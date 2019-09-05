@@ -1,4 +1,26 @@
-# ignore all dta
+# ignore all db
 *.dta
-*.docsx
+*.dta.t
+*.xls
+*.xlsx
+*.sav
+*.SAV
+*.txt
+*.TXT
+*.dbf
+*.zip
+*.sps
+*.rar
+
+# ignore all files
+*.docx
+*.doc
 *.pdf
+*.pptx
+*.db
+*.log
+*.lnk
+
+*.oka
+*.oku
+*.t

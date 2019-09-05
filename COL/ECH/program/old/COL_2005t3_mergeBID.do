@@ -1,0 +1,573 @@
+*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*Noviembre 27, 2013
+
+*** MERGE COLOMBIA ECH 2005 ****
+*------------------------------*	
+
+clear
+set more off
+local anio = 2005
+local anioab ="05" 	
+local ruta "\\sdssrv03\Surveys\survey\COL\ECH\\`anio'\"
+local m7 ="`ruta'm7\data_orig\" 
+local m8 ="`ruta'm8\data_orig\" 
+local m9 ="`ruta'm9\data_orig\" 
+local t3   ="`ruta't3\data_orig\"
+local out  ="`ruta't3\data_merge\"
+
+*1. LECTURA DE BASES
+
+*Cabecera
+*---------
+forvalues i=7/9 {
+*** VIVIENDA ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 V1 33-33 ///
+V2 34-34 V3 35-35 V4A 36-36 V4A_ESTRATO 37-37 V4B 38-38 V4C 39-39 V4D 40-40 V5 41-41 VA1 42-43 VA2 44-45 ///
+VA3 46-46 VA4 47-47 VA5 48-48 VA6 49-49 VA7 50-50 VA8 51-51 VA9 52-61 VA10A 62-62 VA10B 63-63 VA10C 64-64 ///
+VA10D 65-65 VA10E 66-66 VA10F 67-67 VA10G 68-68 VA10H 69-69 VA10I 70-70 VA10J 71-71 VA10K 72-72 VA10L 73-73 ///
+using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==01
+egen llaveV =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO)
+sort llaveV
+saveold `m`i''colca_`anioab'vivi.dta,  replace
+
+*** CARACTERISTICAS GENERALES / EDUCACION  ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 C3 35-36 ///
+C4 37-37 C5 38-39 C6 40-40 C7 41-41 C8 42-42 C9 43-43 C10 44-46 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==10
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+egen llaveV =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO)
+sort llaveV
+saveold `m`i''colca_`anioab'edu.dta,  replace
+
+
+*** FUERZA DE TRABAJO ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+F12 37-37 F13 38-38 F14 39-39 F15 40-40 F15A 41-41 F15B 42-42 F15C 43-44 F16 45-45 F17 46-46 F18 47-48 F19 49-49 ///
+F20 50-50 F21 51-51 F22 52-53 F23 54-54 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==50
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colca_`anioab'ft.dta,  replace
+
+
+*** OCUPADOS ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+O24 35-36 O26 37-38 O27 41-41 O28 42-51 O29 52-52 O29_VALOR 53-62 O30 63-63 O30_VALOR 64-73 O30A 74-74 O30A_VALOR 75-84 ///
+O30B 85-85 O30B_VALOR 86-95  O31 96-105  O32A 106-115 O32B 116-125 O33A 126-135 O33B 136-145 O33C 146-155 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==60 
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colca_`anioab'oep.dta,  replace
+
+*** OCUPADOS SUBEMPLEO
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+O34 35-37 O35A 38-38 O35B 39-41 O36A 42-42 O36B 43-44 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==61
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colca_`anioab'os.dta,  replace
+
+
+*** OCUPADOS EMPLEO SECUNDARIOS
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+O37 35-35 O38 36-45 O39 46-47 O40 52-52 O41 53-54 O42 55-55 O43 56-56 O44 57-57 O45 58-58 O46A 59-59 O46B 60-60 /// 
+O46C 61-61 O46D 62-62 O46E 63-63 O46F 64-64 O46G 65-65 O46H 66-66 O46I 67-67 O47 68-68 O48 69-69 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==62
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colca_`anioab'oes.dta,  replace
+
+*** DESOCUPADOS ***
+clear 
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+D49 35-37 D50 38-40 D51 41-42 D52 43-43 D53 44-44 D54 45-47 D55 48-49 D56 50-53 D57 54-54 D58A 55-64 D58B 65-74 ///
+D58C 75-84 D59A 85-94 D59B 95-104 D59C 105-114 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==70 
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colca_`anioab'des.dta,  replace
+
+
+*** INACTIVOS ***
+clear 
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 SECTOR 12-15 SECCION 16-17 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 ///
+TOTAL_HOGARES 26-27 HOGAR 28-29 TAMANO 30-31 RESULTADO 32-32 ORDEN 33-34 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN2 35-36 ///
+I60 35-35 I61 36-36 I62 37-37 I63 38-38 I64 39-39 I65A 40-49 I65B 50-59 I65C 60-69 I66A 70-79 I66B 80-89 ///
+I66C 90-99 using `m`i''CAB050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==80 
+egen llave =concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR  TAMANO FACTOR ORDEN)
+sort llave 
+saveold `m`i''colca_`anioab'ina.dta,  replace
+}
+                   
+*Resto
+*---------
+forvalues i=7/9 {
+clear
+*** VIVIENDA ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 V1 33-33 V2 34-34 V3 35-35 V4A 36-36 V4A_ESTRATO 37-37 ///
+V4B 38-38 V4C 39-39 V4D 40-40 V5 41-41 VA1 42-43 VA2 44-45 VA3 46-46 VA4 47-47 VA5 48-48 VA6 49-49 VA7 50-50 VA8 51-51 ///
+VA9 52-61 VA10A 62-62 VA10B 63-63 VA10C 64-64 VA10D 65-65 VA10E 66-66 VA10F 67-67 VA10G 68-68 VA10H 69-69 VA10I 70-70 ///
+VA10J 71-71 VA10K 72-72 VA10L 73-73 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==01
+egen llaveV =concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO)
+sort llaveV
+saveold `m`i''colre_`anioab'vivi.dta,  replace
+
+*** CARACTERISTICAS GENERALES / EDUCACION  ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 C3 35-36 C4 37-37 C5 38-39 C6 40-40 C7 41-41 ///
+C8 42-42 C9 43-43 C10 44-46 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==10
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+egen llaveV =concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO)
+sort llaveV
+saveold `m`i''colre_`anioab'edu.dta,  replace
+
+*** FUERZA DE TRABAJO ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 ORDEN2 35-36 F12 37-37 F13 38-38 F14 39-39 ///
+F15 40-40 F15A 41-41 F15B 42-42 F15C 43-44 F16 45-45 F17 46-46 F18 47-48 F19 49-49 F20 50-50 F21 51-51 F22 52-53 ///
+F23 54-54 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==50
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colre_`anioab'ft.dta,  replace
+
+*** OCUPADOS ***
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 O24 35-36 O26 37-38 O27 41-41 O28 42-51 ///
+O29 52-52 O29_VALOR 53-62 O30 63-63 O30_VALOR 64-73 O30A 74-74 O30A_VALOR 75-84 O30B 85-85 O30B_VALOR 86-95 O31 96-105 ///
+O31A 106-115 O32A 116-125 O32B 126-135 O33A 136-145 O33B 146-155 O33C 156-165 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==60 
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colre_`anioab'oep.dta,  replace
+
+*** OCUPADOS SUBEMPLEO
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 O34 35-37 O35A 38-38 O35B 39-41 O36A 42-42 ///
+O36B 43-44 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==61
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave 
+saveold `m`i''colre_`anioab'os.dta,  replace
+
+*** OCUPADOS EMPLEO SECUNDARIOS
+clear
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 O37 35-35 O38 36-45 O39 46-47 O40 52-52 ///
+O41 53-54 O42 55-55 O43 56-56 O44 57-57 O45 58-58 O46A 59-59 O46B 60-60 O46C 61-61 O46D 62-62 O46E 63-63 O46F 64-64 ///
+O46G 65-65 O46H 66-66 O46I 67-67 O46J 68-68 O47 69-69 O48 70-70 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==62
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave 
+saveold `m`i''colre_`anioab'oes.dta,  replace
+
+*** DESOCUPADOS ***
+clear 
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 D49 35-37 D50 38-40 D51 41-42 D52 43-43 ///
+D53 44-44 D54 45-47 D55 48-49 D56 50-51 D57 54-54 D58A 55-64 D58B 65-74 D58C 75-84 D59A 85-94 D59B 95-104 ///
+D59C 105-114 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==70 
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colre_`anioab'des.dta,  replace
+
+*** INACTIVOS ***
+clear 
+infix TIPO 1-2 DPTO 3-4 MPIO 5-7 SEGMENTO 8-10 REGION 11-11 MANZANA 18-19 EDIFICACION 20-22 VIVIENDA 23-25 TOTAL_HOGARES 26-27 HOGAR 28-29 ///
+TAMANO 30-31 RESULTADO 32-32 FACTOR 172-176 FACTOR_HOGAR 178-182 ORDEN 33-34 I60 35-35 I61 36-36 I62 37-37 I63 38-38 ///
+I64 39-39 I65A 40-49 I65B 50-59 I65C 60-69 I66A 70-79 I66B 80-89 I66C 90-99 using `m`i''RES050`i'.TXT 
+gen ANO = `anio'
+gen MES = `i'
+keep if TIPO==80 
+egen llave = concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO FACTOR ORDEN)
+sort llave
+saveold `m`i''colre_`anioab'ina.dta,  replace
+}
+
+*2. Append entre meses
+*------------------------
+foreach zona in ca_ re_ {
+
+use "`m7'col`zona'`anioab'vivi.dta", clear
+append using "`m8'col`zona'`anioab'vivi.dta"
+append using "`m9'col`zona'`anioab'vivi.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llaveV
+saveold `t3'col`zona'`anioab'vivi.dta, replace
+
+use "`m7'col`zona'`anioab'edu.dta", clear
+append using "`m8'col`zona'`anioab'edu.dta"
+append using "`m9'col`zona'`anioab'edu.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llaveV
+saveold "`t3'col`zona'`anioab'edu.dta", replace
+
+use "`m7'col`zona'`anioab'ft.dta", clear
+append using "`m8'col`zona'`anioab'ft.dta"
+append using "`m9'col`zona'`anioab'ft.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave
+saveold "`t3'col`zona'`anioab'ft.dta", replace
+
+use "`m7'col`zona'`anioab'oep.dta", clear
+append using "`m8'col`zona'`anioab'oep.dta"
+append using "`m9'col`zona'`anioab'oep.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave
+saveold "`t3'col`zona'`anioab'oep.dta", replace
+
+
+use "`m7'col`zona'`anioab'os.dta", clear
+append using "`m8'col`zona'`anioab'os.dta"
+append using "`m9'col`zona'`anioab'os.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave
+saveold "`t3'col`zona'`anioab'os.dta", replace
+
+use "`m7'col`zona'`anioab'oes.dta", clear
+append using "`m8'col`zona'`anioab'oes.dta"
+append using "`m9'col`zona'`anioab'oes.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave
+saveold "`t3'col`zona'`anioab'oes.dta", replace
+
+use "`m7'col`zona'`anioab'des.dta", clear
+append using "`m8'col`zona'`anioab'des.dta"
+append using "`m9'col`zona'`anioab'des.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave
+saveold "`t3'col`zona'`anioab'des.dta", replace
+
+use "`m7'col`zona'`anioab'ina.dta", clear
+append using "`m8'col`zona'`anioab'ina.dta"
+append using "`m9'col`zona'`anioab'ina.dta"
+if "`zona'"=="ca_" {
+gen CABECERA=1
+}
+if "`zona'"=="re_"{
+gen CABECERA=0
+}
+sort llave 
+saveold "`t3'col`zona'`anioab'ina.dta", replace
+}
+
+*3. Merge de los 8 modulos trimestrales por zona
+*-----------------------------------------------
+foreach zona in ca_ re_ {
+use `t3'col`zona'`anioab'vivi.dta, clear
+merge llaveV using `t3'col`zona'`anioab'edu.dta,  
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'ft.dta
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'oep.dta
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'os.dta
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'oes.dta
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'des.dta
+tab _merge
+drop _merge
+sort llave
+
+merge llave using `t3'col`zona'`anioab'ina.dta
+tab _merge
+drop _merge
+saveold "`out'COL_`anio't3`zona'.dta", replace
+}
+
+*4. Append zonas
+*---------------
+*En la base de resto hay dos preguntas adicionales que implican hacer los siguientes ajustes para unificar los nombres de las variables
+
+clear
+use "`out'COL_`anio't3ca_.dta"
+rename O46I O46J
+rename O46H O46I
+
+append using "`out'COL_`anio't3re_.dta"
+replace FACTOR=FACTOR/3
+
+drop llaveV
+egen llave1 =concat(DPTO MPIO SEGMENTO REGION  MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO) if CABECERA==0
+egen llave2=concat(DPTO MPIO SEGMENTO REGION SECTOR SECCION MANZANA EDIFICACION VIVIENDA TOTAL_HOGARES HOGAR TAMANO) if CABECERA==1
+gen LLAVE_H="."
+replace LLAVE_H=llave1 if CABECERA==0
+replace LLAVE_H=llave2 if CABECERA==1
+
+*5. LABELS
+*----------
+label var TIPO "TIPO DE REGISTRO"
+label var SEGMENTO "3. SEGMENTO"
+label var REGION "4. REGION"
+label var SECTOR "5. SECTOR"
+label var SECCION "6. SECCION"
+label var MANZANA "7. MANZANA"
+label var EDIFICACION "8. EDIFICACION"
+label var VIVIENDA "9.VIVIENDA"
+label var TOTAL_HOGARES "9.  TOTAL DE HOGARES EN LA VIVIENDA"
+label var HOGAR "10. HOGAR No."
+label var TAMANO "11. No. DE PERSONAS  EN EL HOGAR"
+label var RESULTADO "12. RESULTADO DE LA ENCUESTA"
+label var FACTOR "FACTOR DE EXPANSION dividido para 3"
+label var V1 "1. TIPO DE VIVIENDA"
+label var V2 "2. MATERIAL PREDOMINANTE DE LAS PAREDES EXTERIOR"
+label var V3 "3. MATERIAL PREDOMINANTE DE LOS PISOS"
+label var V4A "A. ENERGIA"
+label var V4A_ESTRATO "     ESTRATO"
+label var V4B "B. GAS"
+label var V4C "C. ALCANTARILLADO"
+label var V4D "D. ACUEDUCTO"
+label var V5 "5. ¿EL AGUA LLEGA LAS 24 HOR"
+label var VA1 "1.  NUMERO DE CUARTOS"
+label var VA2 "2. CUARTOS PARA DORMIR"
+label var VA3 "3. TIPO DE SERVICIO SANITARIO"
+label var VA4 "4. EL SANITARIO DEL HOGAR ES"
+label var VA5 "5. COMO ELIMINAN BASURA"
+label var VA6 "6. DE DONDE OBTIENE AGUA CCONSUMO"
+label var VA7 "7. COMBUSTIBLE COCINA"
+label var VA8 "8. TENENCIA DE LA VIVIENDA"
+label var VA9 "9. CUÁNTO PAGAN MENSUAL ARRIENDO"
+label var VA10A "A.SERVICIO DE TELEFONO"
+label var VA10B "B.MAQUINA LAVADORA"
+label var VA10C "C. NEVERA"
+label var VA10D "D. CALENTADOR"
+label var VA10E "E. TELEVISOR A COLOR"
+label var VA10F "F. TLEVISION POR CABLE"
+label var VA10G "G. EQUIPO SONIDO"
+label var VA10H "H. COMPUTADOR"
+label var VA10I "I. INTERNET"
+label var VA10J "J. HORNO"
+label var VA10K "K. AIRE ACONDICIONADO"
+label var VA10L "L. NINGUNO"
+label var ORDEN "1. NUMERO DE ORDEN"
+label var C3 "3. PARENTESCO"
+label var C4 "4. SEXO"
+label var C5 "5. EDAD"
+label var C6 "6. ESTADO CONYUGAL"
+label var C7 "7. ¿SABE  LEER Y ESCRIBIR?"
+label var C8 "8. ¿ACTUALMENTE....ESTUDIA?"
+label var C9 "9. EL ESTABLECIMIENTO ES OFICIAL"
+label var C10 "10. NIVEL  EDUCATIVO MAS ALTO"
+label var ORDEN "1. NUMERO DE ORDEN"
+label var ORDEN2 "11. ORDEN  P/NA INFORMACIÓN"
+label var F12 "12. ¿EN QUE ACTIVIDAD OCUPO...LA MAYOR PARTE DEL TIEMPO LA SEMANA  PASADA?"
+label var F13 "13. ADEMAS…REALIZO  SEMANA PASADA ACTIVIDAD  PAGA POR UNA HORA O MAS"
+label var F14 "14. AUNQUE....NO TRABAJO LA SEMANA PASADA POR UNA  HORA O MAS EN FORMA …"
+label var F15 "15.....TRABAJO LA SEMANA PASADA EN UN NEGOCIO FAMILIAR ,POR UNA HORA …"
+label var F15A "15 A. LA SEMANA PASADA..."
+label var F15B "15 B. REALIZO ....LA SEMANA "
+label var F15C "15 C. CUANTAS HORAS DEDICO.. "
+label var F16 "16.  ¿EN LAS ULTIMAS 4 SEMANAS.....HIZO ALGUNA DILIGENCIA PARA CONSE.."
+label var F17 "17.  .... DESEA CONSEGUIR UN  TRABAJO REMUNERADO O INSTALAR UN NEGOCIO "
+label var F18 "18.  AUNQUE... DESEA TRABAJAR    ¿POR QUÉ MOTIVO PRINCIPAL  NO HIZO DILIGENCIAS EN LA  ULTIMAS 4 SEMANAS?"
+label var F19 "19. DURANTE LOS ULTIMOS 12  MESES ¿..TRABAJO POR LO MENOS 2 SEMANAS ....."
+label var F20 "20. DESPUÉS DE SU ULTIMO  EMPLEO ¿HA HECHO ALGUNA DILIGENCIA PARA CONSEGUI"
+label var F21 "21. DURANTE LOS ULTIMOS 12 MESES ¿HA HECHO ALGUNA DILIGENCIA PARA TRABAJAR"
+label var F22 "22.  CUANTOS MESES HACE QUE.. DEJO DE BUSCAR TRABAJO  POR ULTIMA VEZ"
+label var F23 "23. SI LE HUBIERA RESULTADO A.. ¿ESTABA DISPONIBLE  LA  SEMANA PASADA PARA…"
+label var O24 "24. QUE HACE... EN ESE TRABAJO"
+label var O26 "26. ACTIVIDAD EMPRESA"
+label var O27 "27.  EN ESTE TRABAJO....  ES"
+label var O28 "28.  CUANTO GANO.. .EL MES PASADO EN ESTE EMPLEO"
+label var O29 "29. ADEMAS DEL SALARIO EN  DINERO,....RECIBIO ALIMENTOS"
+label var O29_VALOR "      VALOR MES ALIMENTOS"
+label var O30 "30. ADEMAS DEL SALARIO EN DINERO,....RECIBIO  VIVIENDA"
+label var O30_VALOR "      VALOR MES VIVIENDA"
+label var O30A "30 A. NORMALMENTE... UTILIZA TRANSP EMPRESA"
+label var O30A_VALOR "      VALOR MES TRANSPORTE"
+label var O30B "30 B. ADEMÁS DEL SALARIO RECIBIO OTROS "
+label var O30B_VALOR "     VALOR MES OTROS"
+label var O31 "31.   CUÁL FUE LA GANANCIA  NETA DE.. EN ESA ACTIVIDAD solo para zona rural/resto"
+label var O31A "31 A. GANANCIA NETA"
+label var O32A "32 A.  CUANTO RECIBIO... EL MES PASADO POR ARRIENDOS"
+label var O32B "32 B.  CUANTO RECIBIO... EL MES PASADO POR JUBILACION "
+label var O33A "33 A.  ULTIMOS 12 MESES AYUDAS EN DINERO"
+label var O33B "33 B.  ULTIMOS 12 MESES AYUDAS EN INTERESES, DIVIDENDOS"
+label var O33C "33 C.  ULTIMOS 12 MESES AYUDAS EN OTRAS FUENTES"
+label var O34 "34. CUANTAS HORAS A LA SEMANA TRABAJA NORMALMENTE"
+label var O35A "35. TRABAJO MENOS DE LAS HORAS NORMALES LA SEMANA PASADA"
+label var O35B "       CUANTAS HORAS NO TRABAJO"
+label var O36A "36. LA SEMANA PASADA..... TRABAJO HORAS ADICIONALES"
+label var O36B "       HORAS EXTRAS"
+label var O37 "37. ADEMÁS DELA OCUPACION… TENÍA OTRA OCUPACION"
+label var O38 "38. CUANTO RECIBIO O GANO....EL MES PASADO EN ESE SEGUNDO TRABAJO"
+label var O39 "39.  CUANTAS HORAS TRABAJO. SEGUNDO TRABAJO"
+label var O40 "40. QUIERE TRABAJAR MÁS HORAS"
+label var O41 "41.  CUANTAS HORAS ADICIONALES PUEDE TRABAJAR A LA SEMANA"
+label var O42 "42. DURANTE LAS ULT 4 SEM  ¿HA BUSCADO TRABAJO?"
+label var O43 "43. SI HUBIERA RESULTADO UN TRABAJO ESTA DISPONIBLE"
+label var O44 "44. DESEA CAMBIAR EL TRAB POR RAZONES DIFERENTES A TRABAJAR MÁS HORAS "
+label var O45 "45. ¿....DESEA CAMBIAR EL  TRABAJO  QUE  TIENE ACTUALMENTE?"
+label var O46A "A. DESEA CAMBIAR  TRABAJO PARA MEJORAR CAPA"
+label var O46B "B. DESEA CAMBIAR  TRABAJO MEJORAR INGRESOS"
+label var O46C "C. DESEA CAMBIAR  TRABAJO DESEA TRABAJAR MEN"
+label var O46D "D. DESEA CAMBIAR  TRABAJO TRABAJO ACTUAL TEMP"
+label var O46E "E. DESEA CAMBIAR  TRABAJOPROBLEMAS EN EL TRAB"
+label var O46F "F.  DESEA CAMBIAR  TRABAJO NO LE GUSTA TRABAJO "
+label var O46G "G. DESEA CAMBIAR  TRABAJO MUCHO ESFUERZO FISIC"
+label var O46H "H. PROBLEMAS AMBIENTALES"
+label var O46I "I. DESEA CAMBIAR  TRABAJO OTRO CUAL"
+label var O46J "J. DESEA CAMBIAR  TRABAJO NO SABE"
+label var O47 "47. DURANTE LOS ULTIMAS 4 SEMANAS.,.... HIZO DILIGENCIAS  TRABAJAR"
+label var O48 "48. SI LE RESULTARA UN NUEVO TRABAJO O EMPLEO ¿PODRIA EMPEZAR A "
+label var D49 "49. DURANTE CUANTO TIEMPO HA.. BUSCANDO TRABAJO"
+label var D50 "50.  SI A.....LE HUBIERA RESULTADO UN TRABAJO LA SEMANA ....."
+label var D51 "51.  EN QUE OCUPACIÓN, OFICIO O LABOR.... HA BUSCADO TRABAJO?"
+label var D52 "52.  ....HA BUSCADO TRABAJO COMO"
+label var D53 "53.  ....HA BUSCADO TRABAJO POR PRIMERA VEZ O HABIA ......"
+label var D54 "54. CUANTO HACE QUE... DEJO DE  TRABAJAR POR ULTIMA VEZ"
+label var D55 "55. QUE OCUPACIÓN, OFICIO, O LABOR REALIZO...... LA ULTIMA VEZ QUE TRABAJO"
+label var D56 "56.  A QUE ACTIVIDAD SE DEDICA EMPRESA ULT TRABAJO"
+label var D57 "57. EN ESE ULTIMO TRABAJO.... ERA:"
+label var D58A "58A. CUANTO RECIBIO... EL MES POR TRABAJO"
+label var D58B "58B. CUANTO RECIBIO... EL MES POR ARRIENDO"
+label var D58C "58C. CUANTO RECIBIO... EL MES POR PENSIONES"
+label var D59A "59A. CUANTO RECIBIO... ULT 12 MESES POR AYUDAS EN DINERO "
+label var D59B "59B. CUANTO RECIBIO... ULT 12 MESES POR  INTERESES "
+label var D59C "59C. CUANTO RECIBIO... ULT 12 MESES POR OTROS "
+label var I60 "60. ....HA TRABAJADO ALGUNA VEZ POR LO MENOS DURANTE DOS…"
+label var I61 "61. CUANTO HACE QUE... TRABAJO POR ULTIMA VEZ,?"
+label var I62 "62.  DESPUÉS DE  SU ULTIMO TRABAJO ¿HA HECHO ALGUNA DILIGENCIA…"
+label var I63 "63.  ¿....HA BUSCADO TRABAJO ALGUNA VEZ?"
+label var I64 "64. CUANTO HACE QUE...... BUSCO TRABAJO POR ULTIMA .."
+label var I65A "65A. CUANTO RECIBIO... EL MES PASADO POR TRABAJO"
+label var I65B "65B. CUANTO RECIBIO... EL MES PASADO POR ARRIENDOS"
+label var I65C "65C. CUANTO RECIBIO... EL MES PASADO POR PENSION"
+label var I66A "66A. CUANTO RECIBIO... ULT 12 MESES POR AYUDA EN DINERO "
+label var I66B "66B. CUANTO RECIBIO... ULT 12 MESES POR INTERESES"
+label var I66C "66C. CUANTO RECIBIO... ULT 12 MESES POR OTRAS FUENTES"
+label var ANO "AÑO DE LA ENCUESTA" 
+label var MES "MES DE LA ENCUESTA"
+label var llave "IDENTIFICADOR DEL INDIVIDUO"
+label var LLAVE_H "IDENTIFICADOR DEL HOGAR"
+label var CABECERA "CABECERA MUNICIPAL"
+
+
+saveold "`out'COL_`anio't3.dta", replace
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

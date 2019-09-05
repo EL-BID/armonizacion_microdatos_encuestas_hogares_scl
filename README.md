@@ -26,11 +26,13 @@ ISO 3166-1 alpha-3 (Tabla 1).
 * La segunda desagregación, ENCUESTA (acrónimo), tiene tantas carpetas como tipos 
 de encuestas tiene un país cuyas bases han sido armonizadas. Están nombradas según 
 el acrónimo del tipo de encuesta de cada país (Anexo electrónico: Hoja A2_surveys). 
-Dentro de cada una de estas carpetas se encuentran tres subcarpetas (i) data_arm, 
-(ii) program, y (iii) log. 
 
-En la subcarpeta program se guardan dos archivos de programación en STATA (archivos con extensión do): (i) PAIS_añoronda_mergeBID.do y (ii) PAIS_añoronda_variablesBID.do). El primer archivo corresponde a la rutina que permite juntar los módulos y, en algunos casos, los meses/trimestres de las encuestas originales en un archivo único (guardados en las carpetas \\sdssrv03\surveys\survey\PAIS\ENCUESTA\año\ronda) y el segundo a la rutina que permite generar las variables de las bases armonizadas a partir del archivo único.
-Finalmente, la subcarpeta log contiene los archivos de tipo ASCII donde aparecen los cálculos en formato de texto, generados automáticamente por STATA a partir de los archivos do para la generación de variables y unión de las bases. Estos archivos mantienen el mismo nombre del archivo do pero con extensión .log. Es decir, PAIS_añoronda_variablesBID.log.
+Dentro de cada una de estas carpetas se encuentran tres subcarpetas (i) data_arm, 
+(ii) program, y (iii) log:
+
+* En la **subcarpeta program** se guardan dos archivos de programación en STATA (archivos con extensión do): **(i)** PAIS_añoronda_mergeBID.do y **(ii)** PAIS_añoronda_variablesBID.do). El primer archivo corresponde a la rutina que permite juntar los módulos y, en algunos casos, los meses/trimestres de las encuestas originales en un archivo único (guardados en las carpetas [\\sdssrv03\surveys\survey\PAIS\ENCUESTA\año\ronda](\\sdssrv03\surveys\survey\PAIS\ENCUESTA\año\ronda) ) y el segundo a la rutina que permite generar las variables de las bases armonizadas a partir del archivo único.
+*  Finalmente, la **subcarpeta log** contiene los archivos de tipo ASCII donde aparecen los cálculos en formato de texto, generados automáticamente por STATA a partir de los archivos do para la generación de variables y unión de las bases. Estos archivos mantienen el mismo nombre del archivo do pero con extensión .log. Es decir, PAIS_añoronda_variablesBID.log.
+
 La armonización de las bases de datos de las encuestas de hogares es un proceso complejo debido que requiere tomar en consideración varios criterios de homogenización para asegurar la calidad y comparabilidad de los datos, dada las restricciones impuestas por la disponibilidad de información levantada en las mismas y las particularidades propias de cada país. En particular, debe tenerse en cuenta lo siguiente:
 
 *	Los cambios metodológicos introducidos en ciertos años por las oficinas de estadística nacionales: en cobertura geográfica, cobertura temática, definición y opciones de respuesta de preguntas específicas, código/nombre de las variables en las bases de datos, marco muestral de viviendas asociados a la ejecución de nuevos censos de población, actualización retrospectiva de factores de ponderación, etc. 
@@ -39,6 +41,8 @@ La armonización de las bases de datos de las encuestas de hogares es un proceso
 *	La ausencia de documentación completa asociadas a las encuestas de hogares (cuestionarios, manuales, diccionario de variables, informe del diseño muestral, entre otros) que dificulta  el entendimiento, manejo y armonización de las bases de datos. 
 
 Algunos de estos aspectos son aclarados más adelante cuando se describe el contenido de cada una de las variables de las bases de armonizadas.
+
+---
 
 ## Cómo citar el uso del banco de datos armonizado
 

@@ -25,7 +25,7 @@ local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
    
 capture log close
-log using "`log_file'", replace 
+*log using "`log_file'", replace 
 
 
 /***************************************************************************
@@ -64,6 +64,8 @@ label value region_BID_c region_BID_c
 	***region_c ***
 	***************
 	gen region_c=.
+	/*No viene la variable ciudad en la versión 2018*/
+	
 	/*replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
@@ -103,16 +105,14 @@ label value region_BID_c region_BID_c
 	*************
 	****idh_ch***
 	*************
-	* Modificación Stephanie González
-	*sort area ciudad zona sector panelm vivienda hogar
-	*egen idh_ch = group(ciudad conglomerado zona sector panelm vivienda hogar)
-	gen idh_ch=id_hogar
+	sort  area estrato upm vivienda hogar p01
+	egen idh_ch = group( area estrato upm vivienda hogar)
 	label variable idh_ch "ID del hogar"
 	
 	*************
 	****idh_ci***
 	*************
-	gen idp_ci=id_persona
+	gen idp_ci=p01
 	label variable idp_ci "ID de la persona en el hogar"
 	
 	*************

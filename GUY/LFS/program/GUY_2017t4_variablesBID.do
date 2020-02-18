@@ -298,7 +298,6 @@ label variable miembros_ci "Miembro del hogar"
 *******************
 ****condocup_ci****
 *******************
-
 gen condocup_ci=.
 replace condocup_ci=1 if q2_04==1 | q2_05==1 | (q2_06==1 | q2_06==2) | (q2_07==1 & (q2_09>=1&q2_09<=3)) | (q2_10==1)
 replace condocup_ci=2 if (q2_19==1 | q2_19==2) & q2_14==1 & (q2_15>=1&q2_15<=10)
@@ -327,6 +326,7 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 ****************
 * horaspri_ci  * 
 ****************
+*Per week
 gen horaspri_ci=q3_03
 label var horaspri_ci "Horas totales trabajadas en la actividad principal"
 
@@ -352,7 +352,8 @@ label var subemp_ci "Personas en subempleo por horas"
 ****************
 *tiempoparc_ci * 
 **************** 
-gen tiempoparc_ci=(q3_03<=30 & q3_11==1) 
+*Trabaja menos de 30 horas y no desea trabajar más*
+gen tiempoparc_ci=(q3_03<=30 & q3_11==2) 
 replace tiempoparc_ci=. if emp_ci!=1
 label var tiempoparc_c "Personas que trabajan medio tiempo" 
 
@@ -389,7 +390,8 @@ label var contrato_ci "Ocupados que tienen contrato firmado de trabajo"
 ****************
 * nempleos_ci  * 
 **************** 
-gen nempleos_ci=.
+gen nempleos_ci=1 if q3_01==2
+replace nempleos_ci=2 if q3_01==1
 label var nempleos_ci "Número de empleos" 
 label def nempleos_ci 1"Un empleo" 2"Más de un empleo"
 label val nempleos_ci nempleos_ci
@@ -458,7 +460,7 @@ foreach var of varlist q6_01 q6_06 q6_04a q6_04b q6_04c q6_04d q6_04e q6_04f{
 replace `var'=. if `var'<0
 }
 *
-egen ylmpri_ci=rsum(q6_01 q6_06 q6_04a q6_04b q6_04c q6_04d q6_04e), missing
+egen ylmpri_ci=rsum(q6_01 q6_06 q6_04a q6_04b q6_04c q6_04d q6_04e q6_04f), missing
 replace ylmpri_ci=. if emp_ci==0
 label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
@@ -472,7 +474,7 @@ replace `var'=. if `var'<0
 *
 replace q6_09=. if q6_09<0 | q6_08==2
 
-egen ylnmpri_ci=rsum(q6_05a q6_05b q6_05c q6_05d q6_05e q6_05f q6_05g q6_05h q6_05i q6_09), missing
+egen ylnmpri_ci=rsum(q6_05a q6_05b q6_05c q6_05d q6_05e q6_05f q6_05g q6_05h q6_05i q6_07 q6_09), missing
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
 
 ****************
@@ -510,7 +512,7 @@ label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 ****************
 * ylm_ci       * 
 **************** 
-gen ylm_ci=ylmpri_ci+ylmsec_ci
+egen ylm_ci= rsum(ylmpri_ci ylmsec_ci), m
 replace ylm_ci=. if emp_ci!=1
 label var ylm_ci "Ingreso laboral monetario total" 
 
@@ -523,14 +525,15 @@ label var ylnm_ci "Ingreso laboral NO monetario total"
 ****************
 * ynlm_ci      * 
 ****************
-foreach var of varlist q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_20a q6_20b q6_21 q6_22 q6_23 q6_24a q6_24b{
+foreach var of varlist q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_20a q6_20b q6_21 q6_22  q6_24a q6_24b{
 replace `var'=. if `var'<0
 }
 *
 *http://www.bankofguyana.org.gy/bog/images/research/Reports/Dec2017.pdf#page=72
 replace q6_20b=q6_20b*206.50
+replace q6_24b=q6_24b*206.50
 
-egen ynlm_ci =rsum(q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_20a q6_20b q6_21 q6_22 q6_23 q6_24a q6_24b)
+egen ynlm_ci =rsum(q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_20a q6_20b q6_21 q6_22 q6_24a q6_24b)
 label var ynlm_ci "Ingreso no laboral monetario"  
 
 ****************
@@ -1179,8 +1182,8 @@ label value tipocontrato_ci tipocontrato_ci
 *************
 *cesante_ci* 
 *************
-gen cesante_ci=1 if q4_02==1 & (q2_14==1 | q2_17==1 | q2_17==1 )
-replace cesante_ci=0 if q4_02==2 & (q2_14==1 | q2_17==1 | q2_17==1 )
+gen cesante_ci=1 if q4_02==1 & (q2_14==1 | q2_17==1 | q2_17==2 )
+replace cesante_ci=0 if q4_02==2 & (q2_14==1 | q2_17==1 | q2_17==2 )
 label var cesante_ci "Desocupado - definicion oficial del pais"	
 
 **************
@@ -1206,6 +1209,7 @@ label value tamemp_o tamemp_o
 **pension_ci*
 *************
 *En este caso solo tendrán valores positivos quienes tienen pension_ci==1
+*Old age pension es no contributiva
 gen pension_ci=(q6_11>0&q6_11<.) | (q6_13>0&q6_13<.) 
 recode pension_ci .=0 
 label var pension_ci "1=Recibe pension contributiva"

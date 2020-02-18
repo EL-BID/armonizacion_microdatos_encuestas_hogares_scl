@@ -25,7 +25,7 @@ local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
    
 capture log close
-*log using "`log_file'", replace 
+log using "`log_file'", replace 
 
 
 /***************************************************************************
@@ -1138,6 +1138,12 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	****************
 	gen tecnica_ci=(nivinst==8)
 	label var tecnica_ci "=1 formacion terciaria tecnica"
+	
+	********************
+	***universidad_ci **
+	****************
+	gen universidad_ci=(nivinst==9)
+	label var universidad_ci "=1 formacion terciaria universitaria"
 
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****

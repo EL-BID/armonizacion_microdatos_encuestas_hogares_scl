@@ -1132,7 +1132,7 @@ label variable eduno_ci "Cero anios de educacion"
 ***edupi_ci***
 **************
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -1140,7 +1140,7 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+replace edupc_ci=1 if (aedu_ci==8 | aedu_ci==9)
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -1148,7 +1148,7 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<11
+replace edusi_ci=1 if aedu_ci>8 & aedu_ci<11
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 

@@ -1477,16 +1477,16 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 *********
 
 gen lp_ci =.
-replace lp_ci =  . if zona_c==1
-replace lp_ci =  . if zona_c==0
+replace lp_ci = 4834   if zona_c==1
+replace lp_ci = 4304 if zona_c==0
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci =  . if zona_c==1
-replace lpe_ci =  . if zona_c==0
+replace lpe_ci =  2176.6 if zona_c==1
+replace lpe_ci =  2085.6 if zona_c==0
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 
@@ -1621,7 +1621,9 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 **salmm_ci***
 *************
 
-gen salmm_ci=.
+/* Salario minimo se renueva cada dos años, se incrementó en 2015 y se toma el salario para los que prestan servicios en empresas industriales, comerciales y de servicios, cuyas instalaciones o existencias, o el conjunto de ambos elementos, no excedan de la cifra de
+Dos millones de pesos dominicanos (RD$2,000,000.00). https://mt.gob.do/images/docs/salario_resolucionNo_1_2015.pdf */
+gen salmm_ci=7843
 label var salmm_ci "Salario minimo legal"
 
 *************

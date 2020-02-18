@@ -1109,7 +1109,9 @@ label var luzmide_ch "El hogar usa un medidor para pagar el consumo de electrici
 * combust_ch  *
 ***************
 gen combust_ch=.
-label var combust_ch "El combustible pricipal usado en el hogar es gas o electricidad"
+replace combust_ch=1 if v36a==1  | v36a==6 | v36a==2 
+replace combust_ch=0 if v36a==7 | v36a==8 | v36a==3 | v36a==4 | v36a==5 | v36a==9
+label var combust_ch "Principal combustible gas o electricidad" 
 
 ***************
 * bano_ch     *
@@ -1527,9 +1529,19 @@ label var salmm_ci "Salario minimo legal"
 **tecnica_ci*
 *************
 gen tecnica_ci=.
-replace tecnica_ci=1 if e6a==11
+*replace tecnica_ci=1 if e6a==11 lo cambio por que esta opción es educación media técnica no terciaria
+replace tecnica_ci=1 if (e6a==12 | e6a==13)
 recode tecnica_ci .=0 
 label var tecnica_ci "1=formacion terciaria tecnica"
+
+*************
+**universidad_ci*
+*************
+gen universidad_ci=.
+replace universidad_ci=1 if (e6a==12 | e6a==13)
+recode universidad_ci .=0 
+label var universidad_ci "1=formacion terciaria univeritaria"
+
 
 **************
 **categoinac_ci*
@@ -1569,6 +1581,23 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
+
+gen dis_ci = 0
+recode dis_ci nonmiss=. if h10a==9 & h10b==9 & h10c==9 & h10d==9 & h10e==9 & h10f==9
+recode dis_ci nonmiss=. if inlist(9,h10a,h10b,h10c,h10d,h10e,h10f)
+recode dis_ci nonmiss=. if h10a>=. & h10b>=. & h10c>=. & h10d>=. & h10e>=. & h10f>=.
+foreach i in a b c d e f {
+forvalues j=2/4 {
+replace dis_ci=1 if h10`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

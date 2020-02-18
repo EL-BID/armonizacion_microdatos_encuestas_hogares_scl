@@ -1134,10 +1134,29 @@ label var repiteult "Ha repetido el último grado"
 ***************
 ***edupub_ci***
 ***************
-gen edupub_ci=0
+gen edupub_ci=.
 replace edupub_ci=1 if tipo_centro_estudios==2
-replace edupub_ci=. if tipo_centro_estudios==.
+replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==3)
 label var edupub_ci "Asiste a un centro de enseñanza público"
+
+*************
+**tecnica_ci*
+*************
+
+gen tecnica_ci=.
+replace tecnica_ci=1 if nivel_ultimo_ano_aprobado==4 
+recode tecnica_ci .=0 
+label var tecnica_ci "1=formacion terciaria tecnica"
+
+*************
+**universidad_ci*
+*************
+
+gen universidad_ci=.
+replace universidad_ci=1 if nivel_ultimo_ano_aprobado==5
+recode universidad_ci .=0 
+label var tecnica_ci "1=formacion terciaria universitaria"
+
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1468,16 +1487,16 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 *********
 
 gen lp_ci =.
-replace lp_ci =  . if zona_c==1
-replace lp_ci =  . if zona_c==0
+replace lp_ci =  5033.9 if zona_c==1
+replace lp_ci =  4482 if zona_c==0
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci =  . if zona_c==1
-replace lpe_ci =  . if zona_c==0
+replace lpe_ci = 2266.6   if zona_c==1
+replace lpe_ci =  2171.8 if zona_c==0
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1568,8 +1587,8 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 7 No sabe
 */
 gen tamemp_ci=1 if cantidad_personas_trabajan_emp>0 & cantidad_personas_trabajan_emp<=5
-replace tamemp_ci=2 if total_personas_trabajan_emp<=1 & total_personas_trabajan_emp<=4
-replace tamemp_ci=3 if total_personas_trabajan_emp>=5 & total_personas_trabajan_emp!=.
+replace tamemp_ci=2 if (cantidad_personas_trabajan_emp>=6 & cantidad_personas_trabajan_emp<=10) | total_personas_trabajan_emp==2
+replace tamemp_ci=3 if total_personas_trabajan_emp>=3 & total_personas_trabajan_emp!=. & total_personas_trabajan_emp!=98
 
 /*
 gen tamemp_ci=1 if cant_pers_trab>0 & cant_pers_trab<=5
@@ -1622,18 +1641,12 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 *************
 **salmm_ci***
 *************
+*Salario se ajusta cada dos años, se ajustó en 2017
 ***Para empresas com menos de RD$2 millones en activos, ver: http://mt.gob.do/images/docs/acuerdos_y_convenios/tarifayresolucion0517/resolucion.pdf
 gen salmm_ci=9411.6
 label var salmm_ci "Salario minimo legal"
 
-*************
-**tecnica_ci*
-*************
 
-gen tecnica_ci=.
-replace tecnica_ci=1 if nivel_ultimo_ano_aprobado==4 
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 *******************
 ***categoinac_ci*** 

@@ -1295,9 +1295,19 @@ label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 *************
 
 gen tecnica_ci=.
-replace tecnica_ci=1 if cp407==7 | cp412==7
+replace tecnica_ci=1 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
 replace tecnica_ci=0 if tecnica_ci ~=1 & ( cp407!=11 & cp412!=11)
 label var tecnica_ci "1=formacion terciaria tecnica"
+
+*************
+*universidad_ci**
+*************
+
+gen universidad_ci=.
+replace universidad_ci=1 if cp407==9 | cp412==9
+replace universidad_ci=0 if universidad_ci ~=1 & ( cp407!=11 & cp412!=11)
+label var universidad_ci "1=formacion terciaria universitaria"
+
 
 **************
 ***eduac_ci***
@@ -1607,7 +1617,10 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
-
+/*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
+para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+clonevar codocupa = cp518cod 
+clonevar codindustria = cp521cod
 
 compress
 
@@ -1617,7 +1630,7 @@ local longlabel: var label `i'
 local shortlabel = substr("`longlabel'",1,79) 
 label var `i' "`shortlabel'"
 }
-saveold "`base_out'",  replace
+saveold "`base_out'", version(12) replace
 
 
 log close

@@ -1235,8 +1235,8 @@ label var salmm_ci "Salario minimo legal"
 *Nota (Aún no está disponible dato para 2017)
 * Fuente 2016: http://www.mef.gob.pa/es/informes/Documents/Pobreza%20y%20distribucion%20del%20ingreso%20-%20marzo%202016.pdf
 gen lp_ci =.
-replace lp_ci= 143.50 if zona_c==1 
-replace lp_ci= 106.49 if zona_c==0
+*replace lp_ci= 143.50 if zona_c==1 
+*replace lp_ci= 106.49 if zona_c==0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1246,8 +1246,8 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *Nota (Aún no está disponible dato para 2017)
 * Fuente 2016: http://www.mef.gob.pa/es/informes/Documents/Pobreza%20y%20distribucion%20del%20ingreso%20-%20marzo%202016.pdf
 gen lpe_ci =.
-replace lpe_ci= 70.36 if zona_c==1 
-replace lpe_ci= 59.19 if zona_c==0
+*replace lpe_ci= 70.36 if zona_c==1 
+*replace lpe_ci= 59.19 if zona_c==0
 
 label var lpe_ci "Linea de indigencia oficial del pais"
 

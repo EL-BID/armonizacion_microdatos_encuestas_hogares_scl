@@ -1501,6 +1501,24 @@ gen region_c=.
 *YL -> elimino var comp para que no genere problemas al SOCIOMETERO (esta var no es necesaria)
 drop comp
 
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
+
+gen dis_ci = 0
+
+recode dis_ci nonmiss=. if s73>=. & s74>=. & s75>=.
+recode dis_ci nonmiss=. if inlist(9, s73, s74, s75)
+forvalues i=3/5 {
+forvalues j=1/6 {
+replace dis_ci=1 if s7`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

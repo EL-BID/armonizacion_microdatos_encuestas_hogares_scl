@@ -446,12 +446,6 @@ replace ypensub_ci= ypensub_ci/12
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
  
 
-*************
-*tecnica_ci**
-*************
-gen tecnica_ci=(p6220==3)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
 ****************
 *categoinac_ci**
 ****************
@@ -1021,6 +1015,23 @@ g       pqnoasis1_ci = .
 	g edupub_ci = 1 if p6175 == 1
 	replace edupub_ci = 0 if p6175 == 2
 	la var edupub_ci "Asiste a un centro de enseÃ±anza pÃºblico"
+	
+**************
+***tecnica_ci*
+**************
+
+gen tecnica_ci = (p6220==3)
+label var tecnica_ci "1=formacion terciaria tecnica"
+
+***************
+* Universidad *
+***************
+
+
+gen universidad_ci = (p6220==4)
+label var universidad_ci "1=formacion universitaria"
+
+	
 
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****

@@ -620,7 +620,7 @@ label var durades_ci "Duración del desempleo"
 
 g year=anio_c
 g mes=12
-g date1=mdy(o16_mes, 01, o16_año)
+g date1=mdy(o16_mes, 01, o16_anio)
 g date2=mdy(mes, 31 , year)
 replace date2=. if date1==. 
 format 	date1 %td
@@ -1094,6 +1094,26 @@ gen tcylmpri_ch =.
 gen autocons_ci=.
 gen autocons_ch=.
 gen region_c=.
+
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
+
+gen dis_ci = 0
+
+recode dis_ci nonmiss=. if r8a>=. & r8b>=. & r8c>=.
+recode dis_ci nonmiss=. if inlist(9, r8a, r8b, r8c)
+foreach i in a b c {
+forvalues j=1/6 {
+replace dis_ci=1 if r8`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

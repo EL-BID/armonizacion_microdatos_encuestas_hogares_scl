@@ -1757,16 +1757,26 @@ s5_09:
  3 particular - privado
 */
 
-gen edupub_ci=(s05a_09==1)
-replace edupub_ci=. if s05a_09==.
+gen edupub_ci=.
+replace edupub_ci= 1 if s05a_09==1
+replace edupub_ci= 0 if s05a_09==2
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
 **************
 ***tecnica_ci*
 **************
 
-gen tecnica_ci = (s05a_02a==77 | s05a_02a==79)
+gen tecnica_ci = (s05a_02a==77 | s05a_02a==79 | s05a_02a==76 | s05a_02a==78)
 label var tecnica_ci "1=formacion terciaria tecnica"
+
+***************
+* Universidad *
+***************
+
+
+gen universidad_ci = (s05a_02a==72 )
+label var universidad_ci "1=formacion universitaria"
+
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -2106,6 +2116,24 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
+
+gen dis_ci = 0
+recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=. 
+recode dis_ci nonmiss=. if inlist(.,s04a_06a,s04a_06b,s04a_06c,s04a_06d,s04a_06e,s04a_06f)
+
+foreach i in a b c d e f {
+forvalues j=2/4 {
+replace dis_ci=1 if s04a_06`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+		
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

@@ -1559,7 +1559,14 @@ replace tecnica_ci=1 if e51_10>=1 & e51_10<=9
 replace tecnica_ci=0 if e51_9>=1 & e51_9<=9
 label var tecnica_ci "1=formacion terciaria tecnica"
 
+*************
+**universidad_ci*
+*************
 
+gen universidad_ci=.
+replace universidad_ci=1 if e51_9>=1 & e51_9<=9
+replace universidad_ci=0 if e51_10>=1 & e51_10<=9
+label var universidad_ci "1=formacion terciaria tecnica"
 
 *93. Acceso a una fuente de agua por red
 

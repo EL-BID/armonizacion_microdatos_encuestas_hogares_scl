@@ -1222,9 +1222,9 @@ label var repiteult_ci "Personas que han repetido el último grado"
 ********************************************************************************************************************************
 ***19._EDUPUB_CI : Personas que asisten a centros de enseñanza publicos.***
 ********************************************************************************************************************************
-gen edupub_ci=0
-replace edupub_ci=1 if a15a==1 
-replace edupub_ci=. if a15a==.
+gen edupub_ci=.
+replace edupub_ci=1 if (a15a==1| a15a==2)
+replace edupub_ci=0 if (a15a==3 | a15a==4)
 label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 
 *************
@@ -1233,6 +1233,14 @@ label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 gen tecnica_ci=.
 replace tecnica_ci=1 if a14>=41 & a14<=43
 recode tecnica_ci .=0 
+label var tecnica_ci "=1 formacion terciaria tecnica"
+
+*************
+***tecnica_ci**
+*************
+gen universidad_ci=.
+replace universidad_ci=1 if a14>=51 & a14<=56
+recode universidad_ci .=0 
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
 *====================================================================================================================================*
@@ -1529,6 +1537,25 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 *******************
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
+
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
+
+gen dis_ci = 0
+recode dis_ci nonmiss=. if a8a>=. & a8b>=.
+recode dis_ci nonmiss=. if inlist(.,a8a,a8b)
+
+foreach i in a b {
+forvalues j=1/7 {
+replace dis_ci=1 if a8`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+
 
 
 /*_____________________________________________________________________________________________________*/

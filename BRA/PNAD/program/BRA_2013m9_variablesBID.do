@@ -1323,7 +1323,7 @@ label variable eduno_ci "Cero anios de educacion"
 ***edupi_ci***
 **************
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -1331,7 +1331,7 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+replace edupc_ci=1 if  (aedu_ci==8 | aedu_ci==9) 
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -1339,7 +1339,7 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<11
+replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -1370,7 +1370,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-*La secundaria sólo dura 4 años. No puede divirse en ciclos
+*La secundaria sólo dura 3 años. No puede divirse en ciclos
 gen edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
@@ -1393,7 +1393,7 @@ gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
-***asispre_ci***
+***asispre_ci**
 ***************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
 	g asispre_ci=.

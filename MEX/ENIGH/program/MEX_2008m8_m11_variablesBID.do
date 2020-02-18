@@ -4186,6 +4186,31 @@ label define id_afro_ci 1 "Afro-descendiente" 0 "Otros"
 label value id_afro_ci id_afro_ci 
 label var id_afro_ci "Afro-descendiente"
 
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
+
+gen dis_ci = 0	
+
+forvalues i=1/7 {
+gen dis`i'=disc`i'
+replace dis`i'="" if disc`i'=="&"
+destring dis`i', replace
+}
+
+recode dis_ci nonmiss=. if dis1>=. & dis2>=. & dis3>=. & dis4>=. & dis5>=. & dis6>=. & dis7>=.
+
+forvalues i=1/7 {
+forvalues j=1/7 {
+replace dis_ci=1 if dis`i'==`j'
+}
+}
+
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
 
 
 /*_____________________________________________________________________________________________________*/

@@ -1461,6 +1461,11 @@ rename rama codindustria
 
 compress
 
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr("`longlabel'",1,79)
+label var `i' "`shortlabel'"
+}
 
 saveold "`base_out'", version(12) replace
 

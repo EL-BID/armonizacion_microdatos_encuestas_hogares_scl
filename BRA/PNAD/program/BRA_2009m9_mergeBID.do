@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Octubre, 2013
 
 
@@ -6,7 +6,7 @@
 *------------------------*
 
 /*Estas bases de datos fueron descargadas el 30 septiembre 2013 e incluyen
-los nuevos pesos con la proyeccion de poblacion del año 2010
+los nuevos pesos con la proyeccion de poblacion del aÃ±o 2010
 */
 
 *1 - Conversion Bases de datos

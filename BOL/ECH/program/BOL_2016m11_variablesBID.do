@@ -2061,7 +2061,6 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 
-
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

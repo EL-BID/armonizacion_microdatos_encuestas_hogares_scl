@@ -1542,6 +1542,25 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 
+/***************************
+* DISCAPACIDAD
+***************************/
+*Daniela Zuluaga Feb 2020:
+*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
+
+gen dis_ci = 0
+recode dis_ci nonmiss=. if a8a>=. & a8b>=.
+recode dis_ci nonmiss=. if inlist(.,a8a,a8b)
+
+foreach i in a b {
+forvalues j=1/7 {
+replace dis_ci=1 if a8`i'==`j'
+}
+}
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

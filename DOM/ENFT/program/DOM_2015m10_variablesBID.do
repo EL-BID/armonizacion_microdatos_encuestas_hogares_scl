@@ -1622,7 +1622,9 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 **salmm_ci***
 *************
 
-gen salmm_ci=.
+/* Salario minimo se renueva cada dos años, se incrementó en 2015 y se toma el salario para los que prestan servicios en empresas industriales, comerciales y de servicios, cuyas instalaciones o existencias, o el conjunto de ambos elementos, no excedan de la cifra de
+Dos millones de pesos dominicanos (RD$2,000,000.00). https://mt.gob.do/images/docs/salario_resolucionNo_1_2015.pdf */
+gen salmm_ci=7843
 label var salmm_ci "Salario minimo legal"
 
 *************

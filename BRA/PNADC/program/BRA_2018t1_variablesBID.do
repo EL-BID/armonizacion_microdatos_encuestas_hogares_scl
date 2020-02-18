@@ -130,7 +130,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2017
+gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 *********************
@@ -897,7 +897,8 @@ label var remesas_ch "Remesas mensuales del hogar"
 **************
 **asiste_ci***
 **************
-gen asiste_ci=(v3002==1)
+gen asiste_ci= v3002
+recode asiste_ci (2=0)
 label var asiste_ci "Personas que actualmente asisten a un centro de enseñanza"
 
 ***************
@@ -919,8 +920,7 @@ gen Ensino_8_9=.
 gen finalizo_1=v3012
 gen seria_asist=v3005a
 gen seria_no_asist=v3011a
-*gen dur_fund_asist=v3004
-*gen dur_fund_no_asist=v3010
+
 
 gen aedu_ci=.
 label var aedu_ci "Anios de educacion"
@@ -933,27 +933,27 @@ replace aedu_ci=0 if nivel_asist==3
 
 *Primaria / Básica - Nuevo sistema (Regular de ensino Fundamental grado 1)
 *Se le resta 1 por que está asistiendo al grado que reporta, por lo tanto no se debe considerar dentro de los años de educación aprobados.
-replace aedu_ci=grado_asist -1 if nivel_asist==4   // 8 años.
-replace aedu_ci=grado_asist-1 if nivel_asist==4   // 9 años, Se debe sumar 1 año más por que el nuevo sistema educación empieza los cursos a partir del grado cero.
+replace aedu_ci=grado_asist -1 if nivel_asist==4
+
 
 *Secundaria / Ensino Medio Regular
-replace aedu_ci=grado_asist+9-1 if nivel_asist==6 
+replace aedu_ci=grado_asist+8-1 if nivel_asist==6 
 
 *Primaria / Básica - Supletivo
 *Base no diferencia entre cursos seriados o no seriados, unicamente pregunta sobre la frecuencia de los grados (anual, semestral) para el nivel Superior
 replace aedu_ci=grado_asist-1 if nivel_asist==5
 
 *Secundaria  - Supletivo
-replace aedu_ci=grado_asist+9-1 if nivel_asist==7
+replace aedu_ci=grado_asist+8-1 if nivel_asist==7
 
 *Superior
 ** La pregunta de grado hace alusión a anio serie o semestre - para universitaria la respuesta esta dado en semetres. Se combiernen a anios: 
-replace grado_asist = 1 if (v3005a == 1|v3005a == 2)   & v3003a == 1 & nivel_asist==8
-replace grado_asist = 2 if (v3005a == 3|v3005a == 4)   & v3003a == 1 & nivel_asist==8
-replace grado_asist = 3 if (v3005a == 5|v3005a == 6)   & v3003a == 1 & nivel_asist==8
-replace grado_asist = 4 if (v3005a == 7|v3005a == 8)   & v3003a == 1 & nivel_asist==8
-replace grado_asist = 5 if (v3005a == 9|v3005a == 10)  & v3003a == 1 & nivel_asist==8
-replace grado_asist = 6 if (v3005a == 11|v3005a == 12) & v3003a == 1 & nivel_asist==8
+replace grado_asist = 1 if (grado_asist == 1|grado_asist == 2)   & v3003a == 1 & nivel_asist==8
+replace grado_asist = 2 if (grado_asist == 3|grado_asist == 4)   & v3003a == 1 & nivel_asist==8
+replace grado_asist = 3 if (grado_asist == 5|grado_asist == 6)   & v3003a == 1 & nivel_asist==8
+replace grado_asist = 4 if (grado_asist == 7|grado_asist == 8)   & v3003a == 1 & nivel_asist==8
+replace grado_asist = 5 if (grado_asist == 9|grado_asist == 10)  & v3003a == 1 & nivel_asist==8
+replace grado_asist = 6 if (grado_asist == 11|grado_asist == 12) & v3003a == 1 & nivel_asist==8
 
 replace aedu_ci=grado_asist+12-1 if nivel_asist==8 // Universitario - No incluye Postgrados
 
@@ -978,30 +978,27 @@ replace aedu_ci=0 if nivel_no_asist==2 | nivel_no_asist==3 | nivel_no_asist==4  
 
 *Primaria antiguo ciclo (solo 4-6 anios) / Elemental
 
-replace aedu_ci=grado_no_asist   if nivel_no_asist==5 & finalizo_1==1   /* Terminó el nivel*/
-replace aedu_ci=0 if nivel_no_asist==5 & finalizo_1==2 /*No terminó ningun el nivel*/
+replace aedu_ci=grado_no_asist   if nivel_no_asist==5   /* Terminó el nivel*/
+replace aedu_ci=0 if nivel_no_asist==5  /*No terminó ningun el nivel*/
 
 *Media 1 // antiguo ciclo 1 Se asume que son 4 años obligatorios. 
 
-replace aedu_ci=grado_no_asist+4   if nivel_no_asist==6  & finalizo_1==1  /* Terminó el nivel*/
-replace aedu_ci=4 if nivel_no_asist==6  & finalizo_1==2 /*No terminó ningún curso de el nivel*/
+replace aedu_ci=grado_no_asist+4   if nivel_no_asist==6   /* Terminó el nivel*/
+
 
 *Media 2 // antiguo ciclo 2 Se asume que son 4 años obligatorios (Adicionales a los anteriores). 
 
 replace aedu_ci=grado_no_asist+4+4   if nivel_no_asist==9  & finalizo_1==1  /* Terminó el nivel*/
-replace aedu_ci=8 if nivel_no_asist==9  & finalizo_1==2 /*No terminó ningún curso del nivel*/
+
 
 
 * Primaria nuevo ciclo (8 anios):
 
-replace aedu_ci=grado_no_asist   if nivel_no_asist==7 & finalizo_1==1    /* Terminó el nivel 8 anios */
-
-replace aedu_ci=0 if nivel_no_asist==7 & finalizo_1==2   /*No terminó ningun corso del nivel */
+replace aedu_ci=grado_no_asist   if nivel_no_asist==7    /* Terminó el nivel 8 anios */
 
 * Medio nuevo ciclo // Se asume que son 3 años obligatorios . 
 
-replace aedu_ci=grado_no_asist+8 if nivel_no_asist==10 & finalizo_1==1  /* Terminó el nivel y el programa al que asistio iba hasta 8*/
-replace aedu_ci=8                if nivel_no_asist==10 & finalizo_1==2 /*No terminó el nivel y el programa al que asistio iba hasta 8*/
+replace aedu_ci=grado_no_asist+8 if nivel_no_asist==10  /* Terminó el nivel y el programa al que asistio iba hasta 8*/
 
 
 *Ensino Fundamental Supletivo
@@ -1020,12 +1017,12 @@ replace aedu_ci=8 if nivel_no_asist==11  & finalizo_1==2
 *Termino 1er Año
 
 ** La pregunta de grado hace alusión a anio serie o semestre - para universitaria la respuesta esta dado en semetres. Se combiernen a anios: 
-replace grado_no_asist = 1 if (v3009a == 1 |v3009a == 2)   & v3011a == 1 & nivel_no_asist==12
-replace grado_no_asist = 2 if (v3009a == 3 |v3009a == 4)   & v3011a == 1 & nivel_no_asist==12
-replace grado_no_asist = 3 if (v3009a == 5 |v3009a == 6)   & v3011a == 1 & nivel_no_asist==12
-replace grado_no_asist = 4 if (v3009a == 7 |v3009a == 8)   & v3011a == 1 & nivel_no_asist==12
-replace grado_no_asist = 5 if (v3009a == 9 |v3009a == 10)  & v3011a == 1 & nivel_no_asist==12
-replace grado_no_asist = 6 if (v3009a == 11|v3009a == 12)  & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 1 if (grado_no_asist == 1 |grado_no_asist == 2)   & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 2 if (grado_no_asist == 3 |grado_no_asist == 4)   & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 3 if (grado_no_asist == 5 |grado_no_asist == 6)   & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 4 if (grado_no_asist == 7 |grado_no_asist == 8)   & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 5 if (grado_no_asist == 9 |grado_no_asist == 10)  & v3011a == 1 & nivel_no_asist==12
+replace grado_no_asist = 6 if (grado_no_asist == 11|grado_no_asist == 12)  & v3011a == 1 & nivel_no_asist==12
 
 replace aedu_ci=grado_no_asist+12 if nivel_no_asist==12 & finalizo_1==1
 *No Termino 1er Año
@@ -1051,7 +1048,6 @@ replace aedu_ci=17+1+2 if nivel_no_asist==15 & finalizo==2
 replace aedu_ci=0 if aedu_ci == -1
 
 
-
 **************
 ***eduno_ci***
 **************
@@ -1064,7 +1060,7 @@ label variable eduno_ci "Cero anios de educacion"
 ***edupi_ci***
 **************
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -1072,7 +1068,7 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+replace edupc_ci=1 if  (aedu_ci==8 | aedu_ci==9) 
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -1080,7 +1076,7 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
+replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -1088,7 +1084,7 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12
+replace edusc_ci=1 if aedu_ci==11
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -1096,7 +1092,7 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<16
+replace eduui_ci=1 if aedu_ci>11 & aedu_ci<16
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1111,7 +1107,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-*La secundaria sólo dura 4 años. No puede divirse en ciclos
+*La secundaria sólo dura 3 años. No puede divirse en ciclos
 gen edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
@@ -1171,8 +1167,15 @@ gen pqnoasis1_ci = .
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un año o grado"
 
+***************
+***edupub_ci***
+***************
 
-
+	gen edupub_ci =.
+	replace edupub_ci = 1 if v3002a==2 // pública
+	replace edupub_ci = 0 if v3002a==1 // privada
+	label var repite_ci "Asiste a educación pública"
+	
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************

@@ -1572,23 +1572,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
-/***************************
-* DISCAPACIDAD
-***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
-
-gen dis_ci = 0
-
-recode dis_ci nonmiss=. if s31c1>=. & s31c2>=. & s31c3>=.
-recode dis_ci nonmiss=. if inlist(9,s31c1, s31c2, s31c3)
-forvalues i=1/3 {
-forvalues j=1/6 {
-replace dis_ci=1 if s31c`i'==`j'
-}
-}
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
 
 
 /*_____________________________________________________________________________________________________*/

@@ -1413,23 +1413,6 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
-/***************************
-* DISCAPACIDAD
-***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
-
-gen dis_ci = 0
-
-recode dis_ci nonmiss=. if t1a>=. & t1b>=. & t1c>=.
-recode dis_ci nonmiss=. if inlist(9, t1a, t1b, t1c)
-foreach i in a b c {
-forvalues j=1/6 {
-replace dis_ci=1 if t1`i'==`j'
-}
-}
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

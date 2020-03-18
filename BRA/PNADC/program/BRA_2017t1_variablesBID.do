@@ -142,8 +142,9 @@ label variable mes_c "trimestre de la encuesta"
 *****************
 ***relacion_ci***
 *****************
-recode vd2002 (4=3)
+
 gen relacion_ci=vd2002
+recode relacion_ci (4=3)
 replace relacion_ci=4 if vd2002>=5 & vd2002<=12
 replace relacion_ci=5 if (vd2002>=13 & vd2002<=15) | vd2002==17
 replace relacion_ci=6 if vd2002==16

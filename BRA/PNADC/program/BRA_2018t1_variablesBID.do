@@ -144,12 +144,15 @@ label variable mes_c "trimestre de la encuesta"
 *****************
 *variable cambia a v2005 - AL
 
+recode v2005 (1=1) (2/3=2) (4/6=3) (7/14=4) (15/17 19=5) (18=6), g(relacion_ci)
+/*
 gen relacion_ci=v2005
 recode relacion_ci (2=3)
 recode relacion_ci (4=5)
 replace relacion_ci=4 if v2005>=6 & v2005<=14
 replace relacion_ci=5 if (v2005>=15 & v2005<=17) | v2005 ==19
 replace relacion_ci=6 if v2005==18
+*/
 label var relacion_ci "Relación de parentesco con el  jefe de hogar"
 label define relacion_ci 1 "Jefe" 2 "Conyuge" 3 "Hijo" 4 "Otros Parientes" 5 "Otros no Parientes" 6 "Servicio Domestico"
 label values relacion_ci relacion_ci
@@ -901,11 +904,13 @@ gen asiste_ci= v3002
 recode asiste_ci (2=0)
 label var asiste_ci "Personas que actualmente asisten a un centro de enseñanza"
 
+/*
 ***************
 ***edupub_ci***
 ***************
 gen edupub_ci=(v3002a==2)
 label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
+*/
 
 *************
 ***aedu_ci***

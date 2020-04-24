@@ -546,21 +546,22 @@ label val rama_ci rama_ci*/
 	variable pp04b_cod, pero en sintonia con la nueva codificacion a partir de 2011 ( ClasificaciÃ³n de Actividades EconÃ³micas para Encuestas SociodemogrÃ¡ficas del MERCOSUR 1.0)*/
 	
 	destring pp04b_cod, replace
-	gen rama_ci=.
-	replace rama_ci = 1 if ((pp04b_cod==1)|(pp04b_cod>=101 &  pp04b_cod<=500)) & emp_ci==1
-	replace rama_ci = 2 if ((pp04b_cod>=10 & pp04b_cod<=14) |(pp04b_cod>=1000 &  pp04b_cod<=1400)) & emp_ci==1
-	replace rama_ci = 3 if ((pp04b_cod>=15 & pp04b_cod<=36) |(pp04b_cod>=1501 &  pp04b_cod<=3609)) & emp_ci==1
-	replace rama_ci = 4 if ((pp04b_cod>=37 & pp04b_cod<=41) |(pp04b_cod>=3700 &  pp04b_cod<=4100)) & emp_ci==1
-	replace rama_ci = 5 if ((pp04b_cod==45) |(pp04b_cod==4500)) & emp_ci==1
-	replace rama_ci = 6 if ((pp04b_cod>=50 & pp04b_cod<=55) |(pp04b_cod>=5001 &  pp04b_cod<=5503) &  pp04b_cod!=5311 & pp04b_cod!=5311) & emp_ci==1
-	replace rama_ci = 7 if ((pp04b_cod>=60 & pp04b_cod<=64) |(pp04b_cod>=6001 &  pp04b_cod<=6402) & pp04b_cod!=6303 &  pp04b_cod!=6402) & emp_ci==1
-	replace rama_ci = 8 if ((pp04b_cod>=65 & pp04b_cod<=70) |(pp04b_cod>=6500 &  pp04b_cod<=7499)) & emp_ci==1
-	replace rama_ci = 9 if ((pp04b_cod>=71 & pp04b_cod<=95) |(pp04b_cod>=7500 &  pp04b_cod<=9900) | pp04b_cod==5311 | pp04b_cod==6303 | pp04b_cod==6402 | pp04b_cod==5311) & emp_ci==1
-    label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación ¤e minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
-	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
-	label val rama_ci rama_ci
+	
+gen rama_ci = .
+replace rama_ci = 1 if ((pp04b_cod==1)|(pp04b_cod>=101 &  pp04b_cod<=300)) & emp_ci==1
+replace rama_ci = 2 if ((pp04b_cod>=500 & pp04b_cod<=900) ) & emp_ci==1
+replace rama_ci = 3 if ((pp04b_cod>=1000 & pp04b_cod<=3300) |  pp04b_cod==10 |  pp04b_cod==19  |  pp04b_cod==20 |  pp04b_cod==21 |  pp04b_cod==26) & emp_ci==1
+replace rama_ci = 4 if ((pp04b_cod>=3500 & pp04b_cod<=3900)) & emp_ci==1
+replace rama_ci = 5 if ((pp04b_cod==4000)) & emp_ci==1
+replace rama_ci = 6 if ((pp04b_cod>=4500 & pp04b_cod<4900) | pp04b_cod==48 | (pp04b_cod>=5500 & pp04b_cod<=5602)) & emp_ci==1
+replace rama_ci = 7 if ((pp04b_cod>=4900 & pp04b_cod<=5300) | pp04b_cod==49) & emp_ci==1
+replace rama_ci = 8 if ((pp04b_cod>=6400 & pp04b_cod<=8200) ) & emp_ci==1
+replace rama_ci = 9 if ((pp04b_cod>=5800 & pp04b_cod<=6300) |(pp04b_cod>=8300 &  pp04b_cod<=9900) | pp04b_cod==85 | pp04b_cod==63 | pp04b_cod==61  | pp04b_cod==58) & emp_ci==1
+label var rama_ci "Rama de actividad"
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val rama_ci rama_ci
 	
 	/*
 capture drop rama_ci

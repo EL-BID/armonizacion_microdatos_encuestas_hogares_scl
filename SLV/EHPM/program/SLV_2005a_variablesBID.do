@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -6,7 +6,7 @@ set more off
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: El Salvador
+PaÃ­s: El Salvador
 Encuesta: EHPM
 Round: a
 Autores: 2006- Analia
 2013 - incoporacion de Variables LMK por Yessenia Loayza (desloay@hotmail.com)
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: 23 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 23 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -72,32 +72,32 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Abril 2014
+*InclusiÃ³n Mayra SÃ¡enz - Abril 2014
 gen region_c= r004
 
 label define region_c  ///
-          1 "Ahuachapán" ///
+          1 "AhuachapÃ¡n" ///
            2 "Santa Ana" ///
            3 "Sonsonate" ///
            4 "Chalatenango" ///
            5 "La Libertad" ///
            6 "San Salvador" ///
-           7 "Cuscatlán" ///
+           7 "CuscatlÃ¡n" ///
            8 "La Paz" ///
-           9 "Cabañas" ///
+           9 "CabaÃ±as" ///
           10 "San Vicente" ///
-          11 "Usulután" ///
+          11 "UsulutÃ¡n" ///
           12 "San Miguel" ///
-          13 "Morazán" ///
-          14 "La Unión" 
+          13 "MorazÃ¡n" ///
+          14 "La UniÃ³n" 
 label value region_c region_c
-label var region_c "División política, departamento"
+label var region_c "DivisiÃ³n polÃ­tica, departamento"
 
 
 ***************
@@ -111,7 +111,7 @@ label variable factor_ch "Factor de expansion del hogar"
 ***************
 ****idh_ch*****
 **************
-*Modificación Mayra Sáenz, Abril-2014
+*ModificaciÃ³n Mayra SÃ¡enz, Abril-2014
 sort lote tipo folio viv 
 egen idh_ch=group(lote tipo folio viv)
 label var idh_ch "ID del hogar"
@@ -345,12 +345,12 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_ci=.
 replace raza_ci= 1 if  (r107 ==1)
 replace raza_ci= 3 if (r107==2 | r107==3)& raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
@@ -359,7 +359,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -426,9 +426,9 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 gen byte emp_ci=0
 replace emp_ci=1 if r403 ==1
 replace emp_ci=1 if r403 ==2 &  r404 ==1 
-/*Se podría considerar empleado a aquellos que contestan la pregunta 405 con un 1
+/*Se podrÃ­a considerar empleado a aquellos que contestan la pregunta 405 con un 1
 sin embargo a este individuo no se le sigue preguntando como si fuera empleado
-sino como si fuera desempleado, así que lo consideramos desempleado*/
+sino como si fuera desempleado, asÃ­ que lo consideramos desempleado*/
 
 ****************
 ***desemp1_ci***
@@ -524,15 +524,15 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen 4 cooperativistas, esta definición es más amplia de 
+/*Dentro de la categorÃ­a empleado se incluyen 4 cooperativistas, esta definiciÃ³n es mÃ¡s amplia de 
 lo usual, principalmemte porque se incluye a los cooperativistas,pero la encuesta considera 
 a todos estos como trabajadores dependientes. 
-En el manual del encuestador: página 59 dice: "En el caso de una persona que está asociada 
-a la cooperativa y además trabaja como patrono o cuenta propia en tierras que son propiedad 
-de la empresa cooperativa, se le anotará código 01 a 03, según el caso. Cuando la persona 
+En el manual del encuestador: pÃ¡gina 59 dice: "En el caso de una persona que estÃ¡ asociada 
+a la cooperativa y ademÃ¡s trabaja como patrono o cuenta propia en tierras que son propiedad 
+de la empresa cooperativa, se le anotarÃ¡ cÃ³digo 01 a 03, segÃºn el caso. Cuando la persona 
 cumple siempre el primer requisito o sea que es asociada y trabaja como jornalero o empleado 
-en el trabajo colectivo de la cooperativa se le anotará código igual 04."
-Por otra parte el grupo "otros" que son 31 casos se incorpora dentro de la categoría empleados ya 
+en el trabajo colectivo de la cooperativa se le anotarÃ¡ cÃ³digo igual 04."
+Por otra parte el grupo "otros" que son 31 casos se incorpora dentro de la categorÃ­a empleados ya 
 que la encuesta los considera empleados dependientes y declaran ingresos*/
 
 ******************
@@ -604,7 +604,7 @@ gen spublico_ci=.
 replace spublico_ci=1 if r419==2
 replace spublico_ci=0 if r419==1
 replace spublico_ci=. if categopri_ci==1 | categopri_ci==2 | categopri_ci==4 | r417==9 | r417==4
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -717,7 +717,7 @@ gen antiguedad_ci=.
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Yanira Oviedo (July, 2010). EN GENERAL, EL CÓDIGO DE NS/ NR NO ES 999999 SINO 1000000. SE HACE ESTE 
+*Yanira Oviedo (July, 2010). EN GENERAL, EL CÃ“DIGO DE NS/ NR NO ES 999999 SINO 1000000. SE HACE ESTE 
 *CAMBIO.
 
 ****************************
@@ -777,7 +777,7 @@ replace yprijbi=.            if categopri_ci>2
 
 *replace yprijbi=0 if categopri_ci<=2 & yprijbi==. & emp_ci==1 
 
-/*Ojo con esto último. Originalmente la encuesta computa una serie de 
+/*Ojo con esto Ãºltimo. Originalmente la encuesta computa una serie de 
 missings que no corresponden a casos de no respuesta, sino
 que es un grupo de trabajadores independientes considerados como productores 
 agropecuarios, para ser consistente con el tratamiento de las encuestas anteriores
@@ -1033,9 +1033,9 @@ gen remesas_ci=remesasext
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1100,7 +1100,7 @@ replace remesas_ch=. if remesasi==. & remesash==. & remesasnm==.
 */
 
 *egen remesas_ch=sum(remesasext) if miembros_ci==1
-*Modificación Mayra Sáenz - Septiembre 2013
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2013
 by idh_ch, sort: egen remesas_ch=sum(remesasext) if miembros_ci==1
 
 ***************
@@ -1158,17 +1158,17 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 gen byte aedu_ci=.
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 
 replace aedu_ci=0 if r204==0 & r203==1
@@ -1210,12 +1210,12 @@ replace aedu_ci=14 if r204==5 & r205==2
 replace aedu_ci=15 if r204==5 & r205==3
 replace aedu_ci=16 if r204==5 & r205==4
 
-* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completó
+* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completÃ³
 replace aedu_ci=aedu_ci-1 if aedu_ci!=0
 
-/* Ahora obtenemos los años de educación para aquellos que
+/* Ahora obtenemos los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento educativo, no se tiene en
-cuenta la educación especial*/
+cuenta la educaciÃ³n especial*/
 
 replace aedu_ci=0 if r219a==0 & (r217==1 | r217==2)
 replace aedu_ci=0 if r219a==1
@@ -1373,7 +1373,7 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-*Agregada por Iván Bornacelly - 01/23/2017
+*Agregada por IvÃ¡n Bornacelly - 01/23/2017
 	g asispre_ci=.
 	replace asispre_ci=1 if r203==1 & r204==1 & r106>=4
 	recode asispre_ci (.=0)
@@ -1425,7 +1425,7 @@ replace pqnoasis1_ci = 7 if r221 ==6
 replace pqnoasis1_ci = 8 if r221 ==8  | r221 ==12
 replace pqnoasis1_ci = 9 if r221 ==10 | r221 ==13
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1450,12 +1450,12 @@ replace edupub_ci=1 if r210a==1
 replace edupub_ci=2 if r210a==2 | r210a==3
 
 /* Variable r210a:
-1: Centro de enseñanza oficial: 
-Es aquel cuya administración y funcionamiento depende del gobierno.
-2: Centro de Enseñanza Laico: 
+1: Centro de enseÃ±anza oficial: 
+Es aquel cuya administraciÃ³n y funcionamiento depende del gobierno.
+2: Centro de EnseÃ±anza Laico: 
 Son todos los centros educativos privados no religiosos. 
-3: Centro de Enseñanza religioso: 
-Son todos los centros educativos que pertenecen a una Congregación Religiosa. 
+3: Centro de EnseÃ±anza religioso: 
+Son todos los centros educativos que pertenecen a una CongregaciÃ³n Religiosa. 
 */
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1487,13 +1487,13 @@ gen bano_ch=(r317>=1 & r317<=6)
 
 gen banoex_ch=(r317>=4 & r317<=6)
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 3, pero genero de la misma manera que los aÃ±os anteriores
 gen des1_ch=.
 replace des1_ch = 0 if r317==7
 replace des1_ch = 1 if r317>=1 & r317<=2
 replace des1_ch = 2 if r317>=3 & r317<=6
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 2, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 2, pero genero de la misma manera que los aÃ±os anteriores
 gen des2_ch=.
 replace des2_ch = 0 if r317==7
 replace des2_ch = 1 if des1_ch==1 | des1_ch==2
@@ -1602,7 +1602,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -1707,7 +1707,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -1737,7 +1737,7 @@ replace categoinac_ci=1 if r407==11
 replace categoinac_ci=2 if r407==7 | r407==13
 replace categoinac_ci=3 if r407==10
 recode categoinac_ci .=4 if condocup_ci==3
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1758,16 +1758,86 @@ gen rentaimp_ch=.
 gen vivialqimp_ch=.
 gen vivitit_ch=.
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=1  if r109!=5
+recode cobsalud_ci (.=0)
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if r109==1 | r109==2
+replace tipocobsalud_ci=2 if r109==3 | r109==4
+replace tipocobsalud_ci=0 if r109==5
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado/otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en Ãºltimo mes. 
+
+gen probsalud_ci=1 if r602!=.
+replace probsalud_ci=0 if r602==.
+
+label var probsalud_ci "Tuvo algÃºn problema de salud en los ultimos dÃ­as"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=1 if r617==4
+recode distancia_ci(.=0) if r617!=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=1 if r617==3
+recode costo_ci (.=0) if r617!=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=1 if r617==1 | r617==2 | r617==5 | r617==11
+recode atencion_ci (.=0) if r617!=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

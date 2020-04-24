@@ -1572,7 +1572,78 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
+*******************
+*** SALUD  ***
+*******************
 
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=1 if ((s12>=1 & s12<=7) | s12==9)
+replace cobsalud_ci=0 if s12==8
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if s12>=1 & s12<=6
+replace tipocobsalud_ci=2 if s12==7 
+replace tipocobsalud_ci=3 if s12==9
+replace tipocobsalud_ci=0 if cobsalud==0
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"Publico" 2"Privado" 3"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimos 3 meses.
+ 
+gen probsalud_ci=1 if  s15>=1 & s15<=4
+replace probsalud_ci=0 if s15==5
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+replace costo_ci=0 if s17<=13
+replace costo_ci=1 if s17==10 | s17==9
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+replace atencion_ci=0 if s17<=13
+replace atencion_ci=1 if s17==11
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

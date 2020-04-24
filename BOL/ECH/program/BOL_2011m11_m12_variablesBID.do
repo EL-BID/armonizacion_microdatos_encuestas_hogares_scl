@@ -2234,6 +2234,31 @@ label var vivialq_ch "Alquiler mensual"
 gen vivialqimp_ch=s8_04
 label var vivialqimp_ch "Alquiler mensual imputado"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=1  if cobersalud<4
+replace cobsalud_ci=0 if cobersalud==4
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=cobersalud
+replace tipocobsalud_ci=0 if cobsalud_ci==0
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado" 3"otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
 
 
 /*_____________________________________________________________________________________________________*/

@@ -1883,6 +1883,64 @@ gen vivialqimp_ch=d8_3 if viviprop_ch~=0
 	*****************
 	gen rentaimp_ch=vivialqimp_ch
 	label var rentaimp_ch "Rentas imputadas del hogar"
+
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=1 if e45_1==1 | e45_2==1 | e45_3==1 | e45_4==1 | e45_5==1 | e45_6==1 | e45_7==1 
+recode cobsalud_ci (.=0)
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+gen tipocobsalud_ci=1 if e45_1==1
+replace tipocobsalud_ci=2 if e45_2==1
+replace tipocobsalud_ci=3 if e45_3==1
+replace tipocobsalud_ci=4 if e45_4==1
+replace tipocobsalud_ci=5 if e45_5==1
+replace tipocobsalud_ci=6 if e45_6==1
+replace tipocobsalud_ci=7 if e45_7==1
+recode tipocobsalud_ci (.=0)
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 1 "MSP" 2 "IAMC" 3 "Privado" 4 "pol/mil" 5"BPS" 6"Municipal" 7"otro" 0"Sin Cobertura"
+lab val tipocobsalud_ci tipocobsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

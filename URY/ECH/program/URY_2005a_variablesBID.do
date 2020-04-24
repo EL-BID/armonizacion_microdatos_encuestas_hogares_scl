@@ -1247,6 +1247,62 @@ label var  aedu_ci "Anios de Educacion"
 gen tecnica_ci=((e11_4>=1 & e11_4<=9) & e11_4_1==1)
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=1 if e5_1==1 | e5_2==1 | e5_3==1 | e5_4==1 | e5_5==1 | e5_6_1==1 
+recode cobsalud_ci (.=0)
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+gen tipocobsalud_ci=1 if e5_1==1
+replace tipocobsalud_ci=2 if e5_2==1
+replace tipocobsalud_ci=3 if e5_3==1
+replace tipocobsalud_ci=4 if e5_4==1
+replace tipocobsalud_ci=5 if e5_5==1
+replace tipocobsalud_ci=6 if e5_6_1==1
+
+recode tipocobsalud_ci (.=0)
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 1 "MSP" 2"pol/mil" 3"Municipal" 4 "BPS" 5"IAMC" 6"otro" 0"Sin Cobertura"
+lab val tipocobsalud_ci tipocobsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
 
 
 /*_____________________________________________________________________________________________________*/
@@ -1290,9 +1346,9 @@ log close
 ********************
 *** URUGUAY 2005 ***
 ********************
-
-
 /*
+
+
 e3 - Parentco 
  1. Jefe
  2. Esposo o compañero
@@ -1305,7 +1361,7 @@ e3 - Parentco
  9. Otro pariente
  10. Servicio doméstico o familiar de éste
  11. No pariente
-*/
+
 
  rename e1 sexo
  rename e2 edad
@@ -1873,6 +1929,6 @@ VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÓMICA
  gen GFAS=(anoest/(edad-6)) if (edad>=12 & edad<=17) & (anoest>=0 & anoest<99)
 
 
-
+*/
 
 	

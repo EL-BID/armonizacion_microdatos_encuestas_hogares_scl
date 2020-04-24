@@ -2134,6 +2134,32 @@ replace dis_ci=1 if s04a_06`i'==`j'
 lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
 		
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=1  if cobersal<4
+replace cobsalud_ci=0 if cobersal==4
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=cobersal
+replace tipocobsalud_ci=0 if cobsalud_ci==0
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado" 3"otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

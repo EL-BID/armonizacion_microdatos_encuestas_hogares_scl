@@ -1029,10 +1029,9 @@ replace aedu_ci=18 if a14==56
 *Postgrado
 replace aedu_ci=19 if a14==71 | a14==101 | a14==111
 replace aedu_ci=20 if a14==72 | a14==102 | a14==112
-replace aedu_ci=21 if a14==73 | a14==103 | a14==114
-replace aedu_ci=22 if a14==74 | a14==104
-replace aedu_ci=23 if a14==85
-replace aedu_ci=24 if a14==86
+replace aedu_ci=21 if a14==73 | a14==103 | a14==113
+replace aedu_ci=22 if a14==74 | a14==104 | a14==114
+
 
 replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
 
@@ -1078,7 +1077,7 @@ replace edusi_ci=1 if (a14>=31 & a14<=35)
 label variable edusi_ci "Secundaria incompleta"*/
 
 gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11) & a14==35 
 label variable edusi_ci "Secundaria incompleta"
 
 ********************************************************************************************************************************

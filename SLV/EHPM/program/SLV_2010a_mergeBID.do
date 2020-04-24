@@ -55,6 +55,12 @@ cap gen numorden = r601
 sort lote  tipo  folio  viv  numorden
 save "`base_in'\sec06_m.dta", replace
 
+*SEC062
+use "`base_in'\sec062.dta", clear
+cap gen numorden = r6012
+sort lote  tipo  folio  viv  numorden
+save "`base_in'\sec062_m.dta", replace
+
 *SEC07
 use "`base_in'\sec07.dta", clear
 cap gen numorden = r701
@@ -83,8 +89,13 @@ merge lote  tipo  folio  viv  numorden using "`base_in'\sec06_m.dta"
 
 	tab _merge
 	drop _merge
-	sort lote  tipo  folio  viv  
+	sort lote  tipo  folio  viv  numorden
 
+	merge lote  tipo  folio  viv  numorden using "`base_in'\sec062_m.dta"
+
+	tab _merge
+	drop _merge
+	sort lote  tipo  folio  viv  
 	
 **** Households
 
@@ -118,4 +129,6 @@ erase "`base_in'\sec02_m.dta"
 erase "`base_in'\sec03_m.dta"
 erase "`base_in'\sec04_m.dta"
 erase "`base_in'\sec06_m.dta"
+erase "`base_in'\sec062_m.dta"
 erase "`base_in'\sec07_m.dta"
+

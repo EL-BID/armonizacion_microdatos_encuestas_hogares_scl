@@ -2122,6 +2122,80 @@ gen autocons_ch=.
 *YL -> elimino var comp para que no genere problemas al SOCIOMETERO (esta var no es necesaria)
 drop comp
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=1 if ((s1>=1 & s1<=7) | s1==9)
+replace cobsalud_ci=0 if s1==8
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if s1>=1 & s1<=6
+replace tipocobsalud_ci=2 if s1==7 
+replace tipocobsalud_ci=3 if s1==9
+replace tipocobsalud_ci=0 if cobsalud==0
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"Publico" 2"Privado" 3"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimos 3 meses.
+ 
+gen probsalud_ci=1 if  s5==1
+replace probsalud_ci=0 if s5==2
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+replace costo_ci=0 if s7<=8
+replace costo_ci=1 if s7==5 | s7==3
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+replace atencion_ci=0 if s7<=8
+replace atencion_ci=1 if s7==6
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

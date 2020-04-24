@@ -1979,6 +1979,84 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=p5585b if  benefdes_ci==1
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=0 if p4191==2 & p4192==2 & p4193==2 & p4194==2 & p4195==2 & p4196==2 &  p4197==2 & p4198==2
+replace cobsalud_ci=1 if p4191==1 | p4192==1 |  p4193==1 | p4194==1 | p4195==1 |  p4196==1 | p4197==1 | 4198==1
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+replace tipocobsalud_ci=0 if cobsalud_ci==0
+replace tipocobsalud_ci=1 if p4191==1
+replace tipocobsalud_ci=2 if p4192==1
+replace tipocobsalud_ci=3 if p4193==1
+replace tipocobsalud_ci=4 if p4194==1
+replace tipocobsalud_ci=5 if p4195==1
+replace tipocobsalud_ci=6 if p4196==1
+replace tipocobsalud_ci=7 if p4197==1
+replace tipocobsalud_ci=8 if p4198==1
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"essalud" 2"Privado" 3"entidad prestadora" 4"policiales" 5"sis" 6"universitario" 7"escolar privado" 8"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimas 4 semanas. 
+gen probsalud_ci=1 if p4021==1 | p4022==1 | p4023==1 | p4024==1 
+replace probsalud_ci=0 if p4025==1
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=0 if p4092==0
+replace distancia_ci=1 if p4092==1
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=0 if p4091==0
+replace costo_ci=1 if p4091==1
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=0 if p4093==0 
+replace atencion_ci=1 if p4093==1
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

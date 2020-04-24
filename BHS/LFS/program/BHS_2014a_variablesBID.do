@@ -811,112 +811,15 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 *****************
 ***ylhopri_ci ***
 *****************
-gen ylmhopri_ci=.
-label var ylmhopri_ci "Salario monetario de la actividad principal" 
+	g ylmhopri_ci = ylmpri_ci / (horaspri_ci * 4.3)
+	la var ylmhopri_ci "Salario monetario de la actividad principal" 
 
 ***************
 ***ylmho_ci ***
 ***************
-gen ylmho_ci=.
-label var ylmho_ci "Salario monetario de todas las actividades" 
+	g ylmho_ci = ylm_ci / (horastot_ci * 4.3)
+	la var ylmho_ci "Salario monetario de todas las actividades" 
 
-**************************INGRESOS-TRANSFERENCIAS**************************************
-
-* Daniela Zuluaga-Enero 2018: Se genera una nueva clasificacion para el ingreso no laboral monetario y no monetario*
-
-***************
-***trapri_ci***
-***************
-gen trapri_ci=.
-label var trapri_ci "Ingreso por transferencias privadas" 
-
-***************
-***trapri_ch***
-***************
-bys idh_ch: egen trapri_ch=sum(trapri_ci) if miembros_ci==1, missing
-label var trapri_ch "Ingreso del hogar por transferencias privadas" 
-
-***************
-***progpub_ci***
-***************
-gen progpub_ci= .
-label var progpub_ci "Ingreso por programas sociales de transferencias condicionadas" 
-
-***************
-***progpub_ch***
-***************
-bys idh_ch: egen progpub_ch=sum(progpub_ci) if miembros_ci==1, missing
-label var progpub_ch "Ingreso del hogar por programas sociales de transferencias condicionadas" 
-
-***************
-***trapub_ci***
-***************
-gen trapub_ci= .
-label var trapub_ci "Ingreso por transferencias publicas" 
-
-***************
-***trapub_ch***
-***************
-bys idh_ch: egen trapub_ch=sum(trapub_ci) if miembros_ci==1, missing
-label var trapub_ch "Ingreso del hogar por transferencias publicas" 
-
-***************
-***capital_ci***
-***************
-gen capital_ci= .
-label var capital_ci "Ingreso por renta del capital" 
-
-***************
-***capital_ch***
-***************
-bys idh_ch: egen capital_ch=sum(capital_ci) if miembros_ci==1, missing
-label var capital_ch "Ingreso del hogar por renta del capital" 
-
-***************
-***otros_ci***
-***************
-gen otros_ci= .
-label var otros_ci "Otros Ingresos" 
-
-***************
-***otros_ch***
-***************
-bys idh_ch: egen otros_ch=sum(otros_ci) if miembros_ci==1, missing
-label var otros_ch "Otros Ingresos del hogar" 
-
-***************
-***ypen_ch***
-***************
-bys idh_ch: egen ypen_ch=sum(ypen_ci) if miembros_ci==1, missing
-label var ypen_ch "Ingresos del hogar por jubilaciones y pensiones contributivas" 
-
-
-***************
-***ytotal_ci***
-***************
-egen ytotal_ci= rowtotal (ylm_ci ylnm_ci trapri_ci trapub_ci capital_ci otros_ci ypen_ci), missing
-label var ytotal_ci "Ingreso total individual" 
-
-***************
-***ytotal_ch***
-***************
-egen ytotal_ch=rowtotal(ylm_ch  ylnm_ch  trapri_ch  trapub_ch  capital_ch  otros_ch  ypen_ch) if miembros_ci==1, missing
-label var ytotal_ch "Ingreso total del hogar"
-
-***************
-***ytotalpc_ch***
-***************
-gen ytotalpc_ch=(ytotal_ch/nmiembros_ch) if miembros_ci==1
-label var ytotalpc_ch "Ingreso per capita del hogar"
-
-
-***************
-***quintil_ci***
-***************
-xtile quintil_ci=ytotalpc_ch if ytotalpc_ch>0 & ytotalpc_ch!=. [pw=(factor_ch)], nq(5)
-label var quintil_ci "Quintil de ingreso"
-label define quintil_ci 1 "Quintil 1" 2 "Quintil 2" 3 "Quintil 3" 4 "Quintil 4" 5 "Quintil 5"
-label values quintil_ci quintil_ci
 
 
 ****************************
@@ -1417,7 +1320,6 @@ tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_
 formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension_ci tipopen_ci instpen_ci	ylmpri_ci nrylmpri_ci ///
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
-trapri_ci trapri_ch progpub_ci progpub_ch trapub_ci  trapub_ch capital_ci capital_ch otros_ci otros_ch ypen_ch ytotal_ci  ytotal_ch ytotalpc_ch quintil_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch ///

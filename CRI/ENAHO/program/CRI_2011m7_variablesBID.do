@@ -1509,7 +1509,7 @@ replace edusi_ci=1 if (a15>=31 & a15<=35)
 label variable edusi_ci "Secundaria incompleta"*/
 
 gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11)  
+replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11)  | a15==35
 label variable edusi_ci "Secundaria incompleta"
 
 ********************************************************************************************************************************

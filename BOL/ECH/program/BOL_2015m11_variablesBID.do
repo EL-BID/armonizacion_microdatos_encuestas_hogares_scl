@@ -2080,6 +2080,38 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=0 if (s4a_4a==6 |  s4a_4b==6)
+replace cobsalud_ci=1  if (s4a_4a<=5 |  s4a_4b<=5)
+
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=s4a_4a
+replace tipocobsalud=s4a_4b if s4a_4a==6
+replace tipocobsalud_ci=0 if cobsalud_ci==0
+replace tipocobsalud_ci=1 if tipocobsalud_ci>0 & tipocobsalud_ci<=3
+replace tipocobsalud_ci=2 if tipocobsalud_c==4
+replace tipocobsalud_ci=3 if tipocobsalud_c==5
+
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado" 3"otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
 
 
 /*_____________________________________________________________________________________________________*/

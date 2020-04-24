@@ -15,7 +15,7 @@ global ruta = "\\Sdssrv03\surveys"
 
 local PAIS CRI
 local ENCUESTA ENAHO
-local ANO "2018"
+local ANO "2019"
 local ronda m7 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -31,8 +31,8 @@ log using "`log_file'", replace
 País: Costa Rica
 Encuesta: ENAHO
 Round: m7
-Última versión: Daniela Zuluaga E-mail: danielazu@iadb.org 
-Fecha última modificación: Marzo 14 de 2018
+Última versión: Angela Lopez E-mail: alop@iadb.org 
+Fecha última modificación: Abril 24 de 2020
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -42,6 +42,8 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
 use `base_in', clear
+
+rename *, lower
 
 ************
 * Region_BID *

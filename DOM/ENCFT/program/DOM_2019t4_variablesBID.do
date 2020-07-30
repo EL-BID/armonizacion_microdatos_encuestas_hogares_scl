@@ -17,7 +17,7 @@ global ruta = "\\Sdssrv03\surveys"
 
 local PAIS DOM
 local ENCUESTA ENCFT
-local ANO "2018"
+local ANO "2019"
 local ronda t4 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -647,21 +647,21 @@ egen ymensual2=rsum(ganancia_secun_imp_monto ingreso_asalariado_secun ingreso_in
 *Información cambiaria que viene en la base de excel
 *Dado que se necesita la información en moneda local se calcula el factor de conversión a pesos
 *Si la información está en pesos se deja como está
-*Si la información está en dólares se multiplica por 49.58, Euros, luego de ser convertidos en dolares, por 0.84 (promedio para los meses del cuarto trimestre d2 2018)
-*Nota: Tasa de cambio a peso CHF=50.16 Para ultimo trimestre
+*Si la información está en dólares se multiplica por 52.78, Euros, luego de ser convertidos en dolares, por 0.9 (promedio para los meses del cuarto trimestre de 2019)
+*Nota: Tasa de cambio a peso CHF=51.54 Para ultimo trimestre
 
 *Modulo Ingresos del Exterior
 gen pension_int=pension_ext_monto	 		    if  pension_ext_moneda=="DOP"
-replace pension_int=pension_ext_monto*49.58   	if  pension_ext_moneda=="USD"
-replace pension_int=(pension_ext_monto*0.84)*49.58   if  pension_ext_moneda=="EUR"
-replace pension_int=pension_ext_monto*50.16   	if  pension_ext_moneda=="CHF"
+replace pension_int=pension_ext_monto*52.78   	if  pension_ext_moneda=="USD"
+replace pension_int=(pension_ext_monto*0.9)*52.78  if  pension_ext_moneda=="EUR"
+replace pension_int=pension_ext_monto*51.54   	if  pension_ext_moneda=="CHF"
 
 replace pension_int=. if pension_ext==2
 
 
 gen interes_int=interes_ext_monto	 		    if interes_ext_moneda=="DOP"
-replace interes_int=interes_ext_monto*49.58	    if interes_ext_moneda=="USD"
-replace interes_int=(interes_ext_monto*0.84)*49.58  if interes_ext_moneda=="EUR"
+replace interes_int=interes_ext_monto*52.78 	    if interes_ext_moneda=="USD"
+replace interes_int=(interes_ext_monto*0.9)*52.78  if interes_ext_moneda=="EUR"
 replace interes_int=. if interes_ext==2
 
 
@@ -675,8 +675,8 @@ replace interes_int=. if interes_ext==2
 forvalues y=1/6  {
 forvalues x=1/3  {
 g remesasaux`y'_`x'=mes`y'_`x'_ext_monto if mes`y'_`x'_ext_moneda=="DOP"
-replace remesasaux`y'_`x'=mes`y'_`x'_ext_monto*49.58 if mes`y'_`x'_ext_moneda=="USD"
-replace remesasaux`y'_`x'=(mes`y'_`x'_ext_monto*.87)*49.58 if mes`y'_`x'_ext_moneda=="EUR"
+replace remesasaux`y'_`x'=mes`y'_`x'_ext_monto*52.78 if mes`y'_`x'_ext_moneda=="USD"
+replace remesasaux`y'_`x'=(mes`y'_`x'_ext_monto*.9)*52.78 if mes`y'_`x'_ext_moneda=="EUR"
 }
 }
 egen remesas_mes=rsum(remesasaux*_*), missing 
@@ -1484,16 +1484,16 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 *********
 
 gen lp_ci =.
-replace lp_ci =  5153.3 if zona_c==1
-replace lp_ci =  4588.2 if zona_c==0
+replace lp_ci =  5319.5 if zona_c==1
+replace lp_ci =  4736.2 if zona_c==0
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci =  2320.3 if zona_c==1
-replace lpe_ci =  2223.3 if zona_c==0
+replace lpe_ci =  2395.2 if zona_c==1
+replace lpe_ci =  2295.0 if zona_c==0
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************

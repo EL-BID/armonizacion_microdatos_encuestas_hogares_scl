@@ -24,7 +24,6 @@ capture log close
 log using "`log_file'", replace 
 
 
-
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: 
@@ -840,28 +839,38 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 ***/aedu_ci****
 ***************
 
-recode s7q11* s7q4* (99=.) (98=.)
+recode s7q11* s7q4*  (99=.) (98=.)
+recode s7q11b (7/2014=7)
 
 gen byte aedu_ci=.
 replace aedu_ci=0                 if s7q11==1 | s7q11==2
 replace aedu_ci=s7q11a           if s7q11==3
-replace aedu_ci=s7q11a           if s7q11==5
-replace aedu_ci=s7q11a+9           if s7q11==4
-replace aedu_ci=s7q11a+6         if s7q11==6
-replace aedu_ci=(s7q11c/2) +11       if (s7q11==7 | s7q11==8)
-replace aedu_ci=(s7q11c/2) +17       if s7q11==9
 
-*******
+replace aedu_ci=s7q11a+9           if s7q11==4
 replace aedu_ci=s7q11b+9 if s7q11==4 & aedu_ci==. //reportaron el grado donde tenian que reportar los anhos de educacion superior
+
+replace aedu_ci=s7q11a           if s7q11==5
+
+replace aedu_ci=s7q11a+6         if s7q11==6
 replace aedu_ci=s7q11b+6 if s7q11==6 & aedu_ci==.
 
-replace aedu_ci=(s7q11b) +11      if (s7q11==7 | s7q11==8) & aedu_ci==. //reportaban educación superior por años.
-replace aedu_ci=(s7q11b) +17       if s7q11==9 & aedu_ci==.
+replace aedu_ci = 12 + s7q11b if s7q11ba==1 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11b if s7q11ba==1 & s7q11==9 // postgrado
+replace aedu_ci = 12 + s7q11c*0.5 if s7q11ba==2 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11c*0.5 if s7q11ba==2 & s7q11==9 //posgrado
+replace aedu_ci = 12 + s7q11d*0.25 if s7q11ba==3 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11d*0.25 if s7q11ba==3 & s7q11==9 //posgrado
 
-replace aedu_ci=(s7q11d/3) +11       if (s7q11==7 | s7q11==8) & aedu_ci==. //reportaban educación superior por trimestres
-replace aedu_ci=(s7q11d/3) +17       if s7q11==9 & aedu_ci==.
+**para los que tienen missing en el regimen de estudio
+replace aedu_ci = 12 + s7q11b if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11b if s7q11==9 & aedu_ci==. // postgrado
+replace aedu_ci = 12 + s7q11c*0.5 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11c*0.5 if s7q11==9 & aedu_ci==. //posgrado
+replace aedu_ci = 12 + s7q11d*0.25 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11d*0.25 if s7q11==9 & aedu_ci==. //posgrado
 
-replace aedu_ci=. if aedu_ci>27
+*para las personas que estan en missing y maximizar la muestra se trata de recuperar los missing en educacion con el nivel educativo
+replace aedu_ci=0 if s7q1==2 & aedu_ci==.
 
 label variable aedu_ci "Años de Educacion"
 

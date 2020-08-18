@@ -382,7 +382,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if (codigo_sum>=1 & codigo_sum <=3) 
 replace condocup_ci=2 if codigo_sum==4 | codigo_sum==11 
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-replace condocup_ci=4 if edad_ci<15
+replace condocup_ci=4 if edad_ci<10
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"

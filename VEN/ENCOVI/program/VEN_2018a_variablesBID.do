@@ -138,8 +138,8 @@ label value region_BID_c region_BID_c
 gen relacion_ci=.
 replace relacion_ci=1 if cmhp17==1
 replace relacion_ci=2 if cmhp17==2
-replace relacion_ci=3 if cmhp17==3
-replace relacion_ci=4 if cmhp17>=4 & cmhp17<=10 /* Otros familiares */
+replace relacion_ci=3 if cmhp17==3 | cmhp17==4
+replace relacion_ci=4 if cmhp17>=5 & cmhp17<=10 /* Otros familiares */
 replace relacion_ci=5 if cmhp17==11  
 replace relacion_ci=6 if cmhp17==12
 label var relacion_ci "Relacion con el Jefe de Hogar"
@@ -304,10 +304,19 @@ label variable miembros_ci "Miembro del hogar"
 ***ocupa_ci***
 **************
 *La clasificación no corresponde a la clasificación estandarizada de ocupación tp47
+tab tmhp38
 
 gen ocupa_ci=.
+replace ocupa_ci=1 if tmhp38>=2 & tmhp38<4
+replace ocupa_ci=2 if tmhp38==1
+replace ocupa_ci=3 if tmhp38==4
+replace ocupa_ci=4 if tmhp38==5 
+replace ocupa_ci=6 if tmhp38==6
+replace ocupa_ci=7 if tmhp38>=7 & tmhp38<9
+replace ocupa_ci=8 if tmhp38==10
+replace ocupa_ci=8 if tmhp38==9
 label var ocupa_ci "Ocupacion Laboral en la Actividad Principal"
-label define ocupa_ci 1 "PROFESIONALES Y TECNICOS" 2 "GERENTES, DIRECTORES Y FUNCIONARIOS SUPERIORES"  3 "PERSONAL ADMINISTRATIVO Y NIVEL INTERMEDIO" 4 "COMERCIANTES Y VENDEDORES" 5 "TRABAJADORES EN SERVICIOS" 6"TRABAJADORES AGRICOLAS Y AFINES" 7 "OBREROS NO AGRICOLAS, CONDUCTORES DE MAQUINAS Y VEHICULOS DE TRANSPORTE Y SIMILARES" 8"FUERZAS ARMADAS" 9"OTRAS OCUPACIONES NO CLASIFICADAS ANTERIORMENTE"
+label define ocupa_ci 1 "PROFESIONALES Y TECNICOS" 2 "GERENTES, DIRECTORES Y FUNCIONARIOS SUPERIORES"  3 "PERSONAL ADMINISTRATIVO Y NIVEL INTERMEDIO" 4 "COMERCIANTES Y VENDEDORES" 5 "TRABAJADORES EN SERVICIOS" 6"TRABAJAD+ORES AGRICOLAS Y AFINES" 7 "OBREROS NO AGRICOLAS, CONDUCTORES DE MAQUINAS Y VEHICULOS DE TRANSPORTE Y SIMILARES" 8"FUERZAS ARMADAS" 9"OTRAS OCUPACIONES NO CLASIFICADAS ANTERIORMENTE"
 label values ocupa_ci ocupa_ci
 
 
@@ -332,7 +341,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if (tmhp34>=1 & tmhp34<=2) 
 replace condocup_ci=2 if (tmhp34 >=3 & tmhp34 <=4)  
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-replace condocup_ci=4 if edad_ci<15
+replace condocup_ci=4 if edad_ci<10
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
@@ -836,9 +845,8 @@ gen byte aedu_ci=.
 replace aedu_ci=0                 if emhp27n==1 | emhp27n==2
 replace aedu_ci=emhp27a           if emhp27n==3
 replace aedu_ci=emhp27a+6         if emhp27n==4
-replace aedu_ci=emhp27s +11       if (emhp27n==5 | emhp27n==6) & emhp27s<6
-replace aedu_ci=16                if emhp27n==6 & (emhp27s >=6 & emhp27s<=12)
-replace aedu_ci=emhp27s +17       if emhp27n==7
+replace aedu_ci=(11+(0.5*emhp27s))  if (emhp27n==5 | emhp27n==6)  // técnico (TSU) | Universitario
+replace aedu_ci=(17+(0.5*emhp27s))  if emhp27n==7 //posgrado
 label variable aedu_ci "Años de Educacion"
 
 

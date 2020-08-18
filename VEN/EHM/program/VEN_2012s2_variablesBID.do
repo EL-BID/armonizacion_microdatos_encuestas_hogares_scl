@@ -1,4 +1,4 @@
-* (VersiÛn Stata 13)
+* (Versi√≥n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -6,7 +6,7 @@ set more off
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -25,11 +25,11 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: 
+Pa√≠s: 
 Encuesta: EHM
 Round: s2
-Autores: Mayra S·enz - saenzmayra.a@gmail.com - mayras@iadb.org 
-Fecha ˙ltima modificaciÛn: Mayo 2014
+Autores: Mayra S√°enz - saenzmayra.a@gmail.com - mayras@iadb.org 
+Fecha √∫ltima modificaci√≥n: Mayo 2014
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -89,13 +89,13 @@ label var factor_ch "Factor de expansion del Hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -104,10 +104,10 @@ label var raza_ci "Raza o etnia del individuo"
 * Region_c *
 ************
 
-*ModificaciÛn Mayra S·enz - Julio 2013
+*Modificaci√≥n Mayra S√°enz - Julio 2013
 /*
 ENTIDADES	COD NUEVO	COD VIEJ
-A partir del 2do sem. 2001	   Del aÒo 94 al 1er Sem del aÒo 2001
+A partir del 2do sem. 2001	   Del a√±o 94 al 1er Sem del a√±o 2001
 		
 NACIONAL	NACIONAL   NACIONAL
 AMC	*	*
@@ -147,34 +147,34 @@ label define region_c  ///
 4	"Apure " ///
 5	"Aragua " ///
 6	"Barinas " ///
-7	"BolÌvar " ///
+7	"Bol√≠var " ///
 8	"Carabobo " ///
 9	"Cojedes " ///
 10	"Delta Amacuro"  ///
-11	"FalcÛn"  ///
-12	"Gu·rico"  ///
+11	"Falc√≥n"  ///
+12	"Gu√°rico"  ///
 13	"Lara"  ///
-14	"MÈrida"  ///
+14	"M√©rida"  ///
 15	"Miranda"  ///
 16	"Monagas"  ///
 17	"Nueva Esparta"  /// 
 18	"Portuguesa"  ///
 19	"Sucre"  ///
-20	"T·chira"  ///
+20	"T√°chira"  ///
 21	"Trujillo"  ///
 22	"Yaracuy"  ///
 23	"Zulia"  ///
 24	"Vargas" 
 	    
 label value region_c region_c
-label var region_c " Primera DivisiÛn polÌtica - Entidades Federativas"
+label var region_c " Primera Divisi√≥n pol√≠tica - Entidades Federativas"
 
 ************************
-*** region seg˙n BID ***
+*** region seg√∫n BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *****************
@@ -387,7 +387,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if (codigo_sum>=1 & codigo_sum <=3) 
 replace condocup_ci=2 if codigo_sum==4 | codigo_sum==11 
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-replace condocup_ci=4 if edad_ci<15
+replace condocup_ci=4 if edad_ci<10
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
@@ -445,7 +445,7 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "instituciÛn a la cual cotiza"
+label var instcot_ci "instituci√≥n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -460,17 +460,17 @@ label value tipocontrato_ci tipocontrato_ci
 *tamemp_ci***
 *************
 gen tamemp_ci=1 if pp50a==1 | pp50a==2
-label var  tamemp_ci "TamaÒo de Empresa" 
+label var  tamemp_ci "Tama√±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if pp50a==3 | pp50a==4 | pp50a==5
 *Empresas grandes
 replace tamemp_ci=3 if pp50a==6
-label define tamaÒo 1"PequeÒa" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaÒo
+label define tama√±o 1"Peque√±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tama√±o
 tab tamemp_ci [iw=factor_ci]
 
 gen tamemp_o=1 if pp50a==1 | pp50a==2 | pp50a==3
-label var  tamemp_o "TamaÒo de Empresa-OECD" 
+label var  tamemp_o "Tama√±o de Empresa-OECD" 
 *Empresas medianas
 replace tamemp_o=2 if pp50a==4  | pp50a==5
 *Empresas grandes
@@ -483,14 +483,14 @@ replace categoinac_ci = 1 if ((pp29==7) & condocup_ci==3)
 replace categoinac_ci = 2 if ((pp29==5) & condocup_ci==3)
 replace categoinac_ci = 3 if ((pp29==6) & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "CategorÌa de inactividad"
-label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÈsticos" 4 "Otros"
+label var categoinac_ci "Categor√≠a de inactividad"
+label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom√©sticos" 4 "Otros"
 label values categoinac_ci categoinac_ci
 *************
 **pension_ci*
 *************
 gen pension_ci=0 
-replace pension_ci=1 if (pp61a==1 | pp61e==1 | pp61f==1) /*A todas las per mayores de diez aÒos */
+replace pension_ci=1 if (pp61a==1 | pp61e==1 | pp61f==1) /*A todas las per mayores de diez a√±os */
 label var pension_ci "1=Recibe pension contributiva"
  
 *************
@@ -587,7 +587,7 @@ g meses=pp46a if pp46a>0
 g anios=pp46b*12 if pp46b>0
 egen durades_ci = rsum(meses anios), missing
 
-*Se ponen como missing values las personas que llevan m·s tiempo desempleadas que tiempo de vida:
+*Se ponen como missing values las personas que llevan m√°s tiempo desempleadas que tiempo de vida:
 gen edad_meses=edad_ci*12
 replace durades_ci=. if durades_ci>edad_meses
 drop edad_meses
@@ -598,7 +598,7 @@ drop edad_meses
 gen desalent_ci=.
 replace desalent_ci=1 if pp43==1 | pp43==2 | pp43==3  
 replace desalent_ci=0 if desalent_ci==.
-label var desalent_ci "Trabajadores desalentados: personas que creen que por alguna razÛn no conseguir·n trabajo"
+label var desalent_ci "Trabajadores desalentados: personas que creen que por alguna raz√≥n no conseguir√°n trabajo"
 label define desalent_ci 1 "Trabajador desalentado" 0 "No es trabajador desalentado" 
 label values desalent_ci desalent_ci 
 *Note esta la variable p44
@@ -609,7 +609,7 @@ label values desalent_ci desalent_ci
 * Modificacion MGD 06/24/2014: horas de la actividad principal.
 gen subemp_ci=0
 replace subemp_ci=1 if horaspri_ci<=30 & pp38==1 & emp_ci==1
-label var subemp_ci "Personas que trabajan 30 horas a la semana o menos y est·n dispuestas a trabajar m·s"
+label var subemp_ci "Personas que trabajan 30 horas a la semana o menos y est√°n dispuestas a trabajar m√°s"
 label define subemp_ci 1 "Subempleado " 0 "No subempleado" 
 label values subemp_ci subemp_ci 
 
@@ -619,7 +619,7 @@ label values subemp_ci subemp_ci
 /*Sobre las horas normalmente trabajadas*/
 
 gen tiempoparc_ci=.
-*No est· la variable pp38: Ha hecho algo para trabajar horas adicionales?
+*No est√° la variable pp38: Ha hecho algo para trabajar horas adicionales?
 
 
 *************
@@ -637,7 +637,7 @@ replace rama_ci=7 if (pp49>=711 & pp49<=720) & emp_ci==1
 replace rama_ci=8 if (pp49>=810 & pp49<=833) & emp_ci==1
 replace rama_ci=9 if (pp49>=910 & pp49<=960) & emp_ci==1
 label var rama_ci "RAMA"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÛn de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÛn" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotaci√≥n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcci√≥n" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ******************
@@ -883,7 +883,7 @@ gen ASIST=pp27
 gen byte asiste_ci=.
 replace asiste_ci=1 if ASIST==1
 replace asiste_ci=0 if ASIST==2
-label var asiste "Personas que actualmente asisten a centros de enseÒanza"
+label var asiste "Personas que actualmente asisten a centros de ense√±anza"
 
 ***************
 ***aedu_ci***
@@ -897,7 +897,7 @@ replace aedu_ci=GRADO+9 if NIVEL==4 & GRADO>0 & GRADO<=2
 replace aedu_ci=11 if NIVEL==4 & GRADO>2
 replace aedu_ci=GRADO+11 if (NIVEL==5 | NIVEL==6) & GRADO>0 
 replace aedu_ci=int(ULTSEM/2)+11 if (NIVEL==5 | NIVEL==6) & ULTSEM>0 
-label variable aedu_ci "AÒos de Educacion"
+label variable aedu_ci "A√±os de Educacion"
 */
 
 * Modificaciones Marcela Rubio Septiembre 2014: correccion en sintaxis nivel primari va de 1-6 no de 1-9 como en los a~nos anteriores
@@ -908,7 +908,7 @@ replace aedu_ci=GRADO+6 if NIVEL==4 & GRADO>0 & GRADO<=5
 replace aedu_ci=11 if NIVEL==4 & GRADO>5
 replace aedu_ci=GRADO+11 if (NIVEL==5 | NIVEL==6) & GRADO>0 
 replace aedu_ci=int(ULTSEM/2)+11 if (NIVEL==5 | NIVEL==6) & ULTSEM>0 
-label variable aedu_ci "AÒos de Educacion"
+label variable aedu_ci "A√±os de Educacion"
 
 
 
@@ -944,7 +944,7 @@ label var edupre_ci "Educacion preescolar"
 	***************
 	***asispre_ci**
 	***************
-	*Variable agregada por Iv√°n Bornacelly - 01/22/2018
+	*Variable agregada por Iv√É¬°n Bornacelly - 01/22/2018
 	g asispre_ci=.
 	la var asispre_ci "Asiste a educacion prescolar"
 	
@@ -1047,13 +1047,13 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac=0 if eduui==1 | eduuc==1
 replace eduac=1 if NIVEL==6
-label var eduac_ci "Educacion terciaria acadÈmica versus educaciÛn terciaria no-acadÈmica "
+label var eduac_ci "Educacion terciaria acad√©mica versus educaci√≥n terciaria no-acad√©mica "
 
 ***************
 ***repite_ci***
 ***************
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un aÒo o grado"
+label var repite_ci "Personas que han repetido al menos un a√±o o grado"
 
 ******************
 ***repiteult_ci***
@@ -1065,7 +1065,7 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseÒanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de ense√±anza publicos"
 
 
 **************
@@ -1073,7 +1073,7 @@ label var edupub_ci "1 = personas que asisten a centros de enseÒanza publicos"
 **************
 gen byte pqnoasis_ci=.
 replace pqnoasis=pp28 if pp28>0
-label var pqnoasis_ci "Razones para no asistir a centros de enseÒanza"
+label var pqnoasis_ci "Razones para no asistir a centros de ense√±anza"
 label define pqnoasis_ci 1 "Culmino sus estudios" 2 "No hay grado o agnos superiores" 3 "No hay cupo, escuela distante" 4 "falta de recursos economicos" 5 "esta trabajando" 6 "asiste a un curso de capacitacion" 7 "no quiere estudiar" 8 "enfermedad o defecto fisico" 9 "problemas de conducta o de aprendizaje" 10 "cambio de residencia" 11 "edad mayor que la regular" 12 "tiene que ayudar en la casa" 13 "edad menor que la regular" 14 "va a tener un hijo o se caso" 15 "otros"
 label values pqnoasis_ci pqnoasis_ci
 
@@ -1092,7 +1092,7 @@ replace pqnoasis1_ci = 7 if pp28 ==11 | pp28 ==13
 replace pqnoasis1_ci = 8 if pp28 ==2  | pp28 ==3 
 replace pqnoasis1_ci = 9 if pp28 ==6  | pp28 ==10 | pp28 ==15
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ********************************************
@@ -1130,7 +1130,7 @@ gen aguamide_ch=.
 *gen luz_ch=.
 *2014, 05 activado MLO
 gen luz_ch=(pv11a==1)
-label var luz_ch "La principal fuente de iluminaciÛn es electricidad"
+label var luz_ch "La principal fuente de iluminaci√≥n es electricidad"
 
 ****************
 ***luzmide_ch***
@@ -1162,31 +1162,31 @@ gen banoex_ch=.
 replace banoex_ch=1 if bano_ch==1 & ph13a==1
 replace banoex_ch=0 if bano_ch==1 & ph13a==2
 
-label var banoex_ch "El servicio higiÈnico es de uso exclusivo del hogar"
+label var banoex_ch "El servicio higi√©nico es de uso exclusivo del hogar"
 
 
 *************
 ***des1_ch***
 *************
 
-* Modificaciones Marcela Rubio Septiembre 2014: variable fuÈ generada como missing
+* Modificaciones Marcela Rubio Septiembre 2014: variable fu√© generada como missing
 
 gen des1_ch=.
 replace des1_ch=0 if pv8==4
 replace des1_ch=1 if pv8==1 | pv8==2 
 replace des1_ch=2 if pv8==3
-label var des1_ch "Tipo de desag¸e incluyendo definiciÛn de unimproved del MDG"
+label var des1_ch "Tipo de desag√ºe incluyendo definici√≥n de unimproved del MDG"
 
 *************
 ***des2_ch***
 *************
 
-* Modificaciones Marcela Rubio Septiembre 2014: variable fuÈ generada como missing
+* Modificaciones Marcela Rubio Septiembre 2014: variable fu√© generada como missing
 
 gen des2_ch=.
 replace des2_ch=0 if pv8==4
 replace des2_ch=1 if pv8==1 | pv8==2 | pv8==3
-label var des2_ch "Tipo de desag¸e sin incluir la definiciÛn de unimproved de los MDG"
+label var des2_ch "Tipo de desag√ºe sin incluir la definici√≥n de unimproved de los MDG"
 
 *************
 ***piso_ch***
@@ -1212,7 +1212,7 @@ replace pared_ch=0 if pv2==3
 replace pared_ch=1 if pv2==1 | pv2==2 | pv2==4 | pv2==5
 replace pared_ch=2 if pv2==6
 
-label var pared_ch "Materiales de construcciÛn de las paredes"
+label var pared_ch "Materiales de construcci√≥n de las paredes"
 label define pared_ch 0 "No permanentes" 1 "Materiales permanentes" 2 "Otros materiales"
 label values pared_ch pared_ch
 
@@ -1226,7 +1226,7 @@ replace techo_ch=0 if pv3==2 | pv3==4
 replace techo_ch=1 if pv3==1 | pv3==3 | pv3==5
 replace techo_ch=2 if pv3==6
 
-label var techo_ch "Material de construcciÛn del techo"
+label var techo_ch "Material de construcci√≥n del techo"
 label define techo_ch 0 "No permanentes" 1 "Materiales permanentes" 2 "Otros materiales" 
 label values techo_ch techo_ch
 
@@ -1234,7 +1234,7 @@ label values techo_ch techo_ch
 ***resid_ch***
 **************
 gen resid_ch=.
-label var resid_ch "MÈtodo de eliminaciÛn de residuos"
+label var resid_ch "M√©todo de eliminaci√≥n de residuos"
 
 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
@@ -1281,8 +1281,8 @@ gen telef_ch=.
 replace telef_ch=1 if pv11d==1
 replace telef_ch=0 if pv11d==2
 */
-label var telef_ch "Hogar tiene servicio telefÛnico fijo"
-label define telef_ch 0 "No" 1 "SÌ"
+label var telef_ch "Hogar tiene servicio telef√≥nico fijo"
+label define telef_ch 0 "No" 1 "S√≠"
 label values telef_ch telef_ch
 
 ***************
@@ -1293,7 +1293,7 @@ gen refrig_ch=.
 replace refrig_ch=1 if ph14a==1
 replace refrig_ch=0 if ph14a==2
 label var refrig_ch "El hogar posee heladera o refrigerador"
-label define refrig_ch 0 "No" 1 "SÌ"
+label define refrig_ch 0 "No" 1 "S√≠"
 label values refrig_ch refrig_ch
 
 **************
@@ -1307,8 +1307,8 @@ gen freez_ch=.
 gen auto_ch=.
 replace auto_ch=1 if ph15>0 & ph15 !=.
 replace auto_ch=0 if ph15==0
-label var auto_ch "El hogar posee automÛvil particular"
-label define auto_ch 0 "No" 1 "SÌ"
+label var auto_ch "El hogar posee autom√≥vil particular"
+label define auto_ch 0 "No" 1 "S√≠"
 label values auto_ch auto_ch
 
 **************
@@ -1319,7 +1319,7 @@ gen compu_ch=.
 replace compu_ch=1 if ph14n==1
 replace compu_ch=0 if ph14n==2
 label var compu_ch "El hogar posee computadora"
-label define compu_ch 0 "No" 1 "SÌ"
+label define compu_ch 0 "No" 1 "S√≠"
 label values compu_ch compu_ch
 
 
@@ -1330,8 +1330,8 @@ label values compu_ch compu_ch
 gen internet_ch=.
 replace internet_ch=1 if ph14o==1
 replace internet_ch=0 if ph14o==2
-label var internet_ch "El hogar posee conexiÛn a internet"
-label define internet_ch 0 "No" 1 "SÌ"
+label var internet_ch "El hogar posee conexi√≥n a internet"
+label define internet_ch 0 "No" 1 "S√≠"
 label values internet_ch internet_ch
 
 ************
@@ -1340,8 +1340,8 @@ label values internet_ch internet_ch
 gen cel_ch=.
 replace cel_ch=1 if ph14l==1
 replace cel_ch=0 if ph14l==2
-label var cel_ch "El hogar tiene servicio telefÛnico celular"
-label define cel_ch 0 "No" 1 "SÌ"
+label var cel_ch "El hogar tiene servicio telef√≥nico celular"
+label define cel_ch 0 "No" 1 "S√≠"
 label values cel_ch cel_ch
 
 **************
@@ -1366,7 +1366,7 @@ gen vivi2_ch=.
 replace vivi2_ch=1 if vivi1_ch==1 | vivi1_ch==2
 replace vivi2_ch=0 if vivi1_ch==3
 label var vivi2_ch "La vivienda en la que reside el hogar es una casa o un departamento"
-label define vivi2_ch 0 "No" 1 "SÌ"
+label define vivi2_ch 0 "No" 1 "S√≠"
 label values vivi2_ch vivi2_ch
 
 
@@ -1386,7 +1386,7 @@ label values viviprop_ch viviprop_ch
 ***vivitit_ch***
 ****************
 gen vivitit_ch=.
-label var vivitit_ch "El hogar posee un tÌtulo de propiedad"
+label var vivitit_ch "El hogar posee un t√≠tulo de propiedad"
 
 ****************
 ***vivialq_ch***
@@ -1417,15 +1417,15 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

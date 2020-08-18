@@ -42,5 +42,6 @@ drop if _merge==1
 compress
 
 drop _merge
+rename lp31_ci lp31
 
 save "`base_out'", replace

@@ -334,7 +334,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if (tp39>=1 & tp39 <=2) 
 replace condocup_ci=2 if (tp39>=3 & tp39 <=4)  
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-replace condocup_ci=4 if edad_ci<15
+replace condocup_ci=4 if edad_ci<10
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
@@ -820,9 +820,8 @@ gen byte aedu_ci=.
 replace aedu_ci=0               if ep30n==1 | ep30n==2
 replace aedu_ci=ep30a           if ep30n==3
 replace aedu_ci=ep30a+6         if ep30n==4
-replace aedu_ci=ep30s+11        if (ep30n==5 | ep30n==6) & ep30s<6
-replace aedu_ci=16              if ep30n==6 & (ep30s>=6 & ep30s<=12)
-replace aedu_ci=ep30s+17        if ep30n==7
+replace aedu_ci=(11+(0.5*ep30s))  if (ep30n==5 | ep30n==6)  // técnico (TSU) | Universitario
+replace aedu_ci=(17+(0.5*ep30s))  if ep30n==7 //posgrado
 label variable aedu_ci "Años de Educacion"
 
 

@@ -67,7 +67,9 @@ label value zona zona
 *** idh_ch ***
 ****************
 
-gen idh_ch = interview__id
+
+sort interview__id
+egen idh_ch=group(interview__id)
 
 
 gen idp_ci=Miembro__id
@@ -76,7 +78,7 @@ gen idp_ci=Miembro__id
 ***************
 ***factor_c***
 ***************
-gen factor_ci=.
+gen factor_ci=pondera
 label var factor_ci "Factor de Expansion del Individuo"
 
 gen factor_ch=pondera
@@ -869,9 +871,6 @@ replace aedu_ci = 17 + s7q11c*0.5 if s7q11==9 & aedu_ci==. //posgrado
 replace aedu_ci = 12 + s7q11d*0.25 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
 replace aedu_ci = 17 + s7q11d*0.25 if s7q11==9 & aedu_ci==. //posgrado
 
-*para las personas que estan en missing y maximizar la muestra se trata de recuperar los missing en educacion con el nivel educativo
-replace aedu_ci=0 if s7q1==2 & aedu_ci==.
-
 label variable aedu_ci "Años de Educacion"
 
 							
@@ -1344,7 +1343,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /*_____________________________________________________________________________________________________*/
 
 
-*do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
@@ -1364,13 +1363,13 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-/*
+
 foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 
 		
 		format `var' %18.4f
 		}
-*/
+
 compress
 
 

@@ -333,7 +333,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if (tp47>=1 & tp47 <=2) 
 replace condocup_ci=2 if (tp47>=3 & tp47 <=4)  
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-replace condocup_ci=4 if edad_ci<15
+replace condocup_ci=4 if edad_ci<10
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
@@ -808,11 +808,10 @@ recode ep37a ep37n ep37s (99=.) (98=.)
 
 gen byte aedu_ci=.
 replace aedu_ci=0               if ep37n==1 | ep37n==2
-replace aedu_ci=ep37a           if ep37n==3 & ep37a>0
-replace aedu_ci=ep37a+6         if ep37n==4 & ep37a>0 & ep37a<=6
-replace aedu_ci= 12             if ep37n==4 & (ep37a>=7 & ep37a<=9) //Hay quienes declaran tener 7,8,9 años de educación media, cuando el máximo es 6. A los que declaran más de 6 se considera que tienen primaria y educación media completa.
-replace aedu_ci=ep37a+12        if (ep37n>=5 & ep37n<=7) & ep37a>0 
-replace aedu_ci=int(ep37s/2)+12 if (ep37n>=5 & ep37n<=7) & ep37s>0 
+replace aedu_ci=ep37a           if ep37n==3
+replace aedu_ci=ep37a+6         if ep37n==4
+replace aedu_ci=(11+(0.5*ep37s))  if (ep37n==5 | ep37n==6)  // técnico (TSU) | Universitario
+replace aedu_ci=(17+(0.5*ep37s))  if ep37n==7 //posgrado
 label variable aedu_ci "Años de Educacion"
 
 

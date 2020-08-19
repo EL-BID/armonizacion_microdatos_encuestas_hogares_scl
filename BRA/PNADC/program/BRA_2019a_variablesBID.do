@@ -94,7 +94,7 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1032/4
+gen factor_ch=v1032
 label variable factor_ch "Factor de expansión del hogar"
 
 ***************
@@ -154,7 +154,7 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=v1032/4 // se divide en 4 pues las bases originales son trimestrales
+gen factor_ci=v1032
 label variable factor_ci "Factor de expansión de personas"
 
 **********
@@ -1498,19 +1498,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename v4010 codocupa
 rename v4013 codindustria
-
 compress
-
-
-global ruta = "\\Sdssrv03\surveys"
-
-local PAIS BRA
-local ENCUESTA PNADC
-local ANO "2019"
-local ronda a 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`ENCUESTA'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
 
 saveold "`base_out'", version(12) replace
 

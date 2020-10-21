@@ -525,6 +525,23 @@ label var ylnm_ci "Ingreso laboral NO monetario total"
 ****************
 * ynlm_ci      * 
 ****************
+*- 3 to 1 month:
+replace q6_16 = q6_16/3
+replace q6_17 = q6_17/3
+
+*- 6 to 1 month
+replace q6_18 = q6_18/6
+replace q6_19 = q6_19/6
+replace q6_20a= q6_20a/6
+replace q6_20b= q6_20b/6
+replace q6_24b= q6_24b/6
+replace q6_24a= q6_24a/6
+
+*-12 to 1 month
+replace q6_21 = q6_21/12
+replace q6_22 = q6_22/12
+
+
 foreach var of varlist q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_20a q6_20b q6_21 q6_22  q6_24a q6_24b{
 replace `var'=. if `var'<0
 }

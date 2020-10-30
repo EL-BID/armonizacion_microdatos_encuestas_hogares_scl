@@ -1504,7 +1504,40 @@ gen id_afro_ci = .
 gen raza_ci=.
 
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
 
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migr==1 & inlist(ch16,1,2,3)) if !mi(migr) & !inlist(ch16,6,9)		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	cap: tostring ch15_cod, replace
+	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
+
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza
@@ -1529,7 +1562,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/

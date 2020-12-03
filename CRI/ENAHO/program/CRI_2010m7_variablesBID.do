@@ -1875,6 +1875,14 @@ gen vivialqimp_ch=.
 replace vivialq_ch=v2b 	
 replace vivialq_ch=. 		if v2b==99999999
 
+/***************************
+* DISCAPACIDAD
+***************************/
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+		
 
 
 /*_____________________________________________________________________________________________________*/

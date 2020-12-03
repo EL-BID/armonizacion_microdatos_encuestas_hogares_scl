@@ -1548,17 +1548,12 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 *Daniela Zuluaga Feb 2020:
 *Con base a elaboración Mariana Pinzón y M.Antonella Pereira
 
-gen dis_ci = 0
-recode dis_ci nonmiss=. if a8a>=. & a8b>=.
-recode dis_ci nonmiss=. if inlist(.,a8a,a8b)
-
-foreach i in a b {
-forvalues j=1/7 {
-replace dis_ci=1 if a8`i'==`j'
-}
-}
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
+    gen dis_ci=1 if A8A!=0
+	replace dis_ci=0 if A8A==0
+	replace dis_ci=. if A8A==. 
+	lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+	lab val dis_ci dis_ci
+	label var dis_ci "Personas con discapacidad"
 
 
 /*_____________________________________________________________________________________________________*/

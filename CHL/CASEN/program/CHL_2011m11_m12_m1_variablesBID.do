@@ -1519,6 +1519,21 @@ label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci
 
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+	
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+		
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

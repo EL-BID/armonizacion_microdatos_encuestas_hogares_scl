@@ -1676,6 +1676,20 @@ lab val atencion_ci atencion_ci
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2015.pdf */
 
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+	
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+		
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

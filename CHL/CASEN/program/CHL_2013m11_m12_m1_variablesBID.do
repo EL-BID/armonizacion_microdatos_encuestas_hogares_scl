@@ -1571,6 +1571,21 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+	
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+		
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

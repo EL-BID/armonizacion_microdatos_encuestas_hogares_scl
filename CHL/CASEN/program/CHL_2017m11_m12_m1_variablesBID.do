@@ -1581,23 +1581,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 
-/***************************
-* DISCAPACIDAD
-***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonela Pereira
-
-gen dis_ci = 0
-recode dis_ci nonmiss=. if h10a==9 & h10b==9 & h10c==9 & h10d==9 & h10e==9 & h10f==9
-recode dis_ci nonmiss=. if inlist(9,h10a,h10b,h10c,h10d,h10e,h10f)
-recode dis_ci nonmiss=. if h10a>=. & h10b>=. & h10c>=. & h10d>=. & h10e>=. & h10f>=.
-foreach i in a b c d e f {
-forvalues j=2/4 {
-replace dis_ci=1 if h10`i'==`j'
-}
-}
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
 
 *******************
 *** SALUD  ***
@@ -1702,6 +1685,29 @@ lab val atencion_ci atencion_ci
 	replace migrantelac_ci=inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1  
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2017.pdf */
 	
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+	
+		gen dis_ci = 0
+		recode dis_ci nonmiss=. if inlist(9,h10a,h10b,h10c,h10d,h10e,h10f) //Si alguna variable es 9 se vale como mv? y si las otras son 2,3 o 4?
+		recode dis_ci nonmiss=. if h10a>=. & h10b>=. & h10c>=. & h10d>=. & h10e>=. & h10f>=. //¿Porq no ==?
+		foreach i in a b c d e f {
+			forvalues j=2/4 {
+			replace dis_ci=1 if h10`i'==`j'
+			}
+			}
+		lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+		lab val dis_ci dis_ci
+		label var dis_ci "Personas con discapacidad"
+		tab dis_ci, mi
+		
+
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

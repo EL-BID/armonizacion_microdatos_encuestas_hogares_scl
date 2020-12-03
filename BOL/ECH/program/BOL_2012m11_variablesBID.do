@@ -2263,6 +2263,18 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
+*****************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+
 
 
 /*_____________________________________________________________________________________________________*/

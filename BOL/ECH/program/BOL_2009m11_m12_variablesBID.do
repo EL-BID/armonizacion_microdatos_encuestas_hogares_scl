@@ -2153,6 +2153,18 @@ label var vivialq_ch "Alquiler mensual"
 gen vivialqimp_ch=s8_04
 label var vivialqimp_ch "Alquiler mensual imputado"
 
+*****************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

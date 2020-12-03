@@ -2090,6 +2090,26 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+gen dis_ci = 0
+foreach i in a b c d e f  {
+forvalues j=2/4 {
+recode dis_ci 0=1 if s04a_06`i'==`j'
+}
+}
+recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
+recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

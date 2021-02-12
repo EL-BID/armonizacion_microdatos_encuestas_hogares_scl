@@ -181,7 +181,7 @@ cap clonevar p47a = pertrabn
 	***estrato_ci***
 	***************
 
-	clonevar estrato_ci=.
+	gen estrato_ci=.
 	label variable estrato_ci "Estrato"
 
 	*************

@@ -162,14 +162,14 @@ label variable factor_ci "Factor de expansion del individuo"
 ***upm_ci***
 ***************
 
-clonevar upm_ci=.
+gen upm_ci=.
 label variable upm_ci "Unidad Primaria de Muestreo"
 
 ***************
 ***estrato_ci***
 ***************
 
-clonevar estrato_ci=.
+gen estrato_ci=.
 label variable estrato_ci "Estrato"
 
 **********

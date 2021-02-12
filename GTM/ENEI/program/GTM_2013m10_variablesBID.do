@@ -167,7 +167,7 @@ label variable upm_ci "Unidad Primaria de Muestreo"
 ***estrato_ci***
 ***************
 
-clonevar estrato_ci=.
+gen estrato_ci=.
 label variable estrato_ci "Estrato"
 
 **********

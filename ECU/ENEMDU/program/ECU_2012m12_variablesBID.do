@@ -183,7 +183,7 @@ label value region_BID_c region_BID_c
 	***estrato_ci***
 	***************
 
-	clonevar estrato_ci=.
+	gen estrato_ci=.
 	label variable estrato_ci "Estrato"
 
 	*************

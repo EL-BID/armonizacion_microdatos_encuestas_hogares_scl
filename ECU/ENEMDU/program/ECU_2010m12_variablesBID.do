@@ -189,7 +189,7 @@ cap clonevar motnobus = p34
 	***estrato_ci***
 	***************
 
-	clonevar estrato_ci=.
+	gen estrato_ci=.
 	label variable estrato_ci "Estrato"
 
 	*************

@@ -2,7 +2,7 @@
 
 * labels de variables
 *====================================================================================================================================*
-*                                                     INCLUSIÛN DE VARIABLES EXTERNAS                                                *
+*                                                     INCLUSI√≥N DE VARIABLES EXTERNAS                                                *
 *====================================================================================================================================*
 capture drop _merge
 merge m:1 pais_c anio_c using "$ruta\general_documentation\data_externa\poverty\International_Poverty_Lines\5_International_Poverty_Lines_LAC_long",   keepusing(ppp_2005 ppp_2011 cpi_2005 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi ppp_wdi2011)
@@ -23,7 +23,7 @@ drop ppp_2005 ppp_2011 cpi_2005 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi _me
 *                                                         VARIABLES DE IDENTIFICACION                                                *
 *====================================================================================================================================*
 label var region_BID_c "Regiones BID"
-	label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)", add modify
+	label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)", add modify
 	label value region_BID_c region_BID_c
 
 label var factor_ci "Factor de expansion del individuo"
@@ -32,14 +32,14 @@ label var factor_ch "Factor de expansion del hogar"
 label var idh_ch "ID del hogar"
 label var idp_ci "ID de la persona en el hogar"
 
-label var region_c "Regiones especifica de cada paÌs"
+label var region_c "Regiones especifica de cada pa√≠s"
 
 label var zona_c "Zona del pais"
 	label define zona_c 1 "urbana" 0 "rural", add modify
 	label value zona_c zona_c
 
 	
-label var pais_c "Nombre del PaÌs"
+label var pais_c "Nombre del Pa√≠s"
 label var anio_c "Anio de la encuesta" 
 *label var semestre_c "Semestre de la encuesta" /* No existe en todas las encuestas*/
 label var mes_c "Mes de la encuesta" 
@@ -50,19 +50,19 @@ label value mes_c mes_c
 *                                                          VARIABLES DEMOGRAFICAS                                                    *
 *====================================================================================================================================*
 label var relacion_ci "Relacion o parentesco con el jefe del hogar"
-	label define relacion_ci 1 "Jefe/a" 2 "Conyuge/esposo/compaÒero" 3 "Hijo/a" 4 "Otros_parientes" 5 "Otros_no_Parientes" 6 "Empleado/a_domestico/a", add modify 
+	label define relacion_ci 1 "Jefe/a" 2 "Conyuge/esposo/compa√±ero" 3 "Hijo/a" 4 "Otros_parientes" 5 "Otros_no_Parientes" 6 "Empleado/a_domestico/a", add modify 
 	label values relacion_ci relacion_ci
 	
 label var sexo_ci "Sexo del individuo" 
 	label define sexo_ci 1 "Hombre" 2 "Mujer", add modify
 	label value sexo_ci sexo_ci
 
-label var edad_ci "Edad del individuo en aÒos"
+label var edad_ci "Edad del individuo en a√±os"
 label var civil_ci "Estado civil"
 	label define civil_ci 1 "soltero/a" 2 "union_formal/informal" 3 "divorciado/a_o_separado/a" 4 "Viudo/a" , add modify
 	label value civil_ci civil_ci
 	
-label var raza_ci "Raza o etnia_clasificacion varia segun el paÌs"
+label var raza_ci "Raza o etnia_clasificacion varia segun el pa√≠s"
 	
 label var jefe_ci "Jefe/a de hogar"
 label var nconyuges_ch "# de conyuges en el hogar"
@@ -83,14 +83,37 @@ label var nmenor1_ch "# de familiares menores a 1 anio en el hogar"
 label var miembros_ci "=1: es miembro del hogar"
 label var nmiembros_ch "# de miembros en el hogar"
 
+
+*====================================================================================================================================*
+*                                                          VARIABLES DE DIVERSIDAD                                                   *
+*====================================================================================================================================*
+label define afroind_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
+label value afroind_ci afroind_ci 
+label var afroind_ci "Raza o etnia del individuo"
+
+lab def afroind_ch 1 "Hogares con Jefatura Ind√≠gena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Informaci√≥n √©tnico/racial"
+lab val afroind_ch afroind_ch 
+label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
+
+label var afroind_ano_c "A√±o Cambio de Metodolog√≠a Medici√≥n Raza/Etnicidad"
+
+lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+
+lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
+lab val dis_ch dis_ch 
+lab var dis_ch "Hogares con miembros con discapacidad"
+
+
 *====================================================================================================================================*
 *                                                          VARIABLES DEL MERCADO LABORAL                                              *
 *====================================================================================================================================*
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def armonizada para cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def armonizada para cada pais"
 	label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "No_responde_por_menor_edad", add modify
 	label value condocup_ci condocup_ci
 	
-label var categoinac_ci "CondiciÛn de inactividad"
+label var categoinac_ci "Condici√≥n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos", add modify
 	label value categoinac_ci categoinac_ci
 
@@ -105,9 +128,9 @@ label var ocupa_ci "Ocupacion laboral en la actividad principal"
 
 label var emp_ci "=1: si ocupado (empleado)"
 
-label var desemp_ci "Desempleado que buscÛ empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que busc√≥ empleo en el periodo de referencia"
 
-label var pea_ci "PoblaciÛn EconÛmicamente Activa"
+label var pea_ci "Poblaci√≥n Econ√≥micamente Activa"
 
 label var desalent_ci "Trabajadores desalentados: creen q no conseguiran trabajo"
 label var antiguedad_ci "Antiguedad en la actividad actual"
@@ -140,11 +163,11 @@ label var tamemp_ci "# empleados en la empresa segun rangos"
 	label define tamemp_ci 1 "Pequena" 2 "Mediana" 3 "Grande", add modify
 	label value tamemp_ci tamemp_ci
 	
-label var spublico_ci "=1: Personas que trabajan en el sector p˙blico"
+label var spublico_ci "=1: Personas que trabajan en el sector p√∫blico"
 
 label var rama_ci "Rama de actividad laboral de la ocupacion principal-Grandes Divisiones (ISIC Rev. 2)"
-	label def rama_ci 1"Agricultura,_caza,_silvicultura_y_pesca" 2"ExplotaciÛn_de_minas_y_canteras" 3"Industrias_manufactureras", add modify
-	label def rama_ci 4"Electricidad,_gas_y_agua" 5"ConstrucciÛn" 6"Comercio,_restaurantes_y_hoteles" 7"Transporte_y_almacenamiento", add modify
+	label def rama_ci 1"Agricultura,_caza,_silvicultura_y_pesca" 2"Explotaci√≥n_de_minas_y_canteras" 3"Industrias_manufactureras", add modify
+	label def rama_ci 4"Electricidad,_gas_y_agua" 5"Construcci√≥n" 6"Comercio,_restaurantes_y_hoteles" 7"Transporte_y_almacenamiento", add modify
 	label def rama_ci 8"Establecimientos_financieros,_seguros_e_inmuebles" 9"Servicios_sociales_y_comunales", add modify
 	label val rama_ci rama_ci
 	
@@ -176,7 +199,7 @@ label var ynlm_ci "Ingreso no laboral monetario total individual"
 label var ynlnm_ci "Ingreso no laboral no monetario total individual" 
 			
 			* Totales a nivel de hogar
-label var nrylmpri_ch "Hogares con alg˙n miembro que no respondiÛ por ingresos"
+label var nrylmpri_ch "Hogares con alg√∫n miembro que no respondi√≥ por ingresos"
 label var ylm_ch "Ingreso laboral monetario del hogar"
 label var ylnm_ch "Ingreso laboral no monetario del hogar"
 label var ylmnr_ch "Ingreso laboral monetario del hogar con missing en NR"
@@ -190,12 +213,12 @@ label var ypen_ci "Monto de ingreso por pension contributiva"
 label var ypensub_ci "Monto de ingreso por pension subsidiada / no contributiva"
 
 * LINEAS DE POBREZA y OTRAS VARIABLES EXTERNAS DE REFERENCIA
-capture label var lp19_ci  "LÌnea de pobreza USD1.9 por dÌa en moneda local a precios corrientes a PPA 2011"
-capture label var lp31_ci  "LÌnea de pobreza USD3.1 por dÌa en moneda local a precios corrientes a PPA 2011"
-capture label var lp5_ci "LÌnea de pobreza USD5 por dÌa en moneda local a precios corrientes a PPA 2011"
+capture label var lp19_ci  "L√≠nea de pobreza USD1.9 por d√≠a en moneda local a precios corrientes a PPA 2011"
+capture label var lp31_ci  "L√≠nea de pobreza USD3.1 por d√≠a en moneda local a precios corrientes a PPA 2011"
+capture label var lp5_ci "L√≠nea de pobreza USD5 por d√≠a en moneda local a precios corrientes a PPA 2011"
 capture label var tc_c "Tasa de cambio LCU/USD Fuente: WB/WDI"
-capture label var ipc_c "Õndice de precios al consumidor base 2011=100 Fuente: IMF/WEO"
-capture label var ppa_c "Factor de conversiÛn Paridad de Poder Adquisitivo PPA LCU/USD 2011 Fuente: WB/WDI"
+capture label var ipc_c "√çndice de precios al consumidor base 2011=100 Fuente: IMF/WEO"
+capture label var ppa_c "Factor de conversi√≥n Paridad de Poder Adquisitivo PPA LCU/USD 2011 Fuente: WB/WDI"
 label var lp_ci "Linea de pobreza oficial del pais en moneda local a precios corrientes"
 label var lpe_ci "Linea de indigencia oficial del pais en moneda local a precios corrientes"
 label var salmm_ci "Salario minimo legal a precios corrientes"
@@ -242,8 +265,8 @@ label var tecnica_ci "=1: formacion terciaria tecnica"
 label var pqnoasis_ci "Razones para no asistir a la escuela-variable original de cada pais"
 label var pqnoasis1_ci "Razones para no asistir a la escuela-variable armonizada"
 label var repite_ci "Ha repetido al menos un grado"
-label var repiteult_ci "Ha repetido el ˙ltimo grado"
-label var edupub_ci "Asiste a un centro de ensenanza p˙blico"
+label var repiteult_ci "Ha repetido el √∫ltimo grado"
+label var edupub_ci "Asiste a un centro de ensenanza p√∫blico"
 
 
 *====================================================================================================================================*
@@ -251,42 +274,42 @@ label var edupub_ci "Asiste a un centro de ensenanza p˙blico"
 *====================================================================================================================================*
 
 label var aguared_ch "Acceso a fuente de agua por red"
-label var aguadist_ch "UbicaciÛn de la principal fuente de agua"
+label var aguadist_ch "Ubicaci√≥n de la principal fuente de agua"
 	label def aguadist_ch 1"Dentro_de_la_vivienda" 2"Fuera_de_la_vivienda_pero_en_el_terreno", add modify
 	label def aguadist_ch 3"Fuera_de_la_vivienda_y_del_terreno", add modify
 	label val aguadist_ch aguadist_ch
-label var aguamala_ch "Agua unimproved seg˙n MDG" 
+label var aguamala_ch "Agua unimproved seg√∫n MDG" 
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
-label var luz_ch  "La principal fuente de iluminaciÛn es electricidad"
+label var luz_ch  "La principal fuente de iluminaci√≥n es electricidad"
 label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 label var combust_ch "Principal combustible gas o electricidad" 
 label var bano_ch "El hogar tiene servicio sanitario"
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
-label var des1_ch "Tipo de desague seg˙n unimproved de MDG"
-	label def des1_ch 0"No_tiene_servicio_sanitario" 1"Conectado_a_red_general_o_c·mara_sÈptica", add modify
-	label def des1_ch 2"Letrina_o_conectado_a_pozo_ciego" 3"Desemboca_en_rÌo_o_calle", add modify
+label var des1_ch "Tipo de desague seg√∫n unimproved de MDG"
+	label def des1_ch 0"No_tiene_servicio_sanitario" 1"Conectado_a_red_general_o_c√°mara_s√©ptica", add modify
+	label def des1_ch 2"Letrina_o_conectado_a_pozo_ciego" 3"Desemboca_en_r√≠o_o_calle", add modify
 	label val des1_ch des1_ch
-label var des2_ch "Tipo de desague sin incluir definiciÛn MDG"
-	label def des2_ch 0"No_tiene_servicio_sanitario" 1"Conectado_a_red_general,_c·mara_sÈptica,_pozo_o_letrina", add modify
+label var des2_ch "Tipo de desague sin incluir definici√≥n MDG"
+	label def des2_ch 0"No_tiene_servicio_sanitario" 1"Conectado_a_red_general,_c√°mara_s√©ptica,_pozo_o_letrina", add modify
 	label def des2_ch 2"Cualquier_otro_caso", add modify
 	label val des2_ch des2_ch
-label var piso_ch "Materiales de construcciÛn del piso"  
+label var piso_ch "Materiales de construcci√≥n del piso"  
 	label def piso_ch 0"Piso_de_tierra" 1"Materiales_permanentes", add modify
 	label val piso_ch piso_ch
-label var pared_ch "Materiales de construcciÛn de las paredes"
-label var techo_ch "Materiales de construcciÛn del techo" 
+label var pared_ch "Materiales de construcci√≥n de las paredes"
+label var techo_ch "Materiales de construcci√≥n del techo" 
 	label def techo_ch 1"Materiales_permanentes"  0"Materiales_no_permanentes" 2 "Otros_materiales", add modify
 label var techo_ch techo_ch 
-label var resid_ch "MÈtodo de eliminaciÛn de residuos"
+label var resid_ch "M√©todo de eliminaci√≥n de residuos"
 label var dorm_ch "# de habitaciones exclusivas para dormir"
 label var cuartos_ch "# Habitaciones en el hogar"
 label var cocina_ch "Cuarto separado y exclusivo para cocinar"
-label var telef_ch "El hogar tiene servicio telefÛnico fijo"
+label var telef_ch "El hogar tiene servicio telef√≥nico fijo"
 label var refrig_ch "El hogar posee refrigerador o heladera"
 label var freez_ch "El hogar posee freezer o congelador"
 label var auto_ch "El hogar posee automovil particular"
 label var compu_ch "El hogar posee computador"
-label var internet_ch "El hogar posee conexiÛn a internet"
+label var internet_ch "El hogar posee conexi√≥n a internet"
 label var cel_ch "El hogar tiene servicio telefonico celular"
 label var vivi1_ch "Tipo de vivienda en la que reside el hogar"
 	label def vivi1_ch 1 "Casa" 2 "Departamento" 3 "Otros", add modify
@@ -297,7 +320,7 @@ label var viviprop_ch "Propiedad de la vivienda"
 	label def viviprop_ch 0"Alquilada" 1"Propia" 3"Ocupada_(propia_de_facto)", add modify
 	label val viviprop_ch viviprop_ch
 	
-label var vivitit_ch "El hogar posee un tÌtulo de propiedad"
+label var vivitit_ch "El hogar posee un t√≠tulo de propiedad"
 label var vivialq_ch "Alquiler mensual"
 label var vivialqimp_ch "Alquiler mensual imputado"
 label var aguamejorada_ch "El hogar tiene acceso a agua potable de fuente mejorada"

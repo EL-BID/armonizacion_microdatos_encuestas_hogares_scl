@@ -265,6 +265,17 @@ contar los registros con parentesco de 501 a 503.
 ******************************
 gen factor_ci=factor
 label var factor_ci "Individual Expansion Factor"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=est_dis
+							
+
 ******************************
 *	sexo_ci
 ******************************
@@ -369,6 +380,46 @@ label var miembros_ci "Miembro del hogar"
 
 *option: gen miembros_ci=((paren>=100 & paren<=300) | (paren>=500 & paren<=700)) 
 
+******************************************************************************
+*	VARIABLES DE DIVERSIDAD
+******************************************************************************
+**María Antonella Pereira & Nathalia Maya - Marzo 2021 
+
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+replace afroind_ci=1 if etnia=="1" 
+replace afroind_ci=2 if etnia=="0"
+replace afroind_ci=3 if etnia=="2"
+replace afroind_ci=. if etnia==" "
+replace afroind_ci=9 if etnia==" " & edad_ci<3
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2010
+
+	*************
+	***dis_ci***
+	**************
+gen dis_ci= disc1
+replace dis_ci="." if inlist(disc1,"&","7")
+destring dis_ci, replace			
+recode  dis_ci (8 = 0) (1/6=1)
+
+	*************
+	***dis_ch***
+	**************
+egen dis_ch = sum(dis_ci), by(idh_ch) 
+replace dis_ch=1 if dis_ch>=1 & dis_ch!=. 
 
 ******************************************************************************
 *	LABOR MARKET
@@ -1682,19 +1733,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 ren industria industria_orig
 ren comercio comercio_orig
 ren servicios servicios_orig
-
-
-/***************************
-* DISCAPACIDAD
-***************************/
-	gen dis_ci= disc1
-	replace dis_ci="." if inlist(disc1,"&","7")
-	destring dis_ci, replace			
-	recode  dis_ci (8 = 0) (1/6=1)
-		lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad", modify
-		lab val dis_ci dis_ci
-		label var dis_ci "Personas con discapacidad"
-
 		
 ******************************
 *** VARIABLES DE MIGRACION ***

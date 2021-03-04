@@ -282,39 +282,26 @@ label var miembros_ci "Miembro del hogar"
 	***afroind_ci***
 	***************
 gen afroind_ci=. 
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
-label var afroind_ci "Raza o etnia del individuo"
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_ch=. 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
-label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
 
 	*******************
 	***afroind_ano_c***
 	*******************
 gen afroind_ano_c=.		
-label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 
 	*******************
 	***dis_ci***
 	*******************
 gen dis_ci=. 
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
 
 	*******************
 	***dis_ch***
 	*******************
 gen dis_ch=. 
-lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-lab val dis_ch dis_ch 
-lab var dis_ch "Hogares con miembros con discapacidad"
 
 ******************************************************************************
 *	LABOR MARKET

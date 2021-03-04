@@ -321,60 +321,48 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<6)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
 
-/*
-ppa07:
-           1 xinca
-           2 garifuna
-           3 ladino
-           4 extranjero
-           5 maya
-*/
 
-gen raza_ci=.
-replace raza_ci= 1 if ppa07 ==1 | ppa07 ==5
-replace raza_ci= 2 if (ppa07 ==2) & raza_ci==.
-replace raza_ci= 3 if (ppa07 ==0 | ppa07 ==3 | ppa07 ==4) & raza_ci==.
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo" 
+         ******************************
+         *** VARIABLES DE DIVERSIDAD **
+         ******************************
+*Nathalia Maya & Antonella Pereira
+*Feb 2021	
 
-gen raza_aux=.
-replace raza_aux= 1 if ppa07 ==1 | ppa07 ==5
-replace raza_aux= 4 if (ppa07 ==2) & raza_aux==.
-replace raza_aux= 3 if (ppa07 ==0 | ppa07 ==3 | ppa07 ==4) & raza_aux==.
-bys idh_ch: gen aux=raza_aux if ppa06==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_aux=aux1 if (raza_aux ==. & (ppa06 ==3 | ppa06==5))  
-replace raza_aux=3 if raza_aux==. 
-drop aux aux1
-label define raza_aux 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 4 "Afro-indígena"
-label value raza_aux raza_aux 
-label var raza_aux "Raza o etnia del individuo" 
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: Usted se considera perteneciente a uno de los siguientes pueblos? (ppa07) (1 xinka; 2 garifuna; 3 ladino; 4 extranjero; 5 maya) 
+gen afroind_ci=. 
+replace afroind_ci=1  if ppa07 == 1 | ppa07 ==2 | ppa07 ==5 
+replace afroind_ci=3 if ppa07 ==3 
+replace afroind_ci=9 if ppa07 ==4
+replace afroind_ci=. if ppa07 ==. | ppa07==0
 
-gen raza_idioma_ci=.
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_aux==1 | raza_aux==4
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2010
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_aux==2 | raza_aux==4
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
+
 
 		************************************
 		*** VARIABLES DEL MERCADO LABORAL***
@@ -1572,7 +1560,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+rafroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

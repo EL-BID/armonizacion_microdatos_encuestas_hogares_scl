@@ -32,8 +32,8 @@ País: Bolivia
 Encuesta: ECH
 Round: m11
 Autores: Mayra Sáenz
-Última modificación: Stephanie González Rubio
-Fecha última modificación: Junio 22, 2018
+ Stephanie González Rubio (Jun 22, 2018)
+Última versión: 2021/03/09 (Cesar Lins)
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -43,7 +43,7 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
 
-use `base_in', clear
+use "`base_in'", clear
 
 
 	****************
@@ -79,6 +79,15 @@ label var region_c "division politica, estados"
 ***************
 gen factor_ch= factor
 label variable factor_ch "Factor de expansion del hogar"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=estrato
 
 ***************
 ****idh_ch*****
@@ -275,50 +284,59 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-*Raza usando idioma
-gen raza_idioma_ci = .
-replace raza_idioma_ci= 1 if s02a_07_1>=7&s02a_07_1<=36 | s02a_07_1==2  
-replace raza_idioma_ci= 3 if s02a_07_1>=41&s02a_07_1<=60 | s02a_07_1==6  
 
-bys idh_ch, sort: gen aux=raza_idioma_ci if s02a_05==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s02a_05==3| s02a_05==9))    
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+												
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s03a_2) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
+**Pregunta: a qué nación o pueblo pertenece? (s03a_2npioc) (AFROBOLIVIANO 1 - TODAS LAS OTRAS CATEGORIAS SON INDIGENAS)
 
-*Raza usando la definicion más apropiada
-gen raza_ci=.
-replace raza_ci= 1 if  s03a_2==1
-replace raza_ci= 2 if  s03a_2==1 & s03a_2npioc==1 
-replace raza_ci= 3 if (s03a_2==2 | s03a_2==3) 
-bys idh_ch: gen aux=raza_ci if s02a_05==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (s02a_05==3| s02a_05==9))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+gen afroind_ci=. 
+replace afroind_ci=1 if s03a_2==1 & s03a_2npioc!=1
+replace afroind_ci=2 if s03a_2npioc==1 
+replace afroind_ci=3 if s03a_2 ==2 
+replace afroind_ci=9 if s03a_2==3 
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2013
+
+
+	*************
+	***dis_ci***
+	**************
+gen dis_ci = 0
+foreach i in a b c d e f  {
+forvalues j=2/4 {
+recode dis_ci 0=1 if s04a_06`i'==`j'
+}
+}
+recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 //¿Para qué esto?
+recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
+
+	
+	*************
+	***dis_ch***
+	**************		
+egen dis_ch  = sum(dis_ci), by(idh_ch) 
+replace dis_ch=1 if dis_ch>=1 & dis_ch!=. 
+
+
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
@@ -2089,25 +2107,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
-	
-******************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci = 0
-foreach i in a b c d e f  {
-forvalues j=2/4 {
-recode dis_ci 0=1 if s04a_06`i'==`j'
-}
-}
-recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
-recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+
 
 	
 /*_____________________________________________________________________________________________________*/
@@ -2123,7 +2123,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -2146,7 +2146,8 @@ rename caeb_op codindustria
 compress
 
 
-saveold "`base_out'", replace 
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "`base_out'", replace 
 
 
 log close

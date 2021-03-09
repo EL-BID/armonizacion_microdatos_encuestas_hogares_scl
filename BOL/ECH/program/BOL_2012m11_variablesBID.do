@@ -36,7 +36,9 @@ Autores:
 Versión 2014: Melany Gualavisi
 Modificación 2016: Mayra Sáenz
 Última versión: 11/04/2016
-Fecha última modificación: 04/09/2014
+Fecha última modificación: 2021/03/09 (Cesar Lins)
+ The database was replaced in 2021 by a more up-to-date version
+ that was made available by INE. The code was updated accordingly.  
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -46,13 +48,8 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
 
-use `base_in', clear
-
-
-foreach v of varlist _all {
-	local lowname=lower("`v'")
-	rename `v' `lowname'
-}
+use "`base_in'", clear
+rename *, lower
 	
 	****************
 	* region_BID_c *
@@ -89,6 +86,15 @@ label var region_c "division politica, estados"
 gen factor_ch=.
 replace factor_ch = factor
 label variable factor_ch "Factor de expansion del hogar"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=estrato
 
 ***************
 ****idh_ch*****
@@ -287,106 +293,38 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
+			
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-/*	
-c2_05b
-1	AFROBOLIVIANO
-2	ARAONA
-3	AYMARA
-5	BAURE
-7	CAVINEÑO
-11	CHIMAN
-13	CHIQUITANO
-15	GUARANI
-16	GUARAYO
-17	ITONAMA
-18	JOAQUINIANO
-19	KALLAWAYA
-22	LECO
-24	MATACO
-25	MOJEÑO
-27	MOSETEN
-28	MOVIMA
-29	PACAHUARA
-30	QUECHUA
-32	SIRIONO
-33	TACANA
-*/	
 
-/*
-destring c2_05b, replace
+gen afroind_ci=. 
+replace afroind_ci=1 if s2_05a==1 & s2_05b!="001" 
+replace afroind_ci=2 if s2_05b=="001" 
+replace afroind_ci=3 if s2_05a==2 
+replace afroind_ci=9 if s2_05a==3 
+label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
+label value afroind_ci afroind_ci 
+label var afroind_ci "Raza o etnia del individuo"
 
-gen raza_ci=.
-*LMC: actualiza raza_ci==1
-replace raza_ci= 1 if  (c2_05b==3 | c2_05b==13 | c2_05b==15 | c2_05b==25 | c2_05b==30)
-tab s1_10a, gen(idiom_)
-replace raza_ci= 1 if (idiom_2==1 | idiom_6==1 | idiom_10==1) & raza_ci==.
-drop idiom_*
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
+lab val afroind_ch afroind_ch 
+label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
+drop afroind_jefe
 
-*replace raza_ci= 1 if  (cods2_05>=3 & cods2_05>=36)
-replace raza_ci= 2 if c2_05b == 1
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo"
-*/
-*Raza usando idioma
-encode s1_11, gen(idioma2)
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2011
+label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 
-gen raza_idioma_ci = .
-replace raza_idioma_ci= 1 if idioma2==3 | idioma2==4 | idioma2==7 | idioma2==9 | idioma2==12 ///
-|idioma2==16 | idioma2==17 | idioma2==19 | idioma2==21 | idioma2==22
-replace raza_idioma_ci= 3 if idioma2==1 | idioma2==2 | idioma2==5 | idioma2==6 | idioma2==8 ///
-| idioma2==10 | idioma2==10 | idioma2==11| idioma2==13| idioma2==14| idioma2==15| idioma2==18 ///
-| idioma2==20
-bys idh_ch, sort: gen aux=raza_idioma_ci if s1_08==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s1_08 ==3 | s1_08==8))  
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
-
-*Raza usando la definicion mas apropiada
-
-*encode s2_05, gen(etnia)
-
-gen raza_ci=.
-replace raza_ci= 1 if  s2_05a==1
-replace raza_ci= 2 if  s2_05b=="AFROBOLIVIANO"
-replace raza_ci= 3 if (s2_05a==2 | s2_05a==3) 
-bys idh_ch: gen aux=raza_ci if s1_08==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (s1_08 ==3|s1_08==8))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
 
 
 ************************************
@@ -2263,19 +2201,6 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
-*****************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
-
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2290,7 +2215,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -2312,8 +2237,8 @@ rename cods5_17a codindustria
 
 compress
 
-
-saveold "`base_out'", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "`base_out'", replace
 
 
 log close

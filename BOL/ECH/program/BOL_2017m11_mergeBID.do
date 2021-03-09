@@ -23,8 +23,8 @@ Encuesta: ECH
 Round: m11_m12
 Autores:
 Versión 2016: Mayra Sáenz
-Versión 2017: Stephanie González Rubio
-Última versión: Junio 22, 2018
+Versión 2017: Stephanie González Rubio (Junio 6, 2018)
+Última modificación: Cesar Lins (2021/03/09)
 
 
 							SCL/LMK - IADB
@@ -36,6 +36,8 @@ Detalle de procesamientos o modificaciones anteriores:
 
 *El nombre del módulo y el de las variables cambia par
 use "$in\eh2017_equipamiento.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s10c_14 posee_
 rename s10c_15 nro_
@@ -80,6 +82,8 @@ sort folio
 save "$in\eh2017_gastos_equipamiento_reshape.dta", replace
 
 use "$in\eh2017_gastosalimentarios.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s10a_01  s10a_
 rename s10a_02  s10b_
@@ -193,20 +197,31 @@ sort folio
 save "$in\eh2017_gastos_alimentarios_reshape.dta", replace
 
 use "$in\eh2017_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio nro
 save, replace
 
 use "$in\eh2017_vivienda.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
 use "$in\eh2017_gastosnoalimentarios", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
 * Merge
 
 use "$in\eh2017_persona.dta", clear
+
+
 
 merge m:1 folio using "$in\eh2017_vivienda.dta", force
 drop _merge
@@ -220,4 +235,5 @@ drop _merge
 merge m:1 folio using "$in\eh2017_gastosnoalimentarios", force
 drop _merge
 
-saveold "$out\BOL_2017m11.dta", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2017m11.dta", replace

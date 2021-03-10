@@ -15,9 +15,9 @@ set more off
 global ruta = "\\Sdssrv03\surveys"
 
 local PAIS PRY
-local ENCUESTA EPH
-local ANO "2017"
-local ronda m10_m12
+local ENCUESTA EPHC
+local ANO "2019"
+local ronda t4
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 *local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_orig\\`PAIS'_`ANO'`ronda'.dta"
@@ -31,11 +31,11 @@ log using "`log_file'", replace
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Paraguay
-Encuesta: EPH
-Round: Octubre-Diciembre
-Autores: Marcela G. Rubio
+Encuesta: EPHC
+Round: Cuarto trimestre 2019
+Autores: Alvaro Altamirano
 
-Última versión: Alvaro Altamirano - Email: alvaroalt@iadb.org
+Última versión: Daniela Zuluaga - Email: danielazu@iadb.org
 
 
 							SCL/LMK - IADB
@@ -74,14 +74,14 @@ label value region_c region_c
 label var region_c "División política, departamento"*/
 
 *Modificación Mayra Sáenz - Septiembre 2014		  
-gen region_c    = 1 if dpto == 0
-replace region_c= 2 if dpto == 2		  
-replace region_c= 3 if dpto == 5		  
-replace region_c= 4 if dpto == 7
-replace region_c= 5 if dpto == 10
-replace region_c= 6 if dpto == 11
-*replace region_c= 7 if dpto == 1 | dpto == 3 | dpto == 4 | dpto == 6 | dpto == 8 | dpto == 9 | (dpto >= 12 & dpto >= 15) 
-replace region_c= 7 if dpto == 20
+gen region_c    = 1 if dptorep == 0
+replace region_c= 2 if dptorep == 2		  
+replace region_c= 3 if dptorep == 5		  
+replace region_c= 4 if dptorep == 7
+replace region_c= 5 if dptorep == 10
+replace region_c= 6 if dptorep == 11
+*replace region_c= 7 if dptorep == 1 | dptorep == 3 | dptorep == 4 | dptorep == 6 | dptorep == 8 | dptorep == 9 | (dptorep >= 12 & dptorep >= 15) 
+replace region_c= 7 if dptorep == 20
 label define region_c ///
 1 "Asunción" ///
 2 "San Pedro" ///
@@ -142,7 +142,7 @@ label variable pais_c "Pais"
 ***anio***
 **********
 
-gen anio_c=2017
+gen anio_c=2019
 label variable anio_c "Anio de la encuesta"
 
 *****************
@@ -154,13 +154,11 @@ label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
-******************************
-*	mes_c
-******************************
-
-*MGR: Base no trae variable de fecha de visitas
-gen mes_c= .
-label variable mes_c "Mes de la encuesta"
+*********************
+***mes(trimmestre)***
+*********************
+g mes_c=trimestre  //dejo el mismo nombre para no modificar dofile de Labels
+label variable mes_c "trimestre de la encuesta"
 
 *****************
 ***relacion_ci***
@@ -391,7 +389,7 @@ label var lp_ci "Linea de pobreza extrema del pais"
 ****************
 gen cotizando_ci=.
 replace cotizando_ci=1 if b10==1 | c07==1
-replace cotizando_ci=0 if (b10==6 | b10==.) & (c07==6 | c07==.)
+replace cotizando_ci=0 if (b10==6 | b10==. | b10==9) & (c07==6 | c07==.)
 replace cotizando_ci = 0 if peaa == 2 
 label var cotizando_ci "Cotizante a la Seguridad Social"
 
@@ -400,7 +398,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 ****************
 gen cotizapri_ci=.
 replace cotizapri_ci=1 if b10==1 
-replace cotizapri_ci=0 if (b10==6 | b10==.) 
+replace cotizapri_ci=0 if (b10==6 | b10==. | b10==9) 
 replace cotizapri_ci = 0 if peaa == 2 
 label var cotizapri_ci "Cotizante a la Seguridad Social en actividad ppal."
 
@@ -468,7 +466,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 **pension_ci*
 *************
 *DZ Jul 2017: Cambio de categorias respecto al anio anterior*
-gen pension_ci=1 if (e01j>0 & e01j<. & e01j!=99999999999) | (e01h>0 & e01h<. & e01h!=99999999999)
+gen pension_ci=1 if (e01jde>0 & e01jde<. & e01jde!=99999999999) | (e01hde>0 & e01hde<. & e01hde!=99999999999)
 recode pension_ci .=0 
 label var pension_ci "1=Recibe pension contributiva"
 
@@ -476,9 +474,9 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 *DZ Jul 2017: Cambio de categorias respecto al anio anterior*
-replace e01j=. if (e01j >= 99999999999 & e01j!=.)
-replace e01h=. if (e01h >= 99999999999 & e01h!=.)
-egen ypen_ci=rowtotal(e01j e01h)
+replace e01jde=. if (e01jde >= 99999999999 & e01jde!=.)
+replace e01hde=. if (e01hde >= 99999999999 & e01hde!=.)
+egen ypen_ci=rowtotal(e01jde e01hde)
 replace ypen_ci=. if pension_ci==0
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -487,15 +485,15 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 * Programa Adulto Mayor
 gen pensionsub_ci=.
-replace pensionsub_ci=1 if (e01k>0 & e01k<. & e01k!=99999999999)
+replace pensionsub_ci=1 if (e01kde>0 & e01kde<. & e01kde!=99999999999)
 recode pensionsub_ci .=0
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 
 *****************
 **ypensub_ci*
 *****************
-replace e01k=. if (e01k >= 99999999999)
-gen ypensub_ci=e01k
+replace e01kde=. if (e01kde >= 99999999999)
+gen ypensub_ci=e01kde
 *replace ypensub_ci=0 if pensionsub_ci==0
 replace ypensub_ci=. if pensionsub_ci==0
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
@@ -504,8 +502,9 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 **salmm_ci***
 *************
 
-* Vigente a partir del 1ero de julio de 2017** 
-gen salmm_ci= 	2041123
+* Vigente a partir del 1ero de julio de 2019** 
+*https://www.ip.gov.py/ip/ejecutivo-decreta-reajuste-de-g-80-277-al-salario-minimo/
+gen salmm_ci= 	2192839
 label var salmm_ci "Salario minimo legal"
 
 
@@ -531,8 +530,7 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 ***desalent_ci***
 *****************
 
-gen desalent_ci=. /*Se intenta construir como en el 2009 pero no existe la variable a09*/
-*gen desalent_ci=(a09==2)
+gen desalent_ci=(a09==2)
 
 ***************
 ***subemp_ci***
@@ -577,7 +575,7 @@ replace tiempoparc_ci=1 if (tothoras>=1 & tothoras<30) & emp_ci==1 /*& d01==6*/ 
 *****************
 egen hr_seman=rsum(b03lu b03ma b03mi b03ju b03vi b03sa b03do), missing
 gen hr_sem_s=tothoras
-gen horaspri_ci=hr_seman if emp_ci==1 
+gen horaspri_ci=hr_seman if emp_ci==1 & hr_seman<170  //AJAM: en una semana hay 168 horas (hay individuos que reportan más de eso)
 
 *****************
 ***horastot_ci***
@@ -684,29 +682,29 @@ replace spublico_ci=. if emp_ci~=1*/
 OCUP: 5112 a 5230: Trabajadores de los servicios y vendedores de comercios y mercados
 Ultima actualización Alvaro AM, con inclusión de CIUO a 4 dígitos provista por instituto de estadística*/
 gen ocupa_ci=.
-replace ocupa_ci=1 if (b01c>=2113 & b01c<=3480)  & emp_ci==1
-replace ocupa_ci=2 if (b01c>=1110 & b01c<=1236) & emp_ci==1
-replace ocupa_ci=3 if (b01c>=4111 & b01c<=4223) & emp_ci==1
-replace ocupa_ci=4 if ((b01c>=5210 & b01c<=5230) | (b01c>=9111 & b01c<=9113)) & emp_ci==1
-replace ocupa_ci=5 if ((b01c>=5111 & b01c<=5169) | (b01c>=9120 & b01c<=9170)) & emp_ci==1
-replace ocupa_ci=6 if ((b01c>=6111 & b01c<=6153) | (b01c>=9211 & b01c<=9212)) & emp_ci==1
-replace ocupa_ci=7 if ((b01c>=7111 & b01c<=8340) | (b01c>=9311 & b01c<=9339))& emp_ci==1
-replace ocupa_ci=8 if b01c==110 & emp_ci==1
-replace ocupa_ci=9 if (b01c>9339 & b01c<=9999) & emp_ci==1
+replace ocupa_ci=1 if (b01rec>=2113 & b01rec<=3480)  & emp_ci==1
+replace ocupa_ci=2 if (b01rec>=1110 & b01rec<=1236) & emp_ci==1
+replace ocupa_ci=3 if (b01rec>=4111 & b01rec<=4223) & emp_ci==1
+replace ocupa_ci=4 if ((b01rec>=5210 & b01rec<=5230) | (b01rec>=9111 & b01rec<=9113)) & emp_ci==1
+replace ocupa_ci=5 if ((b01rec>=5111 & b01rec<=5169) | (b01rec>=9120 & b01rec<=9170)) & emp_ci==1
+replace ocupa_ci=6 if ((b01rec>=6111 & b01rec<=6153) | (b01rec>=9211 & b01rec<=9212)) & emp_ci==1
+replace ocupa_ci=7 if ((b01rec>=7111 & b01rec<=8340) | (b01rec>=9311 & b01rec<=9339))& emp_ci==1
+replace ocupa_ci=8 if b01rec==110 & emp_ci==1
+replace ocupa_ci=9 if (b01rec>9339 & b01rec<=9999) & emp_ci==1
 
 *************
 ***rama_ci***
 *************
 g rama_ci=.
-replace rama_ci=1 if (b02c>=111 & b02c<=500) & emp_ci==1
-replace rama_ci=2 if (b02c>=1010 & b02c<=1429) & emp_ci==1
-replace rama_ci=3 if (b02c>=1511 & b02c<=3720) & emp_ci==1
-replace rama_ci=4 if (b02c>=4010 & b02c<=4100) & emp_ci==1
-replace rama_ci=5 if (b02c>=4510 & b02c<=4550) & emp_ci==1
-replace rama_ci=6 if (b02c>=5010 & b02c<=5520) & emp_ci==1
-replace rama_ci=7 if (b02c>=6010 & b02c<=6420) & emp_ci==1
-replace rama_ci=8 if (b02c>=6511 & b02c<=7020) & emp_ci==1
-replace rama_ci=9 if (b02c>=7111 & b02c<=9999) & emp_ci==1
+replace rama_ci=1 if (b02rec>=111 & b02rec<=500) & emp_ci==1
+replace rama_ci=2 if (b02rec>=1010 & b02rec<=1429) & emp_ci==1
+replace rama_ci=3 if (b02rec>=1511 & b02rec<=3720) & emp_ci==1
+replace rama_ci=4 if (b02rec>=4010 & b02rec<=4100) & emp_ci==1
+replace rama_ci=5 if (b02rec>=4510 & b02rec<=4550) & emp_ci==1
+replace rama_ci=6 if (b02rec>=5010 & b02rec<=5520) & emp_ci==1
+replace rama_ci=7 if (b02rec>=6010 & b02rec<=6420) & emp_ci==1
+replace rama_ci=8 if (b02rec>=6511 & b02rec<=7020) & emp_ci==1
+replace rama_ci=9 if (b02rec>=7111 & b02rec<=9999) & emp_ci==1
 
 
 ****************
@@ -750,7 +748,7 @@ nr
 
 gen tamemp_ci = 1 if b08>=1 & b08<=2
 replace tamemp_ci = 2 if (b08>=3 & b08<=6)
-replace tamemp_ci = 3 if (b08>=7 & b08<=9)
+replace tamemp_ci = 3 if (b08>=7 & b08<=8)
 
 label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
@@ -774,9 +772,9 @@ replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoin
 label var categoinac_ci "Categoría de inactividad"
 label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
 */
-gen categoinac_ci =1 if ((ra06ya09==7) & condocup_ci==3)
-replace categoinac_ci = 2 if  (ra06ya09==1 & condocup_ci==3)
-replace categoinac_ci = 3 if  (ra06ya09==2 & condocup_ci==3)
+gen categoinac_ci =1 if ((a09==15) & condocup_ci==3)
+replace categoinac_ci = 2 if  (a09==7 & condocup_ci==3)
+replace categoinac_ci = 3 if  (a09==4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
 label var categoinac_ci "Categoría de inactividad"
 label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
@@ -837,7 +835,7 @@ replace comida=b20g*2 if b20u==4 & b20g!=99999999999 & b20g!=.
 replace comida=b20g if b20u==5 & b20g!=99999999999 & b20g!=.
 replace comida=b20g/12 if b20u==6 & b20g!=99999999999 & b20g!=.
 
-*Uniformees
+*Uniformes
 gen unifor=.
 replace unifor=b25/12 
 replace unifor =. if b25==99999999999
@@ -1017,6 +1015,7 @@ replace v19 = . if v19>=99999999999
 gen rentaimp_ch=v19
 replace rentaimp_ch=. if v19>=99999999999 /*Si tuviera que alquilar esta vivienda cuanto estimaría que le Pag.. por mes*/
 sort v19
+
 *****************
 ***ylhopri_ci ***
 *****************
@@ -1275,7 +1274,7 @@ replace edupre_ci=0 if nivgra==0
 ***asis_pre***
 ***************
 
-gen byte asispre_ci=. /* Por que no se construyo esta variable si tenemos la informacion??? */
+gen byte asispre_ci=.
 label variable edupre_ci "Asistencia a Educacion preescolar" 
 
 **************
@@ -1455,8 +1454,6 @@ gen luzmide_ch=.
 ****************
 
 gen combust_ch=(v14b==4 | v14b==2)
-
- 
 
 ****************
 ****bano_ch*****
@@ -1789,7 +1786,6 @@ label var id_afro_ci "Afro-descendiente"
 	
 	gen migrantelac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,23,24,28,31,32))
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1820,12 +1816,18 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
-rename b01c codocupa
-rename b02c codindustria
+rename b01rec codocupa
+rename b02rec codindustria
 
 
 compress
 
+*Este loop recorta el tamano de labels para que el saveold sea exitoso (ver: https://www.statalist.org/forums/forum/general-stata-discussion/general/1344966-shorten-variable-labels)
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
 
 saveold "`base_out'", version(12) replace
 

@@ -1505,6 +1505,39 @@ gen raza_ci=.
 
 
 
+<<<<<<< Updated upstream
+=======
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(inlist(ch15,4,5)) 
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) 
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	cap: tostring ch15_cod, replace
+	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci==1) 
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
+
+	
+>>>>>>> Stashed changes
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza

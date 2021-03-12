@@ -1345,14 +1345,14 @@ gen tcylmpri_ch =.
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=inrange(q1_07,2,10)
+	gen migrante_ci=inrange(q1_07,2,10) if q1_07!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(q1_10,1,2,3))
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(q1_10,1,2,3)) if migrante_ci!=. & !inrange(edad_ci,0,4) & q1_10!=5 /* q1_10=5 no esta en el cuestionario, es un typo */
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************

@@ -1405,21 +1405,22 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(p4o_pais!=1)
+	destring p4o_pais, replace
+	gen migrante_ci=(p4o_pais!=1) if p4o_pais!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & p4p_anio<2015)
+	gen migantiguo5_ci=(migrante_ci==1 & (p4p_cuando==1 | (p4p_anio<2015 & p4p_cuando==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4p_cuando!=3
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(inlist(p4o_pais,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1)
+	gen migrantelac_ci=(inlist(p4o_pais,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	

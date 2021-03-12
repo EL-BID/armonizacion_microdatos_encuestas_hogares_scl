@@ -2078,8 +2078,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=1 if migrante_ci==1 & inlist(s03a_1a,1,2)
-	replace migantiguo5_ci=0 if migrante_ci==1 & s03a_1a==3 & mi(migantiguo5_ci)
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s03a_1a,1,2)) if migrante_ci!=. & s03a_1a!=4
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************

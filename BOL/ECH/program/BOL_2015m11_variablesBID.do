@@ -2131,8 +2131,7 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=1 if migrante_ci==1 & inlist(s3a_1a,1,2)
-	replace migantiguo5_ci=0 if migrante_ci==1 & s3a_1a==3 & mi(migantiguo5_ci)
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s3a_1a,1,2)) if s3a_1a!=4 & migrante_ci!=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************

@@ -1569,17 +1569,17 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=0
-	replace migantiguo5_ci=1 if migrante_ci==1 & regresant!=7 & regresant!=9 & regresant!=0
+	gen migantiguo5_ci=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	/* La encuesta pregunta por la residencia de hace 2 años */
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=0 if migrante_ci!=.
-	replace migrantelac_ci=1 if lugnac==2 | lugnac==3
+	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* No se puede diferenciar paises LAC de no LAC */
 	
 	
 /*_____________________________________________________________________________________________________*/

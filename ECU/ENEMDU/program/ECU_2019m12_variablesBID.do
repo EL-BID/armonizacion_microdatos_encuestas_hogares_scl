@@ -102,20 +102,6 @@ label value region_BID_c region_BID_c
 	gen factor_ch=fexp
 	label variable factor_ch "Factor de expansion del hogar"
 	
-	***************
-	***upm_ci***
-	***************
-
-	clonevar upm_ci=upm
-	label variable upm_ci "Unidad Primaria de Muestreo"
-
-	***************
-	***estrato_ci***
-	***************
-
-	clonevar estrato_ci=estrato
-	label variable estrato_ci "Estrato"
-
 	*************
 	****idh_ch***
 	*************
@@ -183,6 +169,20 @@ label value region_BID_c region_BID_c
 	gen factor_ci=fexp
 	label variable factor_ci "Factor de expansion del individuo"
 	
+	***************
+	***upm_ci***
+	***************
+
+	clonevar upm_ci=upm
+	label variable upm_ci "Unidad Primaria de Muestreo"
+
+	***************
+	***estrato_ci***
+	***************
+
+	clonevar estrato_ci=estrato
+	label variable estrato_ci "Estrato"
+
 	*************
 	***sexo_ci***
 	*************
@@ -1470,21 +1470,21 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(p15aa==3)
+	gen migrante_ci=(p15aa==3) if p15aa!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
-	
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(p15ca,1,2,3)) 
+	 
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(p15ca,1,2,3)) if migrante_ci!=. & p15ca!=5
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(inlist(p15ab,32,84,68,76,152,188,222,320,340,533,28,44,170,212,308,332,388,484,558,591,600,604,780,858,862,740) & migrante_ci==1)
+	gen migrantelac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
 

@@ -1663,16 +1663,14 @@ lab val atencion_ci atencion_ci
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=0
-	replace migantiguo5_ci=1 if migrante_ci==1 & inlist(r2,1,2)
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(r2,1,2)) if migrante_ci!=. & r2!=. & r2!=9
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=0 if migrante_ci!=.
-	replace migrantelac_ci=inlist(r1bespp_cod,406,408,409,412,413,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1  
+	gen migrantelac_ci=(inlist(r1bespp_cod,406,408,409,412,413,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1) if migrante_ci!=. & r1bespp_cod!=999
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2015.pdf */
 

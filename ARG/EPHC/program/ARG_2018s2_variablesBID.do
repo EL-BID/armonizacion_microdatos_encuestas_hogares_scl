@@ -117,12 +117,39 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+		
+			****************************
+			*  VARIABLES DE DISENO     *
+			****************************
+	
+	
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
 
 	gen factor_ch=pondera
 	label var factor_ch "Factor de expansion del hogar"
+	
+	******************************
+	*factor expansión individio* 
+	*****************************
+
+	gen factor_ci=pondera
+	label var factor_ch "Factor de expansion del individuo"
+
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen upm_ci=aglomerado
+	label var upm_ci "Unidad primaria de muestreo"
+	
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen estrato_ci=.
+	label var estrato_ci "estrato"
 
 		*************************
 		***VARIABLES DEL HOGAR***
@@ -187,12 +214,6 @@ label variable relacion_ci "Relacion con el jefe del hogar"
 			***VARIABLES DEMOGRAFICAS***
 			****************************
 
-	***********
-	*factor_ci* 
-	***********
-
-	gen factor_ci=pondera
-	
 
 	*********
 	*sexo_ci*

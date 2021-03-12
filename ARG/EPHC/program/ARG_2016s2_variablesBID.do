@@ -119,12 +119,39 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+		
+			****************************
+			*  VARIABLES DE DISENO     *
+			****************************
+	
+	
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
 
 	gen factor_ch=pondera
 	label var factor_ch "Factor de expansion del hogar"
+	
+	******************************
+	*factor expansión individio* 
+	*****************************
+
+	gen factor_ci=pondera
+	label var factor_ch "Factor de expansion del individuo"
+
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen upm_ci=aglomerado
+	label var upm_ci "Unidad primaria de muestreo"
+	
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen estrato_ci=.
+	label var estrato_ci "estrato"
 
 		*************************
 		***VARIABLES DEL HOGAR***
@@ -179,16 +206,10 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	replace relacion_ci=4 if ch03>=4 & ch03<=9
 	replace relacion_ci=5 if ch03==10 
 	*replace relacion_ci=6 if componente==51 /* no se clasifica mas de esta forma desde 2013 t3)*/
+			
 			****************************
 			***VARIABLES DEMOGRAFICAS***
 			****************************
-
-	***********
-	*factor_ci* 
-	***********
-
-	gen factor_ci=pondera
-	
 
 	*********
 	*sexo_ci*
@@ -1538,6 +1559,6 @@ rename pp04b_cod codindustria
 
 compress
 
-saveold "`base_out'", version(12) replace
+save "`base_out'", replace
 
 log close

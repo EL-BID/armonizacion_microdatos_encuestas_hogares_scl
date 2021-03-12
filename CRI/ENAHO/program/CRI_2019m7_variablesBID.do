@@ -72,9 +72,8 @@ label var region_c "División política, region de planificacion"
 
 
 *====================================================================================================================================*
-*                                                    VARIABLES DEL HOGAR                                                             *
+*                                                    VARIABLES DE DISENO                                                             *
 *====================================================================================================================================*
-* En total son 8 variables.
 
 ************************************************************
 *** 1.- FACTOR_CH: factor de expansión del hogar         ***
@@ -83,8 +82,34 @@ label var region_c "División política, region de planificacion"
 gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
 
+******************************************************************
+***2._FACTOR_CI  :Factor de Expansion a nivel individual. ***
+******************************************************************
+gen factor_ci=factor
+label variable factor_ci "Factor de expansion del individuo"
+
+******************************************************************
+***3. UMP  :Unidad Primaria de Muestreo ***
+******************************************************************
+gen upm_ci=upm
+label variable upm_ci "unidad primaria de muestreo"
+
+******************************************************************
+*** 4.estrato 
+******************************************************************
+
+gen estrato_ci=.
+label variable estrato_ci "estrato"
+
+*====================================================================================================================================*
+*                                                    VARIABLES DEL HOGAR                                                             *
+*====================================================================================================================================*
+* En total son 7 variables.
+
+
+
 ************************************************************
-*** 2._ IDH_CH: Identificador del hogar                  ***
+*** 1._ IDH_CH: Identificador del hogar                  ***
 ************************************************************
 
 sort upm cuestionario hogar
@@ -92,13 +117,13 @@ egen idh_ch = group(upm cuestionario hogar)
 label var idh_ch "ID del hogar"
 
 ************************************************************
-*** 3.- IDP_CI: Identificador de personas                ***
+*** 2.- IDP_CI: Identificador de personas                ***
 ************************************************************
 gen idp_ci= linea
 label var idp_ci "ID de la persona en el hogar"
 
 ************************************************************
-***4.- ZONA_C: Zona Urbana vs Rural                      ***
+***3.- ZONA_C: Zona Urbana vs Rural                      ***
 ************************************************************
 gen zona_c=0 if zona==2
 replace zona_c=1 if zona==1
@@ -107,20 +132,20 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 ************************************************************
-****5._ PAIS_C: Nombre del país.                         ***
+****4._ PAIS_C: Nombre del país.                         ***
 ************************************************************
 gen str3 pais_c="CRI"
 label variable pais_c "Pais"
 
 
 ************************************************************
-***6._ANIO_C  :Año de la Encuesta.                       ***
+***5._ANIO_C  :Año de la Encuesta.                       ***
 ************************************************************
-gen anio_c=2018
+gen anio_c=2019
 label variable anio_c "Anio de la encuesta"
 
 ************************************************************
-***7._MES_C  :Mes de la Encuesta.***
+***6._MES_C  :Mes de la Encuesta.***
 ************************************************************
 gen mes_c=7
 label variable mes_c "Mes de la encuesta"
@@ -128,7 +153,7 @@ label define mes_c 7 "Julio"
 label value mes_c mes_c
 
 ******************************************************************
-***8._RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
+***7._RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
 ******************************************************************
 gen relacion_ci=1 		if a3==1
 replace relacion_ci=2 	if a3==2
@@ -149,11 +174,7 @@ label value relacion_ci relacion_ci
 * En el área de demografía son en total 18 variables.
 
 
-******************************************************************
-***1._FACTOR_CI  :Factor de Expansion a nivel individual. ***
-******************************************************************
-gen factor_ci=factor
-label variable factor_ci "Factor de expansion del individuo"
+
 
 ******************************************************************
 ***2._SEXO_CI  :Sexo.                                          ***
@@ -1591,7 +1612,7 @@ rename ramaemppr codindustria
 compress
 
 
-saveold "`base_out'", replace
+save "`base_out'", replace
 
 
 log close

@@ -72,16 +72,40 @@ label var region_c "División política, region de planificacion"
 
 
 *====================================================================================================================================*
-*                                                    VARIABLES DEL HOGAR                                                             *
+*                                                    VARIABLES DE DISENO 
 *====================================================================================================================================*
-* En total son 8 variables.
 
 ************************************************************
-*** 1.- FACTOR_CH: factor de expansión del hogar         ***
+***  FACTOR_CH: factor de expansión del hogar         ***
 ************************************************************
 
 gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
+
+******************************************************************
+*** FACTOR_CI  :Factor de Expansion a nivel individual. ***
+******************************************************************
+gen factor_ci=factor
+label variable factor_ci "Factor de expansion del individuo"
+
+******************************************************************
+*** UPM: Unidad primaria de muestreo ***
+******************************************************************
+gen upm_ci=upm
+label variable factor_ci "unidad primaria de muestreo"
+
+
+******************************************************************
+*** estrato 
+******************************************************************
+
+gen estrato_ci=.
+label variable estrato_ci "estrato"
+
+*====================================================================================================================================*
+*                                                    VARIABLES DEL HOGAR                                                             *
+*====================================================================================================================================*
+
 
 ************************************************************
 *** 2._ IDH_CH: Identificador del hogar                  ***
@@ -146,14 +170,9 @@ label value relacion_ci relacion_ci
 *====================================================================================================================================*
 *                                                          VARIABLES DEMOGRAFICAS                                                    *
 *====================================================================================================================================*
-* En el área de demografía son en total 18 variables.
+* En el área de demografía son en total 17 variables.
 
 
-******************************************************************
-***1._FACTOR_CI  :Factor de Expansion a nivel individual. ***
-******************************************************************
-gen factor_ci=factor
-label variable factor_ci "Factor de expansion del individuo"
 
 ******************************************************************
 ***2._SEXO_CI  :Sexo.                                          ***
@@ -1593,7 +1612,7 @@ rename ocupemppri codocupa
 rename  ramaemppr codindustria 
 compress
 
-saveold "`base_out'", replace
+save "`base_out'", replace
 
 
 log close

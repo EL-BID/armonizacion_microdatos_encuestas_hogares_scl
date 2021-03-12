@@ -1064,7 +1064,7 @@ rename x3 x_3
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(inlist(ntlty,1,2,3,4,5,6,7)) if ntlty!=9 & !mi(ntlty)
+	gen migrante_ci=(inlist(ntlty,1,2,3,4,5,6,7)) if ntlty!=9 & !mi(ntlty) 
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************

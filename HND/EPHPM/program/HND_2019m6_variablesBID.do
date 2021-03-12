@@ -1616,15 +1616,17 @@ replace banomejorado_ch = 0 if ( dh204 ==1 & ((dh205 >=1 & dh205 <=2) | (dh205 >
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=!mi(cd02_4)
+	gen migrante_ci=.
 	label var migrante_ci "=1 si es migrante"
+	/* Base con error en la pregunta de migrante, no se puede rescatar */
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & cd03_anios>4 & cd03_anios!=.)
+	gen migantiguo5_ci=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	/* Encuesta pregunta sobre años viviendo en este lugar, no sabemos si pudo vivir en Honduras y mudarse de ciudad */
 		
 	**********************
 	*** migrantelac_ci ***

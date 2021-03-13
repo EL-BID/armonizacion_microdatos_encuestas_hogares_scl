@@ -1196,7 +1196,7 @@ g instcot_ci=.
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(p07==2)
+	gen migrante_ci=(p07==2) if p07!=. & p07!=9
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************

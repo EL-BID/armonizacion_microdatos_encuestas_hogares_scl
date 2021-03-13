@@ -1773,21 +1773,21 @@ label var id_afro_ci "Afro-descendiente"
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(p10a>19 & p10a!=99 & p10a!=.)
+	gen migrante_ci=(p10a>19) if p10a!=99 & p10a!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & p11a>19 & p11a!=. & p11a!=99)
+	gen migantiguo5_ci=(migrante_ci==1 & p11a<20) if migrante_ci!=. & p11a!=. & p11a!=99 if inrange(edad_ci,0,4)
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,23,24,28,31,32))
+	gen migrantelac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,23,24,28,31,32)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	

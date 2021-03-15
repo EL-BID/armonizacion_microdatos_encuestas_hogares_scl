@@ -1425,22 +1425,23 @@ keep if sexo_ci!=.
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(s6ip1a==3)
+	gen migrante_ci=(s6ip1a==3) if s6ip1a!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & s6ip4a==3)
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s6ip4a,1,2)) if migrante_ci!=. & s6ip4a!=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=.
+	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6ip1b,2,3,4,5,6,7,9,10,11,14,15,18,19,20,21,22,23,25,26,27,29,33,34,35,36)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* Fuente Censo REDATAM */
 	
 	
 /*_____________________________________________________________________________________________________*/

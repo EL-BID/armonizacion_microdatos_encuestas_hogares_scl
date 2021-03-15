@@ -1,4 +1,4 @@
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -6,7 +6,7 @@ set more off
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -30,12 +30,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Panama
+Pa√≠s: Panama
 Encuesta: EH
 Round: Agosto
 Autores: 
-VersiÛn 2014:
-Mayra S·enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Versi√≥n 2014:
+Mayra S√°enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+√öltima versi√≥n: Cesar Lins (SCL/GDI) - Marzo 2021
+
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
@@ -57,7 +59,7 @@ use `base_in', clear
 	
 gen region_BID_c=1
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -69,26 +71,26 @@ label value region_BID_c region_BID_c
 ************
 * region_c *
 ************
-*InclusiÛn Mayra S·enz - Julio 2013
+*Inclusi√≥n Mayra S√°enz - Julio 2013
 
 destring prov, replace
 gen region_c=  prov
 
 label define region_c  ///
 1	"Bocas del Toro" ///
-2	"CoclÈ" ///
-3	"ColÛn" ///
-4	"ChiriquÌ" ///
-5	"DariÈn" ///
+2	"Cocl√©" ///
+3	"Col√≥n" ///
+4	"Chiriqu√≠" ///
+5	"Dari√©n" ///
 6	"Herrera" ///
 7	"Los Santos" ///
-8	"Panam·" ///
+8	"Panam√°" ///
 9	"Veraguas" ///
 10	"Kuna Yala" ///
-11	"Ember·" ///
-12	"Ng‰be-BuglÈ"		  
+11	"Ember√°" ///
+12	"Ng√§be-Bugl√©"		  
 label value region_c region_c
-label var region_c "DivisiÛn polÌtica, provincias"
+label var region_c "Divisi√≥n pol√≠tica, provincias"
 
 ******************************
 *	factor_ci
@@ -177,23 +179,6 @@ label value sexo_ci sexo_ci
 gen edad_ci=p3
 label var edad_ci "Edad del individuo"
 
-**********
-***raza***
-**********
-
-gen raza_ci=.
-replace raza_ci = 1 if indi_rec == "2"
-replace raza_ci = 3 if indi_rec == "1"
-
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
-
-gen raza_idioma_ci = .
-gen id_ind_ci      = .
-gen id_afro_ci     = .
 
 
 ******************************
@@ -266,6 +251,48 @@ label var nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label var miembros_ci "Miembro del hogar"
 
+				
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+	***************
+	*** afroind_ci ***
+	***************
+**Pregunta: ¬øSe considera usted ind√≠gena? (indi_rec) (1 - no ind√≠gena; 2 - ind√≠gena)
+**No se identifica a personas afrodescendientes. Todos los no-ind√≠genas se categorizan como "otro". 
+**En el 2011 se convierte en la EHPM (no solo EH) 
+
+gen afroind_ci=. 
+replace afroind_ci=1 if indi_rec==2
+replace afroind_ci=2 if indi_rec==0
+replace afroind_ci=3 if indi_rec==1
+
+
+	***************
+	*** afroind_ch ***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	*** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=2001
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
+
+
 ******************************************************************************
 *	LABOR MARKET
 ******************************************************************************
@@ -279,7 +306,7 @@ replace condocup_ci=1 if p08_16 >= 1 & p08_16 <= 5
 replace condocup_ci=2 if  p08_16 == 6 |  p08_16 == 7 
 replace condocup_ci=3 if  p08_16 >= 10 &  p08_16 <= 17 |  p08_16 == 0 |  p08_16 == 9 | p08_16 == 8
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 ta condocup_ci [w=factor_ci], missing
@@ -290,7 +317,7 @@ replace condocup_ci=1 if p08_16 >= 1 & p08_16 <= 5
 replace condocup_ci=2 if  (p08_16>=6 & p08_16<=9) 
 recode condocup_ci .=3 if  edad_ci>=10
 recode condocup_ci .=4 if  edad_ci<10
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -398,7 +425,7 @@ replace rama_ci=8 if (p28>=6411 & p28<=6822) & emp_ci==1
 replace rama_ci=9 if ((p28>=5811 & p28<=6022) | (p28>=6201 & p28<=6399) | (p28>=6910 & p28<=9910)) & emp_ci==1
 
 label var rama_ci "Rama actividad principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÛn de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÛn" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotaci√≥n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcci√≥n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ******************************
@@ -416,7 +443,7 @@ label value categopri_ci categopri_ci
 ******************************
 *	categosec_ci
 ******************************
-* En este aÒo no se detalla esta informaciÛn en la actividad secundaria
+* En este a√±o no se detalla esta informaci√≥n en la actividad secundaria
 gen categosec_ci=.
 label define categosec_ci 1 "Patron" 2 "Cuenta Propia" 3 "Empleado" 4 "Familiar no remunerado" 
 label value categosec_ci categosec_ci
@@ -462,7 +489,7 @@ drop a m
 ******************************************************************************
 *		INCOME
 ******************************************************************************
-*ModificaciÛn Mayra Saenz Mayo 2014
+*Modificaci√≥n Mayra Saenz Mayo 2014
 foreach var of varlist _all {
 qui destring `var', replace
 qui capture recode `var' (99999=.) (999=.) (9999=.) (99998=.)
@@ -615,7 +642,7 @@ gen tcylmpri_ch=.
 ******************************
 *	autocons_ci 
 ******************************
-*Revisar cÛmo se codifica esta especificaciÛn que consta en el cuestionario: 
+*Revisar c√≥mo se codifica esta especificaci√≥n que consta en el cuestionario: 
 /*b. Investigue el ingreso neto (entradas menos gastos en la
 actividad). En el caso del sector agropecuario, pregunta
 sobre autoconsumo y/o autosuministro.*/
@@ -828,7 +855,7 @@ label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 ******************************
 gen asiste_ci=(p5==1)
 replace asiste_ci=. if p5==0
-label var asiste "Personas que actualmente asisten a centros de enseÒanza"
+label var asiste "Personas que actualmente asisten a centros de ense√±anza"
 
 ******************************
 *	pqnoasis_ci_ci
@@ -836,9 +863,9 @@ label var asiste "Personas que actualmente asisten a centros de enseÒanza"
 gen pqnoasis_ci=p5a if p5a>0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 label define pqnoasis_ci 1 "No se ofrece el nivel o grado escolar en la comunidad" 2 "Necesita trabajar",add
-label define pqnoasis_ci 3 "Falta de recursos econÛmicos" 4 "Quehaceres domesticos", add 
+label define pqnoasis_ci 3 "Falta de recursos econ√≥micos" 4 "Quehaceres domesticos", add 
 label define pqnoasis_ci 5 "Falta de interes" 6 "Embarazo" 7 "Enfermedad" , add
-label define pqnoasis_ci 8 "No tiene la edad requerida" 9 "Est· muy distante" 10 "Otros", add
+label define pqnoasis_ci 8 "No tiene la edad requerida" 9 "Est√° muy distante" 10 "Otros", add
 label value pqnoasis_ci pqnoasis_ci
 
 **************
@@ -855,7 +882,7 @@ replace pqnoasis1_ci = 7 if p5a==8
 replace pqnoasis1_ci = 8 if p5a==1 | p5a==9
 replace pqnoasis1_ci = 9 if p5a==10
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 gen edupub_ci=.
@@ -870,7 +897,7 @@ gen repite_ci=.
 drop nivel grado
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -899,7 +926,7 @@ label var salmm_ci "Salario minimo legal"
 destring areareco, replace
 gen lp_ci =.
 
-/*replace lp_ci= . if areareco=="U" & dist==1 /* Cdad. Panam·*/
+/*replace lp_ci= . if areareco=="U" & dist==1 /* Cdad. Panam√°*/
 replace lp_ci= . if areareco=="U" & dist==3 /* Zona urbana districto san miguelito*/
 replace lp_ci= . if ((dist!=1 & dist!=3) & areareco=="U") | areareco=="R"  /* resto urbano o rural*/
 */
@@ -911,7 +938,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *********
 
 gen lpe_ci =.
-/*replace lpe_ci= . if areareco=="U" & dist==1 /* Cdad. Panam·*/
+/*replace lpe_ci= . if areareco=="U" & dist==1 /* Cdad. Panam√°*/
 replace lpe_ci= . if areareco=="U" & dist==3 /* Zona urbana districto san miguelito*/
 replace lpe_ci= . if ((dist!=1 & dist!=3) & areareco=="U") | areareco=="R"  /* resto urbano o rural*/
 */
@@ -992,13 +1019,13 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *tamemp_ci
 *************
 gen tamemp_ci=1 if p29==1 & emp_ci==1
-label var  tamemp_ci "TamaÒo de Empresa" 
+label var  tamemp_ci "Tama√±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if (p29==2 | p29==3 | p29==4  )& emp_ci==1
 *Empresas grandes
 replace tamemp_ci=3 if p29==5  & emp_ci==1
-label define tamaÒo 1"PequeÒa" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaÒo
+label define tama√±o 1"Peque√±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tama√±o
 tab tamemp_ci [iw= fac15_e]
 
 gen tamemp_o=1 if (p29==1 | p29==2)
@@ -1006,7 +1033,7 @@ gen tamemp_o=1 if (p29==1 | p29==2)
 replace tamemp_o=2 if (p29==3 | p29==4  )
 *Empresas grandes
 replace tamemp_o=3 if p29==5  
-label var  tamemp_o "TamaÒo de Empresa-OECD"
+label var  tamemp_o "Tama√±o de Empresa-OECD"
 label define tamemp_o 1"[1-9]" 2"[10-49]" 3"[50 y mas]"
 label values tamemp_o tamemp_o
 
@@ -1023,7 +1050,7 @@ replace categoinac_ci=3 if p08_16==14
 replace categoinac_ci=4 if p08_16==15 | p08_16==16 | p08_16==17
 label define inactivo 1"Pensionado y otros" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
-label var  categoinac_ci "CondiciÛn de Inactividad" 
+label var  categoinac_ci "Condici√≥n de Inactividad" 
 
 *************
 **pension_ci*
@@ -1055,7 +1082,7 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 *****************
 **ypensub_ci*
 *****************
-* este aÒo se incluye programa 100 a los 70
+* este a√±o se incluye programa 100 a los 70
 gen ypensub_ci=p72g5 if p72g5>0 & p72g5<=99999
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
@@ -1073,19 +1100,19 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 	
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

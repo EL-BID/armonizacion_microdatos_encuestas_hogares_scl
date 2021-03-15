@@ -1362,7 +1362,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(s6q6!=1) if s6q6!=.a
+	gen migrante_ci=(s6q6!=1) if (s6q6!=.a | s6q6!=.)
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
@@ -1376,7 +1376,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6q6,2,3,4,5,6,7,8) | inlist(s6q6_os,"Haití","Nicaragua","República Dominicana")))
+	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6q6,2,3,4,5,6,7,8) | inlist(s6q6_os,"Haití","Nicaragua","República Dominicana"))) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	

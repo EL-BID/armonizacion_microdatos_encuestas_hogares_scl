@@ -1529,12 +1529,11 @@ gen raza_ci=.
 	**********************
 	
 	cap: tostring ch15_cod, replace
-	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
-	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
-	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
-	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
+	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"BOL","BRA","Bol","Bra","CHI","COL","Col") | ///
+	inlist(ch15_cod,"HAI","Mex","MEX","PAR","PER","Pan","Per","URU","VEN") | ///
+	inlist(ch15_cod,"Ven","bol","bra","chi","col","dom","ecu","hai","mex") | ///
+	inlist(ch15_cod,"per","ven")) & migrante_ci==1) if migrante_ci!=. 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-	
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
 
 	

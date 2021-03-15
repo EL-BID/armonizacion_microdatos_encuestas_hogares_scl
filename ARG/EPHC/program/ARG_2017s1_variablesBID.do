@@ -1526,7 +1526,7 @@ gen raza_ci=.
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migr==1 & inlist(ch16,1,2,3)) if !mi(migr) & !inlist(ch16,6,9)		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) if !inlist(ch16,6,9) & migrante_ci!=.		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1538,6 +1538,7 @@ gen raza_ci=.
 	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
 	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
 	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
+	replace migrantelac_ci=. if ch15_cod=="999" & ch15!=4
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */

@@ -1838,21 +1838,21 @@ lab val atencion_ci atencion_ci
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(e37==4)
+	gen migrante_ci=(e37==4) if e37!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & (e38_1>4 | inlist(e236,1,2,3)) )
+	gen migantiguo5_ci=(migrante_ci==1 & (e38_1>4 | inlist(e236,1,2,3))) if migrante_ci!=. & !inrange(edad_ci,0,4)
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(migrante_ci==1 & inlist(e234_2,32,44,52,76,84,68,152,170,188,218,222,214,320,328,332,340,388,484,558,591,600,604,740,780,862,898,899,902))
+	gen migrantelac_ci=(migrante_ci==1 & inlist(e234_2,32,44,52,76,84,68,152,170,188,218,222,214,320,328,332,340,388,484,558,591,600,604,740,780,862,898,899,902)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: https://www.ine.gub.uy/documents/10181/33944/CODIGO+PAISES.pdf/568e72c7-fc36-4e3a-a2c0-eb3d9af1d3b6 */
 

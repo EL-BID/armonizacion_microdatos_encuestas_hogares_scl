@@ -2,6 +2,7 @@
 Autor: Marcela G. Rubio - Email: marcelarubio28@gmail.com | mrubio@iadb.org
 Ultima version: Alvaro J. Altamirano M. (alvaroalt@iadb.org)
 Junio, 2017 Version Stata 14 */
+* Added ETNIA module. Cesar Lins (SCL/GDI) Marzo 2021
 
 *** MERGE COLOMBIA GEIH 2016 ****
 *------------------------------*	
@@ -26,6 +27,9 @@ clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2016.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2016.dta", force
 drop _merge
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA14.dta"
+drop _merge
+
 egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace

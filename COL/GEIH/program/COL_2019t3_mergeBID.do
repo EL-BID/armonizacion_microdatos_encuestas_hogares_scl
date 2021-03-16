@@ -1,14 +1,14 @@
 /*
 Autor: Marcela G. Rubio - Email: marcelarubio28@gmail.com | mrubio@iadb.org
-Ultima version: Daniela Zuluaga (danielazu@iadb.org)
-Junio, 2018 Version Stata 14 */
+Ultima version: Angela Lopez(alop@iadb.org)
+Octubre, 2020 Version Stata 16 */
 
-*** MERGE COLOMBIA GEIH 2018 ****
+*** MERGE COLOMBIA GEIH 2019 ****
 *------------------------------*	
 
 clear
 set more off
-local anio =2018
+local anio =2019
 local ronda1 a
 local ronda2 t3	
 local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
@@ -24,16 +24,17 @@ local out ="`ruta'\`ronda2'\data_merge\"
 
 clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Personas.dta", clear
+
 merge m:1 DIRECTORIO SECUENCIA_P using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
 drop _merge
 egen id =concat (DIRECTORIO SECUENCIA_P ORDEN)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
-destring Mes, replace
-keep if Mes>=7 & Mes<=9
+destring mes, replace
+keep if mes>=7 & mes<=9
 
-keep  id Impa-Iof6 Impaes-Fex_c Nper-id
-saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
+keep  id impa-iof6 impaes-fex_c nper-id li lp
+save "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
 *2. Append entre meses
@@ -122,7 +123,6 @@ egen id = concat(DIRECTORIO SECUENCIA_P ORDEN)
 sort id
 saveold "`out'\COL_`anio't3migracion.dta", replace
 
-
 *3. Merge de los 8 modulos trimestrales por zona
 *-----------------------------------------------
 foreach zona in cabecera resto {
@@ -162,14 +162,14 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3cabecera.dta", clear
-append using "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3resto.dta" 
-merge 1:1 id using "Z:\survey\COL\GEIH\2018\t3\COL_2018t3migracion.dta", nogen
+use "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
+append using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
+merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
 **Nota** FALTA COMPLETAR ESTE  MODULO CUANDO SALGA LA BASE DE POBREZA EN MAYO
-merge 1:1 id using "Z:\survey\COL\GEIH\2018\a\data_merge\pov_t3.dta"
+merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
 drop _merge
 
 foreach v of varlist _all {
@@ -177,7 +177,7 @@ foreach v of varlist _all {
 	rename `v' `lowname'
 }
 
-saveold "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3.dta", replace
+saveold "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3.dta", replace
 
 
 

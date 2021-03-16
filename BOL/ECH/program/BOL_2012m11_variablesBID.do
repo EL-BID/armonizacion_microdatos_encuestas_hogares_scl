@@ -305,26 +305,28 @@ replace afroind_ci=1 if s2_05a==1 & s2_05b!="001"
 replace afroind_ci=2 if s2_05b=="001" 
 replace afroind_ci=3 if s2_05a==2 
 replace afroind_ci=9 if s2_05a==3 
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
-label var afroind_ci "Raza o etnia del individuo"
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
-label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
 drop afroind_jefe
 
 	*******************
 	***afroind_ano_c***
 	*******************
 gen afroind_ano_c=2011
-label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 
 ************************************
@@ -2214,8 +2216,8 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-afroind_ci afroind_ch afroind_ano_c relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

@@ -33,8 +33,9 @@ Encuesta: ECH
 Round: a
 Autores: 
 Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com - 30 de Octubre de 2013
+Versión 2021: Cesar Lins (SCL/GDI) - Marzo 2021
+
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -328,18 +329,38 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 	
-**********
-***raza***
-**********
-gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+		
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-gen raza_idioma_ci = .
-gen id_ind_ci      = .
-gen id_afro_ci     = .
+			
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 
 
 /******************************/

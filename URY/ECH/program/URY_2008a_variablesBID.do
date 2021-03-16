@@ -35,9 +35,10 @@ Encuesta: ECH
 Round: a
 Autores: 
 Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Última modificación: Daniela Zuluaga (DZ) E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Octubre de 2017
+ Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+ Daniela Zuluaga (DZ) E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com - Octubre de 2017
+Versión 2021: Cesar Lins (SCL/GDI) - Marzo 2021
+
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -394,62 +395,6 @@ gen vivitit_ch=.
 /*				VARIABLES DEMOGRAFICAS			*/
 /************************************************************************/
 
-**********
-***raza***
-**********
-/*
-ASCENDENCIA	e31_1	1 = Sí / 2 = No	Afro o Negra
-	e31_2	1 = Sí / 2 = No	Amarilla
-	e31_3	1 = Sí / 2 = No	Blanca
-	e31_4	1 = Sí / 2 = No	Indígena
-	e31_5_1	1 = Si / 2 = No	Otro
-	e31_5_2	Otra	Descripción
-
-*/
-
-/*
-gen raza_ci= .
-replace raza_ci=1 if e31_4==1
-replace raza_ci=2 if e31_1==1
-replace raza_ci=3 if raza_ci== .
-
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" */
-
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_ci= .
-replace raza_ci=1 if e31_6==4
-replace raza_ci=2 if e31_6==1
-replace raza_ci=3 if raza_ci== .
-
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen raza_idioma_ci=.
-
-*NOTE: HERE WE DOUBLE COUNT ACROSS POPULATIONS. There could be a case in which
-*someone said that he or she is indigenous and afro-d. We are counting that person
-*both in the indigenous and afro dummies to measure statistics WITHIN each population
-*However, if we want to sum every population up to 100%, we should use raza_ci instead
-
-*This will apply for the following years as well
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if e31_4==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if e31_1==1
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
 
 
 gen factor_ci=pesoano
@@ -607,6 +552,54 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
+
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+													
+    ***************
+	***afroind_ci***
+	***************
+**Pregunta: ¿Cree tener ascendencia...? ¿Cuál considera principal de las declaradas?:(e31_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
+**En Uruguay puedes reportar más de una identidad pero la pregunta e31_6 pregunta cuál es la identidad principal. 
+**Nota: Hay 7000 mv en la variable e31_6, con este código se le asigna el valor de las variables individuales si solo seleccionó una raza (e31_1, e31_2...)
+******* Si seleccionó más de una raza se le asigna la raza con mayor número de personas. FALTA DEFINIR CRITERIO DE MIXED RACE
+
+gen afroind_ci=. 
+replace afroind_ci=1 if e31_6 == 4
+replace afroind_ci=1 if e31_6 == 0 & e31_4==1 
+replace afroind_ci=2 if e31_6 == 1 
+replace afroind_ci=2 if e31_6 == 0 & e31_1==1 
+replace afroind_ci=3 if afroind_ci==.
+
+**replace afroind_ci=. if e31_6 ==. | e31_6 == 0
+
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2008
+
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 /******************************/
 /*VARIABLES DE DEMANDA LABORAL*/
@@ -1897,7 +1890,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

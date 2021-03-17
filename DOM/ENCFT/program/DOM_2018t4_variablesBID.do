@@ -168,7 +168,7 @@ label variable trimestre_c "trimestre de la encuesta"
 *********
 
 gen mes_c=mes
-label var raza_ci "Mes de la encuesta"  
+label var mes_c "Mes de la encuesta"  
 
 
 *****************

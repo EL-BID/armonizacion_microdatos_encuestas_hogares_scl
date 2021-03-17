@@ -191,21 +191,7 @@ label value sexo_ci sexo_ci
 gen edad_ci=b05
 replace edad_ci=. if b05==98 | b05==99 /*Casos ignorados*/
 label variable edad_ci "Edad del individuo"
-
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_idioma_ci = . 
-gen id_ind_ci = .
-gen id_afro_ci = .
-*En este año  no se dispone de esta variable.
-gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo"  
+ 
 
 *****************
 ***civil_ci***
@@ -337,6 +323,37 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
+	
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+			
+	***************
+	*** afroind_ci ***
+	***************
+gen afroind_ci=. 
+
+	***************
+	*** afroind_ch ***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	*** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***

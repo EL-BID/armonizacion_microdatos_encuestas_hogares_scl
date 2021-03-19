@@ -564,7 +564,7 @@ label variable miembros_ci "Miembro del hogar"
 **Pregunta: ¿Cree tener ascendencia...? ¿Cuál considera principal de las declaradas?:(e31_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
 **En Uruguay puedes reportar más de una identidad pero la pregunta e31_6 pregunta cuál es la identidad principal. 
 **Nota: Hay 7000 mv en la variable e31_6, con este código se le asigna el valor de las variables individuales si solo seleccionó una raza (e31_1, e31_2...)
-******* Si seleccionó más de una raza se le asigna la raza con mayor número de personas. FALTA DEFINIR CRITERIO DE MIXED RACE
+******* Si seleccionó más de una raza se le asigna la raza con mayor número de personas. 
 
 gen afroind_ci=. 
 replace afroind_ci=1 if e31_6 == 4

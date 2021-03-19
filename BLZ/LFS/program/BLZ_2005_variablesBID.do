@@ -180,53 +180,6 @@ gen dis_ci=.
 	*******************
 gen dis_ch=. 
 
-/*
-*Modificación Marcela Rubio 12/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_ci=.
-replace raza_ci= 1 if  (ethnic ==4)
-replace raza_ci= 2 if  (ethnic ==1 | ethnic==3)
-replace raza_ci= 3 if (ethnic==2 | ethnic==5 | ethnic==6 | ethnic==7 | ethnic==8 | ethnic==9 | ethnic==99)& raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen raza_ci_aux=.
-replace raza_ci_aux= 1 if  (ethnic ==4)
-replace raza_ci_aux= 2 if  (ethnic ==1)
-replace raza_ci_aux= 3 if (ethnic==2 | ethnic==5 | ethnic==6 | ethnic==7 | ethnic==8 | ethnic==9 | ethnic==99)& raza_ci_aux==.
-replace raza_ci_aux= 4 if ethnic==3
-label define raza_ci_aux 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 4 "Afroindigena"
-label value raza_ci_aux raza_ci_aux 
-label var raza_ci_aux "Raza o etnia del individuo auxiliar" 
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-
-*la variable ethnic tiene una clasificación
-*1= Creole
-*2= East Indian
-*3= Garifuna
-*4= Maya
-*5= Mennonite
-*6= Mestizo
-*7= Chinese
-*8= Caucasian/White
-*9= Other
-*99= DK/NS
-*/
 
 *******************
 *  ESTADO CIVIL   *

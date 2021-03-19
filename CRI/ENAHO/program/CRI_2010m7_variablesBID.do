@@ -307,23 +307,19 @@ label variable miembros_ci "Miembro del hogar"
 	***afroind_ci***
 	***************
 gen afroind_ci=. 
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
-label var afroind_ci "Raza o etnia del individuo"
+
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_ch=. 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
-label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
+
 
 	*******************
 	***afroind_ano_c***
 	*******************
 gen afroind_ano_c=.		
-label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
+
 	
 	*************
 	***dis_ci***
@@ -334,18 +330,14 @@ recode nodis 1=0 if inrange(a7a,1,7)
 recode nodis 1=0 if inrange(a7b,1,7)
 gen dis_ci = nodis
 recode dis_ci 0=1 1=0
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+drop nodis
 	
 	*************
 	***dis_ch***
 	**************		
 egen dis_ch  = sum(dis_ci), by(idh_ch) 
 replace dis_ch=1 if dis_ch>=1 & dis_ch!=. 
-lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-lab val dis_ch dis_ch 
-lab var dis_ch "Hogares con miembros con discapacidad"
+
 
 		************************************
 		*** VARIABLES DEL MERCADO LABORAL***

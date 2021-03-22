@@ -71,7 +71,12 @@ label var factor_ch "Factor de Expansion del Hogar"
 gen factor_ci=  factor_ch
 label var factor_ci "Factor de Expansion del Individuo"
 
+*****************
+* ESTRATO Y UPM *
+*****************
 
+gen upm_ci=edno
+gen estrato_ci=stratum
 
 **************
 * REGION BID *

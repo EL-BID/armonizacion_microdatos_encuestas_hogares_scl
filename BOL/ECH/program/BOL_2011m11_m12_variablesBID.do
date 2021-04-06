@@ -311,8 +311,8 @@ label variable miembros_ci "Miembro del hogar"
 **Pregunta: pertenece a alguna nación o pueblo indígena? (Afroboliviano 1; No pertenece 13; No sabe/no responde 14; All else INDIGENOUS 2-12 & 15-19)
 
 gen afroind_ci=. 
-replace afroind_ci=1  if cods2_05!="01" | cods2_05!="88" | cods2_05!="99" 
-replace afroind_ci=2 if cods2_05=="01"
+replace afroind_ci=1  if cods2_05!="88" | cods2_05!="99" 
+replace afroind_ci=2 if cods2_05=="0"
 replace afroind_ci=3 if cods2_05=="88"
 replace afroind_ci=. if cods2_05=="99"
 replace afroind_ci=. if cods2_05==" "

@@ -334,8 +334,8 @@ label variable miembros_ci "Miembro del hogar"
 *** s1_10b - especifique OTROS - "AFROS"
 
 gen afroind_ci=. 
-replace afroind_ci=1 if (s1_10!=7 | s1_10!=8) & (s1_10b!="AFROS")  
-replace afroind_ci=2 if s1_10b=="AFROS"
+replace afroind_ci=1 if (s1_10!=7 | s1_10!=8)  
+replace afroind_ci=2 if s1_10==0
 replace afroind_ci=3 if s1_10==7
 replace afroind_ci=9 if s1_10==8
 

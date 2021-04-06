@@ -294,12 +294,12 @@ label variable miembros_ci "Miembro del hogar"
 	***afroind_ci***
 	***************
 **Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s03a_2) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
-**Pregunta: a qué nación o pueblo pertenece? (s03a_2npioc) (AFROBOLIVIANO 1 - TODAS LAS OTRAS CATEGORIAS SON INDIGENAS)
+**Pregunta: a qué nación o pueblo pertenece? (s03a_2npioc) (ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
 
 gen afroind_ci=. 
-replace afroind_ci=1 if s03a_2==1 & s03a_2npioc!=1
-replace afroind_ci=2 if s03a_2npioc==1 
-replace afroind_ci=3 if s03a_2 ==2 
+replace afroind_ci=1 if s03a_2==1 
+replace afroind_ci=2 if s03a_2==0
+replace afroind_ci=3 if s03a_2==2 
 replace afroind_ci=9 if s03a_2==3 
 
 

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 * (Versión Stata 13)
 clear
 set more off

@@ -14,7 +14,7 @@ global ruta = "\\Sdssrv03\surveys"
 
 local PAIS GUY
 local ENCUESTA LFS
-local ANO "2018"
+local ANO "2019"
 local ronda t4
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -48,6 +48,7 @@ use `base_in', clear
 		**********************************
 		
 	****************
+	
 	* region_BID_c *
 	****************
 	
@@ -115,22 +116,23 @@ label variable pais_c "Pais"
 *************
 * anio_c    *
 *************
-gen anio_c=2018
+gen anio_c=2019
 label variable anio_c "Anio de la encuesta"
 
 *************
 * mes_c    *
 *************
-g mes_c=6
+g mes_c=11
 
+*Cambio 2021
 ***************
 * relacion_ci *
 ***************
 gen relacion_ci=1     if q1_02==1
 replace relacion_ci=2 if q1_02==2 
 replace relacion_ci=3 if q1_02==3 | q1_02==4 | q1_02==6
-replace relacion_ci=4 if (q1_02>=7 & q1_02<=9) | q1_02==5
-replace relacion_ci=5 if q1_02==10
+replace relacion_ci=4 if (q1_02>=7 & q1_02<=8) | q1_02==5
+replace relacion_ci=5if q1_02==9
 label var relacion_ci "Relación de parentesco con el jefe"
 label def relacion_ci 1"Jefe" 2"Conyuge" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio doméstico"
 label val relacion_ci relacion_ci	
@@ -312,9 +314,10 @@ label variable miembros_ci "Miembro del hogar"
 *******************
 ****condocup_ci****
 *******************
+*Cambio 2021
 gen condocup_ci=.
 replace condocup_ci=1 if q2_04==1 | q2_05==1 | (q2_06==1 | q2_06==2) | (q2_07==1 & (q2_09>=1&q2_09<=3)) | (q2_10==1)
-replace condocup_ci=2 if (q2_19==1 | q2_19==2) & q2_14==1 & (q2_15>=1&q2_15<=10)
+replace condocup_ci=2 if (q2_19==1 | q2_19==2) & q2_14==1 & ((q2_15>=1&q2_15<=10) | q2_15==99)
 replace condocup_ci=2 if (q2_19==1 | q2_19==2) & q2_14==2 & (q2_17==1|q2_17==2)
 recode condocup_ci (.=3) if edad_ci>=15
 replace condocup_ci=4 if edad<15
@@ -340,7 +343,6 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 ****************
 * horaspri_ci  * 
 ****************
-*Per week
 gen horaspri_ci=q3_03
 label var horaspri_ci "Horas totales trabajadas en la actividad principal"
 
@@ -375,7 +377,6 @@ label var tiempoparc_c "Personas que trabajan medio tiempo"
 *categopri_ci  * 
 **************** 
 gen categopri_ci=.
-*replace categopri_ci=1 if q3_16==1
 replace categopri_ci=2 if q3_16==3 | q3_16==4
 replace categopri_ci=3 if q3_16==1
 replace categopri_ci=4 if q3_16==2
@@ -487,6 +488,7 @@ replace `var'=. if `var'<0
 }
 *
 replace q6_09=. if q6_09<0 | q6_08==2
+replace q6_07=. if q6_07<0 
 
 egen ylnmpri_ci=rsum(q6_05a q6_05b q6_05c q6_05d q6_05e q6_05f q6_05g q6_05h q6_05i q6_07 q6_09), missing
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
@@ -560,7 +562,7 @@ foreach var of varlist q6_11 q6_12 q6_13 q6_14 q6_15 q6_16 q6_17 q6_18 q6_19 q6_
 replace `var'=. if `var'<0
 }
 *
-*http://www.bankofguyana.org.gy/bog/images/research/Reports/Dec2018.pdf#page=72
+*http://www.bankofguyana.org.gy/bog/images/research/Reports/Dec2019.pdf#page=72
 replace q6_20b=q6_20b*208.50
 replace q6_24b=q6_24b*208.50
 
@@ -1248,6 +1250,10 @@ label var pension_ci "1=Recibe pension contributiva"
 *************
 **ypen_ci*
 *************
+*Cambio 2021
+replace q6_11=. if q6_11<0
+replace q6_13=. if q6_13<0
+
 egen ypen_ci=rsum(q6_11 q6_13), missing
 replace ypen_ci=. if ypen_ci<0
 label var ypen_ci "Valor de la pension contributiva"
@@ -1255,6 +1261,8 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 *pensionsub_ci*
 ***************
+*Cambio 2021
+replace q6_12=. if q6_12<0
 gen pensionsub_ci=(q6_12>0&q6_12<.)
 *egen auxpens=rsum(y26_1am  y26_1dm ), missing
 *gen pensionsub_ci=1 if auxpens>0 & auxpens!=.
@@ -1274,7 +1282,7 @@ gen ypensub_ci=q6_12
 *************
 **salmm_ci***
 *************
-*https://guyanachronicle.com/2016/11/24/new-minimum-wage-order. Se mantuvo en USD 44,200.
+*https://guyanachronicle.com/2016/11/24/new-minimum-wage-order. Se mantuvo en 44,200.
 gen salmm_ci= 44200
 label var salmm_ci "Salario minimo legal"
 
@@ -1326,7 +1334,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 * variables que faltan crear
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
-
 
 ******************************
 *** VARIABLES DE MIGRACION ***

@@ -1790,6 +1790,35 @@ gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
 
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(v5030==98) 
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & (v0507==1 | (v5080!=. & v5080!=98) | (migrante_ci==1 & v5065==6) | (migrante_ci==1 & v5063==4))) if migrante_ci!=. & !inrange(edad_ci,0,4)	
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

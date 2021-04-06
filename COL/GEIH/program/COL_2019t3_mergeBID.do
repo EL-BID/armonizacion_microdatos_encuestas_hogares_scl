@@ -110,6 +110,20 @@ sort idh
 saveold "`t3'col_`zona'_viv.dta", replace
 }
 
+
+** Módulo de migración 
+
+* Sección incluida por SCL/MIG Fernando Morales 
+
+use "`m7'\Julio_mig.dta", clear
+append using "`m8'\Agosto_mig.dta"
+append using "`m9'\Septiembre_mig.dta"
+
+ren (Mes Directorio Secuencia_p Orden Fex_c_2011) (MES DIRECTORIO SECUENCIA_P ORDEN fex_c_2011)
+egen id = concat(DIRECTORIO SECUENCIA_P ORDEN)
+sort id
+saveold "`out'\COL_`anio't3migracion.dta", replace
+
 *3. Merge de los 8 modulos trimestrales por zona
 *-----------------------------------------------
 foreach zona in cabecera resto {
@@ -151,6 +165,7 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 clear
 use "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
 append using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
+merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 

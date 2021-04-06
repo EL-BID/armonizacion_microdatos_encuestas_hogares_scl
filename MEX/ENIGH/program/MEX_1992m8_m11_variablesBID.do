@@ -4138,6 +4138,16 @@ gen raza_idioma_ci = .
 gen id_ind_ci      = .
 gen id_afro_ci     = .
 
+/***************************
+* DISCAPACIDAD
+***************************/
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+
+
+
 
 *Modificación Mayra Sáenz - Septiembre 2014
 sum ylmpri_ci nrylmpri_ci tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylm_ci ylnm_ci ynlm_ci ynlnm_ci ylm_ch ylnm_ch ylmnr_ch ynlm_ch ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch ypen_ci ypensub_ci salmm_ci vivialq_ch vivialqimp_ch

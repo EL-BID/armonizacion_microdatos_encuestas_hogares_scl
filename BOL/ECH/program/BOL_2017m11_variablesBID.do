@@ -2065,23 +2065,52 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
-/***************************
-* DISCAPACIDAD
-***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(s03a_04==3) if s03a_04!=. 	
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s03a_01a,1,2)) if !mi(migrante_ci) & s03a_01a!=4
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
 gen dis_ci = 0
-recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
-recode dis_ci nonmiss=. if inlist(.,s04a_06a,s04a_06b,s04a_06c,s04a_06d,s04a_06e,s04a_06f)
-
 foreach i in a b c d e f  {
 forvalues j=2/4 {
-replace dis_ci=1 if s04a_06`i'==`j'
+recode dis_ci 0=1 if s04a_06`i'==`j'
 }
 }
+recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
+recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
 lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2107,7 +2136,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 

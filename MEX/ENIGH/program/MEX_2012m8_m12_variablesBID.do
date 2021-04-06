@@ -4399,28 +4399,13 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /***************************
 * DISCAPACIDAD
 ***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
-
-gen dis_ci = 0	
-
-forvalues i=1/7 {
-gen dis`i'=disc`i'
-replace dis`i'="" if disc`i'=="&"
-destring dis`i', replace
-}
-
-recode dis_ci nonmiss=. if dis1>=. & dis2>=. & dis3>=. & dis4>=. & dis5>=. & dis6>=. & dis7>=.
-
-forvalues i=1/7 {
-forvalues j=1/7 {
-replace dis_ci=1 if dis`i'==`j'
-}
-}
-
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+	gen dis_ci= disc1
+	replace dis_ci="." if inlist(disc1,"&","7")
+	destring dis_ci, replace			
+	recode  dis_ci (8 = 0) (1/6=1)
+		lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad", modify
+		lab val dis_ci dis_ci
+		label var dis_ci "Personas con discapacidad"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

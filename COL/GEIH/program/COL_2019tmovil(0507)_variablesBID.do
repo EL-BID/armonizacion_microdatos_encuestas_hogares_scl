@@ -1,6 +1,4 @@
 * (Version Stata 14)
-clear
-set more off  
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
@@ -11,15 +9,18 @@ set more off
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+clear all
+set more off
+
+global ruta = "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\sdssrv03\Surveys"
 
 local PAIS COL
 local ENCUESTA GEIH
-local ANO "2019"
-local ronda t3 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+local ANO =2019
+local ronda tmovil(0507)
+local log_file = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "$ruta\Survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\\`PAIS'_`ANO'`ronda'.dta"
+local base_out = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
                         
 capture log close
 log using "`log_file'", replace 
@@ -29,19 +30,21 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 PaÃ­s: Colombia
 Encuesta: GEIH
-Round: t3
+Round: tmovil(0507)
 Autores: Marcela G. Rubio
-Ultima version: Daniela Zuluaga (danielazu@iadb.org)
-Fecha Ãºltima modificaciÃ³n: Marzo 2019
+Siguiente version: Daniela Zuluaga (danielazu@iadb.org)
+Fecha modificaciÃ³n: Marzo 2019
+Modificado por Carolina Hernández para 2020 (jhernandez@colmex.mx)
+Octubre, 2020 Version Stata 14 
 
 							SCL/LMK - IADB
 ****************************************************************************/
 ****************************************************************************/
 
-use `base_in', clear
- foreach v of varlist _all {
-      capture rename `v' `=lower("`v'")'
-   }
+use "`base_in'", clear
+rename *, lower
+   
+drop __000000 __000001 __000002
 ***************
 ***region_c ***
 ***************
@@ -81,14 +84,14 @@ label var region_c "division politico-administrativa, departamento"
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
 ***factor_ch***
 ***************
 g factor_ch=fex_c_2011
-la var factor_ch "Factor de expansiÃ³n del hogar"
+la var factor_ch "Factor de expansión del hogar"
 
 ***************
 ****idh_ch*****
@@ -107,7 +110,7 @@ la var idp_ci "ID de la persona en el hogar"
 **********
 destring clase, replace
 g zona_c = clase == 1
-la var zona_c "Zona del paÃ­s"
+la var zona_c "Zona del país"
 la de zona_c 1 "Urbana" 0 "Rural"
 la val zona_c zona_c
 
@@ -115,15 +118,18 @@ la val zona_c zona_c
 ****pais****
 ************
 g str3 pais_c = "COL"
-la var pais_c "PaÃ­s"
+la var pais_c "País"
 
 **********
 ***anio***
 **********
 g anio_c = 2019
-la var anio_c "AÃ±o de la encuesta"
+la var anio_c "Año de la encuesta"
 
-destring mes, replace
+destring mes, generate (mes2) 
+drop mes
+rename mes2 mes
+
 gen mes_c=mes
 	
 ***************
@@ -131,7 +137,7 @@ gen mes_c=mes
 ***************
 * YL -> El factor fue dividido para 3 porque se unieron los 3 meses (en do-file de merge).
 g factor_ci=fex_c_2011
-la var factor_ci "Factor de expansiÃ³n del individuo"
+la var factor_ci "Factor de expansión del individuo"
 
 
 		****************************
@@ -147,7 +153,7 @@ la var factor_ci "Factor de expansiÃ³n del individuo"
 	replace relacion_ci = 4 if p6050 == 4 | p6050 == 5
 	replace relacion_ci = 5 if p6050 == 7 | p6050 == 8 | p6050 == 9
 	replace relacion_ci = 6 if p6050 == 6
-	la var relacion_ci "RelaciÃ³n con el jefe del hogar"
+	la var relacion_ci "Relación con el jefe del hogar"
 	la de relacion_ci 	1 "Jefe/a" 				///
 						2 "Esposo/a" 			///
 						3 "Hijo/a" 				///
@@ -177,7 +183,7 @@ gen raza_idioma_ci =.
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -193,7 +199,7 @@ notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
 	replace civil_ci = 4 if p6070==5
 	la var civil_ci "Estado civil"
 	la de civil_ci 	1 "Soltero" 				///
-					2 "UniÃ³n formal o informal" ///
+					2 "Unión formal o informal" ///
 					3 "Divorciado o separado" 	///
 					4 "Viudo"
 	la val civil_ci civil_ci
@@ -208,31 +214,31 @@ notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
 ***nconyuges_ch***
 ******************
 	bys idh_ch: egen nconyuges_ch = sum(relacion_ci == 2)
-	la var nconyuges_ch "NÃºmero de cÃ³nyuges"
+	la var nconyuges_ch "Número de cónyuges"
 
 ***************
 ***nhijos_ch***
 ***************
 	bys idh_ch: egen nhijos_ch = sum(relacion_ci == 3)
-	la var nhijos_ch "NÃºmero de hijos"
+	la var nhijos_ch "Número de hijos"
 
 ******************
 ***notropari_ch***
 ******************
 	bys idh_ch: egen notropari_ch = sum(relacion_ci == 4)
-	la var notropari_ch "NÃºmero de otros familiares"
+	la var notropari_ch "Número de otros familiares"
 
 ********************
 ***notronopari_ch***
 ********************
 	bys idh_ch: egen notronopari_ch = sum(relacion_ci == 5)
-	la var notronopari_ch "NÃºmero de no familiares"
+	la var notronopari_ch "Número de no familiares"
 
 ****************
 ***nempdom_ch***
 ****************
 	bys idh_ch: egen nempdom_ch = sum(relacion_ci == 6)
-	la var nempdom_ch "NÃºmero de empleados domÃ©sticos"
+	la var nempdom_ch "Número de empleados domésticos"
 
 *****************
 ***clasehog_ch***
@@ -261,37 +267,37 @@ notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
 ***nmiembros_ch***
 ******************
 	bys idh_ch: egen nmiembros_ch = sum(relacion_ci >= 1 & relacion_ci <= 4)
-	la var nmiembros_ch "NÃºmero de familiares en el hogar"
+	la var nmiembros_ch "Número de familiares en el hogar"
 
 *****************
 ***nmayor21_ch***
 *****************
 	bys idh_ch: egen nmayor21_ch = sum((relacion_ci >= 1 & relacion_ci <= 4) & edad_ci >= 21 & edad_ci!=.)
-	la var nmayor21_ch "NÃºmero de familiares mayores a 21 aÃ±os"
+	la var nmayor21_ch "Número de familiares mayores a 21 años"
 
 *****************
 ***nmenor21_ch***
 *****************
 	bys idh_ch: egen nmenor21_ch = sum((relacion_ci> = 1 & relacion_ci< = 4) & edad_ci < 21)
-	la var nmenor21_ch "NÃºmero de familiares menores a 21 aÃ±os"
+	la var nmenor21_ch "Número de familiares menores a 21 años"
 
 *****************
 ***nmayor65_ch***
 *****************
 	bys idh_ch: egen nmayor65_ch = sum((relacion_ci >= 1 & relacion_ci <= 4) & edad_ci >= 65 & edad_ci!=.)
-	la var nmayor65_ch "NÃºmero de familiares mayores a 65 aÃ±os"
+	la var nmayor65_ch "Número de familiares mayores a 65 años"
 
 ****************
 ***nmenor6_ch***
 ****************
 	bys idh_ch: egen nmenor6_ch = sum((relacion_ci >= 1 & relacion_ci <= 4) & edad_ci < 6)
-	la var nmenor6_ch "NÃºmero de familiares menores a 6 aÃ±os"
+	la var nmenor6_ch "Número de familiares menores a 6 años"
 
 ****************
 ***nmenor1_ch***
 ****************
 	bys idh_ch: egen nmenor1_ch = sum((relacion_ci >= 1 & relacion_ci <= 4) & edad_ci < 1)
-	la var nmenor1_ch "NÃºmero de familiares menores a 1 aÃ±o"
+	la var nmenor1_ch "Número de familiares menores a 1 año"
 
 ****************
 ***miembros_ci***
@@ -312,7 +318,7 @@ replace condocup_ci=1 if oci==1
 replace condocup_ci=2 if dsi==1
 replace condocup_ci=3 if ini==1
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -338,7 +344,7 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 ********************
 gen instcot_ci=p6930
 label var instcot_ci "instituciÃ³n a la cual cotiza"
-label define instcot_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instcot_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instcot_ci instcot_ci
 
 ****************
@@ -455,7 +461,7 @@ recode categoinac_ci .=2 if p7450==2 | (p6240==3 & condocup_ci==3)
 recode categoinac_ci .=3 if p7450==3 | (p6240==4 & condocup_ci==3)
 recode  categoinac_ci .=4 if condocup_ci==3
 
-label var categoinac_ci "CondiciÃ³n de inactividad"
+label var categoinac_ci "Condición de inactividad"
 label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos"
 label value categoinac_ci categoinac_ci
 
@@ -533,12 +539,12 @@ la var subemp_ci "Personas en subempleo por horas"
 	replace categopri_ci = 0 if p6430 == 8 | p6430==9
 	replace categopri_ci = . if emp_ci == 0
 	la de categopri_ci 	0 "Otro" 			///
-						1 "PatrÃ³n" 			///
+						1 "Patrón" 			///
 						2 "Cuenta propia" 	///
 						3 "Empleado" 	 	///
 						4 "No remunerado"
 	la val categopri_ci categopri_ci
-	la var categopri_ci "CategorÃ­a ocupacional"
+	la var categopri_ci "Categoría ocupacional"
 
 ******************
 ***categosec_ci***
@@ -551,12 +557,12 @@ la var subemp_ci "Personas en subempleo por horas"
 	replace categosec_ci = 0 if p7050 == 8 
 	replace categosec_ci = . if emp_ci == 0
 	la de categosec_ci 	0 "Otro" 			///
-						1 "PatrÃ³n" 			///
+						1 "Patrón" 			///
 						2 "Cuenta propia" 	///
 						3 "Empleado" 		///
 						4 "No remunerado"
 	la val categosec_ci categosec_ci
-	la var categosec_ci "CategorÃ­a ocupacional trabajo secundario"
+	la var categosec_ci "Categoría ocupacional trabajo secundario"
 
 *****************
 ***nempleos_ci***
@@ -564,7 +570,7 @@ la var subemp_ci "Personas en subempleo por horas"
 	g nempleos_ci = .
 	*replace nempleos_ci = 1 if emp_ci == 1 & p7040 == 2
 	*replace nempleos_ci = 2 if emp_ci == 1 & p7040 == 1
-	la var nempleos_ci "NÃºmero de empleos" 
+	la var nempleos_ci "Número de empleos" 
 /*
 *****************
 ***firmapeq_ci***
@@ -578,7 +584,7 @@ la var subemp_ci "Personas en subempleo por horas"
 *****************
 	g spublico_ci = (p6430 == 2 | p7050 ==2) 
 	replace spublico_ci = . if emp_ci == 0 
-	la var spublico_ci "Personas que trabajan en el sector pÃºblico"
+	la var spublico_ci "Personas que trabajan en el sector público"
 
 **************
 ***ocupa_ci***
@@ -594,14 +600,14 @@ la var subemp_ci "Personas en subempleo por horas"
 	replace ocupa_ci = 7 if oficio >= 70 & oficio <= 98 & emp_ci == 1  
 	replace ocupa_ci = 9 if oficio == 0  | oficio == 99 & emp_ci == 1
  
-	la var ocupa_ci "OcupaciÃ³n laboral"
-	la de ocupa_ci 	1 "Profesional y tÃ©cnico"																///
+	la var ocupa_ci "Ocupación laboral"
+	la de ocupa_ci 	1 "Profesional y técnico"																///
 					2 "Director o funcionario superior"														///
 					3 "Personal administrativo y nivel intermedio"											///
 					4 "Comerciante o vendedor"																///
 					5 "Trabajador en servicios"																///
-					6 "Trabajador agrÃ­cola y afines"														///
-					7 "Obrero no agrÃ­cola, conductores de mÃ¡quinas y vehÃ­culos de transporte y similares" 	///
+					6 "Trabajador agrícola y afines"														///
+					7 "Obrero no agrícola, conductores de máquinas y vehículos de transporte y similares" 	///
 					8 "Fuerzas armadas" 																	///
 					9 "Otras ocupaciones"
 	la val ocupa_ci ocupa_ci
@@ -625,10 +631,10 @@ la var subemp_ci "Personas en subempleo por horas"
 	
 	la var rama_ci "Rama de actividad"
 	la def rama_ci 	1 "Agricultura, caza, silvicultura y pesca"				///
-					2 "ExplotaciÃ³n de minas y canteras"						///
+					2 "Explotación de minas y canteras"						///
 					3 "Industrias manufactureras"							///
 					4 "Electricidad, gas y agua"							///
-					5 "ConstrucciÃ³n"										///
+					5 "Construcción"										///
 					6 "Comercio, restaurantes y hoteles"					///
 					7 "Transporte y almacenamiento"							///
 					8 "Establecimientos financieros, seguros e inmuebles" 	///
@@ -640,14 +646,14 @@ la var subemp_ci "Personas en subempleo por horas"
 ****************
 	g durades_ci = p7250 / 4.3
 	replace durades_ci = . if p7250 == 999 
-	la var durades_ci "DuraciÃ³n del desempleo en meses"
+	la var durades_ci "Duración del desempleo en meses"
  
 *******************
 ***antiguedad_ci***
 *******************
 	g antiguedad_ci = p6426 / 12 
 	replace antiguedad_ci = . if emp_ci == 0 | p6426 == 999
-	la var antiguedad_ci "Antiguedad en la actividad actual en aÃ±os"
+	la var antiguedad_ci "Antiguedad en la actividad actual en años"
 
 			**************
 			***INGRESOS***
@@ -785,7 +791,7 @@ la var subemp_ci "Personas en subempleo por horas"
 	bys idh_ch: egen nrylmpri_ch = sum(nrylmpri_ci) if miembros_ci == 1
 	replace nrylmpri_ch = 1 if nrylmpri_ch > 0 & nrylmpri_ch < .
 	replace nrylmpri_ch = . if nrylmpri_ch == .
-	la var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
+	la var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
 
 *******************
 ****** ylm_ch *****
@@ -884,7 +890,7 @@ la var subemp_ci "Personas en subempleo por horas"
 ***eduno_ci***
 **************
 	g byte eduno_ci = aedu_ci == 0
-	la var eduno_ci "Sin educaciÃ³n"
+	la var eduno_ci "Sin educación"
 
 **************
 ***edupi_ci***
@@ -959,7 +965,7 @@ la var subemp_ci "Personas en subempleo por horas"
 ***edupre_ci***
 ***************
 	g byte edupre_ci =(p6210s1==1 & p6210==2)
-	la var edupre_ci "EducaciÃ³n preescolar"
+	la var edupre_ci "Educación preescolar"
 
 ***************
 ***asispre_ci**
@@ -968,7 +974,7 @@ la var subemp_ci "Personas en subempleo por horas"
 	g asispre_ci=.
 	replace asispre_ci=1 if p6210s1==0 & p6210==2 & p6170==1
 	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educaciÃ³n prescolar"
+	la var asispre_ci "Asiste a educación prescolar"
 	
 **************
 ***eduac_ci***
@@ -1007,14 +1013,14 @@ g       pqnoasis1_ci = .
 ***repiteult_ci***
 ******************
 	g repiteult_ci = .
-	la var repiteult "Ha repetido el Ãºltimo grado"
+	la var repiteult "Ha repetido el último grado"
 
 ***************
 ***edupub_ci***
 ***************
 	g edupub_ci = 1 if p6175 == 1
 	replace edupub_ci = 0 if p6175 == 2
-	la var edupub_ci "Asiste a un centro de enseÃ±anza pÃºblico"
+	la var edupub_ci "Asiste a un centro de enseñanza público"
 	
 **************
 ***tecnica_ci*
@@ -1054,7 +1060,7 @@ label var universidad_ci "1=formacion universitaria"
 *****************
 	g aguamala_ch = (p5050 == 5 | p5050 == 6)
 	replace aguamala_ch = . if p5050 == .
-	la var aguamala_ch "Agua inadecuada (unimproved) segÃºn MDG" 
+	la var aguamala_ch "Agua inadecuada (unimproved) según MDG" 
 
 *****************
 ***aguamide_ch***
@@ -1067,7 +1073,7 @@ label var universidad_ci "1=formacion universitaria"
 ************
 	g luz_ch = p4030s1 == 1 
 	replace luz_ch=. if p4030s1==.
-	la var luz_ch  "La principal fuente de iluminaciÃ³n es electricidad"
+	la var luz_ch  "La principal fuente de iluminación es electricidad"
 
 ****************
 ***luzmide_ch***
@@ -1104,11 +1110,11 @@ label var universidad_ci "1=formacion universitaria"
 	replace des1_ch = 1 if p5020 == 1 | p5020 == 2
 	replace des1_ch = 2 if p5020 == 3 | p5020 == 4
 	replace des1_ch = 3 if p5020 == 5
-	la var des1_ch "Tipo de desague inadecuado (unimproved) segÃºn MDG"
+	la var des1_ch "Tipo de desague inadecuado (unimproved) según MDG"
 	la def des1_ch 	0 "No tiene servicio sanitario" 				///
-					1 "Conectado a red general o cÃ¡mara sÃ©ptica" 	///
+					1 "Conectado a red general o cámara séptica" 	///
 					2 "Letrina o conectado a pozo ciego" 			///
-					3 "Desemboca en rÃ­o o calle"
+					3 "Desemboca en río o calle"
 	la val des1_ch des1_ch
 
 *************
@@ -1120,7 +1126,7 @@ label var universidad_ci "1=formacion universitaria"
 	replace des2_ch = 2 if p5020 == 5 
 	la var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
 	la def des2_ch 	0 "No tiene servicio sanitario" 								///
-					1 "Conectado a red general, cÃ¡mara psÃ©ptica, pozo o letrina" 	///
+					1 "Conectado a red general, cámara séptica, pozo o letrina" 	///
 					2 "Cualquier otro caso"
 	la val des2_ch des2_ch
 
@@ -1129,7 +1135,7 @@ label var universidad_ci "1=formacion universitaria"
 *************
 	g piso_ch = (p4020 != 1 & p4020 != .)
 	replace piso_ch = . if p4020 == .
-	la var piso_ch "Materiales de construcciÃ³n del piso"  
+	la var piso_ch "Materiales de construcción del piso"  
 	la def piso_ch 	0 "Piso de tierra" 			///
 					1 "Materiales permanentes"
 	la val piso_ch piso_ch
@@ -1140,7 +1146,7 @@ label var universidad_ci "1=formacion universitaria"
 
 	g pared_ch = (p4010 >= 1 & p4010 <= 6)
 	replace pared_ch = . if p4010 == .
-	la var pared_ch "Materiales de construcciÃ³n de las paredes"
+	la var pared_ch "Materiales de construcción de las paredes"
 	la de pared_ch 0"No permanentes" 1"Permanentes"
 	la val pared_ch pared_ch
 
@@ -1148,7 +1154,7 @@ label var universidad_ci "1=formacion universitaria"
 ***techo_ch***
 **************
 	g techo_ch = .
-	la var techo_ch "Materiales de construcciÃ³n del techo"
+	la var techo_ch "Materiales de construcción del techo"
 
 **************
 ***resid_ch***
@@ -1158,8 +1164,8 @@ label var universidad_ci "1=formacion universitaria"
 	replace resid_ch = 2 if p5040 == 2 | p5040 == 3
 	replace resid_ch = 3 if p5040 == 5
 	replace resid_ch = . if p5040 == .
-	la var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
-	la de resid_ch 	0 "RecolecciÃ³n pÃºblica o privada" 	///
+	la var resid_ch "MÃ©todo de eliminación de residuos"
+	la de resid_ch 	0 "Recolección pública o privada" 	///
 					1 "Quemados o enterrados" 			///
 					2 "Tirados a un espacio abierto" 	///
 					3 "Otros"
@@ -1206,7 +1212,7 @@ replace banomejorado_ch = 0 if (( p5020 >=1 &  p5020 <=4) & p5030 ==2) | ( p5020
 **************
 	g telef_ch = p5210s1 == 1
 	replace telef_ch = . if p5210s1 == .
-	la var telef_ch "El hogar tiene servicio telefÃ³nico fijo"
+	la var telef_ch "El hogar tiene servicio telefónico fijo"
 
 ***************
 ***refrig_ch***
@@ -1322,33 +1328,6 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
  
 
-******************************
-*** VARIABLES DE MIGRACION ***
-******************************
-
-* Variables incluidas por SCL/MIG Fernando Morales
-
-	*******************
-	*** migrante_ci ***
-	*******************
-	
-	gen migrante_ci=(p6074==2 & p756==3) if p6074!=. & p756!=.
-	label var migrante_ci "=1 si es migrante"
-	
-	**********************
-	*** migantiguo5_ci ***
-	**********************
-	
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(p755,2,3)) if migrante_ci!=. & p755!=1
-	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-		
-	**********************
-	*** migrantelac_ci ***
-	**********************
-	
-	gen migrantelac_ci=.
-	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1375,8 +1354,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
-
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
@@ -1388,7 +1366,7 @@ compress
 compress
 
 
-saveold "$ruta\harmonized\\COL\\GEIH\data_arm\COL_2019t3_BID.dta", replace
+saveold "`base_out'", replace
 
 
 log close

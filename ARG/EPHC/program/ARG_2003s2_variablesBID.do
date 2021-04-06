@@ -63,7 +63,7 @@ use `base_in', clear
 	
 gen region_BID_c=4
 
-
+**
 	************
 	* region_c *
 	************

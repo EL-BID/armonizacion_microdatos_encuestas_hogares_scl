@@ -1,52 +1,35 @@
-* (Versión stata 12)
-clear
-set more off
-*________________________________________________________________________________________________________________*
 
- * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
- * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor òn©£amente al interior del BID.
- * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
- 
-
-
-global ruta = "\\Sdssrv03\surveys"
-
-local PAIS ARG
-local ENCUESTA EPHC
-local ANO "2018"
-local ronda s2 
-
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-
-capture log close
-log using "`log_file'", replace 
-
-log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 Paî³º Argentina
 Encuesta: EPHC
-Round: IISem-2018
+Round: II Trim-2018
 Autores: 
 Versión 2012: Yessenia Loaysa
-ultima version Stephanie González(SCL/SCL) - Email: stephaniego@iadb.org
-Fecha de ultima modificacion 7 de junio de 2019
+ultima version Alvaro Altamirano (LMK/SCL) - Email: alvaroalt@iadb.org
+Fecha de ultima modificacion 24 de junio de 2020
+Modificado por Carolina Hernández para 2020 (jhernandez@colmex.mx)
+Noviembre, 2020 Version Stata 14 
 
 							SCL/LMK - IADB
 ****************************************************************************/
-/***************************************************************************
-Detalle de procesamientos o modificaciones anteriores:
+/***************************************************************************/
+global ruta = "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys"
 
-****************************************************************************/
+local PAIS ARG
+local ENCUESTA EPHC
+local ANO "2018"
+local ronda t2 
+
+local log_file = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "$ruta\Survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local base_out = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+capture log close
+log using "`log_file'", replace   
 
 
-use `base_in', clear
+use "`base_in'", clear
+
 
 		**********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -478,7 +461,7 @@ tab subemp_ci
 	*NOTA: desde 2001 hay otra clasificacion, pero debe estudiarse como hacer las agrupaciones para la 
 	*construccion de la variable tal como esta propuesta para la armonizacion.
 
-*tostring pp04d_cod, replace
+tostring pp04d_cod, replace
 gen ocup1=substr(pp04d_cod,1,2)
 gen ocup2=substr(pp04d_cod,3,1)
 gen ocup3=substr(pp04d_cod,4,1)
@@ -1508,48 +1491,13 @@ gen id_afro_ci = .
 gen raza_ci=.
 
 
-******************************
-*** VARIABLES DE MIGRACION ***
-******************************
-
-* Variables incluidas por SCL/MIG Fernando Morales
-
-	*******************
-	*** migrante_ci ***
-	*******************
-
-	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
-	label var migrante_ci "=1 si es migrante"
-	
-	**********************
-	*** migantiguo5_ci ***
-	**********************
-	
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) if !inlist(ch16,6,9) & migrante_ci!=.		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
-	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-		
-	**********************
-	*** migrantelac_ci ***
-	**********************
-	
-	cap: tostring ch15_cod, replace
-	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
-	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
-	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
-	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
-	replace migrantelac_ci=. if ch15_cod=="999" & ch15!=4
-	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-	
-	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
-
-	
 /*_____________________________________________________________________________________________________*/
 * Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$ruta\Harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación ¤e que se encuentren todas las variables armonizadas 
@@ -1567,7 +1515,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
@@ -1582,18 +1530,8 @@ local longlabel: var label `i'
 local shortlabel = substr(`"`longlabel'"',1,79)
 label var `i' `"`shortlabel'"'
 }
-global ruta = "\\Sdssrv03\surveys"
 
-local PAIS ARG
-local ENCUESTA EPHC
-local ANO "2018"
-local ronda s2 
 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-
-saveold "`base_out'", version(12) replace
+save "`base_out'",replace
 
 log close

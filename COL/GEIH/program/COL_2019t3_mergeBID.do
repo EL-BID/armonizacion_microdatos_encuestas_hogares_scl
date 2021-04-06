@@ -110,6 +110,7 @@ sort idh
 saveold "`t3'col_`zona'_viv.dta", replace
 }
 
+
 ** Módulo de migración 
 
 * Sección incluida por SCL/MIG Fernando Morales 

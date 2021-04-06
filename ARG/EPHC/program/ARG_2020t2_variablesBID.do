@@ -1,52 +1,34 @@
-* (Versión stata 12)
-clear
-set more off
-*________________________________________________________________________________________________________________*
 
- * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
- * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor òn©£amente al interior del BID.
- * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
- 
-
-
-global ruta = "\\Sdssrv03\surveys"
-
-local PAIS ARG
-local ENCUESTA EPHC
-local ANO "2018"
-local ronda s2 
-
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-
-capture log close
-log using "`log_file'", replace 
-
-log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 Paî³º Argentina
 Encuesta: EPHC
-Round: IISem-2018
+Round: IItrim-2020
 Autores: 
 Versión 2012: Yessenia Loaysa
-ultima version Stephanie González(SCL/SCL) - Email: stephaniego@iadb.org
-Fecha de ultima modificacion 7 de junio de 2019
+ultima version Alvaro Altamirano (LMK/SCL) - Email: alvaroalt@iadb.org
+Fecha de ultima modificacion 24 de junio de 2020
+Modificado por Carolina Hernández para 2020 (jhernandez@colmex.mx)
+Noviembre, 2020 Version Stata 14 
 
 							SCL/LMK - IADB
 ****************************************************************************/
-/***************************************************************************
-Detalle de procesamientos o modificaciones anteriores:
+/***************************************************************************/
+global ruta = "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys"
 
-****************************************************************************/
+local PAIS ARG
+local ENCUESTA EPHC
+local ANO "2020"
+local ronda t2 
+
+local log_file = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "$ruta\Survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local base_out = "$ruta\Harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+capture log close
+log using "`log_file'", replace   
 
 
-use `base_in', clear
+use "`base_in'", clear
 
 		**********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -69,9 +51,9 @@ replace region_c=2  if aglomerado==22                          /*Catamarca*/
 replace region_c=3  if aglomerado==8                           /*Chaco*/
 replace region_c=4  if aglomerado==9 | aglomerado==91          /*Chubut*/
 replace region_c=5  if aglomerado==32                          /*Ciudad de Buenos Aires*/
-replace region_c=6  if aglomerado==13 | aglomerado==36         /*Có²¤¯va*/
+replace region_c=6  if aglomerado==13 | aglomerado==36         /*Córdoba*/
 replace region_c=7  if aglomerado==12                          /*Corrientes*/
-replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre Rî°³*/
+replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
 replace region_c=9  if aglomerado==15                          /*Formosa*/
 replace region_c=10 if aglomerado==19                          /*Jujuy*/
 replace region_c=11 if aglomerado==30                          /*La pampa*/
@@ -158,7 +140,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	*anio*
 	******
 	
-	gen anio_c=ano4
+	gen anio_c=2020
 
 
 	**********
@@ -380,7 +362,11 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	************* 
 	*horastot_ci*
 	*************
-
+	generate pp3f_tot2 = real(pp3f_tot)
+	drop pp3f_tot
+	rename pp3f_tot2 pp3f_tot
+	
+	
 	gen otrashoras=pp3f_tot if pp3f_tot!=999
 	
 	egen horastot_ci=rsum(horaspri_ci otrashoras), missing 
@@ -478,7 +464,7 @@ tab subemp_ci
 	*NOTA: desde 2001 hay otra clasificacion, pero debe estudiarse como hacer las agrupaciones para la 
 	*construccion de la variable tal como esta propuesta para la armonizacion.
 
-*tostring pp04d_cod, replace
+tostring pp04d_cod, replace
 gen ocup1=substr(pp04d_cod,1,2)
 gen ocup2=substr(pp04d_cod,3,1)
 gen ocup3=substr(pp04d_cod,4,1)
@@ -1001,7 +987,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	gen pqnoasis_ci=.
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
 	
-	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
+	**Daniela Zuluaga- Enero 2019: Se agrega la variable pqnoasis1_ci**
 	
 	**************
 	*pqnoasis1_ci*
@@ -1298,7 +1284,7 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 	***************
 	gen vivialqimp_ch=.
 	
-	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
+	**Daniela Zuluaga- Enero 2019: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
 	*********************
     ***aguamejorada_ch***
@@ -1425,6 +1411,7 @@ label var pension_ci "1=Recibe pension contributiva"
 gen aguinpen=v21_m/12 if v2_m>0 & v2_m!=.
 
 egen ypen_ci=rsum(v2_m aguinpen), missing
+replace ypen_ci=. if ypen_ci<0
 label var ypen_ci "Valor de la pension contributiva"
 
 ***************
@@ -1446,13 +1433,10 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 **salmm_ci***
 *************
 
-* http://servicios.infoleg.gob.ar/infolegInternet/anexos/310000-314999/313259/norma.htm *
-* https://www.argentina.gob.ar/trabajo/consejodelsalario/resoluciones *
-* ARG 2018 desde septiembre de 2018. Encuesta aplicada el 3er y 4trimeste de 2018.
-gen salmm_ci=10700
+* https://www.clarin.com/economia/cual-es-el-salario-minimo-vital-y-movil-en-2020-en-argentina_0_FzNMfrTC1.html#:~:text=Desde%20noviembre%20de%202019%2C%20el,hora%20para%20los%20trabajadores%20jornalizados.
+*Salario mínimo fijado en Septiembre 2020
+gen salmm_ci=16875
 label var salmm_ci "Salario minimo legal"
-
-
 
 
 ******************
@@ -1508,48 +1492,13 @@ gen id_afro_ci = .
 gen raza_ci=.
 
 
-******************************
-*** VARIABLES DE MIGRACION ***
-******************************
-
-* Variables incluidas por SCL/MIG Fernando Morales
-
-	*******************
-	*** migrante_ci ***
-	*******************
-
-	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
-	label var migrante_ci "=1 si es migrante"
-	
-	**********************
-	*** migantiguo5_ci ***
-	**********************
-	
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) if !inlist(ch16,6,9) & migrante_ci!=.		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
-	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-		
-	**********************
-	*** migrantelac_ci ***
-	**********************
-	
-	cap: tostring ch15_cod, replace
-	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
-	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
-	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
-	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
-	replace migrantelac_ci=. if ch15_cod=="999" & ch15!=4
-	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-	
-	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
-
-	
 /*_____________________________________________________________________________________________________*/
 * Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$ruta\Harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"*/
 
 /*_____________________________________________________________________________________________________*/
 * Verificación ¤e que se encuentren todas las variables armonizadas 
@@ -1567,12 +1516,11 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
-clonevar codocupa = pp04d_cod
-clonevar codindustria = pp11b_cod
+rename pp04d_cod codocupa
 
 compress
 
@@ -1582,18 +1530,8 @@ local longlabel: var label `i'
 local shortlabel = substr(`"`longlabel'"',1,79)
 label var `i' `"`shortlabel'"'
 }
-global ruta = "\\Sdssrv03\surveys"
 
-local PAIS ARG
-local ENCUESTA EPHC
-local ANO "2018"
-local ronda s2 
 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-
-saveold "`base_out'", version(12) replace
+save "`base_out'",replace
 
 log close

@@ -1513,7 +1513,7 @@ gen raza_ci=.
 	*******************
 	*** migrante_ci ***
 	*******************
-	
+
 	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
 	label var migrante_ci "=1 si es migrante"
 	
@@ -1535,8 +1535,8 @@ gen raza_ci=.
 	inlist(ch15_cod,"per","ven")) & migrante_ci==1) if migrante_ci!=. 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
-
-	
+  
+  
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza

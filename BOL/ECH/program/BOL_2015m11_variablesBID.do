@@ -301,7 +301,7 @@ replace afroind_ci=1  if s3a_2a==1
 replace afroind_ci=2 if s3a_2a==0
 replace afroind_ci=3 if s3a_2a ==2 
 replace afroind_ci=9 if s3a_2a==3 
-replace afroind_ci= .if s3a_2a==.
+replace afroind_ci=. if s3a_2a==.
 
 
 	***************

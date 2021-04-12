@@ -1548,20 +1548,20 @@ gen str folio= folioviv + foliohog
 order folio, first
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta"
+merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta", keep (match master)
 drop _merge
 
-merge 1:1 folio numren using "$ruta\ingreso_deflactado12_per.dta"
+merge 1:1 folio numren using "$ruta\ingreso_deflactado12_per.dta" , keep (match master)
 rename _merge _merge_ing
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp"
+merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\gtos_autoc12.dta"
+merge m:1 folio using "$ruta\gtos_autoc12.dta", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\edu_gtosmh"
+merge m:1 folio using "$ruta\edu_gtosmh", keep (match master)
 drop _merge
 
 *Modificación Mayra Sáenz: Total Ingreso monetario del hogar

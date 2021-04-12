@@ -1636,26 +1636,26 @@ gen str folio= folioviv + foliohog
 order folio, first
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta"
+merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta", keep (match master)
 drop _merge
 
-merge 1:1 folio numren using "$ruta\ingreso_deflactado10_per.dta"
+merge 1:1 folio numren using "$ruta\ingreso_deflactado10_per.dta", keep (match master)
 rename _merge _merge_ing
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp"
+merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp", keep (match master)
 drop _merge
 
-merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosnmp"
+merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosnmp", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\gtos_autoc10.dta"
+merge m:1 folio using "$ruta\gtos_autoc10.dta", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\edu_gtosmh"
+merge m:1 folio using "$ruta\edu_gtosmh", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\edu_costosh"
+merge m:1 folio using "$ruta\edu_costosh", keep (match master)
 drop _merge
 
 

@@ -25,7 +25,7 @@ clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2015.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2015.dta", force
 drop _merge
-merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA15.dta"
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA15.dta", keep(match master)
 drop _merge
 
 egen id =concat (directorio secuencia_p orden)

@@ -334,7 +334,10 @@ recode dis_ci 0=1 if s04a_06`i'==`j'
 recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
 recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
 
-
+	*************
+	***dis_ch***
+	**************	
+egen dis_ch = sum(dis_ci), by(idh_ch) 
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***

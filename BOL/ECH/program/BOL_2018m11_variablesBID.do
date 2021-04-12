@@ -319,7 +319,7 @@ drop afroind_jefe
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=2013
+gen afroind_ano_c=2012
 
 
 	*************

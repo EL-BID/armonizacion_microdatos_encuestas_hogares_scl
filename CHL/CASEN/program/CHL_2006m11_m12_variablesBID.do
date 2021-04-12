@@ -120,6 +120,16 @@ repalce asiste_ci=. if e4==.*/
 *************
 gen factor_ch=expr /*Esta es la expansion que se usa en todos los años anteriores. La provincial recien aparece en el 2000*/
 
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=.
+
 *************
 * idh_ch    *
 *************
@@ -567,50 +577,47 @@ by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1)
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
 
-/*
-ETNIA ¿En Chile, la ley reconoce ocho pueblos originarios o indígenas, ¿pertenece usted a alguno
-de ellos? (Preg. 7)
-t4:
-           1 aymara
-           2 rapa nui 
-           3 quechua 
-           4 mapuche 
-           5 atacameño
-           6 coya
-           7 kawaskar
-           8 yagan
-           9 diaguita
-          90 no pertenece a ningún pueblo indígena
-          99 sin dato
 
-*/
+         ******************************
+         *** VARIABLES DE DIVERSIDAD **
+         ******************************
+*Nathalia Maya & Antonella Pereira
+*Feb 2021	
 
-gen raza_ci=.
-replace raza_ci= 1 if  (t4 >=1 & t4 <=9 )
-replace raza_ci= 3 if (t4==90 | t4==99) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo" 
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: Pueblos ind�genas, �pertenece usted o es descendiente de alguno de ellos? (t4) (Aimara 1; Rapa-Nui o Pascuenses 2; Quechua 3; Mapuche 4; Atacame�o (Likan-Antai) 5; Collas 6; Kawashkar o Alacalufes 7; Y�mana o Yag�n 8; Diaguita 9; No pertenece a ning�n pueblo ind�gena 90; sin dato 99)
+gen afroind_ci=. 
+replace afroind_ci=1 if (t4 >=1 & t4 <=9 )
+replace afroind_ci=2 if t4==0
+replace afroind_ci=3 if t4==90 
+replace afroind_ci=. if t4==99
 
-gen raza_idioma_ci=.
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2006
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 
 
 ********************************
@@ -2195,21 +2202,6 @@ label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci
 
-******************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-	
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
-		
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2223,8 +2215,8 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

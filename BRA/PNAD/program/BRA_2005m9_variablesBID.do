@@ -34,9 +34,9 @@ Autores:
 Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
 Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
 versión 2010: Yanira Oviedo
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Última modificación: Daniela Zuluaga E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Octubre de 2017
+ Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+ Daniela Zuluaga E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com - Octubre de 2017
+Última modificación: Cesar Lins - Marzo 2021
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -254,42 +254,6 @@ gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-/*COR OU RACA v0404
-2 BRANCA
-4 PRETA
-6 AMARELA
-8 PARDA
-0 INDIGENA
-9 IGNORADA*/
-
-gen raza_ci=.
-replace raza_ci= 1 if  (v0404 ==0)
-replace raza_ci= 2 if  (v0404 ==4 | v0404 ==8)
-replace raza_ci= 3 if (v0404==2 | v0404==6 | v0404== 9) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
 
 gen factor_ci=v4611 /*AUN CUANDO HAY UN FACTOR DE PERSONAS ES IDENTICO AL DE HOGARES, EXCEPTO PARA EL '93 EN DONDE SE REGISTRAN vALORES NEGATIvOS! PARA HOMOGENEIZAR,A TODOS LES PONEMOS EL FACTOR DE EXPANSION DEL HOGAR*/
 gen sexo_ci=1 if v0302==2
@@ -323,6 +287,46 @@ by idh_ch:egen byte nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=
 by idh_ch:egen byte nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6))
 by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1))
 
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+												
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: COR OU RACA? (v0404) (BRANCA 2, PRETA 4, AMARELA 6, PARDA 8, INDIGENA 0, IGNORADA 9) 
+
+gen afroind_ci=. 
+replace afroind_ci=1  if v0404==0
+replace afroind_ci=2 if v0404 == 4 | v0404 == 8 
+replace afroind_ci=3 if v0404 == 2 | v0404 == 6 
+replace afroind_ci=. if v0404==9
+
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=1990
+
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 /******************************************************************************/
 /*				vARIABLES DE DEMANDA LABORAL		      */
@@ -1757,7 +1761,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

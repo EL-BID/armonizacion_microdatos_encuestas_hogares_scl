@@ -320,6 +320,39 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	
 	gen miembros_ci=(relacion_ci>=1 & relacion_ci<5) 
 
+	
+				
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+			
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+	
 			***********************************
 			***VARIABLES DEL MERCADO LABORAL***
 			***********************************
@@ -1568,17 +1601,6 @@ gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 gen instcot_ci=.
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_idioma_ci = . 
-gen id_ind_ci = .
-gen id_afro_ci = .
-gen raza_ci=.
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1593,7 +1615,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

@@ -209,6 +209,17 @@ label value relacion_ci relacion_ci
 ******************************
 gen factor_ci=FACTOR
 label var factor_ci "Individual Expansion Factor"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=.
+
 ******************************
 *	sexo_ci
 ******************************
@@ -287,6 +298,35 @@ gen miembros_ci=(relacion_ci<5)
 label var miembros_ci "Miembro del hogar"
 
 *option: gen miembros_ci=((paren>=100 & paren<=300) | (paren>=500 & paren<=700)) 
+
+******************************************************************************
+*	VARIABLES DE DIVERSIDAD
+******************************************************************************
+**María Antonella Pereira & Nathalia Maya - Marzo 2021 
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 ******************************************************************************
 *	LABOR MARKET
@@ -4139,65 +4179,6 @@ egen rtasot = rsum(ing_rent  otros), missing
 label var rtasot "Rentas y otros"
 
 
-
-*********
-*raza_ci*
-*********
-/*
-gen raza_ci=.
-replace raza_ci=1 if LENGUA6==1
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo"
-*/
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-g parentesco = PARENTESCO
-
-gen raza_idioma_ci=.
-replace raza_idioma_ci=1 if LENGUA6==1
-bys idh_ch: gen aux=raza_idioma_ci if parentesco==101
-bys idh_ch: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentesco==301|parentesco==304| ///
-parentesco==608|parentesco==609|parentesco==610|parentesco==612))  
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo"
-
-gen raza_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_idioma_ci==2 
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente"
-
-/***************************
-* DISCAPACIDAD
-***************************/
-*Daniela Zuluaga Feb 2020:
-*Con base a elaboración Mariana Pinzón y M.Antonella Pereira
-
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
-
-
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza
@@ -4210,8 +4191,8 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

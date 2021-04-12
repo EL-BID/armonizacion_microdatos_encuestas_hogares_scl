@@ -32,8 +32,8 @@ País: Bolivia
 Encuesta: ECH
 Round: m11
 Autores: Mayra Sáenz
-Última modificación: Stephanie González Rubio
-Fecha última modificación: Julio 18, 2019
+Stephanie González Rubio (Jul 18, 2019)
+Última versión: 2021/03/09 (Cesar Lins)
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -43,7 +43,7 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
 
-use `base_in', clear
+use "`base_in'", clear
 
 
 	****************
@@ -80,6 +80,17 @@ label var region_c "division politica, estados"
 ***************
 gen factor_ch= factor
 label variable factor_ch "Factor de expansion del hogar"
+
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=estrato
+
 
 ***************
 ****idh_ch*****
@@ -276,50 +287,54 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-*Raza usando idioma
-gen raza_idioma_ci = .
-replace raza_idioma_ci= 1 if s02a_07_>=7&s02a_07_<=36 | s02a_07_==2 | s02a_07_==5
-replace raza_idioma_ci= 3 if s02a_07_>=41&s02a_07_<=60 | s02a_07_==6  
 
-bys idh_ch, sort: gen aux=raza_idioma_ci if s02a_05==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s02a_05==3| s02a_05==8))    
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
 
-*Raza usando la definicion más apropiada
-gen raza_ci=.
-replace raza_ci= 1 if  s03a_04==1
-replace raza_ci= 2 if  s03a_04==1 & s03a_04n==1 
-replace raza_ci= 3 if (s03a_04==2 | s03a_04==3) 
-bys idh_ch: gen aux=raza_ci if s02a_05==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (s02a_05==3| s02a_05==8))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s03a_04) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
+**Pregunta: a qué nación o pueblo pertenece? (s03a_04n)(ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
+** La base original difiere de la base armonizada (s03a_04npioc vs s03a_04n). 
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+gen afroind_ci=. 
+replace afroind_ci=1 if s03a_04==1
+replace afroind_ci=2 if s03a_04==0 
+replace afroind_ci=3 if s03a_04==2 
+replace afroind_ci=9 if s03a_04==3 
+
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2013
+
+
+	*************
+	***dis_ci***
+	**************
+gen dis_ci = 0
+foreach i in a b c d e f  {
+forvalues j=2/4 {
+recode dis_ci 0=1 if s04a_06`i'==`j'
+}
+}
+recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
+recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
+
+
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
@@ -457,8 +472,9 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 *****************
 **ypensub_ci*
 *****************
+*Modificación Cesar Lins - Feb 2021, s07a_010 changed to s07a_01e0 (same as 2017)
+gen  ypensub_ci=s07a_01e0 if s07a_01e0>0 & s07a_01e0!=. 
 
-gen  ypensub_ci=s07a_010 if s07a_010>0 & s07a_010!=. 
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 	
 /* Esta sección es para los residentes habituales del hogar mayores a 7 años. Sin embargo, las variables construidas 
@@ -496,15 +512,17 @@ label var desalent_ci "Trabajadores desalentados"
 *****************
 ***horaspri_ci***
 *****************
+*Modificación Cesar Lins - Feb 2021, 
+** s06b_230 changed to s06b_23ab; s06b_23a changed to s06b_23aa (same as 2017)
 
-  *s06b_230: 23b. cuantas horas en promedio trabaja al dia .. ? (minutos)
-  *s06b_23a: 23a. cuantas horas en promedio trabaja al dia .. ? (horas)
+  *s06b_23ab: 23b. cuantas horas en promedio trabaja al dia .. ? (minutos)
+  *s06b_23aa: 23a. cuantas horas en promedio trabaja al dia .. ? (horas)
   *s6b_22: 22. cuantos dias a la semana trabaja
 
-gen aux_min=  s06b_230/60
-egen horas_min= rsum(s06b_23a aux_min), m
+  gen aux_min=  s06b_23ab/60
+egen horas_min= rsum(s06b_23aa aux_min), m
 gen horaspri_ci = horas_min*s06b_22
-replace horaspri_ci=. if s06b_22==. | s06b_23a==. |  s06b_230==.
+replace horaspri_ci=. if s06b_22==. | s06b_23aa==. |  s06b_23ab==.
 replace horaspri_ci=. if emp_ci!=1
 label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
 
@@ -645,10 +663,12 @@ label variable ocupa_ci "Ocupacion laboral"*/
 
 * MGD 6/15/2017: usa variable a mas digitos para hacer la clasificación, se cambia a CIUO-08
 
-gen longi=length(s06b_110)
-g new_cod=substr(s06b_110,1,3) if longi>3
-replace new_cod=s06b_110 if longi<=3
+*Modificación Cesar Lins - Feb 2021, s06b_110 changed to s06b_11a_cod
+gen longi=length(s06b_11a_cod)
+g new_cod=substr(s06b_11a_cod,1,3) if longi>3
+replace new_cod=s06b_11a_cod if longi<=3
 destring new_cod, replace
+
 gen ocupa_ci=.
 replace ocupa_ci=1 if ((new_cod>=210 & new_cod<=352) | (new_cod>=21 & new_cod<=34)) & emp_ci==1
 replace ocupa_ci=2 if ((new_cod>=110 & new_cod<=143) |  new_cod==11) & emp_ci==1
@@ -792,29 +812,30 @@ replace yliquido= s06c_25a/12	if s06c_25b==8
 **************
 * comisiones *
 **************
-
+*Modificación Cesar Lins - Feb 2021, replaced all variables below by 2017 variable names
 gen ycomisio = .
-replace ycomisio= s06c_27a*30	if s06c_270==1
-replace ycomisio= s06c_27a*4.3	if s06c_270==2
-replace ycomisio= s06c_27a*2	if s06c_270==3
-replace ycomisio= s06c_27a		if s06c_270==4
-replace ycomisio= s06c_27a/2	if s06c_270==5
-replace ycomisio= s06c_27a/3	if s06c_270==6
-replace ycomisio= s06c_27a/6 	if s06c_270==7
-replace ycomisio= s06c_27a/12 	if s06c_270==8
+replace ycomisio= s06c_27aa*30	if s06c_27ab==1
+replace ycomisio= s06c_27aa*4.3	if s06c_27ab==2
+replace ycomisio= s06c_27aa*2	if s06c_27ab==3
+replace ycomisio= s06c_27aa		if s06c_27ab==4
+replace ycomisio= s06c_27aa/2	if s06c_27ab==5
+replace ycomisio= s06c_27aa/3	if s06c_27ab==6
+replace ycomisio= s06c_27aa/6 	if s06c_27ab==7
+replace ycomisio= s06c_27aa/12 	if s06c_27ab==8
 
 ****************
 * horas extras *
 ****************
+*Modificación Cesar Lins - Feb 2021, replaced all variables below by 2017 variable names
 gen yhrsextr= .
-replace yhrsextr= s06c_27b *30	    if s06c_271==1
-replace yhrsextr= s06c_27b *4.3  	if s06c_271==2
-replace yhrsextr= s06c_27b *2		if s06c_271==3
-replace yhrsextr= s06c_27b 		if s06c_271==4
-replace yhrsextr= s06c_27b /2		if s06c_271==5
-replace yhrsextr= s06c_27b /3		if s06c_271==6
-replace yhrsextr= s06c_27b /6	    if s06c_271==7
-replace yhrsextr= s06c_27b /12	    if s06c_271==8
+replace yhrsextr= s06c_27ba *30	    if s06c_27bb==1
+replace yhrsextr= s06c_27ba *4.3  	if s06c_27bb==2
+replace yhrsextr= s06c_27ba *2		if s06c_27bb==3
+replace yhrsextr= s06c_27ba 		if s06c_27bb==4
+replace yhrsextr= s06c_27ba /2		if s06c_27bb==5
+replace yhrsextr= s06c_27ba /3		if s06c_27bb==6
+replace yhrsextr= s06c_27ba /6	    if s06c_27bb==7
+replace yhrsextr= s06c_27ba /12	    if s06c_27bb==8
 
 *********
 * prima *
@@ -830,59 +851,64 @@ replace yprima = s06c_26a/12
 gen yaguina = .
 replace yaguina = s06c_26b/12
 
+*********************************************************************
+*Modificación Cesar Lins - Feb 2021, replaced all variables 
+* in alimentos, transporte, vestimenta, vivienda and otros
+* by 2017 version of the variable names
+
 *************
 * alimentos *
 *************
 gen yalimen = .
-replace yalimen= s06c_301 *30		if s06c_300 ==1 & s06c_30a==1
-replace yalimen= s06c_301 *4.3 	if s06c_300 ==2 & s06c_30a==1
-replace yalimen= s06c_301 *2		if s06c_300 ==3 & s06c_30a==1
-replace yalimen= s06c_301 		    if s06c_300 ==4 & s06c_30a==1
-replace yalimen= s06c_301 /2		if s06c_300 ==5 & s06c_30a==1
-replace yalimen= s06c_301 /3		if s06c_300 ==6 & s06c_30a==1
-replace yalimen= s06c_301 /6		if s06c_300 ==7 & s06c_30a==1
-replace yalimen= s06c_301 /12		if s06c_300 ==8 & s06c_30a==1
+replace yalimen= s06c_30a2 *30		if s06c_30a1 ==1 & s06c_30a==1
+replace yalimen= s06c_30a2 *4.3 	if s06c_30a1 ==2 & s06c_30a==1
+replace yalimen= s06c_30a2 *2		if s06c_30a1 ==3 & s06c_30a==1
+replace yalimen= s06c_30a2 		    if s06c_30a1 ==4 & s06c_30a==1
+replace yalimen= s06c_30a2 /2		if s06c_30a1 ==5 & s06c_30a==1
+replace yalimen= s06c_30a2 /3		if s06c_30a1 ==6 & s06c_30a==1
+replace yalimen= s06c_30a2 /6		if s06c_30a1 ==7 & s06c_30a==1
+replace yalimen= s06c_30a2 /12		if s06c_30a1 ==8 & s06c_30a==1
 
 **************
 * transporte *
 **************
 
 gen ytranspo = .
-replace ytranspo= s06c_303*30	    if s06c_302==1 & s06c_30b==1
-replace ytranspo= s06c_303*4.3	    if s06c_302==2 & s06c_30b==1
-replace ytranspo= s06c_303*2		if s06c_302==3 & s06c_30b==1
-replace ytranspo= s06c_303 	    if s06c_302==4 & s06c_30b==1
-replace ytranspo= s06c_303/2		if s06c_302==5 & s06c_30b==1
-replace ytranspo= s06c_303/3		if s06c_302==6 & s06c_30b==1
-replace ytranspo= s06c_303/6		if s06c_302==7 & s06c_30b==1
-replace ytranspo= s06c_303/12	    if s06c_302==8 & s06c_30b==1
+replace ytranspo= s06c_30b2*30	    if s06c_30b1==1 & s06c_30b==1
+replace ytranspo= s06c_30b2*4.3	    if s06c_30b1==2 & s06c_30b==1
+replace ytranspo= s06c_30b2*2		if s06c_30b1==3 & s06c_30b==1
+replace ytranspo= s06c_30b2 	    if s06c_30b1==4 & s06c_30b==1
+replace ytranspo= s06c_30b2/2		if s06c_30b1==5 & s06c_30b==1
+replace ytranspo= s06c_30b2/3		if s06c_30b1==6 & s06c_30b==1
+replace ytranspo= s06c_30b2/6		if s06c_30b1==7 & s06c_30b==1
+replace ytranspo= s06c_30b2/12	    if s06c_30b1==8 & s06c_30b==1
 
 **************
 * vestimenta *
 **************
 gen yvesti = .
-replace yvesti= s06c_305*30		if s06c_304==1 & s06c_30c==1
-replace yvesti= s06c_305*4.3		if s06c_304==2 & s06c_30c==1
-replace yvesti= s06c_305*2		    if s06c_304==3 & s06c_30c==1
-replace yvesti= s06c_305			if s06c_304==4 & s06c_30c==1
-replace yvesti= s06c_305/2		    if s06c_304==5 & s06c_30c==1
-replace yvesti= s06c_305/3		    if s06c_304==6 & s06c_30c==1
-replace yvesti= s06c_305/6		    if s06c_304==7 & s06c_30c==1
-replace yvesti= s06c_305/12		if s06c_304==8 & s06c_30c==1
+replace yvesti= s06c_30c2*30		if s06c_30c1==1 & s06c_30c==1
+replace yvesti= s06c_30c2*4.3		if s06c_30c1==2 & s06c_30c==1
+replace yvesti= s06c_30c2*2		    if s06c_30c1==3 & s06c_30c==1
+replace yvesti= s06c_30c2			if s06c_30c1==4 & s06c_30c==1
+replace yvesti= s06c_30c2/2		    if s06c_30c1==5 & s06c_30c==1
+replace yvesti= s06c_30c2/3		    if s06c_30c1==6 & s06c_30c==1
+replace yvesti= s06c_30c2/6		    if s06c_30c1==7 & s06c_30c==1
+replace yvesti= s06c_30c2/12		if s06c_30c1==8 & s06c_30c==1
 
 ************
 * vivienda *
 ************
 
 gen yvivien = .
-replace yvivien= s06c_307*30		if s06c_306==1 & s06c_30d==1
-replace yvivien= s06c_307*4.3	    if s06c_306==2 & s06c_30d==1
-replace yvivien= s06c_307*2		if s06c_306==3 & s06c_30d==1
-replace yvivien= s06c_307		    if s06c_306==4 & s06c_30d==1
-replace yvivien= s06c_307/2		if s06c_306==5 & s06c_30d==1
-replace yvivien= s06c_307/3		if s06c_306==6 & s06c_30d==1
-replace yvivien= s06c_307/6		if s06c_306==7 & s06c_30d==1
-replace yvivien= s06c_307/12		if s06c_306==8 & s06c_30d==1
+replace yvivien= s06c_30d2*30		if s06c_30d1==1 & s06c_30d==1
+replace yvivien= s06c_30d2*4.3	    if s06c_30d1==2 & s06c_30d==1
+replace yvivien= s06c_30d2*2		if s06c_30d1==3 & s06c_30d==1
+replace yvivien= s06c_30d2		    if s06c_30d1==4 & s06c_30d==1
+replace yvivien= s06c_30d2/2		if s06c_30d1==5 & s06c_30d==1
+replace yvivien= s06c_30d2/3		if s06c_30d1==6 & s06c_30d==1
+replace yvivien= s06c_30d2/6		if s06c_30d1==7 & s06c_30d==1
+replace yvivien= s06c_30d2/12		if s06c_30d1==8 & s06c_30d==1
 
 
 *************
@@ -890,14 +916,15 @@ replace yvivien= s06c_307/12		if s06c_306==8 & s06c_30d==1
 *************
 
 gen yotros = .
-replace yotros= s06c_309*30	if s06c_308==1 & s06c_30e==1
-replace yotros= s06c_309*4.3	if s06c_308==2 & s06c_30e==1
-replace yotros= s06c_309*2	    if s06c_308==3 & s06c_30e==1
-replace yotros= s06c_309		if s06c_308==4 & s06c_30e==1
-replace yotros= s06c_309/2	    if s06c_308==5 & s06c_30e==1
-replace yotros= s06c_309/3		if s06c_308==6 & s06c_30e==1
-replace yotros= s06c_309/6		if s06c_308==7 & s06c_30e==1
-replace yotros= s06c_309/12	if s06c_308==8 & s06c_30e==1
+replace yotros= s06c_30e2*30	if s06c_30e1==1 & s06c_30e==1
+replace yotros= s06c_30e2*4.3	if s06c_30e1==2 & s06c_30e==1
+replace yotros= s06c_30e2*2	    if s06c_30e1==3 & s06c_30e==1
+replace yotros= s06c_30e2		if s06c_30e1==4 & s06c_30e==1
+replace yotros= s06c_30e2/2	    if s06c_30e1==5 & s06c_30e==1
+replace yotros= s06c_30e2/3		if s06c_30e1==6 & s06c_30e==1
+replace yotros= s06c_30e2/6		if s06c_30e1==7 & s06c_30e==1
+replace yotros= s06c_30e2/12	if s06c_30e1==8 & s06c_30e==1
+**********************************************************************
 
 
 **********************************
@@ -943,23 +970,24 @@ replace yliquido2= s06g_47a/12		if s06g_47b==8
 *****************
 * Horas extra 2 *
 *****************
-
+*Modificación Cesar Lins - Feb 2021, replaced by 2017 variable names
 gen yhrsextr2 = .
-replace yhrsextr2=s06g_480/12 if s06g_48a==1
+replace yhrsextr2=s06g_48a1/12 if s06g_48a==1
 
 ***************************************
 * alimentos, transporte y vestimenta2 *
 ***************************************
-
+*Modificación Cesar Lins - Feb 2021, replaced by 2017 variable names
 gen yalimen2 = .
-replace yalimen2=s06g_481/12	if s06g_48b==1
+replace yalimen2=s06g_48b1/12	if s06g_48b==1
 
 **************
 * vivienda 2 *
 **************
-
+*Modificación Cesar Lins - Feb 2021, replaced by 2017 variable names
 gen yvivien2= .
-replace yvivien2=s06g_482/12	if s06g_48c==1
+replace yvivien2=s06g_48c1/12	if s06g_48c==1
+
 
 
 *************************
@@ -1059,9 +1087,9 @@ replace yindseg = s07a_04b/12
 ******************
 * renta dignidad *
 ******************
-
+* Modificación Cesar Lins - Feb 2021, s07a_010 changed to s07a_01e0
 gen ybono = .
-replace ybono = s07a_010
+replace ybono = s07a_01e0
 
 ******************
 * otros ingresos *
@@ -1084,14 +1112,14 @@ replace yotring = s07a_04d/12
 */
 * No hay la categoria de diario en s7b_5ab
 gen yasistfam = .
-replace yasistfam= s07b_05a*4.3	    if s07b_050==2
-replace yasistfam= s07b_05a*2		if s07b_050==3
-replace yasistfam= s07b_05a		    if s07b_050==4
-replace yasistfam= s07b_05a/2		if s07b_050==5
-replace yasistfam= s07b_05a/3		if s07b_050==6
-replace yasistfam= s07b_05a/6		if s07b_050==7
-replace yasistfam= s07b_05a/12		if s07b_050==8
-
+* Modificación Cesar Lins - Feb 2021, changed all variables below to 2017 version
+replace yasistfam= s07b_05aa*4.3	if s07b_05ab==2
+replace yasistfam= s07b_05aa*2		if s07b_05ab==3
+replace yasistfam= s07b_05aa		if s07b_05ab==4
+replace yasistfam= s07b_05aa/2		if s07b_05ab==5
+replace yasistfam= s07b_05aa/3		if s07b_05ab==6
+replace yasistfam= s07b_05aa/6		if s07b_05ab==7
+replace yasistfam= s07b_05aa/12		if s07b_05ab==8
 
 *********************
 * Trans. monetarias *
@@ -1099,31 +1127,33 @@ replace yasistfam= s07b_05a/12		if s07b_050==8
 * No hay la categoria de diario en s7b_5bb
 * Modificación SGR Julio 19: Desde 2018 desagregan más las preguntas: Dinero+Alimentos+Otros bonos sociales
 
+*Modificación Cesar Lins - Feb 2021, all variables in ydinero, yalimento, yotro_bono, yotro_bono2
+* renamed according to the pattern: s07b_0xb --> s07b_0xba, s07b_0x* --> s07b_0xbb
 gen ydinero = .
-replace ydinero = s07b_05b*4.3	if s07b_051==2
-replace ydinero= s07b_05b*2		if s07b_051==3
-replace ydinero= s07b_05b	    if s07b_051==4
-replace ydinero= s07b_05b/2		if s07b_051==5
-replace ydinero= s07b_05b/3		if s07b_051==6
-replace ydinero= s07b_05b/6		if s07b_051==7
-replace ydinero= s07b_05b/12		if s07b_051==8
+replace ydinero = s07b_05ba*4.3	if s07b_05bb==2
+replace ydinero= s07b_05ba*2		if s07b_05bb==3
+replace ydinero= s07b_05ba	    if s07b_05bb==4
+replace ydinero= s07b_05ba/2		if s07b_05bb==5
+replace ydinero= s07b_05ba/3		if s07b_05bb==6
+replace ydinero= s07b_05ba/6		if s07b_05bb==7
+replace ydinero= s07b_05ba/12		if s07b_05bb==8
 
 gen yalimento= .
-replace yalimento = s07b_05c*4.3	    if s07b_052==2
-replace yalimento= s07b_05c*2		if s07b_052==3
-replace yalimento= s07b_05c	        if s07b_052==4
-replace yalimento= s07b_05c/2		if s07b_052==5
-replace yalimento= s07b_05c/3		if s07b_052==6
-replace yalimento= s07b_05c/6		if s07b_052==7
-replace yalimento= s07b_05c/12		if s07b_052==8
+replace yalimento = s07b_05ca*4.3	    if s07b_05cb==2
+replace yalimento= s07b_05ca*2		if s07b_05cb==3
+replace yalimento= s07b_05ca	        if s07b_05cb==4
+replace yalimento= s07b_05ca/2		if s07b_05cb==5
+replace yalimento= s07b_05ca/3		if s07b_05cb==6
+replace yalimento= s07b_05ca/6		if s07b_05cb==7
+replace yalimento= s07b_05ca/12		if s07b_05cb==8
 
 gen yotro_bono= .
-replace yotro_bono= s07b_05d	        if s07b_053==4
-replace yotro_bono= s07b_05d/12		if s07b_053==8
+replace yotro_bono= s07b_05da	        if s07b_05db==4
+replace yotro_bono= s07b_05da/12		if s07b_05db==8
 
 gen yotro_bono2= .
-replace yotro_bono2= s07b_05e	    if s07b_055==4
-replace yotro_bono2= s07b_05e/12		if s07b_055==8
+replace yotro_bono2= s07b_05ea	    if s07b_05eb==4
+replace yotro_bono2= s07b_05ea/12		if s07b_05eb==8
 
 egen ytransmon=rsum(ydinero yotro_bono), missing
 
@@ -2170,24 +2200,7 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
-******************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci = 0
-foreach i in a b c d e f  {
-forvalues j=2/4 {
-recode dis_ci 0=1 if s04a_06`i'==`j'
-}
-}
-recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
-recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+
 
 	
 /*_____________________________________________________________________________________________________*/
@@ -2202,8 +2215,8 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -2220,13 +2233,16 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo) 
 BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
-rename s06b_110 codocupa
+
+*Modificación Cesar Lins - Feb 2021, s06b_110 -> s06b_11a_cod
+rename s06b_11a_cod codocupa
 rename caeb_op codindustria
 
 compress
 
 
-saveold "`base_out'", replace 
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "`base_out'", replace 
 
 
 log close

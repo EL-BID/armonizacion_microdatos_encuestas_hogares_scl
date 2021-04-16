@@ -1,20 +1,20 @@
 
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m9
 Autores: Revised March, 2008 (by tede) 
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Armonización: Mayra Sáenz  - 8 de Octubre de 2013 - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Última modificación: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Diciembre de 2017
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ArmonizaciÃ³n: Mayra SÃ¡enz  - 8 de Octubre de 2013 - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Ãšltima modificaciÃ³n: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Diciembre de 2017
 			  
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -71,47 +71,47 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  depto
 label define region_c  1 "1. atlantida" ///
-           2 "2. colón" ///
+           2 "2. colÃ³n" ///
            3 "3. comayagua" ///
-           4 "4. copán" ///
-           5 "5. cortés" ///
+           4 "4. copÃ¡n" ///
+           5 "5. cortÃ©s" ///
            6 "6. choluteca" ///
-           7 "7. el paraíso" ///
+           7 "7. el paraÃ­so" ///
            8 "8. francisco morazan" ///
            9 "9. gracias a dios" ///
           10 "10. intibuca" ///
-          11 "11. islas de la bahía" ///
+          11 "11. islas de la bahÃ­a" ///
           12 "12. la paz" ///
           13 "13. lempira" ///
           14 "14. ocotepeque" ///
           15 "15. olancho" ///
-          16 "16. santa bárbara" ///
+          16 "16. santa bÃ¡rbara" ///
           17 "17. valle" ///
           18 "18. yoro" 
 
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 *************************
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -341,7 +341,7 @@ label variable miembros_ci "Miembro del hogar"
 gen condocup_ci=.
 replace condocup_ci=condact
 replace condocup_ci=4 if condact == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -486,7 +486,7 @@ ocupaop:
            3 03. comerciantes y vendedores
            4 04. agricultores, ganaderos y trab. agrop.
            5 05. conductores de transporte
-           6 06. trab. ind. textil, albañileria, mecanica, etc.
+           6 06. trab. ind. textil, albaÃ±ileria, mecanica, etc.
            7 07. trab. area grafica, quim., alimentos, etc.
            8 08. operador de carga y almacenaje
            9 09. ocupacion de los servicios
@@ -518,14 +518,14 @@ label value ocupa_ci ocupa_ci
 gen rama_ci=rama
 replace rama_ci=. if rama==10 |rama==11 | emp_ci==0
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -593,15 +593,15 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *tamemp_ci
 *************
 
-* Honduras. Pequeña 1-5, Mediana 6-50, Grande Más de 50.
+* Honduras. PequeÃ±a 1-5, Mediana 6-50, Grande MÃ¡s de 50.
 gen tamfirma_ci=.
 gen tamemp_ci = 1 if (p33b>=1 & p33b<=5)
 replace tamemp_ci = 2 if (p33b>=6 & p33b<=50)
 replace tamemp_ci = 3 if (p33b>50)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 
 *************
@@ -673,8 +673,8 @@ gen categoinac_ci =1 if (p27==1 & condocup_ci==3)
 replace categoinac_ci = 2 if  (p27==3 & condocup_ci==3)
 replace categoinac_ci = 3 if  (p27==4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -683,7 +683,7 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 gen formal_ci=1 if afiliado_ci==1 & condocup_ci==1 
 label var formal_ci "Formal"
 */
-*Modificación Mayra Sáenz- Febrero 2014
+*ModificaciÃ³n Mayra SÃ¡enz- Febrero 2014
 gen formal_ci=.
 label var formal_ci "Formal"
 
@@ -691,7 +691,7 @@ label var formal_ci "Formal"
 ************************************************************************
 **************************INGRESOS**************************************
 ************************************************************************
-*Daniela Zuluaga- Noviembre 2017: Se deciden reemplazar las variables del ingreso laboral (Monetario y no Monetario) por las que ya están construidas en la base original**
+*Daniela Zuluaga- Noviembre 2017: Se deciden reemplazar las variables del ingreso laboral (Monetario y no Monetario) por las que ya estÃ¡n construidas en la base original**
 
 ***************
 ***ylmpri_ci***
@@ -812,7 +812,7 @@ label var ynlnm_ci "Ingreso no laboral no monetario"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing 
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 
 **************
@@ -1018,15 +1018,15 @@ label var quintil_ci "Quintil de ingreso"
 label define quintil_ci 1 "Quintil 1" 2 "Quintil 2" 3 "Quintil 3" 4 "Quintil 4" 5 "Quintil 5"
 label values quintil_ci quintil_ci
 
-/*NOTA: El ingreso total aquí construido difiere de la variable de ingreso total de la base original . Esto ocurre ya que al agregar algunas de las variables
-desagregadas en la base, no coinciden con las variables agregadas que están construidas en la base original (para los ingresos no laborales), no hay información 
-suficiente para saber cómo se agregaron dichas variables en la base original;
+/*NOTA: El ingreso total aquÃ­ construido difiere de la variable de ingreso total de la base original . Esto ocurre ya que al agregar algunas de las variables
+desagregadas en la base, no coinciden con las variables agregadas que estÃ¡n construidas en la base original (para los ingresos no laborales), no hay informaciÃ³n 
+suficiente para saber cÃ³mo se agregaron dichas variables en la base original;
 En particular, hay inconsistencia con la periodicidad de las variables de otros ingresos.En todo caso, construimos los ingresos no laborales con las variables desagregadas, 
-teniendo como base la periodicidad específicada en el cuestionario.
+teniendo como base la periodicidad especÃ­ficada en el cuestionario.
 LA DIFERENCIA ES MENOR AL 5% */
 
 ******************************************************************************
-*	Educación
+*	EducaciÃ³n
 *****************************************************************************
 
 ************
@@ -1036,9 +1036,9 @@ LA DIFERENCIA ES MENOR AL 5% */
 gen asiste_ci=.
 replace asiste_ci=1 if p02==1
 replace asiste_ci=0 if p02==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
-* Años de educacion aprobados **
+* AÃ±os de educacion aprobados **
 replace p03b=. if p03b==99
 gen aedu_ci=.
 replace aedu_ci=0 if p03a>=1 & p03a<=3
@@ -1046,7 +1046,7 @@ replace aedu_ci=p03b if p03a==5
 replace aedu_ci=p03b+6 if p03a==6 | p03a==7
 replace aedu_ci=p03b+12 if p03a==8 | p03a==9
 replace aedu_ci=p03b+17 if p03a==10
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 ******************************
 *	eduno_ci
@@ -1163,7 +1163,7 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 *****************
 g       pqnoasis1_ci =.
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **********************************
@@ -1212,17 +1212,17 @@ gen des1_ch=.
 replace des1_ch=0 if v05a==6
 replace des1_ch=1 if v05a==1| v05a==2
 replace des1_ch=2 if v05a>=3 & v05a<=5
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 /*
-des1_ch Tipo de desagüe incluyendo la definición de "Unimproved" del MDG
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general o a una cámara séptica
-2 El desagüe está conectado a un pozo ciego o es una letrina.
-3 El desagüe se comunica con la superficie: desemboca en un río o en la calle.*/
-* No hay casos para la categoría 3.
+des1_ch Tipo de desagÃ¼e incluyendo la definiciÃ³n de "Unimproved" del MDG
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general o a una cÃ¡mara sÃ©ptica
+2 El desagÃ¼e estÃ¡ conectado a un pozo ciego o es una letrina.
+3 El desagÃ¼e se comunica con la superficie: desemboca en un rÃ­o o en la calle.*/
+* No hay casos para la categorÃ­a 3.
 
 
 gen des2_ch=.
@@ -1231,12 +1231,12 @@ replace  des2_ch=1 if des1_ch==1 | des1_ch==2
 replace  des2_ch=2 if v05a==9
 
 /*
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general, a una cámara o fosa séptica, o a un pozo ciego o letrina.
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general, a una cÃ¡mara o fosa sÃ©ptica, o a un pozo ciego o letrina.
 2 Cualquier otro*/
-* No hay casos para la categoría 2.
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+* No hay casos para la categorÃ­a 2.
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -1343,15 +1343,15 @@ g  banomejorado_ch = 1 if ( v05a >=1 & v05a <=5) & v05b ==1
 replace banomejorado_ch = 0 if ((v05a >=1 & v05a <=5) & v05b ==2) | (v05a==6)
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

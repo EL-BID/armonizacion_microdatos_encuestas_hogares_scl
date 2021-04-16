@@ -1,4 +1,4 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\PRY\EPH\2012\m10_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\PRY\EPH\2012\m10_m12\data_orig"
 
 local PAIS PRY
 local ENCUESTA EPH
 local ANO "2012"
 local ronda m10_m12
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 *log using "`log_file'", replace 
@@ -28,13 +28,13 @@ capture log close
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Paraguay
+Pa铆s: Paraguay
 Encuesta: EPH 
 Round: Octubre-Diciembre
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 4 de Septiembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 4 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -63,7 +63,7 @@ reshape wide e02l1 e02l1b e02l1c e02l1d e02l2 e02l2b e02l2c e02l2d fex, i(upm nv
 save "$ruta\r13_eph12_mod.dta", replace
 
 
-/*Unifico los modulos de inter閟 para el sociometro:
+/*Unifico los modulos de inter茅s para el sociometro:
   Vivienda, ingresos y personas*/
  
 use "$ruta\r02_eph12.dta", clear

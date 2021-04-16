@@ -1,5 +1,5 @@
 /*
-use "X:\ARM\JAM\2002\Orig_data\jam02-LFS.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\jam02-LFS.dta"
 destring _all, replace
 compress
 format ID %20.0f
@@ -14,7 +14,7 @@ ren IND ind
 
 sort parish const district dwelling hh ind
 
-save "X:\ARM\JAM\2002\Van_data\jam02_lfs.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02_lfs.dta", replace
 
 clear
 
@@ -23,15 +23,15 @@ clear
 *****                            SLC 2002 (SURVEY OF LIVING CONDITIONS)                               *****
 *****                                         MAYO                                                    *****
 ***********************************************************************************************************
-use "X:\ARM\JAM\2002\Orig_data\jam02_jslc.dta", clear
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\jam02_jslc.dta", clear
 destring _all, replace
 compress
 drop _merge
 
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
-use "X:\ARM\JAM\2002\Orig_data\rec033.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec033.dta"
 destring _all, replace
 
 gen h2c=real(h02)
@@ -39,31 +39,31 @@ drop h02
 ren h2c h02
 reshape wide h02 h03 h04, i(serial) j(item_cd)
 sort serial 
-save "X:\ARM\JAM\2002\Van_data\rec33.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec33.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial using "X:\ARM\JAM\2002\Van_data\rec33.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial using "${surveysFolder}\ARM\JAM\2002\Van_data\rec33.dta"
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
 clear
-use "X:\ARM\JAM\2002\Orig_data\rec037b.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec037b.dta"
 destring _all, replace
 reshape wide k02, i(serial ind) j(item_cd)
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\rec37b.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec37b.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial ind using "X:\ARM\JAM\2002\Van_data\rec37b.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial ind using "${surveysFolder}\ARM\JAM\2002\Van_data\rec37b.dta"
 tab _merge
 drop if _merge==2
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 clear
 
-use "X:\ARM\JAM\2002\Orig_data\rec030.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec030.dta"
 destring _all, replace
 reshape wide f06 f07 f08, i(serial) j(item_cd)
 
@@ -79,16 +79,16 @@ replace `var'=. if `var'<0
 }
 
 sort serial 
-save "X:\ARM\JAM\2002\Van_data\rec30.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec30.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial using "X:\ARM\JAM\2002\Van_data\rec30.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial using "${surveysFolder}\ARM\JAM\2002\Van_data\rec30.dta"
 drop _merge
 sort parish const district dwelling hh ind
 
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
-merge parish const district dwelling hh ind using "X:\ARM\JAM\2002\Van_data\jam02_lfs.dta"
+merge parish const district dwelling hh ind using "${surveysFolder}\ARM\JAM\2002\Van_data\jam02_lfs.dta"
 tab _merge
 
 /* _merge	Freq.	Percent	Cum.
@@ -102,7 +102,7 @@ replace muestra=1 if _merge==3
 
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
 
 */

@@ -1,18 +1,18 @@
-*Mayra Sáenz
+*Mayra SÃ¡enz
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 *              Malnutrition, Breastfeeding, and Anemia Indicators                                             *          
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 
 clear all
-use "Z:\survey\JAM\SLC\2000\m5\data_merge\JAM_2000m5.dta"
+use "${surveysFolder}\survey\JAM\SLC\2000\m5\data_merge\JAM_2000m5.dta"
 set more off
 *Main directory
-*global path = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
-global path ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+*global path = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
+global path ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 * Folder of outputs
-*global outputs = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
+*global outputs = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
 
-global outputs ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+global outputs ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 *Source of comparison: http://www.who.int/nutgrowthdb/database/countries/who_standards/jam_dat.pdf
 *==============================================================================================================*
 * Input Variables
@@ -36,12 +36,12 @@ g edadmes = age_yrs * 12 + age_mths if age_yrs <5
 
 *g edadmes = age * 12 + age_mths if age <5
 
-*Jamaica no necesita factor de expansión.
+*Jamaica no necesita factor de expansiÃ³n.
 g factor =1
 label var factor "Factor de expasion"
 
 preserve
-*Para calcular asistencia escolar de niños de 6-11 años
+*Para calcular asistencia escolar de niÃ±os de 6-11 aÃ±os
 g asiste_ci = (b01 !=19 & b01 !=.)
 g q5 = popquint 
 g edad_ci = age
@@ -71,7 +71,7 @@ g pesokg   = c07
 g alturacm = c08
 
 destring alturacm, replace
-/*x: Indicador de datos válidos */
+/*x: Indicador de datos vÃ¡lidos */
 gen x = 1 if (edadmes ~=. & alturacm ~=. & pesokg ~=.)
 *Muestra total
 egen mtot =sum(x) if (edadmes ~=. & alturacm ~=. & pesokg ~=.)
@@ -142,20 +142,20 @@ keep residence edadmes sexo alturacm pesokg how_meas motheredu quintil haz06 waz
 g pais_c = "JAM"
 g anio_c =2000
 
-saveold "D:\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2000", replace
+saveold "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2000", replace
 
 
 *Jamaica 2010
 
 clear all
-use "Z:\survey\JAM\SLC\2010\m5\data_merge\JAM_2010m5.dta"
+use "${surveysFolder}\survey\JAM\SLC\2010\m5\data_merge\JAM_2010m5.dta"
 set more off
 *Main directory
-*global path = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
-global path ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+*global path = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
+global path ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 * Folder of outputs
-*global outputs = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
-global outputs ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+*global outputs = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
+global outputs ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 
 *Source of comparison: http://www.who.int/nutgrowthdb/database/countries/who_standards/jam_dat.pdf
 *==============================================================================================================*
@@ -186,7 +186,7 @@ label value quintil quintil
 
 
 preserve
-*Para calcular asistencia escolar de niños de 6-11 años
+*Para calcular asistencia escolar de niÃ±os de 6-11 aÃ±os
 g asiste_ci = (b1 !=19 & b1 !=. & b1 !=97)
 g q5 = quintil 
 g edad_ci = ageyrs
@@ -208,7 +208,7 @@ g pesokg   = c10
 g alturacm = c11
 
 destring alturacm, replace
-/*x: Indicador de datos válidos */
+/*x: Indicador de datos vÃ¡lidos */
 
 gen x =1 if (edadmes ~=. & alturacm ~=. & pesokg ~=.) & (edadmes >0 & alturacm  >0 & pesokg  >0)
 keep if x ==1
@@ -285,17 +285,17 @@ keep residence edadmes sexo alturacm pesokg how_meas motheredu quintil haz06 waz
 g pais_c = "JAM"
 g anio_c =2010
 
-saveold "D:\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2010", replace
+saveold "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2010", replace
 
 
 
 
 
-append using "D:\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2000"
+append using "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\db\JAMzscor2000"
 
 
 
-*Grafico 1: Cada panel dos años
+*Grafico 1: Cada panel dos aÃ±os
 
 qui kdensity  haz06 if (haz06>= -6 & haz06<=6) & anio_c==2000, generate(x_2000 y_2000)
 qui kdensity  haz06 if (haz06>= -6 & haz06<=6) & anio_c==2010, generate(x_2010 y_2010)
@@ -307,8 +307,8 @@ lwidth(medthick)) ,   legend(order(1 "2000" 2 "2010") textwidth(25))
 xtitle(Height for age mean Z score) ytitle(Density) xlabel(-5(1)5) scheme(s1color);
 #delimit cr
 
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig100_10.pdf", as(pdf)replace
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig100_10.png", as(png)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig100_10.pdf", as(pdf)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig100_10.png", as(png)replace
 
 *Grafico 2: Cada panel con la ultima encuesta de cada pais por quintiles
 gen q5= quintil
@@ -329,11 +329,11 @@ xline(-3, lwidth(medthick) lcolor(red))),  legend(order(1 "Q1" 2 "Q2" 3 "Q3" 4 "
 textwidth(25))  xtitle(Height for age mean Z score) ytitle(Density)  xlabel(-5(1)5); 
 #delimit cr
 
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig200_10.pdf", as(pdf)replace
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig200_10.png", as(png)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig200_10.pdf", as(pdf)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig200_10.png", as(png)replace
 
 
-*Grafico 3: Cada panel con la última encuesta de cada pais por zona
+*Grafico 3: Cada panel con la Ãºltima encuesta de cada pais por zona
 *----------
 kdensity  haz06 if (haz06>= -6 & haz06<=6) & anio_c==2010  & residence==1, generate(x_urb y_urb)
 kdensity  haz06 if (haz06>= -6 & haz06<=6) & anio_c==2010  & residence==2, generate(x_rur y_rur)
@@ -346,5 +346,5 @@ lwidth(medthick)) ,   legend(order(1 "Urban" 2 "Rural") textwidth(25))
 xtitle(Height for age mean Z score) ytitle(Density) xlabel(-5(1)5) scheme(s1color);
 #delimit cr
 
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig300_10.pdf", as(pdf)replace
-graph export "D:\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig300_10.png", as(png)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig300_10.pdf", as(pdf)replace
+graph export "${surveysFolder}\DATA.IDB\Documents\DIA_Publication\graphs\JAMFig300_10.png", as(png)replace

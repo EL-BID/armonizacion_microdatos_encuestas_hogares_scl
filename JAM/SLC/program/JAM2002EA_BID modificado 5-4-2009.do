@@ -16,7 +16,7 @@ al momento de utilizar el comando "weight"
 version 7.0
 
 capture log close
-log using "X:\ARM\JAM\2002\Documents\LogJam03_Aug.log", replace
+log using "${surveysFolder}\ARM\JAM\2002\Documents\LogJam03_Aug.log", replace
 
 clear
 set more off
@@ -30,7 +30,7 @@ set matsize 800
 *****                                         ABRIL                                                   *****
 ***********************************************************************************************************
 
-use "X:\ARM\JAM\2002\Orig_data\jam02-LFS.dta", clear
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\jam02-LFS.dta", clear
 
 destring _all, replace
 compress
@@ -46,7 +46,7 @@ ren IND ind
 
 sort parish const district dwelling hh ind
 
-save "X:\ARM\JAM\2002\Van_data\jam02_lfs.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02_lfs.dta", replace
 
 clear
 
@@ -55,15 +55,15 @@ clear
 *****                            SLC 2002 (SURVEY OF LIVING CONDITIONS)                               *****
 *****                                         MAYO                                                    *****
 ***********************************************************************************************************
-use "X:\ARM\JAM\2002\Orig_data\jam02_jslc.dta", clear
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\jam02_jslc.dta", clear
 destring _all, replace
 compress
 drop _merge
 
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
-use "X:\ARM\JAM\2002\Orig_data\rec033.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec033.dta"
 destring _all, replace
 
 gen h2c=real(h02)
@@ -71,31 +71,31 @@ drop h02
 ren h2c h02
 reshape wide h02 h03 h04, i(serial) j(item_cd)
 sort serial 
-save "X:\ARM\JAM\2002\Van_data\rec33.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec33.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial using "X:\ARM\JAM\2002\Van_data\rec33.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial using "${surveysFolder}\ARM\JAM\2002\Van_data\rec33.dta"
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
 clear
-use "X:\ARM\JAM\2002\Orig_data\rec037b.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec037b.dta"
 destring _all, replace
 reshape wide k02, i(serial ind) j(item_cd)
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\rec37b.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec37b.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial ind using "X:\ARM\JAM\2002\Van_data\rec37b.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial ind using "${surveysFolder}\ARM\JAM\2002\Van_data\rec37b.dta"
 tab _merge
 drop if _merge==2
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 clear
 
-use "X:\ARM\JAM\2002\Orig_data\rec030.dta"
+use "${surveysFolder}\ARM\JAM\2002\Orig_data\rec030.dta"
 destring _all, replace
 reshape wide f06 f07 f08, i(serial) j(item_cd)
 
@@ -111,16 +111,16 @@ replace `var'=. if `var'<0
 }
 
 sort serial 
-save "X:\ARM\JAM\2002\Van_data\rec30.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\rec30.dta", replace
 
-use "X:\ARM\JAM\2002\Van_data\jam02.dta", clear
-merge serial using "X:\ARM\JAM\2002\Van_data\rec30.dta"
+use "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", clear
+merge serial using "${surveysFolder}\ARM\JAM\2002\Van_data\rec30.dta"
 drop _merge
 sort parish const district dwelling hh ind
 
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
-merge parish const district dwelling hh ind using "X:\ARM\JAM\2002\Van_data\jam02_lfs.dta"
+merge parish const district dwelling hh ind using "${surveysFolder}\ARM\JAM\2002\Van_data\jam02_lfs.dta"
 tab _merge
 
 /* _merge	Freq.	Percent	Cum.
@@ -134,7 +134,7 @@ replace muestra=1 if _merge==3
 
 drop _merge
 sort serial ind
-save "X:\ARM\JAM\2002\Van_data\jam02.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Van_data\jam02.dta", replace
 
 
 
@@ -179,7 +179,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a “weighting factor” but a “non response factor”. It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
+/* It is not a â€œweighting factorâ€ but a â€œnon response factorâ€. It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 gen factor2_ci=finwght*100000000 
 label var factor2_ci "Factor de Expansion del Individuo (no suma la poblacion)"
@@ -272,19 +272,19 @@ replace miembros_ci=0 if relacion_ci==6 /*Empleados domesticos y sus familiares 
 label variable miembros_ci "Variable dummy que indica las personas que son miembros del Hogar"
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
 **** Demanda Laboral
@@ -334,7 +334,7 @@ replace rama_ci=8 if Q39M>=8000 & Q39M<9000
 replace rama_ci=9 if Q39M>=9000 & Q39M<10000
 
 label var rama_ci "Rama Laboral en la Ocupacion Principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 capture drop horaspri_ci horastot_ci
@@ -448,7 +448,7 @@ label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en anios)"
 
 gen antiguedad2_ci=Q311 if Q311<9
 label var antiguedad2_ci "Antiguedad en la Ocupacion Actual (categorias)"
-label define antiguedad2_ci 1 "Menos de 3 meses" 2 "3 meses a menos de 6 meses" 3 "6 a menos de 9 meses" 4 "9 meses a menos de 12 meses" 5 "1 año a menos de 2 años" 6 "2 o mas años"
+label define antiguedad2_ci 1 "Menos de 3 meses" 2 "3 meses a menos de 6 meses" 3 "6 a menos de 9 meses" 4 "9 meses a menos de 12 meses" 5 "1 aÃ±o a menos de 2 aÃ±os" 6 "2 o mas aÃ±os"
 label values antiguedad2_ci antiguedad2_ci
 
 gen durades_ci=.
@@ -576,7 +576,7 @@ capture drop asiste_ci
 gen byte asiste_ci=.
 replace asiste_ci=1 if b01>=1 & b01<17
 replace asiste_ci=0 if b01==17
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 capture drop aedu_ci
 gen byte aedu_ci=.
@@ -586,7 +586,7 @@ replace aedu_ci=GRADO2 if NIVEL2==1 | NIVEL2==2 | NIVEL2==3
 
 replace aedu_ci=GRADO-1 if aedu>=age & GRADO<. & GRADO2<.
 replace aedu_ci=0 if b01==17 & b21==19
-label variable aedu_ci "Años de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "AÃ±os de Educacion (no incluye terciaria o universitaria)"
 
 
 
@@ -654,10 +654,10 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac_ci=0 if b01==12 | b01==13 | b21==14 | b21==15
 replace eduac_ci=1 if b01==11 | b21==13
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
@@ -665,12 +665,12 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 gen edupub_ci=.
 replace edupub_ci=1 if b03==1
 replace edupub_ci=0 if b03==2
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ** Generating pqnoasis
 gen byte pqnoasis_ci=.
 replace pqnoasis_ci=b10a
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" 7 "Escuela cerrada" 8 "Carece de zapatos o uniforme, sucios, o mojados" 9 "Lluvia" 10 "Problemas monetarios" 11 "Tiene que realizar alguna diligencia" 12 "No esta seguro en la escuela" 13 "No esta seguro en la comunidad" 14 "Otro" 
 label values pqnoasis_ci pqnoasis_ci
 
@@ -785,7 +785,7 @@ gen vivialqimp_ch=. */
 drop NIVEL GRADO NIVEL2 GRADO2
 
 compress
-save "X:\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace
 
 /*  Muestra los individuos que fueron 'matcheados' en la Encuesta de Living Conditions con la de Labour Force */
 gen match=0
@@ -1307,4 +1307,4 @@ Relationship Codes
  replace UNMPLYMENT15=1 if  (tasadeso==1) 	        & (edad>=15 & edad<=24)
  
  
-save "X:\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace

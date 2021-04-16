@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -32,12 +32,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Argentina
+PaÃ­s: Argentina
 Encuesta: EPHP
 Round: m5
 Autores:
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 31 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 31 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -62,7 +62,7 @@ use "`base_in'", clear
 gen region_BID_c=4
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -296,13 +296,13 @@ replace `ocup' = 7 if `var' ==38 | `var' ==50 | `var' ==68 | `var' ==74 | `var' 
 replace `ocup' = 8 if `var' ==40			 																	
 replace `ocup' = 9 if `var' ==71 | `var' ==81 | `var' ==91 | `var' ==75 | `var' ==77 | `var' ==83																											
 label var     ocupa "ocupation in primary job"
-label define  ocupa 1 "Profesionales y técnicos", add
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa 2 "Directores y funcionarios superiores", add
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa 4 "Comerciantes y vendedores", add
 label define  ocupa 5 "Trabajadores en servicios", add
-label define  ocupa 6 "Trabajadores agrícolas y afines", add
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa 8 "Fuerzas Armadas", add
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add
 */
@@ -314,7 +314,7 @@ rama_ci
 It was difficult to construct the variable Rama. The problem is that for the bananas 
 we are using the ISIC Rev 2, but Argentinean surveys use ISIC Rev 3, so there are more 
 categories than the ones that appear in the bananas. I added "Administracion Publica y 
-Defensa, planes de seguridad social y de afiliación" (p18=751 a to 759), "Enseñanza" 
+Defensa, planes de seguridad social y de afiliaciÃ³n" (p18=751 a to 759), "EnseÃ±anza" 
 (801 to 809), "Actividades de Servicios Sociales y de salud" (851 to 859), 
 "Otras actividades comunitarias, sociales y de salud" (900 to 930) and "Hogars privados 
 con servicio domestico" to Rama==9 (=Servicios Sociales, comunales y personales). 
@@ -375,13 +375,13 @@ replace `ocup' = 7 if `var' ==38 | `var' ==50 | `var' ==68 | `var' ==74 | `var' 
 replace `ocup' = 8 if `var' ==40			 																		
 replace `ocup' = 9 if `var' ==71 | `var' ==81 | `var' ==91 | `var' ==75 | `var' ==77 | `var' ==83																									
 label var ocupault 	"ocupation in primary job"
-label define  ocupault 1 "Profesionales y técnicos", add
+label define  ocupault 1 "Profesionales y tÃ©cnicos", add
 label define  ocupault 2 "Directores y funcionarios superiores", add
 label define  ocupault 3 "Personal administrativo y nivel intermedio", add
 label define  ocupault 4 "Comerciantes y vendedores", add
 label define  ocupault 5 "Trabajadores en servicios", add
-label define  ocupault 6 "Trabajadores agrícolas y afines", add
-label define  ocupault 7 "Obreros no agrícolas, conductores de maquinas y vehículos de transporte y similares", add
+label define  ocupault 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupault 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de transporte y similares", add
 label define  ocupault 8 "Fuerzas Armadas", add
 label define  ocupault 9 "Otras ocupaultciones no clasificadas en las anteriores", add
 
@@ -527,8 +527,8 @@ There's no way to know if a worker has signed a contract or no
 segsoc_ci 
 It's difficult to define this variable in a proper way.  We don't consider the 
 people that declare to have aguinaldo (4), vacaciones (8), Vacaciones y Aguinaldo (12), 
-Indemnizacion (32), Indemnizacion y Aguinaldo (36), Indemnización y Vacaciones (40) and 
-Indemnización, vacaciones y aguinaldo (44)
+Indemnizacion (32), Indemnizacion y Aguinaldo (36), IndemnizaciÃ³n y Vacaciones (40) and 
+IndemnizaciÃ³n, vacaciones y aguinaldo (44)
 ***********/
 
 /*gen segsoc_ci=(p23~=. & p23~=-2 & p23~=4 & p23~=8 & p23~=12 & p23~=32 & p23~=36 & p23~=40 
@@ -606,7 +606,7 @@ Para 1995 a 2002
 
 label var p21 "ingreso proveniente de la ocupacion principal"
 label var p47_1 "ingreso asalariado"
-label var p47_2 "ingreso por bonificación no habituales (asalariados)"
+label var p47_2 "ingreso por bonificaciÃ³n no habituales (asalariados)"
 label var p47_3 "ingreso como cuenta propista"
 label var p47_4 "como ganancia de patron"
 label var p48_1 "jubilacion o pension"
@@ -958,7 +958,7 @@ gen edus2c_ci=.
 
 /**********
 edupre_ci (Educacion Preescolar)
-Si bien en el año 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
+Si bien en el aÃ±o 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
 por lo que es conveniente no crearla
 ***********/
 
@@ -1030,19 +1030,19 @@ label var  eduuc_ci  "Universitaria o Terciaria Completa"
 /*******************************************************************************************************************************************
 VARIABLES DE INFRAESTRUCTURA DEL HOGAR: Como estas Bananas estan armadas solo con el archivo de personas, prefieron "no tocarlo" y escribir 
 otro programa para las variables del hogar y luego mergear las bases: 
-D:\Data.idb\Analia\Suzanne\Harmonization\Ingresos\Argentina\hogarinfraMayo.dta
+${surveysFolder}\Data.idb\Analia\Suzanne\Harmonization\Ingresos\Argentina\hogarinfraMayo.dta
 ********************************************************************************************************************************************/
 
 
 /****************************************************
 Variables generadas que indican cual es la mayor cantidad de regiones con las que se
-pueden contar de acuerdo al año inicial que se desea tomar. A partir de 1997, todas las
+pueden contar de acuerdo al aÃ±o inicial que se desea tomar. A partir de 1997, todas las
 encuestas cuentan con la misma cantidad de regiones. Se debe tener en cuenta que estas 
 variables son utiles para contar con la mayor cantidad de regiones si uno esta interesado
-en tener series de tiempo o trabajar con al menos dos años (para lo cual se necesita ser 
+en tener series de tiempo o trabajar con al menos dos aÃ±os (para lo cual se necesita ser 
 consistente en las regiones a incorporar en los diferentes periodos. 
-En caso que se este interesado en un analisis de corte transversal, en los cuales un año 
-es suficiente, lo indicado es trabajar con todas las regiones existentes para el año en cuestion,
+En caso que se este interesado en un analisis de corte transversal, en los cuales un aÃ±o 
+es suficiente, lo indicado es trabajar con todas las regiones existentes para el aÃ±o en cuestion,
 por lo que no se requiere la utilizacion de estas variables.
 ****************************************************/
 
@@ -1182,13 +1182,13 @@ replace ocupa = 7 if (p20>=380 & p20<390) | (p20>=500 & p20<510) | (p20>=680 & p
 replace ocupa = 8 if (p20>=400 & p20<410)			 																	
 replace ocupa = 9 if (p20>=710 & p20<720) | (p20>=810 & p20<820) | (p20>=910 & p20<920) | (p20>=750 & p20<760) | (p20>=770 & p20<780) | (p20>=830 & p20<840)																											
 label var     ocupa "ocupation in primary job"
-label define  ocupa 1 "Profesionales y técnicos", add
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa 2 "Directores y funcionarios superiores", add
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa 4 "Comerciantes y vendedores", add
 label define  ocupa 5 "Trabajadores en servicios", add
-label define  ocupa 6 "Trabajadores agrícolas y afines", add
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa 8 "Fuerzas Armadas", add
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add
 rename ocupa ocupa_ci
@@ -1229,8 +1229,8 @@ gen repiteult_ci=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

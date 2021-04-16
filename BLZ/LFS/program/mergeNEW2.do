@@ -2,7 +2,7 @@ clear
 set more off
 
 
-use "X:\ARM\BLZ\2007\Orig_data\merged_10.dta" 
+use "${surveysFolder}\ARM\BLZ\2007\Orig_data\merged_10.dta" 
 
 foreach var of varlist q* {
 rename `var' c`var'
@@ -12,60 +12,60 @@ rename `var' c`var'
 
 sort  district urbrur ctv ednumber hhnumber
 
-save "X:\ARM\BLZ\2007\Orig_data\CoreBelize.dta", replace  
+save "${surveysFolder}\ARM\BLZ\2007\Orig_data\CoreBelize.dta", replace  
 
 
 
 
 
-use "X:\ARM\BLZ\2007\Orig_data\housing_cleaned_.dta"
+use "${surveysFolder}\ARM\BLZ\2007\Orig_data\housing_cleaned_.dta"
 
 sort  district urbrur ctv ednumber hhnumber
 
-merge district urbrur ctv ednumber hhnumber using "X:\ARM\BLZ\2007\Orig_data\CoreBelize.dta"
+merge district urbrur ctv ednumber hhnumber using "${surveysFolder}\ARM\BLZ\2007\Orig_data\CoreBelize.dta"
 
 drop _merge
 
 sort  district urbrur ctv ednumber hhnumber cq10 
 
-save "X:\ARM\BLZ\2007\Orig_data\CoreBelize.dta", replace  
+save "${surveysFolder}\ARM\BLZ\2007\Orig_data\CoreBelize.dta", replace  
 
 
 
 
-use "X:\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta" 
+use "${surveysFolder}\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta" 
 
 sort  district urbrur ctv ednumber hhnumber
 
-save "X:\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta", replace 
+save "${surveysFolder}\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta", replace 
 
 
 
 
-use "X:\ARM\BLZ\2007\Orig_data\qls_main_cleaning.dta" 
+use "${surveysFolder}\ARM\BLZ\2007\Orig_data\qls_main_cleaning.dta" 
 
 gen cq10=q40
 
 sort district urbrur ctv ednumber hhnumber 
 
-merge district urbrur ctv ednumber hhnumber  using "X:\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta"
+merge district urbrur ctv ednumber hhnumber  using "${surveysFolder}\ARM\BLZ\2007\Orig_data\qls_household_cleaning.dta"
 
 
 drop _merge
 
 sort  district urbrur ctv ednumber hhnumber cq10 
 
-save "X:\ARM\BLZ\2007\Orig_data\QualityBelize.dta", replace 
+save "${surveysFolder}\ARM\BLZ\2007\Orig_data\QualityBelize.dta", replace 
 
 
 
 
 
-use "X:\ARM\BLZ\2007\Orig_data\CoreBelize.dta"
+use "${surveysFolder}\ARM\BLZ\2007\Orig_data\CoreBelize.dta"
 
 sort  district urbrur ctv ednumber hhnumber cq10 
 
-merge district urbrur ctv ednumber hhnumber cq10  using "X:\ARM\BLZ\2007\Orig_data\QualityBelize.dta"
+merge district urbrur ctv ednumber hhnumber cq10  using "${surveysFolder}\ARM\BLZ\2007\Orig_data\QualityBelize.dta"
 
 
 
@@ -83,7 +83,7 @@ tab test1
 drop if test1>1
 
 
-save "X:\ARM\BLZ\2007\Orig_data\Core&QualityBelize2007.dta", replace
+save "${surveysFolder}\ARM\BLZ\2007\Orig_data\Core&QualityBelize2007.dta", replace
 
 br district urbrur ctv ednumber hhnumbe  cq10 q10  q40
 

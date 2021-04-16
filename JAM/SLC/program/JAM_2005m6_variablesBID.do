@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor ??amente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Jamaica
+Pa铆s: Jamaica
 Encuesta: SLC
 Round: a
-Autores: Mayra S醗nz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Autores: Mayra S谩enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 Versiones anteriores: Yessenia Loayza
-Fecha 鷏tima modificaci髇: 17 de noviembre de 2016
+Fecha 煤ltima modificaci贸n: 17 de noviembre de 2016
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -792,15 +792,15 @@ g vivialqimp_ch=.
 
 destring sexo_ci, replace
   /*_____________________________________________________________________________________________________*/
-* Asignaci髇 de etiquetas e inserci髇 de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), l韓eas de pobreza
+* Asignaci贸n de etiquetas e inserci贸n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l铆neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificaci髇 de que se encuentren todas las variables armonizadas 
+* Verificaci贸n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

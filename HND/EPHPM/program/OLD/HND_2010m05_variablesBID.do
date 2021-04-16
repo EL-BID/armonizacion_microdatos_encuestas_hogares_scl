@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -32,13 +32,13 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m5
 Autores: Yessenia Loaysa (abr-2013)
-Mayra Sáenz (Julio 2013)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+Mayra SÃ¡enz (Julio 2013)
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -67,7 +67,7 @@ use "`base_in'", clear
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -94,7 +94,7 @@ label define region_c  ///
           18 "Yoro"
  
 label value region_c region_c
-label var region_c "Division política, departamentos"
+label var region_c "Division polÃ­tica, departamentos"
 
 ***********
 *factor_ch*
@@ -269,34 +269,34 @@ drop uno
 *************
 
 egen nmayor21_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 **************
 *nmmenor21_ch*
 **************
 
 egen nmenor21_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 **************
 *nmmayor65_ch*
 **************
 
 egen nmayor65_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 ************
 *nmenor6_ch*
 ************
 
 egen nmenor6_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 ************
 *nmenor1_ch*
 ************
 egen nmenor1_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 /*
 ********
 *emp_ci*
@@ -313,7 +313,7 @@ label var emp_ci "Empleado en la semana de referencia"
 
 gen condocup_ci=condact
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -396,20 +396,20 @@ label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 **************
 /*2010
 ce31:
-	1	1. empleado(a) u obrero(a) público
+	1	1. empleado(a) u obrero(a) pÃºblico
 	2	2. empleado(a) u obrero(a) privado
-	3	3. empleado(a) doméstico(a)
-	4	4. miembro de cooperativa de producción
+	3	3. empleado(a) domÃ©stico(a)
+	4	4. miembro de cooperativa de producciÃ³n
 	5	5. cuenta propia que no contrata mano de obra temporal
 	6	6. cuenta propia que contrata mano de obra temporal
 	7	7. empleador o socio activo
 	8	8. miembro de cooperativa
 	9	9. cuenta propia que no contrata mano de obra temporal
 	10	10. cuenta propia que contrata mano de obra temporal
-	11	11. patrón o socio de la finca
+	11	11. patrÃ³n o socio de la finca
 	12	12. trabajador familiar no remunerado
 	13	13. trabajador no remunerado
-Atención: Se excluye de la categorización a los miembros de cooperativas de producción. 
+AtenciÃ³n: Se excluye de la categorizaciÃ³n a los miembros de cooperativas de producciÃ³n. 
 
 Nota: los miembros de coop deberian ser cuenta propia. No es muy alto en 2010. Solo 20 casos.
 */
@@ -751,18 +751,18 @@ replace spublico_ci=0 if ce31!=1 & ce79!=1
 generat asiste_ci=.
 replace asiste_ci=1 if ed03==1
 replace asiste_ci=0 if ed03==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 ren ed04 pqnoasis_ci
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 gen repiteult_ci=.
 replace repiteult_ci=1 if ed13==1
 replace repiteult_ci=0 if ed13==2
-label var repiteult_ci "Personas que están repetiendo el ultimo grado"
+label var repiteult_ci "Personas que estÃ¡n repetiendo el ultimo grado"
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 
 	*************
@@ -770,7 +770,7 @@ label var repite_ci "Personas que han repetido al menos un año o grado"
 	*************
 	
 gen aedu_ci=anosest
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 replace ed10=7 if ed10==8
 replace ed10=8 if ed10==9
@@ -856,12 +856,12 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
 
 /* RECODIFIED, Option 10, 11 and 12 were considered Private = 246 obs
 
-      p09 A traves de que sistema estudió |      Freq.     Percent        Cum.
+      p09 A traves de que sistema estudiÃ³ |      Freq.     Percent        Cum.
     --------------------------------------+-----------------------------------
                                1. PROHECO |         94        0.20        0.20
                             2. EDUCATODOS |        285        0.61        0.81
                               3. PRALEBAH |        149        0.32        1.12
-          4. Presencial en centro público |     42,841       91.20       92.33
+          4. Presencial en centro pÃºblico |     42,841       91.20       92.33
           5. Presencial en centro privado |      2,917        6.21       98.54
  6. Presencial en centro privado bilingue |         32        0.07       98.61
             7. Por radio(maestro en casa) |         90        0.19       98.80
@@ -869,7 +869,7 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
          9. A distancia en centro privado |         37        0.08       99.18
                      10. En el extranjero |        203        0.43       99.61
   11. Educacion virtual publica o privada |          3        0.01       99.62
-                    12. ONG,s o Fundación |         40        0.09       99.71
+                    12. ONG,s o FundaciÃ³n |         40        0.09       99.71
                               13. CCEPREB |          3        0.01       99.71
                   99. No sabe/no responde |        135        0.29      100.00
     --------------------------------------+-----------------------------------
@@ -881,7 +881,7 @@ replace edupub_ci=0 if (ed09==5|ed09==6|ed09==9|ed09==10|ed09==11|ed09==12)
 
 replace edupub_ci=1 if (ed16==1|ed16==2|ed16==3|ed16==4|ed16==7|ed16==8|ed16==13)
 replace edupub_ci=0 if (ed16==5|ed16==6|ed16==9|ed16==10|ed16==11|ed16==12)
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ************
 *aguared_ch*
@@ -943,17 +943,17 @@ replace des1_ch=0 if dh05==2
 replace des1_ch=1 if (dh06==1|dh06==2)
 replace des1_ch=2 if (dh06==5|dh06==6|dh06==7)
 replace des1_ch=3 if (dh06==3|dh06==4)
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 	
 gen des2_ch=.
 replace des2_ch=1 if (dh06==1|dh06==2|dh06==3)
 replace des2_ch=2 if (dh06==4|dh06==5|dh06==6|dh06==7)
 replace des2_ch=0 if dh05==2
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 	
@@ -1084,7 +1084,7 @@ gen aux_g=substr(ce23,7,1) if ce23!="9999999999" & ce23!="."
 destring aux_*, replace
 	
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -1230,7 +1230,7 @@ gen lpe_ci =.
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

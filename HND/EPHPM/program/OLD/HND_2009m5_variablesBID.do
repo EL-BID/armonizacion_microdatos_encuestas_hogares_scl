@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -29,19 +29,19 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m5
 Autores: Yessenia Loaysa (abr-2013)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
 Detalle de procesamientos o modificaciones anteriores:
 RAM 27/05/2010
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 ****************************************************************************/
 
 clear all
@@ -60,7 +60,7 @@ use "`base_in'", clear
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 	****************
@@ -89,7 +89,7 @@ label define region_c  ///
           18 "Yoro"
  
 label value region_c region_c
-label var region_c "Division política, departamentos"
+label var region_c "Division polÃ­tica, departamentos"
 
 ***********
 *factor_ch*
@@ -283,35 +283,35 @@ drop uno
 *************
 
 egen nmayor21_ch=sum((Rela_j>0 & Rela_j<=9) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 **************
 *nmmenor21_ch*
 **************
 
 egen nmenor21_ch=sum((Rela_j>0 & Rela_j<=9) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 **************
 *nmmayor65_ch*
 **************
 
 egen nmayor65_ch=sum((Rela_j>0 & Rela_j<=9) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 ************
 *nmenor6_ch*
 ************
 
 egen nmenor6_ch=sum((Rela_j>0 & Rela_j<=9) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 ************
 *nmenor1_ch*
 ************
 
 egen nmenor1_ch=sum((Rela_j>0 & Rela_j<=9) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 ****************
 ****condocup_ci*
@@ -319,7 +319,7 @@ label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
 
 gen condocup_ci=condact
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -427,24 +427,24 @@ label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 
       p431. En la O.P. Ud trabaja como: |      Freq.     Percent        Cum.
 ----------------------------------------+-----------------------------------
-     1. Empleado(a) u obrero(a) público |      2,495        6.41        6.41
+     1. Empleado(a) u obrero(a) pÃºblico |      2,495        6.41        6.41
      2. Empleado(a) u obrero(a) privado |     14,716       37.78       44.18
-            3. Empleado(a) Doméstico(a) |      1,030        2.64       46.83
-4. Miembro de cooperativa de producción |         14        0.04       46.86
+            3. Empleado(a) DomÃ©stico(a) |      1,030        2.64       46.83
+4. Miembro de cooperativa de producciÃ³n |         14        0.04       46.86
 5. Cuenta propia que no contrata mano d |      8,112       20.83       67.69
 6. Cuenta Propia que contrata mano de o |      1,300        3.34       71.03
             7. Empleador o socio activo |        832        2.14       73.16
               8. Miembro de cooperativa |         38        0.10       73.26
 9. Cuenta propia que no contrata mano d |      3,389        8.70       81.96
 10. Cuenta propia que contrata mano de  |      2,261        5.80       87.76
-         11. Patrón o socio de la finca |        107        0.27       88.04
+         11. PatrÃ³n o socio de la finca |        107        0.27       88.04
   12. Trabajador familiar no remunerado |      4,486       11.52       99.56
            13. Trabajador no remunerado |        173        0.44      100.00
 ----------------------------------------+-----------------------------------
                                   Total |     38,953      100.00
 
 
-Atención: Se excluye de la categorización a los miembros de cooperativas de producción. (RAM 05/10)
+AtenciÃ³n: Se excluye de la categorizaciÃ³n a los miembros de cooperativas de producciÃ³n. (RAM 05/10)
 */
 gen categopri_ci=.
 replace categopri_ci=1 if		p431==10 | p431==11 | p431==6 | p431==7
@@ -507,20 +507,20 @@ label var ylmsec_ci "Ingreso Laboral Monetario de la Actividad Secundaria"
    Ocupacion Secundaria,
    
 
- P462 En la ocupación de... ¿Ud trabaja |
+ P462 En la ocupaciÃ³n de... Â¿Ud trabaja |
                                   como: |      Freq.     Percent        Cum.
 ----------------------------------------+-----------------------------------
-     1. Empleado(a) u obrero(a) público |        115        1.20        1.20
+     1. Empleado(a) u obrero(a) pÃºblico |        115        1.20        1.20
      2. Empleado(a) u obrero(a) privado |      1,897       19.84       21.05
-            3. Empleado(a) Doméstico(a) |         27        0.28       21.33
-4. Miembro de cooperativa de producción |          7        0.07       21.40
+            3. Empleado(a) DomÃ©stico(a) |         27        0.28       21.33
+4. Miembro de cooperativa de producciÃ³n |          7        0.07       21.40
 5. Cuenta propia que no contrata mano d |      1,831       19.15       40.55
 6. Cuenta Propia que contrata mano de o |        167        1.75       42.30
             7. Empleador o socio activo |        101        1.06       43.36
               8. Miembro de cooperativa |         20        0.21       43.57
 9. Cuenta propia que no contrata mano d |      2,020       21.13       64.70
 10. Cuenta propia que contrata mano de  |      1,310       13.70       78.40
-         11. Patrón o socio de la finca |         52        0.54       78.94
+         11. PatrÃ³n o socio de la finca |         52        0.54       78.94
   12. Trabajador familiar no remunerado |      1,945       20.35       99.29
            13. Trabajador no remunerado |         68        0.71      100.00
 ----------------------------------------+-----------------------------------
@@ -894,13 +894,13 @@ replace spublico_ci=0 if p431!=1 & p462!=1
 gen asiste_ci=.
 replace asiste_ci=1 if p103==1
 replace asiste_ci=0 if p103==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 ren p104 pqnoasis_ci
 
 
 
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 
 
@@ -909,31 +909,31 @@ label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
 gen repiteult_ci=.
 replace repiteult_ci=1 if p113==1
 replace repiteult_ci=0 if p113==2
-label var repiteult_ci "Personas que están repetiendo el ultimo grado"
+label var repiteult_ci "Personas que estÃ¡n repetiendo el ultimo grado"
 
 
 
 
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 
 ** para quienes ya no asisten
 gen aedu_ci=anosest
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 
 /* En 2007, en la variable P05 y P11
    
-   P05. ¿Cual es el nivel educativo más alto que alcanzó?
-   P11. ¿Cual es el nivel educativo en el que estudia actualmente?
+   P05. Â¿Cual es el nivel educativo mÃ¡s alto que alcanzÃ³?
+   P11. Â¿Cual es el nivel educativo en el que estudia actualmente?
    
-   apareció la clasificación 8. Superior no Universitario. 
+   apareciÃ³ la clasificaciÃ³n 8. Superior no Universitario. 
    Para ser consistentes con las anteriores harmonizaciones
-   se decidió incluirla dentro de la categoría: 7. Técnico Superior
+   se decidiÃ³ incluirla dentro de la categorÃ­a: 7. TÃ©cnico Superior
    
-   También recodificamos los valores 9 a 8 y 10 a 9, para asegurar la consistencia. */
+   TambiÃ©n recodificamos los valores 9 a 8 y 10 a 9, para asegurar la consistencia. */
    
 replace p105=7 if p105==8
 replace p105=8 if p105==9
@@ -1025,12 +1025,12 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
 
 /* RECODIFIED, Option 10, 11 and 12 were considered Private = 246 obs
 
-      p09 A traves de que sistema estudió |      Freq.     Percent        Cum.
+      p09 A traves de que sistema estudiÃ³ |      Freq.     Percent        Cum.
     --------------------------------------+-----------------------------------
                                1. PROHECO |         94        0.20        0.20
                             2. EDUCATODOS |        285        0.61        0.81
                               3. PRALEBAH |        149        0.32        1.12
-          4. Presencial en centro público |     42,841       91.20       92.33
+          4. Presencial en centro pÃºblico |     42,841       91.20       92.33
           5. Presencial en centro privado |      2,917        6.21       98.54
  6. Presencial en centro privado bilingue |         32        0.07       98.61
             7. Por radio(maestro en casa) |         90        0.19       98.80
@@ -1038,7 +1038,7 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
          9. A distancia en centro privado |         37        0.08       99.18
                      10. En el extranjero |        203        0.43       99.61
   11. Educacion virtual publica o privada |          3        0.01       99.62
-                    12. ONG,s o Fundación |         40        0.09       99.71
+                    12. ONG,s o FundaciÃ³n |         40        0.09       99.71
                               13. CCEPREB |          3        0.01       99.71
                   99. No sabe/no responde |        135        0.29      100.00
     --------------------------------------+-----------------------------------
@@ -1053,7 +1053,7 @@ replace edupub_ci=0 if (p116==5|p116==6|p116==9|p116==10|p116==11|p116==12)
 
 
 
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ************
 *aguared_ch*
@@ -1261,7 +1261,7 @@ replace antiguedad_ci = p433_cant*12 if p433_tiempo==4
 
 
 /************************************************************************************************************
-* 2. Recategorización de variables/ corrección de errores de las bases armonizadas
+* 2. RecategorizaciÃ³n de variables/ correcciÃ³n de errores de las bases armonizadas
 ************************************************************************************************************/
 
 tostring p423_1 p423_2 ,replace
@@ -1281,7 +1281,7 @@ destring aux_*, replace
 gen semestre_c=.
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -1444,7 +1444,7 @@ gen tiempoparc_ci=.
 gen vivialqimp_ch=.
 gen raza_ci=.
 
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

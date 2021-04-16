@@ -3,7 +3,7 @@
 
 clear all
 set more off
-cd "Y:\survey\PER\ENAHO\1997\t4\data_orig"
+cd "${surveysFolder}\survey\PER\ENAHO\1997\t4\data_orig"
 
 **************************************************************************************
 						/*Identificador de hogar*/
@@ -77,5 +77,5 @@ joinby con viv hog using "sumaria-1997-iv.dta", unmatched(both)
 tab _merge
 drop _merge
 
-save "Y:\survey\PER\ENAHO\1997\t4\data_merge\PER_1997t4.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\1997\t4\data_merge\PER_1997t4.dta", replace
 

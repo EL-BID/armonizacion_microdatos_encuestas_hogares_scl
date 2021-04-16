@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ENEMDU
@@ -31,12 +31,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Ecuador
+PaÃ­s: Ecuador
 Encuesta: ENEMDU
 Round: m12
 Autores: Yessenia Loayza (yessenial@iadb.org / desloay@hotmail.com)
-Última versión: Yessenia Loayza E-mail: yessenial@iadb.org / desloay@hotmail.com
-Fecha última modificación: Febrero 2014
+Ãšltima versiÃ³n: Yessenia Loayza E-mail: yessenial@iadb.org / desloay@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Febrero 2014
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -58,7 +58,7 @@ use `base_in', clear
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 	***************
@@ -72,8 +72,8 @@ label value region_BID_c region_BID_c
 	
 	label define region_c ///
 	1 "Azuay" ///
-	2 "Bolívar" ///
-	3 "Cañar" ///
+	2 "BolÃ­var" ///
+	3 "CaÃ±ar" ///
 	4 "Carchi" /// 
 	5 "Cotopaxi" ///
 	6 "Chimborazo" ///
@@ -82,11 +82,11 @@ label value region_BID_c region_BID_c
 	9 "Guayas" ///
 	10 "Imbabura" ///
 	11 "Loja" ///
-	12 "Los Ríos" ///
-	13 "Manabí" ///
+	12 "Los RÃ­os" ///
+	13 "ManabÃ­" ///
 	17 "Pichincha" ///
 	18 "Tungurahua" ///
-	23 "Santo Domingo de los Tsáchilas" ///
+	23 "Santo Domingo de los TsÃ¡chilas" ///
     24 "Santa Elena" ///
 	89 "Amazonia"  ///
 	90 "zonas no delimitadas" 
@@ -104,7 +104,7 @@ label value region_BID_c region_BID_c
 	****idh_ch***
 	*************
 	sort area ciudad zona sector panelm vivienda hogar
-	* Modificación Marcela Rubio
+	* ModificaciÃ³n Marcela Rubio
 	*egen idh_ch = group( area ciudad zona sector panelm vivienda hogar)
 	egen idh_ch = group(ciudad zona sector panelm vivienda hogar)
 	label variable idh_ch "ID del hogar"
@@ -190,11 +190,11 @@ label value region_BID_c region_BID_c
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*
 p15:
-           1 indígena
+           1 indÃ­gena
            2 afroecuatoriano
            3 negro
            4 mulato
@@ -214,7 +214,7 @@ replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
  
-   label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+   label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
    label value raza_ci raza_ci 
    label var raza_ci "Raza o etnia del individuo"
 */
@@ -227,7 +227,7 @@ replace raza_ci=aux1 if (raza_ci ==. & (p04 ==3 |  p04==5))
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
  
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label var raza_ci "Raza o etnia del individuo"
 
@@ -235,7 +235,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -413,7 +413,7 @@ label var id_afro_ci "Afro-descendiente"
 	*** instcot_ci *****
 	********************
 	gen instcot_ci=iess /* a todas las personas*/
-	label var instcot_ci "institución a la cual cotiza"
+	label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 	*************
 	*tamemp_ci***
@@ -422,23 +422,23 @@ label var id_afro_ci "Afro-descendiente"
 	gen tamemp_ci=p47b
 	replace tamemp_ci=. if (p47b>=99 & p47b!=.)
 	replace tamemp_ci=100 if p47a==2
-	label define tamemp_ci 100 "100 y más empleados"
+	label define tamemp_ci 100 "100 y mÃ¡s empleados"
 	label value tamemp_ci tamemp_ci 
 	label var tamemp_ci "# empleados en la empresa de la actividad principal"*/
 
 	*************
 	*tamemp_ci
 	*************
-	*Ecuador Pequeña 1 a 5 Mediana 6 a 50 Grande Más de 50
+	*Ecuador PequeÃ±a 1 a 5 Mediana 6 a 50 Grande MÃ¡s de 50
 	*1 = menos de 100
-	*2 = más de 100
+	*2 = mÃ¡s de 100
 
 	gen tamemp_ci=.
 	replace tamemp_ci=1 if p47a==1 & (p47b>=1 & p47b<=5)
 	replace tamemp_ci=2 if p47b>=6 & p47b<=50
 	replace tamemp_ci=3 if (p47a==2) | (p47b>50 & p47b!=.)
 	label var tamemp_ci "# empleados en la empresa segun rangos"
-	label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+	label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 	label value tamemp_ci tamemp_ci
 	
 	*************
@@ -497,7 +497,7 @@ label var id_afro_ci "Afro-descendiente"
 	label var salmm_ci "Salario minimo legal"
 
 	/************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -511,14 +511,14 @@ label var id_afro_ci "Afro-descendiente"
 	***desemp_ci***
 	****************
 	gen desemp_ci=(condocup_ci==2)
-	label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+	label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 	*************
 	***pea_ci***
 	*************
 	gen pea_ci=0
 	replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-	label var pea_ci "Población Económicamente Activa"
+	label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 	*****************
 	***desalent_ci***
@@ -564,7 +564,7 @@ label var id_afro_ci "Afro-descendiente"
 	*******************
 	***tiempoparc_ci***
 	*******************
-	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como había sido generada antes
+	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como habÃ­a sido generada antes
 	gen tiempoparc_ci=((horaspri_ci>=1 & horaspri_ci<30) & p27==4 & emp_ci==1)
 	replace tiempoparc_ci=. if emp_ci==0
 	label var tiempoparc_c "Personas que trabajan medio tiempo" 
@@ -616,7 +616,7 @@ label var id_afro_ci "Afro-descendiente"
 	*la li p50
 	gen nempleos_ci=p50
 	replace nempleos_ci=. if emp_ci!=1
-	label var nempleos_ci "Número de empleos" 
+	label var nempleos_ci "NÃºmero de empleos" 
 	label define nempleos_ci 1 "Un empleo" 2 "Mas de un empleo"
 	label value nempleos_ci nempleos_ci
 /*
@@ -637,7 +637,7 @@ label var id_afro_ci "Afro-descendiente"
 	*****************
 	gen spublico_ci=(p42==1 & emp_ci==1)
 	replace spublico_ci=. if emp_ci==.
-	label var spublico_ci "Personas que trabajan en el sector público"
+	label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 	**************
 	***ocupa_ci***
@@ -676,8 +676,8 @@ label var id_afro_ci "Afro-descendiente"
 	replace rama_ci = 8 if rama1>=11 & rama1<=12
 	replace rama_ci = 9 if rama1>=13 & rama1<=21
 	label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+	label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
 	*/
@@ -694,8 +694,8 @@ label var id_afro_ci "Afro-descendiente"
 	replace rama_ci = 8 if (p40>=6411 & p40<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((p40>=5811 & p40<=6020) | (p40>=6201 & p40<=6399) | (p40>=8410 & p40<=9900)) & emp_ci==1
 	label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+	label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
 
@@ -709,7 +709,7 @@ label var id_afro_ci "Afro-descendiente"
 	***************
 	*antiguedad_ci*
 	***************
-	* MLO: no se puede distinguir menos de 1 año (indicados como  00)
+	* MLO: no se puede distinguir menos de 1 aÃ±o (indicados como  00)
 	gen antiguedad_ci=p45
 	label var antiguedad_ci "antiguedad laboral (anios) - aproximacion"	
 
@@ -720,8 +720,8 @@ gen categoinac_ci =1 if (p36==2 & condocup_ci==3)
 replace categoinac_ci = 2 if  ( p36==3 & condocup_ci==3)
 replace categoinac_ci = 3 if  ( p36==4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros"
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros"
 
 *******************
 ***formal***
@@ -796,7 +796,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -863,7 +863,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 	replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 	replace nrylmpri_ch=. if nrylmpri_ch==.
-	label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+	label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 	************
 	***ylm_ch***
@@ -950,7 +950,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace anoinst=. if (anoinst>=20)
 	replace anoinst= 0 if (nivinst == 1)
 
-* 26/08/2015: Cambios educación I.B-no se cuenta como años de educación la educación para adultos
+* 26/08/2015: Cambios educaciÃ³n I.B-no se cuenta como aÃ±os de educaciÃ³n la educaciÃ³n para adultos
 	gen aedu_ci = .
 	replace aedu_ci = 0          if nivinst==1
 	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
@@ -978,7 +978,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace anoinst=. if (anoinst>=20)
 	replace anoinst= 0 if (nivinst == 1)
 
-	* 09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
+	* 09/29/2015: Cambios educaciÃ³n por IvÃ¡n Bornacelly SCL/EDU-no se cuenta como aÃ±os de educaciÃ³n la educaciÃ³n para adultos
 	gen aedu_ci = .
 	replace aedu_ci = 0          if nivinst==1
 	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
@@ -987,7 +987,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
 	replace aedu_ci = 0          if nivinst==3
 	replace aedu_ci = anoinst-1    if nivinst==4
-	replace aedu_ci = anoinst-1    if nivinst==5 // Se le resta 1 dado que el nivel primaria y educación básica tienen incluido el primera año de educación inicial
+	replace aedu_ci = anoinst-1    if nivinst==5 // Se le resta 1 dado que el nivel primaria y educaciÃ³n bÃ¡sica tienen incluido el primera aÃ±o de educaciÃ³n inicial
 	* siguiente linea Mod. Ivan B./EDU 2015, 12
 	replace aedu_ci=0 if aedu_ci==-1
 	replace aedu_ci = anoinst+6  if nivinst==6
@@ -1089,7 +1089,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***asispre_ci**
 	***************
-	*Variable agregada por Iván Bornacelly - 01/16/2017
+	*Variable agregada por IvÃ¡n Bornacelly - 01/16/2017
 	g asispre_ci=.
 	replace asispre_ci=1 if pe01==1 & pe02a==3 
 	recode asispre_ci (.=0)
@@ -1110,12 +1110,12 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	*Esta variable no tiene opciones predeterminadas por los que se mantienen las opciones del país
+	*Esta variable no tiene opciones predeterminadas por los que se mantienen las opciones del paÃ­s
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
-	label def pqnoasis_ci 1"edad" 2"termino sus estudios" 3"falta recursos económicos" 4"fracaso escolar"
+	label def pqnoasis_ci 1"edad" 2"termino sus estudios" 3"falta recursos econÃ³micos" 4"fracaso escolar"
 	label def pqnoasis_ci 5"por trabajo" 6"temor maestros" 7"enfermedad o discapacidad" 8"quehaceres del hogar", add
-	label def pqnoasis_ci 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado", add
+	label def pqnoasis_ci 9"familia no permite" 10"no hay establecimientos educativos" 11"no estÃ¡ interesado", add
 	label def pqnoasis_ci 12"por embarazo" 13"por falta de cupo" 14"otra razon", add
 	label val pqnoasis_ci pqnoasis_ci
 		
@@ -1133,7 +1133,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     replace pqnoasis1_ci = 8 if p09==10
     replace pqnoasis1_ci = 9 if p09==4  | p09==6 | p09==13 | p09==14
 
-    label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+    label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
     label value  pqnoasis1_ci pqnoasis1_ci
 
 	***************
@@ -1146,13 +1146,13 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***repiteult_ci***
 	******************
 	gen repiteult_ci=.
-	label var repiteult "Ha repetido el último grado"
+	label var repiteult "Ha repetido el Ãºltimo grado"
 
 	***************
 	***edupub_ci***
 	***************
 	gen edupub_ci=.
-	label var edupub_ci "Asiste a un centro de ensenanza público"
+	label var edupub_ci "Asiste a un centro de ensenanza pÃºblico"
 
 	****************
 	***tecnica_ci **
@@ -1178,7 +1178,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aguadist_ch=1 if vi10a==1
 	replace aguadist_ch=2 if vi10a==2
 	replace aguadist_ch=3 if vi10a==3
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
+	label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 	label val aguadist_ch aguadist_ch
@@ -1189,7 +1189,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*****************
 	gen aguamala_ch=(vi10==6)
 	replace aguamala_ch=. if vi10==.
-	label var aguamala_ch "Agua unimproved según MDG" 
+	label var aguamala_ch "Agua unimproved segÃºn MDG" 
 	
 	*****************
 	***aguamide_ch***
@@ -1201,7 +1201,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***luz_ch***
 	************
 	gen luz_ch=(vi12==1 | vi12==2)
-	label var luz_ch  "La principal fuente de iluminación es electricidad"
+	label var luz_ch  "La principal fuente de iluminaciÃ³n es electricidad"
 	
 	****************
 	***luzmide_ch***
@@ -1238,9 +1238,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace des1_ch=0 if bano_ch==0
 	replace des1_ch=1 if vi09==1 | vi09==2
 	replace des1_ch=2 if vi09==3 | vi09==4
-	label var des1_ch "Tipo de desague según unimproved de MDG"
-	label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-	label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+	label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+	label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+	label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 	label val des1_ch des1_ch
 	
 	
@@ -1250,8 +1250,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen des2_ch=.
 	replace des2_ch=0 if bano_ch==0
 	replace des2_ch=1 if vi09==1 | vi09==2 | vi09==3 | vi09==4
-	label var des2_ch "Tipo de desague sin incluir definición MDG"
-	label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+	label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+	label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 	label def des2_ch 2"Cualquier otro caso", add
 	label val des2_ch des2_ch
 	
@@ -1263,7 +1263,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace piso_ch=0 	if vi04a==7
 	replace piso_ch=2 	if vi04a==5| vi04a==6 | vi04a==8 	
 	replace piso_ch=. 	if vi04a==.
-	label var piso_ch "Materiales de construcción del piso"  
+	label var piso_ch "Materiales de construcciÃ³n del piso"  
 	label def piso_ch 0"Piso de tierra" 1"Materiales permanentes" 2"Otros materiales"
 	label val piso_ch piso_ch
 	
@@ -1273,7 +1273,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	gen pared_ch=0 		if vi05a==5 |vi05a==6 |vi05a==7
 	replace pared_ch=1	if vi05a>=1 & vi05a<=4
-	label var pared_ch "Materiales de construcción de las paredes"
+	label var pared_ch "Materiales de construcciÃ³n de las paredes"
 	label def pared_ch 0"No permanentes" 1"Permanentes"
 	label val pared_ch pared_ch
 	
@@ -1283,7 +1283,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	gen techo_ch=0 		if  vi03a==5 |vi03a==6
 	replace techo_ch=1	if  vi03a>=1 & vi03a<=4
-	label var techo_ch "Materiales de construcción del techo"
+	label var techo_ch "Materiales de construcciÃ³n del techo"
 	label def techo_ch 0"No permanentes" 1"Permanentes"
 	label val techo_ch techo_ch
 	
@@ -1295,8 +1295,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace resid_ch=2 if vi13==3
 	replace resid_ch=3 if vi13==5
 	replace resid_ch=. if vi13==.
-	label var resid_ch "Método de eliminación de residuos"
-	label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+	label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+	label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
@@ -1316,8 +1316,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*************
 	***dorm_ch***
 	*************
-	*Dado que hay hogares que reportan 0 habitaciones exclusivas para dormir, pues la vivienda está constituída por
-	*un sólo ambiente, a estos hogares se les imputa 1 habitación. A los hogares que dicen no tener cuartos exclusivos 
+	*Dado que hay hogares que reportan 0 habitaciones exclusivas para dormir, pues la vivienda estÃ¡ constituÃ­da por
+	*un sÃ³lo ambiente, a estos hogares se les imputa 1 habitaciÃ³n. A los hogares que dicen no tener cuartos exclusivos 
 	*para dormir, pero que viven en vivienda de 2, 3 y 4 habitaciones se les asigna missing
 
 	gen dorm_ch=vi07
@@ -1343,7 +1343,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen telef_ch=0
 	replace telef_ch=1 if eq1501==1
 	replace telef_ch=. if eq1501==.
-	label var telef_ch "El hogar tiene servicio telefónico fijo"
+	label var telef_ch "El hogar tiene servicio telefÃ³nico fijo"
 	
 	***************
 	***refrig_ch***
@@ -1384,7 +1384,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen internet_ch=0
 	replace internet_ch=1 if vi21==1 
 	replace internet_ch=. if vi21==. 
-	label var internet_ch "El hogar posee conexión a Internet"
+	label var internet_ch "El hogar posee conexiÃ³n a Internet"
 	
 
 	************
@@ -1433,7 +1433,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***vivitit_ch***
 	****************
 	gen vivitit_ch=.
-	label var vivitit_ch "El hogar posee un título de propiedad"
+	label var vivitit_ch "El hogar posee un tÃ­tulo de propiedad"
 
 	****************
 	***vivialq_ch***
@@ -1462,15 +1462,15 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNAD
@@ -27,15 +27,15 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+PaÃ­s: Brasil
 Encuesta: PNAD
 Round: m9
 Autores: 
 Autores 2010: Yanira Oviedo
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: octubre 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: octubre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -83,41 +83,41 @@ replace region_c=52 if  v10==83
 replace region_c=53 if  v10==61
 
 label define region_c ///
-11 "Rondônia" ///
+11 "RondÃ´nia" ///
 12 "Acre" ///
 13 "Amazonas" ///
 14 "Roraima" ///
-15 "Pará" ///
-16 "Amapá" ///
+15 "ParÃ¡" ///
+16 "AmapÃ¡" ///
 17 "Tocantins" ///
-21 "Maranhão" ///
-22 "Piauí" ///
-23 "Ceará" ///
+21 "MaranhÃ£o" ///
+22 "PiauÃ­" ///
+23 "CearÃ¡" ///
 24 "Rio Grande do Norte" ///
-25 "Paraíba" ///
+25 "ParaÃ­ba" ///
 26 "Pernambuco" ///
 27 "Alagoas" ///
 28 "Sergipe" ///
 29 "Bahia" ///
 31 "Minas Gerais" ///
-32 "Espírito Santo" ///
+32 "EspÃ­rito Santo" ///
 33 "Rio de Janeiro" ///
-35 "São Paulo" ///
-41 "Paraná" ///
+35 "SÃ£o Paulo" ///
+41 "ParanÃ¡" ///
 42 "Santa Catarina" ///
 43 "Rio Grande do Sul" ///
 50 "Mato Grosso do Sul" ///
 51 "Mato Grosso" ///
-52 "Goiás" ///
+52 "GoiÃ¡s" ///
 53 "Distrito Federal"
 label value region_c region_c
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -153,21 +153,21 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*p304
  2- branca 
  4- preta
  6- parda
  8- amarela
- 9- sem declaração*/
+ 9- sem declaraÃ§Ã£o*/
 
 
 
 gen raza_ci=.
 replace raza_ci= 2 if  (p304 ==4 | p304 ==6)
 replace raza_ci= 3 if (p304==2 | p304==8 | p304== 9) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -176,7 +176,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -201,7 +201,7 @@ replace luz_ch=. if v210==9
 gen luzmide_ch=.
 gen combust_ch=.
 
-* Modificacion Marcela Rubio Septiembre 2014: corrección en sintaxis
+* Modificacion Marcela Rubio Septiembre 2014: correcciÃ³n en sintaxis
 /*
 gen bano_ch=(v208==1 |v208==3)
 replace bano_ch=. if v208==9
@@ -214,7 +214,7 @@ replace bano_ch = 1 if (v208==1 |v208==3)
 gen banoex_ch=(v208==1)
 replace banoex_ch=. if bano_ch==0 | bano_ch==.
 
-* Modificación Marcela Rubio Septiembre 2014: corrección en sintaxis
+* ModificaciÃ³n Marcela Rubio Septiembre 2014: correcciÃ³n en sintaxis
 /*
 gen des1_ch=1 if v207==0 | v207==2
 replace des1_ch=2 if v207==4
@@ -229,7 +229,7 @@ replace des1_ch = 1 if v207==0 | v207==2
 replace des1_ch = 2 if v207==4
 replace des1_ch = 3 if v207==6
 
-* Modificación Marcela Rubio Septiembre 2014: corrección en sintaxis
+* ModificaciÃ³n Marcela Rubio Septiembre 2014: correcciÃ³n en sintaxis
 
 /*
 gen des2_ch=des1_ch
@@ -332,7 +332,7 @@ by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1)
 /******************************************************************************/
 /*				VARIABLES DE DEMANDA LABORAL		      */
 /******************************************************************************/
-/*YL: Nota: en este año no dispongo del diccionario ni formulario. Asumo que las variables no cambian
+/*YL: Nota: en este aÃ±o no dispongo del diccionario ni formulario. Asumo que las variables no cambian
 pero tengo problemas con algunas variables. No puedo identificarlas bien debido a la falta de etiquetas
 */
 
@@ -345,23 +345,23 @@ replace condocup_ci=1 if (p501<=2)
 replace condocup_ci=2 if (p501==3) /*tomaron alguna providencia en la semana de referencia*/
 replace condocup_ci=3 if (p501>=4 & p501<=7)
 replace condocup_ci=4 if edad_ci<10
-label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 años"
+label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 aÃ±os"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 
 /*
 Definiciones:
-* População ocupada: Aquelas pessoas que, num determinado período de referência,
-trabalharam ou tinham trabalho mas não trabalharam (por exemplo, pessoas em férias).
+* PopulaÃ§Ã£o ocupada: Aquelas pessoas que, num determinado perÃ­odo de referÃªncia,
+trabalharam ou tinham trabalho mas nÃ£o trabalharam (por exemplo, pessoas em fÃ©rias).
 
-* População Desocupada: aquelas pessoas que não tinham trababalho, num determinado 
-período de referência, mas estavam dispostas a trabalhar, e que, para isso, tomaram
-alguma providência efetiva (consultando pessoas, jornais, etc.).
+* PopulaÃ§Ã£o Desocupada: aquelas pessoas que nÃ£o tinham trababalho, num determinado 
+perÃ­odo de referÃªncia, mas estavam dispostas a trabalhar, e que, para isso, tomaram
+alguma providÃªncia efetiva (consultando pessoas, jornais, etc.).
 
-População Não Economicamente Ativa: pessoas não classificadas como ocupadas ou 
+PopulaÃ§Ã£o NÃ£o Economicamente Ativa: pessoas nÃ£o classificadas como ocupadas ou 
 desocupadas
 
-PET: >=10 años de edad
+PET: >=10 aÃ±os de edad
 */
 
 ****************
@@ -395,7 +395,7 @@ label var cotizaotros_ci "Cotizante a la Seguridad Social por otro trabajos o po
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -409,7 +409,7 @@ label value tipocontrato_ci tipocontrato_ci
 **pension_ci*
 *************
 gen pension_ci=0 
-replace pension_ci=1 if (p5280==1 | p5281==2) /*A todas las per mayores de diez años*/
+replace pension_ci=1 if (p5280==1 | p5281==2) /*A todas las per mayores de diez aÃ±os*/
 label var pension_ci "1=Recibe pension contributiva"
  
 *************
@@ -468,7 +468,7 @@ label var salmm_ci "Salario minimo legal"
 *************
 ***tecnica_ci**
 *************
-gen tecnica_ci=. /*No se puede identificar educación técnica superior*/
+gen tecnica_ci=. /*No se puede identificar educaciÃ³n tÃ©cnica superior*/
 label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
@@ -505,16 +505,16 @@ replace ocupa_ci=9 if p5030==8 & emp_ci==1
 ****************
 
 *Ramos de atividade
-  *1- agrícola
-  *2- ind. de transformação
-  *3- ind. da construção
+  *1- agrÃ­cola
+  *2- ind. de transformaÃ§Ã£o
+  *3- ind. da construÃ§Ã£o
   *4- out. Ativ. Industriais
-  *5- comércio mercadorias
-  *6- prestação de serviços
+  *5- comÃ©rcio mercadorias
+  *6- prestaÃ§Ã£o de serviÃ§os
   *7- serv.aux.atividade ec.
-  *8- transp. e comunicações
+  *8- transp. e comunicaÃ§Ãµes
   *9- social
- *10- administração pública
+ *10- administraÃ§Ã£o pÃºblica
  *11- outra atividade
 
  * No se puede distinguir que clasificacion CIIU utiliza.  Con la clasificacionq ue esta en el diccionario no se encuentra servicios de agua. MGD 04/29/2014
@@ -526,7 +526,7 @@ replace rama_ci=6 if p5040==5 & emp_ci==1
 replace rama_ci=7 if p5040==8 & emp_ci==1
 replace rama_ci=9 if (p5040==6 | p5040==7 | p5040==9 | p5040==10 | p5040==11) & emp_ci==1
 
-label define rama_ci 1 "Agricultura, Caza, Civicultura y Pesca" 2 "Explotación de minas y Canteras" 3 "Industrias Manufactureras" 4 "Electricidad, Gas y Agua" 5 "Construcción" 6 "Comercio al por mayor y menor, Restaurantes y Hoteles" 7 "Transporte y Almacenamiento" 8 "Establecimientos Financieros, Seguros y Bienes Inmuebles" 9 "Servicios Sociales, Comunales y personales" 
+label define rama_ci 1 "Agricultura, Caza, Civicultura y Pesca" 2 "ExplotaciÃ³n de minas y Canteras" 3 "Industrias Manufactureras" 4 "Electricidad, Gas y Agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, Restaurantes y Hoteles" 7 "Transporte y Almacenamiento" 8 "Establecimientos Financieros, Seguros y Bienes Inmuebles" 9 "Servicios Sociales, Comunales y personales" 
 label values rama_ci rama_ci
 
 
@@ -630,8 +630,8 @@ gen spublico_ci=.
 					****************************
 
 *------------------------------------------------------------------------------------------------------------------
-*YANIRA, Ag 2010: SE HACE UNA CORRECIÓN SOBRE LAS VARIABLES DE EDUCACIÓN. PUES LA VARIABLE DE INSUMO PARA CONSTRUIR 
-*AÑOS DE EDUCACIÓN NO SE TUVO EN CUENTA UN CAMBIO EN LAS OPCIONES DE LAS VARIABLES INSUMO. LO CUAL GENERÓ UN ERROR
+*YANIRA, Ag 2010: SE HACE UNA CORRECIÃ“N SOBRE LAS VARIABLES DE EDUCACIÃ“N. PUES LA VARIABLE DE INSUMO PARA CONSTRUIR 
+*AÃ‘OS DE EDUCACIÃ“N NO SE TUVO EN CUENTA UN CAMBIO EN LAS OPCIONES DE LAS VARIABLES INSUMO. LO CUAL GENERÃ“ UN ERROR
 *------------------------------------------------------------------------------------------------------------------
 
 
@@ -640,7 +640,7 @@ gen spublico_ci=.
 **************
 
 gen asiste_ci=(p314>=4 & p314<=15)
-label var asiste_ci "Personas que actualmente asisten a un centro de enseñanza"
+label var asiste_ci "Personas que actualmente asisten a un centro de enseÃ±anza"
 
 
 *************
@@ -659,14 +659,14 @@ label var aedu_ci "Anios de educacion"
 replace aedu_ci=. if p317==-1 & asiste_ci==0
 
 	*Sistema antiguo
-*Elementar (primário) - se asume que el máximo es 4 - Anteriormente se permitía 6 pero no 5
+*Elementar (primÃ¡rio) - se asume que el mÃ¡ximo es 4 - Anteriormente se permitÃ­a 6 pero no 5
 replace aedu_ci=min(p315,4) if p317==1 & p315>=1 & p315<=6 & asiste_ci==0
-*Medio 1 ciclo (ginasial, etc) - se asume que el máximo es 8
+*Medio 1 ciclo (ginasial, etc) - se asume que el mÃ¡ximo es 8
 replace aedu_ci=min(p315+4,8) if p317==2 & p315>=1 & p315<=5 & asiste_ci==0
 replace aedu_ci=4  if p317==2 & p315==0 & asiste_ci==0
-*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el máximo es 11, pero
-*bajo la lógica anterior deberían se 12, ya que se permite hasta 4 años adicionales en este nivel
-*Aunque solo es necesario tener 11 años de educación para completar la secundaria
+*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el mÃ¡ximo es 11, pero
+*bajo la lÃ³gica anterior deberÃ­an se 12, ya que se permite hasta 4 aÃ±os adicionales en este nivel
+*Aunque solo es necesario tener 11 aÃ±os de educaciÃ³n para completar la secundaria
 replace aedu_ci=min(p315+8,12) if p317==3 & p315>=1 & p315<=4 & asiste_ci==0
 replace aedu_ci=8  if p317==3 & p315==0 & asiste_ci==0
 
@@ -674,7 +674,7 @@ replace aedu_ci=8  if p317==3 & p315==0 & asiste_ci==0
 *Primeiro grau - Bajo este sistema la primaria llega hasta el grado 8
 replace aedu_ci=min(p315,8) if p317==4 & p315>=1 & p315<=8 & asiste_ci==0
 replace aedu_ci=0  if p317==4 & p315==0 & asiste_ci==0
-*Segundo grau - Secundaria son 4 años más
+*Segundo grau - Secundaria son 4 aÃ±os mÃ¡s
 replace aedu_ci=min(p315+8,12) if p317==5 & p315>=1 & p315<=4 & asiste_ci==0
 replace aedu_ci=8 if p317==5 & p315==0 & asiste_ci==0
 
@@ -683,10 +683,10 @@ replace aedu_ci=min(p315+11,17) if p317==6 & p315>=1 & p315<=8 & asiste_ci==0
 replace aedu_ci=11 if p317==6 & p315==0 & asiste_ci==0
 
 *Maestria o doctorado  
-*Para este ciclo no se pregunta el último año aprobado. Por lo tanto se supone que si terminó el ciclo 
-*el individuo cuenta con 19 años de educación (2 años más de educación), si el individuo no terminó se le agrega 
-*1 año más de eduación para quedar con 18 ya que si el último ciclo más alto alcanzado es postgrado, el individuo 
-*por lo menos tuvo que cursar 1 año en ese nivel
+*Para este ciclo no se pregunta el Ãºltimo aÃ±o aprobado. Por lo tanto se supone que si terminÃ³ el ciclo 
+*el individuo cuenta con 19 aÃ±os de educaciÃ³n (2 aÃ±os mÃ¡s de educaciÃ³n), si el individuo no terminÃ³ se le agrega 
+*1 aÃ±o mÃ¡s de eduaciÃ³n para quedar con 18 ya que si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo 
+*por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if p317==7 & p315==0 & asiste_ci==0
 replace aedu_ci=19 if p317==7 & p315==0 & asiste_ci==0
 
@@ -697,13 +697,13 @@ replace aedu_ci=19 if p317==7 & p315==0 & asiste_ci==0
 *No aplica o no responde	
 replace aedu_ci=. if p314==-1 & asiste_ci==1
 
-*Pre-escolar, creche o alfabetización de adultos
+*Pre-escolar, creche o alfabetizaciÃ³n de adultos
 replace aedu_ci=0 if (p314==7 | p314==8) & asiste_ci==1
 
-*Regular de 1º grau/ Supletivo de 1º grau   (se asume que el máximo es 8) 
+*Regular de 1Âº grau/ Supletivo de 1Âº grau   (se asume que el mÃ¡ximo es 8) 
 replace aedu_ci=min(p312-1,7) if (p314==4 | p314==9 | p314==11) & p312>=1 & p312<=8 & asiste_ci==1
 
-*Regular de 2º grau/ Supletivo de 2º grau   (se asume que el máximo es 4, pero con 3 basta para completar el ciclo)
+*Regular de 2Âº grau/ Supletivo de 2Âº grau   (se asume que el mÃ¡ximo es 4, pero con 3 basta para completar el ciclo)
 replace aedu_ci=min(p312+8-1,11) if (p314==5 | p314==10 | p314==12) & p312>=1 & p312<=4 & asiste_ci==1
 
 *Pre-vestibular
@@ -714,10 +714,10 @@ replace aedu_ci=min(p312+11-1,17) if p314==6 & p312>=1 & p312<=8 & asiste_ci==1
 replace aedu_ci=11 if p314==5 & p312==. & asiste_ci==1
 
 *Maestria o doctorado  
-*Si el último ciclo más alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 año en ese nivel
+*Si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if p314==15  & asiste_ci==1
 
-*Se deja sólo la información de las personas con 5 años o más
+*Se deja sÃ³lo la informaciÃ³n de las personas con 5 aÃ±os o mÃ¡s
 replace aedu_ci=. if edad_ci<5
 
 
@@ -782,7 +782,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-*La secundaria sólo dura 4 años. No puede divirse en ciclos
+*La secundaria sÃ³lo dura 4 aÃ±os. No puede divirse en ciclos
 gen edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
@@ -832,13 +832,13 @@ gen pqnoasis1_ci = .
 ***repite_ci***
 ***************
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 ***************
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
+label var  edupub_ci "Personas que asisten a centros de enseÃ±anza pÃºblicos"
 	
 
 
@@ -848,22 +848,22 @@ label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
 gen tamemp_ci=1 if p2901==1  
 replace tamemp_ci=2 if p2921==3
 replace tamemp_ci=3 if p2941==5
-label var  tamemp_ci "Tamaño de Empresa" 
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label var  tamemp_ci "TamaÃ±o de Empresa" 
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 
 ******************
 ***categoinac_ci**
 ******************
 gen categoinac_ci=.
-/*cambian las variables de la encuesta con respecto a años siguientes, por eso se deja como missing
+/*cambian las variables de la encuesta con respecto a aÃ±os siguientes, por eso se deja como missing
 
 gen categoinac_ci=1 if p501==6 & condocup_ci==3
 replace categoinac_ci=2 if p501==4 & condocup_ci==3
 replace categoinac_ci=3 if p501==5 & condocup_ci==3
 recode categoinac_ci .=4 if condocup_ci==3
 */
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
 
@@ -880,7 +880,7 @@ gen vivitit_ch=.
 gen ylmotros_ci=.
 gen ylnmotros_ci=.
 
-**Cambio de moneda - Modificación Mayra Sáenz Septiembre 2014
+**Cambio de moneda - ModificaciÃ³n Mayra SÃ¡enz Septiembre 2014
 
 sum ylmpri_ci nrylmpri_ci tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylm_ci ylnm_ci ynlm_ci ynlnm_ci ylm_ch ylnm_ch ylmnr_ch ynlm_ch ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch ypen_ci ypensub_ci salmm_ci lp_ci lpe_ci vivialq_ch vivialqimp_ch
 
@@ -894,15 +894,15 @@ sum ylmpri_ci nrylmpri_ci tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_c
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

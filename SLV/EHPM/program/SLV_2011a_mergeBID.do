@@ -1,6 +1,6 @@
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -24,7 +24,7 @@ sort idp
 save "`base_in'\bdsec01_m.dta", replace
 
 
-use "`base_in'\bdsec02.dta", clear /*educación */
+use "`base_in'\bdsec02.dta", clear /*educaciÃ³n */
 drop idp
 egen idp =concat(lote tipo folio viv r101)
 sort idp

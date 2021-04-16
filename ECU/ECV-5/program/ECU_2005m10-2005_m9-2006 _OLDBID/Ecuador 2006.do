@@ -1,16 +1,16 @@
 clear
 
 
-use "C:\Data.idb\Victoria\Food\Agregadoi Ecuador 2006.dta" 
+use "${surveysFolder}\Data.idb\Victoria\Food\Agregadoi Ecuador 2006.dta" 
 
 *rename numhog idh_ch
 egen idh_ch=group(region ciudad zona sector numhog)
 sort idh_ch
 
-save "C:\Data.idb\Victoria\Food\GastosECU.dta", replace
+save "${surveysFolder}\Data.idb\Victoria\Food\GastosECU.dta", replace
 
 
-use "X:\ARM\ECU\ECV\2006\Data\ecv0506.dta" 
+use "${surveysFolder}\ARM\ECU\ECV\2006\Data\ecv0506.dta" 
 
 
 gen yindep=.
@@ -148,7 +148,7 @@ collapse (mean) ingtotal_ch ing_agro_ch nmiembros_ch nmenor6_ch factor_f ciudad 
 
 sort idh_ch
 
-merge  idh_ch using "C:\Data.idb\Victoria\Food\GastosECU.dta"
+merge  idh_ch using "${surveysFolder}\Data.idb\Victoria\Food\GastosECU.dta"
 
 tab _merge
 

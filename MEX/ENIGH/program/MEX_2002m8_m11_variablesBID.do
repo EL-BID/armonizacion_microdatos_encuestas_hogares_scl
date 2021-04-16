@@ -5,14 +5,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH
@@ -65,7 +65,7 @@ Agosto 1, 2006 (Victoria)
 La variable de anios de educacion fue modificada de modo de ser comparbale y coherente entre los distintos anios.
 El codigo anterior se puede ver en la seccion de educacion con * adelante del comando
 El criterio utilizado para asignar a cada nivel un determinado numero de anios de estudio se puede ver en el
-siguiente documento: X:\Sociometro_2005\documentation\Years of education in Mexico. 
+siguiente documento: ${surveysFolder}\Sociometro_2005\documentation\Years of education in Mexico. 
 Tambien se cambiaron las varianles edupi, edupc, edusi, edusc y etc de modo de ser coherente con los siguientes
 anios: Primaria 6, Secundaria 6 (12 acumulado) y Terciaria 5 (17 acumulado).  
 

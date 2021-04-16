@@ -18,9 +18,9 @@ Output:
 version 15.1
 drop _all
 
-global input "\\Sdssrv03\surveys\survey\BRA\PNADC\2018\t1\data_orig"
-global output "\\Sdssrv03\surveys\survey\BRA\PNADC\2018\t1\data_merge" 
-global final  "\\Sdssrv03\surveys\harmonized\BRA\PNADC\data_arm" 
+global input "${surveysFolder}\survey\BRA\PNADC\2018\t1\data_orig"
+global output "${surveysFolder}\survey\BRA\PNADC\2018\t1\data_merge" 
+global final  "${surveysFolder}\harmonized\BRA\PNADC\data_arm" 
 /*==================================================
               1: Convierto txt. a .Dta 
 ==================================================*/

@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -30,14 +30,14 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m9
 Autores: Revised March, 2008 (by tede) 
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 9 de Septiembre de 2013
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 9 de Septiembre de 2013
 
- Modificación 4 de Octubre de 2013: Mayra Sáenz
+ ModificaciÃ³n 4 de Octubre de 2013: Mayra SÃ¡enz
 Email: mayras@iadb.org, saenzmayra.a@gmail.com
 
 
@@ -76,20 +76,20 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  depto
-label define region_c 1 "Atlántida" 2 "Colón" 3 "Comayagua" ///
-4 "Copán" 5 "Cortés" 6 "Choluteca" 7 "El Paraíso" 8 "Francisco de Morazán" ///
-10 "Intibuca" 12 "La Paz" 13 "Lempira" 14 "Ocotepeque" 15 "Olancho" 16 "Santa Bárbara" ///
+label define region_c 1 "AtlÃ¡ntida" 2 "ColÃ³n" 3 "Comayagua" ///
+4 "CopÃ¡n" 5 "CortÃ©s" 6 "Choluteca" 7 "El ParaÃ­so" 8 "Francisco de MorazÃ¡n" ///
+10 "Intibuca" 12 "La Paz" 13 "Lempira" 14 "Ocotepeque" 15 "Olancho" 16 "Santa BÃ¡rbara" ///
 17 "Valle" 18 "Yoro"
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 
 ***************
@@ -124,7 +124,7 @@ label value zona_c zona_c
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -385,23 +385,23 @@ label value clasehog_ch clasehog_ch
  
 egen nmayor21_ch=sum((parentco>0 & parentco<=6) & (edad>=21)), by (idh)
 
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((parentco>0 & parentco<=6) & (edad<21)), by (idh)
 
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 egen nmayor65_ch=sum((parentco>0 & parentco<=6) & (edad>=65)), by (idh)
 
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((parentco>0 & parentco<=6) & (edad<6)), by (idh)
 
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 egen nmenor1_ch=sum((parentco>0 & parentco<=6) & (edad<1)),  by (idh)
 
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
 
@@ -411,13 +411,13 @@ replace  asiste_ci=1 if asiste==1
 
 replace  asiste_ci=0 if asiste==6
 
-label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
+label var asiste_ci "Personas que actualmente asisten a centros de enseÃ±anza"
 
 drop asiste
 
 gen pqnoasis_ci=.
 
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 
 gen repiteult_ci=.
@@ -426,9 +426,9 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 gen repite_ci=.
 
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
- * Años de educacion aprobados **
+ * AÃ±os de educacion aprobados **
 replace  grado=. if grado==9
 
 gen aedu_ci=.
@@ -443,7 +443,7 @@ replace  aedu_ci=grado+6 if (nivel==5 | nivel==6) & grado>=0
 replace  aedu_ci=grado+12 if (nivel==7 | nivel==8) & grado>=0
 
 *replace aedu_ci=grado+16 if nivel==9
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 gen eduno_ci=.
 
@@ -564,7 +564,7 @@ replace  eduac=1 if nivel==8
 label var eduac_ci "Educacion universitaria vs educacion terciaria"
 
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 
 /*gen emp_ci=.
@@ -582,7 +582,7 @@ label var emp_ci "Empleado en la semana de referencia"*/
 
 recode condact (1=1) (2 3=2) (4/9=3), gen(condocup_ci)
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -833,7 +833,7 @@ gen rama_ci=ramaocr
 replace  rama_ci=. if ramaocr<1 | emp_ci==0
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -1124,7 +1124,7 @@ gen ylmsec_ci=.
 
 
 
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

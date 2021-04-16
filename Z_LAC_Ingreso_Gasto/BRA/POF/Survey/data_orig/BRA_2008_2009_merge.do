@@ -1,4 +1,4 @@
-cd "Y:\SALUD\bases\Encuestas\BRA\POF\2008_2009\data_orig\"
+cd "${surveysFolder}\SALUD\bases\Encuestas\BRA\POF\2008_2009\data_orig\"
 
 use "T_MORADOR_S.dta", clear
 sort cod_uf num_seq cod_domc num_informante

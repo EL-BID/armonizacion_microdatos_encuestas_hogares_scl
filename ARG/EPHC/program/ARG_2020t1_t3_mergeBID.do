@@ -4,7 +4,7 @@
 clear all
 set more off
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local log_file = "$ruta\harmonized\ARG\EPHC\log\ARG_2021t1_t3_mergeBID.log"
 
@@ -112,6 +112,6 @@ drop id uno miembros
 * Comprime y guarda base
 
 compress
-saveold "\\Sdssrv03\surveys\survey\ARG\EPHC\2020\t1_t3\data_merge\ARG_2020t1_t3.dta"
+saveold "${surveysFolder}\survey\ARG\EPHC\2020\t1_t3\data_merge\ARG_2020t1_t3.dta"
 
 log close

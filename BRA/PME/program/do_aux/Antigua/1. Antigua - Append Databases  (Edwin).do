@@ -12,7 +12,7 @@ set more off
 
 ** Declare Global Directory **
 
-local propiodir = "C:\Users\wb377246\Documents\Julian\LM_W"
+local propiodir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W"
 
 cd "`propiodir'\BRA\Data\pme\"
 

@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: El Salvador
+PaÃ­s: El Salvador
 Encuesta: EHPM
 Round: a
 Autores: 2006- Analia
 2013 - incoporacion de Variables LMK por Yessenia Loaysa
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: 23 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 23 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -72,17 +72,17 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -342,7 +342,7 @@ label variable miembros_ci "Miembro del hogar"
 *************
 
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
@@ -383,7 +383,7 @@ recode condocup_ci .=4 if edad_ci<10
 
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"*/
 
-* NOTA MGD 10/07/2014: condocup se crea como missing para esto años dado que la variable CONDACT
+* NOTA MGD 10/07/2014: condocup se crea como missing para esto aÃ±os dado que la variable CONDACT
 * esta con errores ( dentro de menores CONDACT==0 de edad estan individuos de todas las edades)
 * Al tratar de generar con las variable originales tampoco coincide con la tendencia.
 
@@ -521,7 +521,7 @@ replace categopri_ci=2 if categ==2 | categ==3 |categ==4
 replace categopri_ci=3 if categ==6 | categ==7 |categ==8 | categ==9 
 replace categopri_ci=0 if categ==10
 replace categopri_ci=4 if categ==5
-replace categopri_ci=. if emp_ci==0 /*Hay un desempleado que contesto en la categoría de empleo*/
+replace categopri_ci=. if emp_ci==0 /*Hay un desempleado que contesto en la categorÃ­a de empleo*/
 
 label define categopri_ci 0"Otros" 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
@@ -529,15 +529,15 @@ label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
 
-/*Dentro de la categoría empleado se incluyen a los cooperativistas, esta definición es más amplia de 
+/*Dentro de la categorÃ­a empleado se incluyen a los cooperativistas, esta definiciÃ³n es mÃ¡s amplia de 
 lo usual, principalmemte porque se incluye a los cooperativistas,pero la encuesta considera 
 a todos estos como trabajadores dependientes. 
-En el manual del encuestador: "En el caso de una persona que está asociada 
-a la cooperativa y además trabaja como patrono o cuenta propia en tierras que son propiedad 
-de la empresa cooperativa, se le anotará código 01 a 03, según el caso. Cuando la persona 
+En el manual del encuestador: "En el caso de una persona que estÃ¡ asociada 
+a la cooperativa y ademÃ¡s trabaja como patrono o cuenta propia en tierras que son propiedad 
+de la empresa cooperativa, se le anotarÃ¡ cÃ³digo 01 a 03, segÃºn el caso. Cuando la persona 
 cumple siempre el primer requisito o sea que es asociada y trabaja como jornalero o empleado 
-en el trabajo colectivo de la cooperativa se le anotará código igual 04."
-Por otra parte el grupo "otros" se incorpora dentro de la categoría empleados ya 
+en el trabajo colectivo de la cooperativa se le anotarÃ¡ cÃ³digo igual 04."
+Por otra parte el grupo "otros" se incorpora dentro de la categorÃ­a empleados ya 
 que la encuesta los considera empleados dependientes y declaran ingresos*/
 /*
 *****************
@@ -607,7 +607,7 @@ gen spublico_ci=.
 replace spublico_ci=1 if sectorp==2
 replace spublico_ci=0 if sectorp==1
 replace spublico_ci=. if categopri_ci==1 | categopri_ci==2 | categopri_ci==4 | categ==9 | categ==4
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 **************
 ***ocupa_ci***
@@ -731,8 +731,8 @@ gen antiguedad_ci=.
 *************************************************************************************
 *******************************INGRESOS**********************************************
 *************************************************************************************
-*Modificación Mayra Sáenz - Septiembre 2014
-*Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
+*ConversiÃ³n Colones a dÃ³lares
 /*
 Fuente: http://www.iadb.org/en/research-and-data/latin-american-and-caribbean-macro-watch,8633.html
 1999-Jan	8.76
@@ -812,7 +812,7 @@ replace yprijbi=. if categopri_ci>2
 
 *replace yprijbi=0 if catego<=2 & yprijbi==. & emp_ci==1 
 
-/*Ojo con esto último. Originalmente la encuesta computa una serie de 
+/*Ojo con esto Ãºltimo. Originalmente la encuesta computa una serie de 
 missings que no corresponden a casos de no respuesta, sino
 que es un grupo de trabajadores independientes considerados como productores 
 agropecuarios, para ser consistente con el tratamiento de las encuestas anteriores
@@ -822,7 +822,7 @@ egen ylmpri_ci=rsum(yprijbi yprid)
 replace ylmpri_ci=. if yprijbi==999999 | yprid==999999
 replace ylmpri_ci=. if yprid==. & yprijbi==.
 replace ylmpri_ci=. if emp_ci==0
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ylmpri_ci= ylmpri_ci/8.76
 
 
@@ -888,7 +888,7 @@ egen ylnmpri_ci=rsum(p42405 p42406 p42407 p42408 p42409 p42410 p42411)
 replace ylnmpri_ci=. if p42405==. & p42406==. & p42407==. & p42408==. & p42409==. & p42410==. & p42411==. 
 replace ylnmpri_ci=. if emp_ci==0
 
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ylnmpri_ci= ylnmpri_ci/8.76
 
 * Ingreso laboral no monetario de la actividad principal 1 (SUMAMOS AUTOCONSUMO PARA LOS INDEPENDIENTES)
@@ -928,7 +928,7 @@ replace bonificaciones=r43404a*r43404b/12
 replace bonificaciones=. if r43404a==999999 | r43404b==999
 
 gen ylmsec_ci=ysec1
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ylmsec_ci= ylmsec_ci/8.76
 
 egen ylmsec1_ci=rsum(ysec1 hrsextras vacaciones aguinaldo bonificaciones)
@@ -977,7 +977,7 @@ replace p43411=. if r43411a==999999 | r43411b==999
 egen ylnmsec_ci=rsum(p43405 p43406 p43407 p43408 p43409 p43410 p43411)
 replace ylnmsec_ci=. if p43405==. & p43406==. & p43407==. & p43408==. & p43409==. & p43410==. & p43411==. 
 replace ylnmsec_ci=. if emp_ci==0
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ylnmsec_ci= ylnmsec_ci/8.76
 
 **********************
@@ -1076,7 +1076,7 @@ replace otross=. if r44307==999999
 egen ynlm_ci=rsum(remesasext ayuda cuotalim alqui alqneg alqterr jubil deveh otros utilidades dividendos intereses herencias indemnizacion ayudagob otross)
 replace ynlm_ci=. if remesasext==. & ayuda==. & cuotalim==. & alqui==. & alqneg==. & alqterr==. & jubil==. & deveh==. & otros==. & utilidades==. & dividendos==. & intereses==. & herencias==. & indemnizacion==. & ayudagob==. & otross==. 
 
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ynlm_ci= ynlm_ci/8.76
 
 gen ynlnm_ci=.
@@ -1085,16 +1085,16 @@ gen ynlnm_ci=.
 ****************
 
 gen remesas_ci=remesasext
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace remesas_ci= remesas_ci/8.76
 
 ************************
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1147,13 +1147,13 @@ replace remesash=ayudaef if frecayud==5
 replace remesash=ayudaef*2 if frecayud==6
 replace remesash=. if ayudaef==99999 /*Cero significa No aplicable*/
 replace remesash=. if frecayud==0 /*Cero significa No aplicable*/
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace remesash= remesash/8.76
 
 gen remesasnm=.
 replace remesasnm=ayudaes/12
 replace remesasnm=. if ayudaes==999999
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace remesasnm= remesasnm/8.76
 
 by idh_ch, sort: egen remesasi=sum(remesas_ci) if miembros_ci==1
@@ -1186,7 +1186,7 @@ gen ynlnm_ch=remesasnm
 
 gen autocons_ci=valaut
 replace autocons_ci=. if valaut==999999
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace autocons_ci= autocons_ci/8.76
 
 *******************
@@ -1201,7 +1201,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 
 gen rentaimp_ch=r311
 replace rentaimp_ch=. if r311==99999
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace rentaimp_ch= rentaimp_ch/8.76
 
 
@@ -1230,8 +1230,8 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 
 gen byte aedu_ci=.
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 
 replace aedu_ci=0 if r204==0 & r203==1
@@ -1270,9 +1270,9 @@ replace aedu_ci=14 if r204==5 & r205==2 & r203==1
 replace aedu_ci=15 if r204==5 & r205==3 & r203==1
 
 
-/* Ahora obtenemos los años de educación para aquellos que
+/* Ahora obtenemos los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento educativo, no se tiene en
-cuenta la educación especial*/
+cuenta la educaciÃ³n especial*/
 
 replace aedu_ci=0 if r219a==0 & r217==1
 replace aedu_ci=0 if r219a==1 & r217==1
@@ -1317,7 +1317,7 @@ replace aedu_ci=0 if r203==2 & r217==2
 replace aedu_ci=. if edad<=3
 
 replace aedu_ci=. if aedu_ci>edad & aedu_ci~=. 
-/*Hay 3 casos en donde los años de educación son mayores a la edad por eso lo ajustamos de 
+/*Hay 3 casos en donde los aÃ±os de educaciÃ³n son mayores a la edad por eso lo ajustamos de 
 esta forma*/
 
 **************
@@ -1483,12 +1483,12 @@ replace edupub_ci=1 if centroen==1
 replace edupub_ci=2 if centroen==2 | centroen==3
 
 /* Variable centroen:
-1: Centro de enseñanza oficial: 
-Es aquel cuya administración y funcionamiento depende del gobierno.
-2: Centro de Enseñanza Laico: 
+1: Centro de enseÃ±anza oficial: 
+Es aquel cuya administraciÃ³n y funcionamiento depende del gobierno.
+2: Centro de EnseÃ±anza Laico: 
 Son todos los centros educativos privados no religiosos. 
-3: Centro de Enseñanza religioso: 
-Son todos los centros educativos que pertenecen a una Congregación Religiosa. 
+3: Centro de EnseÃ±anza religioso: 
+Son todos los centros educativos que pertenecen a una CongregaciÃ³n Religiosa. 
 */
 
 
@@ -1593,12 +1593,12 @@ gen viviitit_ch=.
 
 gen vivialq_ch=r308c if r308a==1
 replace vivialq_ch=. if r308c==99999
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace vivialq_ch= vivialq_ch/8.76
 
 gen vivialqimp_ch=r311
 replace vivialqimp_ch=. if r311==99999
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace vivialqimp_ch= vivialqimp_ch/8.76
 
 rename ocup ocuppr
@@ -1623,7 +1623,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -1659,7 +1659,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 gen ypen_ci=r44207a*r44207b/12 if pension_ci==1
-*Modificación Mayra Sáenz - Septiembre 2014 Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014 ConversiÃ³n Colones a dÃ³lares
 replace ypen_ci= ypen_ci/8.76
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -1704,13 +1704,13 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *lp25_ci***
 *********
 gen lp25_ci =34.64886
-label var lp25_ci "Linea de pobreza 2.5 dólares, año base 2005"
+label var lp25_ci "Linea de pobreza 2.5 dÃ³lares, aÃ±o base 2005"
 
 *********
 *lp4_ci***
 *********
 gen lp4_ci =55.43818
-label var lp4_ci "Linea de pobreza 4 dólares, año base 2005"
+label var lp4_ci "Linea de pobreza 4 dÃ³lares, aÃ±o base 2005"
 
 *************
 **salmm_ci***
@@ -1734,7 +1734,7 @@ replace categoinac_ci=1 if r407==11
 replace categoinac_ci=2 if r407==7 | r407==13
 replace categoinac_ci=3 if r407==10
 recode categoinac_ci .=4 if condocup_ci==3
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1756,8 +1756,8 @@ gen desalent_ci=.
 gen categosec_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

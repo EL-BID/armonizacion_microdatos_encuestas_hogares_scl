@@ -12,7 +12,7 @@ los nuevos pesos con la proyeccion de poblacion del año 2010
 *1 - Conversion Bases de datos
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\BRA\PNAD\2009\m9\data_orig\"
+cd "${surveysFolder}\survey\BRA\PNAD\2009\m9\data_orig\"
 infile using "Input PES2009.do", using("PES2009.txt")
 sort uf v0102 v0103
 saveold "pes2009.dta", replace
@@ -31,5 +31,5 @@ tab _merge
 keep if v0201==1 & v0104==1 /*Hogares permanentes y encuestas realizadas*/
 tab _merge
 drop _merge
-saveold "\\Sdssrv03\surveys\survey\BRA\PNAD\2009\m9\data_merge\BRA_2009m9.dta", replace
+saveold "${surveysFolder}\survey\BRA\PNAD\2009\m9\data_merge\BRA_2009m9.dta", replace
 

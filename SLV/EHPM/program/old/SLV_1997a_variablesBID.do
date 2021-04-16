@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: El Salvador
+PaÃ­s: El Salvador
 Encuesta: EHPM
 Round: a
 Autores: 2006- Analia
 2013 - incoporacion de Variables LMK por Yessenia Loayza (desloay@hotmail.com)
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: 23 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 23 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -67,17 +67,17 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -321,7 +321,7 @@ label variable miembros_ci "Miembro del hogar"
 *************
 
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
@@ -355,7 +355,7 @@ label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"*/
 
-* NOTA MGD 10/07/2014: condocup se crea como missing para esto años dado que la variable CONDACT
+* NOTA MGD 10/07/2014: condocup se crea como missing para esto aÃ±os dado que la variable CONDACT
 * esta con errores ( dentro de menores CONDACT==0 de edad estan individuos de todas las edades)
 * Al tratar de generar con las variable originales tampoco coincide con la tendencia.
 
@@ -524,7 +524,7 @@ gen spublico_ci=.
 replace spublico_ci=1 if sectorp==2
 replace spublico_ci=0 if sectorp==1
 replace spublico_ci=. if categopri_ci==1 | categopri_ci==2 | categopri_ci==4 | categ==8 | categ==4
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -642,8 +642,8 @@ gen antiguedad_ci=.
 *************************************************************************************
 
 
-*Modificación Mayra Sáenz - Septiembre 2014
-*Conversión Colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
+*ConversiÃ³n Colones a dÃ³lares
 /*
 Fuente: http://www.iadb.org/en/research-and-data/latin-american-and-caribbean-macro-watch,8633.html
 
@@ -784,7 +784,7 @@ replace ylmpri_ci=. if ingresos==999999
 replace ylmpri_ci=. if emp==0
 
 
-*Modificación Mayra Sáenz Septiembre 2014 y se realiza la conversión de colones a dólares
+*ModificaciÃ³n Mayra SÃ¡enz Septiembre 2014 y se realiza la conversiÃ³n de colones a dÃ³lares
 egen ylmpriaux = rsum(comisiones dietass viaticoss bonif aguinals bonificaciones ylmpri_ci), missing
 replace ylmpri_ci= ylmpriaux
 replace ylmpri_ci=. if ingresos==999999
@@ -792,13 +792,13 @@ replace ylmpri_ci=. if emp==0
 replace ylmpri_ci= ylmpri_ci/8.76
  
 *replace ylmpri_ci=0 if catego<=2 & ylmpri_ci==. & emp==1 
-/*Ojo con esto último. Originalmente la encuesta conputa una serie de 
+/*Ojo con esto Ãºltimo. Originalmente la encuesta conputa una serie de 
 missings que no corresponden a casos de no respuesta, sino
 que es un grupo de trabajadores independientes considerados como productores 
 agropecuarios, para ser consistente con el tratamiento de las encuestas anteriores
 se le asigna ingreso cero a estas personas*/
 
-gen ylmpri1_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ylmpri1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 ********************************
 ***nrylmpri_ci & nrylmpri1_ci***
@@ -806,22 +806,22 @@ gen ylmpri1_ci=. /*NA, esta variable aparece recién en 1998*/
 
 gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 
-gen nrylmpri1_ci=. /*NA, esta variable aparece recién en 1998*/
+gen nrylmpri1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 *******************************
 *** ylnmpri_ci & ylnmpri1_ci***
 *******************************
 
-*gen ylnmpri_ci=. /*NA, esta variable aparece recién en 1998*/
-*Modificación Mayra Sáenz - Septiembre 2014
+*gen ylnmpri_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 egen ylnmpri_ci=rsum(especiess combuss), missing
 replace ylnmpri_ci=. if especiess==. & combuss==. 
 replace ylnmpri_ci=. if emp_ci==0
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ylnmpri_ci= ylnmpri_ci/8.76 
 
 
-gen ylnmpri1_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ylnmpri1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 ***************
@@ -831,7 +831,7 @@ gen ylnmpri1_ci=. /*NA, esta variable aparece recién en 1998*/
 gen ylmsec_ci=ysec 
 replace ylmsec_ci=. if emp==0 | otrotrab==2
 replace ylmsec_ci=. if ysec==999999
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ylmsec_ci= ylmsec_ci/8.76 
 
 
@@ -841,7 +841,7 @@ gen ylmsec1_ci=.
 ***ylnmsec_ci***
 ****************
 
-gen ylnmsec_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ylnmsec_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 
@@ -869,28 +869,28 @@ replace remesas`i'=cantid`i'a/12 if frecun`i'a==12
 
 /*egen remesas_ch=rsum(remesas1 remesas2 remesas3 remesas4 remesas4 remesas5) 
 replace remesas_ch=. if remesas1==. & remesas2==. & remesas3==. & remesas4==. & remesas5==. 
-gen remesas_ci=. /*NA, esta variable aparece recién en 1998*/
+gen remesas_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 */
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 
 egen remesaux=rsum(remesas1 remesas2 remesas3 remesas4 remesas4 remesas5), missing
 replace remesaux=. if remesas1==. & remesas2==. & remesas3==. & remesas4==. & remesas5==.
 
 gen remesas_ci=. 
 replace remesas_ci = remesaux
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace remesas_ci= remesas_ci/8.76 
 
 
 **************************
 ***ynlm0_ci & ynlnm0_ci***
 **************************
-/*Modificación Mayra Sáenz - Septiembre 2014
-*Aparentemente en el cuestionario estas variables son para desempleados, pero también responden los empleados
-*Incluyo los ingresos en actividad principal con filtro de emp_ci ==1 y en otros ingresos si está]
-*desempleado, como está en el manual metodológico.
+/*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
+*Aparentemente en el cuestionario estas variables son para desempleados, pero tambiÃ©n responden los empleados
+*Incluyo los ingresos en actividad principal con filtro de emp_ci ==1 y en otros ingresos si estÃ¡]
+*desempleado, como estÃ¡ en el manual metodolÃ³gico.
 
-/*Estas dos variables de ingreso no laboral, aparecen sólo en este año.
+/*Estas dos variables de ingreso no laboral, aparecen sÃ³lo en este aÃ±o.
 A partir de 1998, el cuestionario cambia y la variable de ingreso no laboral 
 disponible va a ser ynlm_ci*/
 
@@ -1004,13 +1004,13 @@ egen ynlnm0_ci=rsum(especiess combuss)
 replace ynlnm0_ci=. if especiess==. & combuss==. 
 replace ynlnm0_ci=. if emp_ci==0
 
-gen ynlm_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ynlm_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 */
 
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 egen ynlm_ci=rsum(ayuda cuotalim alquileres alqneg jubilacion deveh otross dividendos acteventual arrendamiento depauto vtainm remesaux), missing
 replace ynlm_ci=. if emp_ci==0
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ynlm_ci= ynlm_ci/8.76 
 
 gen ynlnm_ci=.
@@ -1018,33 +1018,33 @@ gen ynlnm_ci=.
 * Para capturar el ingreso de los desocupados 
 egen ylmotros_ci = rsum(comisiones dietass viaticoss bonif aguinals bonificaciones), missing
 replace ylmotros_ci =. if emp_ci ==1
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ylmotros_ci= ylmotros_ci/8.76 
 
 egen ylnmotros_ci=rsum(especiess combuss), missing
 replace ylnmotros_ci=. if emp_ci==1
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ylnmotros_ci= ylnmotros_ci/8.76 
 
 
 **********************
 ***ylm_ci & ylm1_ci***
 **********************
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 *Incluyo los ingresos de otros trabajos.
 egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci), missing
 
-*gen ylm1_ci=. /*NA, esta variable aparece recién en 1998*/
+*gen ylm1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 ************************
 ***ylnm_ci & ylnm1_ci***
 ************************
-*gen ylnm_ci=. /*NA, esta variable aparece recién en 1998*/
+*gen ylnm_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 egen ylnm_ci= rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci), missing
 
-*gen ylnm1_ci=. /*NA, esta variable aparece recién en 1998*/
+*gen ylnm1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 
@@ -1052,9 +1052,9 @@ egen ylnm_ci= rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci), missing
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 **********************************
 *** nrylmpri_ch & nrylmpri1_ch ***
@@ -1065,7 +1065,7 @@ by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
 
-gen nrylmpri1_ch=. /*NA, esta variable aparece recién en 1998*/
+gen nrylmpri1_ch=. /*NA, esta variable aparece reciÃ©n en 1998*/
  
 
 ************************
@@ -1073,11 +1073,11 @@ gen nrylmpri1_ch=. /*NA, esta variable aparece recién en 1998*/
 ************************
 
 *by idh_ch, sort: egen ylm_ch=sum(ylm_ci) if miembros_ci==1
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 by idh_ch, sort: egen ylm_ch=sum(ylm_ci) if miembros_ci==1, missing
 label var ylm_ch "Ingreso laboral monetario del Hogar"
 
-gen ylm1_ch=. /*NA, esta variable aparece recién en 1998*/
+gen ylm1_ch=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 ****************************
 *** ylmnr_ch & ylmnr1_ch ***
@@ -1086,20 +1086,20 @@ gen ylm1_ch=. /*NA, esta variable aparece recién en 1998*/
 by idh_ch, sort: egen ylmnr_ch=sum(ylm_ci) if miembros_ci==1
 replace ylmnr_ch=. if nrylmpri_ch==1
 
-gen ylmnr1_ch=. /*NA, esta variable aparece recién en 1998*/
+gen ylmnr1_ch=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 **************************
 *** ylnm_ch & ylnm1_ch ***
 **************************
 
-*gen ylnm_ch=. /*NA, esta variable aparece recién en 1998*/
-*Modificación Mayra Sáenz - Septiembre 2014
+*gen ylnm_ch=. /*NA, esta variable aparece reciÃ©n en 1998*/
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1, missing
 label var ylnm_ch  "Ingreso laboral no monetario del Hogar"
 
 
-*gen ylnm1_ch=. /*NA, esta variable aparece recién en 1998*/
+*gen ylnm1_ch=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 ******************
 *** remesas_ch ***
@@ -1120,7 +1120,7 @@ replace ynlm0_ch=. if ynlm==. & remesas_ch==.
 drop ynlm
 */
 *gen ynlm_ch=.
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 by idh_ch, sort: egen ynlm_ch=sum(ynlm_ci) if miembros_ci==1, missing
 label var ynlm_ch "Ingreso no laboral monetario del Hogar"
 
@@ -1131,20 +1131,20 @@ label var ynlm_ch "Ingreso no laboral monetario del Hogar"
 *by idh_ch, sort: egen ynlnm0_ch=sum(ynlnm0_ci) if miembros_ci==1
 
 *gen ynlnm_ch=.
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 by idh_ch, sort: egen ynlnm_ch=sum(ynlnm_ci) if miembros_ci==1
 
 *******************
 *** autocons_ci ***
 *******************
 
-gen autocons_ci=. /*NA, esta variable aparece recién en 1999*/
+gen autocons_ci=. /*NA, esta variable aparece reciÃ©n en 1999*/
 
 *******************
 *** autocons_ch ***
 *******************
 
-gen autocons_ch=. /*NA, esta variable aparece recién en 1999*/
+gen autocons_ch=. /*NA, esta variable aparece reciÃ©n en 1999*/
 
 *******************
 *** rentaimp_ch ***
@@ -1152,7 +1152,7 @@ gen autocons_ch=. /*NA, esta variable aparece recién en 1999*/
 
 gen rentaimp_ch=alquiler
 replace rentaimp_ch=. if alquiler==99999
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace rentaimp_ch= rentaimp_ch/8.76 
 
 
@@ -1162,7 +1162,7 @@ replace rentaimp_ch= rentaimp_ch/8.76
 
 gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
 
-gen ylmhopri1_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ylmhopri1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 **************************
 ***ylmho_ci & ylm1ho_ci***
@@ -1170,24 +1170,24 @@ gen ylmhopri1_ci=. /*NA, esta variable aparece recién en 1998*/
 
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
-gen ylmho1_ci=. /*NA, esta variable aparece recién en 1998*/
+gen ylmho1_ci=. /*NA, esta variable aparece reciÃ©n en 1998*/
 
 
 **************************
 ***EDUCATION INDICATORS***
 **************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 gen byte aedu_ci=.
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 
 replace aedu_ci=0 if nivedu==0 & estudia==1
@@ -1217,9 +1217,9 @@ replace aedu_ci=20 if  nivedu==68
 replace aedu_ci=21 if  nivedu==69
 replace aedu_ci=22 if  nivedu==70
 
-/* Ahora obtenemos los años de educación para aquellos que
+/* Ahora obtenemos los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento educativo, no se tiene en
-cuenta la educación especial*/
+cuenta la educaciÃ³n especial*/
 
 replace aedu_ci=0 if ultgrado==0 & (hasist==1 | hasist==2)
 replace aedu_ci=0 if ultgrado==12 | ultgrado==13
@@ -1415,12 +1415,12 @@ replace edupub_ci=1 if centroen==1
 replace edupub_ci=2 if centroen==2 | centroen==3
 
 /* Variable centroen:
-1: Centro de enseñanza oficial: 
-Es aquel cuya administración y funcionamiento depende del gobierno.
-2: Centro de Enseñanza Laico: 
+1: Centro de enseÃ±anza oficial: 
+Es aquel cuya administraciÃ³n y funcionamiento depende del gobierno.
+2: Centro de EnseÃ±anza Laico: 
 Son todos los centros educativos privados no religiosos. 
-3: Centro de Enseñanza religioso: 
-Son todos los centros educativos que pertenecen a una Congregación Religiosa. 
+3: Centro de EnseÃ±anza religioso: 
+Son todos los centros educativos que pertenecen a una CongregaciÃ³n Religiosa. 
 */
 
 
@@ -1519,13 +1519,13 @@ gen viviitit_ch=.
 gen vivialq_ch=cuomes if tenencia==3
 replace vivialq_ch=. if cuomes==99999
 
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace vivialq_ch= vivialq_ch/8.76 
 
 
 gen vivialqimp_ch=alquiler
 replace vivialqimp_ch=. if alquiler==99999
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace vivialqimp_ch= vivialqimp_ch/8.76 
 
 rename ocup ocuppr
@@ -1554,7 +1554,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -1585,7 +1585,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *************
 
 gen ypen_ci=jubila*jubil/12 if pension_ci==1
-*Conversión colones a dólares
+*ConversiÃ³n colones a dÃ³lares
 replace ypen_ci= ypen_ci/8.76
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -1630,13 +1630,13 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *lp25_ci***
 *********
 gen lp25_ci = 33.6152
-label var lp25_ci "Linea de pobreza 2.5 dólares, año base 2005"
+label var lp25_ci "Linea de pobreza 2.5 dÃ³lares, aÃ±o base 2005"
 
 *********
 *lp4_ci***
 *********
 gen lp4_ci =53.78432
-label var lp4_ci "Linea de pobreza 4 dólares, año base 2005"
+label var lp4_ci "Linea de pobreza 4 dÃ³lares, aÃ±o base 2005"
 
 *************
 **salmm_ci***
@@ -1661,7 +1661,7 @@ replace categoinac_ci=1 if r407==11
 replace categoinac_ci=2 if r407==7 | r407==13
 replace categoinac_ci=3 if r407==10
 recode categoinac_ci .=4 if condocup_ci==3
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1681,8 +1681,8 @@ gen desalent_ci=.
 gen categosec_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

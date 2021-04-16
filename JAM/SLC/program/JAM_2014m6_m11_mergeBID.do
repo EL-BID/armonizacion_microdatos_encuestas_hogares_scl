@@ -3,10 +3,10 @@
 			*JSLC 2014*
 			***********
 
-*Se consolida una base para construir los indicadores de sociÛmetro. No obstante, se cuenta con m·s mÛdulos 
+*Se consolida una base para construir los indicadores de soci√≥metro. No obstante, se cuenta con m√°s m√≥dulos 
 *que el investigador puede unir a este consolidado. 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC

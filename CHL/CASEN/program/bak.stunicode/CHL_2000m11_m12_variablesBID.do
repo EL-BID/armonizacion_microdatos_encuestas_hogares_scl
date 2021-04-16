@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -31,15 +31,15 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre - Diciembre
 Autores: 
-Versión 2007: Victoria
-Versión 2012: Yanira Oviedo (YO), Yessenia Loaysa (YL)
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Marzo de 2013
+VersiÃ³n 2007: Victoria
+VersiÃ³n 2012: Yanira Oviedo (YO), Yessenia Loaysa (YL)
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Marzo de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -264,27 +264,27 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*
-ETNIA ¿En Chile, la ley reconoce ocho pueblos originarios o indígenas, ¿pertenece usted a alguno
+ETNIA Â¿En Chile, la ley reconoce ocho pueblos originarios o indÃ­genas, Â¿pertenece usted a alguno
 de ellos? (Preg. 7)
 etnia:
            0 no pertenece a ninguno 
-           1 si, aymará
+           1 si, aymarÃ¡
            2 si, rapa-nui
            3 si, quechua
            4 si, mapuche
-           5 si, atacameño
+           5 si, atacameÃ±o
            6 si, coya
            7 si, kawaskar
-           8 si, yagán 
+           8 si, yagÃ¡n 
 */
 
 gen raza_ci=.
 replace raza_ci= 1 if  (etnia >=1 & etnia <=8 )
 replace raza_ci= 3 if (etnia==0)& raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -293,7 +293,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -318,7 +318,7 @@ replace condocup_ci=1 if (o1==1 | o2==1)
 replace condocup_ci=2 if ((o1==2 | o2==2) & (o3==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -423,7 +423,7 @@ drop aux1 aux2
 */
 
 /*********
-ylmpri2_ci: Este además, incluye bonificaciones y ganancias anuales
+ylmpri2_ci: Este ademÃ¡s, incluye bonificaciones y ganancias anuales
 *********/
 /*
 gen aux1=o28/12 
@@ -563,7 +563,7 @@ gen remesas_ch=.
 
 gen durades_ci=o4/4.3
 replace durades_ci=. if o4==999 /*| activ!=2*/
-label var durades_ci "Duración del desempleo"
+label var durades_ci "DuraciÃ³n del desempleo"
 
 g year=anio_c
 g mes=12
@@ -577,7 +577,7 @@ g tiempotrab=date2-date1
 g antiguedad_ci=tiempotrab/365
 /*gen antiguedad_ci=(2000-o16a)+((11-o16m)/12)+1 if o16m<=11
 replace antiguedad_ci=(2000-o16a)+1 if o16m==12 | o16m==99/*Hay una cita en una de las bananas originales en donde dicen que 
-las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese año se 
+las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese aÃ±o se 
 sumaba a aedu). Por lo tanto, podemos suponer que las entrevistas se realizaron en noviembre a los efectos de calcular le 
 tenure.*/
 replace antiguedad_ci=. if o16a==9999 | o16m==99*/
@@ -630,7 +630,7 @@ drop tamfirma_ci
 * Mod MLO incorporacion 2015/10
 gen spublico_ci=(o10==3 | o10==4 | o10==9)
 replace spublico_ci=. if emp_ci!=1
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 /*******************
 VARIABLES EDUCATIVAS
@@ -680,7 +680,7 @@ gen edusc_ci=edus2c_ci
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing
 gen pqnoasis_ci= e5
 
 **************
@@ -697,7 +697,7 @@ replace pqnoasis1_ci = 7 if e5 ==1 | e5 ==12
 replace pqnoasis1_ci = 8 if e5 ==2  | e5 ==3  | e5 ==4
 replace pqnoasis1_ci = 9 if e5 ==5 | e5 ==13 | e5 ==14 | e5 ==17 | e5 ==18 | e5 ==19 | e5 ==20
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **************
@@ -846,7 +846,7 @@ gen edupub_ci=.
  tab pco1 nucleo if nucleo==0
  tab pco2 if pco1==12
 
- rename expr factor /* Expansión Regional */
+ rename expr factor /* ExpansiÃ³n Regional */
  rename z area
  rename e1 alfabet
  rename e3 asiste
@@ -957,7 +957,7 @@ gen edupub_ci=.
  replace NERS=1 if (edad>=12 & edad<=17) & (asiste==1) & ((nivel==3 & (ultgrado>=6 & ultgrado<=8)) | ((nivel==6 | nivel==8) & (ultgrado>=1 & ultgrado<=3)))
 
 ** Upper secondary
-* Tasa de Neta de Matrícula en la Enseñanza Media
+* Tasa de Neta de MatrÃ­cula en la EnseÃ±anza Media
 
  gen     NERS2=0 if (edad>=14 & edad<=17) & (asiste==1 | asiste==2)
  replace NERS2=1 if (edad>=14 & edad<=17) & (asiste==1) & ((nivel==3 & ultgrado==8) | ((nivel==6 | nivel==8) & (ultgrado>=1 & ultgrado<=3)))
@@ -1200,7 +1200,7 @@ gen edupub_ci=.
 ** Internet access 
 * Household head
 
-* Conexión a internet  
+* ConexiÃ³n a internet  
 
  gen     inte=1 if p7==1 & pco1==1
  replace inte=0 if inte==. & p7!=9 & pco1==1
@@ -1307,7 +1307,7 @@ replace DISCONN=1 if (edad>=15 & edad<=24) & (o7>=8 & o7<=10)
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -1478,7 +1478,7 @@ replace categoinac_ci=3 if o7==1
 replace categoinac_ci=4 if o7==2 | o7==3 | o7==6 | o7==7 | o7==8 | o7==9 | o7==10
 
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1503,15 +1503,15 @@ drop comp
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

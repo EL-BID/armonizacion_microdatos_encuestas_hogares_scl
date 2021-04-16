@@ -11,7 +11,7 @@
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\txt\"
 
 
 *** VIVIENDA ***
@@ -46,7 +46,7 @@ gen MES = 7
 gen CABECERA=0
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\vivienda7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\vivienda7.dta", replace
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
 clear
@@ -62,7 +62,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\educacion7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\educacion7.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -78,7 +78,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\ftrab7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\ftrab7.dta", replace
 
 
 *** OCUPADOS ***
@@ -121,7 +121,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\ocupados7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\ocupados7.dta", replace
 
 
 
@@ -141,7 +141,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\desocupados7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\desocupados7.dta", replace
 
 
 *** INACTIVOS ***
@@ -155,7 +155,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\inactivos7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\inactivos7.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -171,7 +171,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\otrasactividades7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\otrasactividades7.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -186,7 +186,7 @@ gen ANO = 2007
 gen MES = 7
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\otrosingresos7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RESTO\Stata\otrosingresos7.dta", replace
 
 
 
@@ -197,7 +197,7 @@ save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\RES
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\txt\"
 
 
 *** VIVIENDA ***
@@ -231,7 +231,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\vivienda8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\vivienda8.dta", replace
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
 clear
@@ -247,7 +247,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\educacion8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\educacion8.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -263,7 +263,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\ftrab8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\ftrab8.dta", replace
 
 
 *** OCUPADOS ***
@@ -306,7 +306,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\ocupados8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\ocupados8.dta", replace
 
 
 
@@ -326,7 +326,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\desocupados8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\desocupados8.dta", replace
 
 
 *** INACTIVOS ***
@@ -340,7 +340,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\inactivos8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\inactivos8.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -356,7 +356,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\otrasactividades8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\otrasactividades8.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -371,7 +371,7 @@ gen ANO = 2007
 gen MES = 8
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\otrosingresos8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RESTO\Stata\otrosingresos8.dta", replace
 
 
 *********************************
@@ -380,7 +380,7 @@ save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\RES
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\txt\"
 
 
 *** VIVIENDA ***
@@ -414,7 +414,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\vivienda9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\vivienda9.dta", replace
 
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
@@ -431,7 +431,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\educacion9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\educacion9.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -447,7 +447,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\ftrab9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\ftrab9.dta", replace
 
 
 *** OCUPADOS ***
@@ -490,7 +490,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\ocupados9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\ocupados9.dta", replace
 
 
 
@@ -510,7 +510,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\desocupados9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\desocupados9.dta", replace
 
 
 *** INACTIVOS ***
@@ -524,7 +524,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\inactivos9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\inactivos9.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -540,7 +540,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\otrasactividades9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\otrasactividades9.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -555,7 +555,7 @@ gen ANO = 2007
 gen MES = 9
 gen CABECERA=0
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\otrosingresos9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\RESTO\Stata\otrosingresos9.dta", replace
 
 
 	

@@ -1,19 +1,19 @@
 
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CRI
 local ENCUESTA EHPM
@@ -33,12 +33,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Costa Rica
+Pa√≠s: Costa Rica
 Encuesta: EHPM
 Round: m7
 Autores: 
-⁄ltima versiÛn: Mayra S·enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha ˙ltima modificaciÛn: 1 de octubre de 2013
+√öltima versi√≥n: Mayra S√°enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha √∫ltima modificaci√≥n: 1 de octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -56,7 +56,7 @@ use `base_in', clear
 gen region_BID_c=.
 replace region_BID_c=1 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -64,21 +64,21 @@ label value region_BID_c region_BID_c
 ************
 * Region_c *
 ************
-*InclusiÛn Mayra S·enz - Abril 2014
+*Inclusi√≥n Mayra S√°enz - Abril 2014
 gen region_c=provinci
 
 label define region_c  ///
-1	"San JosÈ" ///
+1	"San Jos√©" ///
 2	"Alajuela" ///
 3	"Cartago" ///
 4	"Heredia" ///
 5	"Guanacaste" ///
 6	"Puntarenas" ///
-7	"LimÛn" 
+7	"Lim√≥n" 
       
            
 label value region_c region_c
-label var region_c "DivisiÛn polÌtica, provincias"
+label var region_c "Divisi√≥n pol√≠tica, provincias"
 
 *2000*
 
@@ -192,14 +192,14 @@ label variable edad_ci "Edad del individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
-*En este aÒo  no se dispone de esta variable.
+*En este a√±o  no se dispone de esta variable.
 gen raza_ci=.
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label var raza_ci "Raza o etnia del individuo"  
 
@@ -338,7 +338,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DEL MERCADO LABORAL***
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -407,7 +407,7 @@ replace condocup_ci=1 if condiact==1
 replace condocup_ci=2 if condiact>=2 & condiact<=7
 recode condocup_ci .=3 if condiact>=8 & condiact<=14 & edad_ci>=12
 recode condocup_ci .=4 if  condiact==0 | edad_ci<12
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 12" 
 label value condocup_ci condocup_ci
 
@@ -492,21 +492,21 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscÛ empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que busc√≥ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "PoblaciÛn EconÛmicamente Activa"
+label var pea_ci "Poblaci√≥n Econ√≥micamente Activa"
 
 *****************
 ***desalent_ci***
 *****************
 
 gen desalent_ci=.
-/*Esta variable no est· en el archivo (no fue suministrada por el paÌs)*/
+/*Esta variable no est√° en el archivo (no fue suministrada por el pa√≠s)*/
 
 *****************
 ***horaspri_ci***
@@ -532,14 +532,14 @@ replace horastot_ci=. if emp_ci==0
 ***subemp_ci***
 ***************
 gen subemp_ci=.
-/*Esta variable no est· en el archivo (no fue suministrada por el paÌs)*/
+/*Esta variable no est√° en el archivo (no fue suministrada por el pa√≠s)*/
 
 *******************
 ***tiempoparc_ci***
 *******************
 
 gen tiempoparc_ci=.
-/*Esta variable no est· en el archivo (no fue suministrada por el paÌs)*/
+/*Esta variable no est√° en el archivo (no fue suministrada por el pa√≠s)*/
 
 
 ******************
@@ -586,7 +586,7 @@ label define tipocontrato_ci 1 "Permanente/indefinido" 2 "Temporal" 3 "Sin contr
 label value tipocontrato_ci tipocontrato_ci
 */
 *MGD 06/13/2014
-* Alternativa con p25. øEl trabajo que realizÛ la semana pasada en su ocupaciÛn principal...(todo el anio, ocasional/estacional, otro)
+* Alternativa con p25. ¬øEl trabajo que realiz√≥ la semana pasada en su ocupaci√≥n principal...(todo el anio, ocasional/estacional, otro)
 gen tipocontrato_ci=.
 replace tipocontrato_ci=1 if estabili==1 & categopri_ci==3
 replace tipocontrato_ci=2 if (estabili==2 | estabili==3 | estabili==4 | estabili==9) & categopri_ci==3
@@ -626,7 +626,7 @@ replace spublico_ci=. if emp_ci==0 | secintpr==9
 **************
 ***ocupa_ci***
 **************
-* Utiliza la COCR (clasificaciÛn propia)
+* Utiliza la COCR (clasificaci√≥n propia)
 gen ocupa_ci=.
 replace ocupa_ci=1 if ocupp>=0 & ocupp<=95 & emp_ci==1
 replace ocupa_ci=2 if ocupp>=102 & ocupp<=128 & emp_ci==1
@@ -665,7 +665,7 @@ replace rama_ci=9 if ramap>=9100 & ramap<=9600 & emp_ci==1
 ***durades_ci***
 ****************
 gen durades_ci=.
-/*Esta variable no est· en el archivo (no fue suministrada por el paÌs)*/
+/*Esta variable no est√° en el archivo (no fue suministrada por el pa√≠s)*/
  
 *******************
 ***antiguedad_ci***
@@ -677,7 +677,7 @@ gen antiguedad_ci=.
 ***tamemp_ci***
 *******************
          
-*Costa Rica PequeÒa 1 a 5, Mediana 6 a 19, Grande M·s de 19
+*Costa Rica Peque√±a 1 a 5, Mediana 6 a 19, Grande M√°s de 19
 /*
 gen tamemp_ci = 1 if (tamestpr>=1 & tamestpr<=5)
 replace tamemp_ci = 2 if (tamestpr>=6 & tamestpr<=19)
@@ -689,9 +689,9 @@ replace tamemp_ci = 2 if (tamestpr>=6 & tamestpr<=10)
 replace tamemp_ci = 3 if (tamestpr>10 & tamestpr!=.)
 replace tamemp_ci = . if (tamestpr==99)
 
-label define tamemp_ci 1 "PequeÒa" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "Peque√±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "TamaÒo de empresa"
+label var tamemp_ci "Tama√±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -712,8 +712,8 @@ gen categoinac_ci = 1 if (inactiv == 1 & condocup_ci==3)
 replace categoinac_ci = 2 if (inactiv == 3 & condocup_ci==3)
 replace categoinac_ci = 3 if (inactiv == 4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "CategorÌa de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÈsticos" 4 "Otros" 
+label var categoinac_ci "Categor√≠a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom√©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -735,14 +735,14 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 gen ylmpri_ci=ingprinc
 replace ylmpri_ci=. if ingprinc==9999999
 replace ylmpri_ci=. if emp_ci==0
-*ModificaciÛn Mayra S·enz - Mayo 2014
+*Modificaci√≥n Mayra S√°enz - Mayo 2014
 replace ylmpri_ci=. if ytothog==99999999
 replace ylmpri_ci=. if ytothog==.
 replace ylmpri_ci=0 if ytothog==0
 
 
 /* 
-* Mayra S·enz Abril 2014: Se debe revisar la inclusiÛn de los rubros detallados abajo:
+* Mayra S√°enz Abril 2014: Se debe revisar la inclusi√≥n de los rubros detallados abajo:
 *Revisar el agregado oficial incluye imputaciones a las no respuesta (999999) y se incluye el ingreso
 * de los trabajadores independientes, las ganancias
 
@@ -773,13 +773,13 @@ replace nrylmpri_ci=. if emp_ci==0
 gen ylmsec_ci=ingsec
 replace ylmsec_ci=. if  ingsec==999999
 replace ylmsec_ci=. if emp_ci==0 | nempleos_ci==1
-*ModificaciÛn Mayra S·enz - Mayo 2014
+*Modificaci√≥n Mayra S√°enz - Mayo 2014
 replace ylmsec_ci=. if ytothog==99999999
 replace ylmsec_ci=. if ytothog==.
 replace ylmsec_ci=0 if ytothog==0
 
 /*
-** Mayra S·enz Abril 2014: Se debe revisar la inclusiÛn de las ganancias:
+** Mayra S√°enz Abril 2014: Se debe revisar la inclusi√≥n de las ganancias:
 *Revisar el agregado oficial, y se incluyen las ganancias
 egen ylmsec_ci= rsum(ysecun gansec), missing
 */
@@ -788,7 +788,7 @@ egen ylmsec_ci= rsum(ysecun gansec), missing
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde alg˙n miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde alg√∫n miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -810,12 +810,12 @@ replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==.
 
 gen ynlm_ci=otrosing
 replace ynlm_ci=. if otrosing==9999999
-*ModificaciÛn Mayra S·enz - Mayo 2014
+*Modificaci√≥n Mayra S√°enz - Mayo 2014
 replace ylmsec_ci=. if otrosing==99999999
 replace ylmsec_ci=. if otrosing==.
 replace ylmsec_ci=0 if otrosing==0
 /*
-* Mayra S·enz Abril 2014: Se debe revisar la inclusiÛn de los rubros detallados abajo:
+* Mayra S√°enz Abril 2014: Se debe revisar la inclusi√≥n de los rubros detallados abajo:
 * Revisar el agregado oficial, se incluye el ingreso por pensiones, subsidios, becas, otras transferencias, rentas
 /*
 1  Hora
@@ -871,7 +871,7 @@ replace ingrentas= rentas/12   if per10 ==8
 
 egen ynlm_ci= rsum(yotros ingpension ingsubsi ingbecas ingotrans ingrentas), missing
 
-* Mayra S·enz Abril 2014: Se debe revisar la inclusiÛn de los rubros detallados abajo:
+* Mayra S√°enz Abril 2014: Se debe revisar la inclusi√≥n de los rubros detallados abajo:
 recode autocon (999999 =.)
 gen ylnmpri_ci= autocon
 */
@@ -970,7 +970,7 @@ replace aedu_ci=4 if niveduc==14
 replace aedu_ci=5 if niveduc==15
 replace aedu_ci=6 if niveduc==16
 
-*Secundaria (acadÈmica y tÈcnica)
+*Secundaria (acad√©mica y t√©cnica)
 replace aedu_ci=7 if niveduc==21 | niveduc==31
 replace aedu_ci=8 if niveduc==22 | niveduc==32
 replace aedu_ci=9 if niveduc==23 | niveduc==33
@@ -1108,7 +1108,7 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***asiste_ci***
 ***************
 
-*Esta variable no est· en el archivo (no fue suministrada por el paÌs)*/
+*Esta variable no est√° en el archivo (no fue suministrada por el pa√≠s)*/
 
 gen asiste_ci=.
 
@@ -1116,7 +1116,7 @@ gen asiste_ci=.
 ***pqnoasis***
 **************
 
-/*Ya est· creada*/
+/*Ya est√° creada*/
 
 rename pqnoasis pqnoasis_ci
 
@@ -1134,7 +1134,7 @@ replace pqnoasis1_ci = 7 if pqnoasis_ci==9
 replace pqnoasis1_ci = 8 if pqnoasis_ci==4
 replace pqnoasis1_ci = 9 if pqnoasis_ci==10
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1278,15 +1278,15 @@ ren ocup ocup_old
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

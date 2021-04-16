@@ -2,12 +2,12 @@
 *              Malnutrition, Breastfeeding, and Anemia Indicators                                             *          
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 clear all
-use "Y:\survey\JAM\SLC\1990\m11\data_merge\JAM_1990m11.dta"
+use "${surveysFolder}\survey\JAM\SLC\1990\m11\data_merge\JAM_1990m11.dta"
 set more off
 *Main directory
-global path = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
+global path = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
 * Folder of outputs
-global outputs = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
+global outputs = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
 
 *Source of comparison: http://www.who.int/nutgrowthdb/database/countries/who_standards/jam_dat.pdf
 *==============================================================================================================*
@@ -21,13 +21,13 @@ ds, has(type string)
         replace `var' = "." if strpos(`var',"NNN")
 		replace `var' = "." if strpos(`var',"NNNN")
 		replace `var' = "." if strpos(`var',"NNNNN")
-		replace `var' = "." if strpos(`var',"¸")
-		replace `var' = "." if strpos(`var',"¹")
-		replace `var' = "." if strpos(`var',"±¸±²¹°")
-		replace `var' = "." if strpos(`var',"²¹°±¹±")
-		replace `var' = "." if strpos(`var',"¹¹±±¹°")
-		replace `var' = "." if strpos(`var',"¹¹±¹¹°")
-		replace `var' = "." if strpos(`var',"¹¹¹¹¹¹")
+		replace `var' = "." if strpos(`var',"Â¸")
+		replace `var' = "." if strpos(`var',"Ä…")
+		replace `var' = "." if strpos(`var',"Â±Â¸Â±Ë›Ä…Â°")
+		replace `var' = "." if strpos(`var',"Ë›Ä…Â°Â±Ä…Â±")
+		replace `var' = "." if strpos(`var',"Ä…Ä…Â±Â±Ä…Â°")
+		replace `var' = "." if strpos(`var',"Ä…Ä…Â±Ä…Ä…Â°")
+		replace `var' = "." if strpos(`var',"Ä…Ä…Ä…Ä…Ä…Ä…")
 		replace `var' = "." if strpos(`var',".")
 		replace `var' = "." if strpos(`var',"999999")
 		replace `var' = "." if strpos(`var',"9999")
@@ -79,7 +79,7 @@ recode age_mths 9=. if age_yrs != age
 replace age_yrs = age if age_yrs != age & age_mths ==.
 
 g edadmes = age_yrs * 12 + age_mths if age_yrs <5
-*Jamaica no necesita factor de expansión.
+*Jamaica no necesita factor de expansiÃ³n.
 g factor =1
 label var factor "Factor de expasion"
 
@@ -122,7 +122,7 @@ replace altura = ".9" if altura == "..9"
 destring altura, replace
 g alturacm = altura
 destring alturacm, replace
-/*x: Indicador de datos válidos */
+/*x: Indicador de datos vÃ¡lidos */
 gen x = 1 if (edadmes ~=. & alturacm ~=. & pesokg ~=.)
 *Muestra total
 egen mtot =sum(x)
@@ -194,7 +194,7 @@ the nutritional status of the survey population is poorer on average than that o
 egen hamzs_mtot   = mean(haz06) if (haz06> -6 & haz06< 6)
 
 *Weight-for-age above +2 SD
-*El segundo quintil tiene un punto porcentual más. La diferencia disminuye un poco si no se incluye al 2.
+*El segundo quintil tiene un punto porcentual mÃ¡s. La diferencia disminuye un poco si no se incluye al 2.
 g waa2sd  = (waz06>= 2 & waz06< 5)*100 if (waz06> -6 & waz06< 5)
 
 *Weight-for-age below -2 SD
@@ -215,7 +215,7 @@ g whb2sd  = (whz06>=-5 & whz06<-2)*100 if (whz06>=-5 & whz06< 5)
 g whb3sd  = (whz06>=-5 & whz06<-3)*100 if (whz06>=-5 & whz06< 5)
 *Weight-for-height mean Z-score
 egen whmzs_mtot    = mean(whz06) if (whz06>=-5 & whz06< 5)
-*Se genera mtot sólo para fines de subtítulo de la tabla
+*Se genera mtot sÃ³lo para fines de subtÃ­tulo de la tabla
 
 
 
@@ -281,12 +281,12 @@ bys sexo: egen `i'sex = mean(`i')
  }
 
  *=========================================================================================*
- * Generación de bases de datos por cada tipo de desagregación                              *
+ * GeneraciÃ³n de bases de datos por cada tipo de desagregaciÃ³n                              *
  *=========================================================================================*
  
  
   preserve
-*Se genera total sólo para fines de subtítulo de la tabla
+*Se genera total sÃ³lo para fines de subtÃ­tulo de la tabla
 capture g total = 1
 label define total 1 "Total: Total"
 label value total total

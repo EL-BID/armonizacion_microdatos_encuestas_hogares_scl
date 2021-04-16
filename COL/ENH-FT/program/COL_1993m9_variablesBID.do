@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ENH-FT
@@ -29,13 +29,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ENH-FT
 Round: m9
 Autores: 
-Generación nuevas variables LMK: 
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: noviembre 2013
+GeneraciÃ³n nuevas variables LMK: 
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: noviembre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -71,7 +71,7 @@ label var region_c "division politico-administrativa, departamento"
 ************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -179,7 +179,7 @@ label variable edad_ci "Edad del individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -324,7 +324,7 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 ************************************
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -371,7 +371,7 @@ replace condocup_ci=1 if  ca_13_T05 == 1 | ca_14_T05==1 | ca_15_T05==1
 replace condocup_ci=2 if (condocup_ci!=1)& ( ca_13_T05 == 2 | ca_17_T05==1 | (ca_18_T05==1 & ca_19_T05>=1 & ca_19_T05<=4 ) )
 recode condocup_ci .=3 if  edad>=12
 recode condocup_ci .=4 if edad_ci<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -392,14 +392,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -530,8 +530,8 @@ gen desemp2_ci=.
 ****************
 gen desemp3_ci=(desemp1u_ci==1 | ca_18_T05=="1") 
 
-*Esta debería ser la definición que se utilice para Colombia porque contiene a todos los individuos que    *
-*OFICIALMENTE se consideran Desempleados. Se construye desemp1 para hacerla comparable con los demás países*
+*Esta deberÃ­a ser la definiciÃ³n que se utilice para Colombia porque contiene a todos los individuos que    *
+*OFICIALMENTE se consideran Desempleados. Se construye desemp1 para hacerla comparable con los demÃ¡s paÃ­ses*
 
 *************
 ***pea1_ci***
@@ -730,7 +730,7 @@ drop rama1
 
 gen durades_ci=real(ca_36_T07)/4.3
 replace durades_ci=. if ca_36_T07=="99"
-/* está truncada en 98*/
+/* estÃ¡ truncada en 98*/
 
 *******************
 ***antiguedad_ci***
@@ -811,7 +811,7 @@ replace ylm_ci=. if yprid1==. & yprid==. & yprid2==. & yprid3==.
 gen nrylm_ci=(ylm_ci==. & emp_ci==1)
 
 *como no se puede identificar los ingresos de la actividad principal porque*
-*no estan discriminados de esa manera, se creará una variable similar para *
+*no estan discriminados de esa manera, se crearÃ¡ una variable similar para *
 *identificar la no respuesta para ingresos laborales generales*
 
 
@@ -973,8 +973,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 /*
-En Colombia, la educación primaria dura 5 años y la educación secundaria *
-*6 años y universitaria hasta 5-7 años, dependiendo la carrera*/ 
+En Colombia, la educaciÃ³n primaria dura 5 aÃ±os y la educaciÃ³n secundaria *
+*6 aÃ±os y universitaria hasta 5-7 aÃ±os, dependiendo la carrera*/ 
 
 *** Missings
 gen byte yedc=.
@@ -1222,7 +1222,7 @@ gen combust_ch=.
 ****************
 ****bano_ch*****
 ****************
-*Se cambió == por != en ca_3_T00_!="."
+*Se cambiÃ³ == por != en ca_3_T00_!="."
 
 gen bano_ch=.
 replace bano_ch=(ca_3_T00_!="4" & ca_3_T00_!=".")
@@ -1268,11 +1268,11 @@ replace piso_ch=(ca_4_T00~="5")
 ****pared_ch****
 ****************
 
-*Para unificar la creación de esta variable se cambia la programación
+*Para unificar la creaciÃ³n de esta variable se cambia la programaciÃ³n
 
 *gen pared_ch=.
 *replace pared_ch=(ca_3_T00!="7" & ca_3_T00!="5")
-*5 no permanente: guadua, caña*
+*5 no permanente: guadua, caÃ±a*
 *7 no permanente: tela y desechos*
 
 
@@ -1444,7 +1444,7 @@ label var region_c "division politico-administrativa, departamento"
 ************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -1740,7 +1740,7 @@ replace condocup_ci=1 if  (re_19_T03 == 1 | re_20_T03==1 | re_21_T03==1 | re_22_
 replace condocup_ci=2 if condocup_ci!=1 & (re_19_T03 == 2 | re_24_T03 ==1 | re_25_T03==3)  & edad_ci>=12 
 recode condocup_ci .=3 if  edad>=12
 recode condocup_ci .=4 if edad_ci<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -1761,14 +1761,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -1877,8 +1877,8 @@ gen trab=(re_19_T03=="1")
 /*ultima semana trabajando */
 
 replace trab=1 if (re_19_T03!="9" & re_19_T03!="1") & (re_20_T03=="1"|re_21_T03=="1"|re_22_T03=="1")
-*ocupados: trabajó al menos 1 hora remunerada en la semana de referencia de la encuesta, no trabajó 
-*pero tenía trabajo, trab familiar sin remuneración*
+*ocupados: trabajÃ³ al menos 1 hora remunerada en la semana de referencia de la encuesta, no trabajÃ³ 
+*pero tenÃ­a trabajo, trab familiar sin remuneraciÃ³n*
 gen byte emp_ci=(trab==1)
 
 replace trab=2 if re_19_T03!="9" & re_19_T03!="1" & re_24_T03=="1"
@@ -1903,12 +1903,12 @@ gen desemp2_ci=.
 ****************
 gen desemp3_ci=(re_24_T03=="1") 
 
-*esta debería ser la definición que se utilice para Colombia*
+*esta deberÃ­a ser la definiciÃ³n que se utilice para Colombia*
 * porque contiene a TODOS los clasificados como desempleados*
 * en la encuesta. Se construye desemp1 para hacerla comparable*
-* con los demás países*
+* con los demÃ¡s paÃ­ses*
 
-*re_24_T03=="1" es si ha buscado trabajo en el último anio*
+*re_24_T03=="1" es si ha buscado trabajo en el Ãºltimo anio*
 
 *************
 ***pea1_ci***
@@ -2109,7 +2109,7 @@ drop rama1
 
 gen durades_ci=real(re_45_T06)/4.3
 replace durades_ci=. if re_45_T06=="99"
-/* está truncada en 98*/
+/* estÃ¡ truncada en 98*/
 
 *******************
 ***antiguedad_ci***
@@ -2346,8 +2346,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 /*
-En Colombia, la educación primaria dura 5 años y la educación secundaria *
-*6 años y universitaria hasta 5-7 años, dependiendo la carrera*/ 
+En Colombia, la educaciÃ³n primaria dura 5 aÃ±os y la educaciÃ³n secundaria *
+*6 aÃ±os y universitaria hasta 5-7 aÃ±os, dependiendo la carrera*/ 
 
 
 *** Missings
@@ -2576,7 +2576,7 @@ gen aguamide_ch=.
 ****************
 
 gen luz_ch=(re_5i_T013 =="1")
-*se construyó como=1 si la vivienda tiene conexión a energía eléctrica*
+*se construyÃ³ como=1 si la vivienda tiene conexiÃ³n a energÃ­a elÃ©ctrica*
 
 ****************
 ***luzmide_ch***
@@ -2640,13 +2640,13 @@ replace piso_ch=. if re_4i_T01==""
 ****pared_ch****
 ****************
 
-*Para unificar la creación de esta variable se cambia la programación
+*Para unificar la creaciÃ³n de esta variable se cambia la programaciÃ³n
 
 *gen pared_ch=.
 *replace pared_ch=(re_3i_T01!="7" & re_3i_T01!="5")
 *replace pared_ch=. if re_3i_T01==""
-*Bahareque: Pared de palos entretejidos con cañas y barro*
-*no permanente: guadua o caña(5) y tela /desechos (7)*
+*Bahareque: Pared de palos entretejidos con caÃ±as y barro*
+*no permanente: guadua o caÃ±a(5) y tela /desechos (7)*
  
 gen pared_ch=.
 replace pared_ch=(re_3i_T01=="1" | re_3i_T01=="2" | re_3i_T01=="3" | re_3i_T01=="6")
@@ -2810,15 +2810,15 @@ append using "`base_out1'"
 order re_* ca_*
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

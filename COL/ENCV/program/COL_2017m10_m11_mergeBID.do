@@ -8,7 +8,7 @@ clear matrix
 set more off
 set matsize 2000
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ENCV
@@ -30,23 +30,23 @@ use "`base_in'\Datos de la vivienda", clear
 
 
 **Hogares**
-mmerge DIRECTORIO SECUENCIA_ENCUESTA using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Servicios del hogar", t(1:1)
+mmerge DIRECTORIO SECUENCIA_ENCUESTA using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Servicios del hogar", t(1:1)
 drop _merge 
 sort DIRECTORIO SECUENCIA_ENCUESTA
 
-mmerge DIRECTORIO SECUENCIA_ENCUESTA using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Tenencia y financiación de la vivienda que ocupa el hogar.dta", t(1:1)
+mmerge DIRECTORIO SECUENCIA_ENCUESTA using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Tenencia y financiación de la vivienda que ocupa el hogar.dta", t(1:1)
 drop _merge 
 sort DIRECTORIO SECUENCIA_ENCUESTA
 
-mmerge DIRECTORIO SECUENCIA_ENCUESTA using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Condiciones de vida del hogar y tenencia de bienes (programas).dta", t(1:1)
+mmerge DIRECTORIO SECUENCIA_ENCUESTA using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Condiciones de vida del hogar y tenencia de bienes (programas).dta", t(1:1)
 drop _merge 
 sort DIRECTORIO SECUENCIA_ENCUESTA
 
-mmerge DIRECTORIO SECUENCIA_ENCUESTA using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Condiciones de vida del hogar y tenencia de bienes", t(1:1)
+mmerge DIRECTORIO SECUENCIA_ENCUESTA using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Condiciones de vida del hogar y tenencia de bienes", t(1:1)
 drop _merge 
 sort  DIRECTORIO SECUENCIA_ENCUESTA
 
-mmerge DIRECTORIO SECUENCIA_ENCUESTA using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Seguridad alimentaria.dta", t(1:1)
+mmerge DIRECTORIO SECUENCIA_ENCUESTA using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Seguridad alimentaria.dta", t(1:1)
 drop _merge 
 sort  DIRECTORIO SECUENCIA_ENCUESTA
 
@@ -59,28 +59,28 @@ tempfile hogares
 save `hogares' , replace
 
 **Personas**
-use "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Caracteristicas y composicion del hogar.dta", clear
+use "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Caracteristicas y composicion del hogar.dta", clear
 
-mmerge LLAVEHOG ORDEN using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Salud.dta", t(1:1)
+mmerge LLAVEHOG ORDEN using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Salud.dta", t(1:1)
 drop _merge 
 
-mmerge LLAVEHOG ORDEN  using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Atención integral de los niños y niñas menores de 5 años.dta", t(1:1)
-drop _merge 
-
-
-mmerge LLAVEHOG ORDEN using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Educación", t(1:1)
+mmerge LLAVEHOG ORDEN  using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Atención integral de los niños y niñas menores de 5 años.dta", t(1:1)
 drop _merge 
 
 
-mmerge LLAVEHOG ORDEN  using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Fuerza de trabajo", t(1:1)
+mmerge LLAVEHOG ORDEN using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Educación", t(1:1)
+drop _merge 
+
+
+mmerge LLAVEHOG ORDEN  using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Fuerza de trabajo", t(1:1)
 drop _merge 
  
 
-mmerge LLAVEHOG ORDEN using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Tecnologías de información y comunicación", t(1:1)
+mmerge LLAVEHOG ORDEN using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Tecnologías de información y comunicación", t(1:1)
 drop _merge 
 
 
-mmerge LLAVEHOG ORDEN using "Z:\survey\COL\ENCV\2017\m10_m11\data_orig\Trabajo infantil", t(1:1)
+mmerge LLAVEHOG ORDEN using "${surveysFolder}\survey\COL\ENCV\2017\m10_m11\data_orig\Trabajo infantil", t(1:1)
 drop _merge 
 
 **Llave_h*

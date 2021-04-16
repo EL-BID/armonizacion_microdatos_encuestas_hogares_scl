@@ -1,20 +1,20 @@
 
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m9
 Autores: Revised March, 2008 (by tede) 
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Armonización: Mayra Sáenz  - 8 de Octubre de 2013 - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Última modificación: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Noviembre de 2017
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ArmonizaciÃ³n: Mayra SÃ¡enz  - 8 de Octubre de 2013 - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Ãšltima modificaciÃ³n: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Noviembre de 2017
 			  
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -70,13 +70,13 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 /*
 ***************
 *** REGIONS ***
@@ -105,7 +105,7 @@ Departamentos
  8. Francisco Morazan
  9. Gracias a Dios	==> NOT INCLUDED IN THE SAMPLE
 10. Intibuca
-11. Islas de la Bahía   ==> NOT INCLUDED IN THE SAMPLE
+11. Islas de la BahÃ­a   ==> NOT INCLUDED IN THE SAMPLE
 12. La Paz 
 13. Lempira 
 14. Ocotepeque 
@@ -119,37 +119,37 @@ Departamentos
  */
 gen region_c=  depto
 label define region_c  1 "1. atlantida" ///
-           2 "2. colón" ///
+           2 "2. colÃ³n" ///
            3 "3. comayagua" ///
-           4 "4. copán" ///
-           5 "5. cortés" ///
+           4 "4. copÃ¡n" ///
+           5 "5. cortÃ©s" ///
            6 "6. choluteca" ///
-           7 "7. el paraíso" ///
+           7 "7. el paraÃ­so" ///
            8 "8. francisco morazan" ///
            9 "9. gracias a dios" ///
           10 "10. intibuca" ///
-          11 "11. islas de la bahía" ///
+          11 "11. islas de la bahÃ­a" ///
           12 "12. la paz" ///
           13 "13. lempira" ///
           14 "14. ocotepeque" ///
           15 "15. olancho" ///
-          16 "16. santa bárbara" ///
+          16 "16. santa bÃ¡rbara" ///
           17 "17. valle" ///
           18 "18. yoro" 
 
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 *************************
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -368,7 +368,7 @@ label variable miembros_ci "Miembro del hogar"
 gen condocup_ci=.
 replace condocup_ci=condact
 replace condocup_ci=4 if condact == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -380,7 +380,7 @@ replace condocup_ci=1 if (p10==1 | p11==1 | p12==1)
 replace condocup_ci=2 if (p10==2 | p11==2 | p12==2) & (p14a==1) 
 recode condocup_ci (.=3) if edad_ci>=5
 recode condocup_ci (.=4) if edad_ci<5
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci  1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -555,13 +555,13 @@ replace  rama_ci=7 if (p24>=6010 & p24<=6420) & emp_ci==1
 replace  rama_ci=8 if (p24>=6511 & p24<=7020) & emp_ci==1
 replace  rama_ci=9 if (p24>=7111 & p24<=9900) & emp_ci==1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -626,15 +626,15 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *************
 *tamemp_ci
 *************
-* Honduras. Pequeña 1-5, Mediana 6-50, Grande Más de 50.
+* Honduras. PequeÃ±a 1-5, Mediana 6-50, Grande MÃ¡s de 50.
 
 gen tamemp_ci = 1 if (p26b>=1 & p26b<=5)
 replace tamemp_ci = 2 if (p26b>=6 & p26b<=50)
 replace tamemp_ci = 3 if (p26b>50 & p26b!=.)
 replace tamemp_ci=. if  p26b>=9999
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 
 *************
@@ -711,8 +711,8 @@ gen categoinac_ci =1 if ((p16 ==1 | p16==2) & condocup_ci==3)
 replace categoinac_ci = 2 if  (p16==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (p16==5 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
  
 *******************
 ***formal***
@@ -721,7 +721,7 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 gen formal_ci=1 if afiliado_ci==1 & condocup_ci==1 
 label var formal_ci "Formal"
 */
-*Modificación Mayra Sáenz- Febrero 2014
+*ModificaciÃ³n Mayra SÃ¡enz- Febrero 2014
 gen formal_ci=.
 label var formal_ci "Formal"
 
@@ -729,7 +729,7 @@ label var formal_ci "Formal"
 ************************************************************************
 **************************INGRESOS**************************************
 ************************************************************************
-*Daniela Zuluaga- Noviembre 2017: Se deciden reemplazar las variables del ingreso laboral (Monetario y no Monetario) por las que ya están construidas en la base original**
+*Daniela Zuluaga- Noviembre 2017: Se deciden reemplazar las variables del ingreso laboral (Monetario y no Monetario) por las que ya estÃ¡n construidas en la base original**
 
 ***************
 ***ylmpri_ci***
@@ -888,7 +888,7 @@ label var ynlnm_ci "Ingreso No Laboral No Monetario"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing 
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 
 **************
@@ -1101,15 +1101,15 @@ label var quintil_ci "Quintil de ingreso"
 label define quintil_ci 1 "Quintil 1" 2 "Quintil 2" 3 "Quintil 3" 4 "Quintil 4" 5 "Quintil 5"
 label values quintil_ci quintil_ci
 
-/*NOTA: El ingreso total aquí construido difiere de la variable de ingreso total de la base original . Esto ocurre ya que al agregar algunas de las variables
-desagregadas en la base, no coinciden con las variables agregadas que están construidas en la base original (para los ingresos no laborales), no hay información 
-suficiente para saber cómo se agregaron dichas variables en la base original;
+/*NOTA: El ingreso total aquÃ­ construido difiere de la variable de ingreso total de la base original . Esto ocurre ya que al agregar algunas de las variables
+desagregadas en la base, no coinciden con las variables agregadas que estÃ¡n construidas en la base original (para los ingresos no laborales), no hay informaciÃ³n 
+suficiente para saber cÃ³mo se agregaron dichas variables en la base original;
 En particular, hay inconsistencia con la periodicidad de las variables de otros ingresos.En todo caso, construimos los ingresos no laborales con las variables desagregadas, 
-teniendo como base la periodicidad específicada en el cuestionario.
+teniendo como base la periodicidad especÃ­ficada en el cuestionario.
 LA DIFERENCIA ES MENOR AL 1% */
 
 ******************************************************************************
-*	Educación
+*	EducaciÃ³n
 *****************************************************************************
 
 ************
@@ -1118,9 +1118,9 @@ LA DIFERENCIA ES MENOR AL 1% */
 gen asiste_ci=.
 replace asiste_ci=1 if p02==1
 replace asiste_ci=0 if p02==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
-* Años de educacion aprobados **
+* AÃ±os de educacion aprobados **
 replace p04b=. if p04b>9
 replace p05b=. if p05b>9
 ** para quienes ya no asisten
@@ -1136,7 +1136,7 @@ replace aedu_ci=p05b-1 if p05a==3
 replace aedu_ci=p05b+6-1 if p05a==4 | p05a==5
 replace aedu_ci=p05b+12-1 if p05a==6 | p05a==7
 replace aedu_ci=p05b+17-1 if p05a==8
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 
 ******************************
@@ -1218,13 +1218,13 @@ la var edupre_ci "Asiste a Educacion preescolar"
 *	pqnoasis 
 ******************************
 gen pqnoasis_ci=p03
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 ******************************
 *	repite_ci 
 ******************************
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 ******************************
 *	repiteult_ci 
 ******************************
@@ -1273,7 +1273,7 @@ replace pqnoasis1_ci = 7 if p03==9  | p03==11
 replace pqnoasis1_ci = 8 if p03==5
 replace pqnoasis1_ci = 9 if p03==12
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1281,7 +1281,7 @@ label value  pqnoasis1_ci pqnoasis1_ci
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-* MGR Jul, 2015: la base disponible no asigna a todos los miembros del hogar  el valor de la variable de vivienda, únicamente al jefe.
+* MGR Jul, 2015: la base disponible no asigna a todos los miembros del hogar  el valor de la variable de vivienda, Ãºnicamente al jefe.
 * Ya que no contamos con bases originales para hacer merge nuevamente, expandimos variables de vivienda a nivel de hogar. 
 
 foreach var of varlist v01 v02 v03 v04 v05a v05b v05c v06a v06b v06c v07 v08 v09 v10a v10b v10c v11a v11b v11c v11d v11e v11f v11g ///
@@ -1583,15 +1583,15 @@ replace banomejorado_ch = 0 if ( v06a ==1 & ((v06b >=1 & v06b <=2) | (v06b >=5 &
 
 	
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1638,19 +1638,19 @@ log close
 **************************************
 
 
-* Instituto Nacional de Estadística, Encuesta Permanente de Hogares de Propósitos Múltiples. March, 2003.
+* Instituto Nacional de EstadÃ­stica, Encuesta Permanente de Hogares de PropÃ³sitos MÃºltiples. March, 2003.
 
 /*
 rela_j
  1. jefe del hogar
- 2. esposa(o) o compañera(o) 
+ 2. esposa(o) o compaÃ±era(o) 
  3. hijos de mayor a menor
  4. hijastros de mayor a menor
  5. padres 
  6. yernos y nueras 
  7. otros parientes(nietos,abuelos,tios...)
- 8. otros no parientes(suegros,cuñados...)
- 9. servicio doméstico
+ 8. otros no parientes(suegros,cuÃ±ados...)
+ 9. servicio domÃ©stico
  99. ns/nr
 */
 
@@ -1679,20 +1679,20 @@ rela_j
 
 ** Years of education. 
 /*
-2. ¿Recibe actualmente enseñanza de algún centro educativo?
+2. Â¿Recibe actualmente enseÃ±anza de algÃºn centro educativo?
  1. SI /2. NO
 
-3. ¿Cuál es el nivel más alto de estudio que está cursoando o que
-cursó? y ¿Cuál es el último año aprobado en ese nivel?
+3. Â¿CuÃ¡l es el nivel mÃ¡s alto de estudio que estÃ¡ cursoando o que
+cursÃ³? y Â¿CuÃ¡l es el Ãºltimo aÃ±o aprobado en ese nivel?
 
 niveduc(p03a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
@@ -1735,7 +1735,7 @@ ultgrad (p03b)
 ** Economic Active Population  (10 years or more of age)
 * Included in the database
 * condact
-/* Condición de Actividad
+/* CondiciÃ³n de Actividad
  1. Ocupados	
  2. Desocupados
  3. Inactivos
@@ -1762,7 +1762,7 @@ Domi (vs. Dominio)
 1. Tegucigalpa 
 2. San pedro sula
 3. Ciudades medianas
-4. Ciudades pequeñas
+4. Ciudades pequeÃ±as
 5. Rural 
 */
 
@@ -1813,7 +1813,7 @@ Departamentos
  8. Francisco Morazan
  9. Gracias a Dios	==> NOT INCLUDED IN THE SAMPLE
 10. Intibuca
-11. Islas de la Bahía   ==> NOT INCLUDED IN THE SAMPLE
+11. Islas de la BahÃ­a   ==> NOT INCLUDED IN THE SAMPLE
 12. La Paz 
 13. Lempira 
 14. Ocotepeque 
@@ -1832,20 +1832,20 @@ Departamentos
 ** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
 
 /*
-2. ¿Recibe actualmente enseñanza de algún centro educativo?
+2. Â¿Recibe actualmente enseÃ±anza de algÃºn centro educativo?
  1. SI /2. NO
 
-3. ¿Cuál es el nivel más alto de estudio que está cursoando o que
-cursó? y ¿Cuál es el último año aprobado en ese nivel?
+3. Â¿CuÃ¡l es el nivel mÃ¡s alto de estudio que estÃ¡ cursoando o que
+cursÃ³? y Â¿CuÃ¡l es el Ãºltimo aÃ±o aprobado en ese nivel?
 
 niveduc(p04a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
@@ -1978,8 +1978,8 @@ ultgrad (p04b)
 
 /*
 
-24. ¿Cuál es o era su categoría ocupacional 		rama
-en la ocupación principal?			 	rama de actividad economica
+24. Â¿CuÃ¡l es o era su categorÃ­a ocupacional 		rama
+en la ocupaciÃ³n principal?			 	rama de actividad economica
 1. Empleado u obrero publico	
 2. Empleado u obrero privado(exc.serv.dom)	
 3. Servicio domestico	
@@ -2021,13 +2021,13 @@ categoria ocupacional (ocupacion principal)
  
 ** Access to Electricity ** Additional Indicator
 /*
-7. ¿Qué tipo de alumbrado utiliza en la vivienda?
- 1. Servicio Público
+7. Â¿QuÃ© tipo de alumbrado utiliza en la vivienda?
+ 1. Servicio PÃºblico
  2. Planta privada colectiva
  3. Planta privada individual
- 4. Energía solar
+ 4. EnergÃ­a solar
  5. Vela
- 6. Candil o lámpara de gas 
+ 6. Candil o lÃ¡mpara de gas 
  7. Ocote
  8. Otro:________________________ */
 
@@ -2043,23 +2043,23 @@ categoria ocupacional (ocupacion principal)
 
 /*
 5. Servicio de Agua (v05a)
-a) ¿Tiene tubería instalada para agua?
-1. Sí  2. No
+a) Â¿Tiene tuberÃ­a instalada para agua?
+1. SÃ­  2. No
 
-b) ¿De dónde proviene el agua que utiliza? (v05b)
-1. Servicio Público 
+b) Â¿De dÃ³nde proviene el agua que utiliza? (v05b)
+1. Servicio PÃºblico 
 2. Servicio Privado colectivo
 3. Pozo malacate
 4. Pozo con bomba
-5. Río, riachuelo, manantial, ojo de agua
+5. RÃ­o, riachuelo, manantial, ojo de agua
 6. Cisterna
 7. Otro
 
-c) ¿De dónde la obtiene? (v05c)
+c) Â¿De dÃ³nde la obtiene? (v05c)
 1. Dentro de la vivienda
 2. Fuera de la vivienda y dentro de la propiedad
 3. Fuera de la propiedad a menos de 100 metros
-4. Fuera de la propiedad a más de 100 metros
+4. Fuera de la propiedad a mÃ¡s de 100 metros
 
 */
 
@@ -2078,12 +2078,12 @@ c) ¿De dónde la obtiene? (v05c)
 
 6. Servicio Sanitario
 
-a) ¿Qué tipo de servicio sanitario tiene?
+a) Â¿QuÃ© tipo de servicio sanitario tiene?
  1. Inodoro conectado a alcantarilla
- 2. Inodoro conectado a pozo séptico
- 3. Inodoro con desagüe a río, laguna, mar
- 4. Letrina con cierre hidráulico
- 5. Letrina con pozo séptico
+ 2. Inodoro conectado a pozo sÃ©ptico
+ 3. Inodoro con desagÃ¼e a rÃ­o, laguna, mar
+ 4. Letrina con cierre hidrÃ¡ulico
+ 5. Letrina con pozo sÃ©ptico
  6. Letrina con pozo negro
  7. No tiene
 
@@ -2105,31 +2105,31 @@ b) El uso del servicio sanitario es:
 ** Target 11, Indicator: Proportion of the population with access to secure tenure (%)
 
 /*
-1. Tipo de vivienda			10. ¿Cómo es la tenencia de esta vivienda?
+1. Tipo de vivienda			10. Â¿CÃ³mo es la tenencia de esta vivienda?
 v01					v10a
  1. Casa independiente			 1. Propietario y completamente pagada
  2. Apartamento				 2. Propietario recuperada legalizada
  3. Rancho 				 3. Propietario recuperada sin legalizar
- 4. Cuarto en mesón o cuartería		 4. Propietario y la está pagando			
- 5. Barracón				 5. Alquilada
+ 4. Cuarto en mesÃ³n o cuarterÃ­a		 4. Propietario y la estÃ¡ pagando			
+ 5. BarracÃ³n				 5. Alquilada
  6. Casa improvisada 		         6. Cedida sin pago
- 7. Local no construido para habitación 	
+ 7. Local no construido para habitaciÃ³n 	
  pero usado como vivienda
  8. Albergue (not included in the database)
  9. Otro
 
-2. ¿Cuál es el material predominante 	3. ¿Cuál es el material predominante en el piso?
-en la construcción de las paredes?
- 1. Ladrillo, piedra o bloque		 1. Cerámica
+2. Â¿CuÃ¡l es el material predominante 	3. Â¿CuÃ¡l es el material predominante en el piso?
+en la construcciÃ³n de las paredes?
+ 1. Ladrillo, piedra o bloque		 1. CerÃ¡mica
  2. Adobe				 2. Ladrillo de cemento
  3. Material prefabricado		 3. Ladrillo de barro
  4. Madera				 4. Plancha de cemento
- 5. Bahareque, vara o caña		 5. Madera
+ 5. Bahareque, vara o caÃ±a		 5. Madera
  6. Desechos				 6. Tierra
  7. Otro				 7. Otro
 				 
 11. Cantidad de Piezas de la Vivienda
-a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
+a). Â¿CuÃ¡ntas piezas tiene esta vivienda? (incluya la cocina pero no el baÃ±o)
 */
 
  egen tenencia=max(v10a), by(id_viv)
@@ -2172,7 +2172,7 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 
 * Gender classification of the population refers to the head of the household.
 
-* 3. ¿Cuál es el material predominante en el piso?
+* 3. Â¿CuÃ¡l es el material predominante en el piso?
 
  gen	 DIRT=0 if (piso>=1 & piso<=7) /* Total population excluding missing information */
  replace DIRT=1 if (piso==6)
@@ -2226,21 +2226,21 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 	
 ** Disconnected Youths
 /*
-15. ¿Por qué no buscó trabajo ni trató de establecer su propio
+15. Â¿Por quÃ© no buscÃ³ trabajo ni tratÃ³ de establecer su propio
 negocio o finca la semana pasada?
- 1. Se incorporará a un trabajo antes de un mes			==>17
- 2. Tiene trabajo asegurado después de un mes 			==>17
+ 1. Se incorporarÃ¡ a un trabajo antes de un mes			==>17
+ 2. Tiene trabajo asegurado despuÃ©s de un mes 			==>17
  3. Espera respuesta a gestiones 				==>17
- 4. Está esperando la próxima temporada de trabajo 		==>17
- 5. Cree que no encontrará trabajo				==>17
- 6. Dejó de buscar trabajo momentáneamente			==>17
+ 4. EstÃ¡ esperando la prÃ³xima temporada de trabajo 		==>17
+ 5. Cree que no encontrarÃ¡ trabajo				==>17
+ 6. DejÃ³ de buscar trabajo momentÃ¡neamente			==>17
  7. No tiene tierra, capital, ni materia prima			==>17
  8. No tiene tiempo para buscar trabajo				==>13
  9. No tiene necesidad de trabajar				==>13
  10. Por su edad no puede trabajar				==>13
  11.  Otro							==>13
 
-16. ¿Cuál es su condición actual?
+16. Â¿CuÃ¡l es su condiciÃ³n actual?
  1. Jubilado
  2. Pensionista
  3. Rentista

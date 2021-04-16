@@ -1,8 +1,8 @@
-*Elaboración: María Laura Oliveri (mloliveri@iadb.org / lauraoliveri@yahoo.com)
+*Elaboraciï¿½n: Marï¿½a Laura Oliveri (mloliveri@iadb.org / lauraoliveri@yahoo.com)
 *Diciembre, 2015
 *Ãšltima modificaciÃ³n: Alvaro Altamirano (alvaroalt@iadb.org) Julio 2017.
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 *bases originales (mensuales)
 local base_in = "$ruta\survey\BRA\NPME"

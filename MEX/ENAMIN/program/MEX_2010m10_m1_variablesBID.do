@@ -1,17 +1,17 @@
-* (versión Stata 13)
+* (versiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENAMIN
@@ -27,11 +27,11 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: México
+PaÃ­s: MÃ©xico
 Encuesta: ENOE
 Round: t1
 Autores: Melany Gualavisi (melanyg@iadb.org)
-Fecha última modificación: Diciembre, 2015
+Fecha Ãºltima modificaciÃ³n: Diciembre, 2015
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,14 +54,14 @@ horaspri_ci
 tamemp_ci
 ylmpri_ci
 
-el resto está pendiente de armonizar*/
+el resto estÃ¡ pendiente de armonizar*/
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=1 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -87,19 +87,19 @@ gen str3 pais_c="MEX"
 *	anio_c
 ******************************
 gen anio_c=2010
-label var anio_c "Año de la encuesta"
+label var anio_c "AÃ±o de la encuesta"
 
 ******************************
 *	factor_ci
 ******************************
 gen factor_ci=fac
-label var factor_ci "Factor de expansión"
+label var factor_ci "Factor de expansiÃ³n"
 
 ***************
 ****edad_ci****
 ***************
 gen edad_ci=eda
-label var edad_ci "Edad del individuo en años"
+label var edad_ci "Edad del individuo en aÃ±os"
 
 ***************
 ****sexo_ci****

@@ -2,7 +2,7 @@
 
 *** 2000: desnutricion
 
-cd D:\DATA.IDB\A_PER\PARAGUAY\EIH_2000
+cd ${surveysFolder}\DATA.IDB\A_PER\PARAGUAY\EIH_2000
 use r05_00, clear
 joinby upm nvivi nhoga l02 using r02_00, unm(b)
 drop _merge-p06 p09-recc02
@@ -55,7 +55,7 @@ table pobrezai area  [w=fex], c(mean sobreo) col row
 *** malnutricion
 ****************
 
-cd D:\DATA.IDB\A_PER\EPH_2003-11\Eph2005
+cd ${surveysFolder}\DATA.IDB\A_PER\EPH_2003-11\Eph2005
 use r04_05, clear
 joinby upm nvivi nhoga l02 using r02_05, unm(b)
 drop _merge-p05c p09-npad tipohoga-recrama

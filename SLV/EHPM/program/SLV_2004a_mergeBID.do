@@ -3,7 +3,7 @@
 ***********************
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM

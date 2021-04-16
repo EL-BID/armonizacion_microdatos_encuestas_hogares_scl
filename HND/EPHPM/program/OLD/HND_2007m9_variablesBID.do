@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m5
 Autores: Yessenia Loaysa (abr-2013)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 9 de Septiembre de 2013
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 9 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -61,7 +61,7 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 	****************
@@ -302,19 +302,19 @@ label define clasehog_ch 1"Unipersonal" 2"Nuclear" 3"Ampliado" 4"Compuesto" 5"Co
 label value clasehog_ch clasehog_ch
 
 egen nmayor21_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 egen nmayor65_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 egen nmenor1_ch=sum((rela_j>0 & rela_j<=9) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 gen idp_ci=nper
 label var idp_ci "Identificador Individual dentro del Hogar"
@@ -322,7 +322,7 @@ label var idp_ci "Identificador Individual dentro del Hogar"
 gen asiste_ci=.
 replace asiste_ci=1 if p03==1
 replace asiste_ci=0 if p03==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 **** This variable is not fully harmonized ****
 gen pqnoasis_ci=.
@@ -339,7 +339,7 @@ replace pqnoasis_ci=9	if p04==7
 replace pqnoasis_ci=11	if p04==9
 replace pqnoasis_ci=12	if p04==1
 replace pqnoasis_ci=99	if p04==99
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 gen repiteult_ci=.
 replace repiteult_ci=1 if p13==1
@@ -347,23 +347,23 @@ replace repiteult_ci=0 if p13==2
 label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 ** para quienes ya no asisten
 gen aedu_ci=anosest
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 
 /* En 2007, en la variable P05 y P11
    
-   P05. ¿Cual es el nivel educativo más alto que alcanzó?
-   P11. ¿Cual es el nivel educativo en el que estudia actualmente?
+   P05. Â¿Cual es el nivel educativo mÃ¡s alto que alcanzÃ³?
+   P11. Â¿Cual es el nivel educativo en el que estudia actualmente?
    
-   apareció la clasificación 8. Superior no Universitario. 
+   apareciÃ³ la clasificaciÃ³n 8. Superior no Universitario. 
    Para ser consistentes con las anteriores harmonizaciones
-   se decidió incluirla dentro de la categoría: 7. Técnico Superior
+   se decidiÃ³ incluirla dentro de la categorÃ­a: 7. TÃ©cnico Superior
    
-   También recodificamos los valores 9 a 8 y 10 a 9, para asegurar la consistencia. */
+   TambiÃ©n recodificamos los valores 9 a 8 y 10 a 9, para asegurar la consistencia. */
    
 replace p05=7 if p05==8
 replace p05=8 if p05==9
@@ -455,12 +455,12 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
 
 /* RECODIFIED, Option 10, 11 and 12 were considered Private = 246 obs
 
-      p09 A traves de que sistema estudió |      Freq.     Percent        Cum.
+      p09 A traves de que sistema estudiÃ³ |      Freq.     Percent        Cum.
     --------------------------------------+-----------------------------------
                                1. PROHECO |         94        0.20        0.20
                             2. EDUCATODOS |        285        0.61        0.81
                               3. PRALEBAH |        149        0.32        1.12
-          4. Presencial en centro público |     42,841       91.20       92.33
+          4. Presencial en centro pÃºblico |     42,841       91.20       92.33
           5. Presencial en centro privado |      2,917        6.21       98.54
  6. Presencial en centro privado bilingue |         32        0.07       98.61
             7. Por radio(maestro en casa) |         90        0.19       98.80
@@ -468,7 +468,7 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
          9. A distancia en centro privado |         37        0.08       99.18
                      10. En el extranjero |        203        0.43       99.61
   11. Educacion virtual publica o privada |          3        0.01       99.62
-                    12. ONG,s o Fundación |         40        0.09       99.71
+                    12. ONG,s o FundaciÃ³n |         40        0.09       99.71
                               13. CCEPREB |          3        0.01       99.71
                   99. No sabe/no responde |        135        0.29      100.00
     --------------------------------------+-----------------------------------
@@ -483,7 +483,7 @@ replace edupub_ci=0 if (p16==5|p16==6|p16==9|p16==10|p16==11|p16==12)
 
 
 
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 gen miembros_ci=1 if rela_j>=1 & rela_j<=9
 replace miembros_ci=0 if rela_j==10 | rela_j==11
@@ -496,7 +496,7 @@ drop uno
 
 /* CATEGOPRI
    En 2003, 
-   p027. ¿Cuál ES o ERA su categoría ocupacional PRINCIPAL?
+   p027. Â¿CuÃ¡l ES o ERA su categorÃ­a ocupacional PRINCIPAL?
 
    1. Empleado u obrero publico
    2. Empleado u obrero privado
@@ -510,32 +510,32 @@ drop uno
   99. No sabe, no responde
    
    En 2007,    
-   RP50. Ultima Ocupación para Desocupados
-   53.  En la ocupación de [LEER RP50] ¿usted trabajó como:
+   RP50. Ultima OcupaciÃ³n para Desocupados
+   53.  En la ocupaciÃ³n de [LEER RP50] Â¿usted trabajÃ³ como:
    
-        1. Empleado(a) u obrero público          
+        1. Empleado(a) u obrero pÃºblico          
         2. Empleado(a) u obrero privado     
-        3. Empleado(a) doméstico(a) 
+        3. Empleado(a) domÃ©stico(a) 
                                     
         4. Miembro de cooperativa, asentamiento o grupo                                   
         5. Cuenta propia que no contrata mano de obra temporal
         6. Cuenta propia que contrata mano de obra temporal
-        7. Empleador o patrón   
+        7. Empleador o patrÃ³n   
                                          
         8. Trabajador familiar no remunerado 
         9. Trabajador no remunerado 
 
-    RP60. Ultima Ocupación para Ocupados
-    66.  En la ocupación de [LEER RP60] ¿usted trabajó como:
+    RP60. Ultima OcupaciÃ³n para Ocupados
+    66.  En la ocupaciÃ³n de [LEER RP60] Â¿usted trabajÃ³ como:
     
 	TRABAJADORES ASALARIADOS
-	     1. Empleado(a) u obrero público 
+	     1. Empleado(a) u obrero pÃºblico 
 	     2. Empleado(a) u obrero privado 
-	     3. Empleado(a) doméstico(a)               
+	     3. Empleado(a) domÃ©stico(a)               
 
   	TRABAJADORES CUENTA PROPIA
 
-      	     4. Miembro de cooperativa de producción
+      	     4. Miembro de cooperativa de producciÃ³n
      	     5. Cuenta propia que no contrata mano de obra temporal 
              6. Cuenta propia que contrata mano de obra temporal    
      	     7. Empleador o socio activo     
@@ -544,7 +544,7 @@ drop uno
      	     8. Miembro de cooperativa, asentamiento o grupo                  
      	     9. Cuenta propia que no contrata mano de obra temporal           
   	    10. Cuenta propia que contrata mano de obra temporal    
-  	    11. Patrón o socio de la finca 
+  	    11. PatrÃ³n o socio de la finca 
       
    	    12. Trabajador familiar no remunerado                            
             13. Trabajador no remunerado	*/
@@ -574,7 +574,7 @@ label value categopri_ci categopri_ci
                1. Empl u obrero publico |        103        1.23        1.23
                2. Empl u obrero privado |      1,715       20.48       21.70
                   3. Empleado domestico |         23        0.27       21.98
-4. Miembro de cooperativa de producción |          5        0.06       22.04
+4. Miembro de cooperativa de producciÃ³n |          5        0.06       22.04
 5. Cta. propia que no contrata mano de  |      1,539       18.37       40.41
 6. Cta. propia que contrata mano de obr |        259        3.09       43.51
            7. Empleador o socio activo  |        109        1.30       44.81
@@ -649,7 +649,7 @@ label var emp_ci "Empleado en la semana de referencia"*/
 
 gen condocup_ci=condact
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -797,7 +797,7 @@ replace tiempoparc=1 if horastot<30 & p119==2
 label var tiempoparc "Trabajadores a medio tiempo"
 
 /*Incorporada en 2007
-69. ¿Esta trabajando bajo contrato?
+69. Â¿Esta trabajando bajo contrato?
     1. Contrato individual
     2. Acuerdo Individual
     3. Otro
@@ -811,15 +811,15 @@ label var contrato "Peronas empleadas que han firmado un contrato de trabajo"
 /*
 Asalariados, Ocupacion Principal
 
-74. En el trabajo, ¿tiene usted  derecho a:                  
+74. En el trabajo, Â¿tiene usted  derecho a:                  
 
-      1.    O     Pensión? 
+      1.    O     PensiÃ³n? 
       2.    O     Prestaciones laborales?
       3.    O     Vacaciones?
       4.    O     Pago de horas extra?
       5.    O     Seguro por accidente?
-      6.    O     Aguinaldo (décimo tercer salario)?
-      7.    O     Décimo cuarto salario?
+      6.    O     Aguinaldo (dÃ©cimo tercer salario)?
+      7.    O     DÃ©cimo cuarto salario?
       8.    O     Bonificaciones?
       9.    O     Seguro de vida?
      10.    O     Ninguno de los anteriores?
@@ -830,15 +830,15 @@ label var segsoc "Personas que cuentan con seguro social"
 
 Asalariados, Ocupacion Secundaria
 
-104. En el trabajo, ¿tiene usted derecho a:                              
+104. En el trabajo, Â¿tiene usted derecho a:                              
 
-      1.   O     Pensión? 
+      1.   O     PensiÃ³n? 
       2.   O     Prestaciones laborales?
       3.   O     Vacaciones?
       4.   O     Pago de horas extra?
       5.   O     Seguro por accidente?
       6.   O     Aguinaldo (decimo tercer salario)?
-      7.   O     Décimo cuarto salario?
+      7.   O     DÃ©cimo cuarto salario?
       8.   O     Bonificaciones?
       9.   O     Seguro de vida?
      10.   O     Ninguno de los anteriores?
@@ -1132,7 +1132,7 @@ replace rama_ci=. if ramaop==10 | ramaop==11 | emp_ci==0
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -1295,7 +1295,7 @@ gen tiempoparc_ci=.
 gen pared_ch=.
 gen raza_ci=.
 gen instcot_ci=.
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

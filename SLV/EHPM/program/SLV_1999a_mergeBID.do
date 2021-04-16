@@ -8,7 +8,7 @@ set more off
 
 clear
 
-global ruta = "D:\DATA.IDB\Documents\Marcela\Research\Sociometro\"
+global ruta = "${surveysFolder}\DATA.IDB\Documents\Marcela\Research\Sociometro\"
 
 local PAIS SLV
 local ENCUESTA EHPM

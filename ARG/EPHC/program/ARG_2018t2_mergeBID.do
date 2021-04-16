@@ -13,7 +13,7 @@ set more off
 local anio =2018
 local anio2 =18
 local ronda t2
-local ruta "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys\Survey\ARG\EPHC\\`anio'\"
+local ruta "${surveysFolder}\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys\Survey\ARG\EPHC\\`anio'\"
 local t ="`ruta'\`ronda'\data_orig\" 
 local out1 ="`ruta'\`ronda'\data_merge\"
 local out2 ="`ruta'\s1\data_orig\"

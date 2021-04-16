@@ -7,8 +7,8 @@
 clear
 set more off
 
-global ruta = "\\Sdssrv03\surveys\survey\BOL\ECH\2001\m11_m12\data_orig\"
-global out = "\\Sdssrv03\surveys\survey\BOL\ECH\2001\m11_m12\data_merge"
+global ruta = "${surveysFolder}\survey\BOL\ECH\2001\m11_m12\data_orig\"
+global out = "${surveysFolder}\survey\BOL\ECH\2001\m11_m12\data_merge"
 
 use "$ruta\hogar.dta", clear
 

@@ -15,7 +15,7 @@ set more off
 capture log close
 
 **Note: this local should be change by the user
-local propiodir = "C:\Users\wb377246\Documents\Julian\LM_W"
+local propiodir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W"
 
 *** Declare Global Directory
 global dir	  = "`propiodir'\BRA\Data\"
@@ -41,7 +41,7 @@ compress
 		order v001 serie metro_a orden ordem condom male dob mob yob
 		qui egen id = group (v001 serie metro_a orden ordem condom male dob mob yob)
 	
-		local propiodir = "C:\Users\wb377246\Documents\Julian\LM_W"
+		local propiodir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W"
 
 		drop v001 serie orden ordem condom dob mob yob control npess cfamilia nfamilia 
 		order id

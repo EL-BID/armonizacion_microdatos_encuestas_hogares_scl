@@ -1,7 +1,7 @@
 * MERGE
 * ARGENTINA EPH. CONTINUA. 1erSem. 2004
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local log_file = "$ruta\harmonized\ARG\EPHC\log\ARG_2004s1_mergeBID.log"
 

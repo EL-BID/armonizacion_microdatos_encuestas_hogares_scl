@@ -2,7 +2,7 @@ clear
 
 *2013-MLO
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -25,7 +25,7 @@ sort idp
 save "`base_in'\CHL_1992m11_m12_m.dta", replace
 
 * modulo de ingresos -se usan los ingresos ajustados (lo hizo hasta 2011 CEPAL)
-use "`base_in'\ingresos_ajustados_casen1992.dta", clear /*educación */
+use "`base_in'\ingresos_ajustados_casen1992.dta", clear /*educaciÃ³n */
 egen idp =concat(seg f o)
 sort idp
 save "`base_in'\ingresos_ajustados_casen1992_m.dta", replace

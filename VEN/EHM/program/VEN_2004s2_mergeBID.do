@@ -4,7 +4,7 @@
 
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\VEN\EHM\2004\s2\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\2004\s2\data_orig\"
 
 *Genero IDH
 *-------------------
@@ -33,4 +33,4 @@ drop _merge
 joinby entidad control localidad area linea num_hog using "per042.dta", _merge (_merge)
 tab _merge
 drop _merge
-save "\\Sdssrv03\surveys\survey\VEN\EHM\2004\s2\data_merge\VEN_2004s2.dta", replace
+save "${surveysFolder}\survey\VEN\EHM\2004\s2\data_merge\VEN_2004s2.dta", replace

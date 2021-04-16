@@ -1,14 +1,14 @@
-*Mayra Sáenz
+*Mayra SÃ¡enz
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 *              Malnutrition, Breastfeeding, and Anemia Indicators                                             *          
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 clear all
-use "Y:\survey\JAM\SLC\2006\m5\data_merge\JAM_2006m5.dta"
+use "${surveysFolder}\survey\JAM\SLC\2006\m5\data_merge\JAM_2006m5.dta"
 set more off
 *Main directory
-global path = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
+global path = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
 * Folder of outputs
-global outputs = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
+global outputs = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
 
 *Source of comparison: http://www.who.int/nutgrowthdb/database/countries/who_standards/jam_dat.pdf
 *==============================================================================================================*
@@ -112,7 +112,7 @@ g pesokg   = c10
 g alturacm = c11
 
 destring alturacm, replace
-/*x: Indicador de datos válidos */
+/*x: Indicador de datos vÃ¡lidos */
 gen x = 1 if (edadmes ~=. & alturacm ~=. & pesokg ~=.)
 *Muestra total
 egen mtot =sum(x)
@@ -186,7 +186,7 @@ the nutritional status of the survey population is poorer on average than that o
 egen hamzs_mtot   = mean(haz06) if (haz06> -6 & haz06< 6)
 
 *Weight-for-age above +2 SD
-*El segundo quintil tiene un punto porcentual más. La diferencia disminuye un poco si no se incluye al 2.
+*El segundo quintil tiene un punto porcentual mÃ¡s. La diferencia disminuye un poco si no se incluye al 2.
 g waa2sd  = (waz06>= 2 & waz06< 5)*100 if (waz06> -6 & waz06< 5)
 
 *Weight-for-age below -2 SD
@@ -207,7 +207,7 @@ g whb2sd  = (whz06>=-5 & whz06<-2)*100 if (whz06>=-5 & whz06< 5)
 g whb3sd  = (whz06>=-5 & whz06<-3)*100 if (whz06>=-5 & whz06< 5)
 *Weight-for-height mean Z-score
 egen whmzs_mtot    = mean(whz06) if (whz06>=-5 & whz06< 5)
-*Se genera mtot sólo para fines de subtítulo de la tabla
+*Se genera mtot sÃ³lo para fines de subtÃ­tulo de la tabla
 
 
 
@@ -273,12 +273,12 @@ bys sexo: egen `i'sex = mean(`i')
  }
 
  *=========================================================================================*
- * Generación de bases de datos por cada tipo de desagregación                              *
+ * GeneraciÃ³n de bases de datos por cada tipo de desagregaciÃ³n                              *
  *=========================================================================================*
  
  
   preserve
-*Se genera total sólo para fines de subtítulo de la tabla
+*Se genera total sÃ³lo para fines de subtÃ­tulo de la tabla
 capture g total = 1
 label define total 1 "Total: Total"
 label value total total

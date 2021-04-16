@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (Versiï¿½n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS DOM
 local ENCUESTA ENCFT
@@ -39,7 +39,7 @@ Fecha Ãºltima modificaciÃ³n: 12 de Junio 2018, by Alvaro Altamirano/ alvaroalt@i
 							SCL/LMK - IADB
 **************************************************************************************/
 
-*Conversión de bases de formato excel a stata
+*Conversiï¿½n de bases de formato excel a stata
 /*
 clear all
 global modulos "Vivienda Hogar Miembros Ocupacion Ingresos_Exterior Remesas Calculadas"
@@ -50,7 +50,7 @@ clear
 }
 */
 
-*Consolidando la información*
+*Consolidando la informaciï¿½n*
 *****************************
 use "`base_in'\miembros.dta", clear
 

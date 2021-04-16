@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (Versiï¿½n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENOE\2019\t1\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENOE\2019\t1\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENOE
 local ANO "2019"
 local ronda t1
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 *capture log close
 *log using "`log_file'", replace 
@@ -29,7 +29,7 @@ local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\
 use "$ruta\COE1T119.dta"
 rename _all, lower
 destring eda, replace
-drop if r_def!=0 | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 años (sólo se hace cuestionario de ocupación a los residentes mayores de 12 años)		
+drop if r_def!=0 | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 aï¿½os (sï¿½lo se hace cuestionario de ocupaciï¿½n a los residentes mayores de 12 aï¿½os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 *Limit variable labels' length
 foreach i of varlist _all {
@@ -42,7 +42,7 @@ saveold "$ruta\COE1T119.dta" , replace
 use "$ruta\COE2T119.dta"
 rename _all, lower
 destring eda, replace
-drop if eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 años (sólo se hace cuestionario de ocupación a los residentes mayores de 12 años)		
+drop if eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 aï¿½os (sï¿½lo se hace cuestionario de ocupaciï¿½n a los residentes mayores de 12 aï¿½os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 foreach i of varlist _all {
 local longlabel: var label `i'
@@ -54,7 +54,7 @@ saveold "$ruta\COE2T119.dta", replace
 use "$ruta\SDEMT119.dta"
 rename _all, lower
 destring eda, replace
-drop if r_def!=0 | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 años (sólo se hace cuestionario de ocupación a los residentes mayores de 12 años)		
+drop if r_def!=0 | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 aï¿½os (sï¿½lo se hace cuestionario de ocupaciï¿½n a los residentes mayores de 12 aï¿½os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 merge cd_a  ent  con  v_sel  n_hog  h_mud  n_ren using "$ruta\COE1T119.dta"
 tab _merge

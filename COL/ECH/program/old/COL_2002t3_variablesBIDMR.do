@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ECH
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ECH
 Round: t3
 Autores: Analia
-Generación nuevas variables LMK: 
-Última versión: Marcela Rubio - Email: marcelarubio28@gmail.com | mrubio@iadb.org
-Fecha última modificación: Mayo 2014
+GeneraciÃ³n nuevas variables LMK: 
+Ãšltima versiÃ³n: Marcela Rubio - Email: marcelarubio28@gmail.com | mrubio@iadb.org
+Fecha Ãºltima modificaciÃ³n: Mayo 2014
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -47,7 +47,7 @@ use `base_in', clear
 ************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -57,24 +57,24 @@ label value region_BID_c region_BID_c
 gen region_c= dpto
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -112,7 +112,7 @@ puesto que es una definicion politico-geografica, no por
 densidad demografica*/
 destring clase, replace
 g zona_c = clase == 1
-la var zona_c "Zona del país"
+la var zona_c "Zona del paÃ­s"
 la de zona_c 1 "Urbana" 0 "Rural"
 la val zona_c zona_c
 
@@ -143,7 +143,7 @@ label value mes_c mes_c
 ***factor_ci***
 ***************
 gen  factor_ci=fex_c_2011
-la var factor_ci "Factor de expansión del individuo"
+la var factor_ci "Factor de expansiÃ³n del individuo"
 
 br
 		****************************
@@ -181,7 +181,7 @@ label value sexo_ci sexo_ci
 ***************
 
 gen edad_ci = p5
-label var edad_ci "Edad del individuo (años)"
+label var edad_ci "Edad del individuo (aÃ±os)"
 
 ***************
 ****raza_ci****
@@ -189,7 +189,7 @@ label var edad_ci "Edad del individuo (años)"
 
 gen raza_ci=.
 label var raza_ci "Raza o etnia del individuo"
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
 
@@ -203,7 +203,7 @@ replace civil_ci=2 if p6>=1 & p6<=2
 replace civil_ci=3 if p6==4
 replace civil_ci=4 if p6==3
 label var civil_ci "Estado civil"
-label define civil_ci 1 "Soltero" 2 "Unión formal o informal" 3 "Divorciado o separado" 4 "Viudo"
+label define civil_ci 1 "Soltero" 2 "UniÃ³n formal o informal" 3 "Divorciado o separado" 4 "Viudo"
 label value civil_ci civil_ci
 
 ******************
@@ -218,35 +218,35 @@ label var jefe_ci "Jefe de hogar"
 *******************
 
 bys idh_ch: egen nconyuges_ch = sum(relacion_ci==2)
-label var nconyuges_ch "Número de cónyuges"
+label var nconyuges_ch "NÃºmero de cÃ³nyuges"
 
 ***************
 ***nhijos_ch***
 ***************
 
 bys idh_ch: egen nhijos_ch= sum(relacion_ci==3)
-label var nhijos_ch "Número de hijos"
+label var nhijos_ch "NÃºmero de hijos"
 
 ******************
 ***notropari_ch***
 ******************
 
 bys idh_ch: egen notropari_ch = sum(relacion_ci==4)
-label var notropari_ch "Número de otros familiares"
+label var notropari_ch "NÃºmero de otros familiares"
 
 ********************
 ***notronopari_ch***
 ********************
 
 bys idh_ch: egen notronopari_ch = sum(relacion_ci==5)
-label var notronopari_ch "Número de no familiares"
+label var notronopari_ch "NÃºmero de no familiares"
 
 ****************
 ***nempdom_ch***
 ****************
 
 bys idh_ch: egen nempdom_ch = sum(relacion_ci==6)
-label var nempdom_ch "Número de empleados domésticos"
+label var nempdom_ch "NÃºmero de empleados domÃ©sticos"
 
 *****************
 ***clasehog_ch***
@@ -272,14 +272,14 @@ label value clasehog_ch clasehog_ch
 ******************
 
 bys idh_ch: egen nmiembros_ch = sum(relacion_ci>=1 & relacion_ci<=4)
-label var nmiembros_ch "Número de familiares en el hogar"
+label var nmiembros_ch "NÃºmero de familiares en el hogar"
 
 *****************
 ***nmayor21_ch***
 *****************
 
 bys idh_ch: egen nmayor21_ch = sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci>21 & edad_ci!=.)  
-label var nmayor21_ch "Número de familiares mayores a 21 años"
+label var nmayor21_ch "NÃºmero de familiares mayores a 21 aÃ±os"
 
 
 *****************
@@ -287,28 +287,28 @@ label var nmayor21_ch "Número de familiares mayores a 21 años"
 *****************
 
 bys idh_ch: egen nmenor21_ch = sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci<21)  
-label var nmenor21_ch "Número de familiares mayores a 21 años"
+label var nmenor21_ch "NÃºmero de familiares mayores a 21 aÃ±os"
 
 *****************
 ***nmayor65_ch***
 *****************
 
 bys idh_ch: egen nmayor65_ch = sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci>65)  
-label var nmayor65_ch "Número de familiares mayores a 65 años"
+label var nmayor65_ch "NÃºmero de familiares mayores a 65 aÃ±os"
 
 ****************
 ***nmenor6_ch***
 ****************
 
 bys idh_ch: egen nmenor6_ch = sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci<6)  
-label var nmenor6_ch "Número de familiares menores a 6 años"
+label var nmenor6_ch "NÃºmero de familiares menores a 6 aÃ±os"
 
 ****************
 ***nmenor1_ch***
 ****************
 
 bys idh_ch: egen nmenor1_ch = sum((relacion_ci>= 1 & relacion_ci<= 4) & edad_ci<1)
-label var nmenor1_ch "Número de familiares menores a 1 año"
+label var nmenor1_ch "NÃºmero de familiares menores a 1 aÃ±o"
 
 ****************
 ***miembros_ci***

@@ -6,7 +6,7 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
@@ -31,7 +31,7 @@ Creation Date:    25 Jun 2019 - 10:57:54
 	import os
 	import csv
 	anio= 2019
-	path = r'C:\Users\ALVAROALT\Desktop'
+	path = r'${surveysFolder}\Users\ALVAROALT\Desktop'
 	os.chdir(path)
 	input = pd.read_csv(r'input_PNADC_{}.txt'.format(anio), header=None, encoding = 'latin-1')
 	input[0] = input[0].str.replace(r"([\@])(\d+)", r"_column (0\2)").astype('str')
@@ -48,8 +48,8 @@ local ano 2019
 local ronda t2
 	
 	
-global input  "\\Sdssrv03\surveys\survey\BRA\PNADC\2019\t2\data_orig"
-global output "\\Sdssrv03\surveys\survey\BRA\PNADC\2019\t2\data_merge" 
+global input  "${surveysFolder}\survey\BRA\PNADC\2019\t2\data_orig"
+global output "${surveysFolder}\survey\BRA\PNADC\2019\t2\data_merge" 
 
 
 /*==================================================
@@ -86,7 +86,7 @@ exit
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*

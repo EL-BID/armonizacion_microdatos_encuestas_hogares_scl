@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor ??amente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Jamaica
+PaÃ­s: Jamaica
 Encuesta: SLC
 Round: a
-Autores: Mayra Sáenz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Autores: Mayra SÃ¡enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 Versiones anteriores: Yessenia Loayza
-Fecha última modificación: 17 de noviembre de 2016
+Fecha Ãºltima modificaciÃ³n: 17 de noviembre de 2016
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -50,10 +50,10 @@ use `base_in', clear
 /*clear all 
 set memory 200m
 set more off
-use "Z:\survey\JAM\SLC\2012\m5\data_merge\JAM_2012m5.dta", clear */
+use "${surveysFolder}\survey\JAM\SLC\2012\m5\data_merge\JAM_2012m5.dta", clear */
 
 
-*MS: Este do file requiere revisarse, sólo se encuentran armonizadas ciertas variables.
+*MS: Este do file requiere revisarse, sÃ³lo se encuentran armonizadas ciertas variables.
 
 //////////////////////////////////////////////////////////////////////////
          											   
@@ -138,7 +138,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a “weighting factor” but a “non response factor”. 
+/* It is not a â€œweighting factorâ€ but a â€œnon response factorâ€. 
 It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 ***************
@@ -157,7 +157,7 @@ label var factor_ch "Factor de expansion del Hogar"
 
 ** Population in Jamaica in 2008 = 2,804,332 **
 * Se reajustan los ponderadores:
-*Modificacion Mayra Sáens Mayo 2014 Population 2010= 2703600
+*Modificacion Mayra SÃ¡ens Mayo 2014 Population 2010= 2703600
 
 sum finwght
 scalar pob=r(sum)
@@ -297,31 +297,31 @@ label variable miembros_ci "Variable dummy que indica las personas que son miemb
 * nmayor21_ch *
 ***************
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 ***************
 * nmenor21_ch *
 ***************
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 ***************
 * nmayor65_ch *
 ***************
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 **************
 * nmenor6_ch *
 **************
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 **************
 * nmenor1_ch *
 **************
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
 
@@ -437,7 +437,7 @@ label var ynlnm_ch "Ingreso no laboral no monetario del Hogar"*/
 *Ted generated antiguedad_ci from SLC survey that I'll keep it. 
 
 
-/*REVISAR DESDE ESTA SECCIóN
+/*REVISAR DESDE ESTA SECCIÃ³N
 
 
 ******************************************************************************
@@ -526,7 +526,7 @@ gen GRADO2=b22 if NIVEL2>0 & NIVEL2<=3 /* son los grados de primaria o secundari
 gen byte asiste_ci=.
 replace asiste_ci=1 if b1>=1 & b1<19
 replace asiste_ci=0 if b1==19
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 
 /*
@@ -541,7 +541,7 @@ replace aedu_ci=GRADO2 if NIVEL2==1 | NIVEL2==2 | NIVEL2==3
 
 replace aedu_ci=GRADO-1 if aedu>=ageyrs & GRADO<. & GRADO2<. 
 replace aedu_ci=0 if b1==19 & b21==20
-label variable aedu_ci "Años de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "AÃ±os de Educacion (no incluye terciaria o universitaria)"
 replace aedu_ci=. if aedu_ci<0
 
 
@@ -663,14 +663,14 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac_ci=0 if b1==14 | b1==15 | b21==15 | b21==16
 replace eduac_ci=1 if b1==13 | b21==14
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 *************
 * repite_ci *
 *************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 ****************
 * repiteult_ci *
@@ -688,7 +688,7 @@ destring b3, replace
 gen edupub_ci=.
 replace edupub_ci=1 if b3==1
 replace edupub_ci=0 if b3==2
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ***************
 * pqnoasis_ci *
@@ -717,7 +717,7 @@ destring b10_r1, replace
 
 g pqnoasis_ci=.
 replace pqnoasis_ci=b10_r1
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" ///
 7 "Costos del transporte" 8 "Escuela cerrada" 9 "Carece de zapatos o uniforme, sucios, o mojados" 10 "Lluvia" ///
 11 "Problemas monetarios" 12 "Tiene que realizar alguna diligencia" 13 "No esta seguro en la escuela" 14 "No esta seguro en la comunidad" ///
@@ -740,7 +740,7 @@ replace luz_ch=0 if electric==0
 gen cuartos_ch=.
 replace cuartos_ch=i3 if i3>=0 & i3<=12
 
-gen piso_ch=. // sÃ³lo hay la pregunta de pared.
+gen piso_ch=. // sÃƒÂ³lo hay la pregunta de pared.
 
 gen region_c =.
 
@@ -1138,7 +1138,7 @@ gen vivialqimp_ch=.
 drop NIVEL GRADO NIVEL2 GRADO2  
 */
 
-*saveold "Z:\harmonized\JAM\SLC\data_arm\JAM2012EA_BID.dta", replace 
+*saveold "${surveysFolder}\harmonized\JAM\SLC\data_arm\JAM2012EA_BID.dta", replace 
 
 
 g region_BID_c = .
@@ -1271,15 +1271,15 @@ g vivialqimp_ch=.
 
 destring sexo_ci, replace
   /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

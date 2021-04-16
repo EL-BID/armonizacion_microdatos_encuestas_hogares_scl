@@ -5,19 +5,19 @@
 *_:*:_*_:*:__:*:__:*:__:*:__:*:__:*:__:*:__:*:__:*:__:*:_*
 
 
-*Mayra Sáenz Julio 2013
+*Mayra SÃ¡enz Julio 2013
 clear all
 set more off
 
 
-use "X:\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_viv.dta"
+use "${surveysFolder}\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_viv.dta"
 sort hide
 gen h903h = h903
 label var h903h "Ponderador del hogar"
 
-save "X:\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_vivtemp.dta", replace
+save "${surveysFolder}\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_vivtemp.dta", replace
 
-use "X:\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_pob.dta", clear
+use "${surveysFolder}\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_pob.dta", clear
 rename hide hide1
 tostring hide1, replace
 gen hide=real(substr(hide1,1,6))
@@ -25,7 +25,7 @@ sort hide
 gen h903i = h903
 label var h903i "Ponderador del individuo"
 
-merge m:m hide using "X:\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_vivtemp.dta"
+merge m:m hide using "${surveysFolder}\ARM\BOL\1993\Orig_data\bd10_nueva\eih6_vivtemp.dta"
 tab _merge
 
 /*
@@ -44,4 +44,4 @@ drop _merge
 label var hide "Identificador del hogar"
 label var hide1 "Identificador del individuo"
 
- save "X:\ARM\BOL\1993\Orig_data\bol93.dta", replace
+ save "${surveysFolder}\ARM\BOL\1993\Orig_data\bol93.dta", replace

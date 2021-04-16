@@ -11,7 +11,7 @@
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\txt\"
 
 
 *** VIVIENDA ***
@@ -45,7 +45,7 @@ gen ANO = 2007
 gen MES = 7
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\vivienda7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\vivienda7.dta", replace
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
 clear
@@ -61,7 +61,7 @@ gen ANO = 2007
 gen MES = 7
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\educacion7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\educacion7.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -77,7 +77,7 @@ gen ANO = 2007
 gen MES = 7
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\ftrab7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\ftrab7.dta", replace
 
 
 *** OCUPADOS ***
@@ -120,7 +120,7 @@ gen ANO = 2007
 gen MES = 7
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\ocupados7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\ocupados7.dta", replace
 
 
 
@@ -140,7 +140,7 @@ gen ANO = 2007
 gen MES = 7
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\desocupados7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\desocupados7.dta", replace
 
 
 *** INACTIVOS ***
@@ -153,7 +153,7 @@ P7490S1 48-57 using SAS80cab07.TXT
 gen ANO = 2007
 gen MES = 7
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\inactivos7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\inactivos7.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -168,7 +168,7 @@ P7480S11A1 32-33 P7480S12 34-34 P7480S12A1 35-36 using SAS90cab07.TXT
 gen ANO = 2007
 gen MES = 7
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\otrasactividades7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\otrasactividades7.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -182,7 +182,7 @@ SECUENCIA_ENCUESTA 141-148 SECUENCIA_P 149-156 ORDEN 157-164 CLASE 165-165 AREA 
 gen ANO = 2007
 gen MES = 7
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\otrosingresos7.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CABECERA\Stata\otrosingresos7.dta", replace
 
 
 
@@ -193,7 +193,7 @@ save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0707\CAB
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\txt\"
 
 
 *** VIVIENDA ***
@@ -227,7 +227,7 @@ gen ANO = 2007
 gen MES = 8
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\vivienda8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\vivienda8.dta", replace
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
 clear
@@ -243,7 +243,7 @@ gen ANO = 2007
 gen MES = 8
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\educacion8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\educacion8.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -259,7 +259,7 @@ gen ANO = 2007
 gen MES = 8
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\ftrab8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\ftrab8.dta", replace
 
 
 *** OCUPADOS ***
@@ -302,7 +302,7 @@ gen ANO = 2007
 gen MES = 8
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\ocupados8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\ocupados8.dta", replace
 
 
 
@@ -322,7 +322,7 @@ gen ANO = 2007
 gen MES = 8
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\desocupados8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\desocupados8.dta", replace
 
 
 *** INACTIVOS ***
@@ -335,7 +335,7 @@ P7490S1 48-57 using SAS80cab08.TXT
 gen ANO = 2007
 gen MES = 8
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\inactivos8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\inactivos8.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -350,7 +350,7 @@ P7480S11A1 32-33 P7480S12 34-34 P7480S12A1 35-36 using SAS90cab08.TXT
 gen ANO = 2007
 gen MES = 8
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\otrasactividades8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\otrasactividades8.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -364,7 +364,7 @@ SECUENCIA_ENCUESTA 141-148 SECUENCIA_P 149-156 ORDEN 157-164 CLASE 165-165 AREA 
 gen ANO = 2007
 gen MES = 8
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\otrosingresos8.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CABECERA\Stata\otrosingresos8.dta", replace
 
 
 *********************************
@@ -373,7 +373,7 @@ save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0708\CAB
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\txt\"
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\txt\"
 
 
 *** VIVIENDA ***
@@ -407,7 +407,7 @@ gen ANO = 2007
 gen MES = 9
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\vivienda9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\vivienda9.dta", replace
 
 
 *** CARACTERISTICAS GENERALES / EDUCACION  ***
@@ -424,7 +424,7 @@ gen ANO = 2007
 gen MES = 9
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\educacion9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\educacion9.dta", replace
 
 
 *** FUERZA DE TRABAJO ***
@@ -440,7 +440,7 @@ gen ANO = 2007
 gen MES = 9
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\ftrab9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\ftrab9.dta", replace
 
 
 *** OCUPADOS ***
@@ -483,7 +483,7 @@ gen ANO = 2007
 gen MES = 9
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\ocupados9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\ocupados9.dta", replace
 
 
 
@@ -503,7 +503,7 @@ gen ANO = 2007
 gen MES = 9
 
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\desocupados9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\desocupados9.dta", replace
 
 
 *** INACTIVOS ***
@@ -516,7 +516,7 @@ P7490S1 48-57 using SAS80cab09.TXT
 gen ANO = 2007
 gen MES = 9
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\inactivos9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\inactivos9.dta", replace
 
 
 *** OTRAS ACTIVIDADES ***
@@ -531,7 +531,7 @@ P7480S11A1 32-33 P7480S12 34-34 P7480S12A1 35-36 using SAS90cab09.TXT
 gen ANO = 2007
 gen MES = 9
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\otrasactividades9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\otrasactividades9.dta", replace
 
 
 *** OTROS INGRESOS ***
@@ -545,7 +545,7 @@ SECUENCIA_ENCUESTA 141-148 SECUENCIA_P 149-156 ORDEN 157-164 CLASE 165-165 AREA 
 gen ANO = 2007
 gen MES = 9
 
-save "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\otrosingresos9.dta", replace
+save "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos originales\0709\CABECERA\Stata\otrosingresos9.dta", replace
 
 
 	

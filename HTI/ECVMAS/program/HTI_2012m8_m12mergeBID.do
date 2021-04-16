@@ -3,7 +3,7 @@ clear
 
 *Alvaro Altamirano 10/24/2017
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HTI
 local ENCUESTA ECVMAS
@@ -22,7 +22,7 @@ set more off
  /*Merge */
 use "`base_in'\ECVMAS 2012\2_ECVMAS_BASE DE DONNEES\Hogares2012.dta", clear
 sort hh_id2new
-merge 1:m hh_id2new using "\\Sdssrv03\surveys\survey\HTI\ECVMAS\2012\m8_m12\data_orig\ECVMAS 2012\2_ECVMAS_BASE DE DONNEES\Individuos2012.dta"
-merge m:1 hh_id2new using "\\Sdssrv03\surveys\survey\HTI\ECVMAS\2012\m8_m12\data_orig\ECVMAS 2012\2_ECVMAS_BASE DE DONNEES\pesos2012.dta", gen(mergepesos)
+merge 1:m hh_id2new using "${surveysFolder}\survey\HTI\ECVMAS\2012\m8_m12\data_orig\ECVMAS 2012\2_ECVMAS_BASE DE DONNEES\Individuos2012.dta"
+merge m:1 hh_id2new using "${surveysFolder}\survey\HTI\ECVMAS\2012\m8_m12\data_orig\ECVMAS 2012\2_ECVMAS_BASE DE DONNEES\pesos2012.dta", gen(mergepesos)
 
-save "\\Sdssrv03\surveys\survey\HTI\ECVMAS\2012\m8_m12\data_merge\HTI_2012m8_m12.dta", replace
+save "${surveysFolder}\survey\HTI\ECVMAS\2012\m8_m12\data_merge\HTI_2012m8_m12.dta", replace

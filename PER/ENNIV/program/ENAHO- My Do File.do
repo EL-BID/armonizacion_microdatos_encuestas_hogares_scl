@@ -2,7 +2,7 @@ clear
 set more on
 cap log close
 
-cd D:\BID\PERU\Data\2004\
+cd ${surveysFolder}\BID\PERU\Data\2004\
 
 log using "ENAHO-2004", replace
 
@@ -178,8 +178,8 @@ tab selva
 * IV.  EDUCATION VARIABLES 
 *------------------------------------------------------------*
 
-/*En esta sección es sólo para los residentes habituales 
-mayores a los 3 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los residentes habituales 
+mayores a los 3 aÃ±os de edad*/
 
 *- Genero Educacion en Anos:
 
@@ -292,7 +292,7 @@ Information used to build the variables of Labor Market Participation - Unemploy
 
 p501 == Tuvo algun trabajo la semana pasada ?  -- Si / No
 p502 == Aunque no trabajo la semana pasada, tiene algun empleo fijo ? -- Si / No
-p503 == aunque no trabajó la semana pasada tiene algún negocio propio al que próximame volvera?  --- Si / No
+p503 == aunque no trabajÃ³ la semana pasada tiene algÃºn negocio propio al que prÃ³ximame volvera?  --- Si / No
 
 realizo alguna de las siguientes actividades para obtener ingresos, al menos una hora ?
    p5041   == Trabajando en algun negocio

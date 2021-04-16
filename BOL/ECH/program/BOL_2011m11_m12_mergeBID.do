@@ -1,30 +1,30 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
 
 
-global in = "\\Sdssrv03\surveys\survey\BOL\ECH\2011\m11_m12\data_orig\"
-global out = "\\Sdssrv03\surveys\survey\BOL\ECH\2011\m11_m12\data_merge\"
+global in = "${surveysFolder}\survey\BOL\ECH\2011\m11_m12\data_orig\"
+global out = "${surveysFolder}\survey\BOL\ECH\2011\m11_m12\data_merge\"
 
 
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: ECH
 Round: m11_m12
 Autores:
-Versión 2016: Mayra Sáenz
-Última versión: Noviembre 4, 2016
+VersiÃ³n 2016: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Noviembre 4, 2016
 
 
 							SCL/LMK - IADB
@@ -43,7 +43,7 @@ rename s7_19 monto_
 rename s7_20 cuesta_ 
 rename d_equip item
 
-* reshape del módulo
+* reshape del mÃ³dulo
 reshape wide posee nro anios monto cuesta_, i(folio factor) j(item)
 
 /*
@@ -51,10 +51,10 @@ reshape wide posee nro anios monto cuesta_, i(folio factor) j(item)
 2	ropero
 3	juego de comedor (mesa y sillas)
 4	juego de living
-5	cocina (a gas, eléctrica, etc.)
-6	 horno (a gas, eléctrico, etc.)
+5	cocina (a gas, elÃ©ctrica, etc.)
+6	 horno (a gas, elÃ©ctrico, etc.)
 7	refrigerador o freezer
-8	máquina de coser
+8	mÃ¡quina de coser
 9	computadora 
 10	radio o radiograbador
 11	minicomponente o equipo de sonido
@@ -65,10 +65,10 @@ reshape wide posee nro anios monto cuesta_, i(folio factor) j(item)
 16	lavadora y/o secadora de ropa
 17	aire acondicionado
 18	ventilador
-19	estufa o calefón
+19	estufa o calefÃ³n
 20	bicicleta
 21	motocicleta (para uso del hogar)
-22	automóvil (para uso del hogar)
+22	automÃ³vil (para uso del hogar)
 */
 
 label var nro_1 "juego de living"
@@ -78,10 +78,10 @@ label var `x'_1 "catre o cama"
 label var `x'_2 "ropero"
 label var `x'_3 "juego de comedor (mesa y sillas)"
 label var `x'_4 "juego de living"
-label var `x'_5 "cocina (a gas, eléctrica, etc.)"
-label var `x'_6 " horno (a gas, eléctrico, etc.)"
+label var `x'_5 "cocina (a gas, elÃ©ctrica, etc.)"
+label var `x'_6 " horno (a gas, elÃ©ctrico, etc.)"
 label var `x'_7 "refrigerador o freezer"
-label var `x'_8 "máquina de coser"
+label var `x'_8 "mÃ¡quina de coser"
 label var `x'_9 "computadora "
 label var `x'_10 "radio o radiograbador"
 label var `x'_11 "minicomponente o equipo de sonido"
@@ -92,10 +92,10 @@ label var `x'_15 "horno microondas"
 label var `x'_16 "lavadora y/o secadora de ropa"
 label var `x'_17 "aire acondicionado"
 label var `x'_18 "ventilador"
-label var `x'_19 "estufa o calefón"
+label var `x'_19 "estufa o calefÃ³n"
 label var `x'_20 "bicicleta"
 label var `x'_21 "motocicleta (para uso del hogar)"
-label var `x'_22 "automóvil (para uso del hogar)"
+label var `x'_22 "automÃ³vil (para uso del hogar)"
 
 }
 
@@ -125,15 +125,15 @@ rename s7_04cod item
 reshape wide s7a s7b s7c s7d s7e s7f s7g s7h s7i s7j s7k, i(folio factor) j(item)
 
 foreach i of numlist 1/66 {
-label var s7a_`i' "¿En el último mes en su hogar compraron, consiguieron o consumieron.."
-label var s7b_`i' "¿Con qué frecuencia compra ....?"
-label var s7c_`i' "Generalmente, ¿qué cantidad de .... compra ?"
-label var s7d_`i' "¿Cuánto gasta por comprar esta cantidad?"
-label var s7e_`i' "¿Con qué frecuencia consume .... de lo que ud. produce o vende?"
-label var s7f_`i' "Generalmente, ¿qué cantidad de .... consume de lo que usted mismo produce o vende?"
-label var s7g_`i' "Si tuviera que comprar esa cantidad de (....) en el mercado, ¿cuánto pagaría?"
-label var s7h_`i' "¿El hogar recibió (....) en el último mes como pago en especie, trueque, donación o regalo?"
-label var s7i_`i' "¿Cuánto pagaría si tuviera que comprar esa cantidad de .... en el mercado?"
+label var s7a_`i' "Â¿En el Ãºltimo mes en su hogar compraron, consiguieron o consumieron.."
+label var s7b_`i' "Â¿Con quÃ© frecuencia compra ....?"
+label var s7c_`i' "Generalmente, Â¿quÃ© cantidad de .... compra ?"
+label var s7d_`i' "Â¿CuÃ¡nto gasta por comprar esta cantidad?"
+label var s7e_`i' "Â¿Con quÃ© frecuencia consume .... de lo que ud. produce o vende?"
+label var s7f_`i' "Generalmente, Â¿quÃ© cantidad de .... consume de lo que usted mismo produce o vende?"
+label var s7g_`i' "Si tuviera que comprar esa cantidad de (....) en el mercado, Â¿cuÃ¡nto pagarÃ­a?"
+label var s7h_`i' "Â¿El hogar recibiÃ³ (....) en el Ãºltimo mes como pago en especie, trueque, donaciÃ³n o regalo?"
+label var s7i_`i' "Â¿CuÃ¡nto pagarÃ­a si tuviera que comprar esa cantidad de .... en el mercado?"
 label var s7j_`i' "Unidad de medida de lo que generalmente compra"
 label var s7k_`i' "Unidad de medida consume/produce"
 
@@ -145,31 +145,31 @@ label var s7k_`i' "Unidad de medida consume/produce"
 1	Pan
 2	Galletas de agua, saladas, dulces
 3	Arroz
-4	Maíz en grano
+4	MaÃ­z en grano
 5	Trigo en grano
 6	Quinua
 7	Fideo
-8	Harina de trigo y/o maíz
+8	Harina de trigo y/o maÃ­z
 9	Otros cereales (Avena, hojuelas, etc.)
 10	Carne de pollo (entero, trozado)
-11	Menudencias de Pollo (patas, cabezas, corazón, mollejas,etc.)
+11	Menudencias de Pollo (patas, cabezas, corazÃ³n, mollejas,etc.)
 12	Carne de res (molida, blanda, cortes especiales)
 13	Carne de res con hueso (con fibras, de segunda, tercera)
 14	Carne de cordero
 15   Carne de cerdo                                                                                                                                                   
-16   Charque, chalona (de cualquier animal) Embutidos (salchicha, chorizo, carnes frías,
-18   Menudencias (hígado, corazón, etc.)                                                                      
+16   Charque, chalona (de cualquier animal) Embutidos (salchicha, chorizo, carnes frÃ­as,
+18   Menudencias (hÃ­gado, corazÃ³n, etc.)                                                                      
 19   Otras carnes (llama, conejo, jochi, etc.)
-20   Pescados frescos (sábalo, pejerrey, blanquillo, etc.)                                                                                                  
-21   Sardinas, Atún
+20   Pescados frescos (sÃ¡balo, pejerrey, blanquillo, etc.)                                                                                                  
+21   Sardinas, AtÃºn
 22   Otros pescados (secos, en lata, mariscos, etc.)
 23   Aceite comestible                                                                                                                                               
 24   Margarina, manteca y/o cebo                                                                                                                                 
-25   Leche líquida                                                                                                                                                
+25   Leche lÃ­quida                                                                                                                                                
 26   Leche en polvo                                                                                                                                               
 27   Queso            
 28	Huevos
-29	Otros productos lácteos (mantequilla, yogurt, requesón, etc.)
+29	Otros productos lÃ¡cteos (mantequilla, yogurt, requesÃ³n, etc.)
 30	Cebollas
 31	Tomate
 32	Zanahoria
@@ -177,36 +177,36 @@ label var s7k_`i' "Unidad de medida consume/produce"
 34	Habas frescas
 35	Choclo
 36	Lechuga, acelga
-37	Locoto, pimentón, perejil
+37	Locoto, pimentÃ³n, perejil
 38	Otras verduras frescas (nabo, espinaca, etc)
 39	Papa
-40	Chuño (seco, remojado)
+40	ChuÃ±o (seco, remojado)
 41	Yuca
 42	Oca
-43	Otros tubérculos (papaliza, camote, etc.)
-44   Maní, lentejas, porotos
-45   Plátano de comer/banano/guineo                                                                                                                     
-46   Plátano de cocinar/postre                                                                                                                                    
+43	Otros tubÃ©rculos (papaliza, camote, etc.)
+44   ManÃ­, lentejas, porotos
+45   PlÃ¡tano de comer/banano/guineo                                                                                                                     
+46   PlÃ¡tano de cocinar/postre                                                                                                                                    
 47   Naranja                                                                                                                                                              
 48   Mandarina                                                                                                                                                       
-49   Limón                                                                                                                                                                     
+49   LimÃ³n                                                                                                                                                                     
 50   Papaya                                                                                                                                                                     
 51   Manzana                                                                                                                                                                       
-52   Otras frutas frescas (piña, lima, pomelo, etc.)
-53   Azúcar                                                                                                                                                                   
+52   Otras frutas frescas (piÃ±a, lima, pomelo, etc.)
+53   AzÃºcar                                                                                                                                                                   
 54   Mermeladas y jaleas
-55   Miel de caña y abeja                                                                                            
+55   Miel de caÃ±a y abeja                                                                                            
 56   Refrescos en polvo y postres en polvo
 57   Otros endulzantes (chancaca, sacarina, etc)
-58	Te, café, mate, hierba mate, sultana												
+58	Te, cafÃ©, mate, hierba mate, sultana												
 59	Cocoa, Toddy, Chocolike												
 60	Hojas de coca				
 61   Sal                                                                                                                                                                        
-62   Ají en vaina, seco                                                                                                                                               
+62   AjÃ­ en vaina, seco                                                                                                                                               
 63   Condimentos y sazonadores (ajinomoto, caldos en cubitos, etc.)
 64   Gaseosa en botella
-65   Jugos en botella y/o cartón
-66   Bebidas alcohólicas (cerveza, etc.)
+65   Jugos en botella y/o cartÃ³n
+66   Bebidas alcohÃ³licas (cerveza, etc.)
 */
 
 duplicates report folio

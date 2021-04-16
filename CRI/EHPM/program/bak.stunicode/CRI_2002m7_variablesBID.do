@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CRI
 local ENCUESTA EHPM
@@ -33,12 +33,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Costa Rica
+PaÃ­s: Costa Rica
 Encuesta: EHPM
 Round: m7
-Autores: Mayra Sáenz Julio 2013
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 1 de octubre de 2013
+Autores: Mayra SÃ¡enz Julio 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 1 de octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -60,28 +60,28 @@ qui destring _all, replace
 gen region_BID_c=.
 replace region_BID_c=1 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Abril 2014
+*InclusiÃ³n Mayra SÃ¡enz - Abril 2014
 gen region_c=provincia
 
 label define region_c  ///
-1	"San José" ///
+1	"San JosÃ©" ///
 2	"Alajuela" ///
 3	"Cartago" ///
 4	"Heredia" ///
 5	"Guanacaste" ///
 6	"Puntarenas" ///
-7	"Limón" 
+7	"LimÃ³n" 
       
            
 label value region_c region_c
-label var region_c "División política, provincias"
+label var region_c "DivisiÃ³n polÃ­tica, provincias"
 
 ***************
 ***factor_ch***
@@ -198,13 +198,13 @@ label variable edad_ci "Edad del individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_ci=1 if b16 == 1
 replace raza_ci=2 if b16 == 2 | b16 == 3
 replace raza_ci=3 if b16 == 4 | b16 == 5 | b16 == 9
 
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label var raza_ci "Raza o etnia del individuo"  
 
@@ -212,7 +212,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -358,7 +358,7 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -430,7 +430,7 @@ replace condocup_ci=1 if condact==1
 replace condocup_ci=2 if condact>=2 & condact<=7
 recode condocup_ci .=3 if condact>=8 & condact<=14 & edad_ci>=12
 recode condocup_ci .=4 if  condact==0 | edad_ci<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 12" 
 label value condocup_ci condocup_ci
 
@@ -512,14 +512,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 
 *****************
@@ -606,7 +606,7 @@ label define tipocontrato_ci 1 "Permanente/indefinido" 2 "Temporal" 3 "Sin contr
 label value tipocontrato_ci tipocontrato_ci
 */
 *MGD 06/13/2014
-* Alternativa con p25. ¿El trabajo que realizó la semana pasada en su ocupación principal...(todo el anio, ocasional/estacional, otro)
+* Alternativa con p25. Â¿El trabajo que realizÃ³ la semana pasada en su ocupaciÃ³n principal...(todo el anio, ocasional/estacional, otro)
 gen tipocontrato_ci=.
 replace tipocontrato_ci=1 if c25==1 & categopri_ci==3
 replace tipocontrato_ci=2 if (c25==2 | c25==3 | c25==4 | c25==9) & categopri_ci==3
@@ -700,14 +700,14 @@ label values durades1_ci durades1_ci
 
 
 /* 
-Modificado Mayra Sáenz - Julio 2013
-Se homologa esta variable de acuerdo al resto de años.
+Modificado Mayra SÃ¡enz - Julio 2013
+Se homologa esta variable de acuerdo al resto de aÃ±os.
            c07:
            1 menos de 1 mes
            2 de 1 a menos de 2 meses
            3 de 2 a menos de 4 meses
-           4 de 4 a menos de 1 año
-           5 de 1 año o más
+           4 de 4 a menos de 1 aÃ±o
+           5 de 1 aÃ±o o mÃ¡s
            9 ignorado
 */
 
@@ -718,9 +718,9 @@ replace durades_ci=(1+4.3)/2/4.3 if c07==1
 replace durades_ci=(1+2)/2 if c07==2
 *de 2 a menos de 4 meses
 replace durades_ci=(2+4)/2 if c07==3
-*de 4 a menos de 1 año
+*de 4 a menos de 1 aÃ±o
 replace durades_ci=(4+12)/2 if c07==4
-*de 1 año o más
+*de 1 aÃ±o o mÃ¡s
 replace durades_ci=(12+24)/2 if c07==5
 
 label variable durades_ci "Duracion del desempleo en meses"
@@ -734,7 +734,7 @@ gen antiguedad_ci=.
 ***tamemp_ci***
 *******************
          
-*Costa Rica Pequeña 1 a 5, Mediana 6 a 19, Grande Más de 19
+*Costa Rica PequeÃ±a 1 a 5, Mediana 6 a 19, Grande MÃ¡s de 19
 /*
 gen tamemp_ci = 1 if (c20>=1 & c20<=5)
 replace tamemp_ci = 2 if (c20>=6 & c20<=19)
@@ -747,9 +747,9 @@ replace tamemp_ci = 2 if (c20>=6 & c20<=10)
 replace tamemp_ci = 3 if (c20>10 & c20!=.)
 replace tamemp_ci = . if (c20==99)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -770,8 +770,8 @@ gen categoinac_ci = 1 if (c08 == 1 & condocup_ci==3)
 replace categoinac_ci = 2 if (c08 == 3 & condocup_ci==3)
 replace categoinac_ci = 3 if (c08 == 4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros"
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros"
 
 
 *******************
@@ -795,7 +795,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 gen ylmpri_ci=ingprinc
 replace ylmpri_ci=. if ingprinci>=99999999
 replace ylmpri_ci=. if emp_ci==0
-*Modificación Mayra Sáenz - Mayo 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Mayo 2014
 replace ylmpri_ci=. if ingtothog==99999999
 replace ylmpri_ci=. if ingtothog==.
 replace ylmpri_ci=0 if ingtothog==0
@@ -814,7 +814,7 @@ replace nrylmpri_ci=. if emp_ci==0
 gen ylmsec_ci=ingprisec
 replace ylmsec_ci=. if  ingprisec==99999999
 replace ylmsec_ci=. if emp_ci==0 | nempleos_ci==1
-*Modificación Mayra Sáenz - Mayo 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Mayo 2014
 replace ylmsec_ci=. if ingtothog==99999999
 replace ylmsec_ci=. if ingtothog==.
 replace ylmsec_ci=0 if ingtothog==0
@@ -824,7 +824,7 @@ replace ylmsec_ci=0 if ingtothog==0
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -846,7 +846,7 @@ replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==.
 
 gen ynlm_ci=otrosingme
 replace ynlm_ci=. if otrosing==99999999
-*Modificación Mayra Sáenz - Mayo 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Mayo 2014
 replace ynlm_ci=. if ingtothog==99999999
 replace ynlm_ci=. if ingtothog==.
 replace ynlm_ci=0 if ingtothog==0
@@ -943,7 +943,7 @@ replace aedu_ci=4 if b10==14
 replace aedu_ci=5 if b10==15
 replace aedu_ci=6 if b10==16
 
-*Secundaria (académica y técnica)
+*Secundaria (acadÃ©mica y tÃ©cnica)
 replace aedu_ci=7 if b10==21 | b10==31
 replace aedu_ci=8 if b10==22 | b10==32
 replace aedu_ci=9 if b10==23 | b10==33
@@ -1108,7 +1108,7 @@ replace pqnoasis1_ci = 7 if b12==9
 replace pqnoasis1_ci = 8 if b12==4
 replace pqnoasis1_ci = 9 if b12==10
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1192,7 +1192,7 @@ gen pared_ch=.
 replace pared_ch=0 if v03==6
 replace pared_ch=1 if v03>=1  & v03<=4
 replace pared_ch=2 if v03==5
-**revisar como categorizar prefabricado: perm, temp u otro...está en permanente*
+**revisar como categorizar prefabricado: perm, temp u otro...estÃ¡ en permanente*
 
 gen techo_ch=.
 replace techo_ch=0 if v04==4
@@ -1231,12 +1231,12 @@ replace telef_ch=1 if  v16a==1
 replace telef_ch=0 if  v16a==2
 
 **********************************************************
-**INTERNET_CH : El hogar posee conexión a Intern
+**INTERNET_CH : El hogar posee conexiÃ³n a Intern
 **********************************************************
 gen internet_ch=.
 replace internet_ch=1 if  v16i==1
 replace internet_ch=0 if  v16i==2
-label var internet_ch "El hogar posee conexión a Internet"
+label var internet_ch "El hogar posee conexiÃ³n a Internet"
 
 gen refrig_ch=.
 replace refrig_ch=1 if  v16b==1
@@ -1271,7 +1271,7 @@ replace viviprop_ch=1 if v02==1
 replace viviprop_ch=2 if v02==2
 replace viviprop_ch=3 if v02==4
 replace viviprop_ch=4 if v02==5
-*en precario es de facto??, lo pongo como si sí*
+*en precario es de facto??, lo pongo como si sÃ­*
 *casi un 10% dice otr y no tengo como clasificarla, invente una categoria llamada 4 OTRA*
 
 
@@ -1288,15 +1288,15 @@ gen vivialqimp_ch=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

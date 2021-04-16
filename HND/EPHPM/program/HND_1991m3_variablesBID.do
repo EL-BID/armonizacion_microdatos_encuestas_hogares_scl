@@ -1,17 +1,17 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -30,15 +30,15 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m3
-Autores:Mayra Sáenz
+Autores:Mayra SÃ¡enz
 Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Armonización 4 de Octubre de 2013: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Última modificación: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Noviembre de 2017
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ArmonizaciÃ³n 4 de Octubre de 2013: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Ãšltima modificaciÃ³n: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org, da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Noviembre de 2017
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -62,20 +62,20 @@ use `base_in', clear
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  depto
-label define region_c 1 "Atlántida" 2 "Colón" 3 "Comayagua" ///
-4 "Copán" 5 "Cortés" 6 "Choluteca" 7 "El Paraíso" 8 "Francisco de Morazán" ///
-10 "Intibuca" 12 "La Paz" 13 "Lempira" 14 "Ocotepeque" 15 "Olancho" 16 "Santa Bárbara" ///
+label define region_c 1 "AtlÃ¡ntida" 2 "ColÃ³n" 3 "Comayagua" ///
+4 "CopÃ¡n" 5 "CortÃ©s" 6 "Choluteca" 7 "El ParaÃ­so" 8 "Francisco de MorazÃ¡n" ///
+10 "Intibuca" 12 "La Paz" 13 "Lempira" 14 "Ocotepeque" 15 "Olancho" 16 "Santa BÃ¡rbara" ///
 17 "Valle" 18 "Yoro"
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 
 ***************
@@ -101,8 +101,8 @@ label var idp_ci "Identificador Individual dentro del Hogar"
 ***zona***
 **********
 
-* Para crear la variable zona se debe utilizar el primer dígito de la variable domi. Sin embargo, los valores difieren
-* significativamente de aquellos de años anteriores. Se genera como valor perdido hasta revisar.
+* Para crear la variable zona se debe utilizar el primer dÃ­gito de la variable domi. Sin embargo, los valores difieren
+* significativamente de aquellos de aÃ±os anteriores. Se genera como valor perdido hasta revisar.
 * Fuente: http://63.161.65.190/nada/index.php/catalog/10/vargrp/VG2
 /*
 tostring domi, replace
@@ -123,13 +123,13 @@ gen zona_c=.
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -182,7 +182,7 @@ gen factor_ci=factor_ch
 **********
 ***sexo***
 **********
-*En la base consta la variable sexo, pero las categorías no corresponden a dicha variable.
+*En la base consta la variable sexo, pero las categorÃ­as no corresponden a dicha variable.
 gen sexo_ci=.
 label var sexo "Sexo del Individuo"
 label define sexo_ci 1 "Hombre" 2 "Mujer"
@@ -332,7 +332,7 @@ label variable miembros_ci "Miembro del hogar"
 ****************
 recode activida (11 12=1) (21 22=2) (33/38=3), gen(condocup_ci)
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -404,7 +404,7 @@ label var horastot_ci "Horas totales trabajadas la semana pasada en todas las ac
 ***subemp_ci***
 ***************
 *La variable correcta es la p13, pero no corresponde el cuestionario con la base.
-*No obstante, la p14 señala las horas adicionales que desea trabajar.
+*No obstante, la p14 seÃ±ala las horas adicionales que desea trabajar.
 /*
 gen subemp_ci=0 
 replace subemp_ci=1 if emp_ci==1 & horastot_ci<=30 & (p14>=1 & p14<99)
@@ -524,13 +524,13 @@ replace  rama_ci=7 if (ramagene>=7111 & ramagene<=7200) & emp_ci==1
 replace  rama_ci=8 if (ramagene>=8101 & ramagene<=8329) & emp_ci==1
 replace  rama_ci=9 if (ramagene>=9100 & ramagene<=9600) & emp_ci==1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -613,7 +613,7 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -635,7 +635,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *************
 *tamemp_ci
 *************
-* La variable de la base no corresponde a la numeración que consta en el cuestionario (p27_1).
+* La variable de la base no corresponde a la numeraciÃ³n que consta en el cuestionario (p27_1).
 
 gen tamemp_ci =.
 /*
@@ -644,10 +644,10 @@ label var tamemp_ci "# empleados en la empresa"
 label define tamemp_ci  1 "Menos de 10" 2 "10 o mas"
 label value tamemp_ci tamemp_ci
 
-No se pueden distinguir estas categorías.
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+No se pueden distinguir estas categorÃ­as.
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 */
 *******************
 ***categoinac_ci***
@@ -657,8 +657,8 @@ gen categoinac_ci =1 if (activida==33 & condocup_ci==3)
 replace categoinac_ci = 2 if  (activida==35 & condocup_ci==3)
 replace categoinac_ci = 3 if  (activida==36 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -667,7 +667,7 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 gen formal_ci=1 if afiliado_ci==1 & condocup_ci==1 
 label var formal_ci "Formal"
 */
-*Modificación Mayra Sáenz- Febrero 2014
+*ModificaciÃ³n Mayra SÃ¡enz- Febrero 2014
 gen formal_ci=.
 label var formal_ci "Formal"
 
@@ -779,7 +779,7 @@ label var ynlnm_ci "Ingreso no laboral no monetario"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing 
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 
 **************
@@ -978,14 +978,14 @@ label values quintil_ci quintil_ci
 
 
 ******************************************************************************
-*	Educación
+*	EducaciÃ³n
 ******************************************************************************
 
-* la p4 que es la variable que corresponde a la asistencia según el cuestionario, no coincide con la base de datos.
+* la p4 que es la variable que corresponde a la asistencia segÃºn el cuestionario, no coincide con la base de datos.
 gen asiste_ci=.
-label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
+label var asiste_ci "Personas que actualmente asisten a centros de enseÃ±anza"
 
- * Años de educacion aprobados **
+ * AÃ±os de educacion aprobados **
 gen grado = p5_2
 gen nivel =p5_1
 
@@ -995,7 +995,7 @@ replace  aedu_ci=0 if (nivel>=1 & nivel<=3) | (nivel==4 & grado==0)
 replace  aedu_ci=grado if nivel==4 & grado>=1
 replace  aedu_ci=grado+6 if (nivel==5 | nivel==6) & grado>=0
 replace  aedu_ci=grado+12 if (nivel==7 | nivel==8) & grado>=0
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 
 ******************************
@@ -1113,7 +1113,7 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 *****************
 g       pqnoasis1_ci =.
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **********************************
@@ -1121,7 +1121,7 @@ label value  pqnoasis1_ci pqnoasis1_ci
 **********************************
 
 
-* Modificación Marcela Rubio Septiembre 2014: pequeño cambio en sintaxis de missings
+* ModificaciÃ³n Marcela Rubio Septiembre 2014: pequeÃ±o cambio en sintaxis de missings
 qui destring pv*, replace
 gen aguared_ch=0
 replace aguared_ch = 1 if pv4a ==1 | pv4a==2
@@ -1162,16 +1162,16 @@ replace des1_ch=1 if pv5b==4 | pv5b==5
 replace des1_ch=2 if pv5a==2 | pv5b==6
 
 /*
-des1_ch Tipo de desagüe incluyendo la definición de "Unimproved" del MDG
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general o a una cámara séptica
-2 El desagüe está conectado a un pozo ciego o es una letrina.
-3 El desagüe se comunica con la superficie: desemboca en un río o en la calle.*/
-* No hay casos para la categoría 3.
+des1_ch Tipo de desagÃ¼e incluyendo la definiciÃ³n de "Unimproved" del MDG
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general o a una cÃ¡mara sÃ©ptica
+2 El desagÃ¼e estÃ¡ conectado a un pozo ciego o es una letrina.
+3 El desagÃ¼e se comunica con la superficie: desemboca en un rÃ­o o en la calle.*/
+* No hay casos para la categorÃ­a 3.
 
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 gen des2_ch=.
@@ -1179,20 +1179,20 @@ replace  des2_ch=0 if  des1_ch==0
 replace  des2_ch=1 if des1_ch==1 | des1_ch==2
 
 /*
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general, a una cámara o fosa séptica, o a un pozo ciego o letrina.
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general, a una cÃ¡mara o fosa sÃ©ptica, o a un pozo ciego o letrina.
 2 Cualquier otro*/
-* No hay casos para la categoría 2.
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+* No hay casos para la categorÃ­a 2.
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
 gen piso_ch=.
 replace  piso_ch=0 if  pv3==5
 replace  piso_ch=1 if  pv3>=1 &  pv3<=4 
-* No hay casos para la categoría 2.
-label var piso_ch "Materiales de construcción del piso"  
+* No hay casos para la categorÃ­a 2.
+label var piso_ch "Materiales de construcciÃ³n del piso"  
 label def piso_ch 0"Piso de tierra" 1"Materiales permanentes" 2 "Otros materiales", modify
 label val piso_ch piso_ch
 
@@ -1200,7 +1200,7 @@ label val piso_ch piso_ch
 gen pared_ch=.
 replace  pared_ch=0 if  pv2==4 |  pv2==5
 replace  pared_ch=1 if  pv2>=1 &  pv2<=3
-label var pared_ch "Materiales de construcción de las paredes"
+label var pared_ch "Materiales de construcciÃ³n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes" 2 "Otros materiales", modify
 label val pared_ch pared_ch
 
@@ -1233,7 +1233,7 @@ gen internet_ch=.
 
 gen cel_ch=.
 
-*Mayra Sáenz 2013. Existe la variable pero no se puede distinguir entre casa y departamento.
+*Mayra SÃ¡enz 2013. Existe la variable pero no se puede distinguir entre casa y departamento.
 gen vivi1_ch=.
 
 gen vivi2_ch=.
@@ -1269,15 +1269,15 @@ replace banomejorado_ch = 0 if ((pv5a >=1 & pv5a <=2) & (pv5b >=4 & pv5b <=6) & 
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

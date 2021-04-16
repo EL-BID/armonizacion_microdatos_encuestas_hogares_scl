@@ -297,9 +297,9 @@ replace aedu_ci=6+ultano if nivel==2
 replace aedu_ci=9+ultano if nivel==3 | nivel==4
 replace aedu_ci=12+ultano if nivel>=5 & nivel<=7
 replace aedu_ci=. if nivel==0 | ultano==0 | nivel>=7 /*Estamos droppeando a los del "Instituto Militar" porque son muy pocos (algo asi como el
-0.2% de la muestra) y no esta claro en que categoría deberían entrar*/
-/*U.T.U (nivel=4)>><< Enseñanza técnica. Aunque se llama Universidad Tecnica de Uruguay no esta contado como una carrera universitaria, sino que, dado
-que solo pide como requisito el primer ciclo, es como una enseñanza secundaria de segundo ciclo que puede durar muchos años.*/
+0.2% de la muestra) y no esta claro en que categorÃ­a deberÃ­an entrar*/
+/*U.T.U (nivel=4)>><< EnseÃ±anza tÃ©cnica. Aunque se llama Universidad Tecnica de Uruguay no esta contado como una carrera universitaria, sino que, dado
+que solo pide como requisito el primer ciclo, es como una enseÃ±anza secundaria de segundo ciclo que puede durar muchos aÃ±os.*/
 gen eduno_ci=(asist==2 & asistio==2)
 gen edupi_ci=(nivel==1 & finalizo==2)
 gen edupc_ci=(nivel==1 & finalizo==1)

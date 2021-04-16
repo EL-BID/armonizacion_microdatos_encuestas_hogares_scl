@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNAD
@@ -27,11 +27,11 @@ capture log close
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+PaÃ­s: Brasil
 Encuesta: PNAD
 Round: m9
 Autores: Mayra Saenz mayras@iadb.org | mayrasaenz.a@gmail.com
-Fecha última modificación: 
+Fecha Ãºltima modificaciÃ³n: 
 
 							
 ****************************************************************************/
@@ -86,5 +86,5 @@ drop _merge
 
 
 
-saveold "\\Sdssrv03\surveys\survey\BRA\PNAD\2015\m9\data_merge\\BRA_2015m9.dta", replace
+saveold "${surveysFolder}\survey\BRA\PNAD\2015\m9\data_merge\\BRA_2015m9.dta", replace
 

@@ -5,7 +5,7 @@
 
 /* Y.L -. comento temporalmente
 
-cd "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos" 
+cd "${surveysFolder}\Colombia\2008\GEIH\Datos" 
 use IIItrimestre_cab.dta
 append using IIItrimestre_res.dta
 
@@ -19,17 +19,17 @@ drop temp
 *----------------------------------------------
 /*
 clear
-use "\\sdssrv03\Surveys\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-save "\\sdssrv03\Surveys\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta", replace
 */
 
 clear
-use "\\sdssrv03\Surveys\survey\COL\GEIH\2008\a\data_orig\hogares2008.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2008\a\data_orig\hogares2008.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-merge idh using "\\sdssrv03\Surveys\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta"
+merge idh using "${surveysFolder}\survey\COL\GEIH\2008\a\data_orig\personas 2008.dta"
 tab _merge
 drop _merge idh
 cap egen id =concat (directorio secuencia_p orden)
@@ -37,14 +37,14 @@ sort id
 destring mes, replace
 keep if mes>=7 & mes<=9
 keep  id mes nper-fex_dpto_c pet- ingtot
-save "Y:\survey\COL\GEIH\2008\a\data_merge\pov_2008t3.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2008\a\data_merge\pov_2008t3.dta", replace
 
 clear
-use "\\sdssrv03\Surveys\\survey\COL\GEIH\2008\t3\data_merge\COL_2008t3.dta", clear
+use "${surveysFolder}\\survey\COL\GEIH\2008\t3\data_merge\COL_2008t3.dta", clear
 cap egen id =concat (directorio secuencia_p orden)
 sort id
-merge id using "Y:\survey\COL\GEIH\2008\a\data_merge\pov_2008t3.dta"
+merge id using "${surveysFolder}\survey\COL\GEIH\2008\a\data_merge\pov_2008t3.dta"
 tab _merge
 drop _merge
-save "\\sdssrv03\Surveys\\survey\COL\GEIH\2008\t3\data_merge\COL_2008t3.dta", replace
+save "${surveysFolder}\\survey\COL\GEIH\2008\t3\data_merge\COL_2008t3.dta", replace
 

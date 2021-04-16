@@ -20,7 +20,7 @@ set more off
 
  ** Households
 
- * E5R_UBI - IDENTIFICACIÓN Y UBICACIÓN DE LA VIVIENDA
+ * E5R_UBI - IDENTIFICACIÃ“N Y UBICACIÃ“N DE LA VIVIENDA
 
  merge ciudad zona sector vivienda hogar using "e5r_ubi.dta"
  	
@@ -76,7 +76,7 @@ set more off
 	drop _merge
 	sort ciudad zona sector vivienda hogar
 
- * E5R_EMIG - SECC9. CAPITAL SOCIAL - EMIGRACIÓN LABORAL
+ * E5R_EMIG - SECC9. CAPITAL SOCIAL - EMIGRACIÃ“N LABORAL
 
  merge ciudad zona sector vivienda hogar using "e5r_emig.dta"
 	

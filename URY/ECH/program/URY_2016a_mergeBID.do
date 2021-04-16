@@ -1,8 +1,8 @@
 * Autor: Stephanie Gonzalez Rubio
 * Fecha: 19 de abril de 2017
 
-global ruta "Z:\survey\URY\ECH\2016\a\data_orig"
-global out "Z:\survey\URY\ECH\2016\a\data_merge"
+global ruta "${surveysFolder}\survey\URY\ECH\2016\a\data_orig"
+global out "${surveysFolder}\survey\URY\ECH\2016\a\data_merge"
 set more off
 use "$ruta\encuesta_continua_de_hogares_2016_hogares.dta", clear
 sort numero

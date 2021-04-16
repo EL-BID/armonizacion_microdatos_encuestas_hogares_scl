@@ -1,10 +1,10 @@
 ***********************
 ***** MERGE 2013 ******
 ***********************
-*Mayra Sáenz Septiembre 2014
+*Mayra SÃ¡enz Septiembre 2014
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM

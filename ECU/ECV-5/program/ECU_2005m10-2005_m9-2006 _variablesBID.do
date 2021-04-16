@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ECV-5
@@ -34,12 +34,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Ecuador
+PaÃ­s: Ecuador
 Encuesta: ECV-5
 Round: Octubre,2005 - Septiembre,2006
-Autores: Mayra Sáenz
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 24 de Septiembre de 2013
+Autores: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 24 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -105,7 +105,7 @@ label variable pais_c "Pais"
 **********
 
 gen anio_c=2006
-label variable anio_c "Año de la encuesta"
+label variable anio_c "AÃ±o de la encuesta"
 
 *********
 ***mes***
@@ -128,9 +128,9 @@ pd04:
            6 padre / madre
            7 suegros
            8 hermanos
-           9 cuñados
+           9 cuÃ±ados
           10 otros parientes
-          11 empleada(o) doméstico
+          11 empleada(o) domÃ©stico
           12 pensionistas
           13 otros no parientes
 */
@@ -187,7 +187,7 @@ label variable edad_ci "Edad del individuo"
 *****************
 /*
 pd07:
-           1 unión libre
+           1 uniÃ³n libre
            2 casado
            3 soltero
            4 separado
@@ -338,12 +338,12 @@ replace emp_ci = . if pa01==1 & pa02==1 & pa03==1
 /*
 pa04:
            1 empleado de gobierno o privado
-           2 jornalero peón agropecuario
+           2 jornalero peÃ³n agropecuario
            3 trabajador independiente
            4 tratando de establecer negocio
            5 tratando adquirir propiedad para trabajar
            6 en lo que salga
-           7 no buscó trabajo
+           7 no buscÃ³ trabajo
 */
 
 
@@ -430,18 +430,18 @@ replace horastot_ci=.  if pa66==999
 pa21:
            1 empleado de gobierno
            2 empleado privado
-           3 jornalero o peón
+           3 jornalero o peÃ³n
            4 patrono
            5 cuenta propia
            6 trabajador del hogar sin pago
            7 trabajador no del hogar sin pago
            8 trabajador agropecuario a sueldo
-           9 jornalero o peón agropecuario
-          10 patrón de la finca
+           9 jornalero o peÃ³n agropecuario
+          10 patrÃ³n de la finca
           11 trabajador agropecuario x cta. propia
           12 ayudante agropecuario del hogar sin pago
           13 ayudante agropecuario no del hogar sin pago
-          14 empleado(a) doméstico(a)
+          14 empleado(a) domÃ©stico(a)
 */
 
 gen categopri_ci=.
@@ -455,7 +455,7 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen trabajadores agricolas */
+/*Dentro de la categorÃ­a empleado se incluyen trabajadores agricolas */
 
 ******************
 **dcategopri_ci **
@@ -535,7 +535,7 @@ pa20:
            7 10 a 24 personas
            8 25 a 49 personas
            9 50 a 99 personas
-          10 100 y más personas
+          10 100 y mÃ¡s personas
 
 */
 
@@ -599,7 +599,7 @@ gen durades_ci=.
 *******************
 ***antiguedad_ci***
 *******************
-* en años
+* en aÃ±os
 
 gen antiguedad_ci=(pa16a+pa16b/(12)) 
 replace antiguedad_ci=. if desemp2_ci==1 
@@ -681,18 +681,18 @@ egen yprijbd=rowtotal(yprid decsueldo1 aniversario1 horaextra1 propinas1 vacacio
 /*Para los trabajadores independientes*/
 /*
 pa22b:
-           1 día
+           1 dÃ­a
            2 semana
            3 quincena
            4 mes
            5 trimestre
            6 semestre
-           7 año
+           7 aÃ±o
 */
 
 
 
-* MGR Dic 2015: corrección sintáxis
+* MGR Dic 2015: correcciÃ³n sintÃ¡xis
 gen ingrneto=(pa22a*pa22c)/12 
 
 /*
@@ -708,7 +708,7 @@ replace ingrneto= .     if pa21==999999
 
 /*
 pa23b:
-           1 día
+           1 dÃ­a
            2 semana
            3 quincena
            4 mes
@@ -740,7 +740,7 @@ gen nrylmpri1_ci=(ylmpri1_ci==. & emp_ci==1)
 *******************************
 /*
 pa40c:
-           1 día
+           1 dÃ­a
            2 semana
            3 quincena
            4 mes
@@ -768,7 +768,7 @@ replace food1=pa40b*30 if pa40c==1
 
 /*
   pa42c. al |
-  año veces |
+  aÃ±o veces |
  que recibe |
     la ropa |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -958,13 +958,13 @@ replace ylnm1_ci=. if ylnmpri1_ci==. & ylnmsec_ci==.
 /*
 
 pa78c:
-           1 día
+           1 dÃ­a
            2 semana
            3 quincena
            4 mes
            5 trimestre
            6 semestre
-           7 año
+           7 aÃ±o
 */
 
 gen remesasext=.
@@ -978,13 +978,13 @@ replace remesasext=pa78b*30 	if pa78c==1
 
 /*
 pa77c:
-           1 día
+           1 dÃ­a
            2 semana
            3 quincena
            4 mes
            5 trimestre
            6 semestre
-           7 año
+           7 aÃ±o
 */
 
 gen ayuda=.
@@ -1039,9 +1039,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1154,8 +1154,8 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 Maximo nivel alcanzado:
 pe45:
            1 ninguno
-           2 centro de alfabetización
-           3 educación básica?????????
+           2 centro de alfabetizaciÃ³n
+           3 educaciÃ³n bÃ¡sica?????????
            4 primaria
            5 educac. media o bachillerato
            6 secundaria
@@ -1340,12 +1340,12 @@ replace edupub_ci=0 if pe28==2
 
 /*
 vi19:
-           1 red pública
-           2 pila, pileta o llave pública
-           3 otra fuente por tubería
+           1 red pÃºblica
+           2 pila, pileta o llave pÃºblica
+           3 otra fuente por tuberÃ­a
            4 carro repartidor / triciclo
            5 pozo
-           6 río vertiente o acequia
+           6 rÃ­o vertiente o acequia
            7 otro, cual
 */
 
@@ -1391,8 +1391,8 @@ gen aguamide_ch=.
 
 /*
 vi29:
-           1 empresa eléctrica pública
-           2 planta eléctrica privada
+           1 empresa elÃ©ctrica pÃºblica
+           2 planta elÃ©ctrica privada
            3 paneles solares
            4 vela, candil, mechero, gas
            5 ninguno
@@ -1415,7 +1415,7 @@ gen luzmide_ch=.
 /*
 vi15:
            1 gas
-           2 leña / carbón
+           2 leÃ±a / carbÃ³n
            3 electricidad
            4 otro, cual
 */
@@ -1430,7 +1430,7 @@ replace combust_ch=0 if vi15==2 | vi15==4
 /*
 vi16:
            1 inodoro y alcantarillado
-           2 inodoro y pozo séptico
+           2 inodoro y pozo sÃ©ptico
            3 inodoro y pozo ciego
            4 letrina
            5 no tiene
@@ -1457,7 +1457,7 @@ replace banoex_ch=. if vi17b==.
 /*
 vi16:
            1 inodoro y alcantarillado
-           2 inodoro y pozo séptico
+           2 inodoro y pozo sÃ©ptico
            3 inodoro y pozo ciego
            4 letrina
            5 no tiene
@@ -1484,11 +1484,11 @@ replace des2_ch=2 if vi16==3 | vi16==4
 /*
 vi07:
            1 duela / parquet / tabloncillo
-           2 cerámica / baldosa / vinyl
-           3 mármol / marmetón
+           2 cerÃ¡mica / baldosa / vinyl
+           3 mÃ¡rmol / marmetÃ³n
            4 cemento / ladrillo
-           5 tabla / tablón no tratado
-           6 caña
+           5 tabla / tablÃ³n no tratado
+           6 caÃ±a
            7 tierra
            8 otro, cual
 
@@ -1505,12 +1505,12 @@ replace piso_ch=2 if vi07==8 |vi07==4 | vi07==5
 
 /*
 vi05:
-           1 hormigón / bloque /ladrillo
+           1 hormigÃ³n / bloque /ladrillo
            2 asbesto / cemento
            3 adobe / tapia
            4 madera
-           5 bahareque (caña y carrizo revestido)
-           6 caña
+           5 bahareque (caÃ±a y carrizo revestido)
+           6 caÃ±a
            7 otro
 */
 
@@ -1525,7 +1525,7 @@ replace pared_ch=2 if vi05==4 | vi05==6 | vi05==7
 
 /*
 vi03:
-           1 hormigón / losa / cemento
+           1 hormigÃ³n / losa / cemento
            2 asbesto (eternit)
            3 zinc
            4 teja
@@ -1546,7 +1546,7 @@ replace techo_ch=2 if vi03==6
 /*
 vi41:
            1 servicio municipal
-           2 la botan a la calle, quebrada, río, lote
+           2 la botan a la calle, quebrada, rÃ­o, lote
            3 la queman
            4 reciclan, entierran
            5 otro, cual
@@ -1580,7 +1580,7 @@ gen cuartos_ch=vi10
 /*
 vi13:
            1 en cuarto exclusivo solo para cocinar
-           2 en un cuarto utilizado también para dormir
+           2 en un cuarto utilizado tambiÃ©n para dormir
            3 en sala comedor
            4 en patio, corredor u otro sitio
            5 no cocinan
@@ -1675,7 +1675,7 @@ replace vivi2_ch=0 if vi09>=3 & vi09<=6
 vi42:
            1 en arriendo
            2 anticresis y/o arriendo
-           3 propia y la está pagando
+           3 propia y la estÃ¡ pagando
            4 propia y totalmente pagada
            5 cedida
            6 recibida por servicios

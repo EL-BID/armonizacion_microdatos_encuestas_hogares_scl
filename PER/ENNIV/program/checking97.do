@@ -5,7 +5,7 @@ clear
 set mem 150m
 set more off
 
-local in="D:\Data.idb\Eugenia\Peru\ENNIV\"
+local in="${surveysFolder}\Data.idb\Eugenia\Peru\ENNIV\"
 
 log using "`in'checking97.log", replace
 
@@ -17,11 +17,11 @@ sum idp_ci [w=factor_ci]
 
 tab zona, m
 sum zona
-tab pais, m /*Verificar que el nombre del país esté con Mayúsculas*/
-tab anio, m /*Verificar que sea un número de 4 cifras*/
+tab pais, m /*Verificar que el nombre del paÃ­s estÃ© con MayÃºsculas*/
+tab anio, m /*Verificar que sea un nÃºmero de 4 cifras*/
 tab mes, m
 
-tab parentco_ci, m /*El número de jefes tiene que ser igual al número de hogares*/
+tab parentco_ci, m /*El nÃºmero de jefes tiene que ser igual al nÃºmero de hogares*/
 
 tab sexo_ci, m
 sum sexo_ci
@@ -38,7 +38,7 @@ sum jefe_ci
 
 tab miembro_ci, m
 
-tab nconyuges_ch if parentco_ci==1, m  /*Tiene que dar igual al número de obs. con parentco_ci==2*/
+tab nconyuges_ch if parentco_ci==1, m  /*Tiene que dar igual al nÃºmero de obs. con parentco_ci==2*/
 
 
 tab pea1_ci, m
@@ -188,7 +188,7 @@ tab spublico_ci if emp_ci==1, m
 by categopri_ci, sort: tab spublico_ci if emp_ci==1, m
 
 sum aedu_ci
-compare aedu_ci edad_ci if aedu_ci>0 /*Por lo general la edad_ci debe ser mayor al número de anos de estudio*/
+compare aedu_ci edad_ci if aedu_ci>0 /*Por lo general la edad_ci debe ser mayor al nÃºmero de anos de estudio*/
 
 tab eduno_ci, m
 tab eduno_ci if aedu_ci==0, m

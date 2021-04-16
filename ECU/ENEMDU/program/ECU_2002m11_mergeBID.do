@@ -15,8 +15,8 @@ local ENCUESTA ENEMDU
 local ANO "2002"
 local RONDA m11
 
-global ruta = "M:\survey\ECU\ENEMDU\2002\m11\data_mecovi\"
-global out = "M:\survey\ECU\ENEMDU\2002\m11\data_merge\"
+global ruta = "${surveysFolder}\survey\ECU\ENEMDU\2002\m11\data_mecovi\"
+global out = "${surveysFolder}\survey\ECU\ENEMDU\2002\m11\data_merge\"
 
 
 use "$ruta\viv12_2002.dta", clear

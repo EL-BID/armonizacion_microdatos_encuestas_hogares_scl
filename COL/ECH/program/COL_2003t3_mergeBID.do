@@ -1,4 +1,4 @@
-*Elaboraci髇: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*Elaboraci贸n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *September, 2014
 
 *** MERGE COLOMBIA ECH 2003 ****
@@ -8,23 +8,23 @@ clear
 set more off
 local anio = 2003
 local anioab ="03" 	
-local ruta "\\sdssrv03\Surveys\survey\COL\ECH\\`anio'\a\data_orig\"
+local ruta "${surveysFolder}\survey\COL\ECH\\`anio'\a\data_orig\"
                          
 local m7   ="`ruta'm7\data_orig\" 
 local m8   ="`ruta'm8\data_orig\" 
 local m9   ="`ruta'm9\data_orig\" 
-local t3   ="\\sdssrv03\Surveys\survey\COL\ECH\2003\t3\data_orig\"
-local out  ="\\sdssrv03\Surveys\survey\COL\ECH\2003\t3\data_merge\"
+local t3   ="${surveysFolder}\survey\COL\ECH\2003\t3\data_orig\"
+local out  ="${surveysFolder}\survey\COL\ECH\2003\t3\data_merge\"
 
 
 *1. Bases anuales con homologacion de ingresos
 *----------------------------------------------
 /*
 clear
-use "\\sdssrv03\Surveys\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_orig\personas 2003.dta", clear
+use "${surveysFolder}\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_orig\personas 2003.dta", clear
 gen idh_ch =llave_hog
 sort idh_ch
-merge idh_ch using "\\sdssrv03\Surveys\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_orig\hogares 2003.dta"
+merge idh_ch using "${surveysFolder}\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_orig\hogares 2003.dta"
 tab _merge
 drop _merge
 destring mes, replace
@@ -33,7 +33,7 @@ egen id=concat(llave_hog orden)
 keep if mes>=7 & mes<=9
 keep  id pet- fex_c 
 sort id
-save "Y:\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_merge\t3.dta", replace
+save "${surveysFolder}\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_merge\t3.dta", replace
 
 */
 *2. Append entre meses
@@ -42,9 +42,9 @@ save "Y:\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_merge\t3.dta
 foreach zona in cabecera resto {
 
 *Personas
-         use "`m7'\`zona' - caracter韘ticas generales - educaci髇.dta", clear
-append using "`m8'\`zona' - caracter韘ticas generales - educaci髇.dta"
-append using "`m9'\`zona' - caracter韘ticas generales - educaci髇.dta"
+         use "`m7'\`zona' - caracter铆sticas generales - educaci贸n.dta", clear
+append using "`m8'\`zona' - caracter铆sticas generales - educaci贸n.dta"
+append using "`m9'\`zona' - caracter铆sticas generales - educaci贸n.dta"
 egen id =concat(llave_hog orden)
 sort id
 saveold "`t3'col_`zona'_caracteristicas_generales.dta", replace
@@ -146,7 +146,7 @@ clear
 use "`out'COL_`anio't3cabecera.dta"
 append using "`out'COL_`anio't3resto.dta"
 sort id
-merge 1:m  id using "Y:\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_merge\t3.dta"
+merge 1:m  id using "${surveysFolder}\survey\COL\ECH\2003\a\data_orig\anual_homologado DANE\data_merge\t3.dta"
 tab _merge
 drop _merge
 replace fex_c=fex_c/3

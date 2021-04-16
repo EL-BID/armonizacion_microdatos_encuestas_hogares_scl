@@ -3,7 +3,7 @@
 
 clear all
 set more off
-cd "Y:\survey\PER\ENAHO\2003\a\data_orig"
+cd "${surveysFolder}\survey\PER\ENAHO\2003\a\data_orig"
 
 **************************************************************************************
 						/*Identificador de hogar*/
@@ -33,7 +33,7 @@ foreach base in $BASES{;
 	
 * Marcela Rubio: Reshape base durable goods	 
 
-cd "M:\survey\PER\ENAHO\2003\a\data_orig"
+cd "${surveysFolder}\survey\PER\ENAHO\2003\a\data_orig"
 use enaho01-2003-612.dta, clear
 
 keep idh_ch p612 p612n 
@@ -46,7 +46,7 @@ sort idh_ch
 2	tv. blanco y negro
 3	tv. a color
 4	refrigeradora/congeladora
-5	máquina de coser
+5	mÃ¡quina de coser
 6	equipo de sonido
 7	video grabadora
 8	lavadora
@@ -59,7 +59,7 @@ sort idh_ch
 15	auto, camioneta
 16	triciclo
 17	motocicleta
-18	camión
+18	camiÃ³n
 19	mototaxi
 20	computadora
 21	otro
@@ -70,7 +70,7 @@ label var p6121 "Su hogar tiene: radio"
 label var p6122 "Su hogar tiene: tv. blanco y negro"
 label var p6123 "Su hogar tiene: tv. a color"
 label var p6124 "Su hogar tiene: refrigeradora/congeladora"
-label var p6125 "Su hogar tiene: máquina de coser"
+label var p6125 "Su hogar tiene: mÃ¡quina de coser"
 label var p6126 "Su hogar tiene: equipo de sonido"
 label var p6127 "Su hogar tiene: video grabadora"
 label var p6128 "Su hogar tiene: lavadora"
@@ -83,7 +83,7 @@ label var p61214 "Su hogar tiene: bicicleta"
 label var p61215 "Su hogar tiene: auto, camioneta"
 label var p61216 "Su hogar tiene: triciclo"
 label var p61217 "Su hogar tiene: motocicleta"
-label var p61218 "Su hogar tiene: camión"
+label var p61218 "Su hogar tiene: camiÃ³n"
 label var p61219 "Su hogar tiene: mototaxi"
 label var p61220 "Su hogar tiene: computadora"
 label var p61221 "Su hogar tiene: otro"
@@ -154,6 +154,6 @@ sort idh_ch
 
 
 drop idh* idp*
-save "M:\survey\PER\ENAHO\2003\a\data_merge\PER_2003a.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\2003\a\data_merge\PER_2003a.dta", replace
 
  

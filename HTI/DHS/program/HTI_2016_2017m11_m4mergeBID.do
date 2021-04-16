@@ -3,7 +3,7 @@ clear
 
 *Alvaro Altamirano 10/07/2019
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HTI
 local ENCUESTA DHS

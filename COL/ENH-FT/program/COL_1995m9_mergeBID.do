@@ -1,4 +1,4 @@
-*ElaboraciÛn (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*Elaboraci√≥n (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Noviembre, 2013
 
 *** MERGE COLOMBIA 1995 ****
@@ -6,7 +6,7 @@
 
 clear
 set more off
-local ruta ="\\Sdssrv03\surveys\"
+local ruta ="${surveysFolder}\"
 local in   ="`ruta'survey\COL\ENH-FT\1995\m9\data_orig\"
 local out  ="`ruta'\survey\COL\ENH-FT\1995\m9\data_merge\"
 
@@ -223,7 +223,7 @@ rename _merge merge_viv
 tab merge_viv
 
 /* estas viviendas no aparecen en el archivo de vivi ni en el de hogares ...aparecen solo en el de personas 
-esto significa que habr· 2 viviendas sin info de vivienda, ni de hogar, 8 individuos 
+esto significa que habr√° 2 viviendas sin info de vivienda, ni de hogar, 8 individuos 
 los dejo !!
 
 10   101340501401

@@ -1,12 +1,12 @@
 		*************************************************************
-		***PROGRAMA PARA PEGAR LOS MÓDULOS DE LA ENFT OCTUBRE 2007***
+		***PROGRAMA PARA PEGAR LOS MÃ“DULOS DE LA ENFT OCTUBRE 2007***
 		*************************************************************
 *Elaborado por: Yanira Oviedo - Mayo 2010 
 
 
 clear
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS DOM
 local ENCUESTA ENFT
@@ -23,7 +23,7 @@ log using "`log_file'", replace
 
 
 
-*Pegando la información de individuos*
+*Pegando la informaciÃ³n de individuos*
 **************************************
 
 use "`base_in'\calculadas07.dta"
@@ -75,7 +75,7 @@ sort eft_vivienda eft_hogar eft_miembro
 save "`base_in'\dom07_october.dta", replace
 
 
-*Pegando la información de hogares y viviendas*
+*Pegando la informaciÃ³n de hogares y viviendas*
 ***********************************************
 
 clear 

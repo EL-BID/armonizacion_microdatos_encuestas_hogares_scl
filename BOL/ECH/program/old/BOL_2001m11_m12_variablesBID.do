@@ -1,16 +1,16 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
-* global ruta = "\\Sdssrv03\surveys"
+* global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: ECH
 Round: m11_m12
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,7 +54,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
@@ -308,7 +308,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -316,7 +316,7 @@ label var raza_ci "Raza o etnia del individuo"
 
 
 /* Actualizacion LCM (introducido por YL):
-Para el grupo indígena se toma <=5 y otros = 6 | =7 
+Para el grupo indÃ­gena se toma <=5 y otros = 6 | =7 
 Se puede recuperar afros a partir de la pregunta s111b LCM dic2013*/
 
 gen raza_ci=.
@@ -330,14 +330,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label var raza_ci "Raza o etnia del individuo" 
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 7 años*/ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 7 aÃ±os*/ 
 
 *******************
 ****** tc_c *******
@@ -354,7 +354,7 @@ label var tc_c "Tasa de cambio LCU/USD"
 gen ipc_c = 63.62639
 
 
-label var ipc_c "Índice de precios al consumidor"
+label var ipc_c "Ãndice de precios al consumidor"
 
 *******************
 ****** ppp_c ******
@@ -362,7 +362,7 @@ label var ipc_c "Índice de precios al consumidor"
 
 gen ppp_c = 2.139067
 
-label var ppp_c "Factor de conversión PPP LCU/USD"
+label var ppp_c "Factor de conversiÃ³n PPP LCU/USD"
 
 ****************
 *lp25_2005_ci***
@@ -370,7 +370,7 @@ label var ppp_c "Factor de conversión PPP LCU/USD"
 
 gen lp25_2005_ci = 170.2867
 
-label var lp25_2005_ci  "Línea de pobreza USD2.5 por día en moneda local a precios corrientes a PPP 2005"
+label var lp25_2005_ci  "LÃ­nea de pobreza USD2.5 por dÃ­a en moneda local a precios corrientes a PPP 2005"
 
 ***************
 *lp4_2005_ci***
@@ -378,7 +378,7 @@ label var lp25_2005_ci  "Línea de pobreza USD2.5 por día en moneda local a preci
 
 gen lp4_2005_ci =  272.4586
   
-label var lp4_2005_ci "Línea de pobreza USD4 por día en moneda local a precios corrientes a PPP 2005"
+label var lp4_2005_ci "LÃ­nea de pobreza USD4 por dÃ­a en moneda local a precios corrientes a PPP 2005"
 
 ********* 
 *lpl25_ci
@@ -386,7 +386,7 @@ label var lp4_2005_ci "Línea de pobreza USD4 por día en moneda local a precios c
 
 gen lp25_ci = 140.6049
  
-label var lp25_ci  "Línea de pobreza USD2.5 por día en moneda local a precios corrientes a PPP 2011"
+label var lp25_ci  "LÃ­nea de pobreza USD2.5 por dÃ­a en moneda local a precios corrientes a PPP 2011"
 
 *********
 *lpl4_ci*
@@ -394,7 +394,7 @@ label var lp25_ci  "Línea de pobreza USD2.5 por día en moneda local a precios co
 
 gen lp4_ci = 224.9678
 
-label var lp4_ci "Línea de pobreza USD4 por día en moneda local a precios corrientes a PPP 2011"
+label var lp4_ci "LÃ­nea de pobreza USD4 por dÃ­a en moneda local a precios corrientes a PPP 2011"
 
 *********
 *lp_ci***
@@ -505,7 +505,7 @@ replace condocup_ci=1 if ocup==1
 replace condocup_ci=2 if ocup==2 | ocup==3
 replace condocup_ci=3 if (ocup!=1 & ocup!=2 & ocup!=3) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -517,14 +517,14 @@ replace condocup_ci=1 if s601==1 | s602<=6  | s603a==1
 replace condocup_ci=2 if (s601==2 | s602==7 | s603a>1) & (s605==1 | s606==1) & (s604==1)
 recode condocup_ci .=3 if edad_ci>=10
 recode condocup_ci .=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
 *************
 *cesante_ci* 
 *************
-*Mayra Sáenz Octubre 2013 - Se cambia la s650 por la s610 que corresponde a la sección de condición de actividad.
+*Mayra SÃ¡enz Octubre 2013 - Se cambia la s650 por la s610 que corresponde a la secciÃ³n de condiciÃ³n de actividad.
 gen cesante_ci=1 if  s610==1 & condocup_ci==2
 * 2014, 03 Modificacion siguiente linea MLO
 replace cesante_ci=0 if s610==2 & condocup_ci==2
@@ -536,7 +536,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *************
 *tamemp_ci
 *************
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if s623==1 | s623==2
 replace tamemp_ci=2 if s623>=3 & s623<=6
@@ -590,14 +590,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 *****************
 ***desalent_ci***
@@ -722,7 +722,7 @@ replace nempleos_ci=2 if emp_ci==1 & s632==1
 
 gen firmapeq_ci=.
 replace firmapeq_ci=1 if s623>=1 & s623<=2 /*1 a 4 personas*/
-replace firmapeq_ci=0 if s623>=3 & s623<=8 /*5 o más personas*/
+replace firmapeq_ci=0 if s623>=3 & s623<=8 /*5 o mÃ¡s personas*/
 */
 
 *****************
@@ -798,7 +798,7 @@ replace durades_ci=s649a*12   if s649b==6
 ***antiguedad_ci***
 *******************
 /*Tiempo que trabaja en la empresa*/
-/*En años*/
+/*En aÃ±os*/
 
 gen antiguedad_ci=.
 replace antiguedad_ci=s615a/(4.3*12) if s615b==2 & emp_ci==1
@@ -812,8 +812,8 @@ gen categoinac_ci =1 if (s608a==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  (s608a==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  (s608a==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -1080,7 +1080,7 @@ gen ynlnm_ci=.
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1204,7 +1204,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 5 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 5 aÃ±os de edad*/
 
 gen byte aedu_ci=.
 
@@ -1236,10 +1236,10 @@ replace aedu_ci=17 if (s402a==22 | s402a==25) & s402b==5
 replace aedu_ci=16 if (s402a==21 | s402a==23 | s402a==24) & s402b==8
 replace aedu_ci=17 if (s402a==22 | s402a==25) & s402b==8
 
-/*El nivel 26 "Otros cursos" incluye no sólo cursos informales que 
-siguen a la secundaria, sino también los cursos de postgrado. Por ende,
+/*El nivel 26 "Otros cursos" incluye no sÃ³lo cursos informales que 
+siguen a la secundaria, sino tambiÃ©n los cursos de postgrado. Por ende,
 como no podemos distinguir entre ambos, no los consideramos y hacemos
-los años de educación de estas personas missing*/
+los aÃ±os de educaciÃ³n de estas personas missing*/
 
 **************
 ***eduno_ci***
@@ -1376,7 +1376,7 @@ gen repiteult_ci=.
 ***************
 ***edupub_ci***
 ***************
-/*Sobre los que se matricularon ese año*/
+/*Sobre los que se matricularon ese aÃ±o*/
 
 gen edupub_ci=(s406==2)
 replace edupub_ci=. if s406==.
@@ -1390,7 +1390,7 @@ replace tecnica_ci=1 if s402a==25 | s402a==26
 recode tecnica_ci .=0 
 label var tecnica_ci "1=formacion terciaria tecnica"
 */
-*Modificación Mayra Sáenz-Octubre 2013
+*ModificaciÃ³n Mayra SÃ¡enz-Octubre 2013
 gen tecnica_ci=.
 replace tecnica_ci=1 if s402a==23 | s402a==24
 recode tecnica_ci .=0 
@@ -1473,8 +1473,8 @@ replace vivialqimp_ch=vivialqimp_ch*6.76 if s1004b==2
 ren ocup ocup_old
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

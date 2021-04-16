@@ -13,8 +13,8 @@ local ENCUESTA ENEMDU
 local ANIO 2015
 local RONDA m12
 
-local ruta = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\data_orig"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\\data_merge\\`PAIS'_`ANIO'`RONDA'.dta"
+local ruta = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\data_orig"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\\data_merge\\`PAIS'_`ANIO'`RONDA'.dta"
 
 * Sort de base
 use "`ruta'\201512_enemdubdd_viviendahogar.dta", clear

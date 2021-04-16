@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
+PaÃ­s: Mexico
 Encuesta: ENIGH (tradicional)
 Round: Agosto-Noviembre
 Autores:
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -68,26 +68,26 @@ label define region_c ///
 12 "Guerrero" ///
 13 "Hidalgo" ///
 14 "Jalisco" ///
-15 "México" ///
-16 "Michoacán de Ocampo" ///
+15 "MÃ©xico" ///
+16 "MichoacÃ¡n de Ocampo" ///
 17 "Morelos" ///
 18 "Nayarit" ///
-19 "Nuevo León" ///
+19 "Nuevo LeÃ³n" ///
 20 "Oaxaca" ///
 21 "Puebla" ///
-22 "Querétaro" ///
+22 "QuerÃ©taro" ///
 23 "Quintana Roo" ///
-24 "San Luis Potosí" ///
+24 "San Luis PotosÃ­" ///
 25 "Sinaloa" ///
 26 "Sonora" ///
 27 "Tabasco" ///
 28 "Tamaulipas" ///
 29 "Tlaxcala" ///
 30 "Veracruz de Ignacio de la Llave" ///
-31 "Yucatán" ///
+31 "YucatÃ¡n" ///
 32 "Zacatecas" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -118,7 +118,7 @@ label variable idp_ci "ID de la persona en el hogar"
 /* La variable estrato muestra densidad de poblacion
 como:
 Estrato						
-1 Loc. de 100,000 hab. y más
+1 Loc. de 100,000 hab. y mÃ¡s
 2 Loc. de 15,000 a 99,999 hab.
 3 Loc. de 2,500 a 14,999 hab.
 4 Loc. de menos de 2,500 hab.
@@ -129,7 +129,7 @@ replace zona_c=1 if  zona==1 | zona==2
 replace zona_c=0 if zona==3 | zona==4
 */
 
-*Modificación Mayra Sáenz - Agosto 2015 Se reemplaza la clasificación de zona por la que consta en la sintaxis de CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015 Se reemplaza la clasificaciÃ³n de zona por la que consta en la sintaxis de CONEVAL
 gen byte zona_c= 1 if estrato<=2
 replace zona_c = 0 if (estrato>2 & estrato!=.)
 
@@ -152,12 +152,12 @@ gen anio_c=2004
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *********
@@ -165,7 +165,7 @@ label value region_BID_c region_BID_c
 *********
 
 *gen mes_c=real(substr(meses,1,2))
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen mes_c=mes_ref
 label variable mes_c "Mes de la encuesta"
 label define mes_c 6 "Junio" 7 " Julio" 8 "Agosto" 
@@ -376,8 +376,8 @@ replace condocup_ci=4 if edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -427,13 +427,13 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=. /*En este caso existe la variable presta1_* pero ujn individuo puede estar en varias a la vez*/
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
 *************
 *generat pension_ci=(ing_jub>0 & ing_jub!=.) /* A todas las per mayores de cinco*/
-*Modificación Mayra Sáenz - Agosto 2015: a partir de 2002 se puede diferenciar la pension nacional o del extranjero, se considera solo la nacional.
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: a partir de 2002 se puede diferenciar la pension nacional o del extranjero, se considera solo la nacional.
 g pension_ci = (ypension>0 & ypension!=.)
 label var pension_ci "1=Recibe pension contributiva"
 
@@ -441,7 +441,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 *gen ypen_ci=ing_jub  if pension_ci==1
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen ypen_ci=ypension  if pension_ci==1
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -450,7 +450,7 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 gen pensionsub_ci=0 
 *replace pensionsub_ci=1 if (ing_oport>0 & ing_oport!=.) 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 replace pensionsub_ci=1 if (P059>0 & P059!=.) 
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 *Programas: Beneficio del programa Oportunidades
@@ -459,7 +459,7 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 **  ypensub_ci  *
 *****************
 *gen ypensub_ci= ing_oport if pensionsub_ci==1
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen ypensub_ci= P059 if pensionsub_ci==1
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
@@ -495,12 +495,12 @@ label var lp_ci "linea de pobreza de patrimonio oficial del pais"
 *************
 /*La encuesta fue levantada entre los meses de agosto y noviembre 2004,
 y por lo tanto, al preguntarse por los ingresos de los seis meses anteriores,
-se recolectó información correspondiente a febrero-julio, marzo-agosto,
+se recolectÃ³ informaciÃ³n correspondiente a febrero-julio, marzo-agosto,
 abril-septiembre, y mayo-octubre 2004;
 */
 
 gen entidad=substr(folio,5,2)
-label var  entidad "entidad federativa del país"
+label var  entidad "entidad federativa del paÃ­s"
 quietly {
 capture confirm variable ubica_geo
 if !_rc {
@@ -2973,7 +2973,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -3026,7 +3026,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3145,13 +3145,13 @@ gen horastot_ci=real(horastrab) if emp_ci==1
 ***categopri_ci***
 ******************
 /*
-CÓDIGO	DESCRIPCIÓN
+CÃ“DIGO	DESCRIPCIÃ“N
 1	Obrero o empleado 
-2	Jornalero rural o peón de campo
-3	Trabajador sin retribución de un negocio o empresa que no es propiedad del hogar
-4	Trabajador sin retribución de un negocio o empresa que es propiedad del hogar
+2	Jornalero rural o peÃ³n de campo
+3	Trabajador sin retribuciÃ³n de un negocio o empresa que no es propiedad del hogar
+4	Trabajador sin retribuciÃ³n de un negocio o empresa que es propiedad del hogar
 5	Trabajador por cuenta propia
-6	Patrón, empleador o propietario de un negocio 
+6	PatrÃ³n, empleador o propietario de un negocio 
 7	miembro de una cooperativa
 */
 
@@ -3310,19 +3310,19 @@ gen antiguedad_ci=.
 *******************
 /*
 gen tamemp_ci=numper161
-label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16 o más personas"
+label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16 o mÃ¡s personas"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal" 
   */   
-**México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+**MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if numper161==1 | numper161==2
 replace tamemp_ci = 2 if (numper161==3 |numper161==4)
 replace tamemp_ci = 3 if (numper161==5)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3331,8 +3331,8 @@ gen categoinac_ci =1 if ((bus_trab>=300 & bus_trab<=370) & condocup_ci==3)
 replace categoinac_ci = 2 if  ((bus_trab>=500 & bus_trab<=570) & condocup_ci==3)
 replace categoinac_ci = 3 if  ((bus_trab>=400 & bus_trab<=470) & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3354,7 +3354,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Modificación Mayra Sáenz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
 
 /*
 ****************
@@ -3708,7 +3708,7 @@ bys idh_ch: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
 *******************
 *** rentaimp_ch ***
 *******************
-*Modificacion Mayra Sáenz - Agosto 2015- Antes estaba generada como missing.
+*Modificacion Mayra SÃ¡enz - Agosto 2015- Antes estaba generada como missing.
 gen rentaimp_ch= est_alq
 
 *****************
@@ -4086,7 +4086,7 @@ replace piso_ch=2 if pisos04=="8"
 ****pared_ch****
 ****************
 
-* MGR Jul, 2015: correción en sintaxis
+* MGR Jul, 2015: correciÃ³n en sintaxis
 /*
 gen pared_ch=.
 replace pared_ch=0 if muros01>="01" & muros01<="06"
@@ -4102,7 +4102,7 @@ replace pared_ch=2 if muros01=="13"
 ****techo_ch****
 ****************
 
-*MGR Aug, 2015: correción en sintaxis
+*MGR Aug, 2015: correciÃ³n en sintaxis
 /*
 gen techo_ch=.
 replace techo_ch=0 if techos02>="01" & techos02<="05"
@@ -4272,16 +4272,16 @@ set more off
 Parentesco 
 		
 100 JEFE O JEFA				
-200 ESPOSO (A), COMPAÑERO (A)		
+200 ESPOSO (A), COMPAÃ‘ERO (A)		
 300 HIJO (A)				
-400 TRABAJADOR (ES) DOMÉSTICO (S) - 400, 420, 430, 440
+400 TRABAJADOR (ES) DOMÃ‰STICO (S) - 400, 420, 430, 440
 500 NO TIENE PARENTESCO		
 600 OTRO PARENTESCO		  - 601, 602, ... 624
-700 HUÉSPED
+700 HUÃ‰SPED
 
-Población total 	Se deben incluir a todas las personas reportadas en POBLACIÓN
-Población objeto 	Se deben incluir a todas las personas reportadas en POBLACIÓN
-			 excluyendo los códigos 400, 420, 430, 440 y 700 de Parentesco
+PoblaciÃ³n total 	Se deben incluir a todas las personas reportadas en POBLACIÃ“N
+PoblaciÃ³n objeto 	Se deben incluir a todas las personas reportadas en POBLACIÃ“N
+			 excluyendo los cÃ³digos 400, 420, 430, 440 y 700 de Parentesco
 */
 
  destring parentesco, replace
@@ -4297,7 +4297,7 @@ Población objeto 	Se deben incluir a todas las personas reportadas en POBLACIÓN
 ** AREA
 
 /* Estrato
- 1 Localidades de 100 000 habitantes y más
+ 1 Localidades de 100 000 habitantes y mÃ¡s
  2 Localidades de 15 000 a 99 999 habitantes
  3 Localidades de 2 500 a 14 999 habitantes
  4 Localidades menores de 2 500 habitantes
@@ -4347,19 +4347,19 @@ Población objeto 	Se deben incluir a todas las personas reportadas en POBLACIÓN
   10. NIVEL Y GRADO AL QUE ASISTE
   
   NIVEL (A)						Grado (G1)
-  ¿Cuál es el año o grado al que asiste?
+  Â¿CuÃ¡l es el aÃ±o o grado al que asiste?
   1 Preescolar
   2 Primaria
   3 Secundaria
-  4 Carrera técnica con secundaria terminada
+  4 Carrera tÃ©cnica con secundaria terminada
   5 Preparatoria o bachillerato
-  6 Carrera técnica con preparatoria terminada
+  6 Carrera tÃ©cnica con preparatoria terminada
   7 Normal
   8 Profesional
-  9 Maestría o doctorado
+  9 MaestrÃ­a o doctorado
   
-  16. NIVEL DE INSTRUCCIÓN
-  ¿Hasta qué año o grado aprobó en la escuela?		Grado
+  16. NIVEL DE INSTRUCCIÃ“N
+  Â¿Hasta quÃ© aÃ±o o grado aprobÃ³ en la escuela?		Grado
   (B)							(G2)
   n_instr161						n_instr162
   0 Ninguno				==> 19
@@ -4368,18 +4368,18 @@ Población objeto 	Se deben incluir a todas las personas reportadas en POBLACIÓN
   3 Secundaria				==> 19
   4 Preparatoria o bachillerato		==> 19
   5 Normal
-  6 Carrera técnica o comercial
+  6 Carrera tÃ©cnica o comercial
   7 Profesional
-  8 Maestría
+  8 MaestrÃ­a
   9 Doctorado
   
   17. ANTECEDENTE ESCOLAR
-  ¿Qué estudios le pidieron para ingresar a ...
+  Â¿QuÃ© estudios le pidieron para ingresar a ...
    1. primaria terminada?
    2. secundaria terminada?
    3. preparatoria o bachillerato terminado?
    4. licenciatura o profesional?
-   5. maestría?
+   5. maestrÃ­a?
   
 */
 
@@ -4416,16 +4416,16 @@ Población objeto 	Se deben incluir a todas las personas reportadas en POBLACIÓN
 
 ** Economic Active Population 
 /*
-no_traba. Número de trabajos
+no_traba. NÃºmero de trabajos
 
 buscatrab
 1 Estuvo buscando trabajo
-2 Rentó o alquiló alguna propiedad
+2 RentÃ³ o alquilÃ³ alguna propiedad
 3 Es pensionado o jubilado por su trabajo
-4 Se dedicó a los quehaceres del hogar
-5 Se dedicó a estudiar
-6 Es una persona con alguna limitación física o mental que le impide trabajar
-7 Está en otra situación diferente a las anteriores
+4 Se dedicÃ³ a los quehaceres del hogar
+5 Se dedicÃ³ a estudiar
+6 Es una persona con alguna limitaciÃ³n fÃ­sica o mental que le impide trabajar
+7 EstÃ¡ en otra situaciÃ³n diferente a las anteriores
 */
 
  destring  no_traba, replace
@@ -4461,25 +4461,25 @@ buscatrab
 ** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
 
 /*
-* Personas con 5 años y más
+* Personas con 5 aÃ±os y mÃ¡s
 
 alfabe
-8. ¿Sabe leer y escribir un recado?
+8. Â¿Sabe leer y escribir un recado?
 
 asis_esc
-9. ¿Asiste a la escuela?
+9. Â¿Asiste a la escuela?
 
 nivel (A)
-10.¿Cuál es el año o grado al que asiste?
+10.Â¿CuÃ¡l es el aÃ±o o grado al que asiste?
  1 Preescolar
  2 Primaria
  3 Secundaria
- 4 Carrera técnica con secundaria terminada
+ 4 Carrera tÃ©cnica con secundaria terminada
  5 Preparatoria o bachillerato
- 6 Carrera técnica con preparatoria terminada
+ 6 Carrera tÃ©cnica con preparatoria terminada
  7 Normal
  8 Profesional
- 9 Maestría o doctorado
+ 9 MaestrÃ­a o doctorado
 */
 
 destring asis_esc, replace
@@ -4505,7 +4505,7 @@ gen     NERS=0 if (edad>=12 & edad<=17) & (asis_esc>=1 & asis_esc<=2)
 replace NERS=1 if (edad>=12 & edad<=17) & (asis_esc==1 ) & (A==3 | A==5 | (A==7 & G1<=3)) 
 	
 * Upper secondary
-* Educación preparatoria
+* EducaciÃ³n preparatoria
 
  gen     NERS2=0 if (edad>=15 & edad<=17) & (asis_esc>=1 & asis_esc<=2)
  replace NERS2=1 if (edad>=15 & edad<=17) & (asis_esc==1 ) & (A==5 | (A==7 & G1<=3)) 
@@ -4599,18 +4599,18 @@ replace NERS=1 if (edad>=12 & edad<=17) & (asis_esc==1 ) & (A==3 | A==5 | (A==7 
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 /*
 posicion						rama			cmo121
-9. En ese trabajo del mes pasado ¿Usted fue...		Rama de Actividad 	8200. Trabajadores 
-1 Obrero (a) o empleado (a)							en servicios domésticos.
-2 Jornalero (a) rural o peón de campo						
+9. En ese trabajo del mes pasado Â¿Usted fue...		Rama de Actividad 	8200. Trabajadores 
+1 Obrero (a) o empleado (a)							en servicios domÃ©sticos.
+2 Jornalero (a) rural o peÃ³n de campo						
 3 Trabajador (a) sin pago en un negocio que no es del hogar
 4 Trabajador (a) sin pago en un negocio propiedad del hogar
 5 Trabajador (a) por cuenta propia (solo(a) o con trabajadores sin pago)
-6 Patrón (a) (contrata uno o más trabajadores con pago)
+6 PatrÃ³n (a) (contrata uno o mÃ¡s trabajadores con pago)
 7 Miembro de una cooperativa
 */
 
 * Without Domestic Service
-* No incluye los trabajadores domésticos y sus familiares, ni los huéspedes.
+* No incluye los trabajadores domÃ©sticos y sus familiares, ni los huÃ©spedes.
 
  gen     WENAS=0 if incl==1 & ((edad>=15 & edad<=64) & tasadeso==0 & posicion==1 & (rama>=2110 & rama<=9320) & cmo121~=8200)
  replace WENAS=1 if incl==1 & ((edad>=15 & edad<=64) & tasadeso==0 & posicion==1 & (rama>=2110 & rama<=9320) & cmo121~=8200 & sexo==2)
@@ -4620,7 +4620,7 @@ posicion						rama			cmo121
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 
 * With domestic servants
-* No incluye los trabajadores domésticos y sus familiares, ni los huéspedes.
+* No incluye los trabajadores domÃ©sticos y sus familiares, ni los huÃ©spedes.
 
  gen     WENASD=0 if incl==1 & ((edad>=15 & edad<=64) & tasadeso==0 & posicion==1 & (rama>=2110 & rama<=9320))
  replace WENASD=1 if incl==1 & ((edad>=15 & edad<=64) & tasadeso==0 & posicion==1 & (rama>=2110 & rama<=9320) & sexo==2)
@@ -4632,11 +4632,11 @@ posicion						rama			cmo121
 
 ** Access to Electricity ** Additional Indicator
 /*
-* 21. ¿De dónde obtienen la luz eléctrica 
-1. del servicio público? 
+* 21. Â¿De dÃ³nde obtienen la luz elÃ©ctrica 
+1. del servicio pÃºblico? 
 2. de una planta particular? 
 3. de otra fuente?
-4. No tiene luz eléctrica 
+4. No tiene luz elÃ©ctrica 
 */
 
  destring luz21, replace
@@ -4651,14 +4651,14 @@ posicion						rama			cmo121
 /* 
 * Datos para vivienda
 combus10				combus11
-10. ¿Qué combustibles usan para		11. ¿Cuál utilizan con
+10. Â¿QuÃ© combustibles usan para		11. Â¿CuÃ¡l utilizan con
 cocinar o calentar sus alimentos?	mayor frecuencia?
-  Lea y cruce uno o más códigos
-  Si sólo usan un combustible ==> 12
+  Lea y cruce uno o mÃ¡s cÃ³digos
+  Si sÃ³lo usan un combustible ==> 12
    1 Gas
-   2 Leña
-   3 Carbón
-   4 Petróleo
+   2 LeÃ±a
+   3 CarbÃ³n
+   4 PetrÃ³leo
    5 Electricidad
    6 Otro combustible
 */
@@ -4685,23 +4685,23 @@ cocinar o calentar sus alimentos?	mayor frecuencia?
 /*
 * Datos para vivienda
 agua15
-15. ¿En esta vivienda tienen agua de ...
- 1. la red pública, dentro de la vivienda? 
- 2. la red pública, fuera de la vivienda pero dentro del terreno? 
- 3. una llave pública o hidrante? 
+15. Â¿En esta vivienda tienen agua de ...
+ 1. la red pÃºblica, dentro de la vivienda? 
+ 2. la red pÃºblica, fuera de la vivienda pero dentro del terreno? 
+ 3. una llave pÃºblica o hidrante? 
  4. otra vivienda?
  5. una pipa? 
  6. un pozo? 
- 7. un río, arroyo o lago?
+ 7. un rÃ­o, arroyo o lago?
 
 agua16
-16. ¿Cada cuándo llega el agua a su vivienda?
- 1 Un día a la semana
- 2 Dos días a la semana
- 3 Tres días a la semana
- 4 Cuatro días a la semana
- 5 Cinco días a la semana
- 6 Seis días a la semana
+16. Â¿Cada cuÃ¡ndo llega el agua a su vivienda?
+ 1 Un dÃ­a a la semana
+ 2 Dos dÃ­as a la semana
+ 3 Tres dÃ­as a la semana
+ 4 Cuatro dÃ­as a la semana
+ 5 Cinco dÃ­as a la semana
+ 6 Seis dÃ­as a la semana
  7 Diario algunas horas
  8 Diario durante todo
  9 Otro periodo
@@ -4721,19 +4721,19 @@ agua16
 * Datos para vivienda
 
 bano17	(ban1)					drenaje20 (drena)
-17. ¿Esta vivienda tiene...			20. ¿Esta vivienda tiene drenaje o desagüe conectado a ...
-1 Hoyo negro o pozo ciego			1 La red pública
-2 Letrina					2 Una fosa séptica
-3 Excusado o sanitario sin conexión de agua	3 Una tubería que va a dar a una barranca o grieta
-4 Excusado o sanitario con conexión de agua	4 Una tubería que va a dar a un río, lago o mar
+17. Â¿Esta vivienda tiene...			20. Â¿Esta vivienda tiene drenaje o desagÃ¼e conectado a ...
+1 Hoyo negro o pozo ciego			1 La red pÃºblica
+2 Letrina					2 Una fosa sÃ©ptica
+3 Excusado o sanitario sin conexiÃ³n de agua	3 Una tuberÃ­a que va a dar a una barranca o grieta
+4 Excusado o sanitario con conexiÃ³n de agua	4 Una tuberÃ­a que va a dar a un rÃ­o, lago o mar
 5 No tiene servicio sanitario ==> 21		5 No tiene drenaje
 
 bano18
-18. El o la..... ¿lo (a) usan solamente las personas
+18. El o la..... Â¿lo (a) usan solamente las personas
 que viven en esta vivienda?
 
 bano19
-19. ¿Cuántos cuartos de baño tiene esta vivienda?
+19. Â¿CuÃ¡ntos cuartos de baÃ±o tiene esta vivienda?
 */
 
  destring bano17,replace
@@ -4755,49 +4755,49 @@ bano19
 * Datos para vivienda
 
 muros01
-1. ¿De qué material es la mayor parte de las paredes
+1. Â¿De quÃ© material es la mayor parte de las paredes
 o muros de esta vivienda?
- 1 Pedazos de cartón, hule, llantas, botes, etcétera
- 2 Lámina de cartón
- 3 Lámina metálica o de asbesto
- 4 Carrizo o bambú
+ 1 Pedazos de cartÃ³n, hule, llantas, botes, etcÃ©tera
+ 2 LÃ¡mina de cartÃ³n
+ 3 LÃ¡mina metÃ¡lica o de asbesto
+ 4 Carrizo o bambÃº
  5 Hojas de palma o palmera
  6 Embarro o bajareque
  7 Madera, tejamanil o troncos
  8 Adobe
  9 Multipanel o panel
- 10 Tabique, ladrillo, tabicón, block
+ 10 Tabique, ladrillo, tabicÃ³n, block
  11 Piedra o cantera
  12 Concreto
  13 Otro material
 
 pisos04
-4. ¿De qué material es la mayor parte de los pisos
+4. Â¿De quÃ© material es la mayor parte de los pisos
 de esta vivienda?
  1 Tierra
  2 Cemento firme
- 3 Loseta vinílica, linóleum o congóleum
+ 3 Loseta vinÃ­lica, linÃ³leum o congÃ³leum
  4 Mosaico o loseta de cemento
- 5 Vitropiso, mármol o terrazo
+ 5 Vitropiso, mÃ¡rmol o terrazo
  6 Madera, duela o parquet
  7 Alfombra
  8 Otro material
 
 tenencia12
-12. ¿Alguna de las personas que viven aquí ...
+12. Â¿Alguna de las personas que viven aquÃ­ ...
  1 Renta o alquila la vivienda
  2 Le prestan la vivienda por parte de su trabajo
  3 Le presta la vivienda un familiar o amigo
- 4 Está pagando la vivienda
+ 4 EstÃ¡ pagando la vivienda
  5 Es el propietario de esta vivienda
- 6 Otra situación
+ 6 Otra situaciÃ³n
 
 cua_coc
-6. ¿Esta vivienda tiene cuarto para cocinar?
+6. Â¿Esta vivienda tiene cuarto para cocinar?
 
 num_cua
-9. ¿Cuántos cuartos tiene en total esta
-vivienda contando la cocina? (No cuente pasillos ni baños)
+9. Â¿CuÃ¡ntos cuartos tiene en total esta
+vivienda contando la cocina? (No cuente pasillos ni baÃ±os)
 
 */
 
@@ -4846,7 +4846,7 @@ vivienda contando la cocina? (No cuente pasillos ni baños)
 
 	
 ** Dirt floors
-* 4. ¿De qué material es la mayor parte de los pisos de esta vivienda?
+* 4. Â¿De quÃ© material es la mayor parte de los pisos de esta vivienda?
 
 * Gender classification of the population refers to the head of the household.
 
@@ -4857,7 +4857,7 @@ vivienda contando la cocina? (No cuente pasillos ni baños)
 ** GOAL 8. DEVELOP A GLOBAL PARTNERSHIP FOR DEVELOPMENT
 
 ** Target 16, Indicator: Unemployment Rate of 15 year-olds (%)
-* No incluye los trabajadores domésticos y sus familiares, ni los huéspedes.
+* No incluye los trabajadores domÃ©sticos y sus familiares, ni los huÃ©spedes.
 	
  gen     UNMPLYMENT15=0 if incl==1 & (edad>=15 & edad<=24) & (tasadeso==0 | tasadeso==1) 
  replace UNMPLYMENT15=1 if incl==1 & (edad>=15 & edad<=24) & (tasadeso==1) 
@@ -4865,12 +4865,12 @@ vivienda contando la cocina? (No cuente pasillos ni baños)
 
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 /*
-CAPÍTULO 4. EQUIPAMIENTO DEL HOGAR
-1. ¿Este hogar cuenta con...
- 1. línea telefónica?		=> serv01_1
- 2. teléfono celular?		=> serv01_2
- 3. televisión por cable, 
-SKY o DIREC-TV, Multivisión?	=> serv01_3
+CAPÃTULO 4. EQUIPAMIENTO DEL HOGAR
+1. Â¿Este hogar cuenta con...
+ 1. lÃ­nea telefÃ³nica?		=> serv01_1
+ 2. telÃ©fono celular?		=> serv01_2
+ 3. televisiÃ³n por cable, 
+SKY o DIREC-TV, MultivisiÃ³n?	=> serv01_3
  4. internet?			=> serv01_4	
 */
 
@@ -4902,8 +4902,8 @@ destring serv01_1 serv01_2, replace
 		
 ** Target 18, Indicator: "Personal computers in use per 100 population"
 /*
-CAPÍTULO 4. EQUIPAMIENTO DEL HOGAR
-08. ¿Este hogar cuenta con...		10. ¿Cuántos son?
+CAPÃTULO 4. EQUIPAMIENTO DEL HOGAR
+08. Â¿Este hogar cuenta con...		10. Â¿CuÃ¡ntos son?
 30. computadora? 			eqh10_30
 */
 
@@ -4927,7 +4927,7 @@ CAPÍTULO 4. EQUIPAMIENTO DEL HOGAR
 ************************************************************************
 
 ** CCA 19. Proportion of children under 15 who are working
-* No incluye los trabajadores domésticos y sus familiares, ni los huéspedes.
+* No incluye los trabajadores domÃ©sticos y sus familiares, ni los huÃ©spedes.
 
  gen     CHILDREN=0 if incl==1 & (edad>=12 & edad<=14) 
  replace CHILDREN=1 if incl==1 & (edad>=12 & edad<=14) & peaa==1
@@ -5036,15 +5036,15 @@ CAPÍTULO 4. EQUIPAMIENTO DEL HOGAR
 */
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

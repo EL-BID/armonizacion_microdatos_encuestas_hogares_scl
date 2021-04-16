@@ -1,6 +1,6 @@
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -95,7 +95,7 @@ destring entrevista onda ano decif deccf, replace
 
 /*Daniela Zuluaga- Enero 2018:
 Se reemplazan los nombres de las variables p01 a p08 por p01_hogar a p08_hogar y r01 a r06 por r01_hogar a r06_hogar dado que la base de individuos contiene variables con 
-el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la información al hacer el merge entre hogares e individuos*/
+el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la informaciÃ³n al hacer el merge entre hogares e individuos*/
 
 forvalues i=1/8 {
 rename p0`i' p0`i'_hogar

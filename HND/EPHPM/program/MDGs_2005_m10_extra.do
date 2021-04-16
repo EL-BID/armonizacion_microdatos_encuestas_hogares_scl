@@ -4,14 +4,14 @@
 
 /*
 
-Instituto Nacional de Estadística, Encuesta Permanente de Hogares de Propósitos Múltiples. May, 2005.
+Instituto Nacional de EstadÃ­stica, Encuesta Permanente de Hogares de PropÃ³sitos MÃºltiples. May, 2005.
 
 All indicators presented as part of this research initiative are estimates 
 based on microdata from sample based household surveys. Hence, they ARE NOT
 IDB OFFICIAL STATISTICS, are bound to have an implicit sampling error, and 
 are not strictly comparable with estimates from other data sources 
 (census and administrative records). Official indicators should be obtained 
-directly from each country’s statistical agency.
+directly from each countryâ€™s statistical agency.
 
 Comments are welcomed at eqxis-bid@iadb.org
 */
@@ -61,14 +61,14 @@ set more off
 set linesize 255
 set mem 100m
 
-use "F:\EQxIS\BASES DE DATOS\HONDURAS\hnd04-may.dta", clear
+use "${surveysFolder}\EQxIS\BASES DE DATOS\HONDURAS\hnd04-may.dta", clear
 
-log using "F:\EQxIS\LOGS\HND04.log", replace
+log using "${surveysFolder}\EQxIS\LOGS\HND04.log", replace
 
 /*
 rela_j
  1. jefe del hogar
- 2. esposa(o) o compañera(o) 
+ 2. esposa(o) o compaÃ±era(o) 
  3. hijos
  4. hijastros 
  5. padres 
@@ -114,39 +114,39 @@ rela_j
 ** Years of education. 
 /*
 
-2. ¿Asiste actualmente a algún centro educativo?
+2. Â¿Asiste actualmente a algÃºn centro educativo?
 1. SI ==> 5
 
-4. ¿Cuál es el nivel y año educativo más alto que aprobó?
+4. Â¿CuÃ¡l es el nivel y aÃ±o educativo mÃ¡s alto que aprobÃ³?
 
 Nivel(p04a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
 
-Año Educativo (p04b)
+AÃ±o Educativo (p04b)
 
-5. ¿Qué nivel y año educativo cursa actualmente?
+5. Â¿QuÃ© nivel y aÃ±o educativo cursa actualmente?
 
 Nivel(p05a)				
- 2. Centro de Alfabetización	 
+ 2. Centro de AlfabetizaciÃ³n	 
  3. Pre-Escolar			 
  4. Primaria			 
- 5. Ciclo común			 
+ 5. Ciclo comÃºn			 
  6. Secundaria Diversificado	 
- 7. Técnico Superior		 
+ 7. TÃ©cnico Superior		 
  8. Superior Universitario	 
  9. Post-grado			 
 99. No sabe			 
 
-Año Educativo (p05b)
+AÃ±o Educativo (p05b)
 
 */
 * Included in the database
@@ -237,7 +237,7 @@ Año Educativo (p05b)
 ** Economic Active Population  (10 years or more of age)
 * Included in the database
 * condact
-/* Condición de Actividad
+/* CondiciÃ³n de Actividad
  1. Ocupados	
  2. Desocupados
  3. Inactivos
@@ -264,7 +264,7 @@ Domi (vs. Dominio)
  1. Tegucigalpa 
  2. San pedro sula
  3. Ciudades medianas
- 4. Ciudades pequeñas
+ 4. Ciudades pequeÃ±as
  5. Rural 
  */
 
@@ -364,49 +364,49 @@ svymean NERP
   global VETNIA indigena
   global VREGION1 region
   
-  global DefvarsS "F:\EQxIS\Calculos\DefvarsS.do" 
-  global DefvarsS_SEXOD "F:\EQxIS\Calculos\DefvarsS_SEXOD.do" 
-  global DefvarsE "F:\EQxIS\Calculos\DefvarsE.do" 
-  global TablasS "F:\EQxIS\Calculos\TablasS.do"
-  global TablasE "F:\EQxIS\Calculos\TablasE.do"
-  global DefvarsSR "F:\EQxIS\Calculos\DefvarsSR.do"
-  global TablasSR "F:\EQxIS\Calculos\TablasSR.do"
-  global DefvarsSWENAS "F:\EQxIS\Calculos\DefvarsSWENAS.do"
-  global TablasSWENAS "F:\EQxIS\Calculos\TablasSWENAS.do"
-  global DefvarsSMean "F:\EQxIS\Calculos\DefvarsSMean.do" 
-  global DefvarsEMean "F:\EQxIS\Calculos\DefvarsEMean.do" 
-  global TablasSMean "F:\EQxIS\Calculos\TablasSMean.do"
-  global TablasEMean "F:\EQxIS\Calculos\TablasEMean.do"
-  global DefvarsSTOTN_SECTEN "F:\EQxIS\Calculos\DefvarsSTOTN_SECTEN.do" 
-  global DefvarsSTOTD_SECTEN "F:\EQxIS\Calculos\DefvarsSTOTD_SECTEN.do" 
-  global TablasS_SECTEN "F:\EQxIS\Calculos\TablasS_SECTEN.do"
-  global TablasSOBS "F:\EQxIS\Calculos\TablasSOBS.do" 
-  global TablasEOBS "F:\EQxIS\Calculos\TablasEOBS.do"
+  global DefvarsS "${surveysFolder}\EQxIS\Calculos\DefvarsS.do" 
+  global DefvarsS_SEXOD "${surveysFolder}\EQxIS\Calculos\DefvarsS_SEXOD.do" 
+  global DefvarsE "${surveysFolder}\EQxIS\Calculos\DefvarsE.do" 
+  global TablasS "${surveysFolder}\EQxIS\Calculos\TablasS.do"
+  global TablasE "${surveysFolder}\EQxIS\Calculos\TablasE.do"
+  global DefvarsSR "${surveysFolder}\EQxIS\Calculos\DefvarsSR.do"
+  global TablasSR "${surveysFolder}\EQxIS\Calculos\TablasSR.do"
+  global DefvarsSWENAS "${surveysFolder}\EQxIS\Calculos\DefvarsSWENAS.do"
+  global TablasSWENAS "${surveysFolder}\EQxIS\Calculos\TablasSWENAS.do"
+  global DefvarsSMean "${surveysFolder}\EQxIS\Calculos\DefvarsSMean.do" 
+  global DefvarsEMean "${surveysFolder}\EQxIS\Calculos\DefvarsEMean.do" 
+  global TablasSMean "${surveysFolder}\EQxIS\Calculos\TablasSMean.do"
+  global TablasEMean "${surveysFolder}\EQxIS\Calculos\TablasEMean.do"
+  global DefvarsSTOTN_SECTEN "${surveysFolder}\EQxIS\Calculos\DefvarsSTOTN_SECTEN.do" 
+  global DefvarsSTOTD_SECTEN "${surveysFolder}\EQxIS\Calculos\DefvarsSTOTD_SECTEN.do" 
+  global TablasS_SECTEN "${surveysFolder}\EQxIS\Calculos\TablasS_SECTEN.do"
+  global TablasSOBS "${surveysFolder}\EQxIS\Calculos\TablasSOBS.do" 
+  global TablasEOBS "${surveysFolder}\EQxIS\Calculos\TablasEOBS.do"
 
-  global DefvarsSRE1 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRE1.do" 
-  global TablasSRE1  "F:\EQxIS\Calculos\REGIONES\HND\TablasSRE1.do"
-  global DefvarsSRE2 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRE2.do" 
-  global TablasSRE2  "F:\EQxIS\Calculos\REGIONES\HND\TablasSRE2.do"
-  global DefvarsSRatioRE1   "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRatioRE1.do" 
-  global TablasSRatioRE1    "F:\EQxIS\Calculos\REGIONES\HND\TablasSRatioRE1.do"
-  global TablasSOBSRatioRE1 "F:\EQxIS\Calculos\REGIONES\HND\TablasSOBSRatioRE1.do"
-  global DefvarsSRatioRE2   "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRatioRE2.do" 
-  global TablasSRatioRE2    "F:\EQxIS\Calculos\REGIONES\HND\TablasSRatioRE2.do"
-  global TablasSOBSRatioRE2 "F:\EQxIS\Calculos\REGIONES\HND\TablasSOBSRatioRE2.do"
-  global DefvarsSWENASRE1 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSWENASRE1.do" 
-  global TablasSWENASRE1  "F:\EQxIS\Calculos\REGIONES\HND\TablasSWENASRE1.do"
-  global DefvarsSWENASRE2 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSWENASRE2.do" 
-  global TablasSWENASRE2  "F:\EQxIS\Calculos\REGIONES\HND\TablasSWENASRE2.do"
-  global DefvarsSRE1_SEXOD "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRE1_SEXOD.do" 
-  global DefvarsSRE2_SEXOD "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSRE2_SEXOD.do" 
-  global DefvarsSURBANRE1 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE1.do" 
-  global TablasSURBANRE1  "F:\EQxIS\Calculos\REGIONES\HND\TablasSURBANRE1.do"
-  global DefvarsSURBANRE2 "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE2.do" 
-  global TablasSURBANRE2  "F:\EQxIS\Calculos\REGIONES\HND\TablasSURBANRE2.do"
-  global DefvarsSURBANRE1_SEXOD "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE1_SEXOD.do" 
-  global DefvarsSURBANRE2_SEXOD "F:\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE2_SEXOD.do" 
-  global TablasSMeanRE1  "F:\EQxIS\Calculos\REGIONES\HND\TablasSMeanRE1.do"
-  global TablasSMeanRE2  "F:\EQxIS\Calculos\REGIONES\HND\TablasSMeanRE2.do"
+  global DefvarsSRE1 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRE1.do" 
+  global TablasSRE1  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSRE1.do"
+  global DefvarsSRE2 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRE2.do" 
+  global TablasSRE2  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSRE2.do"
+  global DefvarsSRatioRE1   "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRatioRE1.do" 
+  global TablasSRatioRE1    "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSRatioRE1.do"
+  global TablasSOBSRatioRE1 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSOBSRatioRE1.do"
+  global DefvarsSRatioRE2   "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRatioRE2.do" 
+  global TablasSRatioRE2    "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSRatioRE2.do"
+  global TablasSOBSRatioRE2 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSOBSRatioRE2.do"
+  global DefvarsSWENASRE1 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSWENASRE1.do" 
+  global TablasSWENASRE1  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSWENASRE1.do"
+  global DefvarsSWENASRE2 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSWENASRE2.do" 
+  global TablasSWENASRE2  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSWENASRE2.do"
+  global DefvarsSRE1_SEXOD "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRE1_SEXOD.do" 
+  global DefvarsSRE2_SEXOD "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSRE2_SEXOD.do" 
+  global DefvarsSURBANRE1 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE1.do" 
+  global TablasSURBANRE1  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSURBANRE1.do"
+  global DefvarsSURBANRE2 "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE2.do" 
+  global TablasSURBANRE2  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSURBANRE2.do"
+  global DefvarsSURBANRE1_SEXOD "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE1_SEXOD.do" 
+  global DefvarsSURBANRE2_SEXOD "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\DefvarsSURBANRE2_SEXOD.do" 
+  global TablasSMeanRE1  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSMeanRE1.do"
+  global TablasSMeanRE2  "${surveysFolder}\EQxIS\Calculos\REGIONES\HND\TablasSMeanRE2.do"
 
 quietly{
 set linesize 255
@@ -419,39 +419,39 @@ set linesize 255
 
 /*
 
-2. ¿Asiste actualmente a algún centro educativo?
+2. Â¿Asiste actualmente a algÃºn centro educativo?
 1. SI ==> 5
 
-4. ¿Cuál es el nivel y año educativo más alto que aprobó?
+4. Â¿CuÃ¡l es el nivel y aÃ±o educativo mÃ¡s alto que aprobÃ³?
 
 Nivel(p04a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
 
-Año Educativo (p04b)
+AÃ±o Educativo (p04b)
 
-5. ¿Qué nivel y año educativo cursa actualmente?
+5. Â¿QuÃ© nivel y aÃ±o educativo cursa actualmente?
 
 Nivel(p05a)				
- 2. Centro de Alfabetización	 
+ 2. Centro de AlfabetizaciÃ³n	 
  3. Pre-Escolar			 
  4. Primaria			 
- 5. Ciclo común			 
+ 5. Ciclo comÃºn			 
  6. Secundaria Diversificado	 
- 7. Técnico Superior		 
+ 7. TÃ©cnico Superior		 
  8. Superior Universitario	 
  9. Post-grado			 
 99. No sabe			 
 
-Año Educativo (p05b)
+AÃ±o Educativo (p05b)
 
 */
 
@@ -720,12 +720,12 @@ noisily{
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 
 /*
-29.A. ¿Cuál es o era su categoría ocupacional en la ocupación principal?
- 1. Empleado u obrero público 
+29.A. Â¿CuÃ¡l es o era su categorÃ­a ocupacional en la ocupaciÃ³n principal?
+ 1. Empleado u obrero pÃºblico 
  2. Empleado u obrero privado 
- 3. Empleado doméstico 
+ 3. Empleado domÃ©stico 
 TRABAJADORES CUENTA PROPIA
- 4. Miembro de cooperativa de producción 
+ 4. Miembro de cooperativa de producciÃ³n 
  5. Cuenta propia que no contrata mano de obra temporal 
  6. Cuenta propia que contrata mano de obra temporal 
  7. Empleador o socio activo 
@@ -733,7 +733,7 @@ PRODUCTORES AGROPECUARIOS
  8. Miembro de cooperativa, asentamiento o grupo
  9. Cuenta propia que no contrata mano de obra temporal
  10. Cuenta propia que contrata mano de obra temporal
- 11. Patrón o socio de la finca
+ 11. PatrÃ³n o socio de la finca
  12. Trabajador familiar no remunerado
  13. Trabajador no remunerado
 
@@ -783,13 +783,13 @@ categoria ocupacional (ocupacion principal)
 
 ** Access to Electricity ** Additional Indicator
 /*
-7. ¿Qué tipo de alumbrado utiliza en la vivienda?
- 1. Servicio Público
+7. Â¿QuÃ© tipo de alumbrado utiliza en la vivienda?
+ 1. Servicio PÃºblico
  2. Servicio privado colectivo
  3. Planta propia
- 4. Energía solar
+ 4. EnergÃ­a solar
  5. Vela
- 6. Candil o lámpara de gas 
+ 6. Candil o lÃ¡mpara de gas 
  7. Ocote
  8. Otro:________________________ */
 
@@ -812,32 +812,32 @@ categoria ocupacional (ocupacion principal)
 
 /*
 5. Servicio de Agua (v05a)
-a) ¿Tiene en la vivienda o en la propiedad, tubería instalada para agua?
- 1. Sí  2. No
+a) Â¿Tiene en la vivienda o en la propiedad, tuberÃ­a instalada para agua?
+ 1. SÃ­  2. No
 
-b) ¿Cómo obtiene el agua que utiliza en la vivienda? (v05b)
- 1. Servicio Público por tubería
- 2. Servicio Privado por tubería
+b) Â¿CÃ³mo obtiene el agua que utiliza en la vivienda? (v05b)
+ 1. Servicio PÃºblico por tuberÃ­a
+ 2. Servicio Privado por tuberÃ­a
  3. Pozo malacate
  4. Pozo con bomba
- 5. Río, riachuelo, manantial, ojo de agua
+ 5. RÃ­o, riachuelo, manantial, ojo de agua
  6. Carro Cisterna
  7. Pick-Up barriles o con drones o barriles
  8. Otro
 
-c) ¿Cómo es el suministro de agua?
+c) Â¿CÃ³mo es el suministro de agua?
  1. Permanente
  2. Irregular
 
-d) En los últimos quince días, ¿Con qué frecuencia tuvo el suministro de agua en su vivienda?
-	- Cuántos días
-	- Horas promedio por día
+d) En los Ãºltimos quince dÃ­as, Â¿Con quÃ© frecuencia tuvo el suministro de agua en su vivienda?
+	- CuÃ¡ntos dÃ­as
+	- Horas promedio por dÃ­a
 
-e) ¿Dónde obtiene el agua?
+e) Â¿DÃ³nde obtiene el agua?
  1. Dentro de la vivienda
  2. Fuera de la vivienda y dentro de la propiedad
  3. Fuera de la propiedad a menos de 100 metros
- 4. Fuera de la propiedad a más de 100 metros
+ 4. Fuera de la propiedad a mÃ¡s de 100 metros
 */
 
  noisily{
@@ -870,17 +870,17 @@ e) ¿Dónde obtiene el agua?
 /*
 
 6. Servicio Sanitario
-a) ¿Tiene algún tipo de servicio sanitario?
- 1. Sí 
+a) Â¿Tiene algÃºn tipo de servicio sanitario?
+ 1. SÃ­ 
  2. No ==> 7
 
-b) ¿Qué tipo de servicio sanitario tiene?
+b) Â¿QuÃ© tipo de servicio sanitario tiene?
  1. Inodoro conectado a alcantarilla
- 2. Inodoro conectado a pozo séptico
- 3. Inodoro con desagüe a río, laguna, mar
- 4. Letrina con descarga a río, laguna, mar
- 5. Letrina con cierre hidráulico
- 6. Letrina con pozo séptico
+ 2. Inodoro conectado a pozo sÃ©ptico
+ 3. Inodoro con desagÃ¼e a rÃ­o, laguna, mar
+ 4. Letrina con descarga a rÃ­o, laguna, mar
+ 5. Letrina con cierre hidrÃ¡ulico
+ 6. Letrina con pozo sÃ©ptico
  7. Letrina con pozo negro
 
 c) El uso del servicio sanitario es:
@@ -910,31 +910,31 @@ c) El uso del servicio sanitario es:
 ** Target 11, Indicator: Proportion of the population with access to secure tenure (%)
 
 /*
-1. Tipo de vivienda			10. ¿Cómo es la tenencia de esta vivienda?
+1. Tipo de vivienda			10. Â¿CÃ³mo es la tenencia de esta vivienda?
 v01					v10a
  1. Casa individual			 1. Propietario y completamente pagada
  2. Casa de mat. nat. (Rancho)		 2. Propietario recuperada legalizada
  3. Casa Improvisada (Desechos)		 3. Propietario recuperada sin legalizar
- 4. Apartamento				 4. Propietario y la está pagando
- 5. Cuarto en mesón o cuartería 	 5. Alquilada
- 6. Barracón				 6. Cedida sin pago
- 7. Local no construido para habitación 	
+ 4. Apartamento				 4. Propietario y la estÃ¡ pagando
+ 5. Cuarto en mesÃ³n o cuarterÃ­a 	 5. Alquilada
+ 6. BarracÃ³n				 6. Cedida sin pago
+ 7. Local no construido para habitaciÃ³n 	
  pero usado como vivienda
  8. Otro
 
-2. ¿Cuál es el material predominante 	3. ¿Cuál es el material predominante en el piso?
-en la construcción de las paredes?
- 1. Ladrillo, piedra o bloque		 1. Cerámica
+2. Â¿CuÃ¡l es el material predominante 	3. Â¿CuÃ¡l es el material predominante en el piso?
+en la construcciÃ³n de las paredes?
+ 1. Ladrillo, piedra o bloque		 1. CerÃ¡mica
  2. Adobe				 2. Ladrillo de cemento
  3. Material prefabricado		 3. Ladrillo de granito
  4. Madera				 4. Ladrillo de barro
- 5. Bahareque, vara o caña		 5. Plancha de cemento
+ 5. Bahareque, vara o caÃ±a		 5. Plancha de cemento
  6. Desechos				 6. Madera
  7. Otro				 7. Tierra
 				 	 8. Otro
 
 12. Cantidad de Piezas de la Vivienda
-a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
+a). Â¿CuÃ¡ntas piezas tiene esta vivienda? (incluya la cocina pero no el baÃ±o)
 */
 
  egen tenencia=max(v10a), by(id_viv)
@@ -986,7 +986,7 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 
 * Gender classification of the population refers to the head of the household.
 
-* 3. ¿Cuál es el material predominante en el piso?
+* 3. Â¿CuÃ¡l es el material predominante en el piso?
  noisily display "Proportion of Population living in dwellings with dirt floors"
  global variable DIRT
  gen	 DIRT=0 if (piso>=1 & piso<=8) /* Total population excluding missing information */
@@ -1020,9 +1020,9 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 
 /*
-11. ¿Tiene en esta vivienda los siguientes bienes?
-f. Teléfono fijo 
-g. Teléfono celular 
+11. Â¿Tiene en esta vivienda los siguientes bienes?
+f. TelÃ©fono fijo 
+g. TelÃ©fono celular 
 */
 
  egen telefono=max(v11f), by(id_viv)
@@ -1077,7 +1077,7 @@ g. Teléfono celular
 	
 ** Target 18, Indicator: "Personal computers in use per 100 population"
 /*
-11. ¿Tiene en esta vivienda los siguientes bienes?
+11. Â¿Tiene en esta vivienda los siguientes bienes?
 i. Computadora 
 */
 
@@ -1100,14 +1100,14 @@ i. Computadora
 
 ** Target 18, Indicator: "Internet users per 100 population"
 /*
-10. Durante el mes pasado, ¿tuvo acceso a internet?
- 1. Sí
+10. Durante el mes pasado, Â¿tuvo acceso a internet?
+ 1. SÃ­
  2. No 
  9. No sabe
 
-11.¿En que sitio tuvo acceso a internet? (p11)
+11.Â¿En que sitio tuvo acceso a internet? (p11)
  1. En su casa (a)
- 2. En un cyber-café o negocio de internet (b)
+ 2. En un cyber-cafÃ© o negocio de internet (b)
  3. En su trabajo (c)
  4. En la escuela, colegio o universidad (d)
  5. En una oficina de HONDUTEL (e)
@@ -1189,21 +1189,21 @@ i. Computadora
 
 ** Disconnected Youths
 /*
-17. ¿Por qué no buscó trabajo ni trató de establecer su propio
+17. Â¿Por quÃ© no buscÃ³ trabajo ni tratÃ³ de establecer su propio
 negocio o finca la semana pasada?
- 1. Se incorporará a un trabajo antes de un mes			==>22
- 2. Tiene trabajo asegurado después de un mes 			==>22
+ 1. Se incorporarÃ¡ a un trabajo antes de un mes			==>22
+ 2. Tiene trabajo asegurado despuÃ©s de un mes 			==>22
  3. Espera respuesta a gestiones 				==>22
- 4. Está esperando la próxima temporada de trabajo 		==>22
- 5. Cree que no encontrará trabajo				==>22
- 6. Dejó de buscar trabajo momentáneamente			==>22
+ 4. EstÃ¡ esperando la prÃ³xima temporada de trabajo 		==>22
+ 5. Cree que no encontrarÃ¡ trabajo				==>22
+ 6. DejÃ³ de buscar trabajo momentÃ¡neamente			==>22
  7. No tiene tierra, capital, ni materia prima			==>22
  8. No tiene tiempo para buscar trabajo				==>18
  9. No tiene necesidad de trabajar				==>18
  10. Por su edad no puede trabajar				==>18
  11.  Otro							==>18
 
-18. ¿Cuál es su condición actual?
+18. Â¿CuÃ¡l es su condiciÃ³n actual?
  1. Jubilado
  2. Pensionista
  3. Rentista

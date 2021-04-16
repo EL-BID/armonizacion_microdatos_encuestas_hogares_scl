@@ -1,4 +1,4 @@
-*Elaboración (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Noviembre, 2013
 
 *** MERGE COLOMBIA 1992 ****
@@ -11,7 +11,7 @@
 
 clear
 set more off
-local ruta ="\\Sdssrv03\surveys\"
+local ruta ="${surveysFolder}\"
 local in   ="`ruta'survey\COL\ENH-FT\1992\m9\data_orig\"
 local out  ="`ruta'\survey\COL\ENH-FT\1992\m9\data_merge\"
 
@@ -23,7 +23,7 @@ sort  ca_IDENT
 save `in'colc92vivi.dta,  replace
 clear
 
-*** caracteristicas generales y Educación
+*** caracteristicas generales y EducaciÃ³n
 infile using  "`in'col92_T01C.dct"
 keep if ca_TIPOD=="1"
 sort  ca_IDENT ca_009
@@ -32,7 +32,7 @@ clear
 
 /* no pego los modulos originales porque la variable subtipo no existe*
 
-***MODULO ESPECIAL Educación  & SUBTIPO=="0"
+***MODULO ESPECIAL EducaciÃ³n  & SUBTIPO=="0"
 infile using  "`in'col92_T02_0C.dct"
 keep if ca_TIPOD=="2"
 sort  ca_IDENT ca_009

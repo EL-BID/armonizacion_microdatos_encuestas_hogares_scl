@@ -3,7 +3,7 @@
 
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\BRA\PNAD\2011\m9\data_orig\"
+cd "${surveysFolder}\survey\BRA\PNAD\2011\m9\data_orig\"
 
 *Convierto la base a formato .dta 
 *------------------------------------
@@ -27,7 +27,7 @@ tab _merge
 keep if v0201==1 & v0104==1 /*Hogares permanentes y encuestas realizadas*/
 tab _merge
 drop _merge
-saveold "\\Sdssrv03\surveys\survey\BRA\PNAD\2011\m9\data_merge\BRA_2011m9.dta", replace
+saveold "${surveysFolder}\survey\BRA\PNAD\2011\m9\data_merge\BRA_2011m9.dta", replace
 
 
 

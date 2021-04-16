@@ -1,4 +1,4 @@
-*Elaboración: ?
+*ElaboraciÃ³n: ?
 *Actualizacion y cambio de rutas: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Noviembre, 2013
 
@@ -13,7 +13,7 @@
 
 clear
 set more off
-local ruta = "\\Sdssrv03\surveys\"
+local ruta = "${surveysFolder}\"
 cd "`ruta'survey\COL\ENH-FT\1990\m9\data_orig\"
 
 /*

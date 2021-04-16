@@ -3,10 +3,10 @@
 			*JSLC 2009*
 			***********
 
-*Se consolida una base para construir los indicadores de sociómetro. No obstante, se cuenta con más módulos 
+*Se consolida una base para construir los indicadores de sociÃ³metro. No obstante, se cuenta con mÃ¡s mÃ³dulos 
 *que el investigador puede unir a este consolidado. 
 
-cd "\\sdssrv03\Surveys\Jamaica\2009\JSLC\Datos Originales\STATA"
+cd "${surveysFolder}\Jamaica\2009\JSLC\Datos Originales\STATA"
 
 use rec001.dta, clear
 sort serial
@@ -105,11 +105,11 @@ drop _merge
 
 save jam09.dta, replace
 
-*Inclusión de los agregados de consumo
-*Mayra Sáenz Diciembre 2013
+*InclusiÃ³n de los agregados de consumo
+*Mayra SÃ¡enz Diciembre 2013
 
 clear all
-global path = "D:\BID\JAM\Jam SLC"
+global path = "${surveysFolder}\BID\JAM\Jam SLC"
 use "$path\SLC\2009\m5\data_orig\jam09.dta"
 foreach v of varlist _all {
 	local lowname=lower("`v'")

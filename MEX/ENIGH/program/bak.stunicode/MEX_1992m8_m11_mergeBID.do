@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (Versiï¿½n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\1992\m8_m11\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\1992\m8_m11\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "1992"
 local ronda m8_m11
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -28,18 +28,18 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
-Encuesta: ENIGH (Nueva construcción)
+Paï¿½s: Mexico
+Encuesta: ENIGH (Nueva construcciï¿½n)
 Round: Agosto-Noviembre
 Autores:
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+Versiï¿½n 2013: Mayra Sï¿½enz
+ï¿½ltima versiï¿½n: Mayra Sï¿½enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha ï¿½ltima modificaciï¿½n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
 
-*Mayra Sáenz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
+*Mayra Sï¿½enz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
 *pero con algunas modificaciones, y generando nuevas variables.
 
 
@@ -114,7 +114,7 @@ replace ing_2=ing_2/oct92 if meses=="111009080706"
 replace ing_1=ing_1/nov92 if meses=="111009080706"
 
 
-*Mayra Sáenz Julio 2015- Mes de referencia
+*Mayra Sï¿½enz Julio 2015- Mes de referencia
 
 g mes_ref = substr(meses, 1, 2)
 destring mes_ref, replace
@@ -128,7 +128,7 @@ egen double ing_mens=rmean(ing_1 ing_2 ing_3 ing_4 ing_5 ing_6)
 gen double ing_mon =ing_mens if (clave>="P001" & clave<="P027") 
 gen double ing_lab =ing_mens if (clave>="P001" & clave<="P014") 
 
-**Modificación Mayra Sáenz - Julio 2015 : Son ingresos laborales de P001-P014, se desagrega por actividad principal y secundaria
+**Modificaciï¿½n Mayra Sï¿½enz - Julio 2015 : Son ingresos laborales de P001-P014, se desagrega por actividad principal y secundaria
 gen     ocuprisec = 1 if ocupacion =="1" 
 replace ocuprisec = 2 if ocupacion =="0" | ocupacion =="2"
 
@@ -146,11 +146,11 @@ g double ypension = ing_mens if  (clave=="P022")                                
 g double trat_pr = ing_mens  if  ((clave>="P023" & clave<="P024") | clave=="P027")    //Indemnizaciones recibidas de seguros contra riesgos y terceros,  Indemnizaciones por despido y accidentes de trabajo, Ingresos provenientes de otros paises
 g double trat_pu  = 0
 g double dona_pu  = 0                                                                 
-g double dona_pr  = ing_mens if  (clave=="P025" | clave=="P026")                      //Becas y donaciones provenientes de Instituciones, Regalos y donativos originados dentro del país
-g double otros   = ing_mens  if ((clave>="P028" & clave<="P029"))                     //Venta de automóviles, aparatos electricos de segunda mano, etc.  Otros ingresos corrientes no considerados en los anteriores, (viÃ¡ticos, etc.).
+g double dona_pr  = ing_mens if  (clave=="P025" | clave=="P026")                      //Becas y donaciones provenientes de Instituciones, Regalos y donativos originados dentro del paï¿½s
+g double otros   = ing_mens  if ((clave>="P028" & clave<="P029"))                     //Venta de automï¿½viles, aparatos electricos de segunda mano, etc.  Otros ingresos corrientes no considerados en los anteriores, (viÃ¡ticos, etc.).
 g double remesas = ing_mens  if  (clave=="P027")                                      //Ingresos provenientes de otros paises
 
-*Modificación Mayra Sáenz Julio 2015
+*Modificaciï¿½n Mayra Sï¿½enz Julio 2015
 levelsof clave, local(clave)
 foreach k of local clave {
 g `k' = ing_mens if clave == "`k'"
@@ -569,9 +569,9 @@ replace edba_m=edba_m/d7m10 if decena==8
 replace edba_m=edba_m/d7m10 if decena==9
 
 
-*Modificación Mayra Saenz - Abril 2017: Se desagrega el gasto unicamente en educación (se excluye recreación)
+*Modificaciï¿½n Mayra Saenz - Abril 2017: Se desagrega el gasto unicamente en educaciï¿½n (se excluye recreaciï¿½n)
 
-*Gasto monetario sólo educación
+*Gasto monetario sï¿½lo educaciï¿½n
 gen edu_gtosm=gasm if (clave>="E001" & clave<="E008") | (clave>="E010" & clave<="E013") 
 
 replace edu_gtosm=edu_gtosm/d7m07 if decena==1
@@ -1239,8 +1239,8 @@ sort folio
 saveold "$ruta\hogares92.dta", replace
 
 use "$ruta\concen.dta", clear
-rename folio folio1              //Modificado Mayra Sáenz - Julio 2015
-gen folio = substr(folio1,4,100) //Modificado Mayra Sáenz - Julio 2015
+rename folio folio1              //Modificado Mayra Sï¿½enz - Julio 2015
+gen folio = substr(folio1,4,100) //Modificado Mayra Sï¿½enz - Julio 2015
 
 rename hog factor
 keep folio factor estrato ubica_ge educacion
@@ -1251,7 +1251,7 @@ tab _merge
 drop _merge
 sort folio
 
-*Modificado Mayra Sáenz Julio 2015 - Este ingreso es a nivel de hogar, se reemplaza por el ingreso a nivel de persona.
+*Modificado Mayra Sï¿½enz Julio 2015 - Este ingreso es a nivel de hogar, se reemplaza por el ingreso a nivel de persona.
 /*merge folio using "$ruta\ingreso_deflactado92.dta"
 tab _merge
 drop _merge
@@ -1302,10 +1302,10 @@ egen double reda    =rsum(reda_m reda_nma reda_nme)
 gen double redan= -1 * reda
 gen double reg_espn = -1 * reg_esp
 
-saveold "$ruta\gtos_autoc.dta", replace //Mayra Sáenz Julio 2015
+saveold "$ruta\gtos_autoc.dta", replace //Mayra Sï¿½enz Julio 2015
 
 *_________________________________________________________________________________________________________*
-* Modificación Mayra Sáenz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
+* Modificaciï¿½n Mayra Sï¿½enz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
 *_________________________________________________________________________________________________________*
 
 use "$ruta\person92.dta", clear
@@ -1317,13 +1317,13 @@ sort folio numren, stable
 
 merge m:1 folio using "$ruta\gtos_autoc.dta"
 
-*Modificación Mayra Sáenz: Total Ingreso monetario del hogar
+*Modificaciï¿½n Mayra Sï¿½enz: Total Ingreso monetario del hogar
 bys folio: egen ing_monh = sum(ing_mon)
 
-egen double ict =rsum(ing_monh nomon) if paren=="1" | paren=="2" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double gct =rsum(gasmon nomon)   if paren=="1" | paren=="2" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double intt=rsum(ing_monh nomon redan reg_espn) if paren=="1" | paren=="2" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double gnt =rsum(gasmon nomon redan reg_espn)   if paren=="1" | paren=="2" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
+egen double ict =rsum(ing_monh nomon) if paren=="1" | paren=="2" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double gct =rsum(gasmon nomon)   if paren=="1" | paren=="2" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double intt=rsum(ing_monh nomon redan reg_espn) if paren=="1" | paren=="2" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double gnt =rsum(gasmon nomon redan reg_espn)   if paren=="1" | paren=="2" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
 
 label var  ict  "Ingreso corriente total del hogar"
 label var  gct  "Gasto corriente total del hogar"

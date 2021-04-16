@@ -1,6 +1,6 @@
 
 clear all
-local ruta "Y:\survey\JAM\LFS\2003\m4\data_orig"
+local ruta "${surveysFolder}\survey\JAM\LFS\2003\m4\data_orig"
 
 *Base 1
 
@@ -51,7 +51,7 @@ save "`ruta'\april2003_rt4merge.dta", replace
 
 
 clear all
-local ruta "Y:\survey\JAM\LFS\2003\m4\data_orig"
+local ruta "${surveysFolder}\survey\JAM\LFS\2003\m4\data_orig"
 use "`ruta'\april2003_rt1merge.dta"
 
 
@@ -75,4 +75,4 @@ tab _merge2  _merge4
 drop _merge* idbase
 
 
-save "Y:\survey\JAM\LFS\2003\m4\data_merge\JAM_2003m4.dta", replace
+save "${surveysFolder}\survey\JAM\LFS\2003\m4\data_merge\JAM_2003m4.dta", replace

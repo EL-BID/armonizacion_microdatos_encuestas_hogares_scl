@@ -1,19 +1,19 @@
 
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS GTM
 local ENCUESTA ENIGFAM
@@ -32,12 +32,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Guatemala
+Pa√≠s: Guatemala
 Encuesta: ENEI
 Round: m10_m11
 Autores: 
-⁄ltima versiÛn: Mayra S·enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha ˙ltima modificaciÛn: 24 de Septiembre de 2013
+√öltima versi√≥n: Mayra S√°enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha √∫ltima modificaci√≥n: 24 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -219,7 +219,7 @@ label value zona_c zona_c
 gen str3 pais_c="GTM"
 label variable pais_c "Nonmbre del Pais"
 gen anio_c=1998
-label variable anio_c "AÒo de la Encuesta"
+label variable anio_c "A√±o de la Encuesta"
 
 * Periodo de Referencia: Marzo 1998 a Marzo 1999
 gen byte mes_c=.
@@ -240,7 +240,7 @@ replace relacion_ci=4 if (parentco==4 | parentco==5 | parentco==6 | parentco==7)
 replace relacion_ci=5 if (parentco==9 | parentco==10)
 replace relacion_ci=6 if parentco==8
 label var relacion_ci "Parentesco o relacion con el Jefe del Hogar"
-label define relacion_ci 1 "Jefe(a)" 2 "Esposo(a) o compaÒero(a)" 3 "Hijo(a)" 4 "Otro pariente" 5 "Otro NO pariente" 6 "Empleado(a) domestico(a)" 
+label define relacion_ci 1 "Jefe(a)" 2 "Esposo(a) o compa√±ero(a)" 3 "Hijo(a)" 4 "Otro pariente" 5 "Otro NO pariente" 6 "Empleado(a) domestico(a)" 
 label value relacion_ci relacion_ci
 
 * EDAD
@@ -303,25 +303,25 @@ egen nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5 ), by (idh_ch)
 label variable nmiembros_ch "Numero de miembros en el Hogar"
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad>=21)), by (idh_ch)
-label variable nmayor21_ch "Numero de personas de 21 aÒos o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 a√±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<21)), by (idh_ch)
-label variable nmenor21_ch "Numero de personas menores a 21 aÒos dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 a√±os dentro del Hogar"
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad>=65)), by (idh_ch)
-label variable nmayor65_ch "Numero de personas de 65 aÒos o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 a√±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<6)), by (idh_ch)
-label variable nmenor6_ch "Numero de niÒos menores a 6 aÒos dentro del Hogar"
+label variable nmenor6_ch "Numero de ni√±os menores a 6 a√±os dentro del Hogar"
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<1)),  by (idh_ch)
-label variable nmenor1_ch "Numero de niÒos menores a 1 aÒo dentro del Hogar"
+label variable nmenor1_ch "Numero de ni√±os menores a 1 a√±o dentro del Hogar"
 
 *** RAZA: Se puede generar agrupando la variable 'p03a04'
 *gen ethnic=1 if p03a04== /* INDIGENA */
 *replace ethnic=2 if p03a04== /* NO INDIGENA */
 
-*** ESTADO CIVIL PARA PERSONAS DE 10 A—OS O MAS DE EDAD
+*** ESTADO CIVIL PARA PERSONAS DE 10 A√ëOS O MAS DE EDAD
 gen civil_ci=.  
 replace civil_ci=1 if estcivil==1 | estcivil==6 /* SOLTERO */
 replace civil_ci=2 if estcivil==2 | estcivil==3 /* UNION FORMAL O INFORMAL */
@@ -344,12 +344,12 @@ capture assert hh==1
 *******************************************************************************************
 * VARIABLES DEL MERCADO LABORAL
 
-* EN 2002 PERSONAS DE 7 A—OS Y MAS DE EDAD *
-* EN 1998 ESTE BLOQUE DE PREGUNTAS ESTABA DIRIGIDO A LAS PERSONAS DE 7 A—OS Y MAS DE EDAD *
-* EN 2000 ESTE BLOQUE DE PREGUNTAS ESTABA DIRIGIDO A LAS PERSONAS DE 5 A—OS Y MAS DE EDAD *
+* EN 2002 PERSONAS DE 7 A√ëOS Y MAS DE EDAD *
+* EN 1998 ESTE BLOQUE DE PREGUNTAS ESTABA DIRIGIDO A LAS PERSONAS DE 7 A√ëOS Y MAS DE EDAD *
+* EN 2000 ESTE BLOQUE DE PREGUNTAS ESTABA DIRIGIDO A LAS PERSONAS DE 5 A√ëOS Y MAS DE EDAD *
 *******************************************************************************************
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -377,7 +377,7 @@ gen lpe_ci =.
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 ****************
@@ -436,7 +436,7 @@ replace condocup_ci=1 if teniatra==1 | notrab==1
 replace condocup_ci=2 if (teniatra==2 | notrab==2) & (buscomes==1 | buscosem==1) 
 recode condocup_ci .=3 if edad>=7
 replace condocup_ci=4 if edad<7 
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -544,14 +544,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscÛ empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que busc√≥ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "PoblaciÛn EconÛmicamente Activa"
+label var pea_ci "Poblaci√≥n Econ√≥micamente Activa"
 * Trabajadores Desalentados
 /* 1998: pqnobus=3 "Cree que no hay posibilidad de conseguir trabajo"
 No se puede crear en 2002, no estan las opciones "Se canso de buscar" o "Piensa que no hay trabajo" en la pregunta "Porque no busco trabajo?" que si aparecen en el 2000. Se podria considerar la opcion "Hay trabajo pero no se lo dan a el", pero esta alternativa no se considera en el 2000. */ 
@@ -587,7 +587,7 @@ label var contrato_ci "Personas empleadas que han firmado un contrato de trabajo
 
 * Beneficios (Seguridad Social)
 /* 1998: Not available
-2002: La pregunta exacta, dirigida a todos los ocupados de 7 aÒos o mas, de la encuesta es: Esta ud vinculado al Instituto Guatemalteco de Seguridad Social (IGSS) como afiliado (1), contribuyente (2), beneficiario (3), pensionado (4), ninguna de las anteriores(5)? Solo 50 contribuyentes pagan, los demas no pagan (ver pregunta 'p05b26'). */
+2002: La pregunta exacta, dirigida a todos los ocupados de 7 a√±os o mas, de la encuesta es: Esta ud vinculado al Instituto Guatemalteco de Seguridad Social (IGSS) como afiliado (1), contribuyente (2), beneficiario (3), pensionado (4), ninguna de las anteriores(5)? Solo 50 contribuyentes pagan, los demas no pagan (ver pregunta 'p05b26'). */
 gen segsoc_ci=.
 label variable segsoc_ci "Personas que cuentan con seguro social"
 
@@ -599,14 +599,14 @@ label var nempleos_ci "Numero de empleos"
 label define nempleos_ci 1 "un trabajo" 2 "dos o mas trabajos"
 label values nempleos_ci nempleos_ci
 
-* TamaÒo de la firma
+* Tama√±o de la firma
 gen byte tamfirma_ci=.
 replace tamfirma_ci=0 if tamest>0 & tamest<=5 /* 5 o menos */
 replace tamfirma_ci=1 if tamest>5 /* mas de 5 */
 label var tamfirma_ci "Trabajadores formales"
 label define tamfirma_ci 1 "Mas de 5 trabajadores" 0 "5 o menos trabajadores"
 label values tamfirma_ci tamfirma_ci
-/*Mayra S·enz-No incorporo modificaci'on LMK la segunda l'inea corresponde a afiliaci'on al seguro
+/*Mayra S√°enz-No incorporo modificaci'on LMK la segunda l'inea corresponde a afiliaci'on al seguro
 gen firmapeq_ci= .
 replace firmapeq_ci= 1 if tamest<=5
 recode firmapeq_ci .=0 if (dyv01>0 & dyv01<=5109)  
@@ -749,21 +749,21 @@ label var durades_ci "Duracion del Desempleo (en meses)"
 gen cesante_ci=1 if p06a06==2  Trabajo antes 
 replace cesante_ci=0 if p06a06==1  Primera vez */
 
-*** Antiguedad (A—OS) (Cuantos aÒos continuos lleva trabajando en esta empresa o negocio?) (NOT AVAILABLE IN 1998)
-/* En 2000: en total, cuantos aÒos lleva trabajando? (No menciona que sean continuos) */
+*** Antiguedad (A√ëOS) (Cuantos a√±os continuos lleva trabajando en esta empresa o negocio?) (NOT AVAILABLE IN 1998)
+/* En 2000: en total, cuantos a√±os lleva trabajando? (No menciona que sean continuos) */
 gen antiguedad_ci=.
-label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en aÒos)"
+label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en a√±os)"
 
 ******************************************************************************************************
 * VARIABLES EDUCATIVAS
 
-* PARA PERSONAS DE 7 A—OS O MAS DE EDAD 
+* PARA PERSONAS DE 7 A√ëOS O MAS DE EDAD 
 
-* EN 2000 EXISTE UN BLOQUE DE EDUCACION PREESCOLAR PARA PERSONAS DE MENOS DE 7 A—OS, QUE TAMPOCO APARECE EN 1998
+* EN 2000 EXISTE UN BLOQUE DE EDUCACION PREESCOLAR PARA PERSONAS DE MENOS DE 7 A√ëOS, QUE TAMPOCO APARECE EN 1998
 * Los que tienen edad<=6 tienen 'missings' en estas variables
 ******************************************************************************************************
 
-* A—OS DE EDUCACION
+* A√ëOS DE EDUCACION
 
 * NIVGRADO
 
@@ -814,7 +814,7 @@ replace aedu_ci=20 if nivgrado==48
 replace aedu_ci=21 if nivgrado==49 
 
 *replace aedu_ci=. if nivgrado==27 | nivgrado==37 | nivgrado==49 | nivgrado==0
-label variable aedu_ci "AÒos de Educacion"
+label variable aedu_ci "A√±os de Educacion"
 
 
 /* Groups based on the years of schooling:
@@ -941,10 +941,10 @@ replace edus2c=1 if edusc==1
 label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educacion secundaria"
 
 gen eduac_ci=.
-label var eduac_ci "Educacion terciaria acadÈmica versus educaciÛn terciaria no-acadÈmica "
+label var eduac_ci "Educacion terciaria acad√©mica versus educaci√≥n terciaria no-acad√©mica "
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un aÒo o grado"
+label var repite_ci "Personas que han repetido al menos un a√±o o grado"
 
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
@@ -952,12 +952,12 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 * ASISTE
 gen asiste_ci=0 if asist==3
 replace asiste_ci=1 if asist==1 | asist==2
-label var asiste_ci "Personas que actualmente asisten a centros de enseÒanza"
+label var asiste_ci "Personas que actualmente asisten a centros de ense√±anza"
 
-* POR QUE NO ASISTE (En 1998 la pregunta sobre causa de inasistencia es solo para personas de 7 a 14 aÒos de edad)
+* POR QUE NO ASISTE (En 1998 la pregunta sobre causa de inasistencia es solo para personas de 7 a 14 a√±os de edad)
 gen pqnoasis_ci=.
 replace pqnoasis_ci=rznoasis if rznoasis>0
-label var pqnoasis_ci "Razon principal por la cual ha abandonado o ha dejado de asistir a clases este aÒo"
+label var pqnoasis_ci "Razon principal por la cual ha abandonado o ha dejado de asistir a clases este a√±o"
 label define pqnoasis_ci 1 "Queda lejos la escuela" 2 "No hay escuela" 3 "Falta de dinero" 4 "No le gusta, no quiere ir" 5 "Quehaceres de la casa" 6 "Padres no quieren" 7 "Por trabajo" 8 "Por otra causa" 9 "Discapacidad" 10 "Vacaciones"
 label values pqnoasis_ci pqnoasis_ci
 
@@ -975,13 +975,13 @@ replace pqnoasis1_ci= 6 if  pqnoasis_ci==10
 replace pqnoasis1_ci= 8 if  pqnoasis_ci==1 | pqnoasis_ci==2
 replace pqnoasis1_ci= 9 if  pqnoasis_ci==8
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 * PUBLIC OR PRIVATE SCHOOL
 /* 1998: needs to be used with attend variable since it only holds for those who are currently attending school (Las opciones son: No Asiste, Asiste a PUBLICO, Asiste a PRIVADO)
 
-   2000: Solo para los que se han inscripto para el aÒo escolar 2000:
+   2000: Solo para los que se han inscripto para el a√±o escolar 2000:
          El plantel educativo donde se inscribio es: 
 	 1 Ministerio de Educacion
 	 2 PRONADE
@@ -997,7 +997,7 @@ label value  pqnoasis1_ci pqnoasis1_ci
 Se han considerado como PUBLICAS las opciones 1, 2, 3, 4 y 5 para 2000 */
 gen edupub_ci=1 if asist==1
 replace edupub=0 if asist==2
-label var edupub_ci "1 = personas que asisten a centros de enseÒanza publicos" /* NOT AVAILABLE IN 2002 */
+label var edupub_ci "1 = personas que asisten a centros de ense√±anza publicos" /* NOT AVAILABLE IN 2002 */
 
 * ILLITERACY
 /*gen alfabet=.
@@ -1007,7 +1007,7 @@ replace alfabet=0 if p03a05==2
  En 2002 la variable 'alfabet' se pregunta igual que en 1998. 
 Pero entre 1998 y 2000 han una modificacion en la pregunta. 
      En 1998 la encuesta pregunta: Sabe leer Y escribir? SI - NO
-     En 2000 la encuesta pregunta: Sabe leer y escribir en espaÒol? Lee Y escribe - Solo lee - No lee ni escribe
+     En 2000 la encuesta pregunta: Sabe leer y escribir en espa√±ol? Lee Y escribe - Solo lee - No lee ni escribe
  Este cambio podria explicar parte de la reduccion en la tasa de alfabetismo en Guatemala:
  1998: 79.3 %
  2000: 70.9 % */
@@ -1026,7 +1026,7 @@ label variable miembros_ci "Variable dummy que indica las personas que son miemb
 sort idh_ch
 
 *****************************************************************
-*** INGRESOS LABORALES (PARA PESONAS DE 7 A—OS O MAS DE EDAD) ***
+*** INGRESOS LABORALES (PARA PESONAS DE 7 A√ëOS O MAS DE EDAD) ***
 *****************************************************************
 
 ***************************
@@ -1084,7 +1084,7 @@ egen salario2=rsum(ycm01s ycm02s ycm03s ycm04s ycm05s ycm06s ycm07s) if edad>=7
 ycnm02p ropa o calzado
 ycnm03p uso de la vivienda, agua, electricidad 
 ycnm04p gastos de automovil o transporte
-ycnm05p servicios de enseÒanza
+ycnm05p servicios de ense√±anza
 ycnm06p otros bienes y servicios */
 
 egen salarionm=rsum(ycnm01p ycnm02p ycnm03p ycnm04p ycnm05p ycnm06p) if edad>=7
@@ -1096,7 +1096,7 @@ egen salarionm=rsum(ycnm01p ycnm02p ycnm03p ycnm04p ycnm05p ycnm06p) if edad>=7
 ycnm02s ropa o calzado
 ycnm03s uso de la vivienda, agua, electricidad 
 ycnm04s gastos de automovil o transporte
-ycnm05s servicios de enseÒanza
+ycnm05s servicios de ense√±anza
 ycnm06s otros bienes y servicios */
 
 egen salarionm2=rsum(ycnm01s ycnm02s ycnm03s ycnm04s ycnm05s ycnm06s) if edad>=7
@@ -1377,7 +1377,7 @@ gen categoinac_ci=.
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
@@ -1397,7 +1397,7 @@ label var ylmhopri_ci "Salario Horario Monetario de la Actividad Principal"
 drop hh salario salario2 indep indep2 patron patron2 patronnj patronnj2 salarionm salarionm2 indepnm indepnm2 patronnm patronnm2 patronnjnm patronnjnm2 autoco autoco2 renta transfer otrosy
 
 /*
-**VerificaciÛn de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**Verificaci√≥n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///
@@ -1418,18 +1418,18 @@ pension_ci 	   ypen_ci 	   pensionsub_ci 	   ypensub_ci 	   salmm_ci	   tecnica_
 tamemp_ci categoinac_ci formal_ci
 */
 
-* MGR: modifico esta secciÛn ya que variables no est·n en el mismo orden que el resto de bases armonizadas
+* MGR: modifico esta secci√≥n ya que variables no est√°n en el mismo orden que el resto de bases armonizadas
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

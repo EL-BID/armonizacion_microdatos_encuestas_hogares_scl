@@ -1,17 +1,17 @@
 
 
-* (VersiÃ³n Stata 12)
+* (VersiÃÂ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor Ãºnicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ÃÂºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -30,14 +30,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÃ­s: Uruguay
+PaÃÂ­s: Uruguay
 Encuesta: ECH
 Round: a
 Autores: Yessenia Loayza
-GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
- Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+GeneraciÃÂ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+ Mayra SÃÂ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
  Daniela Zuluaga (DZ) E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com - Octubre de 2017
-VersiÃ³n 2021: Cesar Lins (SCL/GDI) - Marzo 2021
+VersiÃÂ³n 2021: Cesar Lins (SCL/GDI) - Marzo 2021
 
 
 							SCL/LMK - IADB
@@ -50,7 +50,7 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 /***************************************************************************************************************************
- 							armonizaciÃ³n 2010
+ 							armonizaciÃÂ³n 2010
 ****************************************************************************************************************************/
 
 /************************************************************************/
@@ -70,29 +70,29 @@ label define region_c  ///
 8	"Florida" ///
 9	"Lavalleja" ///
 10	"Maldonado" ///
-11	"PaysandÃº" ///
-12	"RÃ­o Negro" ///
+11	"PaysandÃÂº" ///
+12	"RÃÂ­o Negro" ///
 13	"Rivera" ///
 14	"Rocha" ///
 15	"Salto" ///
-16	"San JosÃ©" ///
+16	"San JosÃÂ©" ///
 17	"Soriano" ///
-18	"TacuarembÃ³" ///
+18	"TacuarembÃÂ³" ///
 19	"Treinta y tres"
 
 		    
 label value region_c region_c
-label var region_c "DivisiÃ³n polÃ­tica, departamento"
+label var region_c "DivisiÃÂ³n polÃÂ­tica, departamento"
 ****************
 * region_BID_c *
 ****************
 gen region_BID_c=.
 replace region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃÂ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
-*1. Factor de expansiÃ³n del hogar: 
+*1. Factor de expansiÃÂ³n del hogar: 
 gen factor_ch=pesoan
 
 *2. Identificador del hogar
@@ -103,14 +103,14 @@ gen idp_ci=nper
 
 
 *4. Zona urbana versus rural
-/*Mayra SÃ¡enz-Noviembre 2013: 
-A partir de 2006 se incluye una muestra rural, sin embargo en 2006-2009 sÃ³lo se desagregan 3 categorÃ­as:
- (1) montevideo, (2) Interior con mÃ¡s de 5000 habitantes, y (3) interior con menos de 5000 habitantes y rural. 
- En cambio, en 2010 se desagregan 4 categorÃ­as: (1) montevideo, (2) Interior con mÃ¡s de 5000 habitantes, 
+/*Mayra SÃÂ¡enz-Noviembre 2013: 
+A partir de 2006 se incluye una muestra rural, sin embargo en 2006-2009 sÃÂ³lo se desagregan 3 categorÃÂ­as:
+ (1) montevideo, (2) Interior con mÃÂ¡s de 5000 habitantes, y (3) interior con menos de 5000 habitantes y rural. 
+ En cambio, en 2010 se desagregan 4 categorÃÂ­as: (1) montevideo, (2) Interior con mÃÂ¡s de 5000 habitantes, 
  (3) interior con menos de 5000 habitantes y (4) rural. 
  Por lo tanto, para hacer comparables los datos se genera la variable zona considerando a las zonas de
  menos de 5000 habitantes como rural. Es decir, zona rural=interior con menos de 5000 habitantes y rural.*/
-rename región region
+rename regiÃ³n region
 gen zona_c=.
 replace zona_c=1 if region == 1 | region == 2  
 replace zona_c=0 if region == 3 | region == 4
@@ -120,7 +120,7 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
-*5. PaÃ­s
+*5. PaÃÂ­s
 gen str3 pais_c="URY"
 
 *6. Anio de la encuesta
@@ -132,23 +132,23 @@ gen str3 pais_c="URY"
 *7. Mes de la encuesta
 gen mes_c=mes
 
-*8. RelaciÃ³n o parentesco con el jefe de hogar
+*8. RelaciÃÂ³n o parentesco con el jefe de hogar
 /*
 
 1	Jefe
-2	Esposo o compaÃ±ero
+2	Esposo o compaÃÂ±ero
 3	Hijo de ambos
-4	Hijo sÃ³lo del jefe
-5	Hijo sÃ³lo del cÃ³nyuge
+4	Hijo sÃÂ³lo del jefe
+5	Hijo sÃÂ³lo del cÃÂ³nyuge
 6	Yerno o nuera
 7	Padre o madre
 8	Suegro/a
 9	Hermano/a
-10	CuÃ±ado/a
+10	CuÃÂ±ado/a
 11	Nieto/a
 12	Otro pariente
 13	Otro no pariente
-14	Servicio domÃ©stico o familiar del mismo
+14	Servicio domÃÂ©stico o familiar del mismo
 */
 
 gen relacion_ci=.
@@ -161,7 +161,7 @@ replace relacion_ci=6 if e30==14
 label define relacion_ci 1 "Jefe" 2 "Conyuge" 3 "Hijo" 4 "Otros Parientes" 5 "Otros no Parientes" 6 "Servicio Domestico"
 label values relacion_ci relacion_ci
 
-*9. Factor de expansiÃ³n a nivel individual
+*9. Factor de expansiÃÂ³n a nivel individual
 
 gen factor_ci=pesoano
 
@@ -187,7 +187,7 @@ gen sexo_ci=e26
 *11. Edad
 
 /*
-e27	AÃ±os	AÃ±os cumplidos
+e27	AÃÂ±os	AÃÂ±os cumplidos
 */
 
 gen edad_ci=e27
@@ -200,9 +200,9 @@ label var edad_ci "Edad del Individuo"
 
 /*
 ESTADO CIVIL ACTUAL	e36	
-				1	Separado/a de uniÃ³n libre
+				1	Separado/a de uniÃÂ³n libre
 				2	Divorciado/a
-				3	Casado/a (incluye separado y aÃºn no se divorciÃ³)
+				3	Casado/a (incluye separado y aÃÂºn no se divorciÃÂ³)
 				4	Viudo/a
 				5	Soltero/a
 
@@ -219,7 +219,7 @@ label value civil_ci civil_ci
 */
 
 *Modificado por SCGR - Abril 2017
-*UniÃ³n formal o informal*
+*UniÃÂ³n formal o informal*
 gen civil_ci=2 		if e33==1
 replace civil_ci=1  if e36==5 & e33==2
 replace civil_ci=3  if (e36==1 | e36==2 | e36==3) & e33==2
@@ -352,8 +352,8 @@ label variable miembros_ci "Miembro del hogar"
 	***************
 	*** afroind_ci ***
 	***************
-**Pregunta: Â¿Cree tener ascendencia...? Â¿CuÃ¡l considera principal de las declaradas?:(e29_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
-**En Uruguay puedes reportar mÃ¡s de una identidad pero la pregunta e29_6 pregunta cuÃ¡l es la identidad principal. 
+**Pregunta: ÃÂ¿Cree tener ascendencia...? ÃÂ¿CuÃÂ¡l considera principal de las declaradas?:(e29_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
+**En Uruguay puedes reportar mÃÂ¡s de una identidad pero la pregunta e29_6 pregunta cuÃÂ¡l es la identidad principal. 
 gen afroind_ci=. 
 replace afroind_ci=1 if e29_6 == 4
 replace afroind_ci=2 if e29_6 == 1 
@@ -364,7 +364,7 @@ replace afroind_ci=. if e29_6 ==.
 	*** afroind_ch ***
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
-egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 
 drop afroind_jefe
 
@@ -427,7 +427,7 @@ cap gen emp_ci=(pobpcoac==2)
 
 gen desemp1_ci=((pobpcoac==3|pobpcoac==4|pobpcoac==5) & f107==1)
 
-*58. Personas que no trabajaron ni buscaron trabajo en la Ãºltima semanana pero esperan respuesta de una solicitud de empleo
+*58. Personas que no trabajaron ni buscaron trabajo en la ÃÂºltima semanana pero esperan respuesta de una solicitud de empleo
 
 gen desemp2_ci=(desemp1_ci==1 | f107==2 & f108==2 | f108==3)
 
@@ -540,7 +540,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃÂ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -614,7 +614,7 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 gen instcot_ci=f83
 replace instcot_ci=. if instcot_ci==0
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria"
-label var instcot_ci "instituciÃ³n a la cual cotiza por su trabajo"
+label var instcot_ci "instituciÃÂ³n a la cual cotiza por su trabajo"
 
 *****************
 *tipocontrato_ci*
@@ -635,7 +635,7 @@ gen cesante_ci=1 if f116==1 & categ_ci==2
 replace cesante_ci=0 if f116==2 & categ_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"	
 */
-*Modificado Mayra SÃ¡enz 
+*Modificado Mayra SÃÂ¡enz 
 gen cesante_ci=1 if f116==1 & condocup_ci==2
 replace cesante_ci=0 if f116==2 & condocup_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"	
@@ -658,7 +658,7 @@ gen pension_ci=1 if (aux1>0 & aux1!=.) | (aux2>0 & aux2!=.)
 label var pension_ci "1=Recibe pension contributiva"
 */
 
-* MGR, Aug 2015: correciÃ³n en sintÃ¡xis, se generaba como el 100%
+* MGR, Aug 2015: correciÃÂ³n en sintÃÂ¡xis, se generaba como el 100%
 egen ypension = rowtotal(aux1 aux2), missing
 
 gen pension_ci= (ypension>0 & ypension!=.)
@@ -677,8 +677,8 @@ label var ypen_ci "Valor de la pension contributiva"
 *pensionsub_ci*
 ***************
 
-/*DZ Octubre 2017- Se crea variable pension subsidiada* Dado que la pregunta es excluyente y el programa de pensiÃ³n subsidiada en Uruguay es para Adultos mayores y/o discapacitados
-se pone la condicion de mayor de 70 aÃ±os (edad para recivir el beneficio) en las personas que afirmaron tener pension por invalidez*/
+/*DZ Octubre 2017- Se crea variable pension subsidiada* Dado que la pregunta es excluyente y el programa de pensiÃÂ³n subsidiada en Uruguay es para Adultos mayores y/o discapacitados
+se pone la condicion de mayor de 70 aÃÂ±os (edad para recivir el beneficio) en las personas que afirmaron tener pension por invalidez*/
 gen pensionsub_ci= ((f125==1) | (f125==3 & edad_ci>69))
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 
@@ -723,7 +723,7 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 
 
 
-*63. Trabajadores desalentados: Personas que creen que por alguna razÃ³n no conseguirÃ¡n empleo
+*63. Trabajadores desalentados: Personas que creen que por alguna razÃÂ³n no conseguirÃÂ¡n empleo
 
 gen desalent_ci=.
 
@@ -736,7 +736,7 @@ replace horaspri_ci=. if f85==99 | emp_ci==0
 
 gen horastot_ci=f85+f98
 
-*64. Trabajadores sub-empleados: personas dispuestas a trabajar mÃ¡s pero trabajan 30 horas a la semana o menos
+*64. Trabajadores sub-empleados: personas dispuestas a trabajar mÃÂ¡s pero trabajan 30 horas a la semana o menos
 /*
 gen subemp_ci=(horastot_ci>=1 & horastot_ci<=30 & (f102==1 ))
 replace subemp_ci=. if emp_ci==0
@@ -746,24 +746,24 @@ replace subemp_ci=. if emp_ci==0
 gen subemp_ci=0
 replace subemp_ci=1 if (horaspri_ci>=1 & horaspri_ci<=30) & (f102==1 & f103==1)
 
-*65. Trabajadores a medio tiempo: personas que trabajan menos de 30 horas a la semana y no quieren trabajar mÃ¡s
+*65. Trabajadores a medio tiempo: personas que trabajan menos de 30 horas a la semana y no quieren trabajar mÃÂ¡s
 * Mod. 2015/11 MLO
 *gen tiempoparc_ci=(horastot_ci>=1 & horastot_ci<=30 & f102==2)
 gen tiempoparc_ci=(horaspri_ci>=1 & horaspri_ci<30 & f102==2)
 replace tiempoparc_ci=. if emp_ci==0
 
-*66. CategorÃ­a ocupacional en la actividad principal
+*66. CategorÃÂ­a ocupacional en la actividad principal
 
 /*
-CATEGORÃA DE LA OCUPACIÃ“N	f73
+CATEGORÃÂA DE LA OCUPACIÃâN	f73
 					1	Asalariado privado
-					2	Asalariado pÃºblico
-					3	Miembro de cooperativa de producciÃ³n
-					4	PatrÃ³n
-					5	Cuenta propia sin local o inversiÃ³n
-					6	Cuenta propia con local o inversiÃ³n
+					2	Asalariado pÃÂºblico
+					3	Miembro de cooperativa de producciÃÂ³n
+					4	PatrÃÂ³n
+					5	Cuenta propia sin local o inversiÃÂ³n
+					6	Cuenta propia con local o inversiÃÂ³n
 					7	Miembro del hogar no remunerado
-					8	Programa pÃºblico de empleo
+					8	Programa pÃÂºblico de empleo
 */
 
 gen categopri_ci=1 	if f73==4
@@ -771,19 +771,19 @@ replace categopri_ci=2 	if f73==5 | f73==6 | f73==3
 replace categopri_ci=3 	if f73==1 | f73==2 | f73==8
 replace categopri_ci=4 	if f73==7 
 replace categopri_ci=. 	if emp_ci!=1
-*ModificaciÃ³n MLO
+*ModificaciÃÂ³n MLO
 replace categopri_ci=0 if f73==8 & condocup_ci==1
 
-*67. CategorÃ­a ocupacional en la actividad secundaria
+*67. CategorÃÂ­a ocupacional en la actividad secundaria
 
 /*
-CATEGORÃA DE LA OCUPACIÃ“N	f92	
+CATEGORÃÂA DE LA OCUPACIÃâN	f92	
 					1	Asalariado privado
-					2	Asalariado pÃºblico
-					3	Miembro de cooperativa de producciÃ³n
-					4	PatrÃ³n
-					5	Cuenta propia sin local o inversiÃ³n
-					6	Cuenta propia con local o inversiÃ³n
+					2	Asalariado pÃÂºblico
+					3	Miembro de cooperativa de producciÃÂ³n
+					4	PatrÃÂ³n
+					5	Cuenta propia sin local o inversiÃÂ³n
+					6	Cuenta propia con local o inversiÃÂ³n
 					7	Miembro del hogar no remunerado
 */
 
@@ -805,7 +805,7 @@ replace segsoc_ci=1 if f82==1
 replace segsoc_ci=0 if f82==2
 
 
-*70. NÃºmero de empleos
+*70. NÃÂºmero de empleos
 
 gen nempleos_ci=1 if f70==1
 replace nempleos_ci=2 if f70>1 & f70!=.
@@ -813,12 +813,12 @@ replace nempleos_ci=2 if f70>1 & f70!=.
 *71. Trabajadores formales
 
 /*
-TAMAÃ‘O  DE LA EMPRESA 	f77
+TAMAÃâO  DE LA EMPRESA 	f77
 				1	Una persona
 				2	2 a 4 personas
 				3	5 a 9 personas
 				4	10 a 49  personas
-				5	50 o mÃ¡s personas
+				5	50 o mÃÂ¡s personas
 */
 
 /*
@@ -826,28 +826,28 @@ gen firmapeq_ci=.
 replace firmapeq_ci=1 if emp_ci==1 & f77==1 | f77==2
 replace firmapeq_ci=0 if emp_ci==1 & f77>2
 */
-*72. Personas que trabajan en el sector pÃºblico
+*72. Personas que trabajan en el sector pÃÂºblico
 
 gen spublico_ci=(emp_ci==1 & f73==2)
 replace spublico =. if emp_ci==.
 
 * Modificacion MGD 07/15/2014: mal generada la variable, se dejaban de  lado categorias.
-*Genera la variable para empresas pequeÃ±as
+*Genera la variable para empresas pequeÃÂ±as
 gen tamemp_ci=1 if f77==1 | f77==2 
-label var  tamemp_ci "TamaÃ±o de Empresa" 
+label var  tamemp_ci "TamaÃÂ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if f77==3 | f77==6 | f77==7
 *Empresas grandes
 replace tamemp_ci=3 if f77==5
-label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaÃ±o
+label define tamaÃÂ±o 1"PequeÃÂ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃÂ±o
 tab tamemp_ci [iw=factor_ci]
 
 *Genera la variable para clasificar a los inactivos
 *Jubilados y pensionados
 *drop categoinac_ci
 gen categoinac_ci=1 if f124_1==1 | f124_2==1
-label var  categoinac_ci "CondiciÃ³n de Inactividad" 
+label var  categoinac_ci "CondiciÃÂ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if f124_4==1
 *Quehaceres del Hogar
@@ -858,7 +858,7 @@ label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
 tab categoinac_ci [iw=factor_ci]
 
-*25. OcupaciÃ³n laboral actividad principal *** Se necesita crear primero la variable emp_ci
+*25. OcupaciÃÂ³n laboral actividad principal *** Se necesita crear primero la variable emp_ci
 
 replace f71_2="." if f71_2=="X211"
 
@@ -870,7 +870,7 @@ replace ocupa_ci=1 if (f71_2>=2110 & f71_2<=3480) & emp_ci==1
 replace ocupa_ci=2 if (f71_2>=1110 & f71_2<=1310) & emp_ci==1
 replace ocupa_ci=3 if (f71_2>=4110 & f71_2<=4223) & emp_ci==1
 replace ocupa_ci=4 if ((f71_2>=5210 & f71_2<=5230) | (f71_2>=9110 & f71_2<=9113)) & emp_ci==1
-replace ocupa_ci=5 if ((f71_2>=5111 & f71_2<=5169) | (f71_2>=9120 & f71_2<=9171)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÃ³n a tres digitos de la CIUO-88*/
+replace ocupa_ci=5 if ((f71_2>=5111 & f71_2<=5169) | (f71_2>=9120 & f71_2<=9171)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÃÂ³n a tres digitos de la CIUO-88*/
 replace ocupa_ci=6 if ((f71_2>=6110 & f71_2<=6210) | (f71_2>=9211 & f71_2<=9213)) & emp_ci==1
 replace ocupa_ci=7 if ((f71_2>=7110 & f71_2<=8340) | (f71_2>=9311 & f71_2<=9333)) & emp_ci==1 /*Incluye artesanos y operarios en hilanderias*/
 replace ocupa_ci=8 if (f71_2>=110 & f71_2<=129) & emp_ci==1
@@ -895,17 +895,17 @@ replace rama_ci=8 if (f72_2>=6500 & f72_2<=7499) & emp_ci==1
 replace rama_ci=9 if (f72_2>=7500 & f72_2<=9900) & emp_ci==1
 
 
-*COmentario Mayra SÃ¡enz 2013- No se encuentra la variable categ_ci se reemplaza por condocup_ci.
-*ModificaciÃ³n MLO
+*COmentario Mayra SÃÂ¡enz 2013- No se encuentra la variable categ_ci se reemplaza por condocup_ci.
+*ModificaciÃÂ³n MLO
 drop rama_ci
-recode f72_2 (000/500=1 "Agricultura, caza, silvicultura y pesca") (1000/1430=2 "ExplotaciÃ³n de minas y canteras") (1500/3700=3 "Industrias manufactureras") /*
-*/ (4000/4100=4 "Electricidad, gas y agua") (4500/4550=5 "ConstrucciÃ³n") (5000/5520=6 "Comercio, restaurantes y hoteles") /*
+recode f72_2 (000/500=1 "Agricultura, caza, silvicultura y pesca") (1000/1430=2 "ExplotaciÃÂ³n de minas y canteras") (1500/3700=3 "Industrias manufactureras") /*
+*/ (4000/4100=4 "Electricidad, gas y agua") (4500/4550=5 "ConstrucciÃÂ³n") (5000/5520=6 "Comercio, restaurantes y hoteles") /*
 */ (6000/6420=7 "Transporte y almacenamiento") (6500/7499=8 "Establecimientos financieros, seguros e inmuebles") /*
 */ (7500/9900=9 "Servicios sociales y comunales"),gen(rama_ci)
 replace rama_ci=. if condocup_ci !=1
 
 
-*55a. DuraciÃ³n del desempleo
+*55a. DuraciÃÂ³n del desempleo
 
 gen durades_ci=f113/4.3 if f113>0
 replace durades_ci=. if f116==99
@@ -913,10 +913,10 @@ replace durades_ci=. if f116==99
 *****************
 **antiguedad_ci**
 *****************
-*ModificaciÃ³n MLO
+*ModificaciÃÂ³n MLO
 gen antigenanio=(f88_1/12)
 egen antiguedad_ci=rowtotal(antigenanio  f88_2)
-*Mayra SÃ¡enz-NO se encuentra la variable categ_ci  se cambia por condocup_ci.
+*Mayra SÃÂ¡enz-NO se encuentra la variable categ_ci  se cambia por condocup_ci.
 recode antiguedad_ci 0=. if condocup_ci !=1
 
 *******************
@@ -944,19 +944,19 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *************
 /*
 ylmpri_ci			
-SUELDO O JORNALES LÃQUIDOS	g126_1	$	Monto percibido el mes pasado
+SUELDO O JORNALES LÃÂQUIDOS	g126_1	$	Monto percibido el mes pasado
 COMISIONES, INCENTIVOS, HORAS EXTRAS, HABILITACIONES	g126_2	$	Monto percibido el mes pasado
-VIÃTICOS NO SUJETOS A RENDICIÃ“N	g126_3	$	Monto percibido el mes pasado
+VIÃÂTICOS NO SUJETOS A RENDICIÃâN	g126_3	$	Monto percibido el mes pasado
 PROPINAS	g126_4	$	Monto percibido el mes pasado
 AGUINALDO	g126_5	$	Monto percibido el mes pasado
 SALARIO VACACIONAL	g126_6	$	Monto percibido el mes pasado
 PAGOS ATRASADOS	g126_7	$	Monto percibido el mes pasado
 DERECHO A CULTIVO PARA PROPIO CONSUMO	g133_2	$	Monto percibido por la venta de esos productos
 RETIRO REALIZADO PARA GASTOS DEL HOGAR	g142	$	
-DISTRIBUCIÃ“N DE UTILIDADES	g143	$	anual
-RECIBIÃ“ POR MEDIANERÃA O PARCERÃA	g145	$	Monto percibido en los Ãºltimos 12 meses
-RECIBIÃ“ POR PASTOREO	g146	$	Monto percibido en los Ãºltimos 12 meses
-RECIBIÃ“ POR GANADO A CAPITALIZACIÃ“N	g147	$	Monto percibido en los Ãºltimos 12 meses
+DISTRIBUCIÃâN DE UTILIDADES	g143	$	anual
+RECIBIÃâ POR MEDIANERÃÂA O PARCERÃÂA	g145	$	Monto percibido en los ÃÂºltimos 12 meses
+RECIBIÃâ POR PASTOREO	g146	$	Monto percibido en los ÃÂºltimos 12 meses
+RECIBIÃâ POR GANADO A CAPITALIZACIÃâN	g147	$	Monto percibido en los ÃÂºltimos 12 meses
 
 	
 
@@ -969,7 +969,7 @@ gen `i'm = `i'/12
 egen ylmpri_ci=rsum(g126_1 g126_2 g126_3 g126_4 g126_5 g126_6 g126_7 g133_2 g142 g143m g145m g146m g147m) if emp_ci==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃÂ³lo para las personas ocupadas emp_ci==1
 
 *****************
 ***nrylmpri_ci***
@@ -982,17 +982,17 @@ label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 	****************
 	/*
 	BOLETOS DE TRANSPORTE	g126_8	$	Monto percibido el mes pasado
-	RECIBIÃ“ ALIMENTOS O BEBIDAS	g127_1	NÂº	NÃºmero de desayunos / meriendas
-	RECIBIÃ“ ALIMENTOS O BEBIDAS	g127_2	NÂº	NÃºmero de almuerzos / cenas
-	RECIBIÃ“ ALIMENTOS O BEBIDAS	g127_3	$	Otros - Monto estimado
-	RECIBIÃ“ TICKETS DE ALIMENTACIÃ“N	g128_1	$	Monto recibido el mes pasado
-	RECIBIÃ“ VIVIENDA O ALOJAMIENTO	g129_2	$	Monto que habrÃ­a tenido que pagar por ese alojamiento
-	RECIBIÃ“ OTRO TIPO DE RETRIBUCIÃ“N EN ESPECIE	g130_1	$	Monto que habrÃ­a tenido que pagar por esos bienes
-	RECIBIÃ“ ALGÃšN OTRO TIPO DE COMPLEMENTO PAGADO POR EL EMPLEADOR	g131_1	$	Monto estimado
-autocons	DERECHO A CULTIVO PARA PROPIO CONSUMO	g133_1	$	Monto que habrÃ­a tenido que pagar por esos alimentos
-autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador no agropecuario)	g144_1	$	Monto que habrÃ­a tenido que pagar por esos bienes
+	RECIBIÃâ ALIMENTOS O BEBIDAS	g127_1	NÃÂº	NÃÂºmero de desayunos / meriendas
+	RECIBIÃâ ALIMENTOS O BEBIDAS	g127_2	NÃÂº	NÃÂºmero de almuerzos / cenas
+	RECIBIÃâ ALIMENTOS O BEBIDAS	g127_3	$	Otros - Monto estimado
+	RECIBIÃâ TICKETS DE ALIMENTACIÃâN	g128_1	$	Monto recibido el mes pasado
+	RECIBIÃâ VIVIENDA O ALOJAMIENTO	g129_2	$	Monto que habrÃÂ­a tenido que pagar por ese alojamiento
+	RECIBIÃâ OTRO TIPO DE RETRIBUCIÃâN EN ESPECIE	g130_1	$	Monto que habrÃÂ­a tenido que pagar por esos bienes
+	RECIBIÃâ ALGÃÅ¡N OTRO TIPO DE COMPLEMENTO PAGADO POR EL EMPLEADOR	g131_1	$	Monto estimado
+autocons	DERECHO A CULTIVO PARA PROPIO CONSUMO	g133_1	$	Monto que habrÃÂ­a tenido que pagar por esos alimentos
+autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador no agropecuario)	g144_1	$	Monto que habrÃÂ­a tenido que pagar por esos bienes
 autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_1	$	Valor de lo consumido en carnes o chacinados
-autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_2	$	Valor de lo consumido en lÃ¡cteos
+autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_2	$	Valor de lo consumido en lÃÂ¡cteos
 autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_3	$	Valor de lo consumido en huevos y aves
 autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_4	$	Valor de lo consumido en productos de la huerta
 autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_2_5	$	Valor consumido en otros alimentos
@@ -1000,11 +1000,11 @@ autocons	RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)	g144_
 */
 gen desay=(g127_1*mto_desay)
 gen almue= (g127_2*mto_almue)
-*gen cuota = En este aÃ±o no se pregunta acerca de la cuota mutual.
+*gen cuota = En este aÃÂ±o no se pregunta acerca de la cuota mutual.
 /*
-DERECHO A PASTOREO	g132_1	NÂº	Vacunos
-DERECHO A PASTOREO	g132_2	NÂº	Ovinos
-DERECHO A PASTOREO	g132_3	NÂº	Equinos
+DERECHO A PASTOREO	g132_1	NÃÂº	Vacunos
+DERECHO A PASTOREO	g132_2	NÃÂº	Ovinos
+DERECHO A PASTOREO	g132_3	NÃÂº	Equinos
 */
 
 gen vacas = (g132_1*mto_vacas)
@@ -1017,15 +1017,15 @@ egen ylnmpri_ci= rsum( desay almue vacas oveja caballo g126_8 g127_3 g128_1 g129
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"   
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃÂ³lo para las personas ocupadas emp_ci==1
 
 	***************
 	***ylmsec_ci***
 	***************
 /*
-SUELDO O JORNALES LÃQUIDOS	g134_1	$	Monto percibido el mes pasado
+SUELDO O JORNALES LÃÂQUIDOS	g134_1	$	Monto percibido el mes pasado
 COMISIONES, INCENTIVOS, HORAS EXTRAS, HABILITACIONES	g134_2	$	Monto percibido el mes pasado
-VIÃTICOS NO SUJETOS A RENDICIÃ“N	g134_3	$	Monto percibido el mes pasado
+VIÃÂTICOS NO SUJETOS A RENDICIÃâN	g134_3	$	Monto percibido el mes pasado
 PROPINAS	g134_4	$	Monto percibido el mes pasado
 AGUINALDO	g134_5	$	Monto percibido el mes pasado
 SALARIO VACACIONAL	g134_6	$	Monto percibido el mes pasado
@@ -1039,7 +1039,7 @@ DERECHO A CULTIVO PARA PROPIO CONSUMO	g141_2	$	Monto percibido por la venta de e
 	label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃÂ³lo para las personas ocupadas emp_ci==1
 	
 	****************
 	***ylnmsec_ci***
@@ -1047,27 +1047,27 @@ DERECHO A CULTIVO PARA PROPIO CONSUMO	g141_2	$	Monto percibido por la venta de e
 	/*
 
 	BOLETOS DE TRANSPORTE	g134_8	$	Monto percibido el mes pasado
-	RECIBIÃ“ ALIMENTOS O BEBIDAS	g135_3	$	Otros - Monto estimado
-	RECIBIÃ“ TICKETS DE ALIMENTACIÃ“N	g136_1	$	Valor recibido el mes pasado
-	RECIBIÃ“ VIVIENDA O ALOJAMIENTO	g137_2	$	Monto que habrÃ­a tenido que pagar por ese alojamiento
-	RECIBIÃ“ OTRO TIPO DE RETRIBUCIÃ“N EN ESPECIE	g138_1	$	Monto que habrÃ­a tenido que pagar por esos bienes
-	RECIBIÃ“ ALGÃšN OTRO TIPO DE COMPLEMENTO PAGADO POR EL EMPLEADOR	g139_1	$	Monto estimado
-autocons	DERECHO A CULTIVO PARA PROPIO CONSUMO	g141_1	$	Monto que habrÃ­a tenido que pagar por esos alimentos
+	RECIBIÃâ ALIMENTOS O BEBIDAS	g135_3	$	Otros - Monto estimado
+	RECIBIÃâ TICKETS DE ALIMENTACIÃâN	g136_1	$	Valor recibido el mes pasado
+	RECIBIÃâ VIVIENDA O ALOJAMIENTO	g137_2	$	Monto que habrÃÂ­a tenido que pagar por ese alojamiento
+	RECIBIÃâ OTRO TIPO DE RETRIBUCIÃâN EN ESPECIE	g138_1	$	Monto que habrÃÂ­a tenido que pagar por esos bienes
+	RECIBIÃâ ALGÃÅ¡N OTRO TIPO DE COMPLEMENTO PAGADO POR EL EMPLEADOR	g139_1	$	Monto estimado
+autocons	DERECHO A CULTIVO PARA PROPIO CONSUMO	g141_1	$	Monto que habrÃÂ­a tenido que pagar por esos alimentos
 
         
 */
 
 
-/*RECIBIÃ“ ALIMENTOS O BEBIDAS	g135_1	NÂº	NÃºmero de desayunos / meriendas
-RECIBIÃ“ ALIMENTOS O BEBIDAS	g135_2	NÂº	NÃºmero de almuerzos / cenas
-DERECHO A PASTOREO	g140_1	NÂº	Vacunos
-DERECHO A PASTOREO	g140_2	NÂº	Ovinos
-DERECHO A PASTOREO	g140_3	NÂº	Equinos
+/*RECIBIÃâ ALIMENTOS O BEBIDAS	g135_1	NÃÂº	NÃÂºmero de desayunos / meriendas
+RECIBIÃâ ALIMENTOS O BEBIDAS	g135_2	NÃÂº	NÃÂºmero de almuerzos / cenas
+DERECHO A PASTOREO	g140_1	NÃÂº	Vacunos
+DERECHO A PASTOREO	g140_2	NÃÂº	Ovinos
+DERECHO A PASTOREO	g140_3	NÃÂº	Equinos
 */
 
 gen desaysec=(g135_1*mto_desay)
 gen almuesec= (g135_2*mto_almue)
-*gen cuota = En este aÃ±o no se pregunta acerca de la cuota mutual.
+*gen cuota = En este aÃÂ±o no se pregunta acerca de la cuota mutual.
 
 gen vacassec = (g140_1*mto_vacas)
 gen ovejasec = (g140_2*mto_oveja)
@@ -1078,14 +1078,14 @@ egen ylnmsec_ci=rsum(desaysec almuesec vacassec ovejasec caballosec g134_8 g135_
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1	
+* Se filtra ingreso sÃÂ³lo para las personas ocupadas emp_ci==1	
 	
 **********************************************************************************************
 ***TCYLMPRI_CH : Identificador de los hogares en donde alguno de los miembros reporta como
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃÂºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1101,7 +1101,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 	
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃ±os
+	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃÂ±os
 
 	******************
 	***ylnmotros_ci***
@@ -1110,7 +1110,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃ±os
+	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃÂ±os
 	
 	************
 	***ylm_ci***
@@ -1120,7 +1120,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylm_ci "Ingreso laboral monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no habÃ­a sido incluido
+	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no habÃÂ­a sido incluido
 	
 	*************
 	***ylnm_ci***
@@ -1130,7 +1130,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnm_ci "Ingreso laboral NO monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no habÃ­a sido incluido
+	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no habÃÂ­a sido incluido
 	
 	*************
 	***ynlm_ci***
@@ -1138,55 +1138,55 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	/*
 BPS - CAJA INDUSTRIA Y COMERCIO	g148_1_1	$	Monto percibido el mes pasado
 BPS - CAJA CIVIL Y ESCOLAR	g148_1_2	$	Monto percibido el mes pasado
-BPS - RURAL Y SERVICIO DOMÃ‰STICO	g148_1_3	$	Monto percibido el mes pasado
-UNIÃ“N POSTAL	g148_1_4	$	Monto percibido el mes pasado
+BPS - RURAL Y SERVICIO DOMÃâ°STICO	g148_1_3	$	Monto percibido el mes pasado
+UNIÃâN POSTAL	g148_1_4	$	Monto percibido el mes pasado
 POLICIAL	g148_1_5	$	Monto percibido el mes pasado
 MILITAR	g148_1_6	$	Monto percibido el mes pasado
 PROFESIONAL	g148_1_7	$	Monto percibido el mes pasado
 NOTARIAL	g148_1_8	$	Monto percibido el mes pasado
 BANCARIA	g148_1_9	$	Monto percibido el mes pasado
 OTRA 	g148_1_10	$	Monto percibido el mes pasado
-OTRO PAÃS	g148_1_11	$	Monto percibido el mes pasado
+OTRO PAÃÂS	g148_1_11	$	Monto percibido el mes pasado
 BPS - CAJA INDUSTRIA Y COMERCIO	g148_2_1	$	Monto percibido el mes pasado
 BPS - CAJA CIVIL Y ESCOLAR	g148_2_2	$	Monto percibido el mes pasado
-BPS - RURAL Y SERVICIO DOMÃ‰STICO	g148_2_3	$	Monto percibido el mes pasado
-UNIÃ“N POSTAL	g148_2_4	$	Monto percibido el mes pasado
+BPS - RURAL Y SERVICIO DOMÃâ°STICO	g148_2_3	$	Monto percibido el mes pasado
+UNIÃâN POSTAL	g148_2_4	$	Monto percibido el mes pasado
 POLICIAL	g148_2_5	$	Monto percibido el mes pasado
 MILITAR	g148_2_6	$	Monto percibido el mes pasado
 PROFESIONAL	g148_2_7	$	Monto percibido el mes pasado
 NOTARIAL	g148_2_8	$	Monto percibido el mes pasado
 BANCARIA	g148_2_9	$	Monto percibido el mes pasado
 OTRA 	g148_2_10	$	Monto percibido el mes pasado
-OTRO PAÃS	g148_2_11	$	Monto percibido el mes pasado
+OTRO PAÃÂS	g148_2_11	$	Monto percibido el mes pasado
 SEGURO DE DESEMPLEO	g148_3	$	Monto percibido el mes pasado
 COMPENSACIONES POR ACCIDENTE, MATERNIDAD O ENFERMEDAD	g148_4	$	Monto percibido el mes pasado
-BECAS, SUBSIDIOS, DONACIONES	g148_5_1	$	Del paÃ­s
+BECAS, SUBSIDIOS, DONACIONES	g148_5_1	$	Del paÃÂ­s
 	g148_5_2	$	Del extranjero
-RECIBE PENSIÃ“N ALIMENTICIA O ALGUNA CONTRIBUCIÃ“N POR DIVORCIO O SEPARACIÃ“N	g153_1	$	Del paÃ­s
-RECIBE PENSIÃ“N ALIMENTICIA O ALGUNA CONTRIBUCIÃ“N POR DIVORCIO O SEPARACIÃ“N	g153_2	$	Del extranjero
-OTRO INGRESO CORRIENTE ADEMÃS DE LOS DECLARADOS	g154_1	$	Monto que cobrÃ³ el mes pasado
+RECIBE PENSIÃâN ALIMENTICIA O ALGUNA CONTRIBUCIÃâN POR DIVORCIO O SEPARACIÃâN	g153_1	$	Del paÃÂ­s
+RECIBE PENSIÃâN ALIMENTICIA O ALGUNA CONTRIBUCIÃâN POR DIVORCIO O SEPARACIÃâN	g153_2	$	Del extranjero
+OTRO INGRESO CORRIENTE ADEMÃÂS DE LOS DECLARADOS	g154_1	$	Monto que cobrÃÂ³ el mes pasado
 
 
 
-RECIBE DINERO DE ALGÃšN FAMILIAR U OTRO HOGAR EN EL PAÃS	h155_1	$
+RECIBE DINERO DE ALGÃÅ¡N FAMILIAR U OTRO HOGAR EN EL PAÃÂS	h155_1	$
 TARJETA ALIMENTARIA DE INDA/MIDES	h157_1	$
 
 
 * Variables anuales	a nivel de hogar		
-	FUERON ALQUILADAS 	h160_1	$	Alquileres del paÃ­s
+	FUERON ALQUILADAS 	h160_1	$	Alquileres del paÃÂ­s
 	FUERON ALQUILADAS 	h160_2	$	Alquileres del extranjero
-	RECIBIÃ“ POR ARRENDAMIENTO	h163_1	$	Arrendamientos del paÃ­s
-	RECIBIÃ“ POR ARRENDAMIENTO	h163_2	$	Arrendamientos del extranjero
-	RECIBIÃ“ POR MEDIANERÃA	h164	$	
-	RECIBIÃ“ POR PASTOREO	h165	$	
-	RECIBIÃ“ POR GANADO A CAPITALIZACIÃ“N	h166	$	
-	RECIBIÃ“ POR INTERESES	h168_1	$	Intereses del paÃ­s 
-	RECIBIÃ“ POR INTERESES	h168_2	$	Intereses del extranjero
-	RECIBIÃ“ POR UTILIDADES Y DIVIDENDOS DE ALGÃšN NEGOCIO EN EL QUE NO TRABAJA	h170_1	$	Utilidades y dividendos del paÃ­s
-	RECIBIÃ“ POR UTILIDADES Y DIVIDENDOS DE ALGÃšN NEGOCIO EN EL QUE NO TRABAJA	h170_2	$	Utilidades y dividendos del extranjero
-	RECIBIÃ“ POR UTILIDADES Y DIVIDENDOS DE ALGÃšN NEGOCIO EN EL QUE NO TRABAJA	h171_1	$	
-remesas	RECIBIÃ“ ALGUNA COLABORACIÃ“N ECONÃ“MICA DE ALGÃšN FAMILIAR EN EL EXTERIOR	h172_1	$	
-	RECIBIÃ“ ALGÃšN INGRESO EXTRAORDINARIO	h173_1	$	
+	RECIBIÃâ POR ARRENDAMIENTO	h163_1	$	Arrendamientos del paÃÂ­s
+	RECIBIÃâ POR ARRENDAMIENTO	h163_2	$	Arrendamientos del extranjero
+	RECIBIÃâ POR MEDIANERÃÂA	h164	$	
+	RECIBIÃâ POR PASTOREO	h165	$	
+	RECIBIÃâ POR GANADO A CAPITALIZACIÃâN	h166	$	
+	RECIBIÃâ POR INTERESES	h168_1	$	Intereses del paÃÂ­s 
+	RECIBIÃâ POR INTERESES	h168_2	$	Intereses del extranjero
+	RECIBIÃâ POR UTILIDADES Y DIVIDENDOS DE ALGÃÅ¡N NEGOCIO EN EL QUE NO TRABAJA	h170_1	$	Utilidades y dividendos del paÃÂ­s
+	RECIBIÃâ POR UTILIDADES Y DIVIDENDOS DE ALGÃÅ¡N NEGOCIO EN EL QUE NO TRABAJA	h170_2	$	Utilidades y dividendos del extranjero
+	RECIBIÃâ POR UTILIDADES Y DIVIDENDOS DE ALGÃÅ¡N NEGOCIO EN EL QUE NO TRABAJA	h171_1	$	
+remesas	RECIBIÃâ ALGUNA COLABORACIÃâN ECONÃâMICA DE ALGÃÅ¡N FAMILIAR EN EL EXTERIOR	h172_1	$	
+	RECIBIÃâ ALGÃÅ¡N INGRESO EXTRAORDINARIO	h173_1	$	
 
            
 */
@@ -1206,31 +1206,31 @@ gen inghog= inghog1/npermax
 *Transferencias de programas sociales
 
 /*
-	e59_2	1 = SÃ­ / 2 = No	Bajo peso (riesgo nutricional)
-e59_2_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_3	1 = SÃ­ / 2 = No	Plomo
-e59_3_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_4	1 = SÃ­ / 2 = No	Pensionistas
-e59_4_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_5	1 = SÃ­ / 2 = No	DiabÃ©ticos
-e59_5_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_6	1 = SÃ­ / 2 = No	Renales
-e59_6_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_7	1 = SÃ­ / 2 = No	Renal-diabÃ©tico
-e59_7_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_8	1 = SÃ­ / 2 = No	CelÃ­acos
-e59_8_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_9	1 = SÃ­ / 2 = No	Tuberculosis
-e59_9_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_10	1 = SÃ­ / 2 = No	OncolÃ³gicos
-e59_10_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_11	1 = SÃ­ / 2 = No	Sida (VIH+)
-e59_11_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_12	1 = SÃ­ / 2 = No	Escolar contexto crÃ­tico
-e59_12_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_13	1 = SÃ­ / 2 = No	Otro
-e59_13_1	NÂº	Cantidad de veces que recibe la canasta al mes
-e59_13_2		DescripciÃ³n
+	e59_2	1 = SÃÂ­ / 2 = No	Bajo peso (riesgo nutricional)
+e59_2_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_3	1 = SÃÂ­ / 2 = No	Plomo
+e59_3_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_4	1 = SÃÂ­ / 2 = No	Pensionistas
+e59_4_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_5	1 = SÃÂ­ / 2 = No	DiabÃÂ©ticos
+e59_5_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_6	1 = SÃÂ­ / 2 = No	Renales
+e59_6_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_7	1 = SÃÂ­ / 2 = No	Renal-diabÃÂ©tico
+e59_7_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_8	1 = SÃÂ­ / 2 = No	CelÃÂ­acos
+e59_8_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_9	1 = SÃÂ­ / 2 = No	Tuberculosis
+e59_9_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_10	1 = SÃÂ­ / 2 = No	OncolÃÂ³gicos
+e59_10_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_11	1 = SÃÂ­ / 2 = No	Sida (VIH+)
+e59_11_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_12	1 = SÃÂ­ / 2 = No	Escolar contexto crÃÂ­tico
+e59_12_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_13	1 = SÃÂ­ / 2 = No	Otro
+e59_13_1	NÃÂº	Cantidad de veces que recibe la canasta al mes
+e59_13_2		DescripciÃÂ³n
 
 
 */
@@ -1239,8 +1239,8 @@ gen canasta1 = (e59_2_1	 * indabajo) + (e59_3_1 * indaplomo) + (e59_4_1 * indape
 (e59_5_1 * indadiabet) + (e59_6_1 * indarenal) + (e59_7_1 * indarendia) + (e59_8_1 * indaceliac) + (e59_9_1 * indatuberc) + ///
 (e59_10_1 * indaoncolo) + (e59_11_1 * indasida) /*+ (e59_13_1 * otrcanast)*/
 
-*CONCURRENCIA A COMEDOR O MERENDERO GRATUITO e57_4_1	NÂ°	Desayunos y/o meriendas
-*e57_4_2	NÂ°	Almuerzos y/o cenas
+*CONCURRENCIA A COMEDOR O MERENDERO GRATUITO e57_4_1	NÃÂ°	Desayunos y/o meriendas
+*e57_4_2	NÃÂ°	Almuerzos y/o cenas
 
 
 gen tdesay = (e57_4_1*4.3)*mto_desay
@@ -1248,18 +1248,18 @@ gen tdesay = (e57_4_1*4.3)*mto_desay
 gen talmue = (e57_4_2*4.3)*mto_almue
 
 /*
-RECIBE ALGÃšN TIPO DE ALIMENTACIÃ“N DE ALGÃšN PROGRAMA PÃšBLICO (SALVO CANASTAS)	
+RECIBE ALGÃÅ¡N TIPO DE ALIMENTACIÃâN DE ALGÃÅ¡N PROGRAMA PÃÅ¡BLICO (SALVO CANASTAS)	
 
-RECIBE ALGÃšN TIPO DE ALIMENTACIÃ“N DE ALGÃšN PROGRAMA PÃšBLICO (EXCLUIDAS CANASTAS)	e58	1 = SÃ­ / 2 = No	
-	e58_1	NÂ°	Cantidad de veces que recibe por semana
+RECIBE ALGÃÅ¡N TIPO DE ALIMENTACIÃâN DE ALGÃÅ¡N PROGRAMA PÃÅ¡BLICO (EXCLUIDAS CANASTAS)	e58	1 = SÃÂ­ / 2 = No	
+	e58_1	NÃÂ°	Cantidad de veces que recibe por semana
 
 */
 
 gen salvcana = (e58_1*4.3*mto_almue) 
 
 *HOGAR CONSTITUIDO	mto_hogcon	$	Valor del hogar constituido
-*COBRA HOGAR CONSTITUIDO	g149	1 = SÃ­ / 2 = No	
-*	g149_1	1 = SÃ­ / 2 = No	Declarado en el sueldo
+*COBRA HOGAR CONSTITUIDO	g149	1 = SÃÂ­ / 2 = No	
+*	g149_1	1 = SÃÂ­ / 2 = No	Declarado en el sueldo
 
 
 gen hogcosnt = mto_hogcon if g149==1 & g149_1==2
@@ -1275,7 +1275,7 @@ label var ynlm_ci "Ingreso no laboral monetario"
 	**************
 	***ynlnm_ci***
 	**************
-	*RECIBE AYUDA EN ESPECIE DE ALGÃšN FAMILIAR U OTRO HOGAR EN EL PAÃS	h156_1
+	*RECIBE AYUDA EN ESPECIE DE ALGÃÅ¡N FAMILIAR U OTRO HOGAR EN EL PAÃÂS	h156_1
 	
 	gen ynlnm_ci= (h156_1/npermax)
 	label var ynlnm_ci "Ingreso no laboral no monetario" 
@@ -1298,7 +1298,7 @@ label var ynlm_ci "Ingreso no laboral monetario"
 	by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 	replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 	replace nrylmpri_ch=. if nrylmpri_ch==.
-	label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
+	label var nrylmpri_ch "Hogares con algÃÂºn miembro que no respondiÃÂ³ por ingresos"
 
 	************
 	***ylm_ch***
@@ -1356,7 +1356,7 @@ replace viviprop_ch=2 if d8_1==1 | d8_1==3
 replace viviprop_ch=3 if d8_1>=6 & d8_1<=9
 
 
-*121. El hogar posee un tÃ­tulo de propiedad
+*121. El hogar posee un tÃÂ­tulo de propiedad
 
 gen vivitit_ch=.
 
@@ -1516,7 +1516,7 @@ gen remesas_ch=h172_1
 *********************************VARIABLES EDUCATIVAS***********************************************************************
 ****************************************************************************************************************************
 
-*74. Anios de educaciÃ³n
+*74. Anios de educaciÃÂ³n
 
 
 gen post=1 if e51_11>=1 & e51_11!=9
@@ -1552,23 +1552,23 @@ replace pricom=0 if e51_2==0
 gen preesc=1 if e193==1 | e193==2
 replace preesc=0 if  e193==3
 
-/*  Criterios para la elaboraciÃ³n de aÃ±os de educaciÃ³n aprobados:
-       > No se toma en cuenta los aÃ±os de preescolar
-	   > Los aÃ±os de educacion primaria especial tambiÃ©n son 6 aÃ±os, como la primaria comun
+/*  Criterios para la elaboraciÃÂ³n de aÃÂ±os de educaciÃÂ³n aprobados:
+       > No se toma en cuenta los aÃÂ±os de preescolar
+	   > Los aÃÂ±os de educacion primaria especial tambiÃÂ©n son 6 aÃÂ±os, como la primaria comun
 */
 /*
-*Ajustando â€œ9â€ â€“ â€œNo saben/No respondenâ€ 
+*Ajustando Ã¢â¬Å9Ã¢â¬Â Ã¢â¬â Ã¢â¬ÅNo saben/No respondenÃ¢â¬Â 
 
-gen e51_2n=e51_2 // Primaria ComÃºn
+gen e51_2n=e51_2 // Primaria ComÃÂºn
 replace e51_2n=0 if e51_2==9
 
-gen e51_4n=e51_4 // Ciclo bÃ¡sico Liceo o  UTU
+gen e51_4n=e51_4 // Ciclo bÃÂ¡sico Liceo o  UTU
 replace e51_4n=0 if e51_4==9
 
 gen  e51_5n=e51_5 // Bachillerato Secundario
 replace e51_5n=0 if e51_5==9
 
-gen e51_6n=e51_6 // Bachiellrato TecnolÃ³gico UTU
+gen e51_6n=e51_6 // Bachiellrato TecnolÃÂ³gico UTU
 replace e51_6n=0 if e51_6==9
 
 gen e51_8n=e51_8 //Magisterio
@@ -1588,13 +1588,13 @@ replace aedu_ci=0 if preesc==1
 replace aedu_ci= e51_2n  + e51_4n + e51_5n+  e51_8n + e51_9n + e51_10n + e51_11n if e51_5n>=e51_6n
 replace aedu_ci= e51_2n  + e51_4n + e51_6n + e51_8n + e51_9n + e51_10n + e51_11n if e51_6n> e51_5n 
 
-replace aedu_ci=.  if e51_3>=1 & e51_3<=9 // EducaciÃ³n Especial
-replace aedu_ci=.  if e51_7_1>=1 & e51_7_1<=9 // EducaciÃ³n para Adultos
+replace aedu_ci=.  if e51_3>=1 & e51_3<=9 // EducaciÃÂ³n Especial
+replace aedu_ci=.  if e51_7_1>=1 & e51_7_1<=9 // EducaciÃÂ³n para Adultos
 replace aedu_ci=0 if e51_2n==0 & e51_4n==0 & e51_5n==0 & e51_6n==0 & e51_8n==0 & e51_9n==0 & e51_10n==0 & e51_11n==0
 */
 
-** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisiÃ³n por IvÃ¡n Bornacelly SCL/EDU **
-** Ajustado Jul, 2017 por IvÃ¡n Bornacelly SCL/EDU
+** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisiÃÂ³n por IvÃÂ¡n Bornacelly SCL/EDU **
+** Ajustado Jul, 2017 por IvÃÂ¡n Bornacelly SCL/EDU
 
 gen aedu_ci=.
 replace aedu_ci= 0            if preesc==1 
@@ -1604,13 +1604,13 @@ replace aedu_ci= e51_2        if pricom==1  & e51_2<9
 replace aedu_ci= e51_4 + 6    if cbliceo==1 & e51_4<9
 replace aedu_ci= e51_5 + 9    if bachsec==1 & e51_5<9
 replace aedu_ci= e51_6 + 9    if bachtec==1 & (e51_6>e51_5) & (e51_6<9 )
-replace aedu_ci= e51_7 + 12   if enst==1 & (e51_7_1==1 | aedu_ci>=12 & aedu_ci!=.) & e51_7<9 // Incluyendo educaciÃ³n tÃ©cnica - No es educaciÃ³n exclusiva para adultos
+replace aedu_ci= e51_7 + 12   if enst==1 & (e51_7_1==1 | aedu_ci>=12 & aedu_ci!=.) & e51_7<9 // Incluyendo educaciÃÂ³n tÃÂ©cnica - No es educaciÃÂ³n exclusiva para adultos
 replace aedu_ci= e51_8 + 12   if mag==1  & e51_8<9
 replace aedu_ci= e51_9 + 12   if univ==1 & e51_9<9
 replace aedu_ci= e51_10 + 12  if terc==1 & (e51_10>e51_9) & e51_10<9
 replace aedu_ci= e51_11 + 17  if post==1 & e51_11<9 
 replace aedu_ci=0             if e49==2 & (edad>=5 & edad!=.)
-replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // PoblaciÃ³n que declara estar asistiendo o haber asistido, pero no reporta ningÃºn nivel o aÃ±os de educaciÃ³n aprobado
+replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // PoblaciÃÂ³n que declara estar asistiendo o haber asistido, pero no reporta ningÃÂºn nivel o aÃÂ±os de educaciÃÂ³n aprobado
 
 
 **************
@@ -1733,11 +1733,11 @@ gen asiste_ci=.
 
 *cambio MLO 01,2014
 *replace asiste_ci=1 if e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
-*cambio MGR 06,2015 (correcciÃ³n seÃ±alada por IvÃ¡n Bornacelly SCL/EDU)
+*cambio MGR 06,2015 (correcciÃÂ³n seÃÂ±alada por IvÃÂ¡n Bornacelly SCL/EDU)
 replace asiste_ci=1 if e193==1 | e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
 recode asiste_ci .=0
-/* Y.L.. Note: la pregunta en el cuestionario cambia a "asiste o asistiÃ³",no se puede 
-continuar con la metodologÃ­a del anio anterior para el calculo de esta variable
+/* Y.L.. Note: la pregunta en el cuestionario cambia a "asiste o asistiÃÂ³",no se puede 
+continuar con la metodologÃÂ­a del anio anterior para el calculo de esta variable
 replace asiste_ci = 1 if (e49==1)
 replace asiste_ci = 0 if (e49==2)
 */
@@ -1757,17 +1757,17 @@ g       pqnoasis1_ci =.
 
 gen repite_ci=.
 
-*91. Personas que han repetido el Ãºltimo grado
+*91. Personas que han repetido el ÃÂºltimo grado
 
 gen repiteult_ci=.
 
-*92. Personas que asisten a centros de ensenanza pÃºblicos
+*92. Personas que asisten a centros de ensenanza pÃÂºblicos
 
 gen edupub_ci=.
 *Primaria
 replace edupub_ci=1 if e198 ==1 & e197 == 1
 replace edupub_ci=0 if e198 ==2 & e197 == 1
-*EducaciÃ³n media 
+*EducaciÃÂ³n media 
 replace edupub_ci=1 if e210_1 ==1 & e201 == 1
 replace edupub_ci=0 if e210_1 ==2 & e201 == 1
 *Tecnica
@@ -1787,8 +1787,8 @@ replace edupub_ci=1 if e225 ==1 & e224 == 1
 replace edupub_ci=0 if e225 ==2 & e224 == 1
 
 * Nota Marcela G. Rubio - Abril 2013
-/* Variable habÃ­a sido generada como missing debido a que estructura de preguntas de educaciÃ³n cambiaron a partir de 2011 por lo que he estimado variable ///
- de una manera diferente a los aÃ±os previos */
+/* Variable habÃÂ­a sido generada como missing debido a que estructura de preguntas de educaciÃÂ³n cambiaron a partir de 2011 por lo que he estimado variable ///
+ de una manera diferente a los aÃÂ±os previos */
 
 *************
 **tecnica_ci*
@@ -1815,7 +1815,7 @@ d11
 2 Pozo surgente no protegido
 3 Pozo surgente protegido
 4 Aljibe
-5 Arroyo, rÃ­o
+5 Arroyo, rÃÂ­o
 6 Otro
 */
 
@@ -1823,12 +1823,12 @@ gen aguared_ch=(d11==1)
 replace aguared_ch =. if d11==.
 
 
-*94. UbicaciÃ³n principal de la fuente de agua
+*94. UbicaciÃÂ³n principal de la fuente de agua
 
 gen aguadist_ch=d12
 replace aguadist_ch=. if d12==4
 
-*95. La principal fuente de agua es unimproved segÃºn los mdg
+*95. La principal fuente de agua es unimproved segÃÂºn los mdg
 
 gen aguamala_ch=(d11==4|d11==5) 
 replace aguamala_ch =. if d11==.
@@ -1838,7 +1838,7 @@ replace aguamala_ch =. if d11==.
 
 gen aguamide_ch=.
 
-*97. La principal fuente de iluminaciÃ³n es electricidad
+*97. La principal fuente de iluminaciÃÂ³n es electricidad
 
 gen luz_ch=(d18==1)
 
@@ -1852,17 +1852,17 @@ gen luzmide_ch=.
 gen combust_ch=1 if d20==1 | d20==2 | d20==3 | d20==4
 replace combust_ch=0 if combust_ch==.
 
-*100. El hogar tiene algÃºn tipo de servicio higÃ­enico
+*100. El hogar tiene algÃÂºn tipo de servicio higÃÂ­enico
 
 gen bano_ch=1 if d13<3
 replace bano_ch=0 if d13==3
 
-*101. El servicio higiÃ©nico es de uso exclusivo del hogar
+*101. El servicio higiÃÂ©nico es de uso exclusivo del hogar
 
 gen banoex_ch=1 if d15==1
 replace banoex_ch=0 if d15==2
 
-*102. Tipo de desagÃ¼e incluyendo la definiciÃ³n de unimproved del MDG
+*102. Tipo de desagÃÂ¼e incluyendo la definiciÃÂ³n de unimproved del MDG
 
 gen des1_ch=.
 replace des1_ch=0 if d13==3
@@ -1871,33 +1871,33 @@ replace des1_ch=2 if (d16==2 & d13==2)
 replace des1_ch=3 if d16==3 
 
 
-*Tipo de desagÃ¼e sin incluir la definiciÃ³n de unimproved de los MDG
+*Tipo de desagÃÂ¼e sin incluir la definiciÃÂ³n de unimproved de los MDG
 gen des2_ch=.
 replace des2_ch= 0 if des1_ch==0
 replace des2_ch= 1 if des1_ch==1 | des1_ch==2 | des1_ch==3
 replace des2_ch= 2 if d16 ==4
 
 
-*104. Materiales de construcciÃ³n del piso
+*104. Materiales de construcciÃÂ³n del piso
 
 gen piso_ch=.
 replace piso_ch=0 if c4==5
 replace piso_ch=1 if c4==1 | c4==2 | c4==3
 replace piso_ch=2 if c4==4
 
-*105. Materiales de construcciÃ³n de las paredes
+*105. Materiales de construcciÃÂ³n de las paredes
 
 gen pared_ch=.
 replace pared_ch=0 if c2==6
 replace pared_ch=1 if c2<6
 
-*106. Materiales de construcciÃ³n del techo
+*106. Materiales de construcciÃÂ³n del techo
 
 gen techo_ch=.
 replace techo_ch=0 if c3==6 | c3==5
 replace techo_ch=1 if c3<5
 
-*107. MÃ©todo de eliminaciÃ³n de residuos
+*107. MÃÂ©todo de eliminaciÃÂ³n de residuos
 
 gen resid_ch=.
 
@@ -1929,7 +1929,7 @@ gen cocina_ch=.
 replace cocina_ch=1 if d19==1 | d19==2
 replace cocina_ch=0 if d19==3
 
-*111. El hogar tiene servicio telefÃ³nico fijo
+*111. El hogar tiene servicio telefÃÂ³nico fijo
 
 gen telef_ch=d21_17
 replace telef_ch=0 if telef_ch==2
@@ -1944,7 +1944,7 @@ replace refrig_ch=0 if refrig_ch==2
 
 gen freez_ch=.
 
-*114. El hogar posee automÃ³vil particular
+*114. El hogar posee automÃÂ³vil particular
 
 gen auto_ch=d21_18
 replace auto_ch=0 if auto_ch==2
@@ -1954,12 +1954,12 @@ replace auto_ch=0 if auto_ch==2
 gen compu_ch=d21_15
 replace compu_ch=0 if compu_ch==2
 
-*116. El hogar posee conexiÃ³n a internet
+*116. El hogar posee conexiÃÂ³n a internet
 
 gen internet_ch=d21_16
 replace internet_ch=0 if internet_ch==2
 
-*117. El hogar tiene servicio telefÃ³nico celular
+*117. El hogar tiene servicio telefÃÂ³nico celular
 
 replace e60=0 if e60==2
 bys idh_ch: egen byte cel=sum(e60)
@@ -1980,15 +1980,15 @@ replace vivi2=0 if vivi2==.
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÃ­neas de pobreza
+* AsignaciÃÂ³n de etiquetas e inserciÃÂ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃÂ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
+* VerificaciÃÂ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///

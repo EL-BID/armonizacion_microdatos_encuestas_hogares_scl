@@ -2,7 +2,7 @@ clear
 
 *Marcela Rubio
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN

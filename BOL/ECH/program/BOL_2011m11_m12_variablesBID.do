@@ -6,11 +6,11 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -323,7 +323,7 @@ replace afroind_ci=9 if cods2_05==" " & edad_ci<6
 	***afroind_ch***
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
-egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe 
 
 	*******************

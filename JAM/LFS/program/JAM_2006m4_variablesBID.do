@@ -5,14 +5,14 @@ set more off
 
  * activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * los datos se obtienen de las carpetas que se encuentran en el servidor: \\sdssrv03\surveys
+ * los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * se tiene acceso al servidor únicamente al interior del bid.
  * el servidor contiene las bases de datos mecovi.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local pais JAM
 local encuesta LFS

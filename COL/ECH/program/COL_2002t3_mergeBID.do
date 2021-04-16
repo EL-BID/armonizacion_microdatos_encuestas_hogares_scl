@@ -1,4 +1,4 @@
-*Elaboraci髇: Marcela Rubio (mrubio@iadb.org | marcelarubio28@gmail.com)
+*Elaboraci贸n: Marcela Rubio (mrubio@iadb.org | marcelarubio28@gmail.com)
 *Mayo 12, 2014
 
 *** MERGE COLOMBIA ECH 2002 ****
@@ -41,12 +41,12 @@ foreach zona in cabecera resto {
 
 *** EDUCACION
 
-use "`m7'\`zona' - caracter韘ticas generales - educaci髇.dta", clear
-append using "`m8'\`zona' - caracter韘ticas generales - educaci髇.dta"
-append using "`m9'\`zona' - caracter韘ticas generales - educaci髇.dta"
+use "`m7'\`zona' - caracter铆sticas generales - educaci贸n.dta", clear
+append using "`m8'\`zona' - caracter铆sticas generales - educaci贸n.dta"
+append using "`m9'\`zona' - caracter铆sticas generales - educaci贸n.dta"
 egen id = concat (llave_viv llave_hog orden)
 sort id
-saveold "`t3'\`zona' - caracter韘ticas generales - educaci髇.dta", replace
+saveold "`t3'\`zona' - caracter铆sticas generales - educaci贸n.dta", replace
 
 *** FUERZA DE TRABAJO
 
@@ -108,7 +108,7 @@ saveold "`t3'\`zona' - inactivos.dta", replace
 
 foreach zona in cabecera resto {
 
-use "`t3'\`zona' - caracter韘ticas generales - educaci髇.dta", clear
+use "`t3'\`zona' - caracter铆sticas generales - educaci贸n.dta", clear
 merge 1:1 id using "`t3'\`zona' - fuerza de trabajo.dta"
 drop _merge
 sort id

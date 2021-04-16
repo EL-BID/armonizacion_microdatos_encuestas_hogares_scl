@@ -1,13 +1,13 @@
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -15,13 +15,13 @@ set more off
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Paraguay
+Pa铆s: Paraguay
 Encuesta: EPH
 Round: Octubre-Diciembre
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 4 de Septiembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 4 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -35,54 +35,54 @@ clear
 
 * Households
 /*
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r01_07.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r01_07.dta", clear
 sort upm nvivi nhoga
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r01_07.dta", replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r01_07.dta", replace
 
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta", clear
 sort upm nvivi nhoga
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta", replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta", replace
 
 * Individuals
 
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", clear
 sort upm nvivi nhoga l02 
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", replace
 
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta", clear
 sort upm nvivi nhoga l02 
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta", replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta", replace
 
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta", clear
 sort upm nvivi nhoga l02 
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta", replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta", replace
 
-use "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", clear
+use "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r02_07.dta", clear
 
-merge upm nvivi nhoga using "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta"
+merge upm nvivi nhoga using "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
 
-merge upm nvivi nhoga using "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta"
+merge upm nvivi nhoga using "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingresos_individuales_2007.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-merge upm nvivi nhoga using "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta"
+merge upm nvivi nhoga using "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\ingrefam_2_04_08.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 */
 
-use Y:\survey\PRY\EPH\2007\m10_m12\data_merge\pry07.dta 
-merge upm nvivi nhoga using "Y:\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta"
+use ${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_merge\pry07.dta 
+merge upm nvivi nhoga using "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_orig\Stata\r03_07.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-save "Y:\survey\PRY\EPH\2007\m10_m12\data_merge\PRY_2007m10_m12.dta",replace
+save "${surveysFolder}\survey\PRY\EPH\2007\m10_m12\data_merge\PRY_2007m10_m12.dta",replace
 
 
 

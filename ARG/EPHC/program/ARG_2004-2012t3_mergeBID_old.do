@@ -11,8 +11,8 @@
 clear all
 set more off
 local anio  2007  
-local outS1 = "Y:\Argentina\\`anio'\1erSem\Datos Originales\"
-local outS2 = "Y:\Argentina\\`anio'\2doSem\Datos Originales\"
+local outS1 = "${surveysFolder}\Argentina\\`anio'\1erSem\Datos Originales\"
+local outS2 = "${surveysFolder}\Argentina\\`anio'\2doSem\Datos Originales\"
                
 foreach x in `anio' {
 di  `anio'
@@ -46,7 +46,7 @@ local n 12
 if `x'==2007 {
 local n 07
 		forvalues i=4/4 {  /*no existe 3trimestre 2007, pero si 4to*/
-		cd  "Y:\Argentina\\`x'\t`i'`n'_dta\Datos Originales\"
+		cd  "${surveysFolder}\Argentina\\`x'\t`i'`n'_dta\Datos Originales\"
 		use "Hogar_t`i'`n'.dta",clear
 		keep if realizada==1
 		sort CODUSU nro_hogar
@@ -70,7 +70,7 @@ local n 07
 
 else {
 		forvalues i=1/4 {
-		cd  "Y:\Argentina\\`x'\t`i'`n'_dta\Datos Originales\"
+		cd  "${surveysFolder}\Argentina\\`x'\t`i'`n'_dta\Datos Originales\"
 		use "Hogar_t`i'`n'.dta",clear
 		keep if realizada==1
 		sort CODUSU nro_hogar

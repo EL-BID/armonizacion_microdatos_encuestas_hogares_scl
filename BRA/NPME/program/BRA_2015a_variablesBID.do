@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA NPME
@@ -27,10 +27,10 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+Paï¿½s: Brasil
 Encuesta: NPME
 Round: a
-Autores: María Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
+Autores: Marï¿½a Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
 Fecha Ãšltima modificaciÃ³n: Julio, 2017, by Alvaro Altamirano (alvaroalt@iadb.org)
 
 							SCL/LMK - IADB
@@ -75,7 +75,7 @@ label var region_BID_c "Regiones BID"
 ***************
 ****anio_c*****
 ***************
-*gen anio_c=. /*se generó en do file merge*/
+*gen anio_c=. /*se generï¿½ en do file merge*/
 label var anio_c "AÃ±o de la encuesta" 
 
 ***************
@@ -371,8 +371,8 @@ sdesempleo_ci
 */
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* Verificaciï¿½n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* Tambiï¿½n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 /*
@@ -391,7 +391,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 */
 
-* por ahora dejo solo las variables armonizadas para reducir el tamaño de la base
+* por ahora dejo solo las variables armonizadas para reducir el tamaï¿½o de la base
 keep  region_c pais_c idh_ch idp_ci factor_ci zona_c trimestre_c mes_c sexo_ci edad_ci relacion_ci aedu_ci asiste_ci ///
 condocup_ci categopri_ci formal_ci pea_c durades_ci subemp_ci tamemp_ci tipocontrato_ci ///
 spublico_ci antiguedad_ci rama_ci ylmpri_ci ylm_ci horaspri_ci

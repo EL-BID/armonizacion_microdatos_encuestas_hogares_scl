@@ -4,7 +4,7 @@
 ***Merge para incorporar la base de datos sumaria 1999-iv**
 
 clear
-cd "Y:\survey\PER\ENAHO\1999\t4\data_orig\"
+cd "${surveysFolder}\survey\PER\ENAHO\1999\t4\data_orig\"
 /*
 use "sumaria 1999-iv.dta", clear
 sort conglome vivienda hogar
@@ -22,6 +22,6 @@ sort id
 merge m:1 id using "sumaria 1999-iv.dta"
 drop id _merge
 
-save "Y:\survey\PER\ENAHO\1999\t4\data_merge\PER_1999t4.dta.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\1999\t4\data_merge\PER_1999t4.dta.dta", replace
 
                                            

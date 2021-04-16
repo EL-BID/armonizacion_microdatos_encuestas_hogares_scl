@@ -1,17 +1,17 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
 
-* global ruta = "\\Sdssrv03\surveys"
+* global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: ECH
 Round: m11_m12
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,7 +54,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
@@ -300,7 +300,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*
 gen raza_ci=.
@@ -313,7 +313,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -328,17 +328,17 @@ bys idh_ch, sort: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s106 ==3 | s106==5))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo" 
 
 *Raza usando la definicion mas apropiada
 gen raza_ci=.
-replace raza_ci= 1 if  (s111a >=1 & s111a<=5) | s111b == "BAURE" | s111b=="BAUREÑA" | ///
-s111b=="BAUREÑO" | s111b=="CHIMAN" | s111b=="CHIPAYA" | s111b=="CHIQUITANO" | ///
+replace raza_ci= 1 if  (s111a >=1 & s111a<=5) | s111b == "BAURE" | s111b=="BAUREÃ‘A" | ///
+s111b=="BAUREÃ‘O" | s111b=="CHIMAN" | s111b=="CHIPAYA" | s111b=="CHIQUITANO" | ///
 s111b=="GUARAYO" | s111b=="GUARAYU" | s111b=="ITONAMA"| s111b=="LORETANA"| ///
-s111b=="MAPUCHE"| s111b=="MOVIMA" | s111b=="MOVINA" | s111b=="MOXEÑO" | ///
+s111b=="MAPUCHE"| s111b=="MOVIMA" | s111b=="MOVINA" | s111b=="MOXEÃ‘O" | ///
 s111b=="PACAGUARA"| s111b=="PUEBLO DE LOS ITENES" | s111b=="TACANA" | s111b=="TRINITARIO" | ///
 s111b=="URU CHIPAYA" | s111b=="URUS" | s111b=="WEENHAYEK"
 replace raza_ci= 2 if  s111b=="AFRO BOLIVIA" | s111b=="AFROBOLIVIANO"
@@ -348,14 +348,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & (s106 ==3|s106==5))  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -368,9 +368,9 @@ label var id_afro_ci "Afro-descendiente"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 7 años*/ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 7 aÃ±os*/ 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -481,7 +481,7 @@ replace condocup_ci=2 if condact==3 | condact==4
 replace condocup_ci=3 if (condact==5 | condact==6) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -495,10 +495,10 @@ replace condocup_ci=1 if s501==1 | s502<=6 | (s503a>=1 & s503a<=7)
 *replace condocup_ci=2 if (s501==2 | s502==7 | s503a>1) & (s505==1 | s506==1) & (s504==1)
 replace condocup_ci=2 if (s501==2 | s502==7 | s503a>7) & (s505==1 | s506==1) & (s504==1)
 
-*2015,10 MLO la encuesta pregunta a partir de 7 años (no 10)
+*2015,10 MLO la encuesta pregunta a partir de 7 aÃ±os (no 10)
 recode condocup_ci .=3 if edad_ci>=7
 recode condocup_ci .=4 if edad_ci<7
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 7" 
 label value condocup_ci condocup_ci
 
@@ -517,7 +517,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *************
 *tamemp_ci
 *************
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if s523==1 | s523==2
 replace tamemp_ci=2 if s523>=3 & s523<=6
@@ -571,14 +571,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 *****************
 ***desalent_ci***
@@ -701,7 +701,7 @@ replace nempleos_ci=2 if emp_ci==1 & s532==1
 
 gen firmapeq_ci=.
 replace firmapeq_ci=1 if s523>=1 & s523<=2 /*1 a 4 personas*/
-replace firmapeq_ci=0 if s523>=3 & s523<=8 /*5 o más personas*/
+replace firmapeq_ci=0 if s523>=3 & s523<=8 /*5 o mÃ¡s personas*/
 */
 
 *****************
@@ -765,7 +765,7 @@ replace durades_ci=s548a*12   if s548b==6
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
+/*En aÃ±os*/
 
 gen antiguedad_ci=.
 replace antiguedad_ci=s515a/(4.3*12) if s515b==2 & emp_ci==1
@@ -779,8 +779,8 @@ gen categoinac_ci =1 if (s508a==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  (s508a==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  (s508a==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 
 *******************
@@ -1042,7 +1042,7 @@ gen ynlnm_ci=.
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1166,7 +1166,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 5 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 5 aÃ±os de edad*/
 
 gen byte aedu_ci=.
 
@@ -1339,7 +1339,7 @@ replace pqnoasis1_ci = 7 if s408a==7 | s408a==11
 replace pqnoasis1_ci = 8 if s408a==5
 replace pqnoasis1_ci = 9 if s408a==1  | s408a==13
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1355,7 +1355,7 @@ gen repiteult_ci=.
 ***************
 ***edupub_ci***
 ***************
-/*Sobre los que se matricularon ese año*/
+/*Sobre los que se matricularon ese aÃ±o*/
 
 gen edupub_ci=(s406a==2)
 replace edupub_ci=. if s406a==.
@@ -1373,7 +1373,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-* MGR Jul, 2015: algunas variables de vivienda habían sido generadas como missing ya que no estaban disponibles debido a error al hacer merge.
+* MGR Jul, 2015: algunas variables de vivienda habÃ­an sido generadas como missing ya que no estaban disponibles debido a error al hacer merge.
 
 gen aguared_ch=(s809a==1)
 
@@ -1381,7 +1381,7 @@ gen aguadist_ch=.
 
 gen aguamala_ch=(s809a==6 | s809a==7)
 replace aguamala_ch=. if s809a==.
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 
 
 gen aguamide_ch=.
@@ -1411,7 +1411,7 @@ gen des2_ch=0 if s814==2
 replace des2_ch=1 if s816>=1 & s816<=2
 replace des2_ch=2 if s816==3
 */
-* MGR Jul, 2015 corrección sintáxis
+* MGR Jul, 2015 correcciÃ³n sintÃ¡xis
 gen des2_ch=0 if s814==2
 replace des2_ch=1 if s816>=1 & s816<=3
 replace des2_ch=2 if s816==4
@@ -1504,7 +1504,7 @@ Parentesco			per1
  3. hijo(a) o entenado(a) 	 1
  4. yerno o nuera 		 1	
  5. nieto o nieta 		 1	
- 6. hermano(a) o cuñado(a)	 1
+ 6. hermano(a) o cuÃ±ado(a)	 1
  7. padres o suegros 		 1
  8. otro pariente 		 1
  9. empleada(o) del hogar 	 .	
@@ -1569,30 +1569,30 @@ Parentesco			per1
 * Included in the database
 /*
 s402a
-¿Cuál fue el NIVEL Y CURSO más alto de instrucción que aprobó? 
+Â¿CuÃ¡l fue el NIVEL Y CURSO mÃ¡s alto de instrucciÃ³n que aprobÃ³? 
 
 NIVEL O CICLO
  11. NINGUNO
- 12. CURSO DE ALFABETIZACIÓN
- 13. EDUCACIÓN PRE-ESCOLAR
+ 12. CURSO DE ALFABETIZACIÃ“N
+ 13. EDUCACIÃ“N PRE-ESCOLAR
 SISTEMA ANTERIOR
- 14. BÁSICO (1 A 5 AÑOS)
- 15. INTERMEDIO (1 A 3 AÑOS)
- 16. MEDIO (1 A 4 AÑOS)
+ 14. BÃSICO (1 A 5 AÃ‘OS)
+ 15. INTERMEDIO (1 A 3 AÃ‘OS)
+ 16. MEDIO (1 A 4 AÃ‘OS)
 SISTEMA ACTUAL
- 17. PRIMARIA (1 A 8 AÑOS)
- 18. SECUNDARIA (1 A 4 AÑOS)
-EDUCACIÓN DE ADULTOS
- 19. EDUCACIÓN BÁSICA DE ADULTOS (EBA)
- 20. CENTRO DE EDUCACIÓN MEDIA DE ADULTOS(CEMA)
-EDUCACIÓN SUPERIOR
+ 17. PRIMARIA (1 A 8 AÃ‘OS)
+ 18. SECUNDARIA (1 A 4 AÃ‘OS)
+EDUCACIÃ“N DE ADULTOS
+ 19. EDUCACIÃ“N BÃSICA DE ADULTOS (EBA)
+ 20. CENTRO DE EDUCACIÃ“N MEDIA DE ADULTOS(CEMA)
+EDUCACIÃ“N SUPERIOR
  21. NORMAL
- 22. UNIVERSIDAD PÚBLICA (Licenciatura)
+ 22. UNIVERSIDAD PÃšBLICA (Licenciatura)
  23. UNIVERSIDAD PRIVADA (Licenciatura)
- 24. POSTGRADO, MAESTRÍA
- 25. TÉCNICO DE UNIVERSIDAD
- 26. TÉCNICO DE INSTITUTO
- 27. INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL
+ 24. POSTGRADO, MAESTRÃA
+ 25. TÃ‰CNICO DE UNIVERSIDAD
+ 26. TÃ‰CNICO DE INSTITUTO
+ 27. INSTITUTOS DE FORMACIÃ“N MILITAR Y POLICIAL
  28. OTROS CURSOS
 
 s402b (grado)
@@ -1625,30 +1625,30 @@ ces
 
 /*
 s108a (All observations)
-8. ¿Cuál es el idioma o lengua en el que
-aprendió a hablar en su niñez?
+8. Â¿CuÃ¡l es el idioma o lengua en el que
+aprendiÃ³ a hablar en su niÃ±ez?
 
  1. Quechua
  2. Aymara
  3. Castellano
- 4. Guaraní
+ 4. GuaranÃ­
  5. Otro nativo (s108b)
  6. Extranjero
- 7. Aún no habla
+ 7. AÃºn no habla
  8. No Puede hablar
 
 s111a (12 years or more)
-9. ¿Se considera perteneciente a
+9. Â¿Se considera perteneciente a
 alguno de los siguientes pueblos
 indigenas / originarios, o
-perteneciente a algún grupo
+perteneciente a algÃºn grupo
 minoritario?
 
  1. Quechua?
  2. Aymara?
- 3. Guaraní?
+ 3. GuaranÃ­?
  4. Chiquitano?
- 5. Mojeño?
+ 5. MojeÃ±o?
  6. Otro(s111b)
  7. NINGUNO?
 */
@@ -1671,10 +1671,10 @@ minoritario?
 
 /*
 Estrato							 	Estrato1
-1. Ciudades capitales y área metropolitana			    1 
-2. Ciudades con más de 10.000 hbts (excepto estrato=1)              2
-3. Ciudades con más de 2000 y menos de 10.000 hbts                  2
-4. Ciudades con más de 250 y menos de 2000 hbts                     3
+1. Ciudades capitales y Ã¡rea metropolitana			    1 
+2. Ciudades con mÃ¡s de 10.000 hbts (excepto estrato=1)              2
+3. Ciudades con mÃ¡s de 2000 y menos de 10.000 hbts                  2
+4. Ciudades con mÃ¡s de 250 y menos de 2000 hbts                     3
 5. Area rural dispersa (menos de 250)                               3
 
 1 - 4. => Area amanzanada
@@ -1682,11 +1682,11 @@ Estrato							 	Estrato1
 */
 
 /*
-Región
-Área geográfica utilizada para agrupar los Departamentos de acuerdo a su tipo ecológico
+RegiÃ³n
+Ãrea geogrÃ¡fica utilizada para agrupar los Departamentos de acuerdo a su tipo ecolÃ³gico
 predominante.
-La región clasifica los Departamentos en:
- a) Altiplano comprende los departamentos de La Paz, Oruro, y Potosí.
+La regiÃ³n clasifica los Departamentos en:
+ a) Altiplano comprende los departamentos de La Paz, Oruro, y PotosÃ­.
  b) Valle comprende los departamentos Cochabamba, Chuquisaca y Tarija.
  c) Llano comprende los departamentos de Santa Cruz, Beni y Pando.
 */
@@ -1717,46 +1717,46 @@ depto
 *** GOAL 2. ACHIEVE UNIVERSAL PRIMARY EDUCATION
 /*
 s404
-Durante este año, ¿Se inscribió o matriculó en algún curso 
-o grado de educación escolar o superior?
+Durante este aÃ±o, Â¿Se inscribiÃ³ o matriculÃ³ en algÃºn curso 
+o grado de educaciÃ³n escolar o superior?
 1.Si / 2.No
 
 s405a s405b
-5. ¿A qué NIVEL Y CURSO de educación escolar o superior se inscribió/matriculó este año?
+5. Â¿A quÃ© NIVEL Y CURSO de educaciÃ³n escolar o superior se inscribiÃ³/matriculÃ³ este aÃ±o?
 Sistema escolar
- 13.  Educación  pre escolar (pre-kinder / kinder)
+ 13.  EducaciÃ³n  pre escolar (pre-kinder / kinder)
  17.  Primaria 
  18.  Secundaria                                                                                          
-Educación de adultos                                                                                 
- 19.  Educación básica de adultos (eba)
- 20.  Centro de educación media de adultos (cema)                                                         
-Educación superior
+EducaciÃ³n de adultos                                                                                 
+ 19.  EducaciÃ³n bÃ¡sica de adultos (eba)
+ 20.  Centro de educaciÃ³n media de adultos (cema)                                                         
+EducaciÃ³n superior
  21. Normal
- 22. Universidad pública (licenciatura)
+ 22. Universidad pÃºblica (licenciatura)
  23. Universidad privada (licenciatura)
- 24. Postgrado, maestría
- 25. Técnico  de universidad
- 26. Técnico de instituto
- 27. Institutos de formación militar y policial
+ 24. Postgrado, maestrÃ­a
+ 25. TÃ©cnico  de universidad
+ 26. TÃ©cnico de instituto
+ 27. Institutos de formaciÃ³n militar y policial
  28. Otros cursos
 
 s407
-7. Actualmente, ¿Asiste al curso o grado de educación escolar o superior al que se matriculó este 2002?
+7. Actualmente, Â¿Asiste al curso o grado de educaciÃ³n escolar o superior al que se matriculÃ³ este 2002?
  1. Si ==> Sig. seccion
  2. No ==> 8
 
 s408a
-8. ¿Por qué razón no se inscribió/matriculó o no asiste actualmente?
- 1.  vacación
+8. Â¿Por quÃ© razÃ³n no se inscribiÃ³/matriculÃ³ o no asiste actualmente?
+ 1.  vacaciÃ³n
  2.  falta de dinero
  3.  por trabajo
  4.  por enfermedad o discapacidad 
  5.  los establecimientos son distantes
- 6.  culminó sus estudios
+ 6.  culminÃ³ sus estudios
  7.  edad avanzada
- 8.  falta de interés
+ 8.  falta de interÃ©s
  9.  embarazo
- 10. cuidado de niños/as
+ 10. cuidado de niÃ±os/as
  11. edad temprana
  12. problemas familiares
  13. Otra (s408b)
@@ -1876,15 +1876,15 @@ s408a
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 * Without Domestic Service (7 years old or more)
 /*
-s517. En esta ocupación usted trabaja como:		caeb_p. (ramap)
-							actividad económica ocupación principal
+s517. En esta ocupaciÃ³n usted trabaja como:		caeb_p. (ramap)
+							actividad econÃ³mica ocupaciÃ³n principal
  1. Obrero/a
  2. Empleado/a
  3. Trabajador/a por cuenta propia
- 4. Patrón, socio o empleador que sí recibe salario
- 5. Patrón, socio o empleador que no recibe salario
- 6. Cooperativista de producción 
- 7. Trabajador/a familiar o aprendiz sin remuneración
+ 4. PatrÃ³n, socio o empleador que sÃ­ recibe salario
+ 5. PatrÃ³n, socio o empleador que no recibe salario
+ 6. Cooperativista de producciÃ³n 
+ 7. Trabajador/a familiar o aprendiz sin remuneraciÃ³n
  8.  Empleada/o del hogar
 */
 
@@ -1899,10 +1899,10 @@ s517. En esta ocupación usted trabaja como:		caeb_p. (ramap)
 
 *Proportion of Births Attended by Skilled Health Personnel*
 /*
- s321a SOLO PARA MUJERES ENTRE 13 Y 50 AÑOS
+ s321a SOLO PARA MUJERES ENTRE 13 Y 50 AÃ‘OS
 qaten 
- s321a quien atendió el parto			
- 1. médico						
+ s321a quien atendiÃ³ el parto			
+ 1. mÃ©dico						
  2. enfermera / aux. de enfermeria		
  3. responsable o promotor de salud		
  4. partera o comadrona				
@@ -1924,7 +1924,7 @@ s817
  2: No ==> P20
  
 s818
-18. ¿Cuánto gastan normalmente en el servicio de energía eléctrica al mes?
+18. Â¿CuÃ¡nto gastan normalmente en el servicio de energÃ­a elÃ©ctrica al mes?
  Monto
 */
 
@@ -1935,16 +1935,16 @@ s818
 
 ** Target 9, Indicator: Proportion of the population using solidfuels (%)
 
-* s819 ¿Tiene un cuarto sólo para cocinar?
+* s819 Â¿Tiene un cuarto sÃ³lo para cocinar?
 
 /*
 s820 (combusti)
-¿Principalmente ¿qué tipo de combustible o energía utiliza para cocinar?
- 1. Leña
+Â¿Principalmente Â¿quÃ© tipo de combustible o energÃ­a utiliza para cocinar?
+ 1. LeÃ±a
  2. Guano/ Bosta o taquia
- 3. Kerosén
+ 3. KerosÃ©n
  4. Gas licuado (garrafa)
- 5. Gas natural por red (cañería)
+ 5. Gas natural por red (caÃ±erÃ­a)
  6. Otro
  7. Electricidad
  8. No cocina
@@ -1956,15 +1956,15 @@ s820 (combusti)
 
 ** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
 /*
-9. Principalmente 					12. ¿El agua para beber y cocinar se distribuye...
-¿de dónde obtiene el agua  para beber y cocinar?			
+9. Principalmente 					12. Â¿El agua para beber y cocinar se distribuye...
+Â¿de dÃ³nde obtiene el agua  para beber y cocinar?			
 s809a (agua)						s812 
- 1. Cañería de red		==>10 ==>11 ==>12	 1. por cañería dentro de la vivienda?			
- 2. Pileta pública		==>10 ==>11 ==>12	 2. por cañería fuera de la vivienda,		
+ 1. CaÃ±erÃ­a de red		==>10 ==>11 ==>12	 1. por caÃ±erÃ­a dentro de la vivienda?			
+ 2. Pileta pÃºblica		==>10 ==>11 ==>12	 2. por caÃ±erÃ­a fuera de la vivienda,		
  3. Carro repartidor (aguatero) ==>12			     pero dentro del lote o terreno?							
- 4. Pozo o noria con bomba	==>12			 3. no se distribuye por cañería?
+ 4. Pozo o noria con bomba	==>12			 3. no se distribuye por caÃ±erÃ­a?
  5. Pozo o noria sin bomba	==>12
- 6. Río/ Vertiente/ Acequia	==>12
+ 6. RÃ­o/ Vertiente/ Acequia	==>12
  7. Lago/ Laguna/ Curiche	==>12
  8. Otro (Especifique)		==>12
 */
@@ -1975,11 +1975,11 @@ s809a (agua)						s812
 ** Target 10, Indicator: Proportion of Population with Access to Improved Sanitation, Urban and Rural (%)
 /*
 s814					s815					s816 (conexserv)
-14. ¿Tiene baño, water o letrina? 	15. ¿El baño, water o letrina es...	16. ¿El baño, water o letrina tiene desague...
-1. Si					1. usado  sólo por su hogar?		1. al alcantarillado?
-2. No ==>17				2. compartido con otros hogares?	2. a una cámara séptica?
+14. Â¿Tiene baÃ±o, water o letrina? 	15. Â¿El baÃ±o, water o letrina es...	16. Â¿El baÃ±o, water o letrina tiene desague...
+1. Si					1. usado  sÃ³lo por su hogar?		1. al alcantarillado?
+2. No ==>17				2. compartido con otros hogares?	2. a una cÃ¡mara sÃ©ptica?
 										3. a un pozo ciego?
-										4. a la superficie (calle/quebrada/río)?
+										4. a la superficie (calle/quebrada/rÃ­o)?
 */
 
 * Gender classification of the population refers to the head of the household.
@@ -2014,26 +2014,26 @@ s814					s815					s816 (conexserv)
 s508a
 8. Es usted:
 
- 1. ¿Estudiante?
- 2. ¿Ama de  casa o responsable
+ 1. Â¿Estudiante?
+ 2. Â¿Ama de  casa o responsable
      de los quehaceres del hogar?
- 3. ¿Jubilado o benemérito?
- 4. ¿Otro?(Especifique) (s508b)
+ 3. Â¿Jubilado o benemÃ©rito?
+ 4. Â¿Otro?(Especifique) (s508b)
 
 s509a
-9.¿Por qué no buscó trabajo?
- 1.   Tiene trabajo asegurado que comenzará 
+9.Â¿Por quÃ© no buscÃ³ trabajo?
+ 1.   Tiene trabajo asegurado que comenzarÃ¡ 
        en menos de cuatro semanas
- 2.   Buscó antes y espera respuesta
+ 2.   BuscÃ³ antes y espera respuesta
  3.   No cree poder encontrar trabajo
- 4.   Se cansó de buscar trabajo
+ 4.   Se cansÃ³ de buscar trabajo
  5.   Espera periodo de mayor actividad
  6.   Por estudios
  7.   No necesita trabajar
  8.   Por enfermedad
  9.   Por vejez
  10. Embarazo
- 11. Cuidado de niños/as
+ 11. Cuidado de niÃ±os/as
  12. Por responsabilidades 
       familiares  (especifique)     
  13. Por otras causas (especifique) (s509b)
@@ -2117,15 +2117,15 @@ drop rezago
 ren ocup ocup_old
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

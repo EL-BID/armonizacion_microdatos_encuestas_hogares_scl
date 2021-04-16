@@ -1,10 +1,10 @@
 clear
 
-cd "X:\ARM\BLZ\2003"
+cd "${surveysFolder}\ARM\BLZ\2003"
 
 
 capture log close
-log using "X:\ARM\BLZ\2003\Arm_data\BLZ2003EA_BID.log", replace
+log using "${surveysFolder}\ARM\BLZ\2003\Arm_data\BLZ2003EA_BID.log", replace
 
 
 clear
@@ -18,7 +18,7 @@ set more off
 *****                                         	    Hogares                                            *****
 ************************************************************************************************************
 
-use "X:\ARM\BLZ\2003\Orig_data\belize03.dta", clear
+use "${surveysFolder}\ARM\BLZ\2003\Orig_data\belize03.dta", clear
 
 destring _all, replace
 compress
@@ -96,7 +96,7 @@ label variable pais_c "Nombre del Pais"
 **********
 
 gen anio_c=2003
-label variable anio_c "Año de la Encuesta"
+label variable anio_c "AÃ±o de la Encuesta"
 
 **************************
 * Periodo de Referencia: * 
@@ -118,7 +118,7 @@ label value sexo_ci sexo_ci
 **************
 * PARENTESCO *
 **************
-*Yanira Oviedo, Julio 2010: la opción 3 de la variable creada estaba tomando los códigos equivocadamente. Se corrige abajo
+*Yanira Oviedo, Julio 2010: la opciÃ³n 3 de la variable creada estaba tomando los cÃ³digos equivocadamente. Se corrige abajo
 *gen relacion_ci=.
 *replace relacion_ci=1 if relate==1
 *replace relacion_ci=2 if relate==2
@@ -135,7 +135,7 @@ replace relacion_ci=4 if relate==5 | relate==6 | relate==7
 replace relacion_ci=5 if relate==8 
 replace relacion_ci=. if relate==9 
 label var relacion_ci "Parentesco o relacion con el Jefe del Hogar"
-label define relacion_ci 1 "Jefe(a)" 2 "Esposo(a) o compañero(a)" 3 "Hijo(a)" 4 "Otro pariente" 5 "Otro NO pariente" 6 "Empleado(a) domestico(a)" 
+label define relacion_ci 1 "Jefe(a)" 2 "Esposo(a) o compaÃ±ero(a)" 3 "Hijo(a)" 4 "Otro pariente" 5 "Otro NO pariente" 6 "Empleado(a) domestico(a)" 
 label value relacion_ci relacion_ci
 
 ********
@@ -222,45 +222,45 @@ sort idh_ch
 ****************
 
 egen nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5), by (idh_ch)
-label variable nmiembros_ch "Numero de miembros de 7 años o mas de edad en el Hogar"
+label variable nmiembros_ch "Numero de miembros de 7 aÃ±os o mas de edad en el Hogar"
 
 ***************
 * nmayor21_ch *
 ***************
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21)), by (idh_ch)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 ***************
 * nmenor21_ch *
 ***************
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<21)), by (idh_ch)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 ***************
 * nmayor65_ch *
 ***************
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=65)), by (idh_ch)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 **************
 * nmenor6_ch *
 **************
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6)), by (idh_ch)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 **************
 * nmenor1_ch *
 **************
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1)),  by (idh_ch)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 ***********************************************************
-*** ESTADO CIVIL PARA PERSONAS DE 10 AÑOS O MAS DE EDAD ***
+*** ESTADO CIVIL PARA PERSONAS DE 10 AÃ‘OS O MAS DE EDAD ***
 ***********************************************************
 
 gen civil_ci=.
@@ -418,7 +418,7 @@ label define nempleos_ci 1 "un trabajo" 2 "dos o mas trabajos"
 label values nempleos_ci nempleos_ci
 
 **********************
-* Tamaño de la firma *
+* TamaÃ±o de la firma *
 **********************
 
 /* valores positivos solo para los patrones en categopri==1 */
@@ -478,7 +478,7 @@ replace rama_ci=8 if indmisic>=8000 & indmisic<9000
 replace rama_ci=9 if indmisic>=9000 & indmisic<10000
 
 label var rama_ci "Rama Laboral en la Ocupacion Principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ******************************
@@ -494,11 +494,11 @@ label define durades1_ci 1 "Menos de 1 mes" 2 "1 a 3 meses" 3 "4 a 6 meses" 4 "7
 label values durades1_ci durades1_ci
 
 ****************************************
-*** Antiguedad, AÑOS (NOT AVAILABLE) ***
+*** Antiguedad, AÃ‘OS (NOT AVAILABLE) ***
 ****************************************
 
 gen antiguedad_ci=yrsmain if yrsmain<99
-label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en años)"
+label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en aÃ±os)"
 
 ********************************************************************************
 * VARIABLES EDUCATIVAS (para todos los miembros del hogar)
@@ -525,7 +525,7 @@ replace aedu_ci= yrscompl if yrcomple==.
 replace aedu_ci= (formin - 1) if (yrcomple==. & yrscompl==. & formin>0)
 replace aedu_ci= (classin - 1) if (yrcomple==. & yrscompl==. & formin==. & classin>0)
 replace aedu_ci=. if aedu==99
-label variable aedu_ci "Años de Educacion"
+label variable aedu_ci "AÃ±os de Educacion"
 
 ***************************************
 ** Categorias educativas excluyentes **
@@ -598,13 +598,13 @@ gen edus2c_ci=.
 label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educacion secundaria"
 
 gen eduac_ci=.
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 gen repite_ci=.
-label var repite_ci "=1 si repite o repitio algun grado o año"
+label var repite_ci "=1 si repite o repitio algun grado o aÃ±o"
 
 gen repiteult_ci=.
-label var repiteult_ci "=1 si repite el grado o año que cursa actualmente"
+label var repiteult_ci "=1 si repite el grado o aÃ±o que cursa actualmente"
 
 **********
 * ASISTE *
@@ -613,7 +613,7 @@ label var repiteult_ci "=1 si repite el grado o año que cursa actualmente"
 gen asiste_ci=.
 replace asiste_ci=1 if (attdsch==0) | (attdsch2<2) 
 replace asiste_ci=0 if (attdsch==2) | (attdsch2==2)
-label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
+label var asiste_ci "Personas que actualmente asisten a centros de enseÃ±anza"
 
 *********************
 * POR QUE NO ASISTE *
@@ -628,7 +628,7 @@ label define pqnoasis_ci 1 "Demasiado joven" 2 "Problemas Financieros" 3 "Trabaj
 label values pqnoasis_ci pqnoasis_ci
 
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 
 **************************************
@@ -875,7 +875,7 @@ gen vivialq_ch=.
 
 gen vivialqimp_ch=.
 
-save "X:\ARM\BLZ\2003\Arm_data\BLZ2003EA_BID.dta", replace
+save "${surveysFolder}\ARM\BLZ\2003\Arm_data\BLZ2003EA_BID.dta", replace
 log close
 
 /*
@@ -976,10 +976,10 @@ save "`out'1999\BLZ1999EA_BID_sis.dta", replace
 
 capture log close
 
-log using "D:\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99.log", replace
+log using "${surveysFolder}\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99.log", replace
 
 
-save "X:\ARM\BLZ\2001\Orig_data\belize01_02.dta", replace
+save "${surveysFolder}\ARM\BLZ\2001\Orig_data\belize01_02.dta", replace
 
 /*
 
@@ -1099,7 +1099,7 @@ sum ybus_ratio [w=factor2_ci] if `var'==1
 
 capture log close
 
-log using "D:\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99_2.log", replace
+log using "${surveysFolder}\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99_2.log", replace
 
 **** TABULADOS 2 ****
 version 7.0
@@ -1140,7 +1140,7 @@ restore
 capture log close
 
 
-log using "D:\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99_pov.log", replace
+log using "${surveysFolder}\Data.idb\CECILIACA\BANANAS\BELIZE\Programs\1999\sisrequest_blz99_pov.log", replace
 
 ** POBREZA **
 * % Personas

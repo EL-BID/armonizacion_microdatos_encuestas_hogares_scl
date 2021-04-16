@@ -5,13 +5,13 @@
 
 clear
 *capture log close
-*log using "X:\ARM\PAN\ENV_2003\Programs\pan_env_2003.log", replace
+*log using "${surveysFolder}\ARM\PAN\ENV_2003\Programs\pan_env_2003.log", replace
 
-*ModificaciÛn Mayra S·enz 10/27/2015
+*Modificaci√≥n Mayra S√°enz 10/27/2015
 
 set more off
 
-use "Z:\survey\PAN\ENV\2003\m8_m11\data_merge\pan03_env.dta", clear
+use "${surveysFolder}\survey\PAN\ENV\2003\m8_m11\data_merge\pan03_env.dta", clear
 
 
 
@@ -42,21 +42,21 @@ egen idp_ci=group(form  p000)
 label var idp_ci "ID de la persona en el hogar"
 
 /*
-          p-P2.RelaciÛn de |
+          p-P2.Relaci√≥n de |
                 parentesco |      Freq.     Percent        Cum.
         -------------------+-----------------------------------
 1                  jefe(a) |      6,363       24.07       24.07
-2 esposa(o) o compaÒera(o) |      4,163       15.75       39.82
+2 esposa(o) o compa√±era(o) |      4,163       15.75       39.82
 3                hijo/hija |     11,322       42.83       82.65
 4              yerno/nuera |        467        1.77       84.42
 5              nieto/nieta |      2,360        8.93       93.35
 6              padre/madre |        210        0.79       94.14
 7                suegro(a) |        130        0.49       94.64
 8               hermano(a) |        308        1.17       95.80
-9                cuÒado(a) |        127        0.48       96.28
+9                cu√±ado(a) |        127        0.48       96.28
 10           otro pariente |        769        2.91       99.19
-11   empleado domÈstico(a) |         50        0.19       99.38
-12     pensionista/huÈsped |          5        0.02       99.40
+11   empleado dom√©stico(a) |         50        0.19       99.38
+12     pensionista/hu√©sped |          5        0.02       99.40
 13        otro no pariente |        159        0.60      100.00
 */
 
@@ -134,7 +134,7 @@ s3p7. Estado conyugal
 1 Unido(a)
 2 Casado(a)
 3 Separado(a) de matrimonio
-4 Separado(a) de uniÛn
+4 Separado(a) de uni√≥n
 5 Divorciado(a)	
 6 Viudo(a)	
 7 Soltero(a)
@@ -295,18 +295,18 @@ label var tiempoparc_ci "Trabajan menos de 30 hs semanales y no quieren trabajar
 *	ocupa_ci
 ******************************
 /*
-s7-p14.CÛdigo de ocupaciÛn del primer trabajo (CIUOñ88)
+s7-p14.C√≥digo de ocupaci√≥n del primer trabajo (CIUO‚Äì88)
 11 Miembros del poder ejecutivo y legislat	
 12 Directores de empresas	
 13 Gerentes de empresas	
-21 Profesionales de las ciencias fÌsicas,	
-22 Profesionales de las ciencias biolÛgica	
-23 Profesionales de la enseÒanza	
-24 Otros profesionales cientÌficos e intel	
-31 TÈcnicos y profesionales de nivel medio	
-32 TÈcnicos y profesionales de nivel medio	
+21 Profesionales de las ciencias f√≠sicas,	
+22 Profesionales de las ciencias biol√≥gica	
+23 Profesionales de la ense√±anza	
+24 Otros profesionales cient√≠ficos e intel	
+31 T√©cnicos y profesionales de nivel medio	
+32 T√©cnicos y profesionales de nivel medio	
 33 Maestros e instructores de nivel medio	
-34 Otros tÈcnicos y profesionales de nivel	
+34 Otros t√©cnicos y profesionales de nivel	
 41 Oficinistas	
 42 Empleados en trato directo con el publi	
 43 Jefes y supervisores en actividades adm	
@@ -315,15 +315,15 @@ s7-p14.CÛdigo de ocupaciÛn del primer trabajo (CIUOñ88)
 61 Trabajadores de explotaciones agropecua	
 62 Capataces de explotaciones agropecuaria	
 71 Trabajadores de las industrias extracti	
-72 Trabajadores de la industria metal˙rgic	
-73 Mec·nicos de precisiÛn, ceramistas y ar	
+72 Trabajadores de la industria metal√∫rgic	
+73 Mec√°nicos de precisi√≥n, ceramistas y ar	
 74 Trabajadores de la industria de la alim	
 75 Jefes y encargados en las industrias ex	
 81 Operadores de instalaciones fijas y afi	
 82 Operadores de maquinas y montadores	
-83 Conductores de vehÌculos y operadores d	
+83 Conductores de veh√≠culos y operadores d	
 91 Vendedores ambulantes y trabajadores de	
-92 Obreros y jornaleros de la minerÌa, la	
+92 Obreros y jornaleros de la miner√≠a, la	
 */			
 
 gen labor = p713a
@@ -348,60 +348,60 @@ label values ocupa_ci ocupa_ci
 ******************************
 
 /*
-1	Agricultura, ganaderÌa, caza y activida
-2	Silvicultura, ExtracciÛn de madera y ac
-5	Pesca, acuicultura, explotaciÛn de cria
-13	ExtracciÛn de minerales metalÌferos
-14	ExplotaciÛn de otras minas y canteras
-15	ElaboraciÛn de productos alimenticios y
-17	FabricaciÛn de productos textiles
-18	FabricaciÛn de prendas de vestir; adobo
-19	Curtido y adobo de cueros; fabricaciÛn
-20	ProducciÛn de madera y fabricaciÛn de p
-21	FabricaciÛn de papel y productos de pap
-22	Actividades de ediciÛn e impresiÛn y de
-23	FabricaciÛn de coque, productos de la r
-24	FabricaciÛn de sustancias y productos q
-25	FabricaciÛn de productos de caucho y de
-26	FabricaciÛn de otros productos minerale
-27	FabricaciÛn de metales comunes
-28	FabricaciÛn de productos elaborados de
-29	FabricaciÛn de maquinaria y equipo, n.c
-31	FabricaciÛn de maquinaria y aparatos el
-32	FabricaciÛn de equipo y aparatos de rad
-33	FabricaciÛn de instrumentos mÈdicos, Ûp
-34	FabricaciÛn de vehÌculos automotores; r
-35	FabricaciÛn de otros tipos de equipo de
-36	FabricaciÛn de muebles; industrias manu
+1	Agricultura, ganader√≠a, caza y activida
+2	Silvicultura, Extracci√≥n de madera y ac
+5	Pesca, acuicultura, explotaci√≥n de cria
+13	Extracci√≥n de minerales metal√≠feros
+14	Explotaci√≥n de otras minas y canteras
+15	Elaboraci√≥n de productos alimenticios y
+17	Fabricaci√≥n de productos textiles
+18	Fabricaci√≥n de prendas de vestir; adobo
+19	Curtido y adobo de cueros; fabricaci√≥n
+20	Producci√≥n de madera y fabricaci√≥n de p
+21	Fabricaci√≥n de papel y productos de pap
+22	Actividades de edici√≥n e impresi√≥n y de
+23	Fabricaci√≥n de coque, productos de la r
+24	Fabricaci√≥n de sustancias y productos q
+25	Fabricaci√≥n de productos de caucho y de
+26	Fabricaci√≥n de otros productos minerale
+27	Fabricaci√≥n de metales comunes
+28	Fabricaci√≥n de productos elaborados de
+29	Fabricaci√≥n de maquinaria y equipo, n.c
+31	Fabricaci√≥n de maquinaria y aparatos el
+32	Fabricaci√≥n de equipo y aparatos de rad
+33	Fabricaci√≥n de instrumentos m√©dicos, √≥p
+34	Fabricaci√≥n de veh√≠culos automotores; r
+35	Fabricaci√≥n de otros tipos de equipo de
+36	Fabricaci√≥n de muebles; industrias manu
 37	Reciclamiento
 40	Suministro de electricidad, gas y agua
-41	CaptaciÛn, depuraciÛn y distribuciÛn de
-45	ConstrucciÛn
-51	Comercio al por mayor y en comisiÛn
-52	Comercio al por menor; reparaciÛn de ef
+41	Captaci√≥n, depuraci√≥n y distribuci√≥n de
+45	Construcci√≥n
+51	Comercio al por mayor y en comisi√≥n
+52	Comercio al por menor; reparaci√≥n de ef
 53	Comercio al por mayor en zonas francas
 55	Hoteles y Restaurantes
-60	Transporte por vÌa terrestre; transport
-61	Transporte por vÌa acu·tica
-62	Transporte por vÌa aÈrea
+60	Transporte por v√≠a terrestre; transport
+61	Transporte por v√≠a acu√°tica
+62	Transporte por v√≠a a√©rea
 63	Actividades de transporte complementari
 64	Correo y telecomunicaciones
-65	IntermediaciÛn Financiera, excepto la f
+65	Intermediaci√≥n Financiera, excepto la f
 66	Financiamiento de planes de seguro de p
 67	Actividades auxiliares de la intermedia
 70	Actividades inmobiliarias y asesoramien
 71	Alquiler de maquinaria y equipo sin ope
-72	Inform·tica y actividades conexas
-73	InvestigaciÛn  y desarrollo
+72	Inform√°tica y actividades conexas
+73	Investigaci√≥n  y desarrollo
 74	Otras actividades empresariales
-75	AdministraciÛn p˙blica y defensa; plane
-80	EnseÒanza
+75	Administraci√≥n p√∫blica y defensa; plane
+80	Ense√±anza
 85	Actividades de servicios sociales y de
-90	EliminaciÛn de desperdicios y de aguas
+90	Eliminaci√≥n de desperdicios y de aguas
 91	Actividades de asociaciones, n.c.p.
 92	Actividades de esparcimiento y activida
 93	Otras actividades de servicio
-95	Hogares privados con servicio domÈstico
+95	Hogares privados con servicio dom√©stico
 98	Organizaciones y organos extraterritori
 */
 
@@ -419,7 +419,7 @@ replace rama_ci=9 if rama>=75 & rama<=99
 drop rama
 
 label var rama_ci "Rama actividad principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÛn de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÛn" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotaci√≥n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcci√≥n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 
@@ -430,12 +430,12 @@ label values rama_ci rama_ci
 1                   empleado del gobierno |      1,371       13.87       13.87
 2      empleado de la autoridad del canal |         29        0.29       14.17
 3          empleado de la empresa privada |      3,310       33.50       47.66
-4                        jornalero o peÛn |        615        6.22       53.89
-5                          dueÒo o patrÛn |        387        3.92       57.80
+4                        jornalero o pe√≥n |        615        6.22       53.89
+5                          due√±o o patr√≥n |        387        3.92       57.80
 6  trabajador independiente o en su finca |      2,760       27.93       85.73
 7 ayudante o trabajador familiar sin pago |        806        8.16       93.89
 8 trabaj. sin pago en sitio distinto a su |        104        1.05       94.94
-9                  empleada/o domÈstica/o |        500        5.06      100.00
+9                  empleada/o dom√©stica/o |        500        5.06      100.00
 */
 
 
@@ -526,14 +526,14 @@ drop a m
 
 /* frecuencia ingreso independientes (yindep):
 0	0
-1	DÌa
+1	D√≠a
 2	Semana
 3	Quincena
 4	Mes
 5	Trimestre
 6	Semestre
 7	Cosecha
-8	AÒo
+8	A√±o
 9	Otra
 99	99
 */
@@ -764,7 +764,7 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ******************************************************************************
 
 /*
-1	Acueducto p˙blico
+1	Acueducto p√∫blico
 2	Acueducto de la comunidad
 3	Acueducto particular
 4	Pozo sanitario
@@ -796,9 +796,9 @@ replace aguamala_ch = 1 if v19>=4 & v19<=6
 gen aguamide_ch=.
 
 /*
-1	ElÈctricidad de ELEKTRA O EDEMET EDECHI
-2	ElÈctrico de la Comunidad
-3	ElÈctricidad del Municipio
+1	El√©ctricidad de ELEKTRA O EDEMET EDECHI
+2	El√©ctrico de la Comunidad
+3	El√©ctricidad del Municipio
 4	Electricidad propia
 5	Electricidad de particulares
 6	Querosin o diesel, gas
@@ -816,7 +816,7 @@ replace luzmide_ch = 0 if v36b == 9998 | v36b == 0
 
 /*
 1	Gas
-2	LeÒa
+2	Le√±a
 3	Electricidad
 4	No cocina
 5	Otro
@@ -828,7 +828,7 @@ replace combust_ch = 0 if v38 == 2 | v38 >= 4
 
 /*
 1	Conectado a alcantarillado sanitario
-2	Conectado a tanque sÈptico
+2	Conectado a tanque s√©ptico
 3	De hueco o letrina
 4	No tiene
 */
@@ -852,7 +852,7 @@ replace des1_ch = 0 if v29 == 4
 
 /*
 1	Concreto / cemento
-2	Mosaico, ladrillo, granito, m·rmol
+2	Mosaico, ladrillo, granito, m√°rmol
 3	Madera
 4	Tierra / arena
 5	Otros materiales
@@ -868,7 +868,7 @@ replace piso_ch = 0 if v04==4
 2	Madera
 3	Quincha / adobe
 4	Metal
-5	CaÒa, paja, penca, palos
+5	Ca√±a, paja, penca, palos
 6	Sin paredes
 7	Otros materiales
 */
@@ -895,11 +895,11 @@ replace techo_ch = 0 if v03 == 6
 replace techo_ch = 2 if v03 == 7
 
 /*
-1	Servicio de vehÌculos o carro del Munic
-2	Servicio de vehÌculos particulares
+1	Servicio de veh√≠culos o carro del Munic
+2	Servicio de veh√≠culos particulares
 3	La botan a otros lotes
 4	La botan / tiran dentro del patio
-5	La botan / tiran al rÌo / quebrada / ma
+5	La botan / tiran al r√≠o / quebrada / ma
 6	La queman
 7	La entierran
 8	Otro
@@ -983,8 +983,8 @@ replace viviprop_ch = 3 if v05 >= 4
 2	Derecho posesorio
 3	Recibo o factura
 4	Escritura sin registrar
-5	Escritura en tr·mite
-6	Escritura o tÌtulo registrado
+5	Escritura en tr√°mite
+6	Escritura o t√≠tulo registrado
 */
 
 gen vivitit_ch=.
@@ -1119,7 +1119,7 @@ label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 ******************************
 gen asiste_ci=(p520==1)
 replace asiste_ci=. if p520==.
-label var asiste "Personas que actualmente asisten o estan matriculados a centros de enseÒanza"
+label var asiste "Personas que actualmente asisten o estan matriculados a centros de ense√±anza"
 
 ******************************
 *	pqnoasis_ci_ci
@@ -1128,15 +1128,15 @@ label var asiste "Personas que actualmente asisten o estan matriculados a centro
 1	Edad
 2	Falta de dinero
 3	Trabajo
-4	Labores domÈsticas
-5	TerminÛ estudios
+4	Labores dom√©sticas
+5	Termin√≥ estudios
 6	No le interesa
 7	Enfermedad
 8	Distancia / transporte
 9	Embarazo
 10	Falta de cupo
 11	Requiere plantel especial
-12	TenÌa que repetir
+12	Ten√≠a que repetir
 13	No hay centro educativo
 14	Otro
 */
@@ -1158,7 +1158,7 @@ replace pqnoasis1_ci = 7 if p521==1
 replace pqnoasis1_ci = 8 if p521==8 | p521==13
 replace pqnoasis1_ci = 9 if p521==10  | p521==11 | p521==12  | p521==14
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ******************************
@@ -1174,7 +1174,7 @@ sum  yindep -  ynlm_ci
 ******************
 * RAZA
 *****************
-*ModificaciÛn Mayra S·enz 10/20/2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+*Modificaci√≥n Mayra S√°enz 10/20/2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 g raza_ci =.
 
@@ -1188,14 +1188,14 @@ by idh_ch, sort: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (p002 ==3 | p002==5))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros" 4 "Afro-indigena"
+label define raza_idioma_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros" 4 "Afro-indigena"
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo" 
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1
-label define id_ind_ci 1 "IndÌgena" 0 "Otros" 
+label define id_ind_ci 1 "Ind√≠gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci "Indigena" 
 
@@ -1236,15 +1236,15 @@ g edupub_ci=.
 g  tecnica_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1268,7 +1268,7 @@ compress
 
 
 
-saveold "Z:\harmonized\PAN\ENV\data_arm\PAN2003m8_m11_BID.dta", replace
+saveold "${surveysFolder}\harmonized\PAN\ENV\data_arm\PAN2003m8_m11_BID.dta", replace
 
 
 

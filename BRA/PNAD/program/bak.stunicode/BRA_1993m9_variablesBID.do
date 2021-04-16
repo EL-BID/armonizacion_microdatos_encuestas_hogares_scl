@@ -1,17 +1,17 @@
-* (versiÛn Stata 13)
+* (versi√≥n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNAD
@@ -27,14 +27,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Brasil
+Pa√≠s: Brasil
 Encuesta: PNAD
 Round: m9
 Autores: Yanira Oviedo
-GeneraciÛn nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-ModificaciÛn 2014: Mayra S·enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-⁄ltima versiÛn: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha ˙ltima modificaciÛn: octubre 2013
+Generaci√≥n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+Modificaci√≥n 2014: Mayra S√°enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+√öltima versi√≥n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha √∫ltima modificaci√≥n: octubre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -47,47 +47,47 @@ use `base_in', clear
 *YL: generacion "region_c" proyecto maps America.		
 gen region_c = uf
 label define region_c ///
-11 "RondÙnia" ///
+11 "Rond√¥nia" ///
 12 "Acre" ///
 13 "Amazonas" ///
 14 "Roraima" ///
-15 "Par·" ///
-16 "Amap·" ///
+15 "Par√°" ///
+16 "Amap√°" ///
 17 "Tocantins" ///
-21 "Maranh„o" ///
-22 "PiauÌ" ///
-23 "Cear·" ///
+21 "Maranh√£o" ///
+22 "Piau√≠" ///
+23 "Cear√°" ///
 24 "Rio Grande do Norte" ///
-25 "ParaÌba" ///
+25 "Para√≠ba" ///
 26 "Pernambuco" ///
 27 "Alagoas" ///
 28 "Sergipe" ///
 29 "Bahia" ///
 31 "Minas Gerais" ///
-32 "EspÌrito Santo" ///
+32 "Esp√≠rito Santo" ///
 33 "Rio de Janeiro" ///
-35 "S„o Paulo" ///
-41 "Paran·" ///
+35 "S√£o Paulo" ///
+41 "Paran√°" ///
 42 "Santa Catarina" ///
 43 "Rio Grande do Sul" ///
 50 "Mato Grosso do Sul" ///
 51 "Mato Grosso" ///
-52 "Goi·s" ///
+52 "Goi√°s" ///
 53 "Distrito Federal"
 label value region_c region_c
 
 ************************
-*** region seg˙n BID ***
+*** region seg√∫n BID ***
 ************************
 gen region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 /********************************/
 /*    vARIABLES DEL HOGAR	*/
 /********************************/
-*El idh est· a nivel de familia no de unidade domiciliar
+*El idh est√° a nivel de familia no de unidade domiciliar
 egen idh_ch=group(uf control v0103 v0403)
 sort idh_ch
 by idh_ch: gen idp_ci=_n
@@ -132,12 +132,12 @@ replace des1_ch=. if v0217==9
 *************
 ***des2_ch***
 *************
-*El indicador deberÌa ser una reclasificaciÛn de des1_ch, por ello se cambia aquÌ: 
+*El indicador deber√≠a ser una reclasificaci√≥n de des1_ch, por ello se cambia aqu√≠: 
 gen des2_ch=0 if des1_ch==0
 replace des2_ch=1 if des1_ch==1 | des1_ch==2 
 replace des2_ch=2 if des1_ch==3
-label var des2_ch "Tipo de desague sin incluir definiciÛn MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, c·mara sÈptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definici√≥n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, c√°mara s√©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -147,24 +147,24 @@ gen piso_ch=.
 **************
 ***pared_ch***
 **************
-* Se cambia la construcciÛn de la variable incluyendo: tapia sin revestir y de paja 
+* Se cambia la construcci√≥n de la variable incluyendo: tapia sin revestir y de paja 
 gen pared_ch=0
 replace pared_ch=1 if v0203==1 | v0203==2 |v0203==4
 replace pared_ch=2 if v0203==6 | v0203==3 |v0203==5
 replace pared_ch=. if v0203==9
-label var pared_ch "Materiales de construcciÛn de las paredes"
+label var pared_ch "Materiales de construcci√≥n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
 label val pared_ch pared_ch
 
 **************
 ***techo_ch***
 **************
-*No se incluÌan los techos de paja
+*No se inclu√≠an los techos de paja
 gen techo_ch=0
 replace techo_ch=1 if v0204<=5
 replace techo_ch=2 if v0204==7 |v0204==6
 replace techo_ch=. if v0204==9
-label var techo_ch "Materiales de construcciÛn del techo"
+label var techo_ch "Materiales de construcci√≥n del techo"
 
 gen resid_ch=0 if v0218==1 | v0218==2
 replace resid_ch=1 if v0218==3
@@ -228,7 +228,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 /*COR OU RACA v0404
 2 BRANCA
@@ -242,7 +242,7 @@ gen raza_ci=.
 replace raza_ci= 1 if  (v0404 ==0)
 replace raza_ci= 2 if  (v0404 ==4 | v0404 ==8)
 replace raza_ci= 3 if (v0404==2 | v0404==6 | v0404== 9) & raza_ci==.
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -251,7 +251,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "IndÌgena" 0 "Otros" 
+label define id_ind_ci 1 "Ind√≠gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -267,7 +267,7 @@ gen sexo_ci=1 if v0302==2
 replace sexo_ci=2 if v0302==4
 gen edad_ci=v8005
 replace edad_ci=. if edad_ci==999
-capture gen civil_ci=1 if v1001==3 & v1003==3 /*EN ALGUNOS A—OS NO ESTA EL MODULO DE NUPCIALIDAD!*/
+capture gen civil_ci=1 if v1001==3 & v1003==3 /*EN ALGUNOS A√ëOS NO ESTA EL MODULO DE NUPCIALIDAD!*/
 capture replace civil_ci=2 if v1001==1
 capture replace civil_ci=3 if v1004==2
 capture replace civil_ci=4 if v1004==4
@@ -307,23 +307,23 @@ replace condocup_ci=1 if (v9001==1 | v9002==2 | v9003==1 | v9004==2)
 replace condocup_ci=2 if  v9004==4 & (v9115==1 & (v9119>=1 & v9119<=8)) /*tomaron alguna providencia en la semana de referencia*/
 replace condocup_ci=3 if  condocup_ci!=1 & condocup_ci!=2
 replace condocup_ci=4 if edad_ci<10
-label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 aÒos"
+label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 a√±os"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 
 /*
 Definiciones:
-* PopulaÁ„o ocupada: Aquelas pessoas que, num determinado perÌodo de referÍncia,
-trabalharam ou tinham trabalho mas n„o trabalharam (por exemplo, pessoas em fÈrias).
+* Popula√ß√£o ocupada: Aquelas pessoas que, num determinado per√≠odo de refer√™ncia,
+trabalharam ou tinham trabalho mas n√£o trabalharam (por exemplo, pessoas em f√©rias).
 
-* PopulaÁ„o Desocupada: aquelas pessoas que n„o tinham trababalho, num determinado 
-perÌodo de referÍncia, mas estavam dispostas a trabalhar, e que, para isso, tomaram
-alguma providÍncia efetiva (consultando pessoas, jornais, etc.).
+* Popula√ß√£o Desocupada: aquelas pessoas que n√£o tinham trababalho, num determinado 
+per√≠odo de refer√™ncia, mas estavam dispostas a trabalhar, e que, para isso, tomaram
+alguma provid√™ncia efetiva (consultando pessoas, jornais, etc.).
 
-PopulaÁ„o N„o Economicamente Ativa: pessoas n„o classificadas como ocupadas ou 
+Popula√ß√£o N√£o Economicamente Ativa: pessoas n√£o classificadas como ocupadas ou 
 desocupadas
 
-PET: >=10 aÒos de edad
+PET: >=10 a√±os de edad
 */
 
 ****************
@@ -355,7 +355,7 @@ label var cotizaotros_ci "Cotizante a la Seguridad Social por otro trabajos o po
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "instituciÛn a la cual cotiza"
+label var instcot_ci "instituci√≥n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -375,7 +375,7 @@ replace `var'=. if `var'>=999999 | `var'==-1  | `var'<0
 }
 
 gen pension_ci=0 
-replace pension_ci=1 if (v1252>0 & v1252!=.) | (v1255>0 & v1255!=.) | (v1258>0 & v1258!=.) | (v1261>0 & v1261!=.) /*A todas las per mayores de diez aÒos*/
+replace pension_ci=1 if (v1252>0 & v1252!=.) | (v1255>0 & v1255!=.) | (v1258>0 & v1258!=.) | (v1261>0 & v1261!=.) /*A todas las per mayores de diez a√±os*/
 label var pension_ci "1=Recibe pension contributiva"
  
 *************
@@ -425,7 +425,7 @@ replace region=4	if uf>=41 & uf<=43
 replace region=5	if uf>=50 & uf<=53
 label define region 1"norte" 2"Nordeste" 3"Sudeste/leste" 4"sul" 5"Centro_Oeste"
 label value region region
-label var region "distribuciÛn regional del paÌs"
+label var region "distribuci√≥n regional del pa√≠s"
 
 
 gen area=.
@@ -458,12 +458,12 @@ replace lp_ci=6733.40964735698	if uf==35	& area==1		/*Sao paulo-urbano*/
 replace lp_ci=5496.66093568145	if uf==35	& area==2		 /*Sao paulo-rural*/
 replace lp_ci=6550.1876147929	if uf==53	& area==3		/*Distrito federal-metropolitana*/
 replace lp_ci=8428.21343405326	if region==4	& area==3	& uf==43	/*Porto alegre: sur-metropolitana-rio grande de sul*/
-replace lp_ci=6962.43718515778	if region==4	& area==3	& uf==41	/*curitiba:     sur-metropolitana-paran·*/
-replace lp_ci=6000.52152290924	if region==2	& area==3	& uf==23	/*Fortaleza:    noreste-metropolitana-cear·*/
+replace lp_ci=6962.43718515778	if region==4	& area==3	& uf==41	/*curitiba:     sur-metropolitana-paran√°*/
+replace lp_ci=6000.52152290924	if region==2	& area==3	& uf==23	/*Fortaleza:    noreste-metropolitana-cear√°*/
 replace lp_ci=7878.5473421696	if region==2	& area==3	& uf==26	/*recife:       noreste-metropolitana-pernambuco*/
 replace lp_ci=7420.4922607594	if region==2	& area==3	& uf==29	/*salvador:     noreste-metropolitana-bahia*/
 replace lp_ci=5908.9105066272	if region==3	& area==3	& uf==31	/*belo horizonte:sureste-metropolitana-minas gerais*/
-replace lp_ci=6733.40964735698	if region==1	& area==3	& uf==15	/*belem: noreste-metropolitana-par·*/
+replace lp_ci=6733.40964735698	if region==1	& area==3	& uf==15	/*belem: noreste-metropolitana-par√°*/
 label var lp_ci "Linea de pobreza oficial del pais"
 
 ***********
@@ -488,12 +488,12 @@ replace lpe_ci=3366.70482367849	if uf==35	& area==1		/*Sao paulo-urbano*/
 replace lpe_ci=2748.33046784073	if uf==35	& area==2		 /*Sao paulo-rural*/
 replace lpe_ci=3275.09380739645	if uf==53	& area==3		/*Distrito federal-metropolitana*/
 replace lpe_ci=4214.10671702663	if region==4	& area==3	& uf==43	/*Porto alegre: sur-metropolitana-rio grande de sul*/
-replace lpe_ci=3481.21859257889	if region==4	& area==3	& uf==41	/*curitiba:     sur-metropolitana-paran·*/
-replace lpe_ci=3000.26076145462	if region==2	& area==3	& uf==23	/*Fortaleza:    noreste-metropolitana-cear·*/
+replace lpe_ci=3481.21859257889	if region==4	& area==3	& uf==41	/*curitiba:     sur-metropolitana-paran√°*/
+replace lpe_ci=3000.26076145462	if region==2	& area==3	& uf==23	/*Fortaleza:    noreste-metropolitana-cear√°*/
 replace lpe_ci=3939.2736710848	if region==2	& area==3	& uf==26	/*recife:       noreste-metropolitana-pernambuco*/
 replace lpe_ci=3710.2461303797	if region==2	& area==3	& uf==29	/*salvador:     noreste-metropolitana-bahia*/
 replace lpe_ci=2954.4552533136	if region==3	& area==3	& uf==31	/*belo horizonte:sureste-metropolitana-minas gerais*/
-replace lpe_ci=3366.70482367849	if region==1	& area==3	& uf==15	/*belem: noreste-metropolitana-par·*/
+replace lpe_ci=3366.70482367849	if region==1	& area==3	& uf==15	/*belem: noreste-metropolitana-par√°*/
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 *************
@@ -505,7 +505,7 @@ label var salmm_ci "Salario minimo legal"
 *************
 ***tecnica_ci**
 *************
-gen tecnica_ci=. /*No se puede identificar educaciÛn tÈcnica superior*/
+gen tecnica_ci=. /*No se puede identificar educaci√≥n t√©cnica superior*/
 label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
@@ -549,18 +549,18 @@ replace rama_ci=7 if (v9907>=471 & v9907<=477) | (v9907>=481 & v9907<=482)|v9907
 replace rama_ci=8 if (v9907>=451 & v9907<=453) | (v9907>=461 & v9907<=464)
 replace rama_ci=9 if (v9907>=610 & v9907<=619) | (v9907>=621 & v9907<=624)|(v9907>=631 & v9907<=632) | (v9907>=711 & v9907<=717) | (v9907>=721 & v9907<=727) | (v9907==801)| (v9907>=521 & v9907<=582) | (v9907>=584 & v9907<=610) | v9907==354
 replace rama_ci=. if emp_ci==0
-label define rama_ci 1 "Agricultura, Caza, Civicultura y Pesca" 2 "ExplotaciÛn de minas y Canteras" 3 "Industrias Manufactureras" 4 "Electricidad, Gas y Agua" 5 "ConstrucciÛn" 6 "Comercio al por mayor y menor, Restaurantes y Hoteles" 7 "Transporte y Almacenamiento" 8 "Establecimientos Financieros, Seguros y Bienes Inmuebles" 9 "Servicios Sociales, Comunales y personales" 
+label define rama_ci 1 "Agricultura, Caza, Civicultura y Pesca" 2 "Explotaci√≥n de minas y Canteras" 3 "Industrias Manufactureras" 4 "Electricidad, Gas y Agua" 5 "Construcci√≥n" 6 "Comercio al por mayor y menor, Restaurantes y Hoteles" 7 "Transporte y Almacenamiento" 8 "Establecimientos Financieros, Seguros y Bienes Inmuebles" 9 "Servicios Sociales, Comunales y personales" 
 label values rama_ci rama_ci
 
 
-/*EN TODOS LOS A—OS, EXCEPTO EN EL '96, '97 Y '01 SE DESCRIBEN LAS CONDICIONES LABORALES DE LOS NI—OS DE ENTRE 5 Y 9 A—OS.
-ESTO QUIERE DECIR QUE HAY QUE TENER EN CUENTA QUE EN ESOS A—OS LOS INGRESOS DE ESTOS NI—OS vAN A vALER 0, CUANDO EN OTROS 
-A—OS TIENEN UN vALOR POSITIvO. PARA MANTENER LA COMPARABILIDAD ACROSS TIME, SOLO SE DEBEN AGARRAR LOS INGRESOS DE LOS 
-MAYORES DE 10 A—OS, A MENOS QUE SE vAYAN A EXCLUIR LOS A—OS 1996 Y 1997! ==>> CREAMOS DOS vARIABLES DE INGRESO, UNA QUE LOS 
+/*EN TODOS LOS A√ëOS, EXCEPTO EN EL '96, '97 Y '01 SE DESCRIBEN LAS CONDICIONES LABORALES DE LOS NI√ëOS DE ENTRE 5 Y 9 A√ëOS.
+ESTO QUIERE DECIR QUE HAY QUE TENER EN CUENTA QUE EN ESOS A√ëOS LOS INGRESOS DE ESTOS NI√ëOS vAN A vALER 0, CUANDO EN OTROS 
+A√ëOS TIENEN UN vALOR POSITIvO. PARA MANTENER LA COMPARABILIDAD ACROSS TIME, SOLO SE DEBEN AGARRAR LOS INGRESOS DE LOS 
+MAYORES DE 10 A√ëOS, A MENOS QUE SE vAYAN A EXCLUIR LOS A√ëOS 1996 Y 1997! ==>> CREAMOS DOS vARIABLES DE INGRESO, UNA QUE LOS 
 TIENE EN CUENTA (ej: ylmprik_ci) Y OTRA QUE NO (ylmpri_ci original)*/ 
 
 gen horaspri_ci=v9058
-replace horaspri_ci=. if horaspri_ci==99 |horaspri_ci==-1 | v4714!=1 /*Necesitamos que sÛlo se fije en los empleados "adultos"*/
+replace horaspri_ci=. if horaspri_ci==99 |horaspri_ci==-1 | v4714!=1 /*Necesitamos que s√≥lo se fije en los empleados "adultos"*/
 gen horasprik_ci=horaspri_ci
 capture replace horasprik_ci=v0713 if edad_ci>=5 & edad_ci<=9
 replace horasprik_ci=. if edad_ci>=5 & edad_ci<=9 & (horasprik_ci==99 | horasprik_ci==-1| emp_ci==0)
@@ -581,7 +581,7 @@ replace v9101 = . if v9101 == -1 | v9101 == 99
 replace v9105 = . if v9105 == -1 | v9105 == 99
 
 egen horastot_ci = rsum(v9058 v9101 v9105) 
-replace horastot_ci = . if  (horaspri_ci==. & v9101==. & v9105==.) | v4714!=1 /*Necesitamos que sÛlo se fije en los empleados "adultos"*/
+replace horastot_ci = . if  (horaspri_ci==. & v9101==. & v9105==.) | v4714!=1 /*Necesitamos que s√≥lo se fije en los empleados "adultos"*/
 
 replace horastot_ci = . if horastot_ci < 0
 replace horastot_ci = . if horastot_ci > 150
@@ -603,9 +603,9 @@ replace ylnmprik_ci=. if v9535==-1 | v9535>=999999 | emp_ci==0
 capture replace ylnmprik_ci=v7125 if edad_ci>=5 & edad_ci<=9
 capture replace ylnmprik_ci=. if edad_ci>=5 & edad_ci<=9 & (v7125==-1 | v7125>=999999 | emp_ci==0)
 
-/*TODAS LAS vARIABLES "SECUNDARIAS": ylmsec_ci, ylnmsec_ci, ylmotros_ci, ylnmotros_ci Y durades_ci ESTAN CREADAS S”LO PARA 
-LOS MAYORES DE 10 A—OS. POR LO TANTO LAS vARIABLES AGREGADAS CON SUFIJO k EN REALIDAD S”LO SE REFIEREN A LA ACTIvIDAD 
-PRINCIPAL DE LOS NI—OS*/
+/*TODAS LAS vARIABLES "SECUNDARIAS": ylmsec_ci, ylnmsec_ci, ylmotros_ci, ylnmotros_ci Y durades_ci ESTAN CREADAS S√ìLO PARA 
+LOS MAYORES DE 10 A√ëOS. POR LO TANTO LAS vARIABLES AGREGADAS CON SUFIJO k EN REALIDAD S√ìLO SE REFIEREN A LA ACTIvIDAD 
+PRINCIPAL DE LOS NI√ëOS*/
 
 gen ylmsec_ci=v9982 if edad_ci>=10
 replace ylmsec_ci=. if v9982==-1 | v9982>=999999 | v4714!=1
@@ -678,7 +678,7 @@ gen remesas_ch=.
 replace v1091=. if v1091==99 | v1091==-1
 replace v1092=. if v1092==99 | v1092==-1
 
-*Yanira Oviedo, Junio 2010: Se estaba multiplicando por 12, pero al ser un valor anual, deberÌa dividirse 
+*Yanira Oviedo, Junio 2010: Se estaba multiplicando por 12, pero al ser un valor anual, deber√≠a dividirse 
 *gen aux1=v1091*12
 /*
 gen aux1=v1091/12
@@ -733,10 +733,10 @@ replace firmapeq=0 if (v9008==9 | v9008==10) & ((v9016==2 & (v9017==7 | v9017==8
 replace firmapeq=1 if (v9008>=11 & v9008<=13) | (v9029>=5 & v9029<=7) /*Trabajador No remunerado*/
 replace firmapeq=1 if v9029==1 & (v9032==2 & v9040<=4)  /*Empleado NO Agricola*/
 replace firmapeq=0 if v9029==1 & (v9032==2 & (v9040==6 | v9040==8)) /*Empleado NO Agricola*/
-/*Los empleados NO Agricolas que trabajan en el sector PUBLICO o que son empleados domesticos no tienen tamaÒo de firma!*/
+/*Los empleados NO Agricolas que trabajan en el sector PUBLICO o que son empleados domesticos no tienen tama√±o de firma!*/
 replace firmapeq=1 if v9029==3 & (v9049==3 | (v9049==1 | v9050<=6))/*Cuenta Propia NO Agricola*/
 replace firmapeq=0 if v9029==3 & (v9049==1 | (v9050==8 | v9050==0))/*Cuenta Propia NO Agricola*/
-/*Que pasa con los trabajadores no remunerados? Se incluyen en tamaÒo de firma?*/
+/*Que pasa con los trabajadores no remunerados? Se incluyen en tama√±o de firma?*/
 
 ren firmapeq firmapeq_ci
 *cambio introducido el 06/13/05*
@@ -752,8 +752,8 @@ replace spublico_ci=. if v9032==9
 					****************************
 
 *------------------------------------------------------------------------------------------------------------------
-*YANIRA, Ag 2010: SE HACE UNA CORRECI”N SOBRE LAS vARIABLES DE EDUCACI”N. PUES LA vARIABLE DE INSUMO PARA CONSTRUIR 
-*A—OS DE EDUCACI”N NO SE TUvO EN CUENTA UN CAMBIO EN LAS OPCIONES DE LAS vARIABLES INSUMO. LO CUAL GENER” UN ERROR
+*YANIRA, Ag 2010: SE HACE UNA CORRECI√ìN SOBRE LAS vARIABLES DE EDUCACI√ìN. PUES LA vARIABLE DE INSUMO PARA CONSTRUIR 
+*A√ëOS DE EDUCACI√ìN NO SE TUvO EN CUENTA UN CAMBIO EN LAS OPCIONES DE LAS vARIABLES INSUMO. LO CUAL GENER√ì UN ERROR
 *------------------------------------------------------------------------------------------------------------------
 
 
@@ -762,7 +762,7 @@ replace spublico_ci=. if v9032==9
 **************
 
 gen asiste_ci=(v0602==2)
-label var asiste_ci "Personas que actualmente asisten a un centro de enseÒanza"
+label var asiste_ci "Personas que actualmente asisten a un centro de ense√±anza"
 
 
 *************
@@ -776,19 +776,19 @@ label var aedu_ci "Anios de educacion"
 *PARA LOS QUE NO ASISTEN
 *************************
 
-*Pre-escolar, creche o alfabetizaciÛn de adultos
+*Pre-escolar, creche o alfabetizaci√≥n de adultos
 replace aedu_ci=0 if v0607==9 & asiste_ci==0
 
 	*Sistema antiguo
-*Elementar (prim·rio) - se asume que el m·ximo es 4 - Anteriormente se permitÌa 6 pero no 5
+*Elementar (prim√°rio) - se asume que el m√°ximo es 4 - Anteriormente se permit√≠a 6 pero no 5
 replace aedu_ci=0  if v0607==1 & v0610==. & v0611!=1 & asiste_ci==0
 replace aedu_ci=min(v0610,4) if v0607==1 & v0610>=1 & v0610<=6 & asiste_ci==0
-*Medio 1 ciclo (ginasial, etc) - se asume que el m·ximo es 8
+*Medio 1 ciclo (ginasial, etc) - se asume que el m√°ximo es 8
 replace aedu_ci=min(v0610+4,8) if v0607==2 & v0610>=1 & v0610<=5 & asiste_ci==0
 replace aedu_ci=4  if v0607==2 & v0610==. & v0611!=1 & asiste_ci==0
-*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el m·ximo es 11, pero
-*bajo la lÛgica anterior deberÌan se 12, ya que se permite hasta 4 aÒos adicionales en este nivel
-*Aunque solo es necesario tener 11 aÒos de educaciÛn para completar la secundaria
+*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el m√°ximo es 11, pero
+*bajo la l√≥gica anterior deber√≠an se 12, ya que se permite hasta 4 a√±os adicionales en este nivel
+*Aunque solo es necesario tener 11 a√±os de educaci√≥n para completar la secundaria
 replace aedu_ci=min(v0610+8,12) if v0607==3 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8  if v0607==3 & v0610==. & v0611!=1 & asiste_ci==0
 
@@ -797,7 +797,7 @@ replace aedu_ci=8  if v0607==3 & v0610==. & v0611!=1 & asiste_ci==0
 *Primeiro grau - Bajo este sistema la primaria llega hasta el grado 8
 replace aedu_ci=min(v0610,8) if v0607==4 & v0610>=1 & v0610<=8 & asiste_ci==0
 replace aedu_ci=0  if v0607==4 & v0610==. & v0611!=1 & asiste_ci==0
-*Segundo grau - Secundaria son 4 aÒos m·s
+*Segundo grau - Secundaria son 4 a√±os m√°s
 replace aedu_ci=min(v0610+8,12) if v0607==5 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8 if v0607==5 & v0610==. & v0611!=1 & asiste_ci==0
 
@@ -806,10 +806,10 @@ replace aedu_ci=min(v0610+11,17) if v0607==6 & v0610>=1 & v0610<=8 & asiste_ci==
 replace aedu_ci=11 if v0607==6 & v0610==. & v0611!=1 & asiste_ci==0
 
 *Maestria o doctorado  
-*Para este ciclo no se pregunta el ˙ltimo aÒo aprobado. Por lo tanto se supone que si terminÛ el ciclo 
-*el individuo cuenta con 19 aÒos de educaciÛn (2 aÒos m·s de educaciÛn), si el individuo no terminÛ se le agrega 
-*1 aÒo m·s de eduaciÛn para quedar con 18 ya que si el ˙ltimo ciclo m·s alto alcanzado es postgrado, el individuo 
-*por lo menos tuvo que cursar 1 aÒo en ese nivel
+*Para este ciclo no se pregunta el √∫ltimo a√±o aprobado. Por lo tanto se supone que si termin√≥ el ciclo 
+*el individuo cuenta con 19 a√±os de educaci√≥n (2 a√±os m√°s de educaci√≥n), si el individuo no termin√≥ se le agrega 
+*1 a√±o m√°s de eduaci√≥n para quedar con 18 ya que si el √∫ltimo ciclo m√°s alto alcanzado es postgrado, el individuo 
+*por lo menos tuvo que cursar 1 a√±o en ese nivel
 replace aedu_ci=18 if v0607==7 & v0611==3 & asiste_ci==0
 replace aedu_ci=19 if v0607==7 & v0611==1 & asiste_ci==0
 
@@ -819,13 +819,13 @@ replace aedu_ci=19 if v0607==7 & v0611==1 & asiste_ci==0
 *PARA LOS QUE ASISTEN
 **********************
 
-*Pre-escolar, creche o alfabetizaciÛn de adultos
+*Pre-escolar, creche o alfabetizaci√≥n de adultos
 replace aedu_ci=0 if (v0603==6| v0603==7) & asiste_ci==1
 
-*Regular de 1∫ grau/ Supletivo de 1∫ grau   (se asume que el m·ximo es 8) 
+*Regular de 1¬∫ grau/ Supletivo de 1¬∫ grau   (se asume que el m√°ximo es 8) 
 replace aedu_ci=0  if (v0603==1 | v0603==3) & v0605==. & asiste_ci==1
 replace aedu_ci=min(v0605-1,7) if (v0603==1 | v0603==3) & v0605>=1 & v0605<=8 & asiste_ci==1
-*Regular de 2∫ grau/ Supletivo de 2∫ grau   (se asume que el m·ximo es 4, pero con 3 basta para completar el ciclo)
+*Regular de 2¬∫ grau/ Supletivo de 2¬∫ grau   (se asume que el m√°ximo es 4, pero con 3 basta para completar el ciclo)
 replace aedu_ci=min(v0605+8-1,11) if (v0603==2 | v0603==4) & v0605>=1 & v0605<=4 & asiste_ci==1
 replace aedu_ci=8  if (v0603==2 | v0603==4) & v0605==. & asiste_ci==1
 
@@ -837,10 +837,10 @@ replace aedu_ci=min(v0605+11-1,17) if v0603==5 & v0605>=1 & v0605<=8 & asiste_ci
 replace aedu_ci=11 if v0603==5 & v0605==. & asiste_ci==1
 
 *Maestria o doctorado  
-*Si el ˙ltimo ciclo m·s alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 aÒo en ese nivel
+*Si el √∫ltimo ciclo m√°s alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 a√±o en ese nivel
 replace aedu_ci=18 if v0603==9  & asiste_ci==1
 
-*Se deja sÛlo la informaciÛn de las personas con 5 aÒos o m·s
+*Se deja s√≥lo la informaci√≥n de las personas con 5 a√±os o m√°s
 replace aedu_ci=. if edad_ci<5
 
 
@@ -913,7 +913,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-*La secundaria sÛlo dura 4 aÒos. No puede divirse en ciclos
+*La secundaria s√≥lo dura 4 a√±os. No puede divirse en ciclos
 gen byte edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
@@ -963,13 +963,13 @@ gen pqnoasis1_ci = .
 ***repite_ci***
 ***************
 gen byte repite_ci=.
-label var repite_ci "Personas que han repetido al menos un aÒo o grado"
+label var repite_ci "Personas que han repetido al menos un a√±o o grado"
 
 ***************
 ***edupub_ci***
 ***************
 gen byte edupub_ci=.
-label var  edupub_ci "Personas que asisten a centros de enseÒanza p˙blicos"
+label var  edupub_ci "Personas que asisten a centros de ense√±anza p√∫blicos"
 
 
 
@@ -979,9 +979,9 @@ label var  edupub_ci "Personas que asisten a centros de enseÒanza p˙blicos"
 gen tamemp_ci=1 if v9019==1 | v9019==3 | v9019==5 |v9017==1 | v9017==3 | v9017==5 | v9040==2 | v9040==4 | v9048==2 | v9048==4 | v9048==6 
 replace tamemp_ci=2 if v9019==7 | v9017==7 | v9040==6 | v9048==8
 replace tamemp_ci=3 if v9019==8 | v9017==8 | v9040==8 | v9048==0
-label var  tamemp_ci "TamaÒo de Empresa" 
-label define tamaÒo 1"PequeÒa" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaÒo
+label var  tamemp_ci "Tama√±o de Empresa" 
+label define tama√±o 1"Peque√±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tama√±o
 
 ******************
 ***categoinac_ci**
@@ -990,7 +990,7 @@ gen categoinac_ci=1 if (v9122==2 | v9123==1) & condocup_ci==3
 replace categoinac_ci=2 if v0602==2 & condocup_ci==3
 replace categoinac_ci=3 if v9121==1 & condocup_ci==3
 recode categoinac_ci .=4 if condocup_ci==3
-label var  categoinac_ci "CondiciÛn de Inactividad" 
+label var  categoinac_ci "Condici√≥n de Inactividad" 
 label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
 
@@ -1008,7 +1008,7 @@ gen vivitit_ch=.
 gen compu_ch=.
 gen internet_ch=.
 
-**Cambio de moneda - ModificaciÛn Mayra S·enz Septiembre 2014
+**Cambio de moneda - Modificaci√≥n Mayra S√°enz Septiembre 2014
 
 sum ylmpri_ci nrylmpri_ci tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylm_ci ylnm_ci ynlm_ci ynlnm_ci ylm_ch ylnm_ch ylmnr_ch ynlm_ch ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch ypen_ci ypensub_ci salmm_ci lp_ci lpe_ci vivialq_ch vivialqimp_ch
 
@@ -1022,15 +1022,15 @@ sum ylmpri_ci nrylmpri_ci tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_c
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

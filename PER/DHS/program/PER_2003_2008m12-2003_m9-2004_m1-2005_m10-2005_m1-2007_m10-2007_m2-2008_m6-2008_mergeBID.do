@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *______________________________________________________________________________________________________*
 
 	 * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la 
 	 *posibilidad de utilizar un loop)
-	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
-	 * Se tiene acceso al servidor únicamente al interior del BID.
+	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+	 * Se tiene acceso al servidor Ãºnicamente al interior del BID.
 	 * El servidor contiene las bases de datos MECOVI.
-	 * Las DHS son encuestas cuya población objetivo son las madres de 15-49 años y sus respectivos hijos.
+	 * Las DHS son encuestas cuya poblaciÃ³n objetivo son las madres de 15-49 aÃ±os y sus respectivos hijos.
 *______________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA DHS
@@ -26,18 +26,18 @@ local base_out  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\
                         
 /*______________________________________________________________________________________________________*
 						 BASES DE DATOS DE ENCUESTAS DE SALUD - SOCIOMETRO 
-	País: Perú
+	PaÃ­s: PerÃº
 	Encuesta: DHS
 	Round: m3_m12
-	Versiones anteriores: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+	Versiones anteriores: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 						  Marcela Rubio E-mail: marcelarubio28@gmail.com - mrubio@IADB.ORG
-	Última versión: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
-	Fecha última modificación: Marzo 16, 2015
+	Ãšltima versiÃ³n: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
+	Fecha Ãºltima modificaciÃ³n: Marzo 16, 2015
 									SCL - IADB*/
 *______________________________________________________________________________________________________*
 
 
-*Generación de indicador en la base de madres e hijos
+*GeneraciÃ³n de indicador en la base de madres e hijos
 use "$ruta\survey\PER\DHS\2003_2008\m12-2003_m9-2004_m1-2005_m10-2005_m1-2007_m10-2007_m2-2008_m6-2008\data_orig\Version2\PEBR5ADT.DTA", clear
 sort v001 v002 v003
 sum v001 v002 v003
@@ -103,7 +103,7 @@ label var idhogar1 "Identificador de la madre en el hogar"
 
 
 egen idhogar = concat(v001aux v002aux lninho)
-label var idhogar "Identificador del niño en el hogar"
+label var idhogar "Identificador del niÃ±o en el hogar"
 
 drop z3 z2 z1 lv001 lv002 lv003 v11 v12 v13 v21 v22 v31 v001aux v002aux v003aux lninho
 
@@ -111,7 +111,7 @@ saveold "$ruta\survey\PER\DHS\2003_2008\m12-2003_m9-2004_m1-2005_m10-2005_m1-200
 
 
 
-*Generación de indicador en la base de hogares
+*GeneraciÃ³n de indicador en la base de hogares
 use "$ruta\survey\PER\DHS\2003_2008\m12-2003_m9-2004_m1-2005_m10-2005_m1-2007_m10-2007_m2-2008_m6-2008\data_orig\Version2\PEPR51FL.dta", clear
 sort hv001 hv002 hvidx
 sum hv001 hv002 hvidx
@@ -152,7 +152,7 @@ replace hvidxaux = v31 if hvidxaux ==""
 egen idhogar = concat(hv001aux hv002aux hvidxaux)
 
 
-*Como es base de niños toca pegar sólo con niños
+*Como es base de niÃ±os toca pegar sÃ³lo con niÃ±os
 merge m:m idhogar using "$ruta\survey\PER\DHS\2003_2008\m12-2003_m9-2004_m1-2005_m10-2005_m1-2007_m10-2007_m2-2008_m6-2008\data_orig\Version2\PEBR5ADT_MADRE.DTA"
 
 

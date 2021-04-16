@@ -12,7 +12,7 @@ set mem 1g, perm
 set more off
 
 **Note: this local should be change by the user
-local propiodir = "C:\Users\wb377246\Documents\Julian\LM_W"
+local propiodir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W"
 
 
 *** Declare Global Directory

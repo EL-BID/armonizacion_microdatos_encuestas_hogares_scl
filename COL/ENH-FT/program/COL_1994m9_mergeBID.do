@@ -1,4 +1,4 @@
-*Elaboración (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n (se reelabora en base a varios do-files anteriores): Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Noviembre, 2013
 
 *** MERGE COLOMBIA 1994 ****
@@ -10,7 +10,7 @@
 
 clear
 set more off
-local ruta ="\\Sdssrv03\surveys\"
+local ruta ="${surveysFolder}\"
 local in   ="`ruta'survey\COL\ENH-FT\1994\m9\data_orig\"
 local out  ="`ruta'survey\COL\ENH-FT\1994\m9\data_merge\"
 
@@ -127,7 +127,7 @@ drop FEX_DANE
 /*
 En las anteriores de colombia se perdia al menos el 19% de las observaciones*
 
-. use "L:\MARIAFP\COL-ARM-VIEJOS\1994\Van_data\vancol94.dta", clear
+. use "${surveysFolder}\MARIAFP\COL-ARM-VIEJOS\1994\Van_data\vancol94.dta", clear
 
 . tab register,m
 

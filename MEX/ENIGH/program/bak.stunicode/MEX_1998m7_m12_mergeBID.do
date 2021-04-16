@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (Versiï¿½n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\1998\m7_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\1998\m7_m12\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "1998"
 local ronda m7_m12
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -28,19 +28,19 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
-Encuesta: ENIGH (Nueva construcción)
+Paï¿½s: Mexico
+Encuesta: ENIGH (Nueva construcciï¿½n)
 Round: Julio- Diciembre
 Autores:
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+Versiï¿½n 2013: Mayra Sï¿½enz
+ï¿½ltima versiï¿½n: Mayra Sï¿½enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha ï¿½ltima modificaciï¿½n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
 
 
-*Mayra Sáenz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
+*Mayra Sï¿½enz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
 *pero con algunas modificaciones, y generando nuevas variables.
 
 
@@ -70,7 +70,7 @@ Agosto 1, 2006 (Victoria)
 La variable de anios de educacion fue modificada de modo de ser comparbale y coherente entre los distintos anios.
 El codigo anterior se puede ver en la seccion de educacion con * adelante del comando
 El criterio utilizado para asignar a cada nivel un determinado numero de anios de estudio se puede ver en el
-siguiente documento: X:\Sociometro_2005\documentation\Years of education in Mexico. 
+siguiente documento: ${surveysFolder}\Sociometro_2005\documentation\Years of education in Mexico. 
 Tambien se cambiaron las varianles edupi, edupc, edusi, edusc y etc de modo de ser coherente con los siguientes
 anios: Primaria 6, Secundaria 6 (12 acumulado) y Terciaria 5 (17 acumulado).  
 
@@ -97,10 +97,10 @@ se dejo el porograma anterior y se adicionaron excepciones
 *********************************************************
 
 /*Este programa debe ser utilizado con el Software Stata 
-versión 8 o superior. 
+versiï¿½n 8 o superior. 
 
 Todas las bases de datos de la ENIGH pueden ser obtenidas 
-en la página de Internet del INEGI, www.inegi.gob.mx, y 
+en la pï¿½gina de Internet del INEGI, www.inegi.gob.mx, y 
 deben estar convertidas a formato *.dta. 
 
 Es importante renombrar las bases que se descargan del 
@@ -114,29 +114,29 @@ Base de gasto no monetario: nomonetario98.dta
 Base de concentrado: concentrado98.dta
 
 En este programa se utilizan tres tipos de archivos, los 
-cuales están ubicados en las siguientes carpetas:
+cuales estï¿½n ubicados en las siguientes carpetas:
 
-1) Bases originales: "C:\pobreza ingresos\1998\ENIGH"
-2) Bitácoras: "C:\pobreza ingresos\1998\Log"
-3) Bases generadas: "C:\pobreza ingresos\1998\Resultados"
+1) Bases originales: "${surveysFolder}\pobreza ingresos\1998\ENIGH"
+2) Bitï¿½coras: "${surveysFolder}\pobreza ingresos\1998\Log"
+3) Bases generadas: "${surveysFolder}\pobreza ingresos\1998\Resultados"
 
 
 Para cambiar estas ubicaciones, se modifican los siguientes
 globals 
 
-gl data="C:\pobreza ingresos\1998\ENIGH"
-gl log="C:\pobreza ingresos\1998\Log"
-gl bases="C:\pobreza ingresos\1998\Resultados"
+gl data="${surveysFolder}\pobreza ingresos\1998\ENIGH"
+gl log="${surveysFolder}\pobreza ingresos\1998\Log"
+gl bases="${surveysFolder}\pobreza ingresos\1998\Resultados"
 
 log using "$log\Pobreza por ingresos 1998.txt", text replace
 */
 *********************************************************
 *
-*	PROGRAMA PARA LA MEDICIÓN DE LA POBREZA 1998
+*	PROGRAMA PARA LA MEDICIï¿½N DE LA POBREZA 1998
 *
 *********************************************************
 
-*Última modificación: 24 de julio del 2013
+*ï¿½ltima modificaciï¿½n: 24 de julio del 2013
 
 *********************************************************
 
@@ -147,7 +147,7 @@ log using "$log\Pobreza por ingresos 1998.txt", text replace
 Agosto del 1998.
 
 Los deflactores se crean previamente a partir del INPC 
-general (ver Nota Técnica).
+general (ver Nota Tï¿½cnica).
 
 En esta parte se crea la base:
 "$ruta\ingreso_deflactado98.dta"
@@ -240,7 +240,7 @@ replace ing_3=ing_2/sep98 if meses=="111009080706"
 replace ing_2=ing_1/oct98 if meses=="111009080706"
 replace ing_1=ing_1/nov98 if meses=="111009080706"
 
-*Mayra Sáenz Julio 2015- Mes de referencia
+*Mayra Sï¿½enz Julio 2015- Mes de referencia
 
 g mes_ref = substr(meses, 1, 2)
 destring mes_ref, replace
@@ -256,7 +256,7 @@ egen double ing_mens=rmean(ing_1 ing_2 ing_3 ing_4 ing_5 ing_6)
 gen double ing_mon=ing_mens if clave>="P001" & clave<="P034"
 gen double ing_lab=ing_mens if clave>="P001" & clave<="P019"
 
-**Modificación Mayra Sáenz - Julio 2015 : Son ingresos laborales de P001-P014, se desagrega por actividad principal y secundaria
+**Modificaciï¿½n Mayra Sï¿½enz - Julio 2015 : Son ingresos laborales de P001-P014, se desagrega por actividad principal y secundaria
 gen     ocuprisec = 1 if empleo =="1" 
 replace ocuprisec = 2 if empleo !="1"
 
@@ -275,11 +275,11 @@ g double ypension = ing_mens  if  (clave=="P028")                               
 g double trat_pr  = ing_mens  if  ((clave>="P029" & clave<="P030") | clave=="P033")    //Indemnizaciones recibidas de seguros contra riesgos y terceros,  Indemnizaciones por despido y accidentes de trabajo, Ingresos provenientes de otros paises
 g double trat_pu  = ing_mens  if  (clave=="P034")                                      //Desde 1996 aparece PROCAMPO
 g double dona_pu  = 0                                                                 
-g double dona_pr  = ing_mens if  (clave=="P031" | clave=="P032")                      //Becas y donaciones provenientes de Instituciones, Regalos y donativos originados dentro del país
-g double otros   = ing_mens  if  ((clave>="P035" & clave<="P036"))                     //Venta de automóviles, aparatos electricos de segunda mano, etc.  Otros ingresos corrientes no considerados en los anteriores, (viÃ¡ticos, etc.).
+g double dona_pr  = ing_mens if  (clave=="P031" | clave=="P032")                      //Becas y donaciones provenientes de Instituciones, Regalos y donativos originados dentro del paï¿½s
+g double otros   = ing_mens  if  ((clave>="P035" & clave<="P036"))                     //Venta de automï¿½viles, aparatos electricos de segunda mano, etc.  Otros ingresos corrientes no considerados en los anteriores, (viÃ¡ticos, etc.).
 g double remesas = ing_mens  if  (clave=="P033")                                      //Ingresos provenientes de otros paises
 
-*Modificación Mayra Sáenz Julio 2015
+*Modificaciï¿½n Mayra Sï¿½enz Julio 2015
 levelsof clave, local(clave)
 foreach k of local clave {
 g `k' = ing_mens if clave == "`k'"
@@ -312,8 +312,8 @@ label var dona_pr   "Donaciones Privadas"
 label var remesas   "Remesas"
 label var otros     "Otros"
 
-rename folio folio1              //Modificado Mayra Sáenz - Julio 2015
-gen folio = substr(folio1,4,100) //Modificado Mayra Sáenz - Julio 2015
+rename folio folio1              //Modificado Mayra Sï¿½enz - Julio 2015
+gen folio = substr(folio1,4,100) //Modificado Mayra Sï¿½enz - Julio 2015
 
 sort folio num_ren, stable
 
@@ -323,11 +323,11 @@ saveold "$ruta\ingreso_deflactado98_per.dta", replace
 
 /*Parte II
 
-Creación del gasto monetario deflactado a pesos de agosto 
+Creaciï¿½n del gasto monetario deflactado a pesos de agosto 
 de 2002.
 
 Los deflactores se crean previamente a partir del INPC 
-según aparece en la Nota Técnica.
+segï¿½n aparece en la Nota Tï¿½cnica.
 
 Se crea la base:
 	"$ruta\gastomonetario_def98.dta"
@@ -406,7 +406,7 @@ Accesorios personales                  /Trimestral       /d23tmesini
 Otros gastos diversos y transf.        /Semestral        /dINPCsmesini
 Regalos otorgados                      /Semestral        /dINPCsmesini
 */
-*Definición de los deflactores
+*Definiciï¿½n de los deflactores
 
 *Rubro 1.1 semanal
 
@@ -709,9 +709,9 @@ replace edba_m=edba_m/d7m10 if decena==8
 replace edba_m=edba_m/d7m10 if decena==9
 
 
-*Modificación Mayra Saenz - Abril 2017: Se desagrega el gasto unicamente en educación (se excluye recreación)
+*Modificaciï¿½n Mayra Saenz - Abril 2017: Se desagrega el gasto unicamente en educaciï¿½n (se excluye recreaciï¿½n)
 
-*Gasto monetario sólo educación
+*Gasto monetario sï¿½lo educaciï¿½n
 gen edu_gtosm=gasm if (clave>="E001" & clave<="E020")   
 
 replace edu_gtosm=edu_gtosm/d7m07 if decena==1
@@ -793,11 +793,11 @@ saveold "$ruta\gastomonetario_def98.dta", replace
 
 /*Parte III
 
-Creación del Gasto no monetario deflactado a pesos de 
+Creaciï¿½n del Gasto no monetario deflactado a pesos de 
 agosto del 1998.
 
-Los deflactores se crean previamente a partir del INPC según
-aparece en la Nota Técnica.
+Los deflactores se crean previamente a partir del INPC segï¿½n
+aparece en la Nota Tï¿½cnica.
 
 Se crean las bases:
 	"$ruta\gastonomonetario_def98.dta"
@@ -880,7 +880,7 @@ Accesorios personales                  /Trimestral       /d23tmesini
 Otros gastos diversos y transf.        /Semestral        /dINPCsmesini
 Regalos otorgados                      /Semestral        /dINPCsmesini
 */
-*Definición de los deflactores
+*Definiciï¿½n de los deflactores
 
 *Rubro 1.1 semanal
 
@@ -1359,16 +1359,16 @@ saveold "$ruta\reg_def98.dta", replace
 
 /*Parte IV
 
-Cálculo de la incidencia 1998
+Cï¿½lculo de la incidencia 1998
 
-Con el propósito de obtener cifras representativas a nivel 
+Con el propï¿½sito de obtener cifras representativas a nivel 
 nacional, rural y urbano, se obtiene una base con las 
-variables de tamaño del hogar, estrato y factor de 
-expansión, y a ésta se le unen las bases anteriormente 
+variables de tamaï¿½o del hogar, estrato y factor de 
+expansiï¿½n, y a ï¿½sta se le unen las bases anteriormente 
 generadas. Se estiman los ingresos corriente total y 
-corriente neto, se genera el factor de expansión para 
+corriente neto, se genera el factor de expansiï¿½n para 
 personas, y se calcula la incidencia de la pobreza de 
-acuerdo con el cálculo oficial de la Sedesol.
+acuerdo con el cï¿½lculo oficial de la Sedesol.
 
 Se genera la base 
 	"$ruta\basefinal_98.dta" 
@@ -1386,7 +1386,7 @@ keep folio tam_hog  factor estrato educacion
 sort folio
 
 
-*Modificado Mayra Sáenz Julio 2015 - Este ingreso es a nivel de hogar, se reemplaza por el ingreso a nivel de persona.
+*Modificado Mayra Sï¿½enz Julio 2015 - Este ingreso es a nivel de hogar, se reemplaza por el ingreso a nivel de persona.
 /*merge folio using "$ruta\ingreso_deflactado98.dta"
 tab _merge
 drop _merge
@@ -1438,11 +1438,11 @@ gen double redan= -1 * reda
 gen double reg_espn = -1 * reg_esp
 
 
-rename folio folio1              //Modificado Mayra Sáenz - Julio 2015
-gen folio = substr(folio1,4,100) //Modificado Mayra Sáenz - Julio 2015
+rename folio folio1              //Modificado Mayra Sï¿½enz - Julio 2015
+gen folio = substr(folio1,4,100) //Modificado Mayra Sï¿½enz - Julio 2015
 
 
-*Modificado Mayra Sáenz Julio 2015 - Incluyo la base de hogares
+*Modificado Mayra Sï¿½enz Julio 2015 - Incluyo la base de hogares
 
 merge 1:1 folio using "$ruta\vivi98.dta", force
 tab _merge 
@@ -1451,17 +1451,17 @@ sort folio
 
 
 
-saveold "$ruta\gtos_autoc98.dta", replace //Mayra Sáenz Julio 2015
+saveold "$ruta\gtos_autoc98.dta", replace //Mayra Sï¿½enz Julio 2015
 
 *_________________________________________________________________________________________________________*
-* Modificación Mayra Sáenz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
+* Modificaciï¿½n Mayra Sï¿½enz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
 *_________________________________________________________________________________________________________*
 
 
 use "$ruta\person98.dta", clear
 
-*rename folio folio1              //Modificado Mayra Sáenz - Julio 2015
-*gen folio = substr(folio1,4,100) //Modificado Mayra Sáenz - Julio 2015
+*rename folio folio1              //Modificado Mayra Sï¿½enz - Julio 2015
+*gen folio = substr(folio1,4,100) //Modificado Mayra Sï¿½enz - Julio 2015
 
 
 sort folio num_ren, stable
@@ -1472,13 +1472,13 @@ sort folio num_ren, stable
 
 merge m:1 folio using "$ruta\gtos_autoc98.dta"
 
-*Modificación Mayra Sáenz: Total Ingreso monetario del hogar
+*Modificaciï¿½n Mayra Sï¿½enz: Total Ingreso monetario del hogar
 bys folio: egen ing_monh = sum(ing_mon)
 
-egen double ict=rsum(ing_monh nomon)                 if parentes=="01" | parentes=="02" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double gct=rsum(gasmon nomon)                   if parentes=="01" | parentes=="02" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double gnt=rsum(gasmon nomon redan reg_espn)    if parentes=="01" | parentes=="02" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
-egen double intt=rsum(ing_monh nomon redan reg_espn) if parentes=="01" | parentes=="02" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
+egen double ict=rsum(ing_monh nomon)                 if parentes=="01" | parentes=="02" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double gct=rsum(gasmon nomon)                   if parentes=="01" | parentes=="02" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double gnt=rsum(gasmon nomon redan reg_espn)    if parentes=="01" | parentes=="02" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
+egen double intt=rsum(ing_monh nomon redan reg_espn) if parentes=="01" | parentes=="02" //Mayra Sï¿½enz Agosto 2015 - Aumento esta condiciï¿½n porque esta base estï¿½ a nivel de personas
 
 
 label var  ict "Ingreso corriente total"

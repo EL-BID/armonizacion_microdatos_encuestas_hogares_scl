@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
+PaÃ­s: Mexico
 Encuesta: ENIGH (tradicional)
 Round: Julio-Octubre
 Autores: 
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -50,10 +50,10 @@ use `base_in', clear
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -101,7 +101,7 @@ label value zona_c zona_ci
 
 */
 
-/* Modificación Mayra Sáenz- Septiembre 2013. Se modifica la sintaxis por la siguiente recomendación:
+/* ModificaciÃ³n Mayra SÃ¡enz- Septiembre 2013. Se modifica la sintaxis por la siguiente recomendaciÃ³n:
 Sept 7, 2006 (Mafe) minor error in the program with huge consequences in te size of rural areas
 content of the variable estrato changed and the program didn't include that change 
 previous code.*/
@@ -130,12 +130,12 @@ gen anio_c=1996
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *********
@@ -356,8 +356,8 @@ replace condocup_ci=4 if  edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -405,7 +405,7 @@ gen instcot_ci= . /*No estoy segura de si se debe crearla*/
 replace instcot_ci=presta1 if (presta1>=1 & presta1<=5) 
 label define instcot_ci 1"IMSS" 2"ISSSTE" 3"PEMEX" 4"SECMAR" 5 "SEDENA" 
 label value instcot_ci instcot_ci
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
@@ -463,26 +463,26 @@ label var lp_ci "linea de pobreza de patrimonio oficial del pais"
 *lp25_ci***
 *********
 gen lp25_ci = 256.2393
-label var lp25_ci "Linea de pobreza 2.5 dólares, año base 2005"
+label var lp25_ci "Linea de pobreza 2.5 dÃ³lares, aÃ±o base 2005"
 
 *********
 *lp4_ci***
 *********
 gen lp4_ci = 409.9829
-label var lp4_ci "Linea de pobreza 4 dólares, año base 2005"
+label var lp4_ci "Linea de pobreza 4 dÃ³lares, aÃ±o base 2005"
 
 *************
 **salmm_ci***
 *************
 /*
 La encuesta fue levantada entre los meses de julio y octubre 1996, 
-y por tanto, al preguntarse por los ingresos de los últimos seis meses,
-se recolectó información correspondiente a febrero-julio, marzo-agosto, 
+y por tanto, al preguntarse por los ingresos de los Ãºltimos seis meses,
+se recolectÃ³ informaciÃ³n correspondiente a febrero-julio, marzo-agosto, 
 abril-septiembre,y mayo-octubre 1996
 */
 
 gen entidad=substr(folio,2,2)
-label var  entidad "entidad federativa del país"
+label var  entidad "entidad federativa del paÃ­s"
 quietly {
 capture confirm variable ubica_geo
 if !_rc {
@@ -2955,7 +2955,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -3008,7 +3008,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3083,12 +3083,12 @@ gen horastot_ci=hr_seman+hr_sem_s  if emp_ci==1
 POSICION EN LA OCUPACION
 CODIGO DESCRIPCION
 1 Obrero o Empleado no Agropecuario
-2 Jornalero Rural o Peón de Campo
-3 Patrón Empresario, Empleador o Propietario de un negocio (de 1 a 5 trabajadores)
-4 Patrón Empresario, Empleador o Propietario de un negocio (de 6 o más trabajadores)
+2 Jornalero Rural o PeÃ³n de Campo
+3 PatrÃ³n Empresario, Empleador o Propietario de un negocio (de 1 a 5 trabajadores)
+4 PatrÃ³n Empresario, Empleador o Propietario de un negocio (de 6 o mÃ¡s trabajadores)
 5 Trabajador por Cuenta Propia
-6 Trabajador Familiar sin Retribución de un Negocio Propiedad del Hogar
-7 Trabajador sin Retribución de una Empresa que no es Propiedad del Hogar
+6 Trabajador Familiar sin RetribuciÃ³n de un Negocio Propiedad del Hogar
+7 Trabajador sin RetribuciÃ³n de una Empresa que no es Propiedad del Hogar
 8 Miembro de una Cooperativa
 */
 
@@ -3261,15 +3261,15 @@ gen antiguedad_ci=.
 *************
  gen byte tot_tra=real(numper)
 replace tot_tra=. if tot_tra==99999   
-*México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if (tot_tra>=1 & tot_tra<=5)
 replace tamemp_ci = 2 if (tot_tra>=6 & tot_tra<=50)
 replace tamemp_ci = 3 if (tot_tra>50)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3278,8 +3278,8 @@ gen categoinac_ci =1 if ( no_traba==14 & condocup_ci==3)
 replace categoinac_ci = 2 if  (no_traba==15 & condocup_ci==3)
 replace categoinac_ci = 3 if  (no_traba==16 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3399,9 +3399,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -3907,7 +3907,7 @@ drop automovil camioneta
 ****compu_ch****
 ****************
 
-*Modificaciones Marcela Rubio Septiembre 2014: a partir de este año se toman dos dígitos por cada aparato es decir a partir de la columna 13 no 14
+*Modificaciones Marcela Rubio Septiembre 2014: a partir de este aÃ±o se toman dos dÃ­gitos por cada aparato es decir a partir de la columna 13 no 14
 /*
 gen computa=real(substr(aparatos,14,2))
 gen compu_ch=. 
@@ -3989,8 +3989,8 @@ aorder
 
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

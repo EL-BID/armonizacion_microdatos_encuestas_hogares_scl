@@ -1,6 +1,6 @@
 
 clear all
-local ruta "Y:\survey\JAM\LFS\1993\m4\data_orig\"
+local ruta "${surveysFolder}\survey\JAM\LFS\1993\m4\data_orig\"
 
 *Base 1
 
@@ -22,7 +22,7 @@ save "`ruta'\aprlbf93_rt1amerge.dta", replace
 *Base 2
 
 clear all
-local ruta "Y:\survey\JAM\LFS\1993\m4\data_orig\"
+local ruta "${surveysFolder}\survey\JAM\LFS\1993\m4\data_orig\"
 
 use "`ruta'\aprlbf93_rt2a.dta"
 
@@ -41,7 +41,7 @@ save "`ruta'\aprlbf93_rt2amerge.dta", replace
 *Base 3
 
 clear all
-local ruta "Y:\survey\JAM\LFS\1993\m4\data_orig\"
+local ruta "${surveysFolder}\survey\JAM\LFS\1993\m4\data_orig\"
 
 use "`ruta'\aprlbf93_rt3a.dta"
 
@@ -60,7 +60,7 @@ save "`ruta'\aprlbf93_rt3amerge.dta", replace
 
 * Merge
 clear all
-local ruta "Y:\survey\JAM\LFS\1993\m4\data_orig\"
+local ruta "${surveysFolder}\survey\JAM\LFS\1993\m4\data_orig\"
 use "`ruta'\aprlbf93_rt1amerge.dta"
 
 merge m:m idbase using "`ruta'\aprlbf93_rt2amerge.dta"
@@ -72,4 +72,4 @@ tab _merge
 rename _merge _merge3
 
 drop _merge* idbase
-save "Y:\survey\JAM\LFS\1993\m4\data_merge\JAM_1993m4.dta", replace
+save "${surveysFolder}\survey\JAM\LFS\1993\m4\data_merge\JAM_1993m4.dta", replace

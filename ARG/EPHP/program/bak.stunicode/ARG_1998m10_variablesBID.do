@@ -1,18 +1,18 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -32,12 +32,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Argentina
+Pa铆s: Argentina
 Encuesta: EPHP
 Round: m10
 Autores:
-趌tima versi髇: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha 鷏tima modificaci髇: 31 de Octubre de 2013
+脷ltima versi贸n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha 煤ltima modificaci贸n: 31 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -62,7 +62,7 @@ use "`base_in'", clear
 gen region_BID_c=4
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroam閞ica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam茅rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -303,7 +303,7 @@ rama_ci
 It was difficult to construct the variable Rama. The problem is that for the bananas 
 we are using the ISIC Rev 2, but Argentinean surveys use ISIC Rev 3, so there are more 
 categories than the ones that appear in the bananas. I added "Administracion Publica y 
-Defensa, planes de seguridad social y de afiliaci髇" (p18=751 a to 759), "Ense馻nza" 
+Defensa, planes de seguridad social y de afiliaci贸n" (p18=751 a to 759), "Ense帽anza" 
 (801 to 809), "Actividades de Servicios Sociales y de salud" (851 to 859), 
 "Otras actividades comunitarias, sociales y de salud" (900 to 930) and "Hogars privados 
 con servicio domestico" to Rama==9 (=Servicios Sociales, comunales y personales). 
@@ -404,7 +404,7 @@ replace condocup_ci=2 if estado==2
 replace condocup_ci=3 if estado==3 & edad_ci>=10
 replace condocup_ci=. if estado == 0
 replace condocup_ci=4 if estado == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -524,8 +524,8 @@ There's no way to know if a worker has signed a contract or no
 segsoc_ci 
 It's difficult to define this variable in a proper way.  We don't consider the 
 people that declare to have aguinaldo (4), vacaciones (8), Vacaciones y Aguinaldo (12), 
-Indemnizacion (32), Indemnizacion y Aguinaldo (36), Indemnizaci髇 y Vacaciones (40) and 
-Indemnizaci髇, vacaciones y aguinaldo (44)
+Indemnizacion (32), Indemnizacion y Aguinaldo (36), Indemnizaci贸n y Vacaciones (40) and 
+Indemnizaci贸n, vacaciones y aguinaldo (44)
 ***********/
 
 *gen segsoc_ci=(p23~=. & p23~=-2 & p23~=4 & p23~=8 & p23~=12 & p23~=32 & p23~=36 & p23~=40 & p23~=44 & p23~=64 & p23~=99 & p23~=0 & emp_ci==1) 
@@ -587,7 +587,7 @@ Para 1995 a 2002
 
 label var p21 "ingreso proveniente de la ocupacion principal"
 label var p47_1 "ingreso asalariado"
-label var p47_2 "ingreso por bonificaci髇 no habituales (asalariados)"
+label var p47_2 "ingreso por bonificaci贸n no habituales (asalariados)"
 label var p47_3 "ingreso como cuenta propista"
 label var p47_4 "como ganancia de patron"
 label var p48_1 "jubilacion o pension"
@@ -949,7 +949,7 @@ gen edus2c_ci=.
 
 /**********
 edupre_ci (Educacion Preescolar)
-Si bien en el a駉 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
+Si bien en el a帽o 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
 por lo que es conveniente no crearla
 ***********/
 
@@ -1018,13 +1018,13 @@ label var  eduuc_ci  "Universitaria o Terciaria Completa"
 
 /***************************************************
 Variables generadas que indican cual es la mayor cantidad de regiones con las que se
-pueden contar de acuerdo al a駉 inicial que se desea tomar. A partir de 1997, todas las
+pueden contar de acuerdo al a帽o inicial que se desea tomar. A partir de 1997, todas las
 encuestas cuentan con la misma cantidad de regiones. Se debe tener en cuenta que estas 
 variables son utiles para contar con la mayor cantidad de regiones si uno esta interesado
-en tener series de tiempo o trabajar con al menos dos a駉s (para lo cual se necesita ser 
+en tener series de tiempo o trabajar con al menos dos a帽os (para lo cual se necesita ser 
 consistente en las regiones a incorporar en los diferentes periodos. 
-En caso que se este interesado en un analisis de corte transversal, en los cuales un a駉 
-es suficiente, lo indicado es trabajar con todas las regiones existentes para el a駉 en cuestion,
+En caso que se este interesado en un analisis de corte transversal, en los cuales un a帽o 
+es suficiente, lo indicado es trabajar con todas las regiones existentes para el a帽o en cuestion,
 por lo que no se requiere la utilizacion de estas variables.
 ****************************************************/
 
@@ -1092,7 +1092,7 @@ recognition of the error, updated databases for these "aglomerados" replaced the
 /******************
 Variables de Hogar
 *******************/
-* MGR Jul, 2015: variables de m骴ulo vivienda ten韆n mismo nombre que variables de m骴ulo de personas por lo que se sobreescrib韆 sobre ellas
+* MGR Jul, 2015: variables de m贸dulo vivienda ten铆an mismo nombre que variables de m贸dulo de personas por lo que se sobreescrib铆a sobre ellas
 * Renombro variables de vivienda y hago nuevamente el merge. Armonizo con las variables correctas.
 
 /*Daniela Zuluaga- Enero 2018, 
@@ -1187,13 +1187,13 @@ gen vivialqimp_ch=.
 
 /****************************************************
 Variables generadas que indican cual es la mayor cantidad de regiones con las que se
-pueden contar de acuerdo al a駉 inicial que se desea tomar. A partir de 1997, todas las
+pueden contar de acuerdo al a帽o inicial que se desea tomar. A partir de 1997, todas las
 encuestas cuentan con la misma cantidad de regiones. Se debe tener en cuenta que estas 
 variables son utiles para contar con la mayor cantidad de regiones si uno esta interesado
-en tener series de tiempo o trabajar con al menos dos a駉s (para lo cual se necesita ser 
+en tener series de tiempo o trabajar con al menos dos a帽os (para lo cual se necesita ser 
 consistente en las regiones a incorporar en los diferentes periodos. 
-En caso que se este interesado en un analisis de corte transversal, en los cuales un a駉 
-es suficiente, lo indicado es trabajar con todas las regiones existentes para el a駉 en cuestion,
+En caso que se este interesado en un analisis de corte transversal, en los cuales un a帽o 
+es suficiente, lo indicado es trabajar con todas las regiones existentes para el a帽o en cuestion,
 por lo que no se requiere la utilizacion de estas variables.
 ****************************************************/
 /*
@@ -1228,19 +1228,19 @@ replace ocupa_ci = 9 if ((p20>=998 & p20<=999) | ocup4>=7 | p20==198) & emp_ci==
 replace ocupa_ci =. if ocup4==. & ocupa_ci!=2
 
 label var     ocupa_ci "ocupation in primary job"
-label define  ocupa_ci 1 "Profesionales y t閏nicos", add
+label define  ocupa_ci 1 "Profesionales y t茅cnicos", add
 label define  ocupa_ci 2 "Directores y funcionarios superiores", add
 label define  ocupa_ci 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa_ci 4 "Comerciantes y vendedores", add
 label define  ocupa_ci 5 "Trabajadores en servicios", add
-label define  ocupa_ci 6 "Trabajadores agr韈olas y afines", add
-label define  ocupa_ci 7 "Obreros no agr韈olas, conductores de maquinas y veh韈ulos de   transporte y similares", add
+label define  ocupa_ci 6 "Trabajadores agr铆colas y afines", add
+label define  ocupa_ci 7 "Obreros no agr铆colas, conductores de maquinas y veh铆culos de   transporte y similares", add
 label define  ocupa_ci 8 "Fuerzas Armadas", add
 label define  ocupa_ci 9 "Otras ocupaciones no clasificadas en las anteriores", add
 
 
 /************************************************************************************************************
-* 2. Recategorizaci髇 de variables/ correcci髇 de errores de las bases armonizadas
+* 2. Recategorizaci贸n de variables/ correcci贸n de errores de las bases armonizadas
 ************************************************************************************************************/
 gen semestre_c=.
 	
@@ -1298,13 +1298,13 @@ replace rama_ci = 7 if (p18>=600 & p18<=649) & emp_ci==1
 replace rama_ci = 8 if (p18>=650 & p18<=749) & emp_ci==1
 replace rama_ci = 9 if (p18>=750 & p18<=998) & emp_ci==1
 /*label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotaci髇 de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcci髇" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotaci贸n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcci贸n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci */
 
 /************************************************************************************************************
-* L韓eas de pobreza oficiales
+* L铆neas de pobreza oficiales
 ************************************************************************************************************/
 
 *********
@@ -1453,7 +1453,7 @@ replace categoinac_ci=2 if p11==3
 replace categoinac_ci=4 if p11==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condici髇 de inactividad"
+label var categoinac_ci "Condici贸n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1471,7 +1471,7 @@ gen instcot_ci=.
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodolog韆 enviada por SCL/GDI Maria Olga Pe馻
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog铆a enviada por SCL/GDI Maria Olga Pe帽a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -1480,15 +1480,15 @@ gen raza_ci=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignaci髇 de etiquetas e inserci髇 de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l韓eas de pobreza
+* Asignaci贸n de etiquetas e inserci贸n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l铆neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificaci髇 de que se encuentren todas las variables armonizadas 
+* Verificaci贸n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1506,7 +1506,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
-para an谩lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para an脙隆lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename p20 codocupa
 
 compress

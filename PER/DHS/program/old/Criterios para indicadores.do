@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
-*Mayra Sáenz
+*Mayra SÃ¡enz
 *Marzo 2015
 *mayras@iadb.org
 
-*Este do file está en proceso de elaboración.
+*Este do file estÃ¡ en proceso de elaboraciÃ³n.
 
 
 *______________________________*
 *       Mortalidad Infantil
 *______________________________*
 
-*Las restricciones de edad aplico cuando ya estén unificadas todas las bases.
+*Las restricciones de edad aplico cuando ya estÃ©n unificadas todas las bases.
 	*drop if edad_ci >=40
 	*keep if (edad_ci >=25 & edad_ci <=39)
 	drop if edadm_ni <12

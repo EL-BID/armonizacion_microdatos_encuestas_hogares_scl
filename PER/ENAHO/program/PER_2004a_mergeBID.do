@@ -3,7 +3,7 @@
 
 clear all
 set more off
-cd "Z:\survey\PER\ENAHO\2004\a\data_orig"
+cd "${surveysFolder}\survey\PER\ENAHO\2004\a\data_orig"
 
 **************************************************************************************
 						/*Identificador de hogar*/
@@ -102,20 +102,20 @@ sort idh_ch
 
 
 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 *merge m:m idh_ch using "sumaria-2004.dta"
 joinby idh_ch using "sumaria-2004.dta", unm(b)
 
 drop _merge
 sort idh_ch
 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 *merge m:m idh_ch using "enaho01-2004-612_reshape.dta"
 joinby idh_ch using "enaho01-2004-612_reshape.dta", unm(b)
 drop _merge
 sort idh_ch
 
 drop idh* idp*
-save "Z:\survey\PER\ENAHO\2004\a\data_merge\PER_2004a.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\2004\a\data_merge\PER_2004a.dta", replace
 
  

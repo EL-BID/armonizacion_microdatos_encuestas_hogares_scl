@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *______________________________________________________________________________________________________*
 
 	 * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la 
 	 *posibilidad de utilizar un loop)
-	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
-	 * Se tiene acceso al servidor únicamente al interior del BID.
+	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+	 * Se tiene acceso al servidor Ãºnicamente al interior del BID.
 	 * El servidor contiene las bases de datos MECOVI.
-	 * Las DHS son encuestas cuya población objetivo son las madres de 15-49 años y sus respectivos hijos.
+	 * Las DHS son encuestas cuya poblaciÃ³n objetivo son las madres de 15-49 aÃ±os y sus respectivos hijos.
 *______________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA DHS
@@ -26,23 +26,23 @@ local base_out  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\
                         
 /*______________________________________________________________________________________________________*
 						 BASES DE DATOS DE ENCUESTAS DE SALUD - SOCIOMETRO 
-	País: Perú
+	PaÃ­s: PerÃº
 	Encuesta: DHS
 	Round: m3_m12
-	Versiones anteriores: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+	Versiones anteriores: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 						  Marcela Rubio E-mail: marcelarubio28@gmail.com - mrubio@IADB.ORG
-	Última versión: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
-	Fecha última modificación: Marzo 16, 2015
+	Ãšltima versiÃ³n: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
+	Fecha Ãºltima modificaciÃ³n: Marzo 16, 2015
 									SCL - IADB*/
 *______________________________________________________________________________________________________*
 
-*No se puede generar el identificador de niños porque todos los valores de la línea de niño en el hogar
-*está como missing.
+*No se puede generar el identificador de niÃ±os porque todos los valores de la lÃ­nea de niÃ±o en el hogar
+*estÃ¡ como missing.
 
 /*
 
 
-*Generación de indicador en la base de madres e hijos
+*GeneraciÃ³n de indicador en la base de madres e hijos
 use "$ruta\survey\PER\DHS\2000\m7_m11\data_orig\PEBR41FL.dta", clear
 sort v001 v002 v003
 tostring v001 v002 v003, replace
@@ -87,7 +87,7 @@ saveold "$ruta\survey\PER\DHS\2000\m7_m11\data_orig\PEBR41FL_MADRE.DTA", replace
 
 
 
-*Generación de indicador en la base de hogares
+*GeneraciÃ³n de indicador en la base de hogares
 use "$ruta\survey\PER\DHS\2000\m7_m11\data_orig\PEPR41FL.DTA", clear
 sort hv001 hv002 hvidx
 

@@ -5,9 +5,9 @@
 
 clear
 global survey = "ECH" /*Seleccionar el nombre de la encuesta: GEIH o ECH */
-forvalues i=2003/2003 { /*Seleccionar los años GEIH=2008/2012 ; ECH=2002/2005*/
+forvalues i=2003/2003 { /*Seleccionar los aÃ±os GEIH=2008/2012 ; ECH=2002/2005*/
 
-use "\\sdssrv03\Surveys\survey\COL\\${survey}\\`i'\a\data_orig\personas `i'.dta", clear
+use "${surveysFolder}\survey\COL\\${survey}\\`i'\a\data_orig\personas `i'.dta", clear
 if `i'>=2006 & `i'<=2012 {
 egen idh_ch=concat(directorio secuencia_p)
 }
@@ -19,8 +19,8 @@ destring idh_ch, replace force
 }
 
 sort idh_ch
-merge idh_ch using "\\sdssrv03\Surveys\survey\COL\\${survey}\\`i'\a\data_orig\hogares`i'.dta"
+merge idh_ch using "${surveysFolder}\survey\COL\\${survey}\\`i'\a\data_orig\hogares`i'.dta"
 tab _merge
 drop _merge
-save "\\sdssrv03\Surveys\survey\COL\\${survey}\\`i'\\a\data_merge\COL_`i'a.dta", replace
+save "${surveysFolder}\survey\COL\\${survey}\\`i'\\a\data_merge\COL_`i'a.dta", replace
 }

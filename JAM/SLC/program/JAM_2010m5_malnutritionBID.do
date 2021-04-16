@@ -1,16 +1,16 @@
-*Mayra Sáenz
+*Mayra SÃ¡enz
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 *              Malnutrition, Breastfeeding, and Anemia Indicators                                             *          
 *->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<->:<-*
 clear all
-use "Z:\survey\JAM\SLC\2010\m5\data_merge\JAM_2010m5.dta"
+use "${surveysFolder}\survey\JAM\SLC\2010\m5\data_merge\JAM_2010m5.dta"
 set more off
 *Main directory
-*global path = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
-global path ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+*global path = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators"
+global path ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 * Folder of outputs
-*global outputs = "D:\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
-global outputs ="D:\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
+*global outputs = "${surveysFolder}\DATA.IDB\Anexos_Encuestas_de_Salud\Health_Indicators\outputs"
+global outputs ="${surveysFolder}\DATA.IDB\Documents\DIA_Publication\xls\JamaicaZscores"
 
 *Source of comparison: http://www.who.int/nutgrowthdb/database/countries/who_standards/jam_dat.pdf
 *==============================================================================================================*
@@ -49,7 +49,7 @@ g pesokg   = c10
 g alturacm = c11
 
 destring alturacm, replace
-/*x: Indicador de datos válidos */
+/*x: Indicador de datos vÃ¡lidos */
 
 gen x =1 if (edadmes ~=. & alturacm ~=. & pesokg ~=.) & (edadmes >0 & alturacm  >0 & pesokg  >0)
 keep if x ==1

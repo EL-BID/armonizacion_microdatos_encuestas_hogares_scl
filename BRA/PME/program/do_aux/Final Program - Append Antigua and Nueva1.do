@@ -17,7 +17,7 @@ capture scalar drop _all
 
 
 **Note: this local should be change by the user
-cd C:\Users\wb377246\Documents\Julian\LM_W\BRA
+cd ${surveysFolder}\Users\wb377246\Documents\Julian\LM_W\BRA
 
 ***************************************
 ***************************************

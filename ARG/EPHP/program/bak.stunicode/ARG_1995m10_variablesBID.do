@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -32,12 +32,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Argentina
+PaÃ­s: Argentina
 Encuesta: EPHP
 Round: m10
 Autores:
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 31 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 31 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -62,7 +62,7 @@ use "`base_in'", clear
 gen region_BID_c=4
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -120,7 +120,7 @@ idh_ch (idhogar)
 ************/
 
 gen str5 codigo=string(codusu)
-*Modificación Mayra Sáenz - Marzo 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Marzo 2014
 *gen str2 ciudad=string(aglomera)
 gen str2 ciudad=string(aglomerado)
 gen str7 idh_ch=codigo+ciudad
@@ -304,7 +304,7 @@ rama_ci
 It was difficult to construct the variable Rama. The problem is that for the bananas 
 we are using the ISIC Rev 2, but Argentinean surveys use ISIC Rev 3, so there are more 
 categories than the ones that appear in the bananas. I added "Administracion Publica y 
-Defensa, planes de seguridad social y de afiliación" (p18=751 a to 759), "Enseñanza" 
+Defensa, planes de seguridad social y de afiliaciÃ³n" (p18=751 a to 759), "EnseÃ±anza" 
 (801 to 809), "Actividades de Servicios Sociales y de salud" (851 to 859), 
 "Otras actividades comunitarias, sociales y de salud" (900 to 930) and "Hogars privados 
 con servicio domestico" to Rama==9 (=Servicios Sociales, comunales y personales). 
@@ -400,7 +400,7 @@ replace condocup_ci=2 if estado==2
 replace condocup_ci=3 if estado==3 & edad_ci>=10
 replace condocup_ci=. if estado == 0
 replace condocup_ci=4 if estado == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -519,8 +519,8 @@ There's no way to know if a worker has signed a contract or no
 segsoc_ci 
 It's difficult to define this variable in a proper way.  We don't consider the 
 people that declare to have aguinaldo (4), vacaciones (8), Vacaciones y Aguinaldo (12), 
-Indemnizacion (32), Indemnizacion y Aguinaldo (36), Indemnización y Vacaciones (40) and 
-Indemnización, vacaciones y aguinaldo (44)
+Indemnizacion (32), Indemnizacion y Aguinaldo (36), IndemnizaciÃ³n y Vacaciones (40) and 
+IndemnizaciÃ³n, vacaciones y aguinaldo (44)
 ***********/
 
 *gen segsoc_ci=(p23~=. & p23~=-2 & p23~=4 & p23~=8 & p23~=12 & p23~=32 & p23~=36 & p23~=40 & p23~=44 & p23~=64 & p23~=99 & p23~=0 & emp_ci==1) 
@@ -580,7 +580,7 @@ Para 1995 a 2002
 
 label var p21 "ingreso proveniente de la ocupacion principal"
 label var p47_1 "ingreso asalariado"
-label var p47_2 "ingreso por bonificación no habituales (asalariados)"
+label var p47_2 "ingreso por bonificaciÃ³n no habituales (asalariados)"
 label var p47_3 "ingreso como cuenta propista"
 label var p47_4 "como ganancia de patron"
 label var p48_1 "jubilacion o pension"
@@ -941,7 +941,7 @@ gen edus2c_ci=.
 
 /**********
 edupre_ci (Educacion Preescolar)
-Si bien en el año 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
+Si bien en el aÃ±o 1992 esta el rubro (nivel==10), no se distingue de aquellos que nunca fueron al colegio,
 por lo que es conveniente no crearla
 ***********/
 
@@ -1010,13 +1010,13 @@ label var  eduuc_ci  "Universitaria o Terciaria Completa"
 
 /***************************************************
 Variables generadas que indican cual es la mayor cantidad de regiones con las que se
-pueden contar de acuerdo al año inicial que se desea tomar. A partir de 1997, todas las
+pueden contar de acuerdo al aÃ±o inicial que se desea tomar. A partir de 1997, todas las
 encuestas cuentan con la misma cantidad de regiones. Se debe tener en cuenta que estas 
 variables son utiles para contar con la mayor cantidad de regiones si uno esta interesado
-en tener series de tiempo o trabajar con al menos dos años (para lo cual se necesita ser 
+en tener series de tiempo o trabajar con al menos dos aÃ±os (para lo cual se necesita ser 
 consistente en las regiones a incorporar en los diferentes periodos. 
-En caso que se este interesado en un analisis de corte transversal, en los cuales un año 
-es suficiente, lo indicado es trabajar con todas las regiones existentes para el año en cuestion,
+En caso que se este interesado en un analisis de corte transversal, en los cuales un aÃ±o 
+es suficiente, lo indicado es trabajar con todas las regiones existentes para el aÃ±o en cuestion,
 por lo que no se requiere la utilizacion de estas variables.
 ****************************************************/
 
@@ -1085,7 +1085,7 @@ Variables de Hogar
 
 /*Daniela Zuluaga- Enero 2018, 
 Se reemplazan los nombres de las variables p01 a p08 por p01_hogar a p08_hogar, y r01 a r06 por r01_hogar a r06_hogar, dado que la base de individuos contiene variables 
-con el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la información al hacer el merge entre hogares e individuos. Se generan además
+con el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la informaciÃ³n al hacer el merge entre hogares e individuos. Se generan ademÃ¡s
 las variables de hogar a partir de estas variables originales*/
 
 /******************
@@ -1170,13 +1170,13 @@ gen vivialqimp_ch=.
 	
 /****************************************************
 Variables generadas que indican cual es la mayor cantidad de regiones con las que se
-pueden contar de acuerdo al año inicial que se desea tomar. A partir de 1997, todas las
+pueden contar de acuerdo al aÃ±o inicial que se desea tomar. A partir de 1997, todas las
 encuestas cuentan con la misma cantidad de regiones. Se debe tener en cuenta que estas 
 variables son utiles para contar con la mayor cantidad de regiones si uno esta interesado
-en tener series de tiempo o trabajar con al menos dos años (para lo cual se necesita ser 
+en tener series de tiempo o trabajar con al menos dos aÃ±os (para lo cual se necesita ser 
 consistente en las regiones a incorporar en los diferentes periodos. 
-En caso que se este interesado en un analisis de corte transversal, en los cuales un año 
-es suficiente, lo indicado es trabajar con todas las regiones existentes para el año en cuestion,
+En caso que se este interesado en un analisis de corte transversal, en los cuales un aÃ±o 
+es suficiente, lo indicado es trabajar con todas las regiones existentes para el aÃ±o en cuestion,
 por lo que no se requiere la utilizacion de estas variables.
 ****************************************************/
 
@@ -1203,13 +1203,13 @@ replace `ocup' = 7 if `var' ==38 | `var' ==50 | `var' ==68 | `var' ==74 | `var' 
 replace `ocup' = 8 if `var' ==40;			 																	
 replace `ocup' = 9 if `var' ==71 | `var' ==81 | `var' ==91 | `var' ==75 | `var' ==77 | `var' ==83;																											
 label var     ocupa "ocupation in primary job";
-label define  ocupa 1 "Profesionales y técnicos", add;
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add;
 label define  ocupa 2 "Directores y funcionarios superiores", add;
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add;
 label define  ocupa 4 "Comerciantes y vendedores", add;
 label define  ocupa 5 "Trabajadores en servicios", add;
-label define  ocupa 6 "Trabajadores agrícolas y afines", add;
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add;
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add;
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add;
 label define  ocupa 8 "Fuerzas Armadas", add;
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add;
 rename ocupa ocupa_ci;
@@ -1226,13 +1226,13 @@ replace ocupa = 7 if (p20>=380 & p20<390) | (p20>=500 & p20<510) | (p20>=680 & p
 replace ocupa = 8 if (p20>=400 & p20<410)			 																	
 replace ocupa = 9 if (p20>=710 & p20<720) | (p20>=810 & p20<820) | (p20>=910 & p20<920) | (p20>=750 & p20<760) | (p20>=770 & p20<780) | (p20>=830 & p20<840)																											
 label var     ocupa "ocupation in primary job"
-label define  ocupa 1 "Profesionales y técnicos", add
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa 2 "Directores y funcionarios superiores", add
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa 4 "Comerciantes y vendedores", add
 label define  ocupa 5 "Trabajadores en servicios", add
-label define  ocupa 6 "Trabajadores agrícolas y afines", add
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa 8 "Fuerzas Armadas", add
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add
 rename ocupa ocupa_ci
@@ -1257,20 +1257,20 @@ replace ocupa_ci = 9 if p20==998 & emp_ci==1
 *replace ocupa_ci =. if ocup4==. & ocupa_ci!=2
 
 label var     ocupa_ci "ocupation in primary job"
-label define  ocupa_ci 1 "Profesionales y técnicos", add
+label define  ocupa_ci 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa_ci 2 "Directores y funcionarios superiores", add
 label define  ocupa_ci 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa_ci 4 "Comerciantes y vendedores", add
 label define  ocupa_ci 5 "Trabajadores en servicios", add
-label define  ocupa_ci 6 "Trabajadores agrícolas y afines", add
-label define  ocupa_ci 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa_ci 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa_ci 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa_ci 8 "Fuerzas Armadas", add
 label define  ocupa_ci 9 "Otras ocupaciones no clasificadas en las anteriores", add
 */
 
 
 /************************************************************************************************************
-* 2. Recategorización de variables/ corrección de errores de las bases armonizadas
+* 2. RecategorizaciÃ³n de variables/ correcciÃ³n de errores de las bases armonizadas
 ************************************************************************************************************/
 gen semestre_c=.
 	
@@ -1328,14 +1328,14 @@ replace rama_ci = 7 if (p18>=600 & p18<=649) & emp_ci==1
 replace rama_ci = 8 if (p18>=650 & p18<=749) & emp_ci==1
 replace rama_ci = 9 if (p18>=750 & p18<=998) & emp_ci==1
 /*label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci */
 
 
 /************************************************************************************************************
-* Líneas de pobreza oficiales
+* LÃ­neas de pobreza oficiales
 ************************************************************************************************************/
 
 *********
@@ -1483,7 +1483,7 @@ replace categoinac_ci=2 if p11==3
 replace categoinac_ci=4 if p11==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1499,7 +1499,7 @@ gen instcot_ci=.
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -1508,15 +1508,15 @@ gen raza_ci=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1534,7 +1534,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
-para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para anÃƒÂ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename p20 codocupa
 
 compress

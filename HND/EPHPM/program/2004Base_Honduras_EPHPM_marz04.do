@@ -8,14 +8,14 @@
 *** Revised March, 2008 (by tede) ***
 
 clear
-cd X:\ARM\HON\2004\Marzo\Arm_data
+cd ${surveysFolder}\ARM\HON\2004\Marzo\Arm_data
 
 capture log close
 log using HON2004EA_BID.log, replace 
 
 set more off
 
-use "X:\ARM\HON\2004\Marzo\Orig_data\hnd04-my.dta", clear
+use "${surveysFolder}\ARM\HON\2004\Marzo\Orig_data\hnd04-my.dta", clear
 
 ************
 ****pais****
@@ -508,7 +508,7 @@ replace rama_ci=. if rama==10 | rama==11 | emp_ci==0
 
 drop yalim2 yropa2 yhabita2 ytrans2 yotro2 yprodu2 ypenju2 ysubsi2 yalquile2 ybonos2 yayuda2 yayupar2 yotros2 interes2 prestlab2 yalim3 yropa3 yhabita3 ytrans3 yotro3 yprodu3 yjub2 yremesade yremesae yayudae ypdiv autoconsumop_ci autoconsumos_ci
 
-save "X:\ARM\HON\2004\Marzo\Arm_data\HON2004_1EA_BID.dta", replace
+save "${surveysFolder}\ARM\HON\2004\Marzo\Arm_data\HON2004_1EA_BID.dta", replace
 
 log close
 

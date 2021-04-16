@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Mayo, 2014
 
 *** MERGE COLOMBIA ECH 2005 ****
@@ -8,23 +8,23 @@ clear
 set more off
 local anio = 2005
 local anioab ="05" 	
-local ruta "\\sdssrv03\Surveys\survey\COL\ECH\\`anio'\a\data_orig\"
+local ruta "${surveysFolder}\survey\COL\ECH\\`anio'\a\data_orig\"
                          
 local m7   ="`ruta'm7\data_orig\" 
 local m8   ="`ruta'm8\data_orig\" 
 local m9   ="`ruta'm9\data_orig\" 
-local t3   ="\\sdssrv03\Surveys\survey\COL\ECH\2005\t3\data_orig\"
-local out  ="\\sdssrv03\Surveys\survey\COL\ECH\2005\t3\data_merge\"
+local t3   ="${surveysFolder}\survey\COL\ECH\2005\t3\data_orig\"
+local out  ="${surveysFolder}\survey\COL\ECH\2005\t3\data_merge\"
 
 
 *1. Bases anuales con homologacion de ingresos
 *----------------------------------------------
 
 clear
-use "\\sdssrv03\Surveys\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_orig\personas 2005.dta", clear
+use "${surveysFolder}\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_orig\personas 2005.dta", clear
 gen idh_ch =llave_hog
 sort idh_ch
-merge idh_ch using "\\sdssrv03\Surveys\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_orig\hogares2005.dta"
+merge idh_ch using "${surveysFolder}\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_orig\hogares2005.dta"
 tab _merge
 drop _merge
 destring mes, replace
@@ -33,7 +33,7 @@ egen id=concat(llave_hog orden)
 keep if mes>=7 & mes<=9
 keep  id pet- fex_c 
 sort id
-save "Y:\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_merge\t3.dta", replace
+save "${surveysFolder}\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_merge\t3.dta", replace
 
 *2. Append entre meses
 *------------------------
@@ -148,7 +148,7 @@ use "`out'COL_`anio't3cab.dta"
 append using "`out'COL_`anio't3res.dta"
 sort id
 
-merge id using "Y:\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_merge\t3.dta"
+merge id using "${surveysFolder}\survey\COL\ECH\2005\a\data_orig\anual_homologado DANE\data_merge\t3.dta"
 tab _merge
 
 drop _merge

@@ -7,15 +7,15 @@
 
 clear all
 set more off 
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
  
 local PAIS ECU
 local ENCUESTA ENEMDU
 local ANIO 2016
 local RONDA m12
 
-local ruta = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\data_orig"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\\data_merge\\`PAIS'_`ANIO'`RONDA'.dta"
+local ruta = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\data_orig"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANIO'\\`RONDA'\\data_merge\\`PAIS'_`ANIO'`RONDA'.dta"
 
 * Sort de base
 use "`ruta'\201612_enemdubdd_vivivendahogar.dta", clear

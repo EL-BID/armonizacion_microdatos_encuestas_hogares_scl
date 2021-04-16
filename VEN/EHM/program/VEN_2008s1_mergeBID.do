@@ -3,7 +3,7 @@
 
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\VEN\EHM\2008\s1\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\2008\s1\data_orig\"
 
 *Identificacion bases de datos
 *--------------------------------
@@ -34,7 +34,7 @@ joinby entidad control linea serie num_hog using per081.dta, _merge(_merge)
 tab _merge
 drop _merge
 
-saveold "\\Sdssrv03\surveys\survey\VEN\EHM\2008\s1\data_merge\VEN_2008s1.dta", replace
+saveold "${surveysFolder}\survey\VEN\EHM\2008\s1\data_merge\VEN_2008s1.dta", replace
 
  
 

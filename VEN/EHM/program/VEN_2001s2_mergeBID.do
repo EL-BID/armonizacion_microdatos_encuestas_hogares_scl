@@ -5,7 +5,7 @@
 clear
 set more off
 
-cd "\\Sdssrv03\surveys\survey\VEN\EHM\2001\s2\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\2001\s2\data_orig\"
 
 
 ****************************************************
@@ -23,4 +23,4 @@ sort entidad control area linea num_hog subdomin localida num_per
 merge entidad control area linea num_hog subdomin localida using "viv012_ci.dta"
 tab _merge
 drop _merge*
-saveold "\\Sdssrv03\surveys\survey\VEN\EHM\2001\s2\data_merge\VEN_2001s2.dta", replace
+saveold "${surveysFolder}\survey\VEN\EHM\2001\s2\data_merge\VEN_2001s2.dta", replace

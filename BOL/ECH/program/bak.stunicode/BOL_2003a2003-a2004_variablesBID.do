@@ -1,16 +1,16 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: ECH
 Round: a2003_a2004 
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -53,7 +53,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -131,7 +131,7 @@ relacion:
 	2	esposa/o o conviviente
 	3	hijo/a o entenado/a
 	4	yerno o nuera
-	5	hermano/a o cuñado/a
+	5	hermano/a o cuÃ±ado/a
 	6	padres o suegros
 	8	nieto/a
 	9	otros parientes
@@ -324,7 +324,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -340,7 +340,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -350,7 +350,7 @@ label var raza_ci "Raza o etnia del individuo"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 7 años*/ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 7 aÃ±os*/ 
  
 
 *********
@@ -460,7 +460,7 @@ replace condocup_ci=2 if condact==3 | condact==4
 replace condocup_ci=3 if (condact==5 | condact==6) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -475,10 +475,10 @@ replace condocup_ci=1 if a4_01==1 | a4_02<=6 | (a4_03>=1 & a4_03<=7)
 *replace condocup_ci=2 if (a4_01==2 | a4_02==7 | a4_03>1) & (a4_05==1) & (a4_04==1)
 replace condocup_ci=2 if (a4_01==2 | a4_02==7 | a4_03>7) & (a4_05==1) & (a4_04==1)
 
-*2015,10 MLO la encuesta pregunta a partir de 7 años (no 10)
+*2015,10 MLO la encuesta pregunta a partir de 7 aÃ±os (no 10)
 recode condocup_ci .=3 if edad_ci>=7
 recode condocup_ci .=4 if edad_ci<7
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 7" 
 label value condocup_ci condocup_ci
 
@@ -499,7 +499,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *************
 *tamemp_ci
 *************
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if a4_19>=1 & a4_19<=5
 replace tamemp_ci=2 if a4_19>=6 & a4_19<=49
@@ -551,14 +551,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 
 *****************
@@ -571,7 +571,7 @@ replace desalent_ci=. if emp_ci==.
 *****************
 ***horaspri_ci***
 *****************
-*Esta variable está definida para una semana, sin embargo, se creo para el mes. Se deja la programación inicial sin
+*Esta variable estÃ¡ definida para una semana, sin embargo, se creo para el mes. Se deja la programaciÃ³n inicial sin
 *habilitar y se construye una nueva
 
 /* dias a la semana */
@@ -643,10 +643,10 @@ a4_13:
 	1	obrero(a)
 	2	empleado
 	3	trabajador(a) por cuenta propia
-	4	patrón, socio o empleador que si recibe salario
-	5	patrón, socio o empleador que no recibe salario
-	6	cooperativista de producción
-	7	trabajador(a) familiar o aprendiz sin remuneración
+	4	patrÃ³n, socio o empleador que si recibe salario
+	5	patrÃ³n, socio o empleador que no recibe salario
+	6	cooperativista de producciÃ³n
+	7	trabajador(a) familiar o aprendiz sin remuneraciÃ³n
 	8	empleada(o) del hogar
 */
 
@@ -706,7 +706,7 @@ replace nempleos_ci=2 if emp_ci==1 & a4_36==1
 
 gen firmapeq_ci=.
 replace firmapeq_ci=1 if  a4_19>=1 & a4_19<=5 /*1 a 5 personas*/
-replace firmapeq_ci=0 if  a4_19>=6 & a4_19!=. /*más de 5 personas*/
+replace firmapeq_ci=0 if  a4_19>=6 & a4_19!=. /*mÃ¡s de 5 personas*/
 */
 *****************
 ***spublico_ci***
@@ -723,13 +723,13 @@ replace spublico_ci=. if emp_ci~=1
 **************
 /*
 ceob_1:
-	1	dirección en la adm. pública y empresas
-	2	profesionales, científicos e intelectuales
-	3	técnicos y profesionales de apoyo
+	1	direcciÃ³n en la adm. pÃºblica y empresas
+	2	profesionales, cientÃ­ficos e intelectuales
+	3	tÃ©cnicos y profesionales de apoyo
 	4	empleados de oficina
 	5	servicios y vendedores del comercio
 	6	agricultura, pecuaria, agropecuaria y pesca
-	7	industria extractiva, construcción, ind. manufact.	y	otros	o
+	7	industria extractiva, construcciÃ³n, ind. manufact.	y	otros	o
 	8	operadores de instalaciones y maquinarias
 	9	trabajadores no calificados
 	10	fuerzas armadas
@@ -805,7 +805,7 @@ replace rama_ci=9 if cpaeb_1>=12 & cpaeb_1<=17 & emp_ci==1
 a4_10b:
            2 semana
            4 mes
-           6 año
+           6 aÃ±o
 */
 
 gen durades_ci=.
@@ -826,8 +826,8 @@ gen categoinac_ci =1 if (a4_07==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  (a4_07==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  (a4_07==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -1278,7 +1278,7 @@ replace ytransmon= a5_04b12/12		if a5_04b3==7
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1654,27 +1654,27 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 5 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 5 aÃ±os de edad*/
 
 /*
 a3_02a:
           11 ninguno
-          12 curso de alfabetización
-          13 educación pre-escolar
-          14 básico (1 a 5 años)
-          15 intermedio (1 a 3 años)
-          16 medio (1 a 4 años)
-          17 primaria (1 a 8 años)
-          18 secundaria (1 a 4 años)
-          19 educación básica de adultos (eba)
-          20 centro de educación media de adultos (cema)
+          12 curso de alfabetizaciÃ³n
+          13 educaciÃ³n pre-escolar
+          14 bÃ¡sico (1 a 5 aÃ±os)
+          15 intermedio (1 a 3 aÃ±os)
+          16 medio (1 a 4 aÃ±os)
+          17 primaria (1 a 8 aÃ±os)
+          18 secundaria (1 a 4 aÃ±os)
+          19 educaciÃ³n bÃ¡sica de adultos (eba)
+          20 centro de educaciÃ³n media de adultos (cema)
           21 normal
-          22 universidad  pública (licenciatura)
+          22 universidad  pÃºblica (licenciatura)
           23 universidad  privada (licenciatura)
-          24 postgrado, maestría
-          25 técnico de universidad
-          26 técnico de instituto
-          27 institutos de formación militar y policial
+          24 postgrado, maestrÃ­a
+          25 tÃ©cnico de universidad
+          26 tÃ©cnico de instituto
+          27 institutos de formaciÃ³n militar y policial
           28 otros cursos
 */
 
@@ -1827,8 +1827,8 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 
 *gen asiste_ci=(a3_08==1)
 
-* LMC (introducido por YL): Se cambia la forma de cálculo porque se deben considerar los rangos de edad lcm dic2013
-*Modificación Mayra Sáenz Enero-2017: Se genera la dummy de acuerdo al documento metodológico.
+* LMC (introducido por YL): Se cambia la forma de cÃ¡lculo porque se deben considerar los rangos de edad lcm dic2013
+*ModificaciÃ³n Mayra SÃ¡enz Enero-2017: Se genera la dummy de acuerdo al documento metodolÃ³gico.
 gen asiste_ci= a3_04==1
 /*
 gen asiste_ci= 1 if a3_04==1
@@ -1857,7 +1857,7 @@ replace pqnoasis1_ci = 7 if a3_09 ==7
 replace pqnoasis1_ci = 8 if a3_09 ==5
 replace pqnoasis1_ci = 9 if a3_09 ==1  | a3_09 ==10
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1874,7 +1874,7 @@ gen repiteult_ci=.
 ***************
 ***edupub_ci***
 ***************
-/*Sobre los que se matricularon ese año*/
+/*Sobre los que se matricularon ese aÃ±o*/
 
 gen edupub_ci=(a3_06==2 | a3_06==3)
 replace edupub_ci=. if a3_06==.
@@ -1894,7 +1894,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 /*
 a6_16:
-           1 cañeria de red
+           1 caÃ±eria de red
            2 pileta publica
            3 carro repartidor (aguatero)
            4 pozo o noria con bomba
@@ -1911,16 +1911,16 @@ replace aguared_ch=. if a6_16==.
 *Mayra Saenz Julio 2013 
 /*
 a6_19:
-           1 por cañería dentro de la vivienda
-           2 por cañeria fuera de la vivienda, pero dentro del lote
-           3 por cañeria fuera del lote o terreno
-           4 no se distribuye por cañería
+           1 por caÃ±erÃ­a dentro de la vivienda
+           2 por caÃ±eria fuera de la vivienda, pero dentro del lote
+           3 por caÃ±eria fuera del lote o terreno
+           4 no se distribuye por caÃ±erÃ­a
 */
 
 gen aguadist_ch=1 if a6_19==1
 replace aguadist_ch=2 if a6_19==2
 replace aguadist_ch=3 if a6_19==3
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 label val aguadist_ch aguadist_ch
@@ -1928,7 +1928,7 @@ label val aguadist_ch aguadist_ch
 
 gen aguamala_ch=(a6_16==6 | a6_16==7)
 replace aguamala_ch=. if a6_16==.
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 
 
 
@@ -1947,11 +1947,11 @@ gen luzmide_ch=.
 
 /*
 a6_24:
-           1 leña
+           1 leÃ±a
            2 guano, bosta o taquia
            3 kerosene
            4 gas licuado (garrafa)
-           5 gas natural por red (cañeria)
+           5 gas natural por red (caÃ±eria)
            6 otro
            7 electricidad
            8 no utiliza
@@ -1967,7 +1967,7 @@ a6_21:
 a6_22:
            1 privado
            2 compartido
-           3 no tiene baño
+           3 no tiene baÃ±o
 */
 
 gen bano_ch=(a6_21==1)
@@ -1982,8 +1982,8 @@ a6_23:
            1 alcantarillado
            2 camara septica
            3 pozo ciego
-           4 superficie (calle, quebrada o río)
-           5 no tiene baño
+           4 superficie (calle, quebrada o rÃ­o)
+           5 no tiene baÃ±o
 
 */
 gen des1_ch=.
@@ -1991,9 +1991,9 @@ replace des1_ch=0 if a6_23==0
 replace des1_ch=1 if a6_23==1 | a6_23==2
 replace des1_ch=2 if a6_23==3
 replace des1_ch=3 if a6_23==4
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 
@@ -2001,8 +2001,8 @@ gen des2_ch=.
 replace des2_ch=0 if bano_ch==0
 replace des2_ch=1 if a6_23==1 | a6_23==2 | a6_23==3 
 replace des2_ch=2 if a6_23==4
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -2013,7 +2013,7 @@ a6_10:
            1 tierra
            2 tablon de madera
            3 machimbre o parket
-           4 alfombra o tapìzon
+           4 alfombra o tapÃ¬zon
            5 cemento
            6 mosaico, baldosa o ceramica
            7 ladrillo
@@ -2028,12 +2028,12 @@ replace piso_ch=2 if a6_10==8
 
 /*
 a6_07:
-           1 ladrillo, bloques de cemento u hormigón
+           1 ladrillo, bloques de cemento u hormigÃ³n
            2 adobe o tapial
            3 tabique o quinche
            4 piedra
            5 madera
-           6 caña, palma o troncos
+           6 caÃ±a, palma o troncos
            7 otro
 
 */
@@ -2048,7 +2048,7 @@ a6_09:
            1 calamina o plancha
            2 tejas (cemento, arcilla, fibrocemento)
            3 losa de hormigon armado
-           4 paja, caña, palmo o barro
+           4 paja, caÃ±a, palmo o barro
            5 otro
 
 */
@@ -2059,12 +2059,12 @@ replace techo_ch=2 if a6_09==5
 
 /*
 a6_26:
-           1 la tira al río
+           1 la tira al rÃ­o
            2 la quema
            3 la tira en un terreno baldio a la calle
            4 la entierra
-           5 la deposita al basurero público o contenedor
-           6 utiliza el servicio público de recolección (carro basurero)
+           5 la deposita al basurero pÃºblico o contenedor
+           6 utiliza el servicio pÃºblico de recolecciÃ³n (carro basurero)
            7 otro
 */
 
@@ -2074,8 +2074,8 @@ replace resid_ch=1 if a6_26  ==4 | a6_26  ==2
 replace resid_ch=2 if a6_26  ==1 | a6_26  ==3
 replace resid_ch=3 if a6_26  ==5
 replace resid_ch=. if a6_26  ==.
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -2156,15 +2156,15 @@ replace vivialqimp_ch=vivialqimp_ch*7.45 if a6_06b==2
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

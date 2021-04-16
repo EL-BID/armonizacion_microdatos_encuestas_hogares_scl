@@ -6,7 +6,7 @@ set more off
 *****                                         MAYO                                                    *****
 ***********************************************************************************************************
 
-use "X:\ARM\JAM\2007\Orig_data\jam07_jslc.dta", clear 
+use "${surveysFolder}\ARM\JAM\2007\Orig_data\jam07_jslc.dta", clear 
 
 **********
 * pais_c *
@@ -93,7 +93,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a “weighting factor” but a “non response factor”. 
+/* It is not a â€œweighting factorâ€ but a â€œnon response factorâ€. 
 It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 ***************
@@ -266,35 +266,35 @@ label variable miembros_ci "Variable dummy que indica las personas que son miemb
 ***************
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 ***************
 * nmenor21_ch *
 ***************
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 ***************
 * nmayor65_ch *
 ***************
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 **************
 * nmenor6_ch *
 **************
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 **************
 * nmenor1_ch *
 **************
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
 
@@ -368,7 +368,7 @@ replace rama_ci=8 if L03>=8000 & L03<9000
 replace rama_ci=9 if L03>=9000 & L03<10000
 
 label var rama_ci "Rama Laboral en la Ocupacion Principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ***************
@@ -704,7 +704,7 @@ gen GRADO2=B22 if NIVEL2>0 & NIVEL2<=3 /* son los grados de primaria o secundari
 gen byte asiste_ci=.
 replace asiste_ci=1 if B01>=1 & B01<19
 replace asiste_ci=0 if B01==19
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 ***********
 * aedu_ci *
@@ -717,7 +717,7 @@ replace aedu_ci=GRADO2 if NIVEL2==1 | NIVEL2==2 | NIVEL2==3
 
 replace aedu_ci=GRADO-1 if aedu>=age & GRADO<. & GRADO2<. 
 replace aedu_ci=0 if B01==19 & B21==20
-label variable aedu_ci "Años de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "AÃ±os de Educacion (no incluye terciaria o universitaria)"
 
 ************
 * eduno_ci *
@@ -837,14 +837,14 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac_ci=0 if B01==14 | B01==15 | B21==15 | B21==16
 replace eduac_ci=1 if B01==13 | B21==14
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 *************
 * repite_ci *
 *************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 ****************
 * repiteult_ci *
@@ -863,7 +863,7 @@ destring B03, replace
 gen edupub_ci=.
 replace edupub_ci=1 if B03==1
 replace edupub_ci=0 if B03==2
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ***************
 * pqnoasis_ci *
@@ -893,7 +893,7 @@ destring B10R1, replace
 
 gen byte pqnoasis_ci=.
 replace pqnoasis_ci=B10R1
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" ///
 7 "Costos del transporte" 8 "Escuela cerrada" 9 "Carece de zapatos o uniforme, sucios, o mojados" 10 "Lluvia" ///
 11 "Problemas monetarios" 12 "Tiene que realizar alguna diligencia" 13 "No esta seguro en la escuela" 14 "No esta seguro en la comunidad" ///
@@ -1266,7 +1266,7 @@ gen vivialqimp_ch=.
 
 drop NIVEL GRADO NIVEL2 GRADO2  l01 L07YR2 L07MT2 L07MT2a
 
-save "X:\ARM\JAM\2007\Arm_data\JAM2007EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2007\Arm_data\JAM2007EA_BID.dta", replace
 
 -------
 
@@ -1790,4 +1790,4 @@ Relationship Codes
  replace UNMPLYMENT15=1 if  (tasadeso==1) 	        & (edad>=15 & edad<=24)
  
  
-save "X:\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2002\Arm_data\JAM2002EA_BID.dta", replace

@@ -3,10 +3,10 @@
 			*JSLC 2008*
 			***********
 
-*Se consolida una base para construir los indicadores de sociÛmetro. No obstante, se cuenta con m·s mÛdulos 
+*Se consolida una base para construir los indicadores de soci√≥metro. No obstante, se cuenta con m√°s m√≥dulos 
 *que el investigador puede unir a este consolidado. 
 
-cd "\\sdssrv03\Surveys\Jamaica\2008\JSLC\Datos Originales\STATA"
+cd "${surveysFolder}\Jamaica\2008\JSLC\Datos Originales\STATA"
 
 use rec001.dta, clear
 sort serial

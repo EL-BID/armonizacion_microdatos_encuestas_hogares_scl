@@ -3,7 +3,7 @@
 		******TERCER TRIMESTRE********
 		******************************
 
-cd "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos" 
+cd "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos" 
 
 use IIItrimestre_cab.dta
 append using IIItrimestre_res.dta
@@ -18,4 +18,4 @@ drop temp
 
 compress
 
-saveold "\\sdssrv03\Surveys\Colombia\2007\GEIH\3thquarter\Datos\col07.dta", replace
+saveold "${surveysFolder}\Colombia\2007\GEIH\3thquarter\Datos\col07.dta", replace

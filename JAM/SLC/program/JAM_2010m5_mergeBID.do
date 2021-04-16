@@ -3,10 +3,10 @@
 			*JSLC 2010*
 			***********
 
-*Se consolida una base para construir los indicadores de soci髆etro. No obstante, se cuenta con m醩 m骴ulos 
+*Se consolida una base para construir los indicadores de soci贸metro. No obstante, se cuenta con m谩s m贸dulos 
 *que el investigador puede unir a este consolidado. 
 
-cd "D:\DATA.IDB\Harmonization Task\Jamaica\2010\JSLC\Datos Originales\STATA" 
+cd "${surveysFolder}\DATA.IDB\Harmonization Task\Jamaica\2010\JSLC\Datos Originales\STATA" 
 
 /* use rec001.dta, clear
 sort serial
@@ -172,14 +172,14 @@ tab _merge
 drop _merge 
 
 
-save "D:\DATA.IDB\Harmonization Task\Jamaica\2010\JSLC\Data\jam10.dta", replace 
+save "${surveysFolder}\DATA.IDB\Harmonization Task\Jamaica\2010\JSLC\Data\jam10.dta", replace 
 
 
-*Inclusi髇 del m骴ulo de nutrici髇 
-*Mayra S醗nz Diciembre 2013
+*Inclusi贸n del m贸dulo de nutrici贸n 
+*Mayra S谩enz Diciembre 2013
 
 clear all
-global path = "D:\BID\JAM\Jam SLC"
+global path = "${surveysFolder}\BID\JAM\Jam SLC"
 use "$path\SLC\2010\m5\data_orig\jam10.dta"
 foreach v of varlist _all {
 	local lowname=lower("`v'")

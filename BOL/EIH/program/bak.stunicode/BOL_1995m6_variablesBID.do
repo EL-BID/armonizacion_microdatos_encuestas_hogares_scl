@@ -1,16 +1,16 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA EIH
@@ -28,12 +28,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: EIH
 Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -53,7 +53,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -94,7 +94,7 @@ label value zona_c zona_c
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -316,13 +316,13 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 7 años*/ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 7 aÃ±os*/ 
 	************************************
 	*** VARIABLES DEL MERCADO LABORAL***
 	************************************
 	
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -416,7 +416,7 @@ replace condocup_ci=1 if condact==1
 replace condocup_ci=2 if condact==2 | condact==3
 replace condocup_ci=3 if (condact>3 & condact<=8) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -428,7 +428,7 @@ replace condocup_ci=1 if trabajo==1 | sondeo==1
 replace condocup_ci=2 if (trabajo==2 | sondeo==1) & (bustrab==1 | bus3sem==1)
 recode condocup_ci .=3 if edad_ci>=10
 recode condocup_ci .=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -448,7 +448,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *tamemp_ci
 *************
 
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if (tamest>=2 & tamest<=5) | (nperocup>=1 & nperocup<=5)| (tamestpa>=1 & tamestpa<=5)
 replace tamemp_ci=2 if (tamest>=6 & tamest<=49) | (nperocup>=6 & nperocup<=49)| (tamestpa>=6 & tamestpa<=49)
@@ -500,14 +500,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 *****************
 ***desalent_ci***
@@ -541,7 +541,7 @@ drop horassec
 ***subemp_ci***
 ***************
 /*
-/*Esta variable no es comparable con los años siguientes*/
+/*Esta variable no es comparable con los aÃ±os siguientes*/
 gen subemp_ci=(horaspri_ci<=30 & quierema==1)
 replace subemp_ci=. if emp_ci~=1 | quierema==9 | quierema==0
 */
@@ -556,7 +556,7 @@ label var subemp_ci "Personas en subempleo por horas"
 *******************
 ***tiempoparc_ci***
 *******************
-/*Esta variable no es comparable con los años siguientes*/
+/*Esta variable no es comparable con los aÃ±os siguientes*/
 
 gen tiempoparc_ci=(horaspri_ci<=30 & quierema==2)
 replace tiempoparc_ci=. if emp_ci~=1 | quierema==9 | quierema==0
@@ -691,9 +691,9 @@ replace durades_ci=tpobusca*12 if codtbus==5
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
-/*Sólo para los obreros y empleados
-Esta variable no es comparable con los años siguientes al
+/*En aÃ±os*/
+/*SÃ³lo para los obreros y empleados
+Esta variable no es comparable con los aÃ±os siguientes al
 menos que se la acote a este grupo*/
 
 recode tpoempre (99=.)
@@ -710,8 +710,8 @@ gen categoinac_ci =1 if (pqnotrab==9 & condocup_ci==3)& pension_ci==1
 replace categoinac_ci = 2 if  (pqnotrab==8 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pqnotrab==7 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -844,7 +844,7 @@ gen ynlnm_ci=.
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -966,7 +966,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 5 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 5 aÃ±os de edad*/
 
 gen byte aedu_ci=.
 
@@ -1152,7 +1152,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-/*La encuesta no tiene módulo de vivienda*/
+/*La encuesta no tiene mÃ³dulo de vivienda*/
 
 gen aguared_ch=.
 gen aguadist_ch=.
@@ -1191,15 +1191,15 @@ gen vivialqimp_ch=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

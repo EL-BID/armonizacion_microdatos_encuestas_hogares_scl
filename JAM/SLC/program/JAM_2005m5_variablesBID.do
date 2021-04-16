@@ -1,7 +1,7 @@
 clear all
 set mem 500m
 set more off
-cd "X:\ARM\JAM\2005\JSLC\Orig_data"
+cd "${surveysFolder}\ARM\JAM\2005\JSLC\Orig_data"
 use slc2005.dta
 
 ***********
@@ -656,10 +656,10 @@ gen vivialqimp_ch=.
 cap ren idp_c idp_ci
 
 
-save "X:\ARM\JAM\2005\JSLC\Arm_data\JAM2005EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2005\JSLC\Arm_data\JAM2005EA_BID.dta", replace
 
 
 
-save "X:\ARM\JAM\2005\JAM2005EA_BID.dta", replace
+save "${surveysFolder}\ARM\JAM\2005\JAM2005EA_BID.dta", replace
 
 

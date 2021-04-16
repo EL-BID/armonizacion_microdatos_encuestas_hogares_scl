@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PAN
 local ENCUESTA EH
@@ -30,14 +30,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Panama
+PaÃ­s: Panama
 Encuesta: EH
 Round: Agosto
 Autores: 
-Versión 2010: do file preparado por Melisa Morales para Suzanne Duryea 
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 10 de Octubre de 2013
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2010: do file preparado por Melisa Morales para Suzanne Duryea 
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 10 de Octubre de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
@@ -59,33 +59,33 @@ destring _all, replace
 	
 gen region_BID_c=1
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 
 
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 destring prov, replace
 gen region_c=  prov
 
 label define region_c  ///
 1	"Bocas del Toro" ///
-2	"Coclé" ///
-3	"Colón" ///
-4	"Chiriquí" ///
-5	"Darién" ///
+2	"CoclÃ©" ///
+3	"ColÃ³n" ///
+4	"ChiriquÃ­" ///
+5	"DariÃ©n" ///
 6	"Herrera" ///
 7	"Los Santos" ///
-8	"Panamá" ///
+8	"PanamÃ¡" ///
 9	"Veraguas" ///
 10	"Kuna Yala" ///
-11	"Emberá" ///
-12	"Ngäbe-Buglé"		  
+11	"EmberÃ¡" ///
+12	"NgÃ¤be-BuglÃ©"		  
 label value region_c region_c
-label var region_c "División política, provincias"
+label var region_c "DivisiÃ³n polÃ­tica, provincias"
 
 
 *****************************************
@@ -106,11 +106,11 @@ label var region_c "División política, provincias"
 p1
 Parentesco
  1. Jefes
- 2. Cónyuge del jefe
+ 2. CÃ³nyuge del jefe
  3. Hijo o hija (incluyendo los hijos adoptivos o de crianza)
- 4. Otro pariente (hermanos, nietos, tíos, sobrinos, abuelos, cuñados, padres, suegros, etc.)
- 5. Servicio doméstico (sirvientes, cocineras, cocineras, conductores, niñeras, etc.)
- 6. Otras personas no parientes del jefe (huéspedes y las familias de esas personas)
+ 4. Otro pariente (hermanos, nietos, tÃ­os, sobrinos, abuelos, cuÃ±ados, padres, suegros, etc.)
+ 5. Servicio domÃ©stico (sirvientes, cocineras, cocineras, conductores, niÃ±eras, etc.)
+ 6. Otras personas no parientes del jefe (huÃ©spedes y las familias de esas personas)
 */
 
  gen incl=1     if (p1>=1 & p1<=6) 
@@ -226,7 +226,7 @@ label variable edad_ci "Edad del individuo"
 **********
 
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -372,7 +372,7 @@ replace condocup_ci=1 if sumactiv >= 1 & sumactiv <= 5
 replace condocup_ci=2 if sumactiv >= 6 
 replace condocup_ci=3 if sumactiv >= 7 & sumactiv <= 17 | sumactiv == 0
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -383,7 +383,7 @@ replace condocup_ci=1 if (sumactiv>=1 & sumactiv <=5)
 replace condocup_ci=2 if sumactiv==6 | sumactiv==8 | (((sumactiv>=10 & sumactiv<=12) | sumactiv==15) & p18==1)
 recode condocup_ci .=3 if edad_ci>=10
 recode condocup_ci .=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -524,7 +524,7 @@ replace rama_ci=7 if p29>=6010 & p29<=6420 & emp_ci==1
 replace rama_ci=8 if p29>=6511 & p29<=7020 & emp_ci==1
 replace rama_ci=9 if p29>=7111 & p29<=9900 & emp_ci==1
 label var rama_ci "RAMA"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ******************
@@ -927,10 +927,10 @@ gen vivialqimp_ch=.
 gen asiste_ci=.
 replace asiste_ci=1 if p7==1
 replace asiste_ci=0 if p7==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 gen pqnoasis_ci=p7a if p7a>0
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 **************
 *pqnoasis1_ci*
@@ -946,7 +946,7 @@ replace pqnoasis1_ci = 7 if p7a==8
 replace pqnoasis1_ci = 8 if p7a==1
 replace pqnoasis1_ci = 9 if p7a==9
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 gen edupub_ci=.
@@ -956,7 +956,7 @@ gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 
 
@@ -1036,26 +1036,26 @@ drop nivel grado
 ** Years of Education
 /*
 p7 (asiste)
-7. ¿Asiste a la escuela actualmente?
+7. Â¿Asiste a la escuela actualmente?
 
 p8 (niveduc)
-8. ¿Grado o año más alto aprobó?
+8. Â¿Grado o aÃ±o mÃ¡s alto aprobÃ³?
 
-11. Primaria 1 año	41. Universitaria 1 año
-12. Primaria 2 años	42. Universitaria 2 años
-13. Primaria 3 años	43. Universitaria 3 años
-14. Primaria 4 años	44. Universitaria 4 años
-15. Primaria 5 años	45. Universitaria 5 años
-16. Primaria 6 años	46. Universitaria 6 años
-21. Secundaria 1 año	47. Universitaria 7 años
-22. Secundaria 2 años	48. Universitaria 8 años
-23. Secundaria 3 años	49. Universitaria 9 años
-24. Secundaria 4 años	51. No Universitaria 1 año
-25. Secundaria 5 años	52. No Universitaria 2 años
-26. Secundaria 6 años	53. No Universitaria 3 años
-31. Vocacional 1 año	60. Ningún grado
-32. Vocacional 2 años	70. Enseñanza especial
-33. Vocacional 3 años
+11. Primaria 1 aÃ±o	41. Universitaria 1 aÃ±o
+12. Primaria 2 aÃ±os	42. Universitaria 2 aÃ±os
+13. Primaria 3 aÃ±os	43. Universitaria 3 aÃ±os
+14. Primaria 4 aÃ±os	44. Universitaria 4 aÃ±os
+15. Primaria 5 aÃ±os	45. Universitaria 5 aÃ±os
+16. Primaria 6 aÃ±os	46. Universitaria 6 aÃ±os
+21. Secundaria 1 aÃ±o	47. Universitaria 7 aÃ±os
+22. Secundaria 2 aÃ±os	48. Universitaria 8 aÃ±os
+23. Secundaria 3 aÃ±os	49. Universitaria 9 aÃ±os
+24. Secundaria 4 aÃ±os	51. No Universitaria 1 aÃ±o
+25. Secundaria 5 aÃ±os	52. No Universitaria 2 aÃ±os
+26. Secundaria 6 aÃ±os	53. No Universitaria 3 aÃ±os
+31. Vocacional 1 aÃ±o	60. NingÃºn grado
+32. Vocacional 2 aÃ±os	70. EnseÃ±anza especial
+33. Vocacional 3 aÃ±os
 */
 
  rename p7 asiste
@@ -1090,16 +1090,16 @@ p8 (niveduc)
 ** Economic Active Population
 /*
 p10_17 (sumactiv)
- 0.  No aplicable (menores de 10 años)
+ 0.  No aplicable (menores de 10 aÃ±os)
  1.  Trabajando
- 2.  No trabajó, pero tenía trabajo
+ 2.  No trabajÃ³, pero tenÃ­a trabajo
  3.  Trabajos informales
  4.  Trabajador ocasional
  5.  Trabajos familiares
  6.  Buscando trabajo
- 7.  Ya consiguó trabajo
- 8.  Buscó antes y espera noticias
- 9.  Se cansó de buscar trabajo
+ 7.  Ya consiguÃ³ trabajo
+ 8.  BuscÃ³ antes y espera noticias
+ 9.  Se cansÃ³ de buscar trabajo
  10. Jubilado o pensionado
  11. Estudiante solamente
  12. Ama de casa solamente o trabajador del hogar
@@ -1108,14 +1108,14 @@ p10_17 (sumactiv)
  15. Otros inactivos
 
 p18
- 18. ¿Buscó trabajo el mes pasado?
+ 18. Â¿BuscÃ³ trabajo el mes pasado?
 
 p19
- 19. ¿Buscó trabajo durante los últimos 3 meses?
+ 19. Â¿BuscÃ³ trabajo durante los Ãºltimos 3 meses?
 
 p26
- 26. ¿Cuánto tiempo hace que realizó su último trabajo?
- 999. Nunca trabajó
+ 26. Â¿CuÃ¡nto tiempo hace que realizÃ³ su Ãºltimo trabajo?
+ 999. Nunca trabajÃ³
 */
 
 ** NATIONAL DEFINITION 
@@ -1160,30 +1160,30 @@ p26
 ** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
 
 /*
-CARACTERISTICAS EDUCATIVAS (5 años o más de edad)
+CARACTERISTICAS EDUCATIVAS (5 aÃ±os o mÃ¡s de edad)
 p7 (asiste)
-7. ¿Asiste a la escuela actualmente?
+7. Â¿Asiste a la escuela actualmente?
  1. Si
  2. No
  
 p8 (niveduc)
-8. ¿Grado o año más alto aprobó?
+8. Â¿Grado o aÃ±o mÃ¡s alto aprobÃ³?
 
-11. Primaria 1 año	41. Universitaria 1 año
-12. Primaria 2 años	42. Universitaria 2 años
-13. Primaria 3 años	43. Universitaria 3 años
-14. Primaria 4 años	44. Universitaria 4 años
-15. Primaria 5 años	45. Universitaria 5 años
-16. Primaria 6 años	46. Universitaria 6 años
-21. Secundaria 1 año	47. Universitaria 7 años
-22. Secundaria 2 años	48. Universitaria 8 años
-23. Secundaria 3 años	49. Universitaria 9 años
-24. Secundaria 4 años	51. No Universitaria 1 año
-25. Secundaria 5 años	52. No Universitaria 2 años
-26. Secundaria 6 años	53. No Universitaria 3 años
-31. Vocacional 1 año	60. Ningún grado
-32. Vocacional 2 años	70. Enseñanza especial
-33. Vocacional 3 años
+11. Primaria 1 aÃ±o	41. Universitaria 1 aÃ±o
+12. Primaria 2 aÃ±os	42. Universitaria 2 aÃ±os
+13. Primaria 3 aÃ±os	43. Universitaria 3 aÃ±os
+14. Primaria 4 aÃ±os	44. Universitaria 4 aÃ±os
+15. Primaria 5 aÃ±os	45. Universitaria 5 aÃ±os
+16. Primaria 6 aÃ±os	46. Universitaria 6 aÃ±os
+21. Secundaria 1 aÃ±o	47. Universitaria 7 aÃ±os
+22. Secundaria 2 aÃ±os	48. Universitaria 8 aÃ±os
+23. Secundaria 3 aÃ±os	49. Universitaria 9 aÃ±os
+24. Secundaria 4 aÃ±os	51. No Universitaria 1 aÃ±o
+25. Secundaria 5 aÃ±os	52. No Universitaria 2 aÃ±os
+26. Secundaria 6 aÃ±os	53. No Universitaria 3 aÃ±os
+31. Vocacional 1 aÃ±o	60. NingÃºn grado
+32. Vocacional 2 aÃ±os	70. EnseÃ±anza especial
+33. Vocacional 3 aÃ±os
 */
 
 *** GOAL 2. ACHIEVE UNIVERSAL PRIMARY EDUCATION
@@ -1201,7 +1201,7 @@ p8 (niveduc)
  replace NERS=1 if  (edad>=12 & edad<=17) & (asiste==1 & ((niveduc>=16 & niveduc<=25) |(niveduc>=31 & niveduc<=32)))
 
 * ISCED 3
-* 2o Nivel de enseñanza media
+* 2o Nivel de enseÃ±anza media
 
 
  gen	 NERS2=0 if  (edad>=15 & edad<=17) & (asiste==1 | asiste==2)
@@ -1284,15 +1284,15 @@ p8 (niveduc)
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 /*
 categ (p32)							rama (p29)
-32. ¿Dónde usted trabaja o trabajó lo hizo como..?		29. ¿A qué se dedica el negocio...?
+32. Â¿DÃ³nde usted trabaja o trabajÃ³ lo hizo como..?		29. Â¿A quÃ© se dedica el negocio...?
  1. Empleado del gobierno
  2. Empleado de empresa privada
- 3. Empleado de la comisión del canal o sitios de defensa
- 4. Servicio doméstico
+ 3. Empleado de la comisiÃ³n del canal o sitios de defensa
+ 4. Servicio domÃ©stico
  5. Por cuenta propia
- 6. Patrono (dueño)
+ 6. Patrono (dueÃ±o)
  7. Trabajador familiar
- 8. Miembro de una cooperativa de producción
+ 8. Miembro de una cooperativa de producciÃ³n
 */
 
 * Without Domestic Service
@@ -1345,16 +1345,16 @@ categ (p32)							rama (p29)
 ** Disconnected Youths
 /*
 p10_17 (sumactiv)
-0.  No aplicable (menores de 10 años)
+0.  No aplicable (menores de 10 aÃ±os)
 1.  Trabajando
-2.  No trabajó, pero tenía trabajo
+2.  No trabajÃ³, pero tenÃ­a trabajo
 3.  Trabajos informales
 4.  Trabajador ocasional
 5.  Trabajos familiares
 6.  Buscando trabajo
-7.  Ya consiguó trabajo
-8.  Buscó antes y espera noticias
-9.  Se cansó de buscar trabajo
+7.  Ya consiguÃ³ trabajo
+8.  BuscÃ³ antes y espera noticias
+9.  Se cansÃ³ de buscar trabajo
 10. Jubilado o pensionado
 11. Estudiante solamente
 12. Ama de casa solamente o trabajador del hogar
@@ -1435,7 +1435,7 @@ p10_17 (sumactiv)
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -1462,7 +1462,7 @@ label var salmm_ci "Salario minimo legal"
 *********
 
 gen lp_ci =.
-replace lp_ci= 64.03 if zona_c==1 & dist==1 /* Cdad. Panamá*/
+replace lp_ci= 64.03 if zona_c==1 & dist==1 /* Cdad. PanamÃ¡*/
 replace lp_ci= 64.03 if zona_c==1 & dist==3 /* Zona urbana districto san miguelito*/
 replace lp_ci= 71.19 if ((dist!=1 & dist!=3) & zona_c==1) | zona_c==0  /* resto urbano o rural*/
 
@@ -1474,7 +1474,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *********
 
 gen lpe_ci =.
-replace lpe_ci= 30.69 if zona_c==1 & dist==1 /* Cdad. Panamá*/
+replace lpe_ci= 30.69 if zona_c==1 & dist==1 /* Cdad. PanamÃ¡*/
 replace lpe_ci= 30.69 if zona_c==1 & dist==3 /* Zona urbana districto san miguelito*/
 replace lpe_ci= 31.87 if ((dist!=1 & dist!=3) & zona_c==1) | zona_c==0  /* resto urbano o rural*/
 
@@ -1558,13 +1558,13 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *tamemp_ci
 *************
 gen tamemp_ci=1 if p30==1 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if p30==2 | p30==3 | p30==4
 *Empresas grandes
 replace tamemp_ci=3 if p30==5
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw= fac15_e]
 
 *************
@@ -1572,7 +1572,7 @@ tab tamemp_ci [iw= fac15_e]
 *************
 
 gen categoinac_ci=1 if p10_17==10
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if p10_17==11
 *Quehaceres del Hogar
@@ -1627,15 +1627,15 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ren ocup ocup_old
 	
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

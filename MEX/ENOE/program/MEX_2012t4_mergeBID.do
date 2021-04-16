@@ -1,4 +1,4 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENOE\2012\t4\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENOE\2012\t4\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENOE
 local ANO "2012"
 local ronda t4
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 *capture log close
 *log using "`log_file'", replace 
@@ -28,19 +28,19 @@ local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\
 
 use "$ruta\coe1t412.dta"
 destring eda, replace
-drop if r_def!="00" | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a駉s (s髄o se hace cuestionario de ocupaci髇 a los residentes mayores de 12 a駉s)		
+drop if r_def!="00" | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a帽os (s贸lo se hace cuestionario de ocupaci贸n a los residentes mayores de 12 a帽os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 saveold "$ruta\coe1t4.dta" , replace
 
 use "$ruta\coe2t412.dta"
 destring eda, replace
-drop if eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a駉s (s髄o se hace cuestionario de ocupaci髇 a los residentes mayores de 12 a駉s)		
+drop if eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a帽os (s贸lo se hace cuestionario de ocupaci贸n a los residentes mayores de 12 a帽os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 saveold "$ruta\coe2t4.dta", replace
 
 use "$ruta\sdemt412.dta"
 destring eda, replace
-drop if r_def!="00" | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a駉s (s髄o se hace cuestionario de ocupaci髇 a los residentes mayores de 12 a駉s)		
+drop if r_def!="00" | eda<=11 | eda==99		// Se elimina a aquellos que no sean residentes permanentes, no tengasn cuestionario completo o sean menores de 12 a帽os (s贸lo se hace cuestionario de ocupaci贸n a los residentes mayores de 12 a帽os)		
 sort  cd_a  ent  con  v_sel  n_hog h_mud n_ren	
 merge cd_a  ent  con  v_sel  n_hog  h_mud  n_ren using "$ruta\coe1t4.dta"
 tab _merge

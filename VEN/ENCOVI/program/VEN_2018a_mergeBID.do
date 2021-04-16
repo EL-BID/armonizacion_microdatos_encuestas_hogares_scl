@@ -5,12 +5,12 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 local PAIS VEN
 local ENCUESTA ENCOVI
 local ANO "2018"
@@ -37,7 +37,7 @@ Fecha última modificación: Febrero 2019
 use "$ruta\survey\VEN\ENCOVI\2018\a\data_orig\personas_encovi_2018_vers_23_2.dta", clear
 
 *hago el merge con viviendas
-mmerge ennum  using "\\\Sdssrv03\surveys\survey\VEN\ENCOVI\2018\a\data_orig\hogares_encovi_2018_vers_23_2.dta", t(n:1)
+mmerge ennum  using "\${surveysFolder}\survey\VEN\ENCOVI\2018\a\data_orig\hogares_encovi_2018_vers_23_2.dta", t(n:1)
 
 compress
 

@@ -1,18 +1,18 @@
 
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ECH
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ECH
 Round: t3
 Autores: Yanira Oviedo
-Generación nuevas variables LMK: Andres Felipe Sanchez, Laura Oliveri, Yessenia Loayza
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: noviembre 2013
+GeneraciÃ³n nuevas variables LMK: Andres Felipe Sanchez, Laura Oliveri, Yessenia Loayza
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: noviembre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -48,24 +48,24 @@ use `base_in', clear
 gen region_c=DPTO
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -79,7 +79,7 @@ label var region_c "division politico-administrativa, departamento"
 ************
 gen region_BID_c=3
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *
@@ -325,7 +325,7 @@ replace condocup_ci=1 if  F12 == 1  | F13==1 | F14==1 | F15==1
 replace condocup_ci=2 if (F16==1 | (F16==2 & F17==1 & F18==1)) & F23==1
 recode condocup_ci .=3 
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -384,14 +384,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -438,7 +438,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 *categoinac_ci**
 ***************
 gen categoinac_ci=. 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos"
 label value categoinac_ci categoinac_ci
 /*Y.L. en la ECH No se puede clasificar a todos los inactivos.
@@ -569,7 +569,7 @@ gen nempleos_ci=.
 replace nempleos_ci=1 if emp_ci==1 & O37==2
 replace nempleos_ci=2 if emp_ci==1 & O37==1
 replace nempleos_ci=. if emp_ci==0
-label var nempleos_ci "Número de empleos" 
+label var nempleos_ci "NÃºmero de empleos" 
 
 
 *****************
@@ -578,7 +578,7 @@ label var nempleos_ci "Número de empleos"
 
 gen spublico_ci=(O27==2) 
 replace spublico_ci=. if emp_ci==0 
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 
 **************
@@ -620,8 +620,8 @@ replace rama_ci=9 if (O26>=72 & O26<=99) & emp_ci==1
 replace rama_ci=. if emp_ci==0
 
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -862,7 +862,7 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 
 **************
@@ -967,7 +967,7 @@ replace NIVEL=3 if C10>=610 & C10<=613
 replace NIVEL=4	if C10>=500 & C10<=515
 replace NIVEL=.	if C10==999
 
-label var NIVEL "NIVEL EDUCATIVO MÁS ALTO ALCANZADO"
+label var NIVEL "NIVEL EDUCATIVO MÃS ALTO ALCANZADO"
 label def NIVEL 0"Ninguno" 1"Preescolar" 2"Primaria" 3"Secundaria" 4"Superior"
 label val NIVEL NIVEL
 
@@ -992,8 +992,8 @@ replace aedu_ci=8  if C10==408
 replace aedu_ci=9  if C10==409 
 replace aedu_ci=10 if C10==610 
 replace aedu_ci=11 if C10==611 | C10==500  
-replace aedu_ci=12 if C10==612 /* Y.L -> 12 años de educacion secundaria "son muy pocos"*/
-replace aedu_ci=13 if C10==613 /* Y.L -> 13 años de educacion secundaria "son muy pocos"*/
+replace aedu_ci=12 if C10==612 /* Y.L -> 12 aÃ±os de educacion secundaria "son muy pocos"*/
+replace aedu_ci=13 if C10==613 /* Y.L -> 13 aÃ±os de educacion secundaria "son muy pocos"*/
 
 *** superior o universitario  *** 
 replace aedu_ci=12 if C10==501
@@ -1062,14 +1062,14 @@ label variable edusc_ci "Secundaria completa"
 **************
 ***eduui_ci***
 **************
-*Y.L - > Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L - > Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduui_ci=(aedu_ci>11 & aedu_ci<16)
 label variable eduui_ci "Superior incompleto"
 
 ***************
 ***eduuc_ci***
 ***************
-*Y.L. -> Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L. -> Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduuc_ci= (aedu_ci>=16 & aedu_ci!=.)
 label variable eduuc_ci "Superior completo"
 
@@ -1150,7 +1150,7 @@ label var repite_ci "Ha repetido al menos un grado"
 ***repiteult_ci***
 ******************
 gen repiteult_ci=.
-label var repiteult "Ha repetido el último grado"
+label var repiteult "Ha repetido el Ãºltimo grado"
 
 
 ***************
@@ -1159,7 +1159,7 @@ label var repiteult "Ha repetido el último grado"
 gen edupub_ci=0
 replace edupub_ci=1 if C9==1
 replace edupub_ci=. if C9==.
-label var edupub_ci "Asiste a un centro de ensenanza público"
+label var edupub_ci "Asiste a un centro de ensenanza pÃºblico"
 
 
 	**********************************
@@ -1179,7 +1179,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 ***aguadist_ch***
 *****************
 gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 label val aguadist_ch aguadist_ch
@@ -1192,7 +1192,7 @@ label val aguadist_ch aguadist_ch
 *Y.L. cambio categoria para hacerla comparable con GEIH
 gen aguamala_ch=(VA6==5 | VA6==9)
 replace aguamala_ch=. if VA6==.
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 
 
 *****************
@@ -1208,7 +1208,7 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 ************
 gen luz_ch=0 if V4A!=.
 replace luz_ch=1 if V4A==1 
-label var luz_ch  "La principal fuente de iluminación es electricidad"
+label var luz_ch  "La principal fuente de iluminaciÃ³n es electricidad"
 
 
 ****************
@@ -1251,9 +1251,9 @@ replace des1_ch=0 if bano_ch==0
 replace des1_ch=1 if VA3==1 | VA3==2
 replace des1_ch=2 if VA3==3 | VA3==4
 replace des1_ch=3 if VA3==5
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 
@@ -1265,8 +1265,8 @@ gen des2_ch=.
 replace des2_ch=0 if bano_ch==0
 replace des2_ch=1 if VA3==1 | VA3==2 | VA3==3 | VA3==4
 replace des2_ch=3 if VA3==5
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -1277,7 +1277,7 @@ label val des2_ch des2_ch
 gen piso_ch=1 if V3!=1 & V3!=.
 replace piso_ch=0 if V3==1
 replace piso_ch=. if V3==.
-label var piso_ch "Materiales de construcción del piso"  
+label var piso_ch "Materiales de construcciÃ³n del piso"  
 label def piso_ch 0"Piso de tierra" 1"Materiales permanentes"
 label val piso_ch piso_ch
 
@@ -1287,7 +1287,7 @@ label val piso_ch piso_ch
 gen pared_ch=0 
 replace pared_ch=1 if V2==1 | V2==2 | V2==3 | V2==5
 replace pared_ch=. if V2==.
-label var pared_ch "Materiales de construcción de las paredes"
+label var pared_ch "Materiales de construcciÃ³n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
 label val pared_ch pared_ch
 
@@ -1296,7 +1296,7 @@ label val pared_ch pared_ch
 ***techo_ch***
 **************
 gen techo_ch=.
-label var techo_ch "Materiales de construcción del techo"
+label var techo_ch "Materiales de construcciÃ³n del techo"
 
 **************
 ***resid_ch***
@@ -1306,8 +1306,8 @@ replace resid_ch=1 if VA5==3
 replace resid_ch=2 if VA5==1 | VA5==2
 replace resid_ch=3 if VA5==5
 replace resid_ch=. if VA5==.
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -1337,7 +1337,7 @@ label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 ***telef_ch***
 **************
 gen telef_ch=.
-label var telef_ch "El hogar tiene servicio telefónico fijo"
+label var telef_ch "El hogar tiene servicio telefÃ³nico fijo"
 
 
 ***************
@@ -1381,7 +1381,7 @@ label var compu_ch "El hogar posee computador"
 gen internet_ch=0
 replace internet_ch=1 if VA10I==1
 replace internet_ch=. if VA10I==.
-label var internet_ch "El hogar posee conexión a Internet"
+label var internet_ch "El hogar posee conexiÃ³n a Internet"
 
 
 ************
@@ -1431,7 +1431,7 @@ label val viviprop_ch viviprop_ch
 ***vivitit_ch***
 ****************
 gen vivitit_ch=.
-label var vivitit_ch "El hogar posee un título de propiedad"
+label var vivitit_ch "El hogar posee un tÃ­tulo de propiedad"
 
 
 ****************
@@ -1453,8 +1453,8 @@ gen tcylmpri_ch=.
 gen pqnoasis_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

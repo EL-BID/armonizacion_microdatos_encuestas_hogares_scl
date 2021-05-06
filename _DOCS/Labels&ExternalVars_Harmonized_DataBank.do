@@ -62,7 +62,23 @@ label var civil_ci "Estado civil"
 	label define civil_ci 1 "soltero/a" 2 "union_formal/informal" 3 "divorciado/a_o_separado/a" 4 "Viudo/a" , add modify
 	label value civil_ci civil_ci
 	
-label var raza_ci "Raza o etnia_clasificacion varia segun el país"
+label var dis_ci "Personas con discapacidad"
+	label define dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+	label val dis_ci dis_ci
+	
+label var dis_ch "Hogares con miembros con discapacidad"
+	label define dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
+	label val dis_ch dis_ch 
+
+label var afroind_ci "Raza o etnia del individuo"
+	label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
+	label val afroind_ci afroind_ci 
+
+label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
+	label define afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
+	label val afroind_ch afroind_ch 
+
+label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 	
 label var jefe_ci "Jefe/a de hogar"
 label var nconyuges_ch "# de conyuges en el hogar"

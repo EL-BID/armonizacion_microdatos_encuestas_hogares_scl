@@ -1,5 +1,5 @@
 
-cd "\\Sdssrv03\surveys\survey\URY\ECH\2013\a\data_orig"
+cd "${surveysFolder}\survey\URY\ECH\2013\a\data_orig"
 use h_2013_terceros.dta, clear
 sort numero
 

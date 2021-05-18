@@ -45,8 +45,8 @@ set matsize 2000
  *************************************************************************/
 	
 *Directorios:
-	global RAW    "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\PAN\EIGH\RAW"
-	global data_arm  "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\PAN\EIGH\data_arm"
+	global RAW    "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\PAN\EIGH\RAW"
+	global data_arm  "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\PAN\EIGH\data_arm"
 
 	
 /*	____________________________________________________________________________

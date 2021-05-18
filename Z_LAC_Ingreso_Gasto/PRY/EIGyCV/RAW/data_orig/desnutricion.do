@@ -1,8 +1,8 @@
 * PARAGUAY: EIGCV 2011-2012
 
 
-use Z:\survey\PRY\EIGyCV\2011_2012\reg02t.dta, clear
-joinby upm nvivi nhoga using "D:\DATA.IDB\A_PER\EPH_2003-11\EIGyCV_2011_2012\ingrefam.dta", unm(b)
+use ${surveysFolder}\survey\PRY\EIGyCV\2011_2012\reg02t.dta, clear
+joinby upm nvivi nhoga using "${surveysFolder}\DATA.IDB\A_PER\EPH_2003-11\EIGyCV_2011_2012\ingrefam.dta", unm(b)
 
 destring p06d p06m p06a fva fvm fvd, replace
 recode p06d p06m p06a (99 9999 =.)
@@ -54,7 +54,7 @@ tabstat stunting wasting underweight overweight obesity [w=fex], by(quintili)
 
 
 * tabla gasto en alimentos vs desnutricion
-joinby upm nvivi nhoga using "D:\temp1.dta", unm(b)
+joinby upm nvivi nhoga using "${surveysFolder}\temp1.dta", unm(b)
 keep if _merge==3
 tabstat TOTAL1011 - TOTAL1051 [w=fex], by(stunting)
 tabstat TOTAL1011 - TOTAL1051 [w=fex], by(overweight)
@@ -62,10 +62,10 @@ tabstat TOTAL1011 - TOTAL1051 [w=fex], by(overweight)
 
 * tabla gasto en alimentos vs desnutricion - 9 digitos
 
-use "D:\DATA.IDB\A_PER\EPH_2003-11\EIGyCV_2011_2012\agregado_de_gastos.dta", clear
+use "${surveysFolder}\DATA.IDB\A_PER\EPH_2003-11\EIGyCV_2011_2012\agregado_de_gastos.dta", clear
 keep if ga01c>=100000000 & ga01c<200000000             // solo alimentos
 keep upm nvivi nhoga ga01c TOTAL
-joinby upm nvivi nhoga using "D:\desnut.dta", unm(b)
+joinby upm nvivi nhoga using "${surveysFolder}\desnut.dta", unm(b)
 keep if _merge==3
 
 set more off

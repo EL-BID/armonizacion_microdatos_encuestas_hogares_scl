@@ -2,7 +2,7 @@
 
 *Modificación Mayra Sáenz Julio 2015
 
-cd "Z:\survey\URY\ECH\2006\a\data_orig"
+cd "${surveysFolder}\survey\URY\ECH\2006\a\data_orig"
 
 use hog_2006_publica.dta, clear
 sort numero, stable
@@ -22,4 +22,4 @@ sort numero
 tab _merge
 drop _merge
 
-saveold "Z:\survey\URY\ECH\2006\a\data_merge\URY_2006a.dta", replace
+saveold "${surveysFolder}\survey\URY\ECH\2006\a\data_merge\URY_2006a.dta", replace

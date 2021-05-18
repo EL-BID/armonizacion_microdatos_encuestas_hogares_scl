@@ -10,7 +10,7 @@
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos originales\0807\CABECERA\"
+cd "${surveysFolder}\Colombia\2008\GEIH\Datos originales\0807\CABECERA\"
 
 
 *Pegando los archivos de personas*
@@ -55,37 +55,37 @@ merge directorio secuencia_p  orden using ftrab7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 merge directorio secuencia_p  orden using otrasactividades7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 merge directorio secuencia_p  orden using otrosingresos7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 merge directorio secuencia_p  orden using ocupados7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 merge directorio secuencia_p  orden using inactivos7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 merge directorio secuencia_p  orden using desocupados7.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 
 
@@ -98,13 +98,13 @@ use vivienda7.dta
 sort directorio secuencia_p    
 save, replace
 
-use "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta"
+use "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta"
 sort directorio secuencia_p   
 merge directorio secuencia_p    using vivienda7.dta
 tab _merge 
 drop _merge
 compress
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 
 
@@ -115,7 +115,7 @@ saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\july08_cab.dta", replace
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos originales\0808\CABECERA\"
+cd "${surveysFolder}\Colombia\2008\GEIH\Datos originales\0808\CABECERA\"
 
 
 *Pegando los archivos de personas*
@@ -160,38 +160,38 @@ merge directorio secuencia_p  orden using ftrab8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 
 merge directorio secuencia_p  orden using otrasactividades8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 merge directorio secuencia_p  orden using otrosingresos8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 merge directorio secuencia_p  orden using ocupados8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 merge directorio secuencia_p  orden using inactivos8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 merge directorio secuencia_p  orden using desocupados8.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 
 
 *Pegando el archivo de vivienda y hogar*
@@ -202,13 +202,13 @@ use vivienda8.dta
 sort directorio secuencia_p   
 save, replace
 
-use "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta"
+use "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta"
 sort directorio secuencia_p  
 merge directorio secuencia_p   using vivienda8.dta
 tab _merge 
 drop _merge
 compress
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\august08_cab.dta", replace
 clear
 
 
@@ -218,7 +218,7 @@ clear
 
 clear
 
-cd "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos originales\0809\CABECERA\"
+cd "${surveysFolder}\Colombia\2008\GEIH\Datos originales\0809\CABECERA\"
 
 
 *Pegando los archivos de personas*
@@ -263,38 +263,38 @@ merge directorio secuencia_p  orden using ftrab9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 
 merge directorio secuencia_p  orden using otrasactividades9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden 
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 merge directorio secuencia_p  orden using otrosingresos9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 merge directorio secuencia_p  orden using ocupados9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 merge directorio secuencia_p  orden using inactivos9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 merge directorio secuencia_p  orden using desocupados9.dta
 tab _merge
 drop _merge
 sort directorio secuencia_p  orden
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 
 
 *Pegando el archivo de vivienda y hogar*
@@ -305,13 +305,13 @@ use vivienda9.dta
 sort directorio secuencia_p   
 save, replace
 
-use "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta"
+use "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta"
 sort directorio secuencia_p  
 merge directorio secuencia_p   using vivienda9.dta
 tab _merge 
 drop _merge
 compress
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\september08_cab.dta", replace
 clear
 
 
@@ -319,13 +319,13 @@ clear
 **SE CONFORMA EL TRIMESTRE**
 ****************************
 
-cd "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\"
+cd "${surveysFolder}\Colombia\2008\GEIH\Datos\"
 
 use july08_cab.dta
 append using august08_cab.dta
 append using september08_cab.dta
 compress
-saveold "\\sdssrv03\Surveys\Colombia\2008\GEIH\Datos\IIItrimestre_cab.dta", replace
+saveold "${surveysFolder}\Colombia\2008\GEIH\Datos\IIItrimestre_cab.dta", replace
 
 
 

@@ -1,5 +1,6 @@
-*Elaboración: Marcela G. Rubio (marcelarubio28@gmail.com | mrubio@iadb.org)
+*ElaboraciÃ³n: Marcela G. Rubio (marcelarubio28@gmail.com | mrubio@iadb.org)
 *Mayo, 2015
+* Added ETNIA module. Cesar Lins (SCL/GDI) Marzo 2021
 
 *** MERGE COLOMBIA GEIH 2014 ****
 *------------------------------*	
@@ -24,6 +25,9 @@ clear
 use "`ruta'\`rondaa'\data_orig\anual_homologado_DANE\personas 2014.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2014.dta", force
 drop _merge
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA14.dta", keep(match master)
+drop _merge
+
 egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
@@ -39,9 +43,9 @@ saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 foreach zona in cabecera resto {
 
 *Personas
-use "`m7'\`zona' - características generales (personas).dta", clear
-append using "`m8'\`zona' - características generales (personas).dta"
-append using "`m9'\`zona' - características generales (personas).dta"
+use "`m7'\`zona' - caracterÃ­sticas generales (personas).dta", clear
+append using "`m8'\`zona' - caracterÃ­sticas generales (personas).dta"
+append using "`m9'\`zona' - caracterÃ­sticas generales (personas).dta"
 egen id = concat(directorio secuencia_p orden)
 sort id
 saveold "`t3'col_`zona'_personas.dta", replace

@@ -6,7 +6,7 @@
 ******************************
 * First Semester
 clear
-cd "\\sdssrv03\Surveys\survey\VEN\EHM\2004\s1\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\2004\s1\data_orig\"
 
 * Ordeno variables
 *----------------------
@@ -33,5 +33,5 @@ joinby entidad control localidad area linea num_hog using "per041.dta", _merge(_
 tab _merge
 drop _merge
 
-save "\\sdssrv03\Surveys\survey\VEN\EHM\2004\s1\data_merge\VEN_2004s1.dta", replace
+save "${surveysFolder}\survey\VEN\EHM\2004\s1\data_merge\VEN_2004s1.dta", replace
 

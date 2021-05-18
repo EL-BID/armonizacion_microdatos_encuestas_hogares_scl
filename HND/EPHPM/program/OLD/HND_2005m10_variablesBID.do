@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Honduras
+PaÃ­s: Honduras
 Encuesta: EPHPM
 Round: m5
 Autores: Revised March, 2008 (by tede) 
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 9 de Septiembre de 2013
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 9 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -68,16 +68,16 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 *** HOUSING ***
@@ -493,35 +493,35 @@ label value clasehog_ch clasehog_ch
 ***************
 
 egen nmayor21_ch=sum((rela_j>0 & rela_j<=9) & (edad>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 ***************
 *nmenor21_ch  *
 ***************
 
 egen nmenor21_ch=sum((rela_j>0 & rela_j<=9) & (edad<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 ***************
 *nmayor65_ch  *
 ***************
 
 egen nmayor65_ch=sum((rela_j>0 & rela_j<=9) & (edad>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 ***************
 *nmenor6_ch   *
 ***************
 
 egen nmenor6_ch=sum((rela_j>0 & rela_j<=9) & (edad<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 ***************
 *nmenor1_ch   *
 ***************
 
 egen nmenor1_ch=sum((rela_j>0 & rela_j<=9) & (edad<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 ***************
 *idp_ci       *	
@@ -537,14 +537,14 @@ label var idp_ci "Identificador Individual dentro del Hogar"
 gen asiste_ci=.
 replace asiste_ci=1 if p02==1
 replace asiste_ci=0 if p02==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 ***************
 *pqnoasis_ci  *	
 ***************
 
 gen pqnoasis_ci=p03
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 
 ***************
 *repiteult_ci *	
@@ -560,14 +560,14 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 ***************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 
 ***************
 *aedu_ci      *	
 ***************
 
-* Años de educacion aprobados **
+* AÃ±os de educacion aprobados **
 replace p04b=. if p04b>9
 replace p05b=. if p05b>9
 ** para quienes ya no asisten
@@ -583,7 +583,7 @@ replace aedu_ci=p05b-1 if p05a==3
 replace aedu_ci=p05b+6-1 if p05a==4 | p05a==5
 replace aedu_ci=p05b+12-1 if p05a==6 | p05a==7
 replace aedu_ci=p05b+17-1 if p05a==8
-label var aedu_ci "Años de educacion aprobados"
+label var aedu_ci "AÃ±os de educacion aprobados"
 
 ***************
 *eduno_ci     *	
@@ -716,7 +716,7 @@ label var eduac_ci "Educacion universitaria vs educacion terciaria"
 ***************
 
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ***************
 * miembros_ch *	
@@ -776,7 +776,7 @@ label var emp_ci "Empleado en la semana de referencia"*/
 gen condocup_ci=.
 replace condocup_ci=condact
 replace condocup_ci=4 if condact == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -1205,12 +1205,12 @@ drop yalim2 yropa2 yhabita2 ytrans2 yotro2 yprodu2 ypenju2 ysubsi2 yalquile2 ybo
 ****** Last update: May, 2008   ****** 
 **************************************
 
-* Instituto Nacional de Estadística, Encuesta Permanente de Hogares de Propósitos Múltiples. Oct, 2005.
+* Instituto Nacional de EstadÃ­stica, Encuesta Permanente de Hogares de PropÃ³sitos MÃºltiples. Oct, 2005.
 
 /*
 rela_j
  1. jefe del hogar
- 2. esposa(o) o compañera(o) 
+ 2. esposa(o) o compaÃ±era(o) 
  3. hijos
  4. hijastros 
  5. padres 
@@ -1256,39 +1256,39 @@ rela_j
 ** Years of education. 
 /*
 
-2. ¿Asiste actualmente a algún centro educativo?
+2. Â¿Asiste actualmente a algÃºn centro educativo?
 1. SI ==> 5
 
-4. ¿Cuál es el nivel y año educativo más alto que aprobó?
+4. Â¿CuÃ¡l es el nivel y aÃ±o educativo mÃ¡s alto que aprobÃ³?
 
 Nivel(p04a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
 
-Año Educativo (p04b)
+AÃ±o Educativo (p04b)
 
-5. ¿Qué nivel y año educativo cursa actualmente?
+5. Â¿QuÃ© nivel y aÃ±o educativo cursa actualmente?
 
 Nivel(p05a)				
- 2. Centro de Alfabetización	 
+ 2. Centro de AlfabetizaciÃ³n	 
  3. Pre-Escolar			 
  4. Primaria			 
- 5. Ciclo común			 
+ 5. Ciclo comÃºn			 
  6. Secundaria Diversificado	 
- 7. Técnico Superior		 
+ 7. TÃ©cnico Superior		 
  8. Superior Universitario	 
  9. Post-grado			 
 99. No sabe			 
 
-Año Educativo (p05b)
+AÃ±o Educativo (p05b)
 
 */
 * Included in the database
@@ -1321,7 +1321,7 @@ Año Educativo (p05b)
 ** Economic Active Population  (10 years or more of age)
 * Included in the database
 * condact
-/* Condición de Actividad
+/* CondiciÃ³n de Actividad
  1. Ocupados	
  2. Desocupados
  3. Inactivos
@@ -1348,7 +1348,7 @@ Domi (vs. Dominio)
  1. Tegucigalpa 
  2. San pedro sula
  3. Ciudades medianas
- 4. Ciudades pequeñas
+ 4. Ciudades pequeÃ±as
  5. Rural 
  */
 
@@ -1393,39 +1393,39 @@ Domi (vs. Dominio)
 
 /*
 
-2. ¿Asiste actualmente a algún centro educativo?
+2. Â¿Asiste actualmente a algÃºn centro educativo?
 1. SI ==> 5
 
-4. ¿Cuál es el nivel y año educativo más alto que aprobó?
+4. Â¿CuÃ¡l es el nivel y aÃ±o educativo mÃ¡s alto que aprobÃ³?
 
 Nivel(p04a)				
  1. Ninguno			
- 2. Centro de Alfabetización	
+ 2. Centro de AlfabetizaciÃ³n	
  3. Pre-Escolar			
  4. Primaria			
- 5. Ciclo común			
+ 5. Ciclo comÃºn			
  6. Secundaria Diversificado	
- 7. Técnico Superior		
+ 7. TÃ©cnico Superior		
  8. Superior Universitario	
  9. Post-grado			
 99. No sabe			
 
-Año Educativo (p04b)
+AÃ±o Educativo (p04b)
 
-5. ¿Qué nivel y año educativo cursa actualmente?
+5. Â¿QuÃ© nivel y aÃ±o educativo cursa actualmente?
 
 Nivel(p05a)				
- 2. Centro de Alfabetización	 
+ 2. Centro de AlfabetizaciÃ³n	 
  3. Pre-Escolar			 
  4. Primaria			 
- 5. Ciclo común			 
+ 5. Ciclo comÃºn			 
  6. Secundaria Diversificado	 
- 7. Técnico Superior		 
+ 7. TÃ©cnico Superior		 
  8. Superior Universitario	 
  9. Post-grado			 
 99. No sabe			 
 
-Año Educativo (p05b)
+AÃ±o Educativo (p05b)
 
 */
 
@@ -1545,12 +1545,12 @@ Año Educativo (p05b)
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 
 /*
-29.A. ¿Cuál es o era su categoría ocupacional en la ocupación principal?
- 1. Empleado u obrero público 
+29.A. Â¿CuÃ¡l es o era su categorÃ­a ocupacional en la ocupaciÃ³n principal?
+ 1. Empleado u obrero pÃºblico 
  2. Empleado u obrero privado 
- 3. Empleado doméstico 
+ 3. Empleado domÃ©stico 
 TRABAJADORES CUENTA PROPIA
- 4. Miembro de cooperativa de producción 
+ 4. Miembro de cooperativa de producciÃ³n 
  5. Cuenta propia que no contrata mano de obra temporal 
  6. Cuenta propia que contrata mano de obra temporal 
  7. Empleador o socio activo 
@@ -1558,7 +1558,7 @@ PRODUCTORES AGROPECUARIOS
  8. Miembro de cooperativa, asentamiento o grupo
  9. Cuenta propia que no contrata mano de obra temporal
  10. Cuenta propia que contrata mano de obra temporal
- 11. Patrón o socio de la finca
+ 11. PatrÃ³n o socio de la finca
  12. Trabajador familiar no remunerado
  13. Trabajador no remunerado
 
@@ -1586,13 +1586,13 @@ categoria ocupacional (ocupacion principal)
 
 ** Access to Electricity ** Additional Indicator
 /*
-7. ¿Qué tipo de alumbrado utiliza en la vivienda?
- 1. Servicio Público
+7. Â¿QuÃ© tipo de alumbrado utiliza en la vivienda?
+ 1. Servicio PÃºblico
  2. Servicio privado colectivo
  3. Planta propia
- 4. Energía solar
+ 4. EnergÃ­a solar
  5. Vela
- 6. Candil o lámpara de gas 
+ 6. Candil o lÃ¡mpara de gas 
  7. Ocote
  8. Otro:________________________ */
 
@@ -1606,32 +1606,32 @@ categoria ocupacional (ocupacion principal)
 
 /*
 5. Servicio de Agua (v05a)
-a) ¿Tiene en la vivienda o en la propiedad, tubería instalada para agua?
- 1. Sí  2. No
+a) Â¿Tiene en la vivienda o en la propiedad, tuberÃ­a instalada para agua?
+ 1. SÃ­  2. No
 
-b) ¿Cómo obtiene el agua que utiliza en la vivienda? (v05b)
- 1. Servicio Público por tubería
- 2. Servicio Privado por tubería
+b) Â¿CÃ³mo obtiene el agua que utiliza en la vivienda? (v05b)
+ 1. Servicio PÃºblico por tuberÃ­a
+ 2. Servicio Privado por tuberÃ­a
  3. Pozo malacate
  4. Pozo con bomba
- 5. Río, riachuelo, manantial, ojo de agua
+ 5. RÃ­o, riachuelo, manantial, ojo de agua
  6. Carro Cisterna
  7. Pick-Up barriles o con drones o barriles
  8. Otro
 
-c) ¿Cómo es el suministro de agua?
+c) Â¿CÃ³mo es el suministro de agua?
  1. Permanente
  2. Irregular
 
-d) En los últimos quince días, ¿Con qué frecuencia tuvo el suministro de agua en su vivienda?
-	- Cuántos días
-	- Horas promedio por día
+d) En los Ãºltimos quince dÃ­as, Â¿Con quÃ© frecuencia tuvo el suministro de agua en su vivienda?
+	- CuÃ¡ntos dÃ­as
+	- Horas promedio por dÃ­a
 
-e) ¿Dónde obtiene el agua?
+e) Â¿DÃ³nde obtiene el agua?
  1. Dentro de la vivienda
  2. Fuera de la vivienda y dentro de la propiedad
  3. Fuera de la propiedad a menos de 100 metros
- 4. Fuera de la propiedad a más de 100 metros
+ 4. Fuera de la propiedad a mÃ¡s de 100 metros
 */
 
  
@@ -1649,17 +1649,17 @@ e) ¿Dónde obtiene el agua?
 /*
 
 6. Servicio Sanitario
-a) ¿Tiene algún tipo de servicio sanitario?
- 1. Sí 
+a) Â¿Tiene algÃºn tipo de servicio sanitario?
+ 1. SÃ­ 
  2. No ==> 7
 
-b) ¿Qué tipo de servicio sanitario tiene?
+b) Â¿QuÃ© tipo de servicio sanitario tiene?
  1. Inodoro conectado a alcantarilla
- 2. Inodoro conectado a pozo séptico
- 3. Inodoro con desagüe a río, laguna, mar
- 4. Letrina con descarga a río, laguna, mar
- 5. Letrina con cierre hidráulico
- 6. Letrina con pozo séptico
+ 2. Inodoro conectado a pozo sÃ©ptico
+ 3. Inodoro con desagÃ¼e a rÃ­o, laguna, mar
+ 4. Letrina con descarga a rÃ­o, laguna, mar
+ 5. Letrina con cierre hidrÃ¡ulico
+ 6. Letrina con pozo sÃ©ptico
  7. Letrina con pozo negro
 
 c) El uso del servicio sanitario es:
@@ -1680,31 +1680,31 @@ c) El uso del servicio sanitario es:
 ** Target 11, Indicator: Proportion of the population with access to secure tenure (%)
 
 /*
-1. Tipo de vivienda			10. ¿Cómo es la tenencia de esta vivienda?
+1. Tipo de vivienda			10. Â¿CÃ³mo es la tenencia de esta vivienda?
 v01					v10a
  1. Casa individual			 1. Propietario y completamente pagada
  2. Casa de mat. nat. (Rancho)		 2. Propietario recuperada legalizada
  3. Casa Improvisada (Desechos)		 3. Propietario recuperada sin legalizar
- 4. Apartamento				 4. Propietario y la está pagando
- 5. Cuarto en mesón o cuartería 	 5. Alquilada
- 6. Barracón				 6. Cedida sin pago
- 7. Local no construido para habitación 	
+ 4. Apartamento				 4. Propietario y la estÃ¡ pagando
+ 5. Cuarto en mesÃ³n o cuarterÃ­a 	 5. Alquilada
+ 6. BarracÃ³n				 6. Cedida sin pago
+ 7. Local no construido para habitaciÃ³n 	
  pero usado como vivienda
  8. Otro
 
-2. ¿Cuál es el material predominante 	3. ¿Cuál es el material predominante en el piso?
-en la construcción de las paredes?
- 1. Ladrillo, piedra o bloque		 1. Cerámica
+2. Â¿CuÃ¡l es el material predominante 	3. Â¿CuÃ¡l es el material predominante en el piso?
+en la construcciÃ³n de las paredes?
+ 1. Ladrillo, piedra o bloque		 1. CerÃ¡mica
  2. Adobe				 2. Ladrillo de cemento
  3. Material prefabricado		 3. Ladrillo de granito
  4. Madera				 4. Ladrillo de barro
- 5. Bahareque, vara o caña		 5. Plancha de cemento
+ 5. Bahareque, vara o caÃ±a		 5. Plancha de cemento
  6. Desechos				 6. Madera
  7. Otro				 7. Tierra
 				 	 8. Otro
 
 12. Cantidad de Piezas de la Vivienda
-a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
+a). Â¿CuÃ¡ntas piezas tiene esta vivienda? (incluya la cocina pero no el baÃ±o)
 */
 
  egen tenencia=max(v14), by(id_viv)
@@ -1747,7 +1747,7 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 
 * Gender classification of the population refers to the head of the household.
 
-* 3. ¿Cuál es el material predominante en el piso?
+* 3. Â¿CuÃ¡l es el material predominante en el piso?
 
  gen	 DIRT=0 if (piso>=1 & piso<=8) /* Total population excluding missing information */
  replace DIRT=1 if (piso==7)
@@ -1764,9 +1764,9 @@ a). ¿Cuántas piezas tiene esta vivienda? (incluya la cocina pero no el baño)
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 
 /*
-11. ¿Tiene en esta vivienda los siguientes bienes?
-f. Teléfono fijo 
-g. Teléfono celular 
+11. Â¿Tiene en esta vivienda los siguientes bienes?
+f. TelÃ©fono fijo 
+g. TelÃ©fono celular 
 */
 
  egen telefono=max(v13f), by(id_viv)
@@ -1795,7 +1795,7 @@ g. Teléfono celular
 	
 ** Target 18, Indicator: "Personal computers in use per 100 population"
 /*
-11. ¿Tiene en esta vivienda los siguientes bienes?
+11. Â¿Tiene en esta vivienda los siguientes bienes?
 i. Computadora 
 */
 
@@ -1809,14 +1809,14 @@ i. Computadora
 
 ** Target 18, Indicator: "Internet users per 100 population"
 /*
-10. Durante el mes pasado, ¿tuvo acceso a internet?
- 1. Sí
+10. Durante el mes pasado, Â¿tuvo acceso a internet?
+ 1. SÃ­
  2. No 
  9. No sabe
 
-11.¿En que sitio tuvo acceso a internet? (p11)
+11.Â¿En que sitio tuvo acceso a internet? (p11)
  1. En su casa (a)
- 2. En un cyber-café o negocio de internet (b)
+ 2. En un cyber-cafÃ© o negocio de internet (b)
  3. En su trabajo (c)
  4. En la escuela, colegio o universidad (d)
  5. En una oficina de HONDUTEL (e)
@@ -1861,21 +1861,21 @@ i. Computadora
 
 ** Disconnected Youths
 /*
-17. ¿Por qué no buscó trabajo ni trató de establecer su propio
+17. Â¿Por quÃ© no buscÃ³ trabajo ni tratÃ³ de establecer su propio
 negocio o finca la semana pasada?
- 1. Se incorporará a un trabajo antes de un mes			==>22
- 2. Tiene trabajo asegurado después de un mes 			==>22
+ 1. Se incorporarÃ¡ a un trabajo antes de un mes			==>22
+ 2. Tiene trabajo asegurado despuÃ©s de un mes 			==>22
  3. Espera respuesta a gestiones 				==>22
- 4. Está esperando la próxima temporada de trabajo 		==>22
- 5. Cree que no encontrará trabajo				==>22
- 6. Dejó de buscar trabajo momentáneamente			==>22
+ 4. EstÃ¡ esperando la prÃ³xima temporada de trabajo 		==>22
+ 5. Cree que no encontrarÃ¡ trabajo				==>22
+ 6. DejÃ³ de buscar trabajo momentÃ¡neamente			==>22
  7. No tiene tierra, capital, ni materia prima			==>22
  8. No tiene tiempo para buscar trabajo				==>18
  9. No tiene necesidad de trabajar				==>18
  10. Por su edad no puede trabajar				==>18
  11.  Otro							==>18
 
-16. ¿Cuál es su condición actual?
+16. Â¿CuÃ¡l es su condiciÃ³n actual?
  1. Jubilado
  2. Pensionista
  3. Rentista
@@ -2045,7 +2045,7 @@ replace firmapeq_ci=1 if p38a>=1 & p38a<=5
 replace firmapeq_ci=0 if p38a>=6 & p38a<9999	
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 *********
 *lp25_ci
@@ -2215,7 +2215,7 @@ gen tiempoparc_ci=.
 gen spublico_ci=.
 gen raza_ci=.
 gen instcot_ci=.
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

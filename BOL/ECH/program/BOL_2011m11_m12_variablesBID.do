@@ -6,11 +6,11 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -90,6 +90,15 @@ label var region_c "division politica, estados"
 gen factor_ch=.
 replace factor_ch = factor
 label variable factor_ch "Factor de expansion del hogar"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=estrato
 
 ***************
 ****idh_ch*****
@@ -287,104 +296,51 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
 
-/*	
-cods2_05
-1	Afroboliviano
-3	Aymara
-4	Ayoreo
-5	Baure
-7	Cavineño
-8	Cayubaba
-11	Chiquitano
-13	Guaraní
-15	Guarayo
-19	Leco
-22	Mojeño
-25	Movima
-28	Quechua
-30	Tacana
-32	Tsimane
-33	Weenayek
-36	Yuracaré
-88	No pertenece
-99	No sabe/ no responde
-*/	
 
-/*
-destring cods2_05, replace
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-gen raza_ci=.
-*LMC: actualiza raza_ci==1
-replace raza_ci= 1 if  (cods2_05==3 | cods2_05==11 | cods2_05==13 | cods2_05==22 | cods2_05==28)
-tab s1_10a, gen(idiom_)
-replace raza_ci= 1 if (idiom_4==1 | idiom_10==1 | idiom_13==1 | idiom_22==1) & raza_ci==.
-drop idiom_*
 
-*replace raza_ci= 1 if  (cods2_05>=3 & cods2_05>=36)
-replace raza_ci= 2 if cods2_05 == 1
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo"
-*/
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: pertenece a alguna nación o pueblo indígena? (Afroboliviano 1; No pertenece 13; No sabe/no responde 14; All else INDIGENOUS 2-12 & 15-19)
 
-*Raza usando idioma
-encode s1_11, gen(idioma2)
+gen afroind_ci=. 
+replace afroind_ci=1  if cods2_05!="88" | cods2_05!="99" 
+replace afroind_ci=2 if cods2_05=="0"
+replace afroind_ci=3 if cods2_05=="88"
+replace afroind_ci=. if cods2_05=="99"
+replace afroind_ci=. if cods2_05==" "
+replace afroind_ci=9 if cods2_05==" " & edad_ci<6
 
-gen raza_idioma_ci = 3
-replace raza_idioma_ci= 1 if (idioma2==2 | idioma2==4 | idioma2==5 | (idioma2>=11 & idioma2<=14) | ///
-idioma2==17 | idioma2==18 | idioma2==19 | idioma2==21 | (idioma2>=24 & idioma2<=26) | ///
-idioma2==31 | idioma2==32 | (idioma2>=35 & idioma2<=38))
-replace raza_idioma_ci= . if idioma2==1
-bys idh_ch, sort: gen aux=raza_idioma_ci if s1_08==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s1_08 ==3 | s1_08==8))  
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
 
-*Raza usando la definicion mas apropiada
-encode s2_05, gen(etnia)
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe 
 
-gen raza_ci=.
-replace raza_ci= 1 if  (etnia >=3 & etnia<=13) | (etnia >=16 & etnia<=20)
-replace raza_ci= 2 if  etnia==2
-replace raza_ci= 3 if (etnia ==14) 
-bys idh_ch: gen aux=raza_ci if s1_08==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (s1_08 ==3|s1_08==8))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2011
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 
 
 ************************************
@@ -2261,6 +2217,7 @@ lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado" 3"otros"
 lab val tipocobsalud_ci tipocobsalud_ci
 
 
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
@@ -2273,8 +2230,8 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

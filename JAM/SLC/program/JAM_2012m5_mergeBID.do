@@ -3,12 +3,12 @@
 			*JSLC 2012*
 			***********
 
-*Se consolida una base para construir los indicadores de soci髆etro. No obstante, se cuenta con m醩 m骴ulos 
+*Se consolida una base para construir los indicadores de soci贸metro. No obstante, se cuenta con m谩s m贸dulos 
 *que el investigador puede unir a este consolidado. 
-*Modificaci髇 Mayra S醗nz - Septiembre 2015: se cambia el path
-*cd "M:\survey\JAM\SLC\2012\m5\data_orig"
+*Modificaci贸n Mayra S谩enz - Septiembre 2015: se cambia el path
+*cd "${surveysFolder}\survey\JAM\SLC\2012\m5\data_orig"
 
-cd "\\Sdssrv03\surveys\survey\JAM\SLC\2012\m5\data_orig\\"
+cd "${surveysFolder}\survey\JAM\SLC\2012\m5\data_orig\\"
 
 use rec001.dta, clear
 sort serial
@@ -86,8 +86,8 @@ use rec039.dta, clear
 sort serial ind
 save, replace
 
-*Modificaci髇 Mayra S醗nz - Septiembre 2015
-*Incluyo el m骴ulo de housing.
+*Modificaci贸n Mayra S谩enz - Septiembre 2015
+*Incluyo el m贸dulo de housing.
 use rec026.dta, clear
 sort serial record
 save, replace
@@ -95,9 +95,9 @@ save, replace
 
 * merge
 *-------
-*Modificaci髇 Mayra S醗nz - Septiembre 2015: se cambia el path
-*global ruta = "M:\survey\JAM\SLC\2012\m5\data_merge\"
-global ruta = "\\Sdssrv03\surveys\\survey\JAM\SLC\2012\m5\data_merge\"
+*Modificaci贸n Mayra S谩enz - Septiembre 2015: se cambia el path
+*global ruta = "${surveysFolder}\survey\JAM\SLC\2012\m5\data_merge\"
+global ruta = "${surveysFolder}\\survey\JAM\SLC\2012\m5\data_merge\"
 
 use rec003.dta, clear
 merge m:1 serial using rec001.dta

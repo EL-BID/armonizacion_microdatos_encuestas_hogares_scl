@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
+PaÃ­s: Mexico
 Encuesta: ENIGH (tradicional)
 Round: Agosto-Noviembre
 Autores: 
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -53,12 +53,12 @@ use `base_in', clear
 La variable de anios de educacion fue modificada de modo de ser comparbale y coherente entre los distintos anios.
 El codigo anterior se puede ver en la seccion de educacion con * adelante del comando
 El criterio utilizado para asignar a cada nivel un determinado numero de anios de estudio se puede ver en el
-siguiente documento: X:\Sociometro_2005\documentation\Years of education in Mexico. 
+siguiente documento: ${surveysFolder}\Sociometro_2005\documentation\Years of education in Mexico. 
 Tambien se cambiaron las varianles edupi, edupc, edusi, edusc y etc de modo de ser coherente con los siguientes
 anios: Primaria 6, Secundaria 6 (12 acumulado) y Terciaria 5 (17 acumulado).  
 
 Agosto 29 de 2006 (Mafe)
-Deficion de empleo se cambio, no incluía a todos los empleados, 
+Deficion de empleo se cambio, no incluÃ­a a todos los empleados, 
 codigo anterior:
 gen trab=real(trabajo) /*ultimo mes*
 gen byte emp3_ci=(trab==1)
@@ -99,26 +99,26 @@ label define region_c ///
 12 "Guerrero" ///
 13 "Hidalgo" ///
 14 "Jalisco" ///
-15 "México" ///
-16 "Michoacán de Ocampo" ///
+15 "MÃ©xico" ///
+16 "MichoacÃ¡n de Ocampo" ///
 17 "Morelos" ///
 18 "Nayarit" ///
-19 "Nuevo León" ///
+19 "Nuevo LeÃ³n" ///
 20 "Oaxaca" ///
 21 "Puebla" ///
-22 "Querétaro" ///
+22 "QuerÃ©taro" ///
 23 "Quintana Roo" ///
-24 "San Luis Potosí" ///
+24 "San Luis PotosÃ­" ///
 25 "Sinaloa" ///
 26 "Sonora" ///
 27 "Tabasco" ///
 28 "Tamaulipas" ///
 29 "Tlaxcala" ///
 30 "Veracruz de Ignacio de la Llave" ///
-31 "Yucatán" ///
+31 "YucatÃ¡n" ///
 32 "Zacatecas" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -149,7 +149,7 @@ label variable idp_ci "ID de la persona en el hogar"
 /* La variable estrato muestra densidad de poblacion
 como:
 Estrato						
-1 Loc. de 100,000 hab. y más
+1 Loc. de 100,000 hab. y mÃ¡s
 2 Loc. de 15,000 a 99,999 hab.
 3 Loc. de 2,500 a 14,999 hab.
 4 Loc. de menos de 2,500 hab.
@@ -164,7 +164,7 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_ci
 */
 
-*Modificación Mayra Sáenz - Agosto 2015 Se reemplaza la clasificación de zona por la que consta en la sintaxis de CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015 Se reemplaza la clasificaciÃ³n de zona por la que consta en la sintaxis de CONEVAL
 destring estrato, replace
 gen zona_c=0 if (estrato>2 & estrato!=.)
 replace zona_c=1 if estrato<=2
@@ -187,12 +187,12 @@ gen anio_c=2005
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *********
@@ -200,7 +200,7 @@ label value region_BID_c region_BID_c
 *********
 
 *gen mes_c=real(substr(meses,1,2))
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen mes_c=mes_ref
 label variable mes_c "Mes de la encuesta"
 label define mes_c 6 "Junio" 7 " Julio" 8 "Agosto" 
@@ -410,8 +410,8 @@ replace condocup_ci=4 if edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -463,13 +463,13 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=. /*En este caso existe la variable presta1_* pero ujn individuo puede estar en varias a la vez*/
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
 *************
 *generat pension_ci=(ing_jub>0 & ing_jub!=.) /* A todas las per mayores de cinco*/
-*Modificación Mayra Sáenz - Agosto 2015: a partir de 2002 se puede diferenciar la pension nacional o del extranjero, se considera solo la nacional.
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: a partir de 2002 se puede diferenciar la pension nacional o del extranjero, se considera solo la nacional.
 g pension_ci = (ypension>0 & ypension!=.)
 label var pension_ci "1=Recibe pension contributiva"
 
@@ -477,7 +477,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 *gen ypen_ci=ing_jub  if pension_ci==1
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen ypen_ci=ypension  if pension_ci==1
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -486,7 +486,7 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 gen pensionsub_ci=0 
 *replace pensionsub_ci=1 if (ing_oport>0 & ing_oport!=.) 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 replace pensionsub_ci=1 if (P059>0 & P059!=.)  
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 *Programas: Beneficio del programa Oportunidades
@@ -495,7 +495,7 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 **  ypensub_ci  *
 *****************
 *gen ypensub_ci= ing_oport if pensionsub_ci==1
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen ypensub_ci= P059 if pensionsub_ci==1
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
@@ -531,12 +531,12 @@ label var lp_ci "linea de pobreza de patrimonio"
 *************
 /*La encuesta fue levantada entre los meses de agosto y noviembre 2005,
 y por lo tanto, al preguntarse por los ingresos de los seis meses anteriores,
-se recolectó información correspondiente a febrero-julio, marzo-agosto,
+se recolectÃ³ informaciÃ³n correspondiente a febrero-julio, marzo-agosto,
 abril-septiembre, y mayo-octubre 2005;
 */
 
 gen entidad=substr(folio,5,2)
-label var  entidad "entidad federativa del país"
+label var  entidad "entidad federativa del paÃ­s"
 quietly {
 capture confirm variable ubica_geo
 if !_rc {
@@ -3009,7 +3009,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -3062,7 +3062,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3181,13 +3181,13 @@ gen horastot_ci=(horas_trab) if emp_ci==1
 ***categopri_ci***
 ******************
 /*
-CÓDIGO	DESCRIPCIÓN
+CÃ“DIGO	DESCRIPCIÃ“N
 1	Obrero o empleado 
-2	Jornalero rural o peón de campo
-3	Trabajador sin retribución de un negocio o empresa que no es propiedad del hogar
-4	Trabajador sin retribución de un negocio o empresa que es propiedad del hogar
+2	Jornalero rural o peÃ³n de campo
+3	Trabajador sin retribuciÃ³n de un negocio o empresa que no es propiedad del hogar
+4	Trabajador sin retribuciÃ³n de un negocio o empresa que es propiedad del hogar
 5	Trabajador por cuenta propia
-6	Patrón, empleador o propietario de un negocio 
+6	PatrÃ³n, empleador o propietario de un negocio 
 7	miembro de una cooperativa
 */
 
@@ -3358,19 +3358,19 @@ gen antiguedad_ci=.
 *******************
 /*
 gen tamemp_ci=numper161
-label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16 o más personas"
+label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16 o mÃ¡s personas"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
-**México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+**MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if numper161==1 | numper161==2
 replace tamemp_ci = 2 if (numper161==3 |numper161==4)
 replace tamemp_ci = 3 if (numper161==5)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 *******************
 ***categoinac_ci***
 *******************
@@ -3378,8 +3378,8 @@ gen categoinac_ci =1 if ((bus_trab>="300" & bus_trab<="370") & condocup_ci==3)
 replace categoinac_ci = 2 if  ((bus_trab>="500" & bus_trab<="570") & condocup_ci==3)
 replace categoinac_ci = 3 if  ((bus_trab>="400" & bus_trab<="470") & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3401,7 +3401,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Modificación Mayra Sáenz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
 
 /*
 ****************
@@ -3754,7 +3754,7 @@ bys idh_ch: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
 *******************
 *** rentaimp_ch ***
 *******************
-*Modificacion Mayra Sáenz - Agosto 2015- Antes estaba generada como missing.
+*Modificacion Mayra SÃ¡enz - Agosto 2015- Antes estaba generada como missing.
 gen rentaimp_ch= est_alq
 
 *****************
@@ -3862,7 +3862,7 @@ replace aedu_ci=21 if (nivel_ed==9 & grado_ed==2)
 replace aedu_ci=22 if (nivel_ed==9 & grado_ed==3)
 */
 
-*Modificación Mayra Sáenz - Agosto 2015 - Inclusión de los cambios sugeridos por Ivan Bornacelly SCL/EDU.
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015 - InclusiÃ³n de los cambios sugeridos por Ivan Bornacelly SCL/EDU.
 
 gen byte nivel_ed=real(n_instr161)
 gen byte grado_ed=real(n_instr162)
@@ -3988,7 +3988,7 @@ label variable edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
-*Variable agregada por Iván Bornacelly - 01/23/2017
+*Variable agregada por IvÃ¡n Bornacelly - 01/23/2017
 	g asispre_ci=.
 	replace asispre_ci=1 if asis_esc=="1" & nivel=="1" & edad>=4
 	recode asispre_ci (.=0)
@@ -4155,7 +4155,7 @@ replace piso_ch=2 if pisos04=="8"
 ****pared_ch****
 ****************
 
-* MGR Aug, 2015: corrección sintaxis
+* MGR Aug, 2015: correcciÃ³n sintaxis
 /*
 gen pared_ch=.
 replace pared_ch=0 if muros01>="01" & muros01<="06"
@@ -4172,7 +4172,7 @@ replace pared_ch=2 if muros01=="12"
 ****techo_ch****
 ****************
 
-*MGR Aug, 2015: correción en sintaxis
+*MGR Aug, 2015: correciÃ³n en sintaxis
 /*
 gen techo_ch=.
 replace techo_ch=0 if techos02>="01" & techos02<="05"
@@ -4326,15 +4326,15 @@ gen id_ind_ci      = .
 gen id_afro_ci     = .
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

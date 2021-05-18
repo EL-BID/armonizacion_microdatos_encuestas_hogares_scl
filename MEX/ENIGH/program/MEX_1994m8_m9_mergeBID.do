@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\1994\m8_m9\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\1994\m8_m9\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "1994"
 local ronda m8_m9
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -72,9 +72,9 @@ Base de concentrado: concentrado94.dta
 En este programa se utilizan tres tipos de archivos, los 
 cuales están ubicados en las siguientes carpetas:
 
-1) Bases originales: "C:\pobreza ingresos\1994\ENIGH"
-2) Bitácoras: "C:\pobreza ingresos\1994\Log"
-3) Bases generadas: "C:\pobreza ingresos\1994\Resultados" 
+1) Bases originales: "${surveysFolder}\pobreza ingresos\1994\ENIGH"
+2) Bitácoras: "${surveysFolder}\pobreza ingresos\1994\Log"
+3) Bases generadas: "${surveysFolder}\pobreza ingresos\1994\Resultados" 
   */
 
 *********************************************************

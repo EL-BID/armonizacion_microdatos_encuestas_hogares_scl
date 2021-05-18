@@ -1,19 +1,19 @@
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Honduras
+Pa铆s: Honduras
 Encuesta: EPHPM
 Round: m5
 Autores: Revised March, 2008 (by tede) 
-趌tima versi髇: Mar韆 Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha 鷏tima modificaci髇: 9 de Septiembre de 2013
+脷ltima versi贸n: Mar铆a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha 煤ltima modificaci贸n: 9 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -67,7 +67,7 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroam閞ica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam茅rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
@@ -178,7 +178,7 @@ label var emp_ci "Empleado en la semana de referencia"
 gen condocup_ci=.
 replace condocup_ci=condact
 replace condocup_ci=4 if condact == 4 | edad_ci<10
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 ************
@@ -608,7 +608,7 @@ replace rama_ci=. if rama==10 | rama==11 | emp_ci==0
 drop yalim2 yropa2 yhabita2 ytrans2 yotro2 yprodu2 ypenju2 ysubsi2 yalquile2 ybonos2 yayuda2 yayupar2 yotros2 interes2 prestlab2 yalim3 yropa3 yhabita3 ytrans3 yotro3 yprodu3 yjub2 yremesade yremesae yayudae ypdiv autoconsumop_ci autoconsumos_ci
 
 /************************************************************************************************************
-* 3. Creaci髇 de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci贸n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 *********
 *lp25_ci
@@ -839,7 +839,7 @@ gen region_c=.
 gen raza_ci=.
 gen instcot_ci=.
 
-**Verificaci髇 de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**Verificaci贸n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

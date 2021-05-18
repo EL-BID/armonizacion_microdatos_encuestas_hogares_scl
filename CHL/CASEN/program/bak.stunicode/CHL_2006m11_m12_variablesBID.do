@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Versión 2009: Melisa Morales (MM)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Marzo de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2009: Melisa Morales (MM)
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Marzo de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -118,7 +118,7 @@ repalce asiste_ci=. if e4==.*/
 *************
 * factor_ch *
 *************
-gen factor_ch=expr /*Esta es la expansion que se usa en todos los años anteriores. La provincial recien aparece en el 2000*/
+gen factor_ch=expr /*Esta es la expansion que se usa en todos los aÃ±os anteriores. La provincial recien aparece en el 2000*/
 
 *************
 * idh_ch    *
@@ -162,7 +162,7 @@ gen mes_c=11
 ***************
 * relacion_ci *
 ***************
-* Yanira Oviedo, Junio 2010: Esta pregunta tiene diferentes opciones de respuesta.  Se guarda la programación
+* Yanira Oviedo, Junio 2010: Esta pregunta tiene diferentes opciones de respuesta.  Se guarda la programaciÃ³n
 * original y se propone una nueva
 
 *gen relacion_ci=pco1
@@ -177,8 +177,8 @@ replace relacion_ci=4 if pco1>=6 & pco1<=12
 replace relacion_ci=5 if pco1==13
 replace relacion_ci=6 if pco1==14
 
-label var relacion_ci "Relación de parentesco con el jefe"
-label def relacion_ci 1"Jefe" 2"Conyuge" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio doméstico"
+label var relacion_ci "RelaciÃ³n de parentesco con el jefe"
+label def relacion_ci 1"Jefe" 2"Conyuge" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio domÃ©stico"
 label val relacion_ci relacion_ci	
 
 
@@ -354,7 +354,7 @@ gen freez_ch=.
 ***************
 * auto_ch     * 
 ***************
-*Yanira Oviedo, Junio 2010: El programa no está cumpliendo con su finalidad. Se propone una instrucción nueva.
+*Yanira Oviedo, Junio 2010: El programa no estÃ¡ cumpliendo con su finalidad. Se propone una instrucciÃ³n nueva.
 *by idh_ch: egen auto_ch=sum(r9a>=1) /* for 2006  */
 *replace auto_ch=1 if auto_ch>=1
 
@@ -571,22 +571,22 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*
-ETNIA ¿En Chile, la ley reconoce ocho pueblos originarios o indígenas, ¿pertenece usted a alguno
+ETNIA Â¿En Chile, la ley reconoce ocho pueblos originarios o indÃ­genas, Â¿pertenece usted a alguno
 de ellos? (Preg. 7)
 t4:
            1 aymara
            2 rapa nui 
            3 quechua 
            4 mapuche 
-           5 atacameño
+           5 atacameÃ±o
            6 coya
            7 kawaskar
            8 yagan
            9 diaguita
-          90 no pertenece a ningún pueblo indígena
+          90 no pertenece a ningÃºn pueblo indÃ­gena
           99 sin dato
 
 */
@@ -594,7 +594,7 @@ t4:
 gen raza_ci=.
 replace raza_ci= 1 if  (t4 >=1 & t4 <=9 )
 replace raza_ci= 3 if (t4==90 | t4==99) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label var raza_ci "Raza o etnia del individuo" 
 
@@ -602,7 +602,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -626,7 +626,7 @@ replace condocup_ci=1 if (o1==1 | o2==1 | o3==1)
 replace condocup_ci=2 if ((o1==2 | o2==2 | o3==2) & (o4==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -741,7 +741,7 @@ drop aux1
 */
 
 *********
-*ylmpri2_ci: Este además, incluye bonificaciones y ganancias anuales
+*ylmpri2_ci: Este ademÃ¡s, incluye bonificaciones y ganancias anuales
 *********
 /*
 gen aux1=yextaj/12 if o20_t1!=1 & o20_t2!=1 & o21_t==1 
@@ -1022,7 +1022,7 @@ gen remesas_ch=.
 
 gen durades_ci=o7/4.3
 replace durades_ci=. if o7==999 /*| activ!=2*/
-label var durades_ci "Duración del desempleo"
+label var durades_ci "DuraciÃ³n del desempleo"
 
 ****************
 * antiguedad_ci* 
@@ -1038,7 +1038,7 @@ replace antiguedad_ci=. if diff>1 | o17==9999
 drop diff
 
 /*Hay una cita en una de las bananas originales en donde dicen que 
-las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese año se 
+las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese aÃ±o se 
 sumaba a aedu). Por lo tanto, podemos suponer que las entrevistas se realizaron en noviembre a los efectos de calcular le 
 tenure.*/
 
@@ -1178,8 +1178,8 @@ recode e8c (99=.)
 gen byte aedu_ci=.
 *replace aedu_ci=0 if e8t==0 | e8t==1 | e8t==16 
 replace aedu_ci=0 if e8t==1 | e8t==16 
-replace aedu_ci=e8c if e8t==2 | e8t==3 /*El máximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
-replace aedu_ci=. if e8t==4 // Educación Especial
+replace aedu_ci=e8c if e8t==2 | e8t==3 /*El mÃ¡ximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
+replace aedu_ci=. if e8t==4 // EducaciÃ³n Especial
 *We assume that 'e8t==4', Diferential Education, will be equivalent to missing
 
 *NEW: 16 Oct 2006 (Victoria)
@@ -1190,7 +1190,7 @@ replace aedu_ci=8 if (e8c>=8 & e8t==3)
  table e7c e8t, c(mean edad)
 --------------------------------------------------------------------------------------------------
           |                                          tipo                                         
-    curso |          humanidades  educación media cien  técnica, comercial,   educación media técn
+    curso |          humanidades  educaciÃ³n media cien  tÃ©cnica, comercial,   educaciÃ³n media tÃ©cn
 ----------+---------------------------------------------------------------------------------------
         0 |                                                                                       
         1 |             63.51868               26.9809              62.61818              20.29556
@@ -1200,8 +1200,8 @@ replace aedu_ci=8 if (e8c>=8 & e8t==3)
         5 |             65.15193                                    62.48571              35.31684
         6 |             65.25408                                    64.89024                      
 --------------------------------------------------------------------------------------------------
-Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 años de primaria) y que las otras dos son 
-parte del sistema nuevo (8 años de primaria)
+Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 aÃ±os de primaria) y que las otras dos son 
+parte del sistema nuevo (8 aÃ±os de primaria)
 */
 replace aedu_ci=e8c+6 if e8t==5 | e8t==7
 replace aedu_ci=e8c+8 if e8t==6 | e8t==8
@@ -1212,7 +1212,7 @@ replace aedu_ci=e8c+12 if e8t==15
 replace aedu_ci=. if e8t==99
 
 ** Generating attend. Dummy variable for school attendance
-*Yanira Oviedo, Junio 2010: anteriormente se había tomado la variable e2 se corrige a e4
+*Yanira Oviedo, Junio 2010: anteriormente se habÃ­a tomado la variable e2 se corrige a e4
 gen byte asiste_ci=(e4==1) 
 label variable asiste_ci "Dummy variable for school attendance"
 
@@ -1245,8 +1245,8 @@ gen edusc_ci=edus2c_ci
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing, la e6 es para personas de 7 a 40 años
-* y la variable e5 es para niños de 0 a 6 años.
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing, la e6 es para personas de 7 a 40 aÃ±os
+* y la variable e5 es para niÃ±os de 0 a 6 aÃ±os.
 
 
 gen pqnoasis_ci= e6
@@ -1266,7 +1266,7 @@ replace pqnoasis1_ci = 7 if e6 ==18
 replace pqnoasis1_ci = 8 if e6 ==1  | e6 ==2  
 replace pqnoasis1_ci = 9 if e6 ==11 | e6 ==12 | e6 ==15 | e6 ==16 | e6 ==19 | e6 ==20
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **************
@@ -1379,7 +1379,7 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-*Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
+*CreaciÃ³n de la variable asistencia a preescolar por IvÃ¡n Bornacelly - 01/12/17
 	g asispre_ci=.
 	replace asispre_ci=1 if e4==1 & e8t==1 & edad>=4
 	recode asispre_ci (.=0)
@@ -1425,7 +1425,7 @@ gen edupub_ci=.
  tab pco1 nucleo if nucleo==0
  tab pco2 if pco1==12
  
- rename expr factor /* Expansión Regional */
+ rename expr factor /* ExpansiÃ³n Regional */
  rename z area
  rename e1 alfabet
  * rename e2 asiste
@@ -1505,7 +1505,7 @@ gen edupub_ci=.
 
 ** Economic Active Population 
 
-* Activ => Condición de actividad
+* Activ => CondiciÃ³n de actividad
 
 * 1. Ocupado	2. Desocupado
 
@@ -1532,7 +1532,7 @@ gen edupub_ci=.
 ** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
 
 
-* INCL==1 ==> Excludes "S. Doméstico Puertas Adentro"
+* INCL==1 ==> Excludes "S. DomÃ©stico Puertas Adentro"
 
 *** GOAL 2. ACHIEVE UNIVERSAL PRIMARY EDUCATION
 * ISCED 1
@@ -1557,7 +1557,7 @@ Para mi la tasa NERS no deberia tener la condicion (nivel==3 & (ultgrado>=6 & ul
 
 
 ** Upper secondary
-* Tasa neta de asistencia en la Enseñanza Media
+* Tasa neta de asistencia en la EnseÃ±anza Media
 
  gen     NERS2=0 if (edad>=14 & edad<=17) & (asiste==1 | asiste==2)
  replace NERS2=1 if (edad>=14 & edad<=17) & (asiste==1) & ((nivel==3 & ultgrado==8) | ((nivel==6 | nivel==8) & (ultgrado>=1 & ultgrado<=3)))
@@ -1794,12 +1794,12 @@ Para mi la tasa NERS no deberia tener la condicion (nivel==3 & (ultgrado>=6 & ul
 ** Internet access 
 * Household head
 
-* Conexión a internet conmutada 
+* ConexiÃ³n a internet conmutada 
 
  gen     inte_1=1 if r12a==1 & pco1==1
  replace inte_1=0 if inte_1==. & r12a!=9 & pco1==1
 
-* Conexión a internet banda ancha
+* ConexiÃ³n a internet banda ancha
 
  gen     inte_2=1 if r12a==2 & pco1==1
  replace inte_2=0 if inte_2==. & r12a!=9 & pco1==1
@@ -1908,7 +1908,7 @@ Para mi la tasa NERS no deberia tener la condicion (nivel==3 & (ultgrado>=6 & ul
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -2095,7 +2095,7 @@ replace categoinac_ci=3 if o6==6
 replace categoinac_ci=4 if o6==1 | o6==2 | o6==3 | o6==4 | o6==5 | o6==7 | o6==8 | o6==9 | o6==10| o6==11| o6==12 | o6==13 | o6==14 | o6==15 | o6==18 | o6==19 | o6==20
 
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -2123,15 +2123,15 @@ gen autocons_ch=.
 drop comp
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

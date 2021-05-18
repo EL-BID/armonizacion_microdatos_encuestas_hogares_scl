@@ -1,13 +1,13 @@
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -15,13 +15,13 @@ set more off
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Jamaica
+Pa铆s: Jamaica
 Encuesta: JSLC
 Round: Mayo 1998
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 10 de Diciembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 10 de Diciembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -31,17 +31,17 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
 clear all
-use "Y:\survey\JAM\SLC\1998\m5\data_orig\jam98_jslc.dta"
+use "${surveysFolder}\survey\JAM\SLC\1998\m5\data_orig\jam98_jslc.dta"
 foreach v of varlist _all {
 	local lowname=lower("`v'")
 	rename `v' `lowname'
 }
 sort serial
 
-merge m:m serial using  "Y:\survey\JAM\SLC\1998\m5\data_orig\stata\annual.dta"
+merge m:m serial using  "${surveysFolder}\survey\JAM\SLC\1998\m5\data_orig\stata\annual.dta"
 tab _merge
 drop _merge
-saveold "Y:\survey\JAM\SLC\1998\m5\data_merge\JAM_1998m5.dta", replace
+saveold "${surveysFolder}\survey\JAM\SLC\1998\m5\data_merge\JAM_1998m5.dta", replace
 
 
 

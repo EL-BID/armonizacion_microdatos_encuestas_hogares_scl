@@ -1,12 +1,12 @@
 
-use X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID_2.dta, clear
+use ${surveysFolder}\ARM\GUA\2000\Arm_data\GUA2000EA_BID_2.dta, clear
 
 keep factor_ci -  region
 sort idh_ch idp_ci
 
-save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
+save ${surveysFolder}\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
 
-use X:\ARM\GUA\2000\Orig_data\gta00.dta, clear
+use ${surveysFolder}\ARM\GUA\2000\Orig_data\gta00.dta, clear
 
 gen idh_ch=id_hogar
 gen idp_ci=id_pers
@@ -14,9 +14,9 @@ gen idp_ci=id_pers
 sort idh_ch idp_ci
 drop _merge
 
-merge idh_ch idp_ci using X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta
+merge idh_ch idp_ci using ${surveysFolder}\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta
 
-save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
+save ${surveysFolder}\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
 
 
  tab area [iw=factorex]
@@ -61,7 +61,7 @@ save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
  replace NERS=1 if (edad>=13 & edad<=18) & (niveli==3)
 
 ** Upper secondary
-* Educación Media - Ciclo Diversificado
+* EducaciÃ³n Media - Ciclo Diversificado
 
  gen     NERS2=0 if (edad>=16 & edad<=18) & (seinscri>=1 & seinscri<=2)
  replace NERS2=1 if (edad>=16 & edad<=18) & (niveli==3) & (gradoi>=4 & gradoi<=6)
@@ -213,7 +213,7 @@ save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
 ** Target 11, Indicator: Proportion of the population with access to secure tenure (%)
 
  gen persroom=pers/cuartdis /* Personas en el hogar / total de cuartos del hogar 
- 							(excl. cocina, baños, pasillos, 
+ 							(excl. cocina, baÃ±os, pasillos, 
  							garajes y los dedicados a negocios) */
 
 * Indicator components
@@ -387,4 +387,4 @@ save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
 
  gen GFAS=(anoest/(edad-7)) if (edad>=13 & edad<=18) & (anoest>=0 & anoest<99)
 
-save X:\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace
+save ${surveysFolder}\ARM\GUA\2000\Arm_data\GUA2000EA_BID.dta, replace

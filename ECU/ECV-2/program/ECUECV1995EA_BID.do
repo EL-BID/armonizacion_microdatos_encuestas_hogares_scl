@@ -107,15 +107,15 @@ Also, the orginal data was replaced with the new Mecovi versions
 
 clear
 capture log close
-cd X:\ARM\ECU\ECV\1995\Data
+cd ${surveysFolder}\ARM\ECU\ECV\1995\Data
 set mem 130m
 set more off
 
-use "X:\ARM\ECU\ECV\1995\Data\ecu95_ecv.dta" 
+use "${surveysFolder}\ARM\ECU\ECV\1995\Data\ecu95_ecv.dta" 
 
 
 sort CIUDAD ZONA SECTOR VIVIEN HOGAR 
-merge CIUDAD ZONA SECTOR VIVIEN HOGAR using "X:\ARM\ECU\ECV\1995\Datos_originales\vivi_ecu95.dta" 
+merge CIUDAD ZONA SECTOR VIVIEN HOGAR using "${surveysFolder}\ARM\ECU\ECV\1995\Datos_originales\vivi_ecu95.dta" 
 drop _merge
 
 ***************
@@ -280,7 +280,7 @@ label value civil_ci civil_ci
 /*----------------------
      PD05 |      Freq.
 ----------+-----------
- Uniøn li |      2,543
+ UniÃ¸n li |      2,543
    Casado |      7,094
  Separado |        551
  Divorcia |        151
@@ -388,7 +388,8 @@ label variable nmayor65_ch "Numero de familiares mayores a 65 anios"
 ****************
 
 by idh_ch, sort: egen nmenor6_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad<6)
-label variable nmenor6_ch "Numero de familiares menores a 6 anios"
+label variable nmenor6_ch "Numero de familiares menores a 6 anios"
+
 
 ****************
 ***nmenor1_ch***
@@ -485,7 +486,8 @@ gen horaspri_ci=PA18*PA17  if emp_ci==1
 
 
 *****************
-***horastot_ci********************
+***horastot_ci***
+*****************
 
 gen horastot_ci=PA57  if emp_ci==1 
 replace horastot_ci=.  if PA57==999
@@ -506,7 +508,7 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen trabajadores agricolas */
+/*Dentro de la categorÃ­a empleado se incluyen trabajadores agricolas */
 
 ******************
 **dcategopri_ci **
@@ -653,7 +655,7 @@ replace spublico_ci=1 if PA20==1 & emp_ci==1
 replace spublico_ci=0 if PA20~=1 & emp_ci==1
 replace spublico_ci=. if PA20==.
 
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -818,12 +820,12 @@ replace food1=. if PA33A==999999
    ----------------------
        PA33B |      Freq.
    ----------+-----------
-         D¡a |      1,528
+         DÂ¡a |      1,528
       Semana |        201
     Quincena |         28
          Mes |        224
     Trimestr |          2
-         A¤o |          1
+         AÂ¤o |          1
         Otro |          5
           NR |          9
    ----------------------
@@ -871,7 +873,8 @@ replace trans1=0 if emp==1 & PA36==.
 
 
 gen segur1=.
-gen otross1=.
+gen otross1=.
+
 
 egen ylnmpri_ci=rsum(food1 ropa1 merca1 vivi1 trans1 segur1 otross1)
 replace ylnmpri_ci=. if food1==. &  ropa1==. & merca1==. & vivi1==. & trans1==. & segur1==. & otross1==. 
@@ -963,13 +966,13 @@ gen remesasext=.
 /*----------------------
     PA88B |      Freq.
 ----------+-----------
-1      D¡a |         65
+1      DÂ¡a |         65
 2   Semana |        368
 3 Quincena |        164
 4      Mes |        847
 5 Trimestr |        230
 6 Semestre |        109
-7      A¤o |        164
+7      AÂ¤o |        164
 8     Otro |        243
 9       NR |         18
 ----------------------
@@ -1034,9 +1037,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1145,16 +1148,16 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 * years of education
 
@@ -1165,7 +1168,7 @@ replace yedc=6 if PE33==3 & PE34>=6
 replace yedc=PE34 if PE33==4 
 replace yedc=6 if PE33==4 & PE34>=6  
 replace yedc=7+PE34 if PE33==5
-replace yedc=12 if PE33==6 & PE34>=6 /* tiene 7 años de educacion sec pero su titulo es sec*/
+replace yedc=12 if PE33==6 & PE34>=6 /* tiene 7 aÃ±os de educacion sec pero su titulo es sec*/
 replace yedc=12+PE34 if PE33==8 | PE33==7
 replace yedc=17 if PE33==6 & PE34>=5
 replace yedc=14 if PE33==7 & PE34>=2
@@ -1284,7 +1287,8 @@ replace edupre_ci=1 if PE29==3
 replace edupre_ci=. if aedu_ci==.
 label variable edupre_ci "Educacion preescolar"
 
-
+
+
 **************
 ***eduac_ci***
 **************
@@ -1530,4 +1534,4 @@ replace floor=. if piso_ch==.
 
 
 
-save "X:\ARM\ECU\ECV\1995\Arm_data\ECU1995EA_BID.dta", intercooled replace
+save "${surveysFolder}\ARM\ECU\ECV\1995\Arm_data\ECU1995EA_BID.dta", intercooled replace

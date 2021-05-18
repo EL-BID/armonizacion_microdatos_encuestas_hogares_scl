@@ -1,4 +1,4 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 
@@ -7,8 +7,8 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -19,9 +19,9 @@ local ENCUESTA ENCOVI
 local ANO "2014"
 local ronda m3_m8
 
-global ruta = "\\Sdssrv03\surveys\survey\GTM\ENCOVI\2014\m3_m8\data_orig\"
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+global ruta = "${surveysFolder}\survey\GTM\ENCOVI\2014\m3_m8\data_orig\"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Guatemala
+Pa铆s: Guatemala
 Encuesta: ENCOVI
 Round: Anual
-趌tima versi髇: Marcela G. Rubio - Email: mrubio@iadb.org, marcelarubio28@gmail.com
-趌tima modificaci髇: Daniela Zuluaga -Email: danielazu2iadb.org da.zuluaga@hotmail.com
-Fecha 鷏tima modificaci髇: Octubre de 2017
+脷ltima versi贸n: Marcela G. Rubio - Email: mrubio@iadb.org, marcelarubio28@gmail.com
+脷ltima modificaci贸n: Daniela Zuluaga -Email: danielazu2iadb.org da.zuluaga@hotmail.com
+Fecha 煤ltima modificaci贸n: Octubre de 2017
 
 							SCL/LMK - IADB
 *******************************************************************************/
@@ -50,14 +50,14 @@ set more off
 /*
 use "$ruta\otros_gtos_mes_pasado.dta", clear 
 
-/* C骴igo de los programas que corresponden al 鷏timo n鷐ero de las variables
+/* C贸digo de los programas que corresponden al 煤ltimo n煤mero de las variables
 
            1 asistencia alimentar
            2 mi comedor seguro
-           3 insumos agr韈olas
+           3 insumos agr铆colas
            4 jovenes protagonista
            5 vaso de atol
-           6 alimentaci髇 escolar
+           6 alimentaci贸n escolar
            7 bono de transporte e
            8 becas escolares
            9 bolsas escolares
@@ -79,7 +79,7 @@ saveold "$ruta\asistencia_social_reshape.dta"
 */
 
 
-*Modificaci髇 Mayra S醗nz (Mayo 16,2016): Se incluye el m骴ulo de equipamiento del hogar
+*Modificaci贸n Mayra S谩enz (Mayo 16,2016): Se incluye el m贸dulo de equipamiento del hogar
 
 /*
 use "$ruta\equipamientos_del_hogar.dta", clear 

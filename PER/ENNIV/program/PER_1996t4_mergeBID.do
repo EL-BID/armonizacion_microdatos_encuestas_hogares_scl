@@ -1,18 +1,18 @@
 ************************************
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENNIV
@@ -28,12 +28,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Perú
+PaÃ­s: PerÃº
 Encuesta: ENNIV
 Round: a
-Autores: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: octubre 2013
+Autores: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: octubre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -71,25 +71,25 @@ saveold `base_in'\\hogares.dta, replace
 */
 
 clear
-use "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9641.dta", clear
-merge m:m idhogar using "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9642.dta"
+use "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9641.dta", clear
+merge m:m idhogar using "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9642.dta"
 tab _merge
 capture drop _merge
-merge m:m idhogar using "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9648.dta"
+merge m:m idhogar using "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9648.dta"
 tab _merge
 capture drop _merge
 sort ubi seg viv hog
-saveold "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\hogares.dta", replace
-*Existen más observaciones en la base master que en la using al momento de hacer el merge, de acuerdo a encuestas posteriores
-* pueden ser las encuestas incompletas o vacías.
+saveold "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\hogares.dta", replace
+*Existen mÃ¡s observaciones en la base master que en la using al momento de hacer el merge, de acuerdo a encuestas posteriores
+* pueden ser las encuestas incompletas o vacÃ­as.
 clear
-use "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9643.dta", clear
+use "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\ena9643.dta", clear
 sort ubi seg viv hog 
-merge m:m ubi seg viv hog using "Y:\survey\PER\ENNIV\1996\m10_m12\data_orig\hogares.dta", force
+merge m:m ubi seg viv hog using "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_orig\hogares.dta", force
 tab _merge
 drop if _merge != 3
 drop _merge
 compress
-saveold "Y:\survey\PER\ENNIV\1996\m10_m12\data_merge\PER_1996m10_m12.dta", replace
+saveold "${surveysFolder}\survey\PER\ENNIV\1996\m10_m12\data_merge\PER_1996m10_m12.dta", replace
 
 

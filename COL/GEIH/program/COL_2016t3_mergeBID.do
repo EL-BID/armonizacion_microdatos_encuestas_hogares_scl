@@ -2,6 +2,7 @@
 Autor: Marcela G. Rubio - Email: marcelarubio28@gmail.com | mrubio@iadb.org
 Ultima version: Alvaro J. Altamirano M. (alvaroalt@iadb.org)
 Junio, 2017 Version Stata 14 */
+* Added ETNIA module. Cesar Lins (SCL/GDI) Marzo 2021
 
 *** MERGE COLOMBIA GEIH 2016 ****
 *------------------------------*	
@@ -26,6 +27,9 @@ clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2016.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2016.dta", force
 drop _merge
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA16.dta", keep(match master)
+drop _merge
+
 egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
@@ -106,6 +110,34 @@ sort idh
 saveold "`t3'col_`zona'_viv.dta", replace
 }
 */
+
+** Módulo de migración 
+
+* Sección incluida por SCL/MIG Fernando Morales 
+
+use "`m7'\Julio_mig.dta", clear
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+append using "`m8'\Agosto_mig.dta"
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+append using "`m9'\Septiembre_mig.dta"
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+egen id = concat(directorio secuencia_p orden)
+sort id
+saveold "`out'\COL_`anio't3migracion.dta", replace
+
+
 *3. Merge de los 8 modulos trimestrales por zona
 *-----------------------------------------------
 foreach zona in cabecera resto {
@@ -147,6 +179,7 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 clear
 use "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
 append using "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
+merge 1:1 id using "Z:\survey\COL\GEIH\2016\t3\COL_2016t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 

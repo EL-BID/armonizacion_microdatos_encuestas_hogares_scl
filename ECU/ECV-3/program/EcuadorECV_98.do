@@ -129,13 +129,13 @@ Also, the orginal data was replaced with the new Mecovi versions
 
 clear
 capture log close
-cd X:\ARM\ECU\ECV\1998\Data
+cd ${surveysFolder}\ARM\ECU\ECV\1998\Data
 set mem 130m
 set more off
 
-use "X:\ARM\ECU\ECV\1998\Data\ecu98ecvNEW.dta" 
+use "${surveysFolder}\ARM\ECU\ECV\1998\Data\ecu98ecvNEW.dta" 
 sort CIUDAD ZONA SECTOR VIVIENDA HOGAR 
-merge CIUDAD ZONA SECTOR VIVIENDA HOGAR using "X:\ARM\ECU\ECV\1998\Datos_originales\vivi_ecu98.dta" 
+merge CIUDAD ZONA SECTOR VIVIENDA HOGAR using "${surveysFolder}\ARM\ECU\ECV\1998\Datos_originales\vivi_ecu98.dta" 
 drop _merge
 
 ***************
@@ -532,7 +532,7 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen trabajadores agricolas */
+/*Dentro de la categorÃ­a empleado se incluyen trabajadores agricolas */
 
 ******************
 **dcategopri_ci **
@@ -680,7 +680,7 @@ replace spublico_ci=1 if PA20==1 & emp_ci==1
 replace spublico_ci=0 if PA20~=1 & emp_ci==1
 replace spublico_ci=. if PA20==.
 
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -1013,9 +1013,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1124,16 +1124,16 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 * years of education
 
@@ -1144,7 +1144,7 @@ replace yedc=PE30 if PE29==4 & PE30>=6
 replace yedc=PE30 if PE29==5 
 replace yedc=PE30 if PE29==5 & PE30>=6 
 replace yedc=7+PE30 if PE29==6
-replace yedc=12 if PE29==6 & PE30>=6 /* tiene 7 años de educacion sec pero su titulo es sec*/
+replace yedc=12 if PE29==6 & PE30>=6 /* tiene 7 aÃ±os de educacion sec pero su titulo es sec*/
 replace yedc=12+PE30 if PE29==8 | PE29==7
 replace yedc=17 if PE29==7 & PE30>=6
 replace yedc=14 if PE29==8 & PE30>=2
@@ -1565,4 +1565,4 @@ replace floor=. if piso_ch==.
 
 
 
-save "X:\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", intercooled replace
+save "${surveysFolder}\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", intercooled replace

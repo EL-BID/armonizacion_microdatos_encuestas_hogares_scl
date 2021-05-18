@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
@@ -32,12 +32,12 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Argentina
+PaÃ­s: Argentina
 Encuesta: EPHC
 Round: IISem-2014
 Autores: 
-Versión 2015: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 31 de Marzo de 2015
+VersiÃ³n 2015: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 31 de Marzo de 2015
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -69,9 +69,9 @@ replace region_c=2  if aglomerado==22                          /*Catamarca*/
 replace region_c=3  if aglomerado==8                           /*Chaco*/
 replace region_c=4  if aglomerado==9 | aglomerado==91          /*Chubut*/
 replace region_c=5  if aglomerado==32                          /*Ciudad de Buenos Aires*/
-replace region_c=6  if aglomerado==13 | aglomerado==36         /*Córdova*/
+replace region_c=6  if aglomerado==13 | aglomerado==36         /*CÃ³rdova*/
 replace region_c=7  if aglomerado==12                          /*Corrientes*/
-replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
+replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre RÃ­os*/
 replace region_c=9  if aglomerado==15                          /*Formosa*/
 replace region_c=10 if aglomerado==19                          /*Jujuy*/
 replace region_c=11 if aglomerado==30                          /*La pampa*/
@@ -79,7 +79,7 @@ replace region_c=12 if aglomerado==25                          /*La Rioja*/
 replace region_c=13 if aglomerado==10                          /*Mendoza*/
 replace region_c=14 if aglomerado==7                           /*Misiones*/
 replace region_c=15 if aglomerado==17                          /*Neuquen*/
-replace region_c=16 if aglomerado==93                          /*Río Negro*/ 
+replace region_c=16 if aglomerado==93                          /*RÃ­o Negro*/ 
 replace region_c=17 if aglomerado==23                          /*Salta*/
 replace region_c=18 if aglomerado==27                          /*San Juan*/ 
 replace region_c=19 if aglomerado==26                          /*San Luis*/
@@ -95,9 +95,9 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	3"Chaco"                  /// 
 	4"Chubut"                 ///
 	5"Ciudad de Buenos Aires" ///
-	6"Córdoba"                ///
+	6"CÃ³rdoba"                ///
 	7"Corrientes"             ///
-	8"Entre Ríos"             ///
+	8"Entre RÃ­os"             ///
 	9"Formosa"                ///
 	10"Jujuy"                 ///
 	11"La Pampa"              ///
@@ -105,7 +105,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	13"Mendoza"               ///
 	14"Misiones"              ///
 	15"Neuquon"               ///
-	16"Río Negro"             ///
+	16"RÃ­o Negro"             ///
 	17"Salta"                 ///
 	18"San Juan"              ///
 	19"San Luis"              ///
@@ -113,7 +113,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	21"Santa Fe"              ///
 	22"Santiago del Estero"   ///
 	23"Tierra del Fuego"      ///
-	24"Tucumán"               
+	24"TucumÃ¡n"               
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
@@ -332,7 +332,7 @@ replace condocup_ci=2 if estado==2
 replace condocup_ci=3 if estado==3 & edad_ci>=10
 replace condocup_ci=. if estado == 0
 replace condocup_ci=4 if estado == 4
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -369,8 +369,8 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	gen desemp1_ci=(estado==2)
 
 
-*Note: Aunque la definición de desempleado a través de la variable estado (la busqueda de empleo 
-*es el mes)encaja más en la variable desemp3, se decide ponerla en desemp1_ci para cuando toque hacer agregaciones de 
+*Note: Aunque la definiciÃ³n de desempleado a travÃ©s de la variable estado (la busqueda de empleo 
+*es el mes)encaja mÃ¡s en la variable desemp3, se decide ponerla en desemp1_ci para cuando toque hacer agregaciones de 
 *America Latina, Argentina no tenga missing en el desempleo. 
 
 	************
@@ -419,7 +419,7 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	gen desalent_ci=0 if edad_ci>=10
 	replace desalent_ci=1 if pp02e==3 | pp02e==4 
 
-*Note: Se debería incrementar la categoria 4 "hay poco trabajo en esta epoca de año"
+*Note: Se deberÃ­a incrementar la categoria 4 "hay poco trabajo en esta epoca de aÃ±o"
 
 	*************	
 	*horaspri_ci*
@@ -487,7 +487,7 @@ tab subemp_ci*/
 	
 	*ANTERIOR: We don't consider the people that declare to have 
 	*aguinaldo (4), vacaciones (8), Vacaciones y Aguinaldo (12), Indemnizacion (32),
-	*Indemnizacion y Aguinaldo (36)	indemnización y Vacaciones (40) and Indemnización, 
+	*Indemnizacion y Aguinaldo (36)	indemnizaciÃ³n y Vacaciones (40) and IndemnizaciÃ³n, 
 	*vacaciones y aguinaldo (44).
 	*AHORA:
 	*Sigue siendo solo para empleados (categopri_ci==3) solo se incluyen jubilaciones PERO LO QUE SE QUIERE VER ES 
@@ -587,8 +587,8 @@ replace rama_ci = 7 if ((pp04b_caes>=4900 & pp04b_caes<=5300) | pp04b_caes==49) 
 replace rama_ci = 8 if ((pp04b_caes>=6400 & pp04b_caes<=8200) ) & emp_ci==1
 replace rama_ci = 9 if ((pp04b_caes>=5800 & pp04b_caes<=6300) |(pp04b_caes>=8300 &  pp04b_caes<=9900) | pp04b_caes==85 | pp04b_caes==63 | pp04b_caes==61  | pp04b_caes==58) & emp_ci==1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 	/*
@@ -657,7 +657,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace antiguedad2=. if pp05b2_mes==0 & pp05b2_ano==0 	
 
 	*Para Empleados y obreros
-	*CREO QUE NO ES POSIBLE CONSTRUIR LA VARIABLE ANTIGUEDAD, PERO A CONTINUACIÓN LA MEJOR MANERA DE APROXIMARLA
+	*CREO QUE NO ES POSIBLE CONSTRUIR LA VARIABLE ANTIGUEDAD, PERO A CONTINUACIÃ“N LA MEJOR MANERA DE APROXIMARLA
 	*Para empleados USO EL VALOR MEDIO DE CADA RANGO DE ANIOS, LA ESTOY CREANDO TRUNCADA,
 	* HAY QUE REVISAR ESTO!!!!
 	* Yanira: no estoy de acuerdo con esto.  Posiblemente sea mejor convertir a discretas las 
@@ -691,7 +691,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace antiguedad_ci= antiguedad3 if antiguedad3!=. & emp_ci==1
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=. & emp_ci==1
 	label var antiguedad_ci "antiguedad laboral (anios) - aproximacion"	
-*Note: A los empleados e independientes se les esta dejando un máximo de 5 años de antiguedad.
+*Note: A los empleados e independientes se les esta dejando un mÃ¡ximo de 5 aÃ±os de antiguedad.
 	
 
 			**************************
@@ -785,7 +785,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	gen ynlnm_ci=.
 
 /*
-	*Para ignorar el 0.5% más alto y más bajo de los ingreso se hace lo siguiente:
+	*Para ignorar el 0.5% mÃ¡s alto y mÃ¡s bajo de los ingreso se hace lo siguiente:
 	foreach var in ylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylnm_ci ynlm_ci {
 	sort `var'
 	cap pctile pct = `var' if `var'>=0 & `var'!=. & emp_ci==1, nq(200) genp(percent)
@@ -886,9 +886,9 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	*********
 	*aedu_ci* 
 	*********
-	*NOTA: Como terciario, universitario y posgrado tienen una duración variable se supone 
+	*NOTA: Como terciario, universitario y posgrado tienen una duraciÃ³n variable se supone 
 	*que terciario completo implica 3 anios de educacion adicional a la secundaria, 5 adicionales a universitario 
-	*y 2 a postgrado. Esto solo se basa en el criterio de que la modas de finalización estos niveles suelen
+	*y 2 a postgrado. Esto solo se basa en el criterio de que la modas de finalizaciÃ³n estos niveles suelen
 	*ser estas. ESTO SE DEBE DISCUTIR 
 /*
 	gen aedu_ci=0 if (ch10==0 | ch10==3) 
@@ -940,18 +940,18 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
    *Ajustando variables
 	replace ch10=. if ch10==9
-	replace ch12=. if ch12==99 | ch12==9 // El último condicional es para sacar a la población con educación especial
+	replace ch12=. if ch12==99 | ch12==9 // El Ãºltimo condicional es para sacar a la poblaciÃ³n con educaciÃ³n especial
 	replace ch13=. if ch13==9
 	destring ch14, replace
 	replace ch14=. if ch14==98 | ch14==99
 	
 	
-	*Variable de Año de Educación
+	*Variable de AÃ±o de EducaciÃ³n
 	gen aedu_ci=.
 	
-	*Para quienes no terminaron el último nivel educativo al que asistió
+	*Para quienes no terminaron el Ãºltimo nivel educativo al que asistiÃ³
 	
-	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero años de educación para aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 años.
+	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero aÃ±os de educaciÃ³n para aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 aÃ±os.
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
 	replace aedu_ci=ch14+7 if ch12==4 & ch13==2
@@ -960,7 +960,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
 	replace aedu_ci=ch14+17 if ch12==8 & ch13==2
 		
-	*Para quienes terminaron el último nivel educativo al que asistió
+	*Para quienes terminaron el Ãºltimo nivel educativo al que asistiÃ³
 	
 	replace aedu_ci=7 if ch12==2 & ch13==1
 	replace aedu_ci=9 if ch12==3 & ch13==1
@@ -970,7 +970,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
-	*Imputando para los que tenemos certeza del nivel educativo más alto alcanzado
+	*Imputando para los que tenemos certeza del nivel educativo mÃ¡s alto alcanzado
 	replace aedu_ci=7 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
@@ -1049,7 +1049,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	***********
 	*edupre_ci*
 	***********
-	*Cambio realizado 11/7/2016 por Iván Bornacelly - Creando la dummy que identifica a la población que asiste a Educación Prescolar
+	*Cambio realizado 11/7/2016 por IvÃ¡n Bornacelly - Creando la dummy que identifica a la poblaciÃ³n que asiste a EducaciÃ³n Prescolar
 	gen byte edupre_ci=.
 	replace edupre_ci=1 if ch12==1
 	recode edupre_ci(.=0)
@@ -1057,7 +1057,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	************
 	*asispre_ci*
 	************
-	*Nueva variable incoporada 01/11/2017 por Iván Bornacelly
+	*Nueva variable incoporada 01/11/2017 por IvÃ¡n Bornacelly
 	g asispre_ci=.
 	replace asispre_ci=1 if ch10==1 & ch12==1 & ch06>=4
 	recode asispre_ci (.=0)
@@ -1070,8 +1070,8 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 
 
 	/** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar años de educación
-Esta parte está más adelante y por ahora el impacto más visible es que la población con educación especial se les asigna de manera directa 3 años de educación cuando no deberían ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación de los años de Educación para Argentina se desactive la segunda línea del siguiente código:*/
+Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar aÃ±os de educaciÃ³n
+Esta parte estÃ¡ mÃ¡s adelante y por ahora el impacto mÃ¡s visible es que la poblaciÃ³n con educaciÃ³n especial se les asigna de manera directa 3 aÃ±os de educaciÃ³n cuando no deberÃ­an ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputaciÃ³n de los aÃ±os de EducaciÃ³n para Argentina se desactive la segunda lÃ­nea del siguiente cÃ³digo:*/
 
 replace eduno_ci=1	if aedu_ci==0 
 *replace aedu_ci=3 	if aedu_ci==. & edupi_ci==1
@@ -1206,7 +1206,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	replace des1_ch=0 if bano_ch==0
 	replace des1_ch=1 if iv11==1 | iv11==2
 	replace des1_ch=2 if iv11==3 | iv11==4
-	* Junio 2015 MGR: iv11=0 corresponde a no tiene baño por lo que no debe reemplazarse por missing ya que escribe sobre la opción 0 de des1_ch
+	* Junio 2015 MGR: iv11=0 corresponde a no tiene baÃ±o por lo que no debe reemplazarse por missing ya que escribe sobre la opciÃ³n 0 de des1_ch
 	*replace des1_ch=. if iv11==0 | iv11==9
 	replace des1_ch=. if iv11==9
 
@@ -1216,7 +1216,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	gen des2_ch=.
 	replace des2_ch=0 if bano_ch==0
 	replace des2_ch=1 if iv11==1 | iv11==2 | iv11==3 | iv11==4
-	* Junio 2015 MGR: iv11=0 corresponde a no tiene baño por lo que no debe reemplazarse por missing ya que escribe sobre la opción 0 de des2_ch
+	* Junio 2015 MGR: iv11=0 corresponde a no tiene baÃ±o por lo que no debe reemplazarse por missing ya que escribe sobre la opciÃ³n 0 de des2_ch
 	*replace des2_ch=. if iv11==0 | iv11==9
 	replace des2_ch=. if iv11==9
 
@@ -1362,7 +1362,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	*********************
     ***aguamejorada_ch***
     *********************
-	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
+	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicaciÃ³n del grifo porque no se detallan las fuentes de agua
 	replace aguamejorada_ch = 0 if iv7 == 4
 		
 	*********************
@@ -1469,7 +1469,7 @@ label var tamemp_ci "# empleados en la empresa segun rangos"
 label define tamemp_ci 1 "Pequena" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
 
-*micro 1 a 4 pequeña 5 a 14 Mediana 15-40 Grande mas 41
+*micro 1 a 4 pequeÃ±a 5 a 14 Mediana 15-40 Grande mas 41
 gen tamemp=1 if (pp04c >= 1 & pp04c <= 4)
 replace tamemp=2 if pp04c>=5 & pp04c<=14
 replace tamemp=3 if pp04c>=15 & pp04c<=40 & pp04c!=. & pp04c!=99
@@ -1536,7 +1536,7 @@ replace categoinac_ci=2 if cat_inac==3
 replace categoinac_ci=4 if cat_inac==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1548,7 +1548,7 @@ gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
 recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 	
-* Sin restricción a ocupados.
+* Sin restricciÃ³n a ocupados.
 g formal_1=cotizando_ci
 	
 *variables que faltan crear
@@ -1561,7 +1561,7 @@ gen instcot_ci=.
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -1571,15 +1571,15 @@ gen raza_ci=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1597,7 +1597,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
-para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para anÃƒÂ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
 
 compress

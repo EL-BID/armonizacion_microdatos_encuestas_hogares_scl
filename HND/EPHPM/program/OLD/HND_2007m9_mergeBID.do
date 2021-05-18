@@ -5,7 +5,7 @@ set more off
 
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -144,10 +144,10 @@ replace CV48a=7 if N==6
 label define CV48aa 1"Entraron los ladrones a su casa" ///
 		    3"Le robaron el carro o una moto" ///
 		    2"Le atacaron con violencia, amenazas o armas para robarle" ///
-		    6"¿Le han robado. (sin violencia) estando fuera de la casa?" ///
-		    4"¿Lesiones personales?" ///
-		    7"¿Secuestro?" ///
-		    5"¿Estafa o chantaje?"
+		    6"Å¼Le han robado. (sin violencia) estando fuera de la casa?" ///
+		    4"Å¼Lesiones personales?" ///
+		    7"Å¼Secuestro?" ///
+		    5"Å¼Estafa o chantaje?"
 label values CV48a CV48aa
 tab CV48a
 drop four n N NN

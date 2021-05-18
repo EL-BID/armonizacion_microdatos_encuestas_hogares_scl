@@ -10,7 +10,7 @@ capture log close
 set memory 500m
 set more off
 
-local in="X:\ARM\COL\ECV\2008\"
+local in="${surveysFolder}\ARM\COL\ECV\2008\"
 capture log close
 log using "`in'Documents\COL2008EA_BID.log", replace
 use "`in'Origin_data\col08_ecv.dta"
@@ -98,8 +98,8 @@ label value relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-*NOTA: para este año la encuesta generó solo un factor de expansión por hogar.
-*luego todos los individuos del hogar tienen el mismo factor de expansión.
+*NOTA: para este aÃ±o la encuesta generÃ³ solo un factor de expansiÃ³n por hogar.
+*luego todos los individuos del hogar tienen el mismo factor de expansiÃ³n.
 
 gen factor_ci=factor_expansion
 label variable factor_ci "Factor de expansion del individuo"
@@ -272,7 +272,7 @@ label var emp_ci "Ocupado (empleado)"
 ****************
 gen desemp1_ci=0
 replace desemp1_ci=1 if p6240==2 & p6280==1
-label var desemp1_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp1_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
 
 
 ****************
@@ -296,21 +296,21 @@ label var desemp3_ci "desemp2_ci + personas que buscaron antes del periodo de re
 *************
 gen pea1_ci=0
 replace pea1_ci=1 if emp_ci==1 |desemp1_ci==1
-label var pea1_ci "Población Económicamente Activa con desemp1_ci"
+label var pea1_ci "PoblaciÃ³n EconÃ³micamente Activa con desemp1_ci"
 
 *************
 ***pea2_ci***
 *************
 gen pea2_ci=0
 replace pea2_ci=1 if emp_ci==1 |desemp2_ci==1
-label var pea2_ci "Población Económicamente Activa con desemp2_ci"
+label var pea2_ci "PoblaciÃ³n EconÃ³micamente Activa con desemp2_ci"
 
 *************
 ***pea3_ci***
 *************
 gen pea3_ci=0
 replace pea3_ci=1 if emp_ci==1 |desemp3_ci==1
-label var pea3_ci "Población Económicamente Activa con desemp3_ci"
+label var pea3_ci "PoblaciÃ³n EconÃ³micamente Activa con desemp3_ci"
 
 *****************
 ***desalent_ci***
@@ -409,7 +409,7 @@ gen nempleos_ci=.
 replace nempleos_ci=1 if emp_ci==1 & p8636==2
 replace nempleos_ci=2 if emp_ci==1 & p8636==1
 replace nempleos_ci=. if emp_ci==0
-label var nempleos_ci "Número de empleos" 
+label var nempleos_ci "NÃºmero de empleos" 
 
 *****************
 ***firmapeq_ci***
@@ -427,7 +427,7 @@ label var firmapeq_ci "Trabajadores informales"
 
 gen spublico_ci=(p6435==2) 
 replace spublico_ci=. if emp_ci==0 
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 
 **************
@@ -471,8 +471,8 @@ replace rama_ci=9 if (p6390s1>=75 & p6390s1<=99) & emp_ci==1
 replace rama_ci=. if emp_ci==0
 
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -638,7 +638,7 @@ label var ynlnm_ci "Ingreso no laboral no monetario"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembro_ci==1
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 
 **************
@@ -865,8 +865,8 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 
-*Para la educación superior no es posible saber cuantos anios dura el ciclo normalmente
-*por ello se hace una aproximación a través de titulación. En esta encuesta si se puede saber
+*Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo normalmente
+*por ello se hace una aproximaciÃ³n a travÃ©s de titulaciÃ³n. En esta encuesta si se puede saber
 *pero se mantiene el procedimiento para mantener la comparabilidad
 
 gen byte eduui_ci=0
@@ -878,8 +878,8 @@ label variable eduui_ci "Superior incompleto"
 ***eduuc_ci***
 ***************
 
-*Para la educación superior no es posible saber cuantos anios dura el ciclo
-*por ello se hace una aproximación a través de titulación
+*Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo
+*por ello se hace una aproximaciÃ³n a travÃ©s de titulaciÃ³n
 gen byte eduuc_ci=0
 replace eduuc_ci=1 if aedu_ci>11 & (p6219==5 | p6219==6 | p6219==8 | p6219==9 | p6219==10 | p6213==7)
 label variable eduuc_ci "Superior completo"
@@ -966,7 +966,7 @@ label var repite_ci "Ha repetido al menos un grado"
 ******************
 
 gen repiteult_ci=.
-label var repiteult "Ha repetido el último grado"
+label var repiteult "Ha repetido el Ãºltimo grado"
 
 
 ***************
@@ -975,7 +975,7 @@ label var repiteult "Ha repetido el último grado"
 
 gen edupub_ci=0 if p8592==2
 replace edupub_ci=1 if p8592==1 
-label var edupub_ci "Asiste a un centro de ensenanza público"
+label var edupub_ci "Asiste a un centro de ensenanza pÃºblico"
 
 
 
@@ -1000,7 +1000,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 
 gen aguadist_ch=.
 replace aguadist_ch=p5060
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 label val aguadist_ch aguadist_ch
@@ -1012,7 +1012,7 @@ label val aguadist_ch aguadist_ch
 
 gen aguamala_ch=(p8530==5 | p8530==6)
 replace aguamala_ch=. if p8530==.
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 
 
 *****************
@@ -1029,7 +1029,7 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 gen luz_ch=0
 replace luz_ch=1 if p8520s1==1 
-label var luz_ch  "La principal fuente de iluminación es electricidad"
+label var luz_ch  "La principal fuente de iluminaciÃ³n es electricidad"
 
 
 ****************
@@ -1076,9 +1076,9 @@ replace des1_ch=0 if bano_ch==0
 replace des1_ch=1 if p8526==1 | p8526==2
 replace des1_ch=2 if p8526==3 | p8526==4
 replace des1_ch=3 if p8526==5
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 
@@ -1090,8 +1090,8 @@ gen des2_ch=.
 replace des2_ch=0 if bano_ch==0
 replace des2_ch=1 if p8526==1 | p8526==2 | p8526==3 | p8526==4
 replace des2_ch=3 if p8526==5
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -1103,7 +1103,7 @@ label val des2_ch des2_ch
 gen piso_ch=1 if p4015!=7 & p4015!=.
 replace piso_ch=0 if p4015==7
 replace piso_ch=. if p4015==.
-label var piso_ch "Materiales de construcción del piso"  
+label var piso_ch "Materiales de construcciÃ³n del piso"  
 label def piso_ch 0"Piso de tierra" 1"Materiales permanentes"
 label val piso_ch piso_ch
 
@@ -1114,7 +1114,7 @@ label val piso_ch piso_ch
 gen pared_ch=0 
 replace pared_ch=1 if p4005==1 | p4005==2 | p4005==3 | p4005==5 | p4005==6
 replace pared_ch=. if p4005==.
-label var pared_ch "Materiales de construcción de las paredes"
+label var pared_ch "Materiales de construcciÃ³n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
 label val pared_ch pared_ch
 
@@ -1124,7 +1124,7 @@ label val pared_ch pared_ch
 **************
 
 gen techo_ch=.
-label var techo_ch "Materiales de construcción del techo"
+label var techo_ch "Materiales de construcciÃ³n del techo"
 
 **************
 ***resid_ch***
@@ -1134,8 +1134,8 @@ gen resid_ch =0    if p5041==1 | p5041==6
 replace resid_ch=1 if p5041==4 | p5041==5
 replace resid_ch=2 if p5041==2 | p5041==3
 replace resid_ch=. if p5041==.
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -1173,7 +1173,7 @@ label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 gen telef_ch=0
 replace telef_ch=1 if p5305==1
 replace telef_ch=. if p5305==.
-label var telef_ch "El hogar tiene servicio telefónico fijo"
+label var telef_ch "El hogar tiene servicio telefÃ³nico fijo"
 
 
 ***************
@@ -1221,7 +1221,7 @@ label var compu_ch "El hogar posee computador"
 gen internet_ch=0
 replace internet_ch=1 if p5210s3==1
 replace internet_ch=3 if p5210s3==.
-label var internet_ch "El hogar posee conexión a Internet"
+label var internet_ch "El hogar posee conexiÃ³n a Internet"
 
 
 ************
@@ -1277,7 +1277,7 @@ label val viviprop_ch viviprop_ch
 gen vivitit_ch=.
 replace vivitit_ch=1 if p5120==1
 replace vivitit_ch=0 if p5120==2
-label var vivitit_ch "El hogar posee un título de propiedad"
+label var vivitit_ch "El hogar posee un tÃ­tulo de propiedad"
 
 
 ****************

@@ -20,13 +20,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor ??amente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC
@@ -45,12 +45,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Jamaica
+Pa√≠s: Jamaica
 Encuesta: SLC
 Round: a
-Autores: Mayra S·enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Autores: Mayra S√°enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 Versiones anteriores: Yessenia Loayza
-Fecha ˙ltima modificaciÛn: 17 de noviembre de 2016
+Fecha √∫ltima modificaci√≥n: 17 de noviembre de 2016
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -102,7 +102,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a ìweighting factorî but a ìnon response factorî. It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
+/* It is not a ‚Äúweighting factor‚Äù but a ‚Äúnon response factor‚Äù. It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 gen factor2_ci=finwght*100000000 
 label var factor2_ci "Factor de Expansion del Individuo (no suma la poblacion)"
@@ -195,19 +195,19 @@ replace miembros_ci=0 if relacion_ci==6 /*Empleados domesticos y sus familiares 
 label variable miembros_ci "Variable dummy que indica las personas que son miembros del Hogar"
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 aÒos o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 a√±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 aÒos dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 a√±os dentro del Hogar"
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 aÒos o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 a√±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niÒos menores a 6 aÒos dentro del Hogar"
+label variable nmenor6_ch "Numero de ni√±os menores a 6 a√±os dentro del Hogar"
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niÒos menores a 1 aÒo dentro del Hogar"
+label variable nmenor1_ch "Numero de ni√±os menores a 1 a√±o dentro del Hogar"
 
 
 **** Demanda Laboral
@@ -257,7 +257,7 @@ replace rama_ci=8 if Q39M>=8000 & Q39M<9000
 replace rama_ci=9 if Q39M>=9000 & Q39M<10000
 
 label var rama_ci "Rama Laboral en la Ocupacion Principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÛn de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÛn" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotaci√≥n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcci√≥n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 capture drop horaspri_ci horastot_ci
@@ -371,7 +371,7 @@ label var antiguedad_ci "Antiguedad en la Ocupacion Actual (en anios)"
 
 gen antiguedad2_ci=Q311 if Q311<9
 label var antiguedad2_ci "Antiguedad en la Ocupacion Actual (categorias)"
-label define antiguedad2_ci 1 "Menos de 3 meses" 2 "3 meses a menos de 6 meses" 3 "6 a menos de 9 meses" 4 "9 meses a menos de 12 meses" 5 "1 aÒo a menos de 2 aÒos" 6 "2 o mas aÒos"
+label define antiguedad2_ci 1 "Menos de 3 meses" 2 "3 meses a menos de 6 meses" 3 "6 a menos de 9 meses" 4 "9 meses a menos de 12 meses" 5 "1 a√±o a menos de 2 a√±os" 6 "2 o mas a√±os"
 label values antiguedad2_ci antiguedad2_ci
 
 gen durades_ci=.
@@ -499,7 +499,7 @@ capture drop asiste_ci
 gen byte asiste_ci=.
 replace asiste_ci=1 if b01>=1 & b01<17
 replace asiste_ci=0 if b01==17
-label var asiste "Personas que actualmente asisten a centros de enseÒanza"
+label var asiste "Personas que actualmente asisten a centros de ense√±anza"
 
 capture drop aedu_ci
 gen byte aedu_ci=.
@@ -509,7 +509,7 @@ replace aedu_ci=GRADO2 if NIVEL2==1 | NIVEL2==2 | NIVEL2==3
 
 replace aedu_ci=GRADO-1 if aedu>=age & GRADO<. & GRADO2<.
 replace aedu_ci=0 if b01==17 & b21==19
-label variable aedu_ci "AÒos de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "A√±os de Educacion (no incluye terciaria o universitaria)"
 
 
 
@@ -577,10 +577,10 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac_ci=0 if b01==12 | b01==13 | b21==14 | b21==15
 replace eduac_ci=1 if b01==11 | b21==13
-label var eduac_ci "Educacion terciaria acadÈmica versus educaciÛn terciaria no-acadÈmica "
+label var eduac_ci "Educacion terciaria acad√©mica versus educaci√≥n terciaria no-acad√©mica "
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un aÒo o grado"
+label var repite_ci "Personas que han repetido al menos un a√±o o grado"
 
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
@@ -588,12 +588,12 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 gen edupub_ci=.
 replace edupub_ci=1 if b03==1
 replace edupub_ci=0 if b03==2
-label var edupub_ci "1 = personas que asisten a centros de enseÒanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de ense√±anza publicos"
 
 ** Generating pqnoasis
 gen byte pqnoasis_ci=.
 replace pqnoasis_ci=b10a
-label var pqnoasis_ci "Razones para no asistir a centros de enseÒanza"
+label var pqnoasis_ci "Razones para no asistir a centros de ense√±anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" 7 "Escuela cerrada" 8 "Carece de zapatos o uniforme, sucios, o mojados" 9 "Lluvia" 10 "Problemas monetarios" 11 "Tiene que realizar alguna diligencia" 12 "No esta seguro en la escuela" 13 "No esta seguro en la comunidad" 14 "Otro" 
 label values pqnoasis_ci pqnoasis_ci
 
@@ -611,7 +611,7 @@ replace pqnoasis1_ci = 8 if b10a==6 | b10a==7
 replace pqnoasis1_ci = 9 if b10a==9 | b10a==11 | b10a==12 | b10a==13 | b10a==14
 
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 gen luz_ch=.
@@ -622,7 +622,7 @@ replace luz_ch=0 if m01==2
 gen cuartos_ch=.
 replace cuartos_ch=i03 if i03>=0
 
-gen piso_ch=. // s√≥lo hay la pregunta de pared.
+gen piso_ch=. // s√É¬≥lo hay la pregunta de pared.
 
 gen region_c =.
 
@@ -831,15 +831,15 @@ g vivitit_ch =.
 g vivialq_ch =.
 g vivialqimp_ch=.
  /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

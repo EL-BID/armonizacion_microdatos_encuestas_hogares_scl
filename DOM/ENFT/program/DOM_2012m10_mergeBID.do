@@ -1,9 +1,9 @@
 		***********************************************************
-		***PROGRAMA PARA PEGAR LOS MÓDULOS DE LA ENFT OCTUB 2012***
+		***PROGRAMA PARA PEGAR LOS MÃ“DULOS DE LA ENFT OCTUB 2012***
 		***********************************************************
 clear
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS DOM
 local ENCUESTA ENFT
@@ -90,13 +90,13 @@ rename `v' `lowname'
 sort eft_vivienda eft_hogar eft_miembro
 save "`base_in'\miembro O2012.dta", replace
 
-*Consolidando la información*
+*Consolidando la informaciÃ³n*
 *****************************
 
 merge eft_vivienda eft_hogar eft_miembro using "`base_in'\ocupacion O2012.dta"
 tab _merge
 tab eft_edad if _merge==1
-*Los menores de 10 años no tienen informacion de ocupación (ok)
+*Los menores de 10 aÃ±os no tienen informacion de ocupaciÃ³n (ok)
 drop _merge
 sort eft_vivienda eft_hogar eft_miembro
 
@@ -139,23 +139,23 @@ label var	eft_alfabetismo	"sabe leer y escribir"
 label var	eft_alquiler_ing_ext	"recibio alquiler del exterior"
 label var	eft_alquiler_ing_nac	"recibio ingresos por alquiler nacional"
 label var	eft_alumbrado_publico	"las calles poseen alumbrado publico"
-label var	eft_anio_pasado_alquiler	"recibio alquiler año pasado"
-label var	eft_anio_pasado_gobierno	"recibio ayuda del gobierno año pasado"
-label var	eft_anio_pasado_interes	"recibio interes año pasado"
-label var	eft_anio_pasado_monto_alquiler	"monto alquiler año pasado"
-label var	eft_anio_pasado_monto_gobierno	"monto ayuda gobierno año pasado"
-label var	eft_anio_pasado_monto_interes	"monto interes año pasado"
-label var	eft_anio_pasado_monto_ocasion	"monto ocasional año pasado"
-label var	eft_anio_pasado_monto_otros	"monto otros ingresos año pasado"
-label var	eft_anio_pasado_monto_pension	"monto pension año pasado"
-label var	eft_anio_pasado_monto_remesas	"monto de remesas año pasado"
-*label var	eft_anio_pasado_ocacional	"recibio ingreso ocasional año pasado"
-label var	eft_anio_pasado_otros	"recibio otros ingresos año pasado"
-label var	eft_anio_pasado_otros_esp	"otros ingresos año pasado especificar"
-label var	eft_anio_pasado_pension	"recibio ing. pension año pasado"
-label var	eft_anio_pasado_remesas	"recibio remesas año pasado"
-label var	eft_ano	"año"
-label var	eft_anos_encontrar_empleo	"año en encontrar empleo"
+label var	eft_anio_pasado_alquiler	"recibio alquiler aÃ±o pasado"
+label var	eft_anio_pasado_gobierno	"recibio ayuda del gobierno aÃ±o pasado"
+label var	eft_anio_pasado_interes	"recibio interes aÃ±o pasado"
+label var	eft_anio_pasado_monto_alquiler	"monto alquiler aÃ±o pasado"
+label var	eft_anio_pasado_monto_gobierno	"monto ayuda gobierno aÃ±o pasado"
+label var	eft_anio_pasado_monto_interes	"monto interes aÃ±o pasado"
+label var	eft_anio_pasado_monto_ocasion	"monto ocasional aÃ±o pasado"
+label var	eft_anio_pasado_monto_otros	"monto otros ingresos aÃ±o pasado"
+label var	eft_anio_pasado_monto_pension	"monto pension aÃ±o pasado"
+label var	eft_anio_pasado_monto_remesas	"monto de remesas aÃ±o pasado"
+*label var	eft_anio_pasado_ocacional	"recibio ingreso ocasional aÃ±o pasado"
+label var	eft_anio_pasado_otros	"recibio otros ingresos aÃ±o pasado"
+label var	eft_anio_pasado_otros_esp	"otros ingresos aÃ±o pasado especificar"
+label var	eft_anio_pasado_pension	"recibio ing. pension aÃ±o pasado"
+label var	eft_anio_pasado_remesas	"recibio remesas aÃ±o pasado"
+label var	eft_ano	"aÃ±o"
+label var	eft_anos_encontrar_empleo	"aÃ±o en encontrar empleo"
 label var	eft_apariencia_vivienda	"apariencia de la vivienda"
 label var	eft_aspirador_elect	"aspirador_elect"
 label var	eft_automovil	"automovil"
@@ -340,7 +340,7 @@ label var	eft_telefono	"telefono"
 label var	eft_televisor	"televisor"
 label var	eft_tenencia_esp	"tipo de tenencia especificar"
 label var	eft_tiempo_busca_trab	"tiempo que busca trabajo"
-label var	eft_tiempo_lab_anos	"tiempo laborando en años"
+label var	eft_tiempo_lab_anos	"tiempo laborando en aÃ±os"
 label var	eft_tiempo_lab_dias	"tiempo laborando en dias"
 label var	eft_tiempo_lab_meses	"tiempo laborando en meses"
 label var	eft_tiempo_residencia	"tiempo de residencia"
@@ -360,7 +360,7 @@ label var	eft_trabajo_antes	"trabajo anteriormente"
 label var	eft_trabajo_sem_ant	"trabajo la semana anterior"
 label var	eft_tuvo_act_econ_sem_ant	"tuvo actividad economica "
 label var	eft_ubicacion_cocina	"ubicacion de la cocina"
-label var	eft_ult_ano_aprobado	"ultimo año aprobado"
+label var	eft_ult_ano_aprobado	"ultimo aÃ±o aprobado"
 label var	eft_ult_doce_beneficios_marg	"beneficios marginales ult. doce meses"
 label var	eft_ult_doce_bonificacion	"bonificacion ult. doce meses"
 label var	eft_ult_doce_dividendos	"divivendos ult. doce meses"
@@ -385,7 +385,7 @@ label var	pet	"poblacion en edad de trabajar"
 * Comprime y guarda base
 compress
 renpfix eft_
-saveold "Y:\survey\DOM\ENFT\2012\m10\data_merge\DOM_2012m10.dta", replace
+saveold "${surveysFolder}\survey\DOM\ENFT\2012\m10\data_merge\DOM_2012m10.dta", replace
 
 log close
 

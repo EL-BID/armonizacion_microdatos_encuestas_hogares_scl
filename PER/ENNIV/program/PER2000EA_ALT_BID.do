@@ -8,7 +8,7 @@ capture log close
 set memory 300m
 set more off
 
-local in="X:\ARM\PER\ENNIV\"
+local in="${surveysFolder}\ARM\PER\ENNIV\"
 use "`in'2000\Orig_data\per00.dta"
 
 
@@ -82,7 +82,7 @@ label variable mes_c "Mes de la encuesta"
 ***relacion_ci***
 *****************
 
-/*No hay empleados domésticos ni pensionistas*/
+/*No hay empleados domÃ©sticos ni pensionistas*/
 
 gen relacion_ci=.
 replace relacion_ci=1 if s1p1==1
@@ -262,7 +262,7 @@ label variable miembro_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los mayores a 6 años.*/ 
+/* Esta secciÃ³n es para los mayores a 6 aÃ±os.*/ 
 
 ************
 ***emp_ci***
@@ -272,9 +272,9 @@ gen byte emp_ci=0
 replace emp_ci=1 if s5a6==1 | s5a10==8 |s5a11==1
 
 /*Hay un grupo de 110 personas que dicen tener un empleo fijo aunque
-no trabajaron en la última semana, a este grupo no se les hacen las preguntas
-de empleados, por lo que no tenemos información sobre las características del
-empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que están de
+no trabajaron en la Ãºltima semana, a este grupo no se les hacen las preguntas
+de empleados, por lo que no tenemos informaciÃ³n sobre las caracterÃ­sticas del
+empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que estÃ¡n de
 vacaciones o licencia. Voy a generar una dummy para identificarlos*/
 
 gen licencia=(s5a10==8 | s5a11==1)
@@ -342,8 +342,8 @@ replace horaspri_ci=. if emp_ci~=1
 gen horassec=s5c3*s5c4
 replace horassec=0 if s5c3==0 & s5c4==0
 
-/*Hay un caso en donde es evidente que hay un error de codificación
-una persona reporta en el trabajo secundario trabajar 101 horas por día,
+/*Hay un caso en donde es evidente que hay un error de codificaciÃ³n
+una persona reporta en el trabajo secundario trabajar 101 horas por dÃ­a,
 voy a asumir que son 10 horas*/
 
 replace horassec=s5c3*10 if idp_ci==1 & idh_ch==3671
@@ -405,7 +405,7 @@ label variable categosec_ci "Categoria ocupacional trabajo secundario"
 *****************
 /*Defino como trabajador con un contrato a aquel que ha
 firmado un contrato por tiempo indefinido o definido.
-Esta pregunta es sólo para los empleados dependientes*/
+Esta pregunta es sÃ³lo para los empleados dependientes*/
 
 gen contrato_ci=.
 replace contrato_ci=1 if s5b14==1 | s5b14==2
@@ -445,7 +445,7 @@ replace firmapeq_ci=0 if s5b18>=3 & s5b18<=8
 *****************
 ***spublico_ci***
 *****************
-/*Sólo para los empleados dependientes*/
+/*SÃ³lo para los empleados dependientes*/
 
 gen spublico_ci=.
 replace spublico_ci=1 if (s5b13==1 | s5b13==3)
@@ -496,7 +496,7 @@ gen durades_ci=s5a8/4.3 if desemp2_ci==1
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
+/*En aÃ±os*/
 
 gen ant1=s5b6a
 gen ant2=s5b6b/12
@@ -515,7 +515,7 @@ replace antiguedad_ci=. if emp_ci~=1
 ***ylmpri_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ypri=.
 replace ypri=s5b7a*30  if s5b7b==2
 replace ypri=s5b7a*4.3 if s5b7b==3
@@ -558,7 +558,7 @@ gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 *** ylnmpri_ci ***
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsss=.
 replace bsss=s5b11b*30  if s5b11c==2
@@ -596,7 +596,7 @@ replace ylnmpri_ci=. if emp_ci~=1
 ***ylmsec_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ysec=.
 replace ysec=s5c7a*30  if s5c7b==2
 replace ysec=s5c7a*4.3 if s5c7b==3
@@ -633,7 +633,7 @@ replace ylmsec_ci=. if emp_ci~=1 | nempleos_ci~=2
 ****ylnmsec_ci****
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsssec=.
 replace bsssec=s5c11b*30  if s5c11c==2
@@ -801,7 +801,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Esta sección es para los mayores a 6 años.*/ 
+/* Esta secciÃ³n es para los mayores a 6 aÃ±os.*/ 
 
 /*
 gen byte aedu_ci=.
@@ -842,8 +842,8 @@ replace aedu_ci=23 if s3p2a==9 & s3p2b==6
 replace aedu_ci=24 if s3p2a==9 & s3p2b==7
 
 
-/*Hay unos 14 casos en donde la edad es menor o igual que los años de educación
-asumo que hay un error de codificación y hago missing estos casos*/
+/*Hay unos 14 casos en donde la edad es menor o igual que los aÃ±os de educaciÃ³n
+asumo que hay un error de codificaciÃ³n y hago missing estos casos*/
 
 */
 
@@ -855,10 +855,10 @@ replace aedu_ci=6+s3p2b	if s3p2a==5 | s3p2a==6
 replace aedu_ci=11+s3p2b if s3p2a==7 | s3p2a==8 
 replace	aedu_ci=16+s3p2b if s3p2a==9
 
-label var aedu_ci "Anios de educación"
+label var aedu_ci "Anios de educaciÃ³n"
 
 * Se considera que los que tienen postgrado estudiaron, previamente, una carrera 
-* universitaria de 5 años 
+* universitaria de 5 aÃ±os 
 replace aedu_ci=16+s3p2b if s3p2a==9 
 
 * Los que tienen "otro" se asume que tienen primaria completa ;
@@ -1009,8 +1009,8 @@ label define pqnoasis 11 "Se caso" 12 "Embarazo", add
 label define pqnoasis 13 "Otros", add
 label value pqnoasis pqnoasis
 
-/*Hay un caso en donde la persona está asistiendo a la escuela y responde
-razón para no asistir, asumo que es un error de codificación y hago missing
+/*Hay un caso en donde la persona estÃ¡ asistiendo a la escuela y responde
+razÃ³n para no asistir, asumo que es un error de codificaciÃ³n y hago missing
 en pqnoasis*/
 
 replace pqnoasis=. if asiste_ci==1 & pqnoasis~=.

@@ -1,4 +1,4 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 
@@ -7,32 +7,32 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\PRY\EPH\2014\m10_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\PRY\EPH\2014\m10_m12\data_orig"
 
 local PAIS PRY
 local ENCUESTA EPH
 local ANO "2014"
 local ronda m10_m12
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 *log using "`log_file'", replace 
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Paraguay
+Pa铆s: Paraguay
 Encuesta: EPH 
 Round: Octubre-Diciembre
 Autores:
-Versi髇 2015: Marcela G. Rubio
-趌tima versi髇: Marcela G. Rubio - Email: mrubio@iadb.org, marcelarubio28@gmail.com
-Fecha 鷏tima modificaci髇: 5 de Mayo de 2015
+Versi贸n 2015: Marcela G. Rubio
+脷ltima versi贸n: Marcela G. Rubio - Email: mrubio@iadb.org, marcelarubio28@gmail.com
+Fecha 煤ltima modificaci贸n: 5 de Mayo de 2015
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -62,7 +62,7 @@ duplicates report  upm nvivi nhoga
 save "$ruta\r13_eph2014_mod.dta", replace
 
 
-/*Unifico los modulos de inter閟 para el sociometro:
+/*Unifico los modulos de inter茅s para el sociometro:
   Vivienda, ingresos y personas*/
  
 use "$ruta\r02_eph2014.dta", clear

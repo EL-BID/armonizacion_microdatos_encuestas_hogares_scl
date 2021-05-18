@@ -2,7 +2,7 @@
 version 7.0
 capture log close
 
-log using "X:\ARM\VEN\PrimerSemestre\2003\Documents\LogVen01_Mar.log", replace
+log using "${surveysFolder}\ARM\VEN\PrimerSemestre\2003\Documents\LogVen01_Mar.log", replace
 
 clear
 set more off
@@ -19,7 +19,7 @@ set matsize 800
 *****                                       46.287 Hogares                                            *****
 ***********************************************************************************************************
 
-use "X:\ARM\VEN\PrimerSemestre\2003\Van_data\ven02_sem1.dta", clear
+use "${surveysFolder}\ARM\VEN\PrimerSemestre\2003\Van_data\ven02_sem1.dta", clear
 
 destring _all, replace
 compress
@@ -92,13 +92,13 @@ label value civil_ci civil_ci
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -247,7 +247,7 @@ replace rama_ci=8 if pp44>=810 & pp44<=833
 replace rama_ci=9 if pp44>=910 & pp44<=960
 
 label var rama_ci "Rama Laboral en la Ocupacion Principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 capture drop horaspri_ci horastot_ci
@@ -507,7 +507,7 @@ capture drop asiste_ci
 gen byte asiste_ci=.
 replace asiste_ci=1 if ASIST==1
 replace asiste_ci=0 if ASIST==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 capture drop aedu_ci
 gen byte aedu_ci=.
@@ -516,7 +516,7 @@ replace aedu=GRADO if NIVEL==3 & GRADO>0
 replace aedu=GRADO+9 if NIVEL==4 & GRADO>0 & GRADO<=3
 replace aedu=GRADO+11 if (NIVEL==5 | NIVEL==6) & GRADO>0 
 replace aedu=int(ULTSEM/2)+11 if (NIVEL==5 | NIVEL==6) & ULTSEM>0 
-label variable aedu_ci "Años de Educacion"
+label variable aedu_ci "AÃ±os de Educacion"
 
 
 * Unfortunately, we found people with more years of education that years of life. 
@@ -594,21 +594,21 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac=0 if eduui==1 | eduuc==1
 replace eduac=1 if NIVEL==6
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ** Generating pqnoasis
 gen byte pqnoasis_ci=.
 replace pqnoasis=pp28 if pp28>0
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Culmino sus estudios" 2 "No hay grado o agnos superiores" 3 "No hay cupo, escuela distante" 4 "falta de recursos economicos" 5 "esta trabajando" 6 "asiste a un curso de capacitacion" 7 "no quiere estudiar" 8 "enfermedad o defecto fisico" 9 "problemas de conducta o de aprendizaje" 10 "cambio de residencia" 11 "edad mayor que la regular" 12 "tiene que ayudar en la casa" 13 "edad menor que la regular" 14 "va a tener un hijo o se caso" 15 "otros"
 label values pqnoasis_ci pqnoasis_ci
 
@@ -627,7 +627,7 @@ replace pqnoasis1_ci = 7 if pp28 ==11 | pp28 ==13
 replace pqnoasis1_ci = 8 if pp28 ==2  | pp28 ==3 
 replace pqnoasis1_ci = 9 if pp28 ==6  | pp28 ==10 | pp28 ==15
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 *** HOUSING ***
@@ -760,8 +760,8 @@ gen vivialqimp_ch=.
 drop YOCUPAPM YOCUPAM YOTROS EDAD NIVEL GRADO ULTSEM ASIST
 /*Faltan generar algunas variables
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

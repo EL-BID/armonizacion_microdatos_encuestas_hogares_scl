@@ -2,7 +2,7 @@
 
 ## Descripción
 
-El repositorio harmonized-surveys contiene los scripts de transformación de las 
+El repositorio armonizacion_microdatos_encuestas_hogares_scl contiene los scripts de transformación de las 
 encuestas originales de forma tal que proporcionan información comparable a lo 
 largo del tiempo y entre países. 
 
@@ -12,9 +12,6 @@ solo archivo para cada año (o ronda) de un país. Actualmente, se disponen de 3
 bases armonizadas correspondiente a las encuestas de hogares de 20 países de América
 Latina y el Caribe desde 1986. 
 
-## Ubicación 
-
-> Intranet del BID: \\Sdssrv03\surveys\harmonized
 
 ## Estructura 
 Harmonized ha sido organizada para distinguir dos niveles de desagregación: país y tipo de encuesta 
@@ -22,10 +19,11 @@ Harmonized ha sido organizada para distinguir dos niveles de desagregación: pa�
 * La primera desagregación, PAÍS (acrónimo), tiene un total de  23 subcarpetas 
 correspondientes a los países de la región que tienen armonizadas sus bases de datos, 
 cada una nombrada con el acrónimo del país según la nomenclatura estándar 
-ISO 3166-1 alpha-3 (Tabla 1).	
+ISO 3166-1 alpha-3.	
+
 * La segunda desagregación, ENCUESTA (acrónimo), tiene tantas carpetas como tipos 
 de encuestas tiene un país cuyas bases han sido armonizadas. Están nombradas según 
-el acrónimo del tipo de encuesta de cada país (Anexo electrónico: Hoja A2_surveys). 
+el acrónimo del tipo de encuesta de cada país. 
 
 Dentro de cada una de estas carpetas se encuentran tres subcarpetas (i) data_arm, 
 (ii) program, y (iii) log:
@@ -39,8 +37,6 @@ La armonización de las bases de datos de las encuestas de hogares es un proceso
 * Las diferencias entre encuestas nacionales para capturar la información en los módulos/secciones comunes: edad en educación, empleo, migración, etnia/raza; periodos de referencia (diaria, semanal, mensual, trimestral) en empleo, ingresos, gastos; miembros informantes (jefe, jefe-cónyuge, todos) en etnia/raza; unidad monetaria (local, dólar u otras) para capturar parte de los ingresos relacionados con las remesas, pensiones, etc. 
 *	Las diferencias entre encuestas nacionales respecto a la estructura de las bases de datos, en particular en la forma en que son almacenadas: horizontalmente (donde una línea es la información de un hogar o personas) o verticalmente (donde una línea es la información de ítems como los del equipamiento del hogar); con una variable por pregunta (como la edad, sexo) o con una variable para varias preguntas (como los ingresos de varias fuentes guardadas en una sola variable). En el marco de las bases de datos armonizadas, cada una es guardada de manera horizontal en una sola base de datos para cada año de cada país a nivel de individuos. 
 *	La ausencia de documentación completa asociadas a las encuestas de hogares (cuestionarios, manuales, diccionario de variables, informe del diseño muestral, entre otros) que dificulta  el entendimiento, manejo y armonización de las bases de datos. 
-
-Algunos de estos aspectos son aclarados más adelante cuando se describe el contenido de cada una de las variables de las bases de armonizadas.
 
 ---
 

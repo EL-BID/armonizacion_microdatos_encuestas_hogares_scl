@@ -6,11 +6,11 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys\survey\URY\ECH\1990\s2\data_orig"
+ global ruta = "${surveysFolder}\survey\URY\ECH\1990\s2\data_orig"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -18,7 +18,7 @@ local ANO "1990"
 local ronda s2 
 
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 
                                                     
 capture log close
@@ -177,7 +177,7 @@ compress
 
 *do ruta\labelsBID.do, modify
 
-saveold "\\Sdssrv03\surveys\survey\URY\ECH\1990\s2\data_merge\\URY_1990s2.dta"
+saveold "${surveysFolder}\survey\URY\ECH\1990\s2\data_merge\\URY_1990s2.dta"
 
 
 log close

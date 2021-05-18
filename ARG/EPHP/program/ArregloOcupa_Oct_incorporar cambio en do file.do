@@ -1,16 +1,16 @@
 clear
 set mem 500m
-local in1 "X:\ARM\ARG\EPHOct\1992\Arm_data\ARGOct1992EA_BID.dta"
-local in2 "X:\ARM\ARG\EPHOct\1993\Arm_data\ARGOct1993EA_BID.dta"
-local in3 "X:\ARM\ARG\EPHOct\1994\Arm_data\ARGOct1994EA_BID.dta"
-local in4 "X:\ARM\ARG\EPHOct\1995\Arm_data\ARGOct1995EA_BID.dta"
-local in5 "X:\ARM\ARG\EPHOct\1996\Arm_data\ARGOct1996EA_BID.dta"
-local in6 "X:\ARM\ARG\EPHOct\1997\Arm_data\ARGOct1997EA_BID.dta"
-local in7 "X:\ARM\ARG\EPHOct\1998\Arm_data\ARGOct1998EA_BID.dta"
-local in8 "X:\ARM\ARG\EPHOct\1999\Arm_data\ARGOct1999EA_BID.dta"
-local in9 "X:\ARM\ARG\EPHOct\2000\Arm_data\ARGOct2000EA_BID.dta"
-local in10 "X:\ARM\ARG\EPHOct\2001\Arm_data\ARGOct2001EA_BID.dta"
-local in11 "X:\ARM\ARG\EPHOct\2002\Arm_data\ARGOct2002EA_BID.dta"
+local in1 "${surveysFolder}\ARM\ARG\EPHOct\1992\Arm_data\ARGOct1992EA_BID.dta"
+local in2 "${surveysFolder}\ARM\ARG\EPHOct\1993\Arm_data\ARGOct1993EA_BID.dta"
+local in3 "${surveysFolder}\ARM\ARG\EPHOct\1994\Arm_data\ARGOct1994EA_BID.dta"
+local in4 "${surveysFolder}\ARM\ARG\EPHOct\1995\Arm_data\ARGOct1995EA_BID.dta"
+local in5 "${surveysFolder}\ARM\ARG\EPHOct\1996\Arm_data\ARGOct1996EA_BID.dta"
+local in6 "${surveysFolder}\ARM\ARG\EPHOct\1997\Arm_data\ARGOct1997EA_BID.dta"
+local in7 "${surveysFolder}\ARM\ARG\EPHOct\1998\Arm_data\ARGOct1998EA_BID.dta"
+local in8 "${surveysFolder}\ARM\ARG\EPHOct\1999\Arm_data\ARGOct1999EA_BID.dta"
+local in9 "${surveysFolder}\ARM\ARG\EPHOct\2000\Arm_data\ARGOct2000EA_BID.dta"
+local in10 "${surveysFolder}\ARM\ARG\EPHOct\2001\Arm_data\ARGOct2001EA_BID.dta"
+local in11 "${surveysFolder}\ARM\ARG\EPHOct\2002\Arm_data\ARGOct2002EA_BID.dta"
 
 /*
 Evolucion del Numero de digitos de ocupa_ci por Aglomerado
@@ -75,13 +75,13 @@ replace `ocup' = 7 if `var' ==38 | `var' ==50 | `var' ==68 | `var' ==74 | `var' 
 replace `ocup' = 8 if `var' ==40;			 																	
 replace `ocup' = 9 if `var' ==71 | `var' ==81 | `var' ==91 | `var' ==75 | `var' ==77 | `var' ==83;																											
 label var     ocupa "ocupation in primary job";
-label define  ocupa 1 "Profesionales y técnicos", add;
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add;
 label define  ocupa 2 "Directores y funcionarios superiores", add;
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add;
 label define  ocupa 4 "Comerciantes y vendedores", add;
 label define  ocupa 5 "Trabajadores en servicios", add;
-label define  ocupa 6 "Trabajadores agrícolas y afines", add;
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add;
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add;
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add;
 label define  ocupa 8 "Fuerzas Armadas", add;
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add;
 rename ocupa ocupa_ci;
@@ -98,13 +98,13 @@ replace ocupa = 7 if (p20>=380 & p20<390) | (p20>=500 & p20<510) | (p20>=680 & p
 replace ocupa = 8 if (p20>=400 & p20<410)			 																	
 replace ocupa = 9 if (p20>=710 & p20<720) | (p20>=810 & p20<820) | (p20>=910 & p20<920) | (p20>=750 & p20<760) | (p20>=770 & p20<780) | (p20>=830 & p20<840)																											
 label var     ocupa "ocupation in primary job"
-label define  ocupa 1 "Profesionales y técnicos", add
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa 2 "Directores y funcionarios superiores", add
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa 4 "Comerciantes y vendedores", add
 label define  ocupa 5 "Trabajadores en servicios", add
-label define  ocupa 6 "Trabajadores agrícolas y afines", add
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa 8 "Fuerzas Armadas", add
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add
 rename ocupa ocupa_ci
@@ -127,13 +127,13 @@ replace ocupa = 7 if (p20>=380 & p20<390) | (p20>=500 & p20<510) | (p20>=680 & p
 replace ocupa = 8 if (p20>=400 & p20<410)			 																	
 replace ocupa = 9 if (p20>=710 & p20<720) | (p20>=810 & p20<820) | (p20>=910 & p20<920) | (p20>=750 & p20<760) | (p20>=770 & p20<780) | (p20>=830 & p20<840)																											
 label var     ocupa "ocupation in primary job"
-label define  ocupa 1 "Profesionales y técnicos", add
+label define  ocupa 1 "Profesionales y tÃ©cnicos", add
 label define  ocupa 2 "Directores y funcionarios superiores", add
 label define  ocupa 3 "Personal administrativo y nivel intermedio", add
 label define  ocupa 4 "Comerciantes y vendedores", add
 label define  ocupa 5 "Trabajadores en servicios", add
-label define  ocupa 6 "Trabajadores agrícolas y afines", add
-label define  ocupa 7 "Obreros no agrícolas, conductores de maquinas y vehículos de   transporte y similares", add
+label define  ocupa 6 "Trabajadores agrÃ­colas y afines", add
+label define  ocupa 7 "Obreros no agrÃ­colas, conductores de maquinas y vehÃ­culos de   transporte y similares", add
 label define  ocupa 8 "Fuerzas Armadas", add
 label define  ocupa 9 "Otras ocupaciones no clasificadas en las anteriores", add
 rename ocupa ocupa_ci

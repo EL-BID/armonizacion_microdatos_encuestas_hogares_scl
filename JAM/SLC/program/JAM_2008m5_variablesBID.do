@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor ??amente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Jamaica
+Paï¿½s: Jamaica
 Encuesta: SLC
 Round: a
-Autores: Mayra Sáenz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Autores: Mayra Sï¿½enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 Versiones anteriores: Yessenia Loayza
-Fecha última modificación: 17 de noviembre de 2016
+Fecha ï¿½ltima modificaciï¿½n: 17 de noviembre de 2016
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,7 +54,7 @@ use `base_in', clear
 *use "\\yessenial\s\Data.idb\ARM\JAM\2008\JSLC\data\jam08a.dta"
 
 *ModificaciÃ³n Mayra SÃ¡enz Agosto 2015.
-*use "Z:\survey\JAM\SLC\2008\m5\data_merge\JAM_2008m5.dta"
+*use "${surveysFolder}\survey\JAM\SLC\2008\m5\data_merge\JAM_2008m5.dta"
 
 
 /*January 2008
@@ -141,7 +141,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a “weighting factor” but a “non response factor”. 
+/* It is not a ï¿½weighting factorï¿½ but a ï¿½non response factorï¿½. 
 It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 ***************
@@ -298,31 +298,31 @@ label variable miembros_ci "Variable dummy que indica las personas que son miemb
 * nmayor21_ch *
 ***************
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aï¿½os o mas dentro del Hogar"
 
 ***************
 * nmenor21_ch *
 ***************
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aï¿½os dentro del Hogar"
 
 ***************
 * nmayor65_ch *
 ***************
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aï¿½os o mas dentro del Hogar"
 
 **************
 * nmenor6_ch *
 **************
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niï¿½os menores a 6 aï¿½os dentro del Hogar"
 
 **************
 * nmenor1_ch *
 **************
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niï¿½os menores a 1 aï¿½o dentro del Hogar"
 
 
 
@@ -529,7 +529,7 @@ gen GRADO2=b22 if NIVEL2>0 & NIVEL2<=3 /* son los grados de primaria o secundari
 gen byte asiste_ci=.
 replace asiste_ci=1 if b1>=1 & b1<19
 replace asiste_ci=0 if b1==19
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseï¿½anza"
 
 ***********
 * aedu_ci *
@@ -542,7 +542,7 @@ replace aedu_ci=GRADO2 if NIVEL2==1 | NIVEL2==2 | NIVEL2==3
 
 replace aedu_ci=GRADO-1 if aedu>=ageyrs & GRADO<. & GRADO2<. 
 replace aedu_ci=0 if b1==19 & b21==20
-label variable aedu_ci "Años de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "Aï¿½os de Educacion (no incluye terciaria o universitaria)"
 replace aedu_ci=. if aedu_ci<0
 
 ************
@@ -663,14 +663,14 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac_ci=0 if b1==14 | b1==15 | b21==15 | b21==16
 replace eduac_ci=1 if b1==13 | b21==14
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadï¿½mica versus educaciï¿½n terciaria no-acadï¿½mica "
 
 *************
 * repite_ci *
 *************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aï¿½o o grado"
 
 ****************
 * repiteult_ci *
@@ -688,7 +688,7 @@ destring b3, replace
 gen edupub_ci=.
 replace edupub_ci=1 if b3==1
 replace edupub_ci=0 if b3==2
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseï¿½anza publicos"
 
 ***************
 * pqnoasis_ci *
@@ -717,7 +717,7 @@ destring b10_r1, replace
 
 g pqnoasis_ci=.
 replace pqnoasis_ci=b10_r1
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseï¿½anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" ///
 7 "Costos del transporte" 8 "Escuela cerrada" 9 "Carece de zapatos o uniforme, sucios, o mojados" 10 "Lluvia" ///
 11 "Problemas monetarios" 12 "Tiene que realizar alguna diligencia" 13 "No esta seguro en la escuela" 14 "No esta seguro en la comunidad" ///
@@ -738,7 +738,7 @@ replace pqnoasis1_ci = 8 if b10_r1==6 | b10_r1==8
 replace pqnoasis1_ci = 9 if b10_r1==10 | (b10_r1>=12 & b10_r1<=16)
 
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econï¿½micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interï¿½s" 5	"Quehaceres domï¿½sticos/embarazo/cuidado de niï¿½os/as" 6 "Terminï¿½ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 *** HOUSING ***
@@ -1202,15 +1202,15 @@ g remesas_ch=.
 
 destring sexo_ci, replace
   /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* Asignaciï¿½n de etiquetas e inserciï¿½n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lï¿½neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* Verificaciï¿½n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

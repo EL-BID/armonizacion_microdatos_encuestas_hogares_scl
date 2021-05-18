@@ -5,7 +5,7 @@ program drop _all
 set memory 600m
 set more off
 
-local in = "X:\ARM\"
+local in = "${surveysFolder}\ARM\"
 log using "Consistencia.log", replace
 
 local	in1="`in'CRI\1990\Arm_data\CRI1990EA_BID.dta";

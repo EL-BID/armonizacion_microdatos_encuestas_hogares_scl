@@ -1,16 +1,16 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys\survey\URY\ECH\1990\s2\data_orig"
+ global ruta = "${surveysFolder}\survey\URY\ECH\1990\s2\data_orig"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -18,7 +18,7 @@ local ANO "1990"
 local ronda s2 
 
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 
                                                     
 capture log close
@@ -26,12 +26,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Uruguay
+PaÃ­s: Uruguay
 Encuesta: ECH
 Round: s2
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 30 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -177,7 +177,7 @@ compress
 
 *do ruta\labelsBID.do, modify
 
-saveold "\\Sdssrv03\surveys\survey\URY\ECH\1990\s2\data_merge\\URY_1990s2.dta"
+saveold "${surveysFolder}\survey\URY\ECH\1990\s2\data_merge\\URY_1990s2.dta"
 
 
 log close

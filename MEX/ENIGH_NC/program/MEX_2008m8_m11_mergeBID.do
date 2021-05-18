@@ -1,4 +1,4 @@
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\2008\m8_m11\nueva_construccion\data_orig\STATA"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\2008\m8_m11\nueva_construccion\data_orig\STATA"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "2008"
 local ronda m8_m11
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\nueva_construccion\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\nueva_construccion\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\nueva_construccion\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\nueva_construccion\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Mexico
-Encuesta: ENIGH (Nueva construcciÛn)
+Pa√≠s: Mexico
+Encuesta: ENIGH (Nueva construcci√≥n)
 Round: Agosto-Noviembre
 Autores:
-VersiÛn 2013: Mayra S·enz
-⁄ltima versiÛn: Mayra S·enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha ˙ltima modificaciÛn: 19 de Agosto de 2013
+Versi√≥n 2013: Mayra S√°enz
+√öltima versi√≥n: Mayra S√°enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha √∫ltima modificaci√≥n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -142,56 +142,56 @@ log close
 	3. Gastos.dta
 	4. Eroga.dta */
 	
-* Nota sobre la actualizaciÛn de la serie 2000 - 2005 *	
+* Nota sobre la actualizaci√≥n de la serie 2000 - 2005 *	
 
 /*
 
-El Instituto Nacional de EstadÌstica, GeografÌa e Inform·tica (INEGI), en 
-un esfuerzo por fortalecer el servicio p˙blico de informaciÛn estadÌstica 
+El Instituto Nacional de Estad√≠stica, Geograf√≠a e Inform√°tica (INEGI), en 
+un esfuerzo por fortalecer el servicio p√∫blico de informaci√≥n estad√≠stica 
 presenta las Bases de Datos de la Encuesta Nacional de Ingresos y Gastos 
 de los Hogares para 2000, 2002, 2004, y 2005, Armonizadas de acuerdo con 
-la ConciliaciÛn Demogr·fica, con la intenciÛn de dar respuesta a los 
-requerimientos de aquellos usuarios especializados, con un interÈs particular 
-en el an·lisis de los microdatos, que permiten un conocimiento m·s detallado 
-del monto, la estructura y la distribuciÛn de los ingresos de los hogares y 
+la Conciliaci√≥n Demogr√°fica, con la intenci√≥n de dar respuesta a los 
+requerimientos de aquellos usuarios especializados, con un inter√©s particular 
+en el an√°lisis de los microdatos, que permiten un conocimiento m√°s detallado 
+del monto, la estructura y la distribuci√≥n de los ingresos de los hogares y 
 del destino de los gastos del hogar en bienes de consumo duradero y no 
-duradero. TambiÈn se obtiene informaciÛn sobre la infraestructura de las 
-viviendas, la composiciÛn familiar de los hogares, asÌ como de la actividad 
-econÛmica de cada uno de sus miembros. 
+duradero. Tambi√©n se obtiene informaci√≥n sobre la infraestructura de las 
+viviendas, la composici√≥n familiar de los hogares, as√≠ como de la actividad 
+econ√≥mica de cada uno de sus miembros. 
 
-Esta encuesta proporciona informaciÛn a nivel nacional tanto para el conjunto 
-de localidades de 2 500 y m·s habitantes, como para el de aquellas con menos 
+Esta encuesta proporciona informaci√≥n a nivel nacional tanto para el conjunto 
+de localidades de 2 500 y m√°s habitantes, como para el de aquellas con menos 
 de 2 500 habitantes. 
 
 Las cifras que se incluyen para el periodo 2000-2005 han sido sometidas a un 
-proceso de armonizaciÛn acorde con las cifras de la ConciliaciÛn Demogr·fica 
-realizada conjuntamente por el Consejo Nacional de PoblaciÛn, El Colegio de 
-MÈxico y el INEGI. 
+proceso de armonizaci√≥n acorde con las cifras de la Conciliaci√≥n Demogr√°fica 
+realizada conjuntamente por el Consejo Nacional de Poblaci√≥n, El Colegio de 
+M√©xico y el INEGI. 
 
-A la par del ejercicio de armonizaciÛn, se llevÛ a cabo una revisiÛn de la 
-informaciÛn captada por las cuatro ˙ltimas ENIGH, con el propÛsito de uniformarlas. 
-Este ejercicio permitiÛ homologar las bases de datos en conjunto, y no una a una 
-de manera aislada. En particular, en la ENIGH 2004 se corrigieron pequeÒos errores 
-en la construcciÛn de algunas variables. 
+A la par del ejercicio de armonizaci√≥n, se llev√≥ a cabo una revisi√≥n de la 
+informaci√≥n captada por las cuatro √∫ltimas ENIGH, con el prop√≥sito de uniformarlas. 
+Este ejercicio permiti√≥ homologar las bases de datos en conjunto, y no una a una 
+de manera aislada. En particular, en la ENIGH 2004 se corrigieron peque√±os errores 
+en la construcci√≥n de algunas variables. 
 
-Es importante mencionar que con las nuevas bases de datos 2000-2005 de las ENIGH sÌ 
-es posible analizar la evoluciÛn de los ingresos y de los gastos de los hogares 
+Es importante mencionar que con las nuevas bases de datos 2000-2005 de las ENIGH s√≠ 
+es posible analizar la evoluci√≥n de los ingresos y de los gastos de los hogares 
 mexicanos en el periodo. 
 
-Las bases de datos est·n conformadas por 10 archivos: siete de la base de datos (DBF), 
-tres de cat·logos (pdf), incluyendo uno con la estructura de la base de datos (pdf). 
-La informaciÛn detallada puede consultarse en la descripciÛn de la base de datos (pdf). 
-Para bajar las bases de datos de la ENIGH, sÛlo tiene que descargarlas en un directorio 
+Las bases de datos est√°n conformadas por 10 archivos: siete de la base de datos (DBF), 
+tres de cat√°logos (pdf), incluyendo uno con la estructura de la base de datos (pdf). 
+La informaci√≥n detallada puede consultarse en la descripci√≥n de la base de datos (pdf). 
+Para bajar las bases de datos de la ENIGH, s√≥lo tiene que descargarlas en un directorio 
 de su equipo y desempacarlo. Para el manejo de las bases de datos, y considerando el 
-volumen de informaciÛn, se recomienda utilizar software como Fox o Access. 
+volumen de informaci√≥n, se recomienda utilizar software como Fox o Access. 
 
-Por medio de esta encuesta y de la difusiÛn de sus resultados, tanto en productos impresos 
-y electrÛnicos, como en bases de datos, el INEGI consolida su compromiso con la poblaciÛn 
-de brindar informaciÛn que contribuya al conocimiento de la realidad sociodemogr·fica y 
-econÛmica del paÌs. 
+Por medio de esta encuesta y de la difusi√≥n de sus resultados, tanto en productos impresos 
+y electr√≥nicos, como en bases de datos, el INEGI consolida su compromiso con la poblaci√≥n 
+de brindar informaci√≥n que contribuya al conocimiento de la realidad sociodemogr√°fica y 
+econ√≥mica del pa√≠s. 
 
-Conviene seÒalar que estas bases de datos, en formato de disco compacto, estar·n a su 
-disposiciÛn en los prÛximos dÌas en los Centros de InformaciÛn del INEGI 
+Conviene se√±alar que estas bases de datos, en formato de disco compacto, estar√°n a su 
+disposici√≥n en los pr√≥ximos d√≠as en los Centros de Informaci√≥n del INEGI 
  
 
 Fuente:

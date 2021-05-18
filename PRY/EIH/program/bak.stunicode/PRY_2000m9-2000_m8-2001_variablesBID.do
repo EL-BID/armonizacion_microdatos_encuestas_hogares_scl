@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PRY
 local ENCUESTA EIH
@@ -31,13 +31,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Paraguay
+PaÃ­s: Paraguay
 Encuesta: EIH
 Round: Septiembre 2000- Agosto 2001
 Autores:
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Septiembre de 2013
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -57,7 +57,7 @@ drop ocupa
 DURADES, CODIGO Y COMENTARIOS ANTERIORES
 gen tdurades_ci=mesesbus
 replace tdurades_ci=. if tdurades_ci==0
-tiene un comportamiento muy estraño
+tiene un comportamiento muy estraÃ±o
 son unas duraciones pero no son en numeros sino en intervalos
 
 May 18, 2006 (Analia)
@@ -83,28 +83,28 @@ drop rama1
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Abril 2014
+*InclusiÃ³n Mayra SÃ¡enz - Abril 2014
 
 gen region_c=  depto
 label define region_c ///
-           0 "Asunción" ///    
-           1 "Concepción" ///  
+           0 "AsunciÃ³n" ///    
+           1 "ConcepciÃ³n" ///  
            2 "San pedro" ///   
            3 "Cordillera" ///  
-           4 "Guairá" ///      
-           5 "Caaguazú" ///    
-           6 "Caazapá" ///     
-           7 "Itapúa" ///      
+           4 "GuairÃ¡" ///      
+           5 "CaaguazÃº" ///    
+           6 "CaazapÃ¡" ///     
+           7 "ItapÃºa" ///      
            8 "Misiones" ///    
-           9 "Paraguarí" ///   
-          10 "Alto paraná" /// 
+           9 "ParaguarÃ­" ///   
+          10 "Alto paranÃ¡" /// 
           11 "Central" ///     
-          12 "Ñeembucú" ///    
+          12 "Ã‘eembucÃº" ///    
           13 "Amambay" ///     
-          14 "Canindeyú" ///   
+          14 "CanindeyÃº" ///   
           15 "Pdte. Hayes" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 
 ***************
@@ -155,12 +155,12 @@ gen anio_c=2001
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=4 if pais=="PRY" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -374,7 +374,7 @@ label variable miembros_ci "Miembro del hogar"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -456,7 +456,7 @@ replace condocup_ci=2 if (trabajo==6 | almenos1==6) & busco7==1 & trahora==1
 recode condocup_ci .=3 if edad_ci>=10
 recode condocup_ci .=4 if edad_ci<10
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -470,7 +470,7 @@ replace condocup_ci=2 if (pead==2 | pead==7)  & edad_ci>=10
 recode condocup_ci .=3 if (pead==3 | pead==6) | (condocup_ci==. & edad_ci>=10)
 recode condocup_ci (.=4) if edad_ci<10 | pead==0
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -592,7 +592,7 @@ gen horastot_ci=hr_sem_s  if emp_ci==1
 /*gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if tothoras>=30 & deseamas==6 & emp_ci==1 */
 
-*10/21/15 MGD: corrección de sintaxis
+*10/21/15 MGD: correcciÃ³n de sintaxis
 gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if horaspri_ci>=1 & horaspri_ci<30 & deseamas==6 & emp_ci==1
 
@@ -663,7 +663,7 @@ replace firmapeq_ci=. if tamestp>6
 *****************
 ***spublico_ci***
 *****************
-* 10/21/2015 MGD: corrección pequeña para que se tomen en cuenta a todos los ocupados.
+* 10/21/2015 MGD: correcciÃ³n pequeÃ±a para que se tomen en cuenta a todos los ocupados.
 gen spublico_ci=0 if emp_ci==1
 replace spublico_ci=1 if (categ==1 | categ==3) & emp_ci==1
 
@@ -726,15 +726,15 @@ replace antiguedad_ci=. if trano==99
 ***tamemp_ci***
 *******************
 
-*Paraguay Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*Paraguay PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if tamestp>=1 & tamestp<=2
 replace tamemp_ci = 2 if (tamestp>=3 & tamestp<=5)
 replace tamemp_ci = 3 if (tamestp==6)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci*** 
@@ -743,8 +743,8 @@ gen categoinac_ci =1 if (pqnotra7==14 & condocup_ci==3)
 replace categoinac_ci = 2 if  (pqnotra7==10 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pqnotra7==5 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -847,8 +847,8 @@ gen ylnm_ci=.
 *************
 ***ynlm_ci***
 *************
-*Modificación Mayra Sáenz- Marzo 2014
-*Se incluye yayudex en la recodificación.
+*ModificaciÃ³n Mayra SÃ¡enz- Marzo 2014
+*Se incluye yayudex en la recodificaciÃ³n.
 local var="yalqrent yinteres yayudafa yotrosy yjubpen yayudex"
 foreach x of local var {
 gen `x'1=`x'
@@ -882,9 +882,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -1297,7 +1297,7 @@ gen piso_ch=.
 replace piso_ch=1 if piso>0
 replace piso_ch=0 if piso==1 | piso==4
 replace piso_ch=2 if piso==8 
-opción 4 = lecherada es cemento
+opciÃ³n 4 = lecherada es cemento
 */
 
 gen piso_ch=.
@@ -1481,7 +1481,7 @@ gen raza_ci=1 if idioma==1
 replace raza_ci=0 if idioma==2 | idioma==3 | idioma==4 | idioma==5
 */
 /*
-*Mayra Sáenz- Octubre 2013
+*Mayra SÃ¡enz- Octubre 2013
 gen raza_ci=.
 replace raza_ci= 1 if idioma ==1 
 replace raza_ci= 3 if idioma ==2 | idioma ==3 | idioma ==4 |raza_ci==.
@@ -1490,13 +1490,13 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
 */
 
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_ci=.
 
@@ -1508,14 +1508,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & relacion_ci ==3)  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -1537,11 +1537,11 @@ label var id_afro_ci "Afro-descendiente"
 Parentesco
 
  1. Jefe/a	
- 2. Esposo/a/compañero/a	
+ 2. Esposo/a/compaÃ±ero/a	
  3. Hijo/a	
  4. Otro pariente	
  5. No pariente	
- 6. Empleado doméstico	
+ 6. Empleado domÃ©stico	
 */
 
  gen     incl=1 if (parentco>=1 &  parentco<=5)
@@ -1583,9 +1583,9 @@ Parentesco
 
 /*
 
-3: ¿Cuál es el último grado o curso aprobado por ... ?
+3: Â¿CuÃ¡l es el Ãºltimo grado o curso aprobado por ... ?
 GRADO
--1: No aplicable (menores de 5 años)
+-1: No aplicable (menores de 5 aÃ±os)
  0: Ninguno
  1: Primero
  2: Segundo
@@ -1593,37 +1593,37 @@ GRADO
  4: Cuarto
  5: Quinto
  6: Sexto
- 7: Séptimo
+ 7: SÃ©ptimo
  8: Octavo
  88: Escuela especial
  99: No responde
 
-4: ¿Cuál es el nivel del grado o curso más alto que aprobó...?
+4: Â¿CuÃ¡l es el nivel del grado o curso mÃ¡s alto que aprobÃ³...?
 NIVEL
--1: No aplicable (menores de 5 años)
- 0: Sin instrucción / Especial
+-1: No aplicable (menores de 5 aÃ±os)
+ 0: Sin instrucciÃ³n / Especial
  1: Preescolar
  2: Primario
- 3: Secundario Básico
+ 3: Secundario BÃ¡sico
  4: Bachiller Comercial
- 5: Bachiller Técnico
- 6: Bachiller Humanístico
- 7: Formación Docente
- 8: Formación Militar / Policial
+ 5: Bachiller TÃ©cnico
+ 6: Bachiller HumanÃ­stico
+ 7: FormaciÃ³n Docente
+ 8: FormaciÃ³n Militar / Policial
  9: Universitario
- 10: Educación Básica Adultos
+ 10: EducaciÃ³n BÃ¡sica Adultos
  99: No responde
 
-7: ¿Asiste ... actualmente a una institución de enseñanza formal?
+7: Â¿Asiste ... actualmente a una instituciÃ³n de enseÃ±anza formal?
 ASISTE
--1: No aplicable (menores de 5 años)
- 0: No aplicable (personas de 36 años de EDAD y más)
+-1: No aplicable (menores de 5 aÃ±os)
+ 0: No aplicable (personas de 36 aÃ±os de EDAD y mÃ¡s)
  1: Si, preescolar
  2: Si, primario
  3: Si, secundario
  4: Si, superior
  5: Si, universitario
- 6: Si, educación de adultos
+ 6: Si, educaciÃ³n de adultos
  7: Especial
  8: No asiste
  9: No responde
@@ -1649,8 +1649,8 @@ ASISTE
 
 ** Upper secondary
    /* 
-   educ. media científica (bachillerato humanístico científico)             
-   educ. media técnica    (bachillerato técnico comercial)
+   educ. media cientÃ­fica (bachillerato humanÃ­stico cientÃ­fico)             
+   educ. media tÃ©cnica    (bachillerato tÃ©cnico comercial)
    */
 
  gen     NERS2=0 if (edad>=15 & edad<=17) & (asiste>=1 & asiste<=8)
@@ -1749,17 +1749,17 @@ gen ter=1 if (asiste==4 | asiste==5)
 
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 /*
-12: ¿En esta ocupación trabaja como:....?
-CATEGP CATEGORÍA OCUPACIONAL
+12: Â¿En esta ocupaciÃ³n trabaja como:....?
+CATEGP CATEGORÃA OCUPACIONAL
 0: No aplicable
-1: Empleado público
+1: Empleado pÃºblico
 2: Empleado privado
-3: Obrero público
+3: Obrero pÃºblico
 4: Obrero privado
-5: Empleador o patrón
+5: Empleador o patrÃ³n
 6: Trabajador por cuenta propia
 7: Trabajador familiar no remunerado
-8: Empleado doméstico
+8: Empleado domÃ©stico
 9: No responde
 
 */
@@ -1781,8 +1781,8 @@ CATEGP CATEGORÍA OCUPACIONAL
 
 *Proportion of 1 Year Old Children Immunized Against Measles*
 /*
-19: ¿ …(NOMBRE)… tiene la vacuna antisarampión?
-0: No aplicable (personas de 5 años de edad y más)
+19: Â¿ â€¦(NOMBRE)â€¦ tiene la vacuna antisarampiÃ³n?
+0: No aplicable (personas de 5 aÃ±os de edad y mÃ¡s)
 1: Si
 2: No sabe
 6: No
@@ -1796,13 +1796,13 @@ CATEGP CATEGORÍA OCUPACIONAL
 
 *Proportion of Births Attended by Skilled Health Personnel*
 /*
-Pregunta 1: ¿ …(NOMBRE)… nació en un … ?
+Pregunta 1: Â¿ â€¦(NOMBRE)â€¦ naciÃ³ en un â€¦ ?
 NACIOEN
-0: No aplicable (personas de 5 años de edad y más)
+0: No aplicable (personas de 5 aÃ±os de edad y mÃ¡s)
 1: Hospital
 2: Centro de salud
 3: Puesto de salud
-4: Clínica o sanatorio privado
+4: ClÃ­nica o sanatorio privado
 5: En casa de partera
 6: En su casa
 7: Otro
@@ -1818,7 +1818,7 @@ NACIOEN
 
 ** Access to Electricity ** Additional Indicator
 /*
-9. Corriente eléctrica. ¿Dispone de luz eléctrica?
+9. Corriente elÃ©ctrica. Â¿Dispone de luz elÃ©ctrica?
  1. Si
  6. No
 */
@@ -1834,8 +1834,8 @@ NACIOEN
 /*
 15b: Combustible que utiliza habitualmente para
 cocinar)
-1: Leña
-2: Carbón
+1: LeÃ±a
+2: CarbÃ³n
 3: Gas
 5: Alcohol
 6: Electricidad
@@ -1853,12 +1853,12 @@ cocinar)
 ** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
 
 /*
-6: ¿De dónde proviene el agua que utiliza?)
+6: Â¿De dÃ³nde proviene el agua que utiliza?)
 1: Corposana 		==>7 ==>8
 2: Senasa 		==>7 ==>8
 3: Red privada 		==>7 ==>8
-4: Arroyo - río 	==>8
-5: Ycuá o manantial 	==>8
+4: Arroyo - rÃ­o 	==>8
+5: YcuÃ¡ o manantial 	==>8
 6: Pozo con bomba	==>8
 7: Pozo sin bomba 	==>8
 8: Aguatero 		==>7 ==>8
@@ -1883,11 +1883,11 @@ cocinar)
  	
 ** Target 10, Indicator: Proportion of Population with Access to Improved Sanitation, Urban and Rural (%)
 /*
-14: ¿Tiene servicio sanitario?
-1: W.C. conectado a red pública
+14: Â¿Tiene servicio sanitario?
+1: W.C. conectado a red pÃºblica
 2: W.C. con pozo ciego
 3: Excusado tipo municipal
-4: Letrina común
+4: Letrina comÃºn
 5: Otro
 6: No tiene
 
@@ -1904,7 +1904,7 @@ cocinar)
 
 /*
 
-1. Tipo de vivienda		18. Durante el último año, ¿Cuál ha sido la situación legal de la vivienda?
+1. Tipo de vivienda		18. Durante el Ãºltimo aÃ±o, Â¿CuÃ¡l ha sido la situaciÃ³n legal de la vivienda?
 						
 1. Casa				1. Propia 
 2. Rancho 			2. Pagando en cuotas 
@@ -1921,13 +1921,13 @@ v04				v03
 3. Ladrillo 			3. Madera
 4. Lecherada 			4. Ladrillo 
 5. Baldosa 	 		5. Piedra 
-6. Cerámica			6. Otro
+6. CerÃ¡mica			6. Otro
 7. Granito 				
 8. Otro		
 
 
-2a. Número de pieza
-(No incluya baño, cocina, cuartos o
+2a. NÃºmero de pieza
+(No incluya baÃ±o, cocina, cuartos o
 piezas destinadas exclusivamente al
 comercio o industria)
 
@@ -1978,7 +1978,7 @@ comercio o industria)
  replace UNMPLYMENT15=1 if (edad>=15 & edad<=24) & (tasadeso==1) 
 
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
-* 27: ¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
+* 27: Â¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
 
 
 * Gender classification of the population refers to the head of the household.
@@ -2002,7 +2002,7 @@ comercio o industria)
  replace CEL=1 if (celular==1)
 
 ** Target 18, Indicator: "Personal computers in use per 100 population"
-* 27: ¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
+* 27: Â¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
 * 20 Computadora
 
 * Gender classification of the population refers to the head of the household.
@@ -2011,7 +2011,7 @@ comercio o industria)
  replace COMPUTER=1 if (tiene20>=1 & tiene20<=10)
  	
 ** Target 18, Indicator: "Internet users per 100 population"
-* 27: ¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
+* 27: Â¿Tiene el hogar algunos de los siguientes bienes utilizados mayormente por el hogar?
 
 * Gender classification of the population refers to the head of the household.
 
@@ -2116,15 +2116,15 @@ comercio o industria)
 ren ocup ocup_old
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

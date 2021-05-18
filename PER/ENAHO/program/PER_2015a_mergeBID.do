@@ -1,11 +1,11 @@
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Perú
+PaÃ­s: PerÃº
 Encuesta: ENAHO
 Round: a
 Autores: Marcela G. Rubio E-mail: marcelarubio28@gmail.com - mrubio@iadb.org
-Fecha última modificación: 22 de junio de 2016
+Fecha Ãºltima modificaciÃ³n: 22 de junio de 2016
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -13,8 +13,8 @@ Fecha última modificación: 22 de junio de 2016
 
 clear all
 set more off
-global ruta ="M:\survey\PER\ENAHO\2015\a\data_orig\"
-global out ="M:\survey\PER\ENAHO\2015\a\data_merge\"
+global ruta ="${surveysFolder}\survey\PER\ENAHO\2015\a\data_orig\"
+global out ="${surveysFolder}\survey\PER\ENAHO\2015\a\data_merge\"
 
 *Equipamiento del hogar
 use "$ruta\498-Modulo18\enaho01-2015-612.dta" , clear
@@ -36,13 +36,13 @@ reshape wide p612, i(conglome vivienda hogar) j(p612n)
 12	refrigeradora/congeladora
 13	lavadora
 14	horno microondas
-15	máquina de coser
+15	mÃ¡quina de coser
 16	bicicleta
 17	auto, camioneta
 18	motocicleta
 19	triciclo
 20	mototaxi
-21	camión
+21	camiÃ³n
 22	otro
 23	otro
 24	otro
@@ -64,13 +64,13 @@ label var p61211 "Su hogar tiene: cocina a kerosene"
 label var p61212 "Su hogar tiene: refrigeradora/congeladora"
 label var p61213 "Su hogar tiene: lavadora"
 label var p61214 "Su hogar tiene: horno microondas"
-label var p61215 "Su hogar tiene: máquina de coser"
+label var p61215 "Su hogar tiene: mÃ¡quina de coser"
 label var p61216 "Su hogar tiene: bicicleta"
 label var p61217 "Su hogar tiene: auto, camioneta"
 label var p61218 "Su hogar tiene: motocicleta"
 label var p61219 "Su hogar tiene: triciclo"
 label var p61220 "Su hogar tiene: mototaxi"
-label var p61221 "Su hogar tiene: camión"
+label var p61221 "Su hogar tiene: camiÃ³n"
 label var p61222 "Su hogar tiene: otro"
 label var p61223 "Su hogar tiene: otro"
 label var p61224 "Su hogar tiene: otro"

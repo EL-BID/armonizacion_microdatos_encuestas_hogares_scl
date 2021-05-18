@@ -1,16 +1,16 @@
 
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Bolivia
+Pa√≠s: Bolivia
 Encuesta: ECH
 Round: m11_m12
 Autores: 
-⁄ltima versiÛn: Melany Gualavisi  melanyg@iadb.org 
-Fecha ˙ltima modificaciÛn: 04/11/2014
+√öltima versi√≥n: Melany Gualavisi  melanyg@iadb.org 
+Fecha √∫ltima modificaci√≥n: 04/11/2014
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -53,7 +53,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -299,7 +299,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 /*
 gen raza_ci=.
@@ -312,7 +312,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -327,7 +327,7 @@ bys idh_ch, sort: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (s1_06 ==3 | s1_06==8))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo" 
@@ -341,14 +341,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & (s1_06 ==3|s1_06==8))  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "IndÌgena" 0 "Otros" 
+label define id_ind_ci 1 "Ind√≠gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -361,7 +361,7 @@ label var id_afro_ci "Afro-descendiente"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta secciÛn es para los residentes habituales del hogar mayores a 7 aÒos*/ 
+/* Esta secci√≥n es para los residentes habituales del hogar mayores a 7 a√±os*/ 
 *********
 *lp_ci***
 *********
@@ -458,7 +458,7 @@ replace condocup_ci=1 if condact==1
 replace condocup_ci=2 if condact==2 | condact==3
 replace condocup_ci=3 if (condact==4 | condact==5) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -470,17 +470,17 @@ gen condocup_ci=.
 replace condocup_ci=1 if s5_01==1 | s5_02<=6 | (s5_03>=1 & s5_03<=7)
 *replace condocup_ci=2 if (s5_01==2 | s5_02==7 | s5_03>1) & (s5_05==1) & (s5_04==1)
 replace condocup_ci=2 if (s5_01==2 | s5_02==7 | s5_03>7) & (s5_05==1) & (s5_04==1)
-*2015,10 MLO la encuesta pregunta a partir de 7 aÒos (no 10)
+*2015,10 MLO la encuesta pregunta a partir de 7 a√±os (no 10)
 recode condocup_ci .=3 if edad_ci>=7
 recode condocup_ci .=4 if edad_ci<7
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 7" 
 label value condocup_ci condocup_ci
 
 *************
 *cesante_ci* 
 *************
-*Mayra S·enz Octubre 2013 - Se cambia la s5_57 por la s5_07 que corresponde a la secciÛn de condiciÛn de actividad.
+*Mayra S√°enz Octubre 2013 - Se cambia la s5_57 por la s5_07 que corresponde a la secci√≥n de condici√≥n de actividad.
 
 gen cesante_ci=1 if s5_07==1 & condocup_ci==2
 * 2014, 03 Modificacion siguiente linea MLO
@@ -493,13 +493,13 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *************
 *tamemp_ci
 *************
-*Bolivia PequeÒa 1 a 5 Mediana 6 a 49 Grande M·s de 49
+*Bolivia Peque√±a 1 a 5 Mediana 6 a 49 Grande M√°s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if s5_27>=1 & s5_27<=5
 replace tamemp_ci=2 if s5_27>=6 & s5_27<=49
 replace tamemp_ci=3 if s5_27>49 & s5_27!=.
 label var tamemp_ci "# empleados en la empresa segun rangos"
-label define tamemp_ci 1 "PequeÒa" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "Peque√±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
 
 *************
@@ -545,14 +545,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscÛ empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que busc√≥ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "PoblaciÛn EconÛmicamente Activa"
+label var pea_ci "Poblaci√≥n Econ√≥micamente Activa"
 
 
 *****************
@@ -567,10 +567,10 @@ label var desalent_ci "Trabajadores desalentados"
 *****************
 ***horaspri_ci***
 *****************
-*NOTA: se la variable se est· creando como horas trabajadas al mes. Sin embargo, la definiciÛn indica que es 
-*a la semana.  Por lo tanto, se cambia la programaciÛn y debe revisarse en los programas de aÒos anteriores
+*NOTA: se la variable se est√° creando como horas trabajadas al mes. Sin embargo, la definici√≥n indica que es 
+*a la semana.  Por lo tanto, se cambia la programaci√≥n y debe revisarse en los programas de a√±os anteriores
 
-*DÌas a la semana s5_27a
+*D√≠as a la semana s5_27a
 *Horas diarias s5_27b 
 *gen horassem =  s5_27b* s5_27a
 *gen horaspri_ci= horassem*4.3
@@ -584,7 +584,7 @@ label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
 *****************
 ***horastot_ci***
 *****************
-*Nota: para el segundo trabajo tambiÈn se mensualiza. Por tanto, se construye la programaciÛn para los datos 
+*Nota: para el segundo trabajo tambi√©n se mensualiza. Por tanto, se construye la programaci√≥n para los datos 
 *semanales
 *drop horassem
 *gen horassem =  s5_43a*s5_43b1
@@ -603,7 +603,7 @@ replace horassec_ci=. if emp_ci~=1
 ***subemp_ci***
 ***************
 /*
-*NOTA: aquÌ fue necesario ajustar el cambio de horas
+*NOTA: aqu√≠ fue necesario ajustar el cambio de horas
 gen subemp_ci=.
 replace subemp_ci=1 if s5_52== 1 & horastot_ci <= 30
 replace subemp_ci=0 if s5_52== 2 & emp_ci == 1
@@ -683,14 +683,14 @@ label value tipocontrato_ci tipocontrato_ci
 gen nempleos_ci=.
 replace nempleos_ci=1 if emp_ci==1
 replace nempleos_ci=2 if emp_ci==1 & s5_40==1
-label var nempleos_ci "N˙mero de empleos" 
+label var nempleos_ci "N√∫mero de empleos" 
 
 /*
 *****************
 ***firmapeq_ci***
 *****************
 *NOTA: en el documento de definiciones se reconocen como trabajadores informales aquellos en firmas con 5 o menos 
-*empleados. Por ello se cambian los lÌmites en la creaciÛn de la variable. Esto se debe mirar hacia atr·s.
+*empleados. Por ello se cambian los l√≠mites en la creaci√≥n de la variable. Esto se debe mirar hacia atr√°s.
 gen firmapeq_ci=.
 replace firmapeq_ci=1 if  s5_27>=1 & s5_27<=5 
 replace firmapeq_ci=0 if  s5_27>=6 & s5_27!=.
@@ -705,7 +705,7 @@ gen spublico_ci=.
 replace spublico_ci=1 if s5_22==1
 replace spublico_ci=0 if s5_22==2 | s5_22==3
 replace spublico_ci=. if emp_ci~=1
-label var spublico_ci "Personas que trabajan en el sector p˙blico"
+label var spublico_ci "Personas que trabajan en el sector p√∫blico"
 
 
 **************
@@ -742,19 +742,19 @@ label variable ocupa_ci "Ocupacion laboral"
 *************
 /*
 caeb_op:
-           1 Agricultura, GanaderÌa y Caza
+           1 Agricultura, Ganader√≠a y Caza
            2 Silvicultura y Pesca
-           3 ExplotaciÛn de Minas y Canteras
+           3 Explotaci√≥n de Minas y Canteras
            4 Industria Manufacturera
            5 Prod. y Distr. de Electricidad, Gas y Agua
-           6 ConstrucciÛn
+           6 Construcci√≥n
            7 Venta y Reparaciones
            8 Hoteles y Restaurantes
            9 Transporte, Almacenamiento, Comunicaciones
-          10 IntermediaciÛn Financiera
+          10 Intermediaci√≥n Financiera
           11 Serv. Inmobiliarios, Empresariales y de Alquiler
-          12 Adm. P˙blica, Defensa y Seguridad Social
-          13 EducaciÛn
+          12 Adm. P√∫blica, Defensa y Seguridad Social
+          13 Educaci√≥n
           14 Servicios Sociales y de Salud
           15 Servicios Comunitarios y Personales
           16 Hogares Privados
@@ -773,8 +773,8 @@ replace rama_ci=7 if caeb_op==9 & emp_ci==1
 replace rama_ci=8 if caeb_op>=10 & caeb_op<=11 & emp_ci==1
 replace rama_ci=9 if caeb_op>=12 & caeb_op<=17 & emp_ci==1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÛn de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÛn" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotaci√≥n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcci√≥n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -786,7 +786,7 @@ label val rama_ci rama_ci
 a4_10b:
            2 semana
            4 mes
-           6 aÒo
+           6 a√±o
 */
 
 gen durades_ci=.
@@ -813,8 +813,8 @@ gen categoinac_ci =1 if (s5_14==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  ( s5_14==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  ( s5_14==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "CategorÌa de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÈsticos" 4 "Otros" 
+label var categoinac_ci "Categor√≠a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom√©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -906,7 +906,7 @@ replace yhrsextr= s5_34b1/12	if s5_34b2==8
 *********
 * prima *
 *********
-*Esto tiene un periodo de referencia de los ˙ltimos 12 meses. Hay que revisarlo para los aÒos anteriores 
+*Esto tiene un periodo de referencia de los √∫ltimos 12 meses. Hay que revisarlo para los a√±os anteriores 
 gen yprima = .
 replace yprima = s5_33a/12
 replace yprima =. if s5_33a==999999
@@ -914,7 +914,7 @@ replace yprima =. if s5_33a==999999
 *************
 * aguinaldo *
 *************
-*Esto tiene un periodo de referencia de los ˙ltimos 12 meses. Hay que revisarlo para los aÒos anteriores 
+*Esto tiene un periodo de referencia de los √∫ltimos 12 meses. Hay que revisarlo para los a√±os anteriores 
 gen yaguina = .
 replace yaguina = s5_33b/12
 replace yaguina=. if   s5_33b==999999
@@ -1037,8 +1037,8 @@ replace yliquido2= s5_48a/12	if s5_48b==8
 *****************
 * Horas extra 2 *
 *****************
-*Para el empleo secundario se pregunta por los ˙ltimos 12 meses. Por eso se divide entre 12. Se debe 
-*revisar esto para los aÒos anteriores
+*Para el empleo secundario se pregunta por los √∫ltimos 12 meses. Por eso se divide entre 12. Se debe 
+*revisar esto para los a√±os anteriores
 
 gen yhrsextr2 = .
 replace yhrsextr2=s5_49a2/12 if s5_49a1==1
@@ -1047,8 +1047,8 @@ replace yhrsextr2=s5_49a2/12 if s5_49a1==1
 ***************************************
 * alimentos, transporte y vestimenta2 *
 ***************************************
-*Para el empleo secundario se pregunta por los ˙ltimos 12 meses. Por eso se divide entre 12. Se debe 
-*revisar esto para los aÒos anteriores
+*Para el empleo secundario se pregunta por los √∫ltimos 12 meses. Por eso se divide entre 12. Se debe 
+*revisar esto para los a√±os anteriores
 
 gen yalimen2 = .
 replace yalimen2= s5_49b2/12	if s5_49b1==1
@@ -1123,7 +1123,7 @@ replace yotren = s6_02c
 ************************
 * alquileres agricolas *
 ************************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen yalqagri = .
 replace yalqagri =  s6_03a/12		
 
@@ -1131,7 +1131,7 @@ replace yalqagri =  s6_03a/12
 **************
 * dividendos *
 **************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen ydivi = .
 replace ydivi =  s6_03b/12
 
@@ -1139,7 +1139,7 @@ replace ydivi =  s6_03b/12
 *************************
 * alquileres maquinaria *
 *************************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen yalqmaqui = .
 replace yalqmaqui = s6_03c/12
 
@@ -1147,7 +1147,7 @@ replace yalqmaqui = s6_03c/12
 ******************
 * indem. trabajo *
 ******************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen yindtr = .
 replace yindtr =  s6_05a/12
 
@@ -1155,7 +1155,7 @@ replace yindtr =  s6_05a/12
 ******************
 * indem. seguros *
 ******************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores. (BONOSOL)
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores. (BONOSOL)
 gen yindseg = .
 replace yindseg = s6_05b/12
 
@@ -1163,7 +1163,7 @@ replace yindseg = s6_05b/12
 ***********
 * bonosol *
 ***********
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen ybono = .
 replace ybono = s6_05c/12
 
@@ -1171,7 +1171,7 @@ replace ybono = s6_05c/12
 ******************
 * otros ingresos *
 ******************
-*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los aÒos anteriores.
+*Esto se pregunta anual, por ello se divide entre doce.  Se deben revisar los programas de los a√±os anteriores.
 gen yotring = .
 replace yotring = s6_05d/12
 
@@ -1222,7 +1222,7 @@ replace ytransmon= s6_04b12/12		if s6_04b3==8
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde alg˙n miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde alg√∫n miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1293,8 +1293,8 @@ label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 ******************
 *** ylnmpri_ci ***
 ******************
-*Aqui se venÌan contando ingresos del segundo empleo. Por ello, se cambia la programaciÛn. Se debe revisar desde cuando
-*se han generado estos ingresos asÌ.
+*Aqui se ven√≠an contando ingresos del segundo empleo. Por ello, se cambia la programaci√≥n. Se debe revisar desde cuando
+*se han generado estos ingresos as√≠.
 *egen ylnmprid=rsum(yalimen ytranspo yvesti yvivien yguarde yalimen2 yhrsextr2 yvivien2), missing
 *replace ylnmprid=. if yalimen==. & ytranspo==. & yvesti==. & yvivien==. & yguarde==. & yalimen2==. & yhrsextr2==. & yvivien2==.  
 *replace ylnmprid=0 if categopri_ci==4
@@ -1446,7 +1446,7 @@ label var remesas_ci "Remesas mensuales reportadas por el individuo"
 by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing
 replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 replace nrylmpri_ch=. if nrylmpri_ch==.
-label var nrylmpri_ch "Hogares con alg˙n miembro que no respondiÛ por ingresos"
+label var nrylmpri_ch "Hogares con alg√∫n miembro que no respondi√≥ por ingresos"
 
 
 **************
@@ -1543,31 +1543,31 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta secciÛn es sÛlo para los mayores a los 5 aÒos de edad*/
+/*En esta secci√≥n es s√≥lo para los mayores a los 5 a√±os de edad*/
 
 /*
 s4_02a:
           11 Ninguno
-          12 Curso de alfabetizaciÛn
-          13 EducaciÛn pre-escolar
-          14 B·sico (1 a 5 aÒos)
-          15 Intermedio (1 a 3 aÒos)
-          16 Medio (1 a 4 aÒos)
-          17 Primaria (1 a 8 aÒos)
-          18 Secundaria (1 a 4 aÒos)
-          19 EducaciÛn b·sica de adultos (EBA)
-          20 Centro de educaciÛn media de adultos (CEMA)
-          21 EducaciÛn juvenil alternativa(EJA)
-          22 EducaciÛn primaria de adultos(EPA)
-          23 EduaciÛn secundaria de adultos(ESA)
+          12 Curso de alfabetizaci√≥n
+          13 Educaci√≥n pre-escolar
+          14 B√°sico (1 a 5 a√±os)
+          15 Intermedio (1 a 3 a√±os)
+          16 Medio (1 a 4 a√±os)
+          17 Primaria (1 a 8 a√±os)
+          18 Secundaria (1 a 4 a√±os)
+          19 Educaci√≥n b√°sica de adultos (EBA)
+          20 Centro de educaci√≥n media de adultos (CEMA)
+          21 Educaci√≥n juvenil alternativa(EJA)
+          22 Educaci√≥n primaria de adultos(EPA)
+          23 Eduaci√≥n secundaria de adultos(ESA)
           24 Normal
-          25 Universidad  p˙blica(Licenciatura)
+          25 Universidad  p√∫blica(Licenciatura)
           26 Universidad  privada (Licenciatura)
-          27 Postgrado (Diplomado, especialidad, maestrÌa, doctorado)
-          28 TÈcnico de universidad
-          29 TÈcnico de instituto(DuraciÛn mayor o igual a 1 aÒo)
-          30 Institutos de formaciÛn militar y policial
-          31 Otros cursos(DuraciÛn menor a 1 aÒo)
+          27 Postgrado (Diplomado, especialidad, maestr√≠a, doctorado)
+          28 T√©cnico de universidad
+          29 T√©cnico de instituto(Duraci√≥n mayor o igual a 1 a√±o)
+          30 Institutos de formaci√≥n militar y policial
+          31 Otros cursos(Duraci√≥n menor a 1 a√±o)
 */
 
 
@@ -1711,7 +1711,7 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-*Variable aÒadida por Iv·n Bornacelly - 01/12/2017
+*Variable a√±adida por Iv√°n Bornacelly - 01/12/2017
 	g asispre_ci=.	
 	replace asispre_ci=1 if s4_06==1 & s4_07a==13
 	recode asispre_ci (.=0)
@@ -1736,8 +1736,8 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 
 *gen asiste_ci=(s4_10==1)
 
-*LCM (introducido por YL): Se cambia la forma de c·lculo porque se deben considerar los rangos de edad lcm dic2013
-*ModificaciÛn Mayra S·enz Enero-2017: Se genera la dummy de acuerdo al documento metodolÛgico.
+*LCM (introducido por YL): Se cambia la forma de c√°lculo porque se deben considerar los rangos de edad lcm dic2013
+*Modificaci√≥n Mayra S√°enz Enero-2017: Se genera la dummy de acuerdo al documento metodol√≥gico.
 gen asiste_ci= s4_06==1
 /*
 gen asiste_ci= 1 if s4_06==1
@@ -1750,9 +1750,9 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 
 gen pqnoasis_ci=s4_11
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"vacaciÛn/receso" 2"falta de dinero" 3"por trabajo" 4"por enfermedad/accidente/discapacidad"
-label def pqnoasis_ci 5"los establecimientos son distantes" 6"culminÛ sus estudios" 7"edad temprana/ edad avanzada", add
-label def pqnoasis_ci 8"falta de interÈs" 9"labores de casa/ embarazo/cuidado de niÒos/as" 10"otra", add
+label def pqnoasis_ci 1"vacaci√≥n/receso" 2"falta de dinero" 3"por trabajo" 4"por enfermedad/accidente/discapacidad"
+label def pqnoasis_ci 5"los establecimientos son distantes" 6"culmin√≥ sus estudios" 7"edad temprana/ edad avanzada", add
+label def pqnoasis_ci 8"falta de inter√©s" 9"labores de casa/ embarazo/cuidado de ni√±os/as" 10"otra", add
 label val pqnoasis_ci pqnoasis_ci 
 
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
@@ -1771,7 +1771,7 @@ replace pqnoasis1_ci = 7 if s4_11==7
 replace pqnoasis1_ci = 8 if s4_11==5
 replace pqnoasis1_ci = 9 if s4_11==1  | s4_11==10
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
  
 ***************
@@ -1788,24 +1788,24 @@ label var repite_ci "Ha repetido al menos un grado"
 
 gen repiteult_ci=(s4_09==1)
 replace repiteult_ci=. if s4_09==.
-label var repiteult "Ha repetido el ˙ltimo grado"
+label var repiteult "Ha repetido el √∫ltimo grado"
 
 
 ***************
 ***edupub_ci***
 ***************
-/*Sobre los que se matricularon ese aÒo*/
+/*Sobre los que se matricularon ese a√±o*/
 /*
 s4_06:
            1 Particular / privado
-           2 Fiscal / p˙blico
-           3 P˙blico de Convenio
+           2 Fiscal / p√∫blico
+           3 P√∫blico de Convenio
 */
 
 
 gen edupub_ci=(s4_08==2 | s4_08==3)
 replace edupub_ci=. if s4_08==.
-label var edupub_ci "Asiste a un centro de ensenanza p˙blico"
+label var edupub_ci "Asiste a un centro de ensenanza p√∫blico"
 
 
 **************
@@ -1828,27 +1828,27 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ****************
 /*
 *s8_10:
-*1  por caÒeria dentro de la vivienda
-*2  por caÒerÌa fuera de la vivienda, pero dentro del lote o ter
-*3  por caÒeria fuera del lote o terreno
-*4  no se distribuye por caÒeria
+*1  por ca√±eria dentro de la vivienda
+*2  por ca√±er√≠a fuera de la vivienda, pero dentro del lote o ter
+*3  por ca√±eria fuera del lote o terreno
+*4  no se distribuye por ca√±eria
 
 gen aguared_ch=(s8_10==1 | s8_10==2 | s8_10==3)
 replace aguared_ch=. if s8_10==.
 label var aguared_ch "Acceso a fuente de agua por red"
-* ModificaciÛn Mayra S·enz Julio 2013
+* Modificaci√≥n Mayra S√°enz Julio 2013
 * Mejor se debe utilizar esta variable
 
 
 s8_09
 
 
-           1 caÒerÌa de red
-           2 pileta p˙blica
+           1 ca√±er√≠a de red
+           2 pileta p√∫blica
            3 carro repartidor (aguatero)
            4 pozo o noria con bomba
            5 pozo o noria sin bomba
-           6 rÌo/vertiente/acequia
+           6 r√≠o/vertiente/acequia
            7 lago/laguna/curiche
            8 otro
 */
@@ -1867,7 +1867,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 gen aguadist_ch=1 if s8_10==1
 replace aguadist_ch=2 if s8_10==2
 replace aguadist_ch=3 if s8_10==3
-label var aguadist_ch "UbicaciÛn de la principal fuente de agua"
+label var aguadist_ch "Ubicaci√≥n de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 label val aguadist_ch aguadist_ch
@@ -1876,11 +1876,11 @@ label val aguadist_ch aguadist_ch
 *****************
 ***aguamala_ch***
 *****************
-*Hay que crear esta variable hacia atr·s pues sÌ est· disponible
+*Hay que crear esta variable hacia atr√°s pues s√≠ est√° disponible
 
 gen aguamala_ch=(s8_09==6 | s8_09==7)
 replace aguamala_ch=. if s8_09==.
-label var aguamala_ch "Agua unimproved seg˙n MDG" 
+label var aguamala_ch "Agua unimproved seg√∫n MDG" 
 
 
 *****************
@@ -1897,7 +1897,7 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 gen luz_ch=(s8_15==1)
 replace luz_ch =. if  s8_15== .
-label var luz_ch  "La principal fuente de iluminaciÛn es electricidad"
+label var luz_ch  "La principal fuente de iluminaci√≥n es electricidad"
 
 
 ****************
@@ -1943,9 +1943,9 @@ replace des1_ch=0 if bano_ch==0
 replace des1_ch=1 if s8_14==1 | s8_14==2
 replace des1_ch=2 if s8_14==3
 replace des1_ch=3 if s8_14==4
-label var des1_ch "Tipo de desague seg˙n unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o c·mara sÈptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÌo o calle", add
+label var des1_ch "Tipo de desague seg√∫n unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o c√°mara s√©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en r√≠o o calle", add
 label val des1_ch des1_ch
 
 
@@ -1957,8 +1957,8 @@ gen des2_ch=.
 replace des2_ch=0 if bano_ch==0
 replace des2_ch=1 if s8_14==1 | s8_14==2 | s8_14==3 
 replace des2_ch=3 if s8_14==4
-label var des2_ch "Tipo de desague sin incluir definiciÛn MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, c·mara sÈptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definici√≥n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, c√°mara s√©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -1970,7 +1970,7 @@ label val des2_ch des2_ch
 gen piso_ch=0 if  s8_08==1 
 replace piso_ch=1 if  s8_08>=2 &  s8_08<=7 
 replace piso_ch=2 if  s8_08==8
-label var piso_ch "Materiales de construcciÛn del piso"  
+label var piso_ch "Materiales de construcci√≥n del piso"  
 label def piso_ch 0"Piso de tierra" 1"Materiales permanentes"
 label val piso_ch piso_ch
 
@@ -1982,7 +1982,7 @@ label val piso_ch piso_ch
 gen pared_ch=0 if s8_05 ==6
 replace pared_ch=1 if s8_05==1 | s8_05==2 | s8_05==3 | s8_05==4 | s8_05==5
 replace pared_ch=2 if s8_05==7
-label var pared_ch "Materiales de construcciÛn de las paredes"
+label var pared_ch "Materiales de construcci√≥n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
 label val pared_ch pared_ch
 
@@ -1994,7 +1994,7 @@ label val pared_ch pared_ch
 gen techo_ch=0 if s8_07==4
 replace techo_ch=1 if s8_07>=1 & s8_07<=3
 replace techo_ch=2 if s8_07==5
-label var techo_ch "Materiales de construcciÛn del techo"
+label var techo_ch "Materiales de construcci√≥n del techo"
 
 
 **************
@@ -2006,8 +2006,8 @@ replace resid_ch=1 if s8_33==4 | s8_33==2
 replace resid_ch=2 if s8_33==1 | s8_33==3
 replace resid_ch=3 if s8_33==5
 replace resid_ch=. if s8_33==.
-label var resid_ch "MÈtodo de eliminaciÛn de residuos"
-label def resid_ch 0"RecolecciÛn p˙blica o privada" 1"Quemados o enterrados"
+label var resid_ch "M√©todo de eliminaci√≥n de residuos"
+label def resid_ch 0"Recolecci√≥n p√∫blica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -2059,13 +2059,13 @@ label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 
 gen telef_ch=(s8_24==1)
 replace telef_ch = . if s8_24==.
-label var telef_ch "El hogar tiene servicio telefÛnico fijo"
+label var telef_ch "El hogar tiene servicio telef√≥nico fijo"
 
 
 ********
 ***NA***
 ********
-*La informaciÛn para estas variables est· en el cuestionario, pero no en la base
+*La informaci√≥n para estas variables est√° en el cuestionario, pero no en la base
 
 
 gen refrig_ch=.
@@ -2086,7 +2086,7 @@ label var compu_ch "El hogar posee computador"
 *****************
 gen internet_ch=(s8_26==1)
 replace internet_ch = .   if  s8_26 == .
-label var internet_ch "El hogar posee conexiÛn a Internet"
+label var internet_ch "El hogar posee conexi√≥n a Internet"
 
 
 
@@ -2141,7 +2141,7 @@ label val viviprop_ch viviprop_ch
 ****************
 
 gen vivitit_ch=.
-label var vivitit_ch "El hogar posee un tÌtulo de propiedad"
+label var vivitit_ch "El hogar posee un t√≠tulo de propiedad"
 
 
 ****************
@@ -2162,15 +2162,15 @@ label var vivialqimp_ch "Alquiler mensual imputado"
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

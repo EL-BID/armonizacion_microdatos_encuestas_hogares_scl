@@ -2,20 +2,20 @@
 
 /*
 
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENAHO
@@ -31,12 +31,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Per˙
+Pa√≠s: Per√∫
 Encuesta: ENAHO
 Round: t4
 Autores: 
-⁄ltima versiÛn: Mayra S·enz - Email: saenzmayra.a@gmail.com - mayras@iadb.org
-Fecha ˙ltima modificaciÛn: agosto 2013
+√öltima versi√≥n: Mayra S√°enz - Email: saenzmayra.a@gmail.com - mayras@iadb.org
+Fecha √∫ltima modificaci√≥n: agosto 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -77,7 +77,7 @@ label define region_c ///
 19"Pasco"	          ///
 20"Piura"	          ///
 21"Puno"	          ///
-22"San MartÌn"	      ///
+22"San Mart√≠n"	      ///
 23"Tacna"	          ///
 24"Tumbes"	          ///
 25"Ucayali"	
@@ -85,11 +85,11 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento" 
 
 ************************
-*** region seg˙n BID ***
+*** region seg√∫n BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -164,7 +164,7 @@ label define relacion_ci 6 "Empleado/a domestico/a", add
 
 label value relacion_ci relacion_ci
 
-/*En este aÒo no hay empleados domÈsticos ni pensionistas*/
+/*En este a√±o no hay empleados dom√©sticos ni pensionistas*/
 
 
 ****************************
@@ -355,7 +355,7 @@ label var afiliado_ci "Afiliado a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "instituciÛn a la cual cotiza"
+label var instcot_ci "instituci√≥n a la cual cotiza"
 
 ****************
 *cotizando_ci***
@@ -380,7 +380,7 @@ label value tipocontrato_ci tipocontrato_ci
 *tamemp_ci***
 *************
 gen tamemp_ci=ocprango 
-label define  tamemp_ci 1"menos de 100" 2"de 100 a 499" 3"de 500 y m·s p"
+label define  tamemp_ci 1"menos de 100" 2"de 100 a 499" 3"de 500 y m√°s p"
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 
 *************
@@ -437,7 +437,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *******************
@@ -452,43 +452,43 @@ label var tc_c "Tasa de cambio LCU/USD"
 *******************
 
 gen ipc_c =  61.26602
-label var ipc_c "Õndice de precios al consumidor base 2011=100"
+label var ipc_c "√çndice de precios al consumidor base 2011=100"
 
 *******************
 ****** ppp_c ******
 *******************
 
 gen ppp_c = 1.378235 
-label var ppp_c "Factor de conversiÛn PPP LCU/USD"
+label var ppp_c "Factor de conversi√≥n PPP LCU/USD"
 
 ****************
 *lp25_2005_ci***
 ****************
 
-*MGR Jul,2015: se modifican lÌneas de pobreza internacionales con aÒo base PPP2011. Se renombran lÌneas con aÒo base PPP2005. 
+*MGR Jul,2015: se modifican l√≠neas de pobreza internacionales con a√±o base PPP2011. Se renombran l√≠neas con a√±o base PPP2005. 
 gen lp25_2005_ci = 99.21872
-label var lp25_2005_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a precios corrientes a PPP 2005"
+label var lp25_2005_ci  "L√≠nea de pobreza USD2.5 por d√≠a en moneda local a precios corrientes a PPP 2005"
 
 ***************
 *lp4_2005_ci***
 ***************
 
-*MGR Jul,2015: se modifican lÌneas de pobreza internacionales con aÒo base PPP2011. Se renombran lÌneas con aÒo base PPP2005. 
+*MGR Jul,2015: se modifican l√≠neas de pobreza internacionales con a√±o base PPP2011. Se renombran l√≠neas con a√±o base PPP2005. 
 gen lp4_2005_ci = 158.75
-label var lp4_2005_ci "LÌnea de pobreza USD4 por dÌa en moneda local a precios corrientes a PPP 2005"
+label var lp4_2005_ci "L√≠nea de pobreza USD4 por d√≠a en moneda local a precios corrientes a PPP 2005"
 
 ********* 
 *lp25_ci
 *********
 
 gen lp25_ci = 73.07928
-capture label var lp25_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a precios corrientes a PPP 2011"
+capture label var lp25_ci  "L√≠nea de pobreza USD2.5 por d√≠a en moneda local a precios corrientes a PPP 2011"
 
 *********
 *lp4_ci*
 *********
 gen lp4_ci = 116.9269  
-capture label var lp4_ci "LÌnea de pobreza USD4 por dÌa en moneda local a precios corrientes a PPP 2011"
+capture label var lp4_ci "L√≠nea de pobreza USD4 por d√≠a en moneda local a precios corrientes a PPP 2011"
 
 
 *************
@@ -583,7 +583,7 @@ replace tiempoparc_ci=. if emp_ci==0
 ******************
 ***categopri_ci***
 ******************
-* 10/20/2015 MGD: se aÒade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se a√±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categopri_ci=.
 replace categopri_ci=0 if ocpcateg==7
@@ -592,7 +592,7 @@ replace categopri_ci=2 if ocpcateg==2
 replace categopri_ci=3 if ocpcateg==3 | ocpcateg==4 | ocpcateg==6 
 replace categopri_ci=4 if ocpcateg==5 /*| ocpcateg==7*/
 
-label define categopri_ci 0 "Otra clasificaciÛn" 1"Patron" 2"Cuenta propia" 
+label define categopri_ci 0 "Otra clasificaci√≥n" 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4" No remunerado", add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
@@ -601,7 +601,7 @@ label variable categopri_ci "Categoria ocupacional trabajo principal"
 ******************
 ***categosec_ci***
 ******************
-* 10/20/2015 MGD: se aÒade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se a√±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categosec_ci=.
 replace categosec_ci=0 if ocscateg==7
@@ -610,7 +610,7 @@ replace categosec_ci=2 if ocscateg==2
 replace categosec_ci=3 if ocscateg==3 | ocscateg==4 | ocscateg==6
 replace categosec_ci=4 if ocscateg==5 /*| ocscateg==7*/
 
-label define categosec_ci 0 "Otra clasificaciÛn"1"Patron" 2"Cuenta propia" 
+label define categosec_ci 0 "Otra clasificaci√≥n"1"Patron" 2"Cuenta propia" 
 label define categosec_ci 3"Empleado" 4 "No remunerado" , add
 label value categosec_ci categosec_ci
 label variable categosec_ci "Categoria ocupacional trabajo secundario"
@@ -705,8 +705,8 @@ replace ypridbd=. if ingdliq==99999
 
 replace ypridbd=0 if categopri_ci==4 
 /* A los trabajadores no remunerados que trabajan menos de 15 horas la encuesta no les
-pregunta acerca de sus ingresos y los manda a la secciÛn de desempleo. Como este grupo en
-realidad est· trabajando, reemplazo su ingreso missing por cero*/
+pregunta acerca de sus ingresos y los manda a la secci√≥n de desempleo. Como este grupo en
+realidad est√° trabajando, reemplazo su ingreso missing por cero*/
 
 replace ypridbd=. if categopri_ci<=2
 
@@ -946,8 +946,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta secciÛn es sÛlo para los residentes habituales 
-mayores a los 3 aÒos de edad*/
+/*En esta secci√≥n es s√≥lo para los residentes habituales 
+mayores a los 3 a√±os de edad*/
 
 destring anoaprob, replace
 
@@ -1122,7 +1122,7 @@ label define pqnoasis 4 "Prob. econ", add
 label define pqnoasis 5 "Prob.fam", add
 label define pqnoasis 6 "Bajas notas", add
 label define pqnoasis 7 "Termino", add
-label define pqnoasis 8 "Otra razÛn", add
+label define pqnoasis 8 "Otra raz√≥n", add
 label define pqnoasis 99 "Missing", add
 label value pqnoasis pqnoasis
 
@@ -1138,7 +1138,7 @@ replace pqnoasis1_ci = 4 if razdejes==2
 replace pqnoasis1_ci = 6 if razdejes==7
 replace pqnoasis1_ci = 9 if razdejes==6 | razdejes==8
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1273,7 +1273,7 @@ replace vivialqimp_ch=. if alqmens2==9999
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -1283,8 +1283,8 @@ gen id_ind_ci      = .
 gen id_afro_ci     = .
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* TambiÈn se incluyen variables que se manejaban en versiones anteriores, estas son:
+* Verificaci√≥n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* Tambi√©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

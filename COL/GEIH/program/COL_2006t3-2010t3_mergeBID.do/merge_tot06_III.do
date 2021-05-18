@@ -3,7 +3,7 @@
 		******TERCER TRIMESTRE********
 		******************************
 
-cd "\\sdssrv03\Surveys\Colombia\2006\GEIH\3thquarter\Datos" 
+cd "${surveysFolder}\Colombia\2006\GEIH\3thquarter\Datos" 
 
 use IIItrimestre_cab.dta
 append using IIItrimestre_res.dta
@@ -18,8 +18,8 @@ drop temp
 
 compress
 
-saveold "\\sdssrv03\Surveys\Colombia\2006\GEIH\3thquarter\Datos\col06.dta", replace
+saveold "${surveysFolder}\Colombia\2006\GEIH\3thquarter\Datos\col06.dta", replace
 
 
-*NOTA: aquÌ el factor se divide entre 2 porque realmente es un bimestre y no un trimestre ya que por
-*el momento no se est· incluyendo julio
+*NOTA: aqu√≠ el factor se divide entre 2 porque realmente es un bimestre y no un trimestre ya que por
+*el momento no se est√° incluyendo julio

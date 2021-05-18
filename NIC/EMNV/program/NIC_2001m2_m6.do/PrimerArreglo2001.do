@@ -1,6 +1,6 @@
 clear
-use "X:\ARM\NIC\2001\Orig_data\emnv19 gastos equipo.dta"
-X:\ARM\NIC\2001\Orig_data
+use "${surveysFolder}\ARM\NIC\2001\Orig_data\emnv19 gastos equipo.dta"
+${surveysFolder}\ARM\NIC\2001\Orig_data
 gen refrig_chaux=(s9pecod==4 & s9pe1==1)
 gen auto_chaux=(s9pecod==22 & s9pe1==1)
 gen compaux=(s9pecod==21 & s9pe1==1)
@@ -14,10 +14,10 @@ sort id_hogar
 by id_hogar:gen contador=(_n==1)
 keep if contador==1
 drop contador
-save "X:\ARM\NIC\2001\Van_data\Equipos01.dta", replace
+save "${surveysFolder}\ARM\NIC\2001\Van_data\Equipos01.dta", replace
 
 clear
-use "X:\ARM\NIC\2001\Orig_data\emnv16gastosparted1.dta"
+use "${surveysFolder}\ARM\NIC\2001\Orig_data\emnv16gastosparted1.dta"
 gen alquilerc=0
 replace alquilerc=s9pd12 if s9pd1cod==1  
 gen alquilerv=0
@@ -47,10 +47,10 @@ sort id_hogar
 by id_hogar:gen contador=(_n==1)
 keep if contador==1
 drop contador
-save "X:\ARM\NIC\2001\Van_data\ynlmmo.dta", replace
+save "${surveysFolder}\ARM\NIC\2001\Van_data\ynlmmo.dta", replace
 
 clear
-use "X:\ARM\NIC\2001\Orig_data\emnv17gastosparted2.dta"
+use "${surveysFolder}\ARM\NIC\2001\Orig_data\emnv17gastosparted2.dta"
 gen intahorros=0
 replace intahorros=s9pd22 if s9pd2cod==1
 gen intprest=0
@@ -89,10 +89,10 @@ sort id_hogar
 by id_hogar:gen contador=(_n==1)
 keep if contador==1
 drop contador
-save "X:\ARM\NIC\2001\Van_data\ynlman.dta", replace
+save "${surveysFolder}\ARM\NIC\2001\Van_data\ynlman.dta", replace
 
 clear
-use "X:\ARM\NIC\2001\Orig_data\emnv18gastosparted3.dta"
+use "${surveysFolder}\ARM\NIC\2001\Orig_data\emnv18gastosparted3.dta"
 gen regalosintc=0
 replace regalosintc=s9pd33a if s9pd3cod==1
 gen regalosintd=0
@@ -139,10 +139,10 @@ sort id_hogar
 by id_hogar:gen contador=(_n==1)
 keep if contador==1
 drop contador
-save "X:\ARM\NIC\2001\Van_data\remesas.dta", replace
+save "${surveysFolder}\ARM\NIC\2001\Van_data\remesas.dta", replace
 
 clear 
-use "Y:\Nicaragua\2001\Datos originales\CONSING.dta", clear
+use "${surveysFolder}\Nicaragua\2001\Datos originales\CONSING.dta", clear
 gen id_hogar=real(string(i00a)+string(i00b))
 sort id_hogar
-save "X:\ARM\NIC\2001\Van_data\CONSING.dta", replace
+save "${surveysFolder}\ARM\NIC\2001\Van_data\CONSING.dta", replace

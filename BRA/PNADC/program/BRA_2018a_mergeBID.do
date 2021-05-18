@@ -5,7 +5,7 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
@@ -26,9 +26,9 @@ Creation Date:    25 Jun 2019 - 10:57:54
 version 15.1
 drop _all
 
-global input  "\\Sdssrv03\surveys\survey\BRA\PNADC\2018\a\data_orig"
-global output "\\Sdssrv03\surveys\survey\BRA\PNADC\2018\a\data_merge" 
-global final  "\\Sdssrv03\surveys\harmonized\BRA\PNADC\data_arm" 
+global input  "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig"
+global output "${surveysFolder}\survey\BRA\PNADC\2018\a\data_merge" 
+global final  "${surveysFolder}\harmonized\BRA\PNADC\data_arm" 
 
 /*==================================================
               1: txt. to .dta 
@@ -48,7 +48,7 @@ foreach ano of local anos {
 }
 
 
-       infile using "\\Sdssrv03\surveys\survey\BRA\PNADC\2018\a\data_orig\input_visita_2018.do", using("\\Sdssrv03\surveys\survey\BRA\PNADC\2018\a\data_orig\PNADC_2018_visita1.txt")
+       infile using "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\input_visita_2018.do", using("${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\PNADC_2018_visita1.txt")
 		save   "${output}\PNADC_`ano'_visita.dta", replace
 
 /*==================================================

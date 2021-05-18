@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ECH
@@ -27,13 +27,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ECH
 Round: t3
 Autores: Analia
-Generación nuevas variables LMK: 
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: noviembre 2013
+GeneraciÃ³n nuevas variables LMK: 
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: noviembre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -46,7 +46,7 @@ use `base_in', clear
 ************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -56,24 +56,24 @@ label value region_BID_c region_BID_c
 gen region_c= real(substr(pIDENT,1,2))
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -362,7 +362,7 @@ replace condocup_ci=1 if  p12_T50 == 1  | p13_T50==1 | p14_T50==1 | p15_T501==1
 replace condocup_ci=2 if condocup_ci!=1 & (p12_T50 == 2 | p16_T50==1 | (p18_T50==1 | p18_T50==3)) & p23_T50==1
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2 & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -382,14 +382,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -459,7 +459,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 *categoinac_ci**
 ***************
 gen categoinac_ci=. 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos"
 label value categoinac_ci categoinac_ci
 /*Y.L. en la ECH No se puede clasificar a todos los inactivos.
@@ -518,7 +518,7 @@ gen promhora1=real(p39_T621) if emp_ci==1
 replace promhora1=98 if p39_T621=="98" /*acotado*/
 replace promhora1=. if p39_T621=="99"
 
-/*dan cosas extrañas xq trabaja el promedio, dejo lo mas cercano al DANE*/
+/*dan cosas extraÃ±as xq trabaja el promedio, dejo lo mas cercano al DANE*/
 egen tothoras=rowtotal (promhora promhora1)
 replace tothoras=. if promhora==. & promhora1==. 
 replace tothoras=. if tothoras>=168
@@ -916,8 +916,8 @@ replace yedc=8  if yedc1==408
 replace yedc=9  if yedc1==409 
 replace yedc=10 if yedc1==410
 replace yedc=11 if yedc1==411 | yedc1==500 
-replace yedc=12 if yedc1==412 /* Y.L -> 12 años de educacion secundaria "son muy pocos"*/
-replace yedc=12 if yedc1==413 /* Y.L -> 13 años de educacion secundaria "son muy pocos"*/
+replace yedc=12 if yedc1==412 /* Y.L -> 12 aÃ±os de educacion secundaria "son muy pocos"*/
+replace yedc=12 if yedc1==413 /* Y.L -> 13 aÃ±os de educacion secundaria "son muy pocos"*/
 
 *** superior o universitario  *** 
 replace yedc=12 if yedc1==501
@@ -1009,14 +1009,14 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-*Y.L - > Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L - > Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduui_ci=(aedu_ci>11 & aedu_ci<16)
 label variable eduui_ci "Superior incompleto"
 
 ***************
 ***eduuc_ci****
 ***************
-*Y.L. -> Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L. -> Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduuc_ci= (aedu_ci>=16 & aedu_ci!=.)
 label variable eduuc_ci "Superior completo"
 
@@ -1130,9 +1130,9 @@ replace des1_ch=0 if p2_T01=="6"
 replace des1_ch=1 if p2_T01=="1"|p2_T01=="2"
 replace des1_ch=2 if p2_T01=="3" | p2_T01=="4"
 replace des1_ch=3 if p2_T01=="5"
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 ****************
@@ -1168,8 +1168,8 @@ replace resid_ch=1 if basura==3
 replace resid_ch=2 if basura==2 | basura==1 
 drop basura
 
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -1275,8 +1275,8 @@ gen ylnmotros_ci=.
 gen tcylmpri_ch=.
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

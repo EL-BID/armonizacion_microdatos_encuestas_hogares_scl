@@ -1,17 +1,17 @@
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENAHO
@@ -27,13 +27,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Per˙
+Pa√≠s: Per√∫
 Encuesta: ENAHO
 Round: a
-Autores: Mayra S·enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
-GeneraciÛn nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-⁄ltima versiÛn: Yessenia Loayza - Email: desloay@hotmail.com
-Fecha ˙ltima modificaciÛn: agosto 2013
+Autores: Mayra S√°enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Generaci√≥n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+√öltima versi√≥n: Yessenia Loayza - Email: desloay@hotmail.com
+Fecha √∫ltima modificaci√≥n: agosto 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -69,7 +69,7 @@ label define region_c ///
 19"Pasco"	          ///
 20"Piura"	          ///
 21"Puno"	          ///
-22"San MartÌn"	      ///
+22"San Mart√≠n"	      ///
 23"Tacna"	          ///
 24"Tumbes"	          ///
 25"Ucayali"	
@@ -77,11 +77,11 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento"
 
 ************************
-*** region seg˙n BID ***
+*** region seg√∫n BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -119,7 +119,7 @@ label variable idp_ci "ID de la persona en el hogar"
 /*
 estrato:
 
-¡rea Urbana:	
+√Årea Urbana:	
 	1	mayor de 100,000 viviendas
 	2	de 20,001 a 100,000 viviendas
 	3	de 10,001 a 20,000 viviendas
@@ -128,8 +128,8 @@ estrato:
 
 Area Rural:	 
 	6	menos de 401 viviendas
-	7	¡rea de empadronamiento rural	-	aer	compuesto
-	8	¡rea de empadronamiento rural	-	aer	simple
+	7	√Årea de empadronamiento rural	-	aer	compuesto
+	8	√Årea de empadronamiento rural	-	aer	simple
 */
 
 
@@ -199,10 +199,10 @@ label value relacion_ci relacion_ci
 ***raza_ci***
 *************
 
-/* SÛlo se pregunta al jefe y a su cÛnyuge
-øPOR SUS ANTEPASADOS Y DE ACUERDO A SUS
+/* S√≥lo se pregunta al jefe y a su c√≥nyuge
+¬øPOR SUS ANTEPASADOS Y DE ACUERDO A SUS
 COSTUMBRES UD. SE CONSIDERA:
-IndÌgena de la AmazonÌa? .............................1
+Ind√≠gena de la Amazon√≠a? .............................1
 De Origen Quechua? .....................................2
 De Origen Aymara? .......................................3
 De Origen Negro / Mulato / Zambo?..............4
@@ -219,12 +219,12 @@ bys idh_ch: egen razjef1 = max(razjef)
 replace raza_ci=razjef1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop razjef razjef1
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" */
 
-*ModificaciÛn Mayra S·enz 10/20/2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+*Modificaci√≥n Mayra S√°enz 10/20/2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 
 gen raza_ci=.
 replace raza_ci= 1 if  p46 == 1 |  p46 == 2 |  p46 ==3 | p47 ==1 |  p47 == 2 |  p47 ==3 
@@ -234,7 +234,7 @@ bys idh_ch: egen razjef1 = max(razjef)
 replace raza_ci=razjef1 if (raza_ci ==. & (p203 ==3 | p203==5))  
 replace raza_ci=3 if raza_ci==. 
 drop razjef razjef1
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -243,7 +243,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1 
-label define id_ind_ci 1 "IndÌgena" 0 "Otros" 
+label define id_ind_ci 1 "Ind√≠gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -422,7 +422,7 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta secciÛn es para los residentes habituales del hogar mayores a 14 aÒos */ 
+/* Esta secci√≥n es para los residentes habituales del hogar mayores a 14 a√±os */ 
 
 ****************
 ****condocup_ci*
@@ -454,7 +454,7 @@ gen tipopen_ci=.
 *** instcot_ci *****
 ********************
 gen instcot_ci=. /*La variable */
-label var instcot_ci "instituciÛn a la cual cotiza"
+label var instcot_ci "instituci√≥n a la cual cotiza"
 
 ****************
 *cotizando_ci***
@@ -481,13 +481,13 @@ gen tamemp_ci=p512b
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
 gen tamemp_ci=1 if p512b>=1 &  p512b<=5 
-label var  tamemp_ci "TamaÒo de Empresa" 
+label var  tamemp_ci "Tama√±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if p512b>=6 &  p512b<=50
 *Empresas grandes
 replace tamemp_ci=3 if p512b>=51 &  p512b<=9998
-label define tamaÒo 1"PequeÒa" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaÒo
+label define tama√±o 1"Peque√±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tama√±o
 
 
 ****************
@@ -497,8 +497,8 @@ gen categoinac_ci =1 if (p546==6 & condocup_ci==3)
 replace categoinac_ci = 2 if  (p546==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (p546==5 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "CategorÌa de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÈsticos" 4 "Otros"
+label var categoinac_ci "Categor√≠a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom√©sticos" 4 "Otros"
 label value categoinac_ci categoinac_ci
 
 
@@ -531,7 +531,7 @@ replace ypen_ci=. if pjub==. & pviudz==.
 label var ypen_ci "Valor de la pension contributiva"
 
 
-/**ModificaciÛn Mayra S·enz- Julio 2015: Se reemplazan por variables originales
+/**Modificaci√≥n Mayra S√°enz- Julio 2015: Se reemplazan por variables originales
 * 2004-2014:
 gen     ypen_ci = 0
 replace ypen_ci = d556t1/3 if pension_ci==1
@@ -588,7 +588,7 @@ gen lpe_ci =linpe
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -677,7 +677,7 @@ replace tiempoparc_ci=. if emp_ci==0
 ******************
 ***categopri_ci***
 ******************
-* 10/20/2015 MGD: se aÒade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se a√±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categopri_ci=.
 replace categopri_ci=0 if p507==7
@@ -686,7 +686,7 @@ replace categopri_ci=2 if p507==2
 replace categopri_ci=3 if p507==3 | p507==4 | p507==6 
 replace categopri_ci=4 if p507==5 /*| p507==7*/
 
-label define categopri_ci 0 "Otra clasificaciÛn" 1"Patron" 2"Cuenta propia" 
+label define categopri_ci 0 "Otra clasificaci√≥n" 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4" No remunerado", add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
@@ -703,7 +703,7 @@ replace categosec_ci=2 if p517==2
 replace categosec_ci=3 if p517==3 | p517==4 | p517==6
 replace categosec_ci=4 if p517==5 /*| p517==7*/
 
-label define categosec_ci 0 "Otra clasificaciÛn" 1"Patron" 2"Cuenta propia" 
+label define categosec_ci 0 "Otra clasificaci√≥n" 1"Patron" 2"Cuenta propia" 
 label define categosec_ci 3"Empleado" 4 "No remunerado" , add
 label value categosec_ci categosec_ci
 label variable categosec_ci "Categoria ocupacional trabajo secundario"
@@ -804,7 +804,7 @@ replace antiguedad_ci=anios_ant+meses_ant/12
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Mayra S√°enz- Julio 2015: En este quietly se encuentra la generaci√≥n de ingresos anterior.
+*Mayra S√É¬°enz- Julio 2015: En este quietly se encuentra la generaci√É¬≥n de ingresos anterior.
 /*
 quietly {
 ***************
@@ -822,8 +822,8 @@ replace ypridbd=. 		if p524e1==999999
 
 replace ypridbd=0 if categopri_ci==4 
 /* A los trabajadores no remunerados que trabajan menos de 15 horas la encuesta no les
-pregunta acerca de sus ingresos y los manda a la secciÛn de desempleo. Como este grupo en
-realidad est· trabajando, reemplazo su ingreso missing por cero*/
+pregunta acerca de sus ingresos y los manda a la secci√≥n de desempleo. Como este grupo en
+realidad est√° trabajando, reemplazo su ingreso missing por cero*/
 
 replace ypridbd=. if categopri_ci<=2
 
@@ -1068,7 +1068,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde alg˙n miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde alg√∫n miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1152,7 +1152,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
 */
 *==================================================================================================================================================================*
-* Mayra S√°enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estad√≠stica del pa√≠s, de acuerdo a sintaxis elaborada por Marcos Robles.
+* Mayra S√É¬°enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estad√É¬≠stica del pa√É¬≠s, de acuerdo a sintaxis elaborada por Marcos Robles.
 *==================================================================================================================================================================*
 *** Las variables son las mismas para 2004-2014 
 
@@ -1298,7 +1298,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde alg˙n miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde alg√∫n miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1363,7 +1363,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 *gen rentaimp_ch=p106
 *replace rentaimp=. if p106==99999
 
-*Modificaci√≥n Mayra S√°enz - Julio 2015
+*Modificaci√É¬≥n Mayra S√É¬°enz - Julio 2015
 gen rentaimp_ch= vivialqimp
 
 
@@ -1391,20 +1391,20 @@ replace p301b=. if p301b==99
 replace p301c=. if p301c==99
 
 /*Nota Importante del Manual de diligenciamiento de la ENAHO:
-Si para el nivel primario (cÛdigo 3 Û 4) el informante responde en grados, anote la informaciÛn en
-el recuadro GRADO y en el recuadro A—O trace una diagonal y viceversa. Tenga en cuenta la
-edad del informante, es decir a las personas menores de 35 aÒos considÈrelos en grados .*/
+Si para el nivel primario (c√≥digo 3 √≥ 4) el informante responde en grados, anote la informaci√≥n en
+el recuadro GRADO y en el recuadro A√ëO trace una diagonal y viceversa. Tenga en cuenta la
+edad del informante, es decir a las personas menores de 35 a√±os consid√©relos en grados .*/
 
 
-*Los q responden con antiguo sistema de prima(p301b): habian cinco aÒos de primaria.
+*Los q responden con antiguo sistema de prima(p301b): habian cinco a√±os de primaria.
 gen byte aedu_ci=.
-replace aedu_ci=0  if p301a==1 | p301a==2 // Sin nivel o educaciÛn inicial o prescolar
+replace aedu_ci=0  if p301a==1 | p301a==2 // Sin nivel o educaci√≥n inicial o prescolar
 replace aedu_ci=1  if p301a==3 & p301b==0
 replace aedu_ci=2  if p301a==3 & p301b==1 
 replace aedu_ci=3  if p301a==3 & p301b==2
 replace aedu_ci=4  if p301a==3 & p301b==3
 replace aedu_ci=5  if p301a==3 & p301b==4
-*Como se responde actual sist prim (p301c): seis aÒos de primaria.
+*Como se responde actual sist prim (p301c): seis a√±os de primaria.
 replace aedu_ci=0  if p301a==3 & p301c==0 & p301b==0
 replace aedu_ci=1  if p301a==3 & p301c==1 & p301b==0
 replace aedu_ci=2  if p301a==3 & p301c==2 & p301b==0
@@ -1542,7 +1542,7 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iv·n Bornacelly - 01/23/2017
+*Agregado por Iv√°n Bornacelly - 01/23/2017
 	g asispre_ci=.
 	replace asispre_ci=1 if p307==1 & p308a==1 & p208a>=4
 	recode asispre_ci (.=0)
@@ -1570,7 +1570,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***pqnoasis_ci***
 **************
 
-*Modificado Mayra S·enz - Junio 2016- antes se generaba como missing
+*Modificado Mayra S√°enz - Junio 2016- antes se generaba como missing
 
 gen pqnoasis_ci=p313a
 
@@ -1581,7 +1581,7 @@ label define pqnoasis_ci 5 "No interesa" 6 "Edad insuficiente" , add
 label define pqnoasis_ci 7 "Enfermedad" 8 "Prob economicos", add
 label define pqnoasis_ci 9 "Prob familiares" 10 "Bajas notas", add
 label define pqnoasis_ci 11 "Quehaceres domesticos" 12 "superiores/asiste a academia pre-univer", add
-label define pqnoasis_ci 13 "Lo que se enseÒa no sirve" 14 "Otra razon", add
+label define pqnoasis_ci 13 "Lo que se ense√±a no sirve" 14 "Otra razon", add
 label value pqnoasis_ci pqnoasis_ci
 
 **************
@@ -1599,7 +1599,7 @@ replace pqnoasis1_ci = 7 if p313==6
 replace pqnoasis1_ci = 8 if p313==3 | p313==4
 replace pqnoasis1_ci = 9 if p313==1 | p313==10 | p313==13 | p313==14
 
-label define pqnoasis1_ci 1 "Problemas econÛmicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÈs" 5	"Quehaceres domÈsticos/embarazo/cuidado de niÒos/as" 6 "TerminÛ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econ√≥micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de inter√©s" 5	"Quehaceres dom√©sticos/embarazo/cuidado de ni√±os/as" 6 "Termin√≥ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1725,7 +1725,7 @@ gen vivialq_ch=p105b if viviprop_ch==0
 *gen vivialqimp_ch=p106
 *replace vivialqimp_ch=. if p106==99999
 
-*ModificaciÛn Mayra S·enz - Julio 2015
+*Modificaci√≥n Mayra S√°enz - Julio 2015
 gen vivialqimp_ch= vivialqimp
 
 gen refrig_ch=(p61212==1)
@@ -1733,15 +1733,15 @@ gen auto_ch =(p61217==1)
 gen compu_ch=(p6127==1)
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1759,7 +1759,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
-para an√°lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para an√É¬°lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 clonevar codocupa = p505 
 clonevar codindustria = p506
 

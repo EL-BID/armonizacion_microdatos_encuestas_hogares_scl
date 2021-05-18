@@ -1,5 +1,5 @@
 		*************************************************************
-		***PROGRAMA PARA PEGAR LOS MÓDULOS DE LA ENFT OCTUBRE 202004***
+		***PROGRAMA PARA PEGAR LOS MÃ“DULOS DE LA ENFT OCTUBRE 202004***
 		*************************************************************
 *Elaborado por: Yessenia Loayza - july 2012
 
@@ -7,7 +7,7 @@
 
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -25,7 +25,7 @@ log using "`log_file'", replace
 *Abril, 2013
 
 		***************************************
-		*CONFORMACIÓN BASE ÚNICA HONDURAS 2010*
+		*CONFORMACIÃ“N BASE ÃšNICA HONDURAS 2010*
 		***************************************
 *Nota: se armoniza esta base (mayo) hasta que se obtenga la de septiembre
 clear	

@@ -1,15 +1,15 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Uruguay
+PaÃ­s: Uruguay
 Encuesta: ECH
 Round: a
 Autores: 
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 30 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -91,7 +91,7 @@ Also, the orginal data was replaced with the new Mecovi versions
 use `base_in', clear
 
 /***************************************************************************************************************************
- 							Harmonización 01-03
+ 							HarmonizaciÃ³n 01-03
 ****************************************************************************************************************************/
 
 /************************************************************************/
@@ -180,7 +180,7 @@ gen vivitit_ch=.
 gen region_BID_c=.
 replace region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
@@ -198,17 +198,17 @@ label define region_c  1 "Montevideo" ///
            8 "Florida" /// 
            9 "Lavalleja" /// 
           10 "Maldonado" /// 
-          11 "Paysandú" /// 
-          12 "Río Negro" /// 
+          11 "PaysandÃº" /// 
+          12 "RÃ­o Negro" /// 
           13 "Rivera" /// 
           14 "Rocha" /// 
           15 "Salto" /// 
-          16 "San José" /// 
+          16 "San JosÃ©" /// 
           17 "Soriano" /// 
-          18 "Tacuarembó" ///
+          18 "TacuarembÃ³" ///
           19 "Treinta y Tres" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 
 /************************************************************************/
@@ -273,13 +273,13 @@ label variable nempdom_ch "Numero de empleados domesticos"
 gen byte clasehog_ch=0
 **** Unipersonal
 replace clasehog_ch=1 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch==0
-**** Nuclear: conformado por el jefe(a) y cónyuge; jefe(a) e hijos(as); jefe(a), cónyuge e hijos(as).
+**** Nuclear: conformado por el jefe(a) y cÃ³nyuge; jefe(a) e hijos(as); jefe(a), cÃ³nyuge e hijos(as).
 replace clasehog_ch=2 if (nhijos_ch>0| nconyuges_ch>0) & (notropari_ch==0 & notronopari_ch==0)
 **** Ampliado: conformado por un hogar nuclear y al menos otro pariente, o por un jefe(a) y al menos otro pariente.
 replace clasehog_ch=3 if ((clasehog_ch ==2 & notropari_ch>0) & notronopari_ch==0) |(notropari_ch>0 & notronopari_ch==0)  
 **** Compuesto: conformado por un hogar nuclear o ampliado y al menos un integrante sin parentesco.
 replace clasehog_ch= 4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))
-**** Corresidente: Hogar formado por dos o más integrantes sin parentesco con el jefe(a) del hogar.
+**** Corresidente: Hogar formado por dos o mÃ¡s integrantes sin parentesco con el jefe(a) del hogar.
 replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0
 
 label variable clasehog_ch "Tipo de hogar"
@@ -341,7 +341,7 @@ label variable miembros_ci "Miembro del hogar"
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -412,7 +412,7 @@ label var instpen_ci "Institucion a la cual esta afiliado variable original de c
 ********************
 gen instcot_ci=.
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria"
-label var instcot_ci "institución a la cual cotiza por su trabajo"
+label var instcot_ci "instituciÃ³n a la cual cotiza por su trabajo"
 
 *****************
 *tipocontrato_ci*
@@ -427,7 +427,7 @@ label value tipocontrato_ci tipocontrato_ci
 *************
 gen tamemp_ci=f8
 replace tamemp_ci=. if f8==0
-label define tamemp_ci 1"una persona" 2"2-4 personas" 3"5-9 personas" 4 "10-49 personas" 5"50 o más" 6"10-19 personas" 7"20-49 personas"
+label define tamemp_ci 1"una persona" 2"2-4 personas" 3"5-9 personas" 4 "10-49 personas" 5"50 o mÃ¡s" 6"10-19 personas" 7"20-49 personas"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
@@ -539,7 +539,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 drop aux_reg
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -575,7 +575,7 @@ replace ocupa_ci=1 if (f5_2>=211 & f5_2<=348) & emp_ci==1
 replace ocupa_ci=2 if (f5_2>=111 & f5_2<=131) & emp_ci==1
 replace ocupa_ci=3 if (f5_2>=411 & f5_2<=422) & emp_ci==1
 replace ocupa_ci=4 if ((f5_2>=521 & f5_2<=523) | f5_2==911) & emp_ci==1
-replace ocupa_ci=5 if ((f5_2>=511 & f5_2<=516) | (f5_2>=912 & f5_2<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregación a tres digitos de la CIUO-88*/
+replace ocupa_ci=5 if ((f5_2>=511 & f5_2<=516) | (f5_2>=912 & f5_2<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÃ³n a tres digitos de la CIUO-88*/
 replace ocupa_ci=6 if ((f5_2>=611 & f5_2<=616) | f5_2==921) & emp_ci==1
 replace ocupa_ci=7 if ((f5_2>=711 & f5_2<=834) | (f5_2>=931 & f5_2<=933)) & emp_ci==1 /*Incluye artesanos y operarios en hilanderias*/
 replace ocupa_ci=8 if (f5_2==11 | f5_2==12)& emp_ci==1
@@ -646,23 +646,23 @@ replace firmapeq_ci=1 if emp_ci==1 & f8==1|f8==2
 replace firmapeq_ci=0 if emp_ci==1 & f8>2*/
 gen spublico_ci=(emp_ci==1 & f7==2)
 
-*Genera la variable para empresas pequeñas
+*Genera la variable para empresas pequeÃ±as
 *drop tamemp_ci
 gen tamemp_ci=1 if f8==1 | f8==2 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if f8==4 | f8==3
 *Empresas grandes
 replace tamemp_ci=3 if f8==5
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw=factor_ci]
 
 *Genera la variable para clasificar a los inactivos
 *Jubilados y pensionados
 *drop categoinac_ci
 gen categoinac_ci=1 if f40_1==1 | f40_2==1
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if f40_4==1
 *Quehaceres del Hogar
@@ -697,9 +697,9 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 * ylmpri_ci *
 *************
 /*
-SUELDO O JORNALES LÍQUIDOS 	g1_1_1
+SUELDO O JORNALES LÃQUIDOS 	g1_1_1
 COMISIONES, INCENTIVOS, HORAS EXTRAS 	g1_1_2
-VIÁTICOS NO SUJETOS A RENDICIÓN 	g1_1_3
+VIÃTICOS NO SUJETOS A RENDICIÃ“N 	g1_1_3
 PROPINAS 	g1_1_4
 AGUINALDO 	g1_1_5
 SALARIO VACACIONAL 	g1_1_6
@@ -708,7 +708,7 @@ SALARIO VACACIONAL 	g1_1_6
 **Cuenta propia
 RETIRO DE DINERO EL MES PASADO 	g2_1
 	
-DISTRIBUCIÓN DE UTILIDADES EN ULT. 12 MESES 	g2_3
+DISTRIBUCIÃ“N DE UTILIDADES EN ULT. 12 MESES 	g2_3
 
 
 
@@ -719,7 +719,7 @@ gen g2_3m = g2_3/12
 egen ylmpri_ci=rsum(g1_1_1	g1_1_2	g1_1_3	g1_1_4	g1_1_5	g1_1_6 g2_1 g2_3m) if emp_ci==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 
 *****************
 ***nrylmpri_ci***
@@ -739,15 +739,15 @@ MONTO MENSUAL DE RETIRO DE PRODUCTOS 	g2_2	(Autoconsumo)
 	label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"   
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 	***************
 	***ylmsec_ci***
 	***************
 /*
-SUELDO O JORNALES LÍQUIDOS 	g1_2_1	
+SUELDO O JORNALES LÃQUIDOS 	g1_2_1	
 COMISIONES, INCENTIVOS, HORAS EXTRAS 	g1_2_2	
-VIÁTICOS NO SUJETOS A RENDICIÓN 	g1_2_3	
+VIÃTICOS NO SUJETOS A RENDICIÃ“N 	g1_2_3	
 PROPINAS 	g1_2_4	
 AGUINALDO 	g1_2_5	
 SALARIO VACACIONAL 	g1_2_6	
@@ -758,7 +758,7 @@ SALARIO VACACIONAL 	g1_2_6
 	label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 	****************
 	***ylnmsec_ci***
@@ -774,14 +774,14 @@ egen ylnmsec_ci=rsum(g1_2_7 g1_2_8) if emp_ci==1, missing
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 **********************************************************************************************
 ***TCYLMPRI_CH : Identificador de los hogares en donde alguno de los miembros reporta como
 *** top-code el ingreso de la actividad principal. 
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -797,7 +797,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral monetario otros trabajos para todos los aÃ±os
 	
 	******************
 	***ylnmotros_ci***
@@ -806,7 +806,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral no monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃ±os
 	
 	************
 	***ylm_ci***
@@ -816,7 +816,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylm_ci "Ingreso laboral monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no había sido incluido	
+	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no habÃ­a sido incluido	
 	
 	
 	*************
@@ -827,7 +827,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnm_ci "Ingreso laboral NO monetario total" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no había sido incluido
+	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no habÃ­a sido incluido
 	
 	
 	*************
@@ -844,14 +844,14 @@ CONTRIBUCIONES POR DIVORCIO 	g3_6
 AYUDAS FAMILIARES U OTROS HOGARES 	g3_7
 HOGAR CONSTITUIDO 	g3_8
 G4. OTROS INGRESOS	
-ÚLTIMO MES	
+ÃšLTIMO MES	
 POR ALQUILER 	g4_1_1
-ALGÚN OTRO INGRESO CORRIENTE 	g4_1_2
-ÚLTIMOS DOCE MESES 2/	
+ALGÃšN OTRO INGRESO CORRIENTE 	g4_1_2
+ÃšLTIMOS DOCE MESES 2/	
 POR ARRENDAMIENTO DE TERRENOS 	g4_2_1
 INTERESES DE CTAS. BANC. 	g4_2_2
 UTILIDADES, DIVIDENDOS 	g4_2_3
-INDEMNIZACIÓN POR DESPIDO 	g4_2_4
+INDEMNIZACIÃ“N POR DESPIDO 	g4_2_4
 OTRO INGRESO CORRIENTE 	g4_2_5
 INGRESO EXTRAORDINARIOS (JUEGOS DE AZAR, ETC) 	g4_2_6
 G5. INGRESOS DEL EXTERIOR	
@@ -863,7 +863,7 @@ AYUDAS FAMILIARES U OTROS HOGARES 	g5_6
 ARRENDAMIENTOS DE TIERRAS O TERRENOS 	g5_7
 ALQUILER DE CASAS 	g5_8
 INTERESES PROVENIENTES DE CUENTAS BANC. 	g5_9
-INTERESES PROVENIENTES DE PRÉSTAMOS 	g5_10
+INTERESES PROVENIENTES DE PRÃ‰STAMOS 	g5_10
 UTILIDADES O DIVIDENDOS DE NEGOCIOS 	g5_11
               
 */
@@ -900,7 +900,7 @@ label var ynlm_ci "Ingreso no laboral monetario"
 	by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 	replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 	replace nrylmpri_ch=. if nrylmpri_ch==.
-	label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+	label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 	************
 	***ylm_ch***
@@ -1066,7 +1066,7 @@ replace aedu_ci= e11_2        if prim==1 & e11_2<=6
 replace aedu_ci= e11_3 + 6    if secu==1 & e11_3<=6
 *replace aedu_ci= e11_4 + 12   if tecn==1 & e11_4_1==1 & e11_4<=6
 replace aedu_ci= e11_5 + 12   if mag==1  & e11_5<9
-replace aedu_ci= e11_6 + 12   if univ==1 & (e11_6>e11_5) & (e11_6<9) /* se toma los años de mag o univ no la suma de los dos */
+replace aedu_ci= e11_6 + 12   if univ==1 & (e11_6>e11_5) & (e11_6<9) /* se toma los aÃ±os de mag o univ no la suma de los dos */
 replace aedu_ci=0             if aedu_ci==. & (edad>=5 & edad!=.)
 drop prim secu tecn mag univ
 
@@ -1212,15 +1212,15 @@ gen tecnica_ci=.
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

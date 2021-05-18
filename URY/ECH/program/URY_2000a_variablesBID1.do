@@ -1,15 +1,15 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -28,12 +28,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Uruguay
+PaÃ­s: Uruguay
 Encuesta: ECH
 Round: a
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 30 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -76,7 +76,7 @@ Also, the orginal data was replaced with the new Mecovi versions
 
 use `base_in', clear
 /***************************************************************************************************************************
- 							Harmonización 1999-2000
+ 							HarmonizaciÃ³n 1999-2000
 ****************************************************************************************************************************/
 
 /************************************************************************/
@@ -107,7 +107,7 @@ label values relacion_ci relacion_ci
 gen region_BID_c=.
 replace region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
@@ -125,17 +125,17 @@ label define region_c  1 "Montevideo" ///
            8 "Florida" /// 
            9 "Lavalleja" /// 
           10 "Maldonado" /// 
-          11 "Paysandú" /// 
-          12 "Río Negro" /// 
+          11 "PaysandÃº" /// 
+          12 "RÃ­o Negro" /// 
           13 "Rivera" /// 
           14 "Rocha" /// 
           15 "Salto" /// 
-          16 "San José" /// 
+          16 "San JosÃ©" /// 
           17 "Soriano" /// 
-          18 "Tacuarembó" ///
+          18 "TacuarembÃ³" ///
           19 "Treinta y Tres" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 /************************************************************************/
 /*			VARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
@@ -229,7 +229,7 @@ by idh_ch: egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -281,7 +281,7 @@ label var instpen_ci "Institucion a la cual esta afiliado variable original de c
 ********************
 gen instcot_ci=.
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria"
-label var instcot_ci "institución a la cual cotiza por su trabajo"
+label var instcot_ci "instituciÃ³n a la cual cotiza por su trabajo"
 
 *****************
 *tipocontrato_ci*
@@ -295,7 +295,7 @@ label value tipocontrato_ci tipocontrato_ci
 *tamemp_ci***
 *************
 gen tamemp_ci=pf081
-label define tamemp_ci 1"menos de 10 personas" 2"más de 10 personas"
+label define tamemp_ci 1"menos de 10 personas" 2"mÃ¡s de 10 personas"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
@@ -352,13 +352,13 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *lp25_ci***
 *********
 gen lp25_ci=717.4257
-label var lp25_ci "Linea de pobreza 2.5 dólares, año base 2005"
+label var lp25_ci "Linea de pobreza 2.5 dÃ³lares, aÃ±o base 2005"
 
 *********
 *lp4_ci***
 *********
 gen lp4_ci=1147.881
-label var lp4_ci "Linea de pobreza 4 dólares, año base 2005"
+label var lp4_ci "Linea de pobreza 4 dÃ³lares, aÃ±o base 2005"
 
 *************
 **salmm_ci***
@@ -396,7 +396,7 @@ replace ocupa_ci=1 if (x>=211 & x<=348) & emp_ci==1
 replace ocupa_ci=2 if (x>=111 & x<=145) & emp_ci==1
 replace ocupa_ci=3 if (x>=411 & x<=433) & emp_ci==1
 replace ocupa_ci=4 if ((x>=521 & x<=599) | x==911) & emp_ci==1
-replace ocupa_ci=5 if ((x>=511 & x<=516) | (x>=912 & x<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregación a tres digitos de la CIUO-88*/
+replace ocupa_ci=5 if ((x>=511 & x<=516) | (x>=912 & x<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÃ³n a tres digitos de la CIUO-88*/
 replace ocupa_ci=6 if ((x>=601 & x<=640) | x==921 | x==923) & emp_ci==1
 replace ocupa_ci=7 if ((x>=711 & x<=890) | (x>=931 & x<=933)) & emp_ci==1 /*Incluye artesanos y operarios en hilanderias*/
 replace ocupa_ci=8 if (x==11 | x==12)& emp_ci==1
@@ -554,23 +554,23 @@ replace firmapeq_ci=1 if emp_ci==1 & pf081==1 & pf082>=1 & pf082<=5
 replace firmapeq_ci=0 if emp_ci==1 & (pf081==1 & pf082>5)|pf081==2*/
 gen spublico_ci=(emp_ci==1 & pf41==2)
 
-*Genera la variable para empresas pequeñas
+*Genera la variable para empresas pequeÃ±as
 *drop tamemp_ci
 gen tamemp_ci=1 if pf082==1 | pf082==2 | pf082==3 | pf082==4 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if pf082==6 | pf082==7 | pf082==8 | pf082==9 | pf082==5
 *Empresas grandes
 replace tamemp_ci=3 if pf081==2
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw=factor_ci]
 
 *Genera la variable para clasificar a los inactivos
 *Jubilados y pensionados
 *drop categoinac_ci
 gen categoinac_ci=1 if pf3111==1 | pf3112==1
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if pf313==1
 *Quehaceres del Hogar
@@ -739,7 +739,7 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 
 /*
 *********************************************************************************************
-**Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+**VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 qui sum factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///

@@ -47,8 +47,8 @@ este rubro se ubicó en transferencias privadas, al igual que las incapacidades 
  *************************************************************************/
 	
 *Directorios:
-	global RAW    "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\CRI\ENIGH\RAW"
-	global data_arm  "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\CRI\ENIGH\data_arm"
+	global RAW    "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\CRI\ENIGH\RAW"
+	global data_arm  "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\CRI\ENIGH\data_arm"
 
 	
 /*	____________________________________________________________________________

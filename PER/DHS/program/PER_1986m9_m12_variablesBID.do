@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *______________________________________________________________________________________________________*
 
 	 * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la 
 	 *posibilidad de utilizar un loop)
-	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
-	 * Se tiene acceso al servidor únicamente al interior del BID.
+	 * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+	 * Se tiene acceso al servidor Ãºnicamente al interior del BID.
 	 * El servidor contiene las bases de datos MECOVI.
-	 * Las DHS son encuestas cuya población objetivo son las madres de 15-49 años y sus respectivos hijos.
+	 * Las DHS son encuestas cuya poblaciÃ³n objetivo son las madres de 15-49 aÃ±os y sus respectivos hijos.
 *______________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA DHS
@@ -30,13 +30,13 @@ log using "`log_file'", replace
                         
 /*______________________________________________________________________________________________________*
 						 BASES DE DATOS DE ENCUESTAS DE SALUD - SOCIOMETRO 
-	País: Perú
+	PaÃ­s: PerÃº
 	Encuesta: DHS
 	Round: m9_m12
-	Versiones anteriores: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+	Versiones anteriores: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
 						  Marcela Rubio E-mail: marcelarubio28@gmail.com - mrubio@IADB.ORG
-	Última versión: Mayra Sáenz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
-	Fecha última modificación: Marzo 16, 2015
+	Ãšltima versiÃ³n: Mayra SÃ¡enz   E-mail: saenzmayra.a@gmail.com - mayras@iadb.org		
+	Fecha Ãºltima modificaciÃ³n: Marzo 16, 2015
 									SCL - IADB*/
 *______________________________________________________________________________________________________*
 
@@ -45,22 +45,22 @@ use `base_in', clear
 
 
 	*____________________________________________________*
-	*        Variables de identificación                 *
+	*        Variables de identificaciÃ³n                 *
 	*____________________________________________________*
 	
 	
-	*Region según BID
+	*Region segÃºn BID
 	gen region_BID_c=3 
 	label var region_BID_c "Regiones BID"
-	label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+	label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 	label value region_BID_c region_BID_c
 	
 	
 	*Region
-	*v101  sólo tiene 4 regiones, en el resto de años tiene 13, por lo que genero como missing sdistrit
+	*v101  sÃ³lo tiene 4 regiones, en el resto de aÃ±os tiene 13, por lo que genero como missing sdistrit
 	g region_c   = .
 	label value region_c region_c
-    label var region_c "DPA de cada País"
+    label var region_c "DPA de cada PaÃ­s"
 	
 	
 	*Para identificar si vive en Lima Capital - Tomo la variable de facto place of residence
@@ -68,19 +68,19 @@ use `base_in', clear
 	label var capital_c "Personas que viven en Lima"
 
 	
-	* Número de conglomerado
+	* NÃºmero de conglomerado
 	g conglomerado_c  = v001
-	label var conglomerado_c "Número de conglomerado"	
+	label var conglomerado_c "NÃºmero de conglomerado"	
 	
 
-	*País 
+	*PaÃ­s 
 	g pais_c   = "PER"
 	label var pais_c "Nombre del pais"
 	
 	
 	*Anio de la encuesta
 	g anio_c   = v007
-	label var anio_c "Año de la Encuesta"
+	label var anio_c "AÃ±o de la Encuesta"
 	
 	
 	*Factor de Expansion a nivel individual
@@ -102,23 +102,23 @@ use `base_in', clear
 
 	
 	*________________________________________________________________*
-	*        Características del niño                                *
+	*        CaracterÃ­sticas del niÃ±o                                *
 	*________________________________________________________________*
 	
-	*Año de nacimiento del niño
+	*AÃ±o de nacimiento del niÃ±o
 	g anacimaux = int((b3-1)/12)
 	replace anacimaux = anacimaux+1900 
 	g anacim_ni = b2+1900
 	replace anacim_ni = anacimaux if anacim_ni ==.
-	label var anacim_ni "Año de nacimiento del niño"
+	label var anacim_ni "AÃ±o de nacimiento del niÃ±o"
 	
 	
-	*Mes de nacimiento del niño
+	*Mes de nacimiento del niÃ±o
 	g mnacim_ni = (b3-((anacimaux-1900)*12))
-	label var mnacim_ni "Mes de nacimiento del niño"
+	label var mnacim_ni "Mes de nacimiento del niÃ±o"
 	
 	
-	*Edad del niño en meses
+	*Edad del niÃ±o en meses
 	
 	g yinterv = int((v008-1)/12)
 	g minterv = (v008-(yinterv*12))
@@ -126,26 +126,26 @@ use `base_in', clear
 	g ageanios = yinterv-anacim_ni
 	g agemes= minterv-mnacim_ni
 	g edadm_ni  = (ageanios*12)+agemes  
-	label var edadm_ni "Edad del niño en meses"
+	label var edadm_ni "Edad del niÃ±o en meses"
 	
 	
-	*Edad del niño en años
+	*Edad del niÃ±o en aÃ±os
 	g edada_ni = b8
-	label var edada_ni "Edad del niño en años"
+	label var edada_ni "Edad del niÃ±o en aÃ±os"
 	
 	
-	*Sexo del niño
+	*Sexo del niÃ±o
 	g sexo_ni     = b4
 	label define sexo_ni 1 "Masculino" 2 "Femenino"
 	label value  sexo_ni sexo_ni
-	label var sexo_ni "Sexo del niño"
+	label var sexo_ni "Sexo del niÃ±o"
 	
 	
 	*Gemelo
 	g gemelo_ni  = b0>=1 & b0<=3
 	label define gemelo_ni 1 "Si" 0 "No"
 	label value  gemelo_ni gemelo_ni 
-	label var gemelo_ni "El niño es gemelo =1"
+	label var gemelo_ni "El niÃ±o es gemelo =1"
 	
 	
 	*Orden de nacimiento de los hijos
@@ -153,62 +153,62 @@ use `base_in', clear
 	label var ordnacim_ni "Orden de nacimiento de los hijos"
 	
 	
-	*Número de hermanos del niño
+	*NÃºmero de hermanos del niÃ±o
 	sort anio_c caseid -ordnacim_ni
 	g nherma_ni = v201 - 1
-	label var nherma_ni "Número de hermanos del niño"
+	label var nherma_ni "NÃºmero de hermanos del niÃ±o"
 	
 	
-	*El niño está vivo 1=Sí
+	*El niÃ±o estÃ¡ vivo 1=SÃ­
 	g vivo_ni = b5
 	label define vivo_ni 1 "Si" 0 "No"
 	label value vivo_ni vivo_ni 
-	label var vivo_ni "El niño está vivo 1=Sí"
+	label var vivo_ni "El niÃ±o estÃ¡ vivo 1=SÃ­"
 	
 	
-	*Diferencia de edad (años) con los hermanos mayores
+	*Diferencia de edad (aÃ±os) con los hermanos mayores
 	sort id_ma -ordnacim_ni
 	bys id_ma: g difedada_ni = ((anacim_ni[_n+1] - anacim_ni)*-1)*12
-	label var difedada_ni "Diferencia sólo de años de edad (sin considerar meses) con los hermanos mayores" 
+	label var difedada_ni "Diferencia sÃ³lo de aÃ±os de edad (sin considerar meses) con los hermanos mayores" 
 	
 	
 	*Diferencia de edad (meses) con los hermanos mayores
 	bys id_ma: g difedadm_ni = (mnacim_ni[_n+1] - mnacim_ni)*-1
-	label var difedadm_ni "Diferencia sólo de los meses de edad (sin considerar años) con los hermanos mayores" 
+	label var difedadm_ni "Diferencia sÃ³lo de los meses de edad (sin considerar aÃ±os) con los hermanos mayores" 
 	
 	
-	*Diferencia de edad total (años y meses) con los hermanos mayores
+	*Diferencia de edad total (aÃ±os y meses) con los hermanos mayores
 	g difedad_ni =difedada_ni+difedadm_ni
 	replace difedad_ni =0 if ordnacim_ni ==1
-	label var difedad_ni "Diferencia de edad (suma años y meses) con los hermanos mayores" 
+	label var difedad_ni "Diferencia de edad (suma aÃ±os y meses) con los hermanos mayores" 
 	
 		
-	*Edad del niño al morir (meses)
+	*Edad del niÃ±o al morir (meses)
 	g edadalmorm_ni =b7
-	label var edadalmorm_ni "Edad del niño al morir (meses)"
+	label var edadalmorm_ni "Edad del niÃ±o al morir (meses)"
 	
 	
-	*Edad del niño al morir (días, meses, años)
+	*Edad del niÃ±o al morir (dÃ­as, meses, aÃ±os)
 	g edadalmord_ni =b6
 	replace edadalmord_ni= . if b6 >=997
-    label var edadalmord_ni "Edad del niño al morir (días(1), meses(2), años(3))"
+    label var edadalmord_ni "Edad del niÃ±o al morir (dÃ­as(1), meses(2), aÃ±os(3))"
 	
 	
-	*Diferencia entre año de la encuesta y año de nacimiento del niño
+	*Diferencia entre aÃ±o de la encuesta y aÃ±o de nacimiento del niÃ±o
 	g difencnacim_ni = anio_c - anacim_ni
-	label var difencnacim_ni "Diferencia entre año de la encuesta y año de nacimiento del niño"
+	label var difencnacim_ni "Diferencia entre aÃ±o de la encuesta y aÃ±o de nacimiento del niÃ±o"
 	
 	
 	*________________________________________________________________*
-	*        Características de la madre                             *
+	*        CaracterÃ­sticas de la madre                             *
 	*________________________________________________________________*
 	
 	
-	*Autoidentificación etnica del individuo
+	*AutoidentificaciÃ³n etnica del individuo
 	g raza_ma = . //No hay observaciones para ethnicity
-	label define raza_ma 1 "Indígena" 0 "No Indígena"
+	label define raza_ma 1 "IndÃ­gena" 0 "No IndÃ­gena"
 	label value raza_ma raza_ma
-	label var raza_ma "Autoidentificación etnica de la madre"
+	label var raza_ma "AutoidentificaciÃ³n etnica de la madre"
 
 	
 	*Mes de nacimiento de la madre 
@@ -216,9 +216,9 @@ use `base_in', clear
 	label var mnacim_ma "Mes de nacimiento de la madre" 
 	
 	
-	*Año de nacimiento de la madre
+	*AÃ±o de nacimiento de la madre
 	g anacim_ma = v010+1900
-	label var anacim_ma "Año de nacimiento de la madre" 
+	label var anacim_ma "AÃ±o de nacimiento de la madre" 
 	
 	
 	*Edad de la madre al momento de la encuesta
@@ -233,7 +233,7 @@ use `base_in', clear
 	label var edadparto_ma "Edad de la madre al momento del parto"
 
 	
-	*Años de escolaridad de la madre
+	*AÃ±os de escolaridad de la madre
 	*Para las bases de 1986,1991,1996 se requiere generar esta variable.
 	g aedu_ma = .
 	replace aedu_ma = 0  if v106 ==0
@@ -253,25 +253,25 @@ use `base_in', clear
 	replace aedu_ma = 14 if v106 ==3 & v107 ==3
 	replace aedu_ma = 15 if v106 ==3 & v107 ==4
 	replace aedu_ma = 16 if v106 ==3 & v107 >=5
-	label var aedu_ma "Años de escolaridad de la madre"
+	label var aedu_ma "AÃ±os de escolaridad de la madre"
 	
 	
-	*Nivel de educación de la madre
+	*Nivel de educaciÃ³n de la madre
 	g       nivedu_ma =.
 	replace nivedu_ma = 1 if v106==0 | ((v107>=1 & v107<5) & v106==1)
 	replace nivedu_ma = 2 if (v107>=5 & v106==1)
 	replace nivedu_ma = 3 if ((v107>=1 & v107<=4) & v106==2)
 	replace nivedu_ma = 4 if (v107>=5 & v106==2) 
 	replace nivedu_ma = 5 if ((v107>=1) & v106==3) 
-	label define nivedu_ma 1 "Primaria incompleta o menos" 2 "Primaria completa" 3 "Secundaria incompleta" 4 "Secundaria completa" 5 "Más de secundaria completa"
+	label define nivedu_ma 1 "Primaria incompleta o menos" 2 "Primaria completa" 3 "Secundaria incompleta" 4 "Secundaria completa" 5 "MÃ¡s de secundaria completa"
 	label value nivedu_ma nivedu_ma
-	label var nivedu_ma "Nivel de educación de la madre"
+	label var nivedu_ma "Nivel de educaciÃ³n de la madre"
 	
 
 
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas
 /*_____________________________________________________________________________________________________*/
 
 drop anacimaux aux1 aux2 yinterv minterv ageanios agemes

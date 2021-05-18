@@ -11,7 +11,7 @@ set more off
 
 ** Declare Global Directory **
 
-global dir = "C:\Users\wb377246\Documents\Julian\LM_W\BRA\Data"
+global dir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W\BRA\Data"
 
 
 /* Loop # 1 to use all the complete information. All 12 months of information*/

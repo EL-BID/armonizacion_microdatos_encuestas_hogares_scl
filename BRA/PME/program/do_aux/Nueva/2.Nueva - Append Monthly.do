@@ -11,7 +11,7 @@ set more off
 *set trace on
 
 **Note: this local should be change by the user
-local propiodir = "C:\Users\wb377246\Documents\Julian\LM_W"
+local propiodir = "${surveysFolder}\Users\wb377246\Documents\Julian\LM_W"
 
 *** Declare Global Directory
 global dir	  = "`propiodir'\BRA\Data"

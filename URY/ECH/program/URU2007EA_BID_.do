@@ -4,11 +4,11 @@ set more off
 
 capture log close
 
-use "X:\ARM\URU\ECH\2007\Van_data\ury07.dta", clear
+use "${surveysFolder}\ARM\URU\ECH\2007\Van_data\ury07.dta", clear
 
 
 /***************************************************************************************************************************
- 							armonizaciÛn 2007
+ 							armonizaci√≥n 2007
 ****************************************************************************************************************************/
 
 /************************************************************************/
@@ -28,19 +28,19 @@ gen mes_c=.
 /*
 e32
 1	Jefe
-2	Esposo o compaÒero
+2	Esposo o compa√±ero
 3	Hijo de ambos
-4	Hijo sÛlo del jefe
-5	Hijo sÛlo del cÛnyuge
+4	Hijo s√≥lo del jefe
+5	Hijo s√≥lo del c√≥nyuge
 6	Yerno o nuera
 7	Padre
 8	Suegro
 9	Hermano
-10	CuÒado
+10	Cu√±ado
 11	Nieto
 12	Otro pariente
 13	Otro no pariente
-14	Servicio domÈstico o familiar del mismo
+14	Servicio dom√©stico o familiar del mismo
 */
 
 gen relacion_ci=e32
@@ -58,11 +58,11 @@ label values relacion_ci relacion_ci
 /*
 d11	
 1	Red general
-2	Canilla p˙blica
+2	Canilla p√∫blica
 3	Pozo surgente no protegido
 4	Pozo surgente protegido
 5	Aljibe
-6	Arroyo, rÌo
+6	Arroyo, r√≠o
 7	Otro
 */
 
@@ -81,12 +81,12 @@ gen luz_ch=.
 gen luzmide_ch=.
 
 /*
-d21	1	EnergÌa elÈctrica (U.T.E)
-	2	EnergÌa elÈctrica (grupo electrÛgeno)
-	3	Gas por caÒerÌa
-	4	Superg·s
+d21	1	Energ√≠a el√©ctrica (U.T.E)
+	2	Energ√≠a el√©ctrica (grupo electr√≥geno)
+	3	Gas por ca√±er√≠a
+	4	Superg√°s
 	5	Queroseno
-	6	LeÒa
+	6	Le√±a
 	7	Ninguna
 
 */
@@ -96,8 +96,8 @@ replace combust_ch =. if d10==.
 
 
 /*
-d15	1	SÌ. Con cisterna
-	2	SÌ. Sin cisterna
+d15	1	S√≠. Con cisterna
+	2	S√≠. Sin cisterna
 	3	No
 */
 
@@ -127,14 +127,14 @@ gen techo_ch=.
 gen resid_ch=.
 
 /*
-d10	N∞	N˙mero de habitaciones para dormir
+d10	N¬∞	N√∫mero de habitaciones para dormir
 */
 
 gen dorm_ch=d10
 replace dorm_ch=. if d10==9
 sum dorm*
 /*
-d9	N∞	N˙mero de habitaciones residenciales
+d9	N¬∞	N√∫mero de habitaciones residenciales
 */
 
 gen cuartos_ch=d9
@@ -157,10 +157,10 @@ d21_4		1 = Si / 2 = No		Freezer (solo)
 d21_5_1		1 = Si / 2 = No		TV color
 d21_6		1 = Si / 2 = No		Radio
 d21_14_1 	1 = Si / 2 = No		Microcomputador (incluye laptop)
-d21_15		1 = Si / 2 = No		ConexiÛn a internet
-d21_16_1 	1 = Si / 2 = No		TelÈfono
+d21_15		1 = Si / 2 = No		Conexi√≥n a internet
+d21_16_1 	1 = Si / 2 = No		Tel√©fono
 d21_17_1 	1 = Si / 2 = No		Celular
-d21_18_1 	1 = Si / 2 = No		AutomÛvil o camioneta
+d21_18_1 	1 = Si / 2 = No		Autom√≥vil o camioneta
 */
 
 gen refrig_ch=.
@@ -192,12 +192,12 @@ replace cel_ch= 1 if d22_17_1 ==1
 replace cel_ch= 0 if d22_17_1 ==2
 
 /*
-TENENCIA DE LA VIVIENDA		d8_1	1	Propietario de la vivienda y el terreno y la est· pagando
-					2	Propietario de la vivienda y el terreno y ya la pagÛ
-					3	Propietario solamente de la vivienda y la est· pagando
-					4	Propietario solamente de la vivienda y ya la pagÛ
+TENENCIA DE LA VIVIENDA		d8_1	1	Propietario de la vivienda y el terreno y la est√° pagando
+					2	Propietario de la vivienda y el terreno y ya la pag√≥
+					3	Propietario solamente de la vivienda y la est√° pagando
+					4	Propietario solamente de la vivienda y ya la pag√≥
 					5	Inquilino o arrendatario de la vivienda
-					6	Ocupante con relaciÛn de dependencia
+					6	Ocupante con relaci√≥n de dependencia
 					7	Ocupante gratuito
 					8	Ocupante sin permiso del propietario
 				d8_2	$	Monto de la cuota de compra
@@ -230,7 +230,7 @@ e27	1	Hombre
 gen sexo_ci=e27
 
 /*
-e28	AÒos	AÒos cumplidos
+e28	A√±os	A√±os cumplidos
 */
 
 gen edad_ci=e28
@@ -238,10 +238,10 @@ replace edad_ci=. if e28==99
 
 /*
 ESTADO CIVIL ACTUAL	e40	1	Divorciado/a
-				2	Casado/a (incluye separado y a˙n no se divorciÛ)
+				2	Casado/a (incluye separado y a√∫n no se divorci√≥)
 				3	Viudo/a
 				4	Soltero/a
-				5	Separado/a de uniÛn libre
+				5	Separado/a de uni√≥n libre
 */
 
 gen civil_ci=1 		if e40==4
@@ -286,7 +286,7 @@ by idh_ch: egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<
 /******************************/
 
 /*
-CONDICION DE ACTIVIDAD ECONOMICA	pobpcoac	1	Menor de 14 aÒos
+CONDICION DE ACTIVIDAD ECONOMICA	pobpcoac	1	Menor de 14 a√±os
 							2	Ocupados
 							3	Desocupados por primera vez
 							4	Desocupados propiamente dichos
@@ -302,8 +302,8 @@ CONDICION DE ACTIVIDAD ECONOMICA	pobpcoac	1	Menor de 14 aÒos
 gen emp_ci=(pobpcoac==2)
 
 /*
-TAREAS QUE PROPORCIONAN MAYORES INGRESOS	f67_1		DescripciÛn
-						f67-2	CÛd.	CÛdigo
+TAREAS QUE PROPORCIONAN MAYORES INGRESOS	f67_1		Descripci√≥n
+						f67-2	C√≥d.	C√≥digo
 */
 
 ***************************** REVISAR EL NUMERO DE DIGITOS
@@ -318,15 +318,15 @@ replace ocupa_ci=1 if (f73_2>=210 & f73_2<=320 | f73_2>=2110 & f73_2<=3470) & em
 replace ocupa_ci=2 if (f73_2>=130 & f73_2<=190 | f73_2>=1110 & f73_2<=1310) & emp_ci==1
 replace ocupa_ci=3 if (f73_2>=4110 & f73_2<=4220 | f73_2>=410 & f73_2<=430) & emp_ci==1
 replace ocupa_ci=4 if (f73_2>=5110 & f73_2<=5210) & emp_ci==1
-replace ocupa_ci=5 if (f73_2==5220 | f73_2==5230) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÛn a tres digitos de la CIUO-88*/
+replace ocupa_ci=5 if (f73_2==5220 | f73_2==5230) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaci√≥n a tres digitos de la CIUO-88*/
 replace ocupa_ci=6 if (f73_2>=6110 & f73_2<=6210) & emp_ci==1
 replace ocupa_ci=7 if (f73_2>=7110 & f73_2<=8340) & emp_ci==1 /*Incluye artesanos y operarios en hilanderias*/
 replace ocupa_ci=8 if (f73_2==110 | f73_2==120) & emp_ci==1
 replace ocupa_ci=9 if f73_2>9000 & emp_ci==1
 
 /*
-A QUE SE DEDICA EL ESTABLECIMIENTO DONDE REALIZA LAS TAREAS	f68_1		DescripciÛn
-								f74_2	CÛd.	CÛdigo
+A QUE SE DEDICA EL ESTABLECIMIENTO DONDE REALIZA LAS TAREAS	f68_1		Descripci√≥n
+								f74_2	C√≥d.	C√≥digo
 */
 
 replace f74_2="." if f74_2=="." | f74_2=="+512" | f74_2=="<" | f74_2=="X211" | f74_2=="15 4"
@@ -347,9 +347,9 @@ replace rama_ci=9 if f74_2>=7500 & f74_2<=9900 & emp_ci==1
 *********************************************************************
 
 /*
-HORAS TRABAJADAS POR SEMANA	f88	N∫	N˙mero de horas trabajadas por semana
+HORAS TRABAJADAS POR SEMANA	f88	N¬∫	N√∫mero de horas trabajadas por semana
 
-CUANTAS HORAS TRABAJA EN OTRAS OCUPACIONES	f101	N∫	N˙mero de horas que trabaja
+CUANTAS HORAS TRABAJA EN OTRAS OCUPACIONES	f101	N¬∫	N√∫mero de horas que trabaja
 */
 
 *********************************** REVISAR LAS VARIABLES DE INGRESO****************************
@@ -435,14 +435,14 @@ gen tiempoparc_ci=(horastot_ci>=1 & horastot_ci<=30 & f105==4)
 replace tiempoparc_ci=. if emp_ci==0
 
 /*
-CATEGORÕA DE LA OCUPACI”N	f75	1	Asalariado privado
-					2	Asalariado p˙blico
-					3	Miembro de cooperativa de producciÛn
-					4	PatrÛn
-					5	Cuenta propia sin local o inversiÛn
-					6	Cuenta propia con local o inversiÛn
+CATEGOR√çA DE LA OCUPACI√ìN	f75	1	Asalariado privado
+					2	Asalariado p√∫blico
+					3	Miembro de cooperativa de producci√≥n
+					4	Patr√≥n
+					5	Cuenta propia sin local o inversi√≥n
+					6	Cuenta propia con local o inversi√≥n
 					7	Miembro del hogar no remunerado
-					8	Programa p˙blico de empleo
+					8	Programa p√∫blico de empleo
 */
 
 gen categopri_ci=1 	if f75==4
@@ -452,12 +452,12 @@ replace categopri_ci=4 	if f75==7
 replace categopri_ci=. 	if emp_ci!=1
 
 /*
-CATEGORÕA DE LA OCUPACI”N	f95	1	Asalariado privado
-					2	Asalariado p˙blico
-					3	Miembro de cooperativa de producciÛn
-					4	PatrÛn
-					5	Cuenta propia sin local o inversiÛn
-					6	Cuenta propia con local o inversiÛn
+CATEGOR√çA DE LA OCUPACI√ìN	f95	1	Asalariado privado
+					2	Asalariado p√∫blico
+					3	Miembro de cooperativa de producci√≥n
+					4	Patr√≥n
+					5	Cuenta propia sin local o inversi√≥n
+					6	Cuenta propia con local o inversi√≥n
 					7	Miembro del hogar no remunerado
 */
 
@@ -472,18 +472,18 @@ gen contrato_ci=.
 gen segsoc_ci=.
 
 /*
-TRABAJOS QUE TIENE	f72	N∫	N˙mero de trabajos que tiene
+TRABAJOS QUE TIENE	f72	N¬∫	N√∫mero de trabajos que tiene
 */
 
 gen nempleos_ci=1 if f72==1
 replace nempleos_ci=2 if f72>1
 
 /*
-TAMA—O  DE LA EMPRESA 	f80	1	Una persona
+TAMA√ëO  DE LA EMPRESA 	f80	1	Una persona
 				2	2 a 4 personas
 				3	5 a 9 personas
 				4	10 a 49  personas
-				5	50 o m·s personas
+				5	50 o m√°s personas
 */
 
 
@@ -492,7 +492,7 @@ replace firmapeq_ci=1 if emp_ci==1 & f80==1 | f80==2
 replace firmapeq_ci=0 if emp_ci==1 & f80>2
 
 /*
-CATEGORÕA DE LA OCUPACI”N	f75/f85		2	Asalariado p˙blico
+CATEGOR√çA DE LA OCUPACI√ìN	f75/f85		2	Asalariado p√∫blico
 */
 
 gen spublico_ci=(emp_ci==1 & f75==2)
@@ -506,24 +506,24 @@ replace spublico =. if emp_ci==.
 
 
 /*
-NIVEL Y A—O MAS ALTO ALCANZADO	
-			e54_1_1	AÒo	AÒos cursados en Primaria
+NIVEL Y A√ëO MAS ALTO ALCANZADO	
+			e54_1_1	A√±o	A√±os cursados en Primaria
 			e54_1_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_2_1	AÒo	AÒos cursados en Secundaria
+			e54_2_1	A√±o	A√±os cursados en Secundaria
 			e54_2_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_3_1	AÒo	AÒos cursados en EnseÒanza TÈcnica
+			e54_3_1	A√±o	A√±os cursados en Ense√±anza T√©cnica
 			e54_3_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_3_3	1	Exigencia de enseÒanza secundaria completa para realizar curso de UTU
-				2	Exigencia de enseÒanza secundaria primer ciclo para realizar curso de UTU
-				3	Exigencia de enseÒanza primaria completa para realizar curso de UTU
+			e54_3_3	1	Exigencia de ense√±anza secundaria completa para realizar curso de UTU
+				2	Exigencia de ense√±anza secundaria primer ciclo para realizar curso de UTU
+				3	Exigencia de ense√±anza primaria completa para realizar curso de UTU
 				4	Ninguna exigencia
-			e52-4_1	AÒo	Magisterio o Profesorado
+			e52-4_1	A√±o	Magisterio o Profesorado
 			e52-4_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_5-1	AÒo	Universidad o similar
+			e54_5-1	A√±o	Universidad o similar
 			e54_5_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_6_1	AÒo	Terciario no universitario
+			e54_6_1	A√±o	Terciario no universitario
 			e54_6_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e52-7-1	AÒo	Posgrado (maestrÌa o doctorado)
+			e52-7-1	A√±o	Posgrado (maestr√≠a o doctorado)
 			e54_7_2	1 = Si / 2 = No	Finalizo o no el nivel
 */
 
@@ -656,7 +656,7 @@ label variable edupre_ci "Educacion preescolar"
 gen eduac_ci=.
 
 /*
-ASISTENCIA ACTUAL A ESTABLECIMIENTO DE ENSE—ANZA	e50	1 = Si / 2 = No	
+ASISTENCIA ACTUAL A ESTABLECIMIENTO DE ENSE√ëANZA	e50	1 = Si / 2 = No	
 */
 
 gen asiste_ci=.
@@ -669,7 +669,7 @@ gen pqnoasist_ci=.
 gen repite_ci=.
 
 /*
-ESTABLECIMIENTO P⁄BLICO O PRIVADO	e51	1	P˙blico
+ESTABLECIMIENTO P√öBLICO O PRIVADO	e51	1	P√∫blico
 						2	Privado
 */
 
@@ -679,7 +679,7 @@ replace edupub_ci = 0 if (e51==2)
 
 label var  aedu_ci "Anios de Educacion"
 
-save "X:\ARM\URU\ECH\\2007\Arm_data\URU2007EA_BID.dta", replace
+save "${surveysFolder}\ARM\URU\ECH\\2007\Arm_data\URU2007EA_BID.dta", replace
 
 
 

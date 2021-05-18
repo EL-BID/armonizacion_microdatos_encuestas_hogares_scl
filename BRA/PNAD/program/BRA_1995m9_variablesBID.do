@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNAD
@@ -1027,7 +1027,7 @@ replace aedu_ci=8   if ultcurso==4 & ultserie==0 & terult==1
 replace aedu_ci=11 if ultcurso==5 & ultserie==0 & terult==1 
 replace aedu_ci=15 if ultcurso==6 & ultserie==0 & terult==1 
 replace aedu_ci=18 if ultcurso==7 & ultserie==0 & terult==1
-save "\\Sdssrv03\surveys\survey\BRA\PNAD\1995\m9\data_orig\Noasiste.dta", replace
+save "${surveysFolder}\survey\BRA\PNAD\1995\m9\data_orig\Noasiste.dta", replace
 
 restore
 keep if asiste_ci==1
@@ -1063,8 +1063,8 @@ replace aedu_ci=15 if cursoasi==9 & serieasi==0 & termino==0
 replace aedu_ci=(15+serieasi) if cursoasi==9 & serieasi>0 & serieasi<6
 *** top code at 20 years
 replace aedu_ci=20 if cursoasi==9 & serieasi>0 & serieasi<9
-save "\\Sdssrv03\surveys\survey\BRA\PNAD\1995\m9\data_orig\Asiste.dta", replace
-append using "\\Sdssrv03\surveys\survey\BRA\PNAD\1995\m9\data_orig\Noasiste.dta"
+save "${surveysFolder}\survey\BRA\PNAD\1995\m9\data_orig\Asiste.dta", replace
+append using "${surveysFolder}\survey\BRA\PNAD\1995\m9\data_orig\Noasiste.dta"
 
 
 ** zero if never attended school and invalid anwsers for all other school questions

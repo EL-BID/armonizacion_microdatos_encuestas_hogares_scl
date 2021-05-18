@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PAN
 local ENCUESTA EHPM
@@ -30,11 +30,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Panama
+PaÃ­s: Panama
 Encuesta: EHPM
 Round: Marzo
 Autores: 
-Versión 2016: Marcela G. Rubio (MGR) - Email: mrubio@iadb.org, marcelarubio28@gmail.com
+VersiÃ³n 2016: Marcela G. Rubio (MGR) - Email: mrubio@iadb.org, marcelarubio28@gmail.com
+Ãšltima versiÃ³n: Cesar Lins (SCL/GDI) - Marzo 2021
+
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
@@ -55,74 +57,74 @@ use `base_in', clear
 	
 gen region_BID_c=1
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *** LABELS
 
-label var	llave_sec	"	Llave secuencial única de unión entre las tres tablas (Vivienda – Hogar – Persona)	"
+label var	llave_sec	"	Llave secuencial Ãºnica de uniÃ³n entre las tres tablas (Vivienda â€“ Hogar â€“ Persona)	"
 label var	prov	"	Provincia	"
 label var	cuest	"	Cuestionario/uno para cada hogar	"
-label var	hogar	"	Hogar número	"
-label var	nper	"	Número de la persona	"
+label var	hogar	"	Hogar nÃºmero	"
+label var	nper	"	NÃºmero de la persona	"
 label var	p1	"	Parentesco	"
 label var	p1a	"	Otro pariente	"
 label var	p2	"	Sexo	"
 label var	p3	"	Edad	"
-label var	p4_ssocial	"	¿Tiene ud. Seguro social?	"
+label var	p4_ssocial	"	Â¿Tiene ud. Seguro social?	"
 label var	p4a_ss_fic	"	Tiene usted la ficha que le da acceso a recibir los servicios del Seguro Social?	"
-label var	p4b	"	¿Está inscrito en el registro civil?	"
-label var	p4c	"	¿Por qué motivo no está inscrito?	"
-label var	p4c_otro_e	"	Otro motivo por el que no está inscrito	"
-label var	p4d	"	¿Se considera usted indígena?	"
-label var	p4e	"	¿A qué grupo indígena pertenece?	"
-label var	p4e_otro	"	Otro grupo indígena al que pertenece	"
-label var	p4f	"	¿Se considera usted negro(a) o afrodescendiente?	"
-label var	p4g	"	¿Se considera...	"
+label var	p4b	"	Â¿EstÃ¡ inscrito en el registro civil?	"
+label var	p4c	"	Â¿Por quÃ© motivo no estÃ¡ inscrito?	"
+label var	p4c_otro_e	"	Otro motivo por el que no estÃ¡ inscrito	"
+label var	p4d	"	Â¿Se considera usted indÃ­gena?	"
+label var	p4e	"	Â¿A quÃ© grupo indÃ­gena pertenece?	"
+label var	p4e_otro	"	Otro grupo indÃ­gena al que pertenece	"
+label var	p4f	"	Â¿Se considera usted negro(a) o afrodescendiente?	"
+label var	p4g	"	Â¿Se considera...	"
 label var	p4g_otro	"	Otro afrodescendiente	"
-label var	p4h	"	¿En qué provincia o comarca indígena vivía su madre cuando usted nació?	"
-label var	p4i	"	¿En qué período llegó usted a vivir a panamá?	"
-label var	p4i_anio	"	¿En qué año llegó?	"
-label var	p4j	"	¿En qué provincia o comarca indígena vivía usted en marzo del año pasado?	"
-label var	p4k	"	¿Está usted afiliado a algún fondo privado de pensión o jubilación?	"
-label var	p5	"	¿Asiste a la escuela?	"
+label var	p4h	"	Â¿En quÃ© provincia o comarca indÃ­gena vivÃ­a su madre cuando usted naciÃ³?	"
+label var	p4i	"	Â¿En quÃ© perÃ­odo llegÃ³ usted a vivir a panamÃ¡?	"
+label var	p4i_anio	"	Â¿En quÃ© aÃ±o llegÃ³?	"
+label var	p4j	"	Â¿En quÃ© provincia o comarca indÃ­gena vivÃ­a usted en marzo del aÃ±o pasado?	"
+label var	p4k	"	Â¿EstÃ¡ usted afiliado a algÃºn fondo privado de pensiÃ³n o jubilaciÃ³n?	"
+label var	p5	"	Â¿Asiste a la escuela?	"
 label var	p5_tipo	"	Tipo de escuela:	"
-label var	p5a	"	¿Motivo no asiste?	"
+label var	p5a	"	Â¿Motivo no asiste?	"
 label var	p5a_otro_m	"	Otro Motivo de la no asistencia	"
-label var	p6	"	¿Qué grado aprobó?	"
-label var	p7	"	¿Sabe leer y escribir?	"
-label var	p7_titulo	"	¿Diploma o título?	"
-label var	p08_16	"	Condición de actividad	"
+label var	p6	"	Â¿QuÃ© grado aprobÃ³?	"
+label var	p7	"	Â¿Sabe leer y escribir?	"
+label var	p7_titulo	"	Â¿Diploma o tÃ­tulo?	"
+label var	p08_16	"	CondiciÃ³n de actividad	"
 label var	p11_meses	"	Meses	"
 label var	p08_16b_ot	"	Otros inactivos	"
-label var	p17	"	¿Piensa buscar trabajo en los próximos 6 meses?	"
-label var	p18	"	¿…No estuvo buscando, ni piensa buscar…?	"
-label var	p18a	"	Otro de la opción j de la pregunta P20	"
-label var	p19	"	¿Cuánto tiempo hace que estuvo o está trabajo…?	"
-label var	p20	"	¿Hizo alguna gestión para conseguir empleo...?	"
-label var	p21	"	¿Qué gestión hizo...?	"
-label var	p21a	"	Otro de la opción j de la pregunta P21	"
-label var	p22a	"	¿Estuvo disponible para trabajar durante...las dos semanas anteriores?	"
-label var	p22b	"	¿Estuvo disponible para trabajar durante... actualmente?	"
-label var	p22c	"	¿Estuvo disponible para trabajar durante... las próximas dos semanas?	"
-label var	p23	"	¿Para qué tipo de trabajo…?	"
-label var	p24	"	¿Cuánto tiempo hace…?	"
-label var	p25	"	¿Motivo dejó su último..?	"
+label var	p17	"	Â¿Piensa buscar trabajo en los prÃ³ximos 6 meses?	"
+label var	p18	"	Â¿â€¦No estuvo buscando, ni piensa buscarâ€¦?	"
+label var	p18a	"	Otro de la opciÃ³n j de la pregunta P20	"
+label var	p19	"	Â¿CuÃ¡nto tiempo hace que estuvo o estÃ¡ trabajoâ€¦?	"
+label var	p20	"	Â¿Hizo alguna gestiÃ³n para conseguir empleo...?	"
+label var	p21	"	Â¿QuÃ© gestiÃ³n hizo...?	"
+label var	p21a	"	Otro de la opciÃ³n j de la pregunta P21	"
+label var	p22a	"	Â¿Estuvo disponible para trabajar durante...las dos semanas anteriores?	"
+label var	p22b	"	Â¿Estuvo disponible para trabajar durante... actualmente?	"
+label var	p22c	"	Â¿Estuvo disponible para trabajar durante... las prÃ³ximas dos semanas?	"
+label var	p23	"	Â¿Para quÃ© tipo de trabajoâ€¦?	"
+label var	p24	"	Â¿CuÃ¡nto tiempo haceâ€¦?	"
+label var	p25	"	Â¿Motivo dejÃ³ su Ãºltimo..?	"
 label var	p25_otro	"	Otro de la pregunta P25	"
-label var	p27	"	¿Dónde trabaja o trabajó...?	"
+label var	p27	"	Â¿DÃ³nde trabaja o trabajÃ³...?	"
 label var	p27a_otro	"	Otros de la pregunta P27	"
-label var	p29	"	¿Cuántas personas trabajan..?	"
+label var	p29	"	Â¿CuÃ¡ntas personas trabajan..?	"
 label var	p29a	"	Especifique	"
-label var	p30	"	¿Cuántos... eran empleados..	"
-label var	p31	"	¿Dónde usted trabaja... lo hizo como...?	"
-label var	p32	"	¿Es o era empleado...?	"
-label var	p33_sit	"	Provincia – DISTRITO – CORREGIMIENTO	"
-label var	p34	"	¿Tiempo de trabajar en esa empresa...?	"
-label var	p35	"	¿Trabajó ud. Por sueldo fijo? Sí = 1/No = 2	"
-label var	p351	"	Por día?	"
+label var	p30	"	Â¿CuÃ¡ntos... eran empleados..	"
+label var	p31	"	Â¿DÃ³nde usted trabaja... lo hizo como...?	"
+label var	p32	"	Â¿Es o era empleado...?	"
+label var	p33_sit	"	Provincia â€“ DISTRITO â€“ CORREGIMIENTO	"
+label var	p34	"	Â¿Tiempo de trabajar en esa empresa...?	"
+label var	p35	"	Â¿TrabajÃ³ ud. Por sueldo fijo? SÃ­ = 1/No = 2	"
+label var	p351	"	Por dÃ­a?	"
 label var	p352	"	Por tarea?	"
 label var	p353	"	Por hora?	"
-label var	p354	"	Días	"
+label var	p354	"	DÃ­as	"
 label var	p355	"	Tareas	"
 label var	p356	"	Horas	"
 label var	p361	"	Salario en efectivo	"
@@ -132,122 +134,122 @@ label var	p363	"	Ingreso... independiente...	"
 label var	p364	"	Ingreso... especie...	"
 label var	p364a	"	Tipo de especie	"
 label var	p365	"	Autoconsumo o autosuministro	"
-label var	p37	"	¿Cuántas horas trabajó la semana..?	"
-label var	p38	"	¿Tuvo algún otro trabajo..?	"
-label var	p39c	"	¿Dónde usted trabaja... lo hizo como...?	"
-label var	p39d	"	¿Tiempo de trabajar en esa empresa... ?	"
-label var	p39e	"	¿Cuántas horas trabajó la semana pasada en su otro trabajo..?	"
-label var	p39	"	¿Ingreso mensual en el otro trabajo?	"
-label var	p40	"	¿En los últimos 6 meses utilizó un teléfono móvil (celular) para uso personal? 	"
-label var	p41	"	¿En los últimos 6 meses utilizó alguna computadora?	"
-label var	p44	"	¿En los últimos 6 meses utilizó internet?	"
-label var	p72a	"	Jubilación?...	"
-label var	p72b	"	Pensión?	"
-label var	p72c1	"	Pensión alimenticia?...	"
+label var	p37	"	Â¿CuÃ¡ntas horas trabajÃ³ la semana..?	"
+label var	p38	"	Â¿Tuvo algÃºn otro trabajo..?	"
+label var	p39c	"	Â¿DÃ³nde usted trabaja... lo hizo como...?	"
+label var	p39d	"	Â¿Tiempo de trabajar en esa empresa... ?	"
+label var	p39e	"	Â¿CuÃ¡ntas horas trabajÃ³ la semana pasada en su otro trabajo..?	"
+label var	p39	"	Â¿Ingreso mensual en el otro trabajo?	"
+label var	p40	"	Â¿En los Ãºltimos 6 meses utilizÃ³ un telÃ©fono mÃ³vil (celular) para uso personal? 	"
+label var	p41	"	Â¿En los Ãºltimos 6 meses utilizÃ³ alguna computadora?	"
+label var	p44	"	Â¿En los Ãºltimos 6 meses utilizÃ³ internet?	"
+label var	p72a	"	JubilaciÃ³n?...	"
+label var	p72b	"	PensiÃ³n?	"
+label var	p72c1	"	PensiÃ³n alimenticia?...	"
 label var	p72c2	"	Dinero?...	"
-label var	p72c3	"	Alimentación escolar..?	"
+label var	p72c3	"	AlimentaciÃ³n escolar..?	"
 label var	p72c4	"	Alimentos..?	"
-label var	p72c5	"	Artículos escolares?	"
+label var	p72c5	"	ArtÃ­culos escolares?	"
 label var	p72c7	"	Ropa/Calzado	"
 label var	p72c8	"	Regalos	"
 label var	p72c6	"	Otros..?	"
-label var	p72c6_otro	"	¿Cuál otro?	"
+label var	p72c6_otro	"	Â¿CuÃ¡l otro?	"
 label var	p72d	"	Alquileres, rentas..?...	"
-label var	p72e	"	Premios de lotería...?...	"
-label var	p72f1	"	Becas ?... Institución pública	"
+label var	p72e	"	Premios de loterÃ­a...?...	"
+label var	p72f1	"	Becas ?... InstituciÃ³n pÃºblica	"
 label var	p72f2	"	Becas ?... Universal	"
-label var	p72f3	"	Becas ?... Institución privada	"
+label var	p72f3	"	Becas ?... InstituciÃ³n privada	"
 label var	p72f4	"	Becas ? Otras	"
 label var	p72g1	"	Subsidios..? Transferencia	"
 label var	p72g2	"	Subsidios..? SENAPAN	"
 label var	p72g3	"	Subsidios..? Suplementos	"
 label var	p72g4	"	Subsidios..? Insumos agropecuarios	"
 label var	p72g5	"	Subsidios..? 100 a los 70	"
-label var	p72g6	"	Ángel guardián	"
-label var	p72h	"	¿Décimo tercer mes?...	"
-label var	p72i	"	¿Ingresos agropecuarios?	"
-*label var	p72j	"	¿Parvis mejorado?	"
-label var	p72k	"	¿Asistencia habitacional..?	"
-label var	p72l	"	¿Otros ingresos..?	"
+label var	p72g6	"	Ãngel guardiÃ¡n	"
+label var	p72h	"	Â¿DÃ©cimo tercer mes?...	"
+label var	p72i	"	Â¿Ingresos agropecuarios?	"
+*label var	p72j	"	Â¿Parvis mejorado?	"
+label var	p72k	"	Â¿Asistencia habitacional..?	"
+label var	p72l	"	Â¿Otros ingresos..?	"
 label var	p72m	"	Sin ninguno de estos ingresos?	"
-label var	areareco	"	Urbano = “1”  / rural = “2”	"
-label var	fac15_e	"	Factor de expansión de 15  y más/menos 15 años de edad.	"
-label var	indi_rec	"	No indígena = 1/Indígena = 2	"
-label var	div_pa2	"	División de las provincias de Panamá y Panamá Oeste	"
-label var	pea_nea	"	PEA = Población Económicamente Activa NEA = Población No económicamente Activa	"
-label var	desagreg	"	Condición en la actividad económica desagregada de la PEA:	"
-label var	p26reco	"	Ocupación principal a 1 dígito:	"
-label var	p28reco	"	Categoría en la actividad económica principal a 1 dígito.	"
-label var	p3_reco	"	Recodificación de edades	"
+label var	areareco	"	Urbano = â€œ1â€  / rural = â€œ2â€	"
+label var	fac15_e	"	Factor de expansiÃ³n de 15  y mÃ¡s/menos 15 aÃ±os de edad.	"
+label var	indi_rec	"	No indÃ­gena = 1/IndÃ­gena = 2	"
+label var	div_pa2	"	DivisiÃ³n de las provincias de PanamÃ¡ y PanamÃ¡ Oeste	"
+label var	pea_nea	"	PEA = PoblaciÃ³n EconÃ³micamente Activa NEA = PoblaciÃ³n No econÃ³micamente Activa	"
+label var	desagreg	"	CondiciÃ³n en la actividad econÃ³mica desagregada de la PEA:	"
+label var	p26reco	"	OcupaciÃ³n principal a 1 dÃ­gito:	"
+label var	p28reco	"	CategorÃ­a en la actividad econÃ³mica principal a 1 dÃ­gito.	"
+label var	p3_reco	"	RecodificaciÃ³n de edades	"
 label var	grado_ap	"	Grado aprobado:	"
 label var	horas	"	Horas trabajadas:	"
 label var	salario	"	Salario de los empleados:	"
 label var	ingreso	"	Ingreso de los Ocupados:	"
-*label var	p26_3dig	"	Ocupación principal a 3 dígitos.	"
+*label var	p26_3dig	"	OcupaciÃ³n principal a 3 dÃ­gitos.	"
 
-label var	v0_condici	"	Condición de la vivienda	"
-label var	v0_cond_ot	"	Otra condición de la vivienda	"
+label var	v0_condici	"	CondiciÃ³n de la vivienda	"
+label var	v0_cond_ot	"	Otra condiciÃ³n de la vivienda	"
 label var	v1a_tipo_d	"	Tipo de vivienda	"
-label var	v1b_tenenc	"	¿La vivienda que habita este hogar es…?	"
+label var	v1b_tenenc	"	Â¿La vivienda que habita este hogar esâ€¦?	"
 label var	v1b_pago_m	"	Pago mensual en B/.	"
-label var	v1b_otra_t	"	Otra?  Especifique…	"
-label var	v1c_pagari	"	¿Si tuviera que pagar alquiler por la vivienda…?	"
-label var	v1d_materi	"	¿De qué material es la mayor parte de las paredes exteriores del edificio o casa?	"
-label var	v1e_materi	"	¿De qué material es la mayor parte del techo del edificio o casa?	"
-label var	v1f_materi	"	¿De qué material es la mayor parte del piso de esta vivienda?	"
-label var	v1g_cuarto	"	¿Cuántos cuartos tiene la vivienda?	"
-label var	v1h_dormit	"	De estos: ¿cuántos cuartos son sólo para dormir?	"
-label var	v1i_agua_b	"	¿De dónde obtienen principalmente el agua para beber?	"
-label var	v1i_otra	"	Otra ubicación	"
+label var	v1b_otra_t	"	Otra?  Especifiqueâ€¦	"
+label var	v1c_pagari	"	Â¿Si tuviera que pagar alquiler por la viviendaâ€¦?	"
+label var	v1d_materi	"	Â¿De quÃ© material es la mayor parte de las paredes exteriores del edificio o casa?	"
+label var	v1e_materi	"	Â¿De quÃ© material es la mayor parte del techo del edificio o casa?	"
+label var	v1f_materi	"	Â¿De quÃ© material es la mayor parte del piso de esta vivienda?	"
+label var	v1g_cuarto	"	Â¿CuÃ¡ntos cuartos tiene la vivienda?	"
+label var	v1h_dormit	"	De estos: Â¿cuÃ¡ntos cuartos son sÃ³lo para dormir?	"
+label var	v1i_agua_b	"	Â¿De dÃ³nde obtienen principalmente el agua para beber?	"
+label var	v1i_otra	"	Otra ubicaciÃ³n	"
 label var	v1i_pago_a	"	Pago mensual por servicio de agua	"
-label var	v1j_ubicac	"	¿Las plumas o las llaves de agua de esta vivienda están ubicadas…	"
-label var	v1k_servic	"	¿Tiene esta vivienda servicio sanitario...	"
-label var	v1l_uso_sa	"	¿El uso del servicio sanitario es...	"
-label var	v1m_basura	"	¿Cómo eliminan la basura en esta vivienda?	"
+label var	v1j_ubicac	"	Â¿Las plumas o las llaves de agua de esta vivienda estÃ¡n ubicadasâ€¦	"
+label var	v1k_servic	"	Â¿Tiene esta vivienda servicio sanitario...	"
+label var	v1l_uso_sa	"	Â¿El uso del servicio sanitario es...	"
+label var	v1m_basura	"	Â¿CÃ³mo eliminan la basura en esta vivienda?	"
 label var	v1m_otra	"	Otra forma de eliminar la basura	"
 label var	v1m_pago_b	"	Pago mensual por servicio de basura	"
-label var	v1n_combus	"	¿Qué combustible utilizan con más frecuencia para cocinar…	"
-label var	v1o_luz	"	Qué alumbrado tiene la vivienda	"
+label var	v1n_combus	"	Â¿QuÃ© combustible utilizan con mÃ¡s frecuencia para cocinarâ€¦	"
+label var	v1o_luz	"	QuÃ© alumbrado tiene la vivienda	"
 label var	v1o_otro	"	Otro tipo de alumbrado.	"
-label var	v1o_pago_l	"	Cuánto paga en luz regularmente al mes?	"
-label var	cuantos_ho	"	¿Cuántos hogares residen en esta vivienda?	"
-label var	fac15_e	"	Factor de expansión.	"
+label var	v1o_pago_l	"	CuÃ¡nto paga en luz regularmente al mes?	"
+label var	cuantos_ho	"	Â¿CuÃ¡ntos hogares residen en esta vivienda?	"
+label var	fac15_e	"	Factor de expansiÃ³n.	"
 
-label var	h2b_radio	"	¿Radio…?	"
-label var	h2c_telefo	"	¿Teléfono residencial…?	"
-label var	h2d_celula	"	¿Teléfono celular…?	"
-label var	h2e_televi	"	¿Televisor…?	"
-label var	h2e1_tv_cu	"	¿Cuántos TV...?	"
-label var	h2e2_cable	"	Señal de Cable TV	"
-label var	h4_computa	"	¿Computadora…?	"
+label var	h2b_radio	"	Â¿Radioâ€¦?	"
+label var	h2c_telefo	"	Â¿TelÃ©fono residencialâ€¦?	"
+label var	h2d_celula	"	Â¿TelÃ©fono celularâ€¦?	"
+label var	h2e_televi	"	Â¿Televisorâ€¦?	"
+label var	h2e1_tv_cu	"	Â¿CuÃ¡ntos TV...?	"
+label var	h2e2_cable	"	SeÃ±al de Cable TV	"
+label var	h4_computa	"	Â¿Computadoraâ€¦?	"
 label var	h4a_pc	"	Computador de mesa	"
-label var	h4b_portat	"	Computador portátil (incluidos laptops, netbooks	"
+label var	h4b_portat	"	Computador portÃ¡til (incluidos laptops, netbooks	"
 label var	h4c_tablet	"	Tablets?	"
-label var	h5_serv_in	"	¿Internet móvil...?	"
-label var	h5_serv__a	"	¿Internet fija...?	"
-label var	h5aa_no_ne	"	 Porqué este hogar no tiene acceso internet? No necesita internet	"
-label var	h5ab_otro	"	 Porqué este hogar no tiene acceso internet? Accesan a Internet en otro lugar?	"
-label var	h5ac_confi	"	 Porqué este hogar no tiene acceso internet? Falta de confianza, conocimientos o capacidades para utilizar Internet?	"
-label var	h5ad_costo	"	Porqué este hogar no tiene acceso internet? Costo del equipo o servicios muy elevado?	"
-label var	h5ae_priva	"	Porqué este hogar no tiene acceso internet? Inquietudes en materia de privacidad o seguridad?	"
-label var	h5af_servi	"	 Porqué este hogar no tiene acceso internet? Servicio de Internet no disponible en la zona?	"
-label var	h5ag_otros	"	 Porqué este hogar no tiene acceso internet? Otros?	"
-label var	h5a_otra_r	"	 Porqué este hogar no tiene acceso internet?	"
-label var	h7_transfe	"	¿Red de oportunidades…?	"
-label var	h7a_anio    "	¿Desde que año recibe…?	"
-label var	h7c_act_re	"	¿Actualmente lo recibe la red de oportunidades?	"
-label var	h7c1_anio	"	¿Desde qué año no recibe la red de oportunidades?	"
+label var	h5_serv_in	"	Â¿Internet mÃ³vil...?	"
+label var	h5_serv__a	"	Â¿Internet fija...?	"
+label var	h5aa_no_ne	"	 PorquÃ© este hogar no tiene acceso internet? No necesita internet	"
+label var	h5ab_otro	"	 PorquÃ© este hogar no tiene acceso internet? Accesan a Internet en otro lugar?	"
+label var	h5ac_confi	"	 PorquÃ© este hogar no tiene acceso internet? Falta de confianza, conocimientos o capacidades para utilizar Internet?	"
+label var	h5ad_costo	"	PorquÃ© este hogar no tiene acceso internet? Costo del equipo o servicios muy elevado?	"
+label var	h5ae_priva	"	PorquÃ© este hogar no tiene acceso internet? Inquietudes en materia de privacidad o seguridad?	"
+label var	h5af_servi	"	 PorquÃ© este hogar no tiene acceso internet? Servicio de Internet no disponible en la zona?	"
+label var	h5ag_otros	"	 PorquÃ© este hogar no tiene acceso internet? Otros?	"
+label var	h5a_otra_r	"	 PorquÃ© este hogar no tiene acceso internet?	"
+label var	h7_transfe	"	Â¿Red de oportunidadesâ€¦?	"
+label var	h7a_anio    "	Â¿Desde que aÃ±o recibeâ€¦?	"
+label var	h7c_act_re	"	Â¿Actualmente lo recibe la red de oportunidades?	"
+label var	h7c1_anio	"	Â¿Desde quÃ© aÃ±o no recibe la red de oportunidades?	"
 label var	tot_per	"	Total de personas.	"
 label var	tot_per_h	"	Total de personas, sexo masculino.	"
 label var	tot_per_m	"	Total de personas, sexo femenino.	"
-label var	tot_per_e1	"	Total de 10 y más de edad.	"
-label var	per_e10_h	"	Total de personas de 10 y más años, sexo masculino.	"
-label var	per_e10_m	"	Total de personas de 10 y más años, sexo femenino.	"
-label var	tot_per__a	"	Total de personas de 15 y más años de edad.	"
-label var	per_e15_h	"	Total de personas de 15 y más años, sexo masculino.	"
-label var	per_e15_m	"	Total de personas de 15 y más años, sexo femenino.	"
-label var	residian	"	Personas que residían agosto del año pasado	"
-*label var	fac_hog_e	"	Factor de expansión de 15  y más/menos 15 años de edad.	"
+label var	tot_per_e1	"	Total de 10 y mÃ¡s de edad.	"
+label var	per_e10_h	"	Total de personas de 10 y mÃ¡s aÃ±os, sexo masculino.	"
+label var	per_e10_m	"	Total de personas de 10 y mÃ¡s aÃ±os, sexo femenino.	"
+label var	tot_per__a	"	Total de personas de 15 y mÃ¡s aÃ±os de edad.	"
+label var	per_e15_h	"	Total de personas de 15 y mÃ¡s aÃ±os, sexo masculino.	"
+label var	per_e15_m	"	Total de personas de 15 y mÃ¡s aÃ±os, sexo femenino.	"
+label var	residian	"	Personas que residÃ­an agosto del aÃ±o pasado	"
+*label var	fac_hog_e	"	Factor de expansiÃ³n de 15  y mÃ¡s/menos 15 aÃ±os de edad.	"
 
 
 ******************************************************************************
@@ -263,19 +265,19 @@ gen region_c=  prov
 
 label define region_c  ///
 1	"Bocas del Toro" ///
-2	"Coclé" ///
-3	"Colón" ///
-4	"Chiriquí" ///
-5	"Darién" ///
+2	"CoclÃ©" ///
+3	"ColÃ³n" ///
+4	"ChiriquÃ­" ///
+5	"DariÃ©n" ///
 6	"Herrera" ///
 7	"Los Santos" ///
-8	"Panamá" ///
+8	"PanamÃ¡" ///
 9	"Veraguas" ///
 10	"Kuna Yala" ///
-11	"Emberá" ///
-12	"Ngäbe-Buglé"		  
+11	"EmberÃ¡" ///
+12	"NgÃ¤be-BuglÃ©"		  
 label value region_c region_c
-label var region_c "División política, provincias"
+label var region_c "DivisiÃ³n polÃ­tica, provincias"
 
 ta region_c 
 ******************************
@@ -284,6 +286,17 @@ ta region_c
 
 gen factor_ci= fac15_e   
 label var factor_ci "Factor de expansion del individuo"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=.
+
 
 ******************************
 *	idh_ch
@@ -368,22 +381,6 @@ label value sexo_ci sexo_ci
 gen edad_ci=p3
 label var edad_ci "Edad del individuo"
 
-**********
-***raza***
-**********
-
-encode indi_rec, gen(indi_raza)
-gen raza_ci=1 if indi_raza==1
-replace raza_ci=3 if indi_raza==2
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
-
-gen raza_idioma_ci = .
-gen id_ind_ci      = .
-gen id_afro_ci     = .
 
 ******************************
 *	civil_ci
@@ -456,6 +453,50 @@ label var nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label var miembros_ci "Miembro del hogar"
 
+	
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+	***************
+	*** afroind_ci ***
+	***************
+**Pregunta: Â¿Se considera usted indÃ­gena? (p4d) Â¿Se considera usted negro(a) o afrodescendiente? (p4f) 1- SI, 2- NO
+**Puedes reportar mÃ¡s de una identidad por lo que hay una poblaciÃ³n afroindigena. Estos se consideran afrodescendientes puesto que la muestra total de afros es mayor.
+
+gen afroind_ci=. 
+replace afroind_ci=1 if p4d==1 
+replace afroind_ci=2 if p4f==1 
+replace afroind_ci=3 if p4d==2 & p4f==2
+
+
+	***************
+	*** afroind_ch ***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
+
+	*******************
+	*** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=2015
+
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
+
+
 ******************************************************************************
 *	LABOR MARKET
 ******************************************************************************
@@ -470,7 +511,7 @@ replace condocup_ci=1 if p8_16 >= 1 & p8_16 <= 5
 replace condocup_ci=2 if  (p8_16>=6 & p8_16<=9) 
 recode condocup_ci .=3 if  edad_ci>=10
 recode condocup_ci .=4 if  edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -482,7 +523,7 @@ replace condocup_ci=1 if ocup_deso==2
 replace condocup_ci=2 if ocup_deso==1 
 recode condocup_ci .=3 if  edad_ci>=10
 recode condocup_ci .=4 if  edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -557,10 +598,10 @@ replace ocupa_ci=1 if (p26reco==2 | p26reco==3) & emp_ci==1
 replace ocupa_ci=2 if (p26reco==1) & emp_ci==1
 replace ocupa_ci=3 if (p26reco==4) & emp_ci==1
 replace ocupa_ci=4 if (p26reco==5) & emp_ci==1
-*replace ocupa_ci=5 if (p26reco==5) & emp_ci==1 /*trabajadores de servicios y vendedores están en la misma categoría por lo que lo incluyo en la 4*/
+*replace ocupa_ci=5 if (p26reco==5) & emp_ci==1 /*trabajadores de servicios y vendedores estÃ¡n en la misma categorÃ­a por lo que lo incluyo en la 4*/
 replace ocupa_ci=6 if (p26reco==6) & emp_ci==1
 replace ocupa_ci=7 if (p26reco==8) & emp_ci==1
-*replace ocupa_ci=8  /*pregunta no incluye categoría de "Fuerzas armadas"*/
+*replace ocupa_ci=8  /*pregunta no incluye categorÃ­a de "Fuerzas armadas"*/
 replace ocupa_ci=9 if (p26reco==7 | p26reco==9) & emp_ci==1
 
 ******************************
@@ -580,7 +621,7 @@ replace rama_ci=8 if (p28reco==11 | p28reco==12) & emp_ci==1
 replace rama_ci=9 if (p28reco==10 | (p28reco>=13 & p28reco<=21)) & emp_ci==1
 
 label var rama_ci "Rama actividad principal"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 ******************************
@@ -1148,7 +1189,7 @@ label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 ******************************
 gen asiste_ci=(p5==1)
 replace asiste_ci=. if p5==.
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 ******************************
 *	pqnoasis_ci_ci
@@ -1156,9 +1197,9 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 gen pqnoasis_ci=p5a if p5a>0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 label define pqnoasis_ci 1 "No se ofrece el nivel o grado escolar en la comunidad" 2 "Necesita trabajar",add
-label define pqnoasis_ci 3 "Falta de recursos económicos" 4 "Quehaceres domesticos", add 
+label define pqnoasis_ci 3 "Falta de recursos econÃ³micos" 4 "Quehaceres domesticos", add 
 label define pqnoasis_ci 5 "Falta de interes" 6 "Embarazo" 7 "Enfermedad" , add
-label define pqnoasis_ci 8 "No tiene la edad requerida" 9 "Está muy distante" 10 "Ya se graduó" 11 "Se casó" 12 "Otros", add
+label define pqnoasis_ci 8 "No tiene la edad requerida" 9 "EstÃ¡ muy distante" 10 "Ya se graduÃ³" 11 "Se casÃ³" 12 "Otros", add
 label value pqnoasis_ci pqnoasis_ci
 
 **************
@@ -1176,7 +1217,7 @@ replace pqnoasis1_ci = 7 if p5a==8
 replace pqnoasis1_ci = 8 if p5a==1 | p5a==9
 replace pqnoasis1_ci = 9 if p5a==12
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1192,7 +1233,7 @@ gen repite_ci=.
 drop nivel grado
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 *************
 **salmm_ci***
@@ -1311,20 +1352,20 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *tamemp_ci
 *************
 gen tamemp_ci=1 if p29==1 & emp_ci==1
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if (p29==2 | p29==3 | p29==4  )& emp_ci==1
 *Empresas grandes
 replace tamemp_ci=3 if p29==5  & emp_ci==1
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw= fac15_e]
 
 *************
 *categoinac_ci
 *************
 gen categoinac_ci=1 if p8_16==11 | p8_16==12
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if p8_16==13
 *Quehaceres del Hogar
@@ -1388,21 +1429,49 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	g ybenefdes_ci=.
 	label var ybenefdes_ci "Monto de seguro de desempleo"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	destring p4h, replace
+	gen migrante_ci=(p4h>100 & p4h!=.) if p4h!=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio=="2010" & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=(inlist(p4h,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -1413,7 +1482,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
 

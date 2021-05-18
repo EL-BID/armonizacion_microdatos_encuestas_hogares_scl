@@ -1,17 +1,17 @@
-* (versión Stata 13)
+* (versiï¿½n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA NPME
@@ -27,11 +27,11 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+Paï¿½s: Brasil
 Encuesta: NPME
 Round: a
-Autores: María Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
-Fecha última modificación: Diciembre, 2015
+Autores: Marï¿½a Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
+Fecha ï¿½ltima modificaciï¿½n: Diciembre, 2015
 Fecha Ãšltima modificaciÃ³n: Julio, 2017, by Alvaro Altamirano (alvaroalt@iadb.org)
 
 							SCL/LMK - IADB

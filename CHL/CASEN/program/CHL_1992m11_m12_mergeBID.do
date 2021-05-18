@@ -2,7 +2,7 @@ clear
 
 *2013-MLO
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN

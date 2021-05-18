@@ -1,6 +1,6 @@
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -91,9 +91,9 @@ local data28 = "`base_in'\sfehog003ba.dta"
 *local data30 = "`base_in'\sannichog003ba.dta";
 *local data31 = "`base_in'\viedmahog003ba.dta";
 
-*MGR Jul, 2015: se habÌa agregado una base de personas por lo que habÌan muchos duplicados.
+*MGR Jul, 2015: se hab√≠a agregado una base de personas por lo que hab√≠an muchos duplicados.
 
-* Otro problema est· en que base de personas tiene variables con el mismo nombre de variables de vivienda, renombramos estas para hacer merge
+* Otro problema est√° en que base de personas tiene variables con el mismo nombre de variables de vivienda, renombramos estas para hacer merge
 * Bases originales quedan en carpeta backup
 
 forvalues i=1/28 {

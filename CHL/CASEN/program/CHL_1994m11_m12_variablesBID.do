@@ -5,14 +5,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -674,10 +674,10 @@ gen edupub_ci=.
 
 
 /*
-save "X:\ARM\CHL\1994\Van_data\CHL1994.dta", replace
+save "${surveysFolder}\ARM\CHL\1994\Van_data\CHL1994.dta", replace
 clear
 
-infile using "X:\ARM\CHL\1994\Programs\Van_prog\asiste.dct"
+infile using "${surveysFolder}\ARM\CHL\1994\Programs\Van_prog\asiste.dct"
 compress
 egen idh_ch=group(r p c z s f)
 *egen idh_ch=group(r p c z seg f)
@@ -687,16 +687,16 @@ sort idh sexo edad
 drop r p c z s f o
 *drop r p c z seg f o
 compress
-save "X:\ARM\CHL\1994\Van_data\asiste.dta", replace
+save "${surveysFolder}\ARM\CHL\1994\Van_data\asiste.dta", replace
 clear
 
-use "X:\ARM\CHL\1994\Van_data\CHL1994.dta"
+use "${surveysFolder}\ARM\CHL\1994\Van_data\CHL1994.dta"
 sort idh_ch sexo edad
 /* we sort by sexo and edad because there was an error in the previous banana,
 the parentco variable had only 1 digit, so the person 10, 11 or 12, it was considered  0,1 or 2. Now, the problem is fixed. '
 We have also now included here the nucleo variable and the parentnu variable*/
 
-merge idh_ch sexo edad using X:\ARM\CHL\1994\Van_data\asiste.dta
+merge idh_ch sexo edad using ${surveysFolder}\ARM\CHL\1994\Van_data\asiste.dta
 drop idp_ci
 rename idpersox idp_ci
 sort idh_ch idp_ci
@@ -925,6 +925,22 @@ gen tcylmpri_ch =.
 gen autocons_ci=.
 gen freez_ch=.
 gen region_c=.
+
+******************************
+*** VARIABLES DE GDI *********
+******************************
+	
+	
+	/***************************
+     * DISCAPACIDAD
+    ***************************/
+	
+gen dis_ci==. 
+lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+lab val dis_ci dis_ci
+label var dis_ci "Personas con discapacidad"
+		
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

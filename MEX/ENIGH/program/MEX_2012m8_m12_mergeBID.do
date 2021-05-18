@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\2012\m8_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\2012\m8_m12\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "2012"
 local ronda m8_m12
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -66,18 +66,18 @@ Base de concentrado: Concen.dta
 En este programa se utilizan tres tipos de archivos, los cuales 
 están ubicados en las siguientes carpetas:
 
-1) Bases originales: "C:\pobreza ingresos\2012\ENIGH"
-2) Bitácoras: "C:\pobreza ingresos\2012\Log"
-3) Bases generadas: "C:\pobreza ingresos\2012\Resultados"
+1) Bases originales: "${surveysFolder}\pobreza ingresos\2012\ENIGH"
+2) Bitácoras: "${surveysFolder}\pobreza ingresos\2012\Log"
+3) Bases generadas: "${surveysFolder}\pobreza ingresos\2012\Resultados"
 
 
 Para cambiar estas ubicaciones, se modifican los siguientes
 globals 
 
 
-gl data="C:\pobreza ingresos\2012\ENIGH"
-gl log="C:\pobreza ingresos\2012\Log"
-gl bases="C:\pobreza ingresos\2012\Resultados"
+gl data="${surveysFolder}\pobreza ingresos\2012\ENIGH"
+gl log="${surveysFolder}\pobreza ingresos\2012\Log"
+gl bases="${surveysFolder}\pobreza ingresos\2012\Resultados"
 
 
 log using "$log\Pobreza 2012.txt", text replace
@@ -1548,20 +1548,20 @@ gen str folio= folioviv + foliohog
 order folio, first
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta"
+merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta", keep (match master)
 drop _merge
 
-merge 1:1 folio numren using "$ruta\ingreso_deflactado12_per.dta"
+merge 1:1 folio numren using "$ruta\ingreso_deflactado12_per.dta" , keep (match master)
 rename _merge _merge_ing
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp"
+merge 1:1 folioviv foliohog numren using "$ruta\edu_gtosmp", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\gtos_autoc12.dta"
+merge m:1 folio using "$ruta\gtos_autoc12.dta", keep (match master)
 drop _merge
 
-merge m:1 folio using "$ruta\edu_gtosmh"
+merge m:1 folio using "$ruta\edu_gtosmh", keep (match master)
 drop _merge
 
 *Modificación Mayra Sáenz: Total Ingreso monetario del hogar

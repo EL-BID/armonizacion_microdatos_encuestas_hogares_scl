@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Versión 2007: Victoria, Maria Fernanda Prada (MFP)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2007: Victoria, Maria Fernanda Prada (MFP)
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -148,7 +148,7 @@ gen combust_ch=.
 gen bano_ch=((v9!=0 & v28==-3) | v28>0)
 gen banoex_ch=(v28==-3 | v28<v9)
 replace banoex_ch=. if bano_ch==0 
-gen des1_ch=. /*Si no tiene eliminacion a superficie, no puede ser comparado en magnitud con otros años ni con otros países, entonces no nos 
+gen des1_ch=. /*Si no tiene eliminacion a superficie, no puede ser comparado en magnitud con otros aÃ±os ni con otros paÃ­ses, entonces no nos 
 sirve*/
 gen des2_ch=.
 replace des2_ch=1 if v13==1 | v13==2
@@ -272,7 +272,7 @@ replace condocup_ci=4 if edad<12
 replace condocup_ci=1 if condact==1
 replace condocup_ci=2 if condact==2 | condact==3
 replace condocup_ci=3 if condact>3 & condact!=0*/
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -354,15 +354,15 @@ ylmpri_ci
         6 |       535535.2
         7 |        9899597
 --------------------------
-Dado como esta hecha la pregunta, "Cual fue su ingreso o remuneración líquida en el MES pasado" y dada la 
+Dado como esta hecha la pregunta, "Cual fue su ingreso o remuneraciÃ³n lÃ­quida en el MES pasado" y dada la 
 posibilidad de declarar la periodicidad del ingreso, no queda claro que es lo que la gente esta contestando... 
 Es decir, puede ser que la gente cobre quincenal, pero al preguntarle sobre lo que gano el mes pasado 
 simplemente multiplique su quincenio por dos y listo... Eso es lo que, efectivamente, parece pasar con la 
 categoria 2. Sin embargo, la categoria 3 si pareciera ser una mensual dividida por 4 y lo mismo con la diaria 
-(aunque habria que multiplicarla por 22!). Sin embargo, en años anteriores,la transformación se vino haciendo
-de la manera usual. Más aún, al hacer ese tipo de transformación se obtienen cifras bastante parecidas 
-a las del gobierno de chile, por lo que esa es la metodología que se seguira aquí, aún cuando haga notar que 
-esa no es la metodología más apropiada.
+(aunque habria que multiplicarla por 22!). Sin embargo, en aÃ±os anteriores,la transformaciÃ³n se vino haciendo
+de la manera usual. MÃ¡s aÃºn, al hacer ese tipo de transformaciÃ³n se obtienen cifras bastante parecidas 
+a las del gobierno de chile, por lo que esa es la metodologÃ­a que se seguira aquÃ­, aÃºn cuando haga notar que 
+esa no es la metodologÃ­a mÃ¡s apropiada.
 */
 
 /*
@@ -731,9 +731,9 @@ replace aedu_ci=e7+12 if e8==9
 replace aedu_ci=e7+17 if e8==10          
 
 /*** VAMOS A RESTAR UN ANO PARA LOS QUE ACTUALMENTE ESTAN ASISTIENDO PORQUE TODAVIA NO HAN TERMINADO ESE ANO.. 
-lo que CASEN asume es que: "Nosotros no le restamos el año para las personas que están asistiendo asumimos que 
-el e7 que señala es aprobado por el período de levantamiento de la encuesta (15 nov a 20 diciembre)en que
-ya esta casi finalizando el año escolar."  *****/
+lo que CASEN asume es que: "Nosotros no le restamos el aÃ±o para las personas que estÃ¡n asistiendo asumimos que 
+el e7 que seÃ±ala es aprobado por el perÃ­odo de levantamiento de la encuesta (15 nov a 20 diciembre)en que
+ya esta casi finalizando el aÃ±o escolar."  *****/
 
 *** to create the attend variable;
 gen byte attend=e2
@@ -756,7 +756,7 @@ gen eduui_ci=(e8==6 | e8==8)
 gen eduuc_ci=(e8==7 | e8==9 | e8==10)
 */
 /*
-*Mayra Sáenz - Septiembre 2014
+*Mayra SÃ¡enz - Septiembre 2014
 *Pruebo con esta sintaxis, pero el porcentaje de asistencia a la secundaria baja.
 g aedu_ci = .
 replace aedu_ci = 0 if (e8==1 | e8 ==13) 
@@ -772,7 +772,7 @@ replace aedu_ci = 17+4 if ((e7>=4 & e7<=7) & e8==10)
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing
 gen pqnoasis_ci= e4
 
 **************
@@ -789,7 +789,7 @@ replace pqnoasis1_ci = 7 if e4 ==10
 replace pqnoasis1_ci = 8 if e4 ==1  | e4 ==2  | e4 ==3
 replace pqnoasis1_ci = 9 if e4 ==11 | e4 ==12 | e4 ==15 | e4 ==17 | e4 ==18
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **************
@@ -930,7 +930,7 @@ gen edupub_ci=.
 
 	
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -967,7 +967,7 @@ gen afiliado_ci=.
 replace afiliado_ci=1 if ( o17 >= 1 &  o17 <= 6)
 recode afiliado_ci .=0 if o7  != -3
 label var afiliado_ci "Afiliado a la Seguridad Social"
-*Mayra Saenz Octubre 2013, se aumenta la especificación cuando afilafp !=-3 que corresponde a los que no aplican.
+*Mayra Saenz Octubre 2013, se aumenta la especificaciÃ³n cuando afilafp !=-3 que corresponde a los que no aplican.
 
 ****************
 *tipopen_ci*****
@@ -1110,7 +1110,7 @@ replace categoinac_ci=3 if o4==1
 replace categoinac_ci=4 if o4==2 | o4==3 | o4==6 | o4==7 | o4==8 | o4==9
 
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1127,7 +1127,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -1144,15 +1144,15 @@ gen region_c=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

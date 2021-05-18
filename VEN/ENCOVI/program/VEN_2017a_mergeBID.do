@@ -1,16 +1,16 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS VEN
 local ENCUESTA ENCOVI
@@ -24,11 +24,11 @@ capture log close
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: 
+PaÃ­s: 
 Encuesta: ENCOVI
 Round: a
 Autores: Daniela Zuluaga - danielazu@iadb.org - da.zuluaga@hotmail.com
-Fecha última modificación: Marzo 2018
+Fecha Ãºltima modificaciÃ³n: Marzo 2018
 
 							SCL/LMK - IADB
 ****************************************************************************/

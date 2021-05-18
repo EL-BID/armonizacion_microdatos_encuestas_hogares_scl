@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Versión 2007: Victoria, Maria Fernanda Prada (MFP)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2007: Victoria, Maria Fernanda Prada (MFP)
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -263,7 +263,7 @@ replace condocup_ci=1 if (o1==1 | o2==1)
 replace condocup_ci=2 if ((o1==2 | o2==2) & (o3==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -456,9 +456,9 @@ replace aedu_ci=8 if (e5>=8 & e6==3)
 replace aedu_ci=8+e5 if e6==6 | e6==8
 replace aedu_ci=6+e5 if e6==5 | e6==7 
 /*En Chile hubo un cambio en el sistema educativo, por el cual se paso de una primaria
-(preparatoria) de 6 años, a una de 8. Por lo tanto, para todos los que contesten haber participado del sistema antiguo, se 
-les imputan 6 años de educacion primaria en vez de 8 ==> Con la secundaria no hay problema, porque en el sistema antiguo se
-compenzaba y duraba 6 años.*/
+(preparatoria) de 6 aÃ±os, a una de 8. Por lo tanto, para todos los que contesten haber participado del sistema antiguo, se 
+les imputan 6 aÃ±os de educacion primaria en vez de 8 ==> Con la secundaria no hay problema, porque en el sistema antiguo se
+compenzaba y duraba 6 aÃ±os.*/
 replace aedu_ci=12 if (e5>=5 & (e6>=5 & e6<=8))|(e5>=4 & (e6==5 | e6==7))
 replace aedu_ci=8 if (e6>=5 & e6<=8) & (e5==9 | e5==10)
 replace aedu_ci=12+e5 if e6>=9 & e6<=14
@@ -486,7 +486,7 @@ gen eduuc_ci=(e6==10 | e6==12 | e6==14 | e6==15)
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing
 gen pqnoasis_ci= e3
 
 **************
@@ -503,7 +503,7 @@ replace pqnoasis1_ci = 7 if e3 ==10 | e3 ==11
 replace pqnoasis1_ci = 8 if e3 ==1  | e3 ==2  | e3 ==3
 replace pqnoasis1_ci = 9 if e3 ==12 | e3 ==13 | e3 ==16 | e3 ==18 | e3 ==19
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **************
@@ -644,7 +644,7 @@ gen edupub_ci=.
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -823,7 +823,7 @@ replace categoinac_ci=3 if o5==1
 replace categoinac_ci=4 if o5==2 | o5==3 | o5==6 | o5==7 | o5==8 | o5==9 | o5==10
 
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -839,7 +839,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -855,15 +855,15 @@ gen autocons_ci=.
 gen region_c=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

@@ -8,7 +8,7 @@ clear matrix
 set more off
 set matsize 2000
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ENCV
@@ -27,44 +27,44 @@ local base_out = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`
 
 **Viviendas**
 use "`base_in'\dbfp_encv_545_1.dta", clear
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_545_2.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_545_2.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
 **Hogares**
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_1.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_1.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_2.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_2.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_3.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_3.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_4.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_4.dta", t(1:1)
 drop _merge 
 sort  periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_5.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_5.dta", t(1:1)
 drop _merge 
 sort  periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_6.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_6.dta", t(1:1)
 drop _merge 
 sort  periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_7.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_7.dta", t(1:1)
 drop _merge 
 sort  periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_8.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_8.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
-mmerge periodo directorio secuencia_encuesta using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_9.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_546_9.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta
 
@@ -76,21 +76,21 @@ tempfile hogares
 save `hogares' , replace
 
 **Personas**
-use "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_1.dta", clear
+use "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_1.dta", clear
 
-mmerge periodo directorio secuencia_encuesta secuencia_p using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_2.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta secuencia_p using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_2.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta secuencia_p
 
-mmerge periodo directorio secuencia_encuesta secuencia_p using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_3.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta secuencia_p using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_3.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta secuencia_p
 
-mmerge periodo directorio secuencia_encuesta secuencia_p using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_4.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta secuencia_p using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_4.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta secuencia_p
 
-mmerge periodo directorio secuencia_encuesta secuencia_p using "Z:\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_5.dta", t(1:1)
+mmerge periodo directorio secuencia_encuesta secuencia_p using "${surveysFolder}\survey\COL\ENCV\2010\m8\data_orig\STATA\dbfp_encv_547_5.dta", t(1:1)
 drop _merge 
 sort periodo directorio secuencia_encuesta secuencia_p
 

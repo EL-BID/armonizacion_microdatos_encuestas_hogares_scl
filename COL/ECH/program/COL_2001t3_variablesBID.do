@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ECH
@@ -27,13 +27,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ECH
 Round: t3
 Autores: Analia
-Generación nuevas variables LMK: 
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: noviembre 2013
+GeneraciÃ³n nuevas variables LMK: 
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: noviembre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -48,7 +48,7 @@ use `base_in', clear
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -57,24 +57,24 @@ label value region_BID_c region_BID_c
 gen region_c= real(substr(pIDENT,1,2))
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -100,7 +100,7 @@ sort idh_ch
 label variable idh_ch "ID del hogar"
 
 /*Alvaro AM 07-2019: genero este nuevo id porque el destring no recoge todos los digitos del string
-de id para COL-2001, lo que resulta en ids de hogar duplicados y en una subestimaciÃ³n de pobreza
+de id para COL-2001, lo que resulta en ids de hogar duplicados y en una subestimaciÃƒÂ³n de pobreza
 porque se sobreestiman los ingresos familiares. 
 Ver: https://www.statalist.org/forums/forum/general-stata-discussion/general/1371814-problem-with-format-of-variable-after-using-destring-stata-13-1-mp-on-windows-7
 */
@@ -195,7 +195,7 @@ label variable edad_ci "Edad del individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -339,7 +339,7 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 *********
 *lp_ci***
@@ -373,7 +373,7 @@ replace condocup_ci=1 if  p12_T50 == 1  | p13_T50==1 | p14_T50==1 | p15_T501==1
 replace condocup_ci=2 if condocup_ci!=1 & (p12_T50 == 2 | p16_T50==1 | (p18_T50==1 | p18_T50==3)) & p23_T50==1
 replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2 & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -386,7 +386,7 @@ label var afiliado_ci "Afiliado a la Seguridad Social"
 ****************
 *cotizando_ci***
 ****************
-* Solo hay variable para este año por lo que no se puede homologar.
+* Solo hay variable para este aÃ±o por lo que no se puede homologar.
 gen cotizando_ci=.
 /*
 * 2014, 01 Incorporacion MLO
@@ -399,14 +399,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -477,7 +477,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 *categoinac_ci**
 ***************
 gen categoinac_ci=. 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos"
 label value categoinac_ci categoinac_ci
 /*Y.L. en la ECH No se puede clasificar a todos los inactivos.
@@ -518,7 +518,7 @@ gen desemp_abierto=1 if p16_T50=="1" & p23_T50=="1"
 *p16_T50 hizo diligencias en las ultimas 4 semanas
 *p23_T50 estaba disponible para trabajar la semana pasada*
 gen desemp_oculto=1 if  (p18_T50>="02" & p18_T50<="10") & p21_T50=="1"
-* no ha buscado trabajo en la ultima semana, razones validas, pero si ha buscado en el año
+* no ha buscado trabajo en la ultima semana, razones validas, pero si ha buscado en el aÃ±o
 gen desemp_DANE=1 if  desemp_abierto==1 | desemp_oculto==1 | p23_T50=="1"
 
 ****************
@@ -715,7 +715,7 @@ drop rama1
 ****************
 gen durades_ci=real(p49_T70)/4.3
 *replace durades_ci=61.9 if p54_T70=="998"
-/*está truncada en 260 semanas---> 61.9 meses*/
+/*estÃ¡ truncada en 260 semanas---> 61.9 meses*/
 replace durades_ci=. if p49_T70=="999" | p49_T70=="998"
 
 *p54_T70 es en semanas*
@@ -897,9 +897,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -1019,8 +1019,8 @@ replace yedc=8  if yedc1==408
 replace yedc=9  if yedc1==409 
 replace yedc=10 if yedc1==410
 replace yedc=11 if yedc1==411  | yedc1==500 
-replace yedc=12 if yedc1==412 /* Y.L -> 12 años de educacion secundaria "son muy pocos"*/
-replace yedc=13 if yedc1==413 /* Y.L -> 13 años de educacion secundaria "son muy pocos"*/
+replace yedc=12 if yedc1==412 /* Y.L -> 12 aÃ±os de educacion secundaria "son muy pocos"*/
+replace yedc=13 if yedc1==413 /* Y.L -> 13 aÃ±os de educacion secundaria "son muy pocos"*/
 
 *** superior o universitario  *** 
 replace yedc=12 if yedc1==501
@@ -1115,14 +1115,14 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-*Y.L - > Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L - > Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduui_ci=(aedu_ci>11 & aedu_ci<16)
 label variable eduui_ci "Superior incompleto"
 
 ***************
 ***eduuc_ci****
 ***************
-*Y.L. -> Para la educación superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
+*Y.L. -> Para la educaciÃ³n superior no es posible saber cuantos anios dura el ciclo esta es una aprox.
 gen byte eduuc_ci= (aedu_ci>=16 & aedu_ci!=.)
 label variable eduuc_ci "Superior completo"
 
@@ -1217,7 +1217,7 @@ gen aguamide_ch=.
 *****luz_ch*****
 ****************
 
-* Modificaciones Marcela Rubio - Noviembre 2014: se genera variable como missing ya que con var p4i_T013 no puedo generarse luz_ch ya que sólo toma el valor de 1
+* Modificaciones Marcela Rubio - Noviembre 2014: se genera variable como missing ya que con var p4i_T013 no puedo generarse luz_ch ya que sÃ³lo toma el valor de 1
 /*
 destring p4i_T013, replace
 gen luz_ch=(p4i_T013==1)
@@ -1256,9 +1256,9 @@ replace des1_ch=0 if p2_T01=="6"
 replace des1_ch=1 if p2_T01=="1"|p2_T01=="2"
 replace des1_ch=2 if p2_T01=="3" | p2_T01=="4"
 replace des1_ch=3 if p2_T01=="5"
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 
@@ -1300,8 +1300,8 @@ gen resid_ch=0 if basura==4
 replace resid_ch=1 if basura==3 
 replace resid_ch=2 if basura==2 | basura==1 
 drop basura
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -1436,15 +1436,15 @@ gen ylnmotros_ci=.
 gen tcylmpri_ch=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

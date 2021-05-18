@@ -1,13 +1,13 @@
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -15,13 +15,13 @@ set more off
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Jamaica
+Pa铆s: Jamaica
 Encuesta: JSLC
 Round: Mayo 2000
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 10 de Diciembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 10 de Diciembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -34,7 +34,7 @@ Detalle de procesamientos o modificaciones anteriores:
 clear all
 set mem 500m
 set more off
-cd "\\Sdssrv03\surveys\Jamaica\2006\JSLC\Datos Originales\slc2006"
+cd "${surveysFolder}\Jamaica\2006\JSLC\Datos Originales\slc2006"
 
 use rec004
 
@@ -101,14 +101,14 @@ merge m:1 serial using rec001
 drop _merge 
 
 
-save "\\Sdssrv03\surveys\Jamaica\2006\JSLC\Data\slc2006.dta", replace
-save "X:\ARM\JAM\2006\JSLC\Orig_data\slc2006.dta", replace
+save "${surveysFolder}\Jamaica\2006\JSLC\Data\slc2006.dta", replace
+save "${surveysFolder}\ARM\JAM\2006\JSLC\Orig_data\slc2006.dta", replace
 */
 
 
-* La base que tiene los datos de desnutrici髇 es la rec009.dta
+* La base que tiene los datos de desnutrici贸n es la rec009.dta
 clear all
-global path = "D:\BID\JAM\Jam SLC"
+global path = "${surveysFolder}\BID\JAM\Jam SLC"
 use "$path\SLC\2006\m5\data_orig\slc2006\rec009.dta"
 foreach v of varlist _all {
 	local lowname=lower("`v'")
@@ -122,7 +122,7 @@ saveold "$path\SLC\2006\m5\data_orig\slc2006\rec009.dta", replace
 
 
 clear all
-global path = "D:\BID\JAM\Jam SLC"
+global path = "${surveysFolder}\BID\JAM\Jam SLC"
 use "$path\SLC\2006\m5\data_orig\slc2006.dta"
 foreach v of varlist _all {
 	local lowname=lower("`v'")

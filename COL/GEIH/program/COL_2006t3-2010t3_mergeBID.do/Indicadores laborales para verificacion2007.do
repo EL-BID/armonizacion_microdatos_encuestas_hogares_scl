@@ -1,6 +1,6 @@
 			**************************************************
-			********CONSTRUCCIÓN DE ALGUNOS INDICADORES******* 
-			*****DE MDO LABORAL PARA VERIFICACIÓN DE BASES****
+			********CONSTRUCCIÃ“N DE ALGUNOS INDICADORES******* 
+			*****DE MDO LABORAL PARA VERIFICACIÃ“N DE BASES****
 			**************************************************
 
 

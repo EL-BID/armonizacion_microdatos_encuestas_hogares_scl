@@ -1,6 +1,6 @@
-*Elaboración: Melany Gualavisi
+*ElaboraciÃ³n: Melany Gualavisi
 *Marzo,2016
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS TTO
 local ENCUESTA CSSP

@@ -1,7 +1,7 @@
 * Peru
 clear
 set more off
-cd "Y:\survey\PER\ENAHO\2002\t4\data_orig\"
+cd "${surveysFolder}\survey\PER\ENAHO\2002\t4\data_orig\"
 
 *Creacion del archivo principal de la ENAHO 4o trimestre del 2002
 
@@ -17,7 +17,7 @@ cd "Y:\survey\PER\ENAHO\2002\t4\data_orig\"
 *1-800b (Part Ciudadana),
 
 *
-* La informacion del archivo SUMARIA también se encuentra en el archivo final.
+* La informacion del archivo SUMARIA tambiÃ©n se encuentra en el archivo final.
 
  
 ******************************
@@ -63,5 +63,5 @@ drop _merge
 sort conglome vivienda hogar codperso
 merge conglome vivienda hogar using peru02-iv-hogares_modif.dta
 compress
-save "Y:\survey\PER\ENAHO\2002\t4\data_merge\PER_2002t4.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\2002\t4\data_merge\PER_2002t4.dta", replace
 

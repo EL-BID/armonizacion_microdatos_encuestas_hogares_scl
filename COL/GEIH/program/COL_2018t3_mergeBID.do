@@ -12,7 +12,7 @@ set more off
 local anio =2018
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -166,14 +166,14 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3cabecera.dta", clear
-append using "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3resto.dta" 
-merge 1:1 id using "Z:\survey\COL\GEIH\2018\t3\COL_2018t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2018\t3\COL_2018t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
 **Nota** FALTA COMPLETAR ESTE  MODULO CUANDO SALGA LA BASE DE POBREZA EN MAYO
-merge 1:1 id using "Z:\survey\COL\GEIH\2018\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2018\a\data_merge\pov_t3.dta"
 drop _merge
 
 foreach v of varlist _all {
@@ -181,7 +181,7 @@ foreach v of varlist _all {
 	rename `v' `lowname'
 }
 
-saveold "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3.dta", replace
 
 
 

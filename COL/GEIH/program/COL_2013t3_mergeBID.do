@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Enero, 2014
 
 *** MERGE COLOMBIA GEIH 2013 ****
@@ -8,7 +8,7 @@ clear
 set more off
 local anio = 2013
 local anioab ="13" 	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'm7\data_orig\" 
 local m8 ="`ruta'm8\data_orig\" 
 local m9 ="`ruta'm9\data_orig\" 
@@ -20,18 +20,18 @@ local out  ="`ruta't3\data_merge\"
 *----------------------------------------------
 
 clear
-use "Y:\survey\COL\GEIH\2013\a\data_orig\anual_homologado DANE\personas_2013.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2013\a\data_orig\anual_homologado DANE\personas_2013.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-merge m:1 idh using "Y:\survey\COL\GEIH\2013\a\data_orig\anual_homologado DANE\hogares_2013.dta"
+merge m:1 idh using "${surveysFolder}\survey\COL\GEIH\2013\a\data_orig\anual_homologado DANE\hogares_2013.dta"
 drop _merge
 egen id =concat (directorio secuencia_p orden)
 sort id
-save "Y:\survey\COL\GEIH\2013\a\data_merge\pov_anual.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2013\a\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 keep  id impa- fex_c nper- fex_dpto_c
-save "Y:\survey\COL\GEIH\2013\a\data_merge\pov_t3.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2013\a\data_merge\pov_t3.dta", replace
 
 *2. Append entre meses
 *------------------------
@@ -159,7 +159,7 @@ append using "`out'COL_`anio't3resto.dta"
 replace fex_c_2011=fex_c_2011/3
 sort id
 
-merge 1:1 id using "Y:\survey\COL\GEIH\2013\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2013\a\data_merge\pov_t3.dta"
 drop _merge
 
 saveold "`out'COL_`anio't3.dta", replace

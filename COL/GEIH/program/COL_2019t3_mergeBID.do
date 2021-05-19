@@ -11,7 +11,7 @@ set more off
 local anio =2019
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -163,17 +163,17 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
-append using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
-merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
 **Nota** FALTA COMPLETAR ESTE  MODULO CUANDO SALGA LA BASE DE POBREZA EN MAYO
-merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
 drop _merge
 
-merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\a\data_merge\ETNIA19.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\ETNIA19.dta"
 drop _merge
 
 
@@ -182,7 +182,7 @@ foreach v of varlist _all {
 	rename `v' `lowname'
 }
 
-saveold "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3.dta", replace
 
 
 

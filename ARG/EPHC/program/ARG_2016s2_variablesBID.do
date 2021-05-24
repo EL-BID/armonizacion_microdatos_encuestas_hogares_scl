@@ -132,6 +132,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	gen factor_ch=pondera
 	label var factor_ch "Factor de expansion del hogar"
 	
+
 	******************************
 	*factor expansión individio* 
 	*****************************
@@ -152,6 +153,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 
 	gen estrato_ci=.
 	label var estrato_ci "estrato"
+
 
 		*************************
 		***VARIABLES DEL HOGAR***

@@ -1620,7 +1620,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
-local ANO "2019"
+local ANO "2020"
 local ronda s2 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"

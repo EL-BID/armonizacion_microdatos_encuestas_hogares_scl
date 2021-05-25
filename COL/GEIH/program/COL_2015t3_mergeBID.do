@@ -10,7 +10,7 @@ set more off
 local anio = 2015
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -174,16 +174,16 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3cabecera.dta", clear
-append using "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3resto.dta" 
-merge 1:1 id using "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
-merge 1:1 id using "M:\survey\COL\GEIH\2015\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2015\a\data_merge\pov_t3.dta"
 drop _merge
 
-saveold "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3.dta", replace
 
 
 

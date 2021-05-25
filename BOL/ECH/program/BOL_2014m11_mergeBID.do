@@ -1,10 +1,18 @@
+
+* (Versión Stata 12)
+clear
+set more off
+
 * Elaboración: Marcela G. Rubio 
 * Fecha: Marzo 2016
+* Última versión: 2021/03/09 (Cesar Lins)
 
 global in  = "${surveysFolder}\survey\BOL\ECH\2014\m11\data_orig\"
 global out = "${surveysFolder}\survey\BOL\ECH\2014\m11\data_merge"
 
 use "$in\eh2014_equipamiento.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8_13 posee_
 rename s8_14 nro_
@@ -48,6 +56,8 @@ sort folio
 save "$in\eh2014_equipamiento_reshape.dta", replace
 
 use "$in\eh2014_gastosalimentarios.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8a_01  s8a_
 rename s8a_02  s8b_
@@ -147,16 +157,24 @@ sort folio
 save "$in\eh2014_gastosalimentarios_reshape.dta", replace
 
 use "$in\eh2014_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio nro
 save, replace
 
 use "$in\eh2014_vivienda.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
 * Merge
 
 use "$in\eh2014_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 merge m:1 folio using "$in\eh2014_vivienda.dta", force
 drop _merge
@@ -167,4 +185,5 @@ drop _merge
 merge m:1 folio using "$in\eh2014_gastosalimentarios_reshape.dta", force
 drop _merge
 
-saveold "$out\BOL_2014m11.dta", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2014m11.dta", replace

@@ -177,6 +177,12 @@ merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\pov_t3.dt
 drop _merge
 
 
+
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\ETNIA19.dta"
+drop _merge
+
+
+
 foreach v of varlist _all {
 	local lowname=lower("`v'")
 	rename `v' `lowname'

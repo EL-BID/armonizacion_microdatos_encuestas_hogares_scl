@@ -24,7 +24,7 @@ Encuesta: ECH
 Round: m11
 Autores:
 Versión 2016: Mayra Sáenz
-Última versión: Noviembre 4, 2016
+Última versión: 2021/03/09 (Cesar Lins)
 
 
 							SCL/LMK - IADB
@@ -217,8 +217,13 @@ merge m:1 folio using  "$in\bolivia_gastosalimentarios_2012_reshape.dta", force
 drop _merge
 
 
+
 saveold "$out\BOL_2012m11.dta", replace
 
 
 *Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
 save "$out\BOL_2012m11.dta", replace
+
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2012a.dta", replace
+

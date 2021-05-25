@@ -11,7 +11,7 @@ set more off
 local anio =2019
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -25,15 +25,18 @@ local out ="`ruta'\`ronda2'\data_merge\"
 clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Personas.dta", clear
 
-merge m:1 DIRECTORIO SECUENCIA_P using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
+merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
 drop _merge
-egen id =concat (DIRECTORIO SECUENCIA_P ORDEN)
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA19.dta", keep(match master)
+drop _merge
+
+egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 
-keep  id impa-iof6 impaes-fex_c nper-id li lp
+keep  id impa-iof6 impaes-fex_c nper-id li lp P6080 P6080S1
 save "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -163,22 +166,23 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
-append using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
-merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
 **Nota** FALTA COMPLETAR ESTE  MODULO CUANDO SALGA LA BASE DE POBREZA EN MAYO
-merge 1:1 id using "\\Sdssrv03\surveys\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
 drop _merge
+
 
 foreach v of varlist _all {
 	local lowname=lower("`v'")
 	rename `v' `lowname'
 }
 
-saveold "\\Sdssrv03\surveys\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2019\t3\data_merge\COL_2019t3.dta", replace
 
 
 

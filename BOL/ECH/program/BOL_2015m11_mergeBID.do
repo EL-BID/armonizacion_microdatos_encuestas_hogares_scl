@@ -187,6 +187,11 @@ sort folio
 save, replace
 
 use "$in\eh2015_gastos_noalimentarios", clear
+*Modificación Cesar Lins - Feb 2021, file name lost second underscore
+use "$in\eh2015_gastos_noalimentarios", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 

@@ -299,6 +299,47 @@ notes raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
 	g miembros_ci = (relacion_ci <= 4)
 	la var miembros_ci "Miembro del hogar"
 
+******************************************************************************
+*	VARIABLES DE DIVERSIDAD
+******************************************************************************
+**MarÃ­a Antonella Pereira & Nathalia Maya - Marzo 2021 
+
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: De acuerdo con su cultura, pueblo o rasgos fÃ­sicos, â€¦ es o se reconoce como:(P6080) (1- Indigena 2- Gitano - Rom 3- Raizal del archipiÃ©lago de San AndrÃ©s y providencia 4- Palenquero de San basilio o descendiente 5- Negro(a), mulato(a), Afrocolombiano(a) o Afrodescendiente 6- Ninguno de los anteriores (mestizo, blanco, etc)) 
+gen afroind_ci=. 
+replace afroind_ci=1  if p6080 == 1 
+replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
+replace afroind_ci=3 if p6080 == 2 | p6080 == 6
+replace afroind_ci=. if p6080 ==.
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2006
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+	
+		************************************
+		*** VARIABLES DEL MERCADO LABORAL***
+		************************************
+
 
 		************************************
 		*** VARIABLES DEL MERCADO LABORAL***

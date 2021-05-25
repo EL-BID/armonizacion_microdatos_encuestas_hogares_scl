@@ -25,18 +25,18 @@ local out ="`ruta'\`ronda2'\data_merge\"
 
 clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Personas.dta", clear
-merge m:1 DIRECTORIO SECUENCIA_P using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
+merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
 drop _merge
-merge 1:1 DIRECTORIO SECUENCIA_P ORDEN using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA18.dta", keep(match master)
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA18.dta", keep(match master)
 drop _merge
 
-egen id =concat (DIRECTORIO SECUENCIA_P ORDEN)
+egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring Mes, replace
 keep if Mes>=7 & Mes<=9
 
-keep  id Impa-Iof6 Impaes-Fex_c Nper-id
+keep  id Impa-Iof6 Impaes-Fex_c Nper-id P6080 P6080S1
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -169,6 +169,9 @@ clear
 use "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3cabecera.dta", clear
 append using "Z:\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3resto.dta" 
 merge 1:1 id using "Z:\survey\COL\GEIH\2018\t3\COL_2018t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2018\t3\data_merge\COL_2018t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 

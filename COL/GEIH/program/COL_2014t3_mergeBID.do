@@ -22,7 +22,7 @@ local out ="`ruta'\`ronda2'\data_merge\"
 *----------------------------------------------
 
 clear
-use "`ruta'\`rondaa'\data_orig\anual_homologado_DANE\personas 2014.dta", clear
+use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2014.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2014.dta", force
 drop _merge
 merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA14.dta", keep(match master)
@@ -33,7 +33,7 @@ sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa- fex_c nper- fex_dpto_c
+keep  id impa- fex_c nper- fex_dpto_c P6080 P6080S1
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 

@@ -115,6 +115,13 @@ label value region_BID_c region_BID_c
 
 	clonevar estrato_ci=estrato
 	label variable estrato_ci "Estrato"
+	
+		***************
+	***factor_ci***
+	***************
+	gen factor_ci=fexp
+	label variable factor_ci "Factor de expansion del individuo"
+
 
 	*************
 	****idh_ch***
@@ -177,25 +184,6 @@ label value region_BID_c region_BID_c
 			***VARIABLES DEMOGRAFICAS***
 			****************************
 	
-	***************
-	***factor_ci***
-	***************
-	gen factor_ci=fexp
-	label variable factor_ci "Factor de expansion del individuo"
-	
-	***************
-	***upm_ci***
-	***************
-
-	clonevar upm_ci=upm
-	label variable upm_ci "Unidad Primaria de Muestreo"
-
-	***************
-	***estrato_ci***
-	***************
-
-	clonevar estrato_ci=estrato
-	label variable estrato_ci "Estrato"
 
 	*************
 	***sexo_ci***

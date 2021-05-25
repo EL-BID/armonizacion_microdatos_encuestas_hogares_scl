@@ -307,11 +307,10 @@ gen estrato_ci=.
 	***************
 **Pregunta: De acuerdo con su cultura, pueblo o rasgos físicos, … es o se reconoce como:(P6080) (1- Indigena 2- Gitano - Rom 3- Raizal del archipiélago de San Andrés y providencia 4- Palenquero de San basilio o descendiente 5- Negro(a), mulato(a), Afrocolombiano(a) o Afrodescendiente 6- Ninguno de los anteriores (mestizo, blanco, etc)) 
 gen afroind_ci=. 
-replace afroind_ci=1  if p6080 == 1 
-replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
-replace afroind_ci=3 if p6080 == 2 | p6080 == 6
-replace afroind_ci=. if p6080 ==.
-
+replace afroind_ci=1  if P6080 == 1 
+replace afroind_ci=2 if P6080 == 3 | P6080 == 4 | P6080 == 5
+replace afroind_ci=3 if P6080 == 2 | P6080 == 6
+replace afroind_ci=. if P6080 ==.
 	***************
 	***afroind_ch***
 	***************

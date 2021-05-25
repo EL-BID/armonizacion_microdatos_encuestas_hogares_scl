@@ -98,6 +98,11 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "Division política, departamentos"
 
+***********
+*factor_ch*
+***********
+gen factor_ch=factor
+label var factor_ch "Factor de Expansion del Hogar"
 
 ********
 *idh_ch*
@@ -156,7 +161,7 @@ label value relacion_ci relacion_ci
 ***********
 *factor_ci*
 ***********
-gen factor_ci=factor_ch
+gen factor_ci=factor
 
 *********
 *sexo_ci*

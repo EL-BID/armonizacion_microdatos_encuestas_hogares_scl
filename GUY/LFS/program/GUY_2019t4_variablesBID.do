@@ -132,7 +132,7 @@ gen relacion_ci=1     if q1_02==1
 replace relacion_ci=2 if q1_02==2 
 replace relacion_ci=3 if q1_02==3 | q1_02==4 | q1_02==6
 replace relacion_ci=4 if (q1_02>=7 & q1_02<=8) | q1_02==5
-replace relacion_ci=5if q1_02==9
+replace relacion_ci=5 if q1_02==9
 label var relacion_ci "Relación de parentesco con el jefe"
 label def relacion_ci 1"Jefe" 2"Conyuge" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio doméstico"
 label val relacion_ci relacion_ci	

@@ -34,10 +34,10 @@ global ronda  "t3"
 				}
 
 *2. Armonización de Variables
-global PAIS COL
-global ENCUESTA GEIH
-global ANO "2019"
-global ronda  "t3"
+global PAIS VEN
+global ENCUESTA ENCOVI
+global ANO "2014 2015 2016 2017 2018 2019"
+global ronda  "a"
 
 				foreach pais of global PAIS {
 					foreach enc of global ENCUESTA {
@@ -56,11 +56,11 @@ global ronda  "t3"
 *3.UNICODE
 
 clear all
-cd "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl\URY\ECH\program\" 
+cd "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl\COL\GEIH\program\" 
 
-unicode analyze  "URY_2011a_variablesBID.do" 
+unicode analyze  "COL_2019t3_variablesBID.do" 
 unicode encoding set "latin1"
-unicode translate  "URY_2011a_variablesBID.do" 
+unicode translate  "COL_2019t3_variablesBID.do" 
 
 *************
 global PAIS COL

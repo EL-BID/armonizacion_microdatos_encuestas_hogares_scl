@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (Versión stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -16,7 +16,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
-local ANO "2016"
+local ANO "2020"
 local ronda s2 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -24,21 +24,19 @@ local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
    
 
-
-
 capture log close
-log using "`log_file'", replace 
+cap log using "`log_file'", replace 
 
-log off
+cap log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 Paî³º Argentina
 Encuesta: EPHC
-Round: IISem-2016
+Round: IISem-2019
 Autores: 
-Versión ²012: Yessenia Loaysa
-Û¬tima version Daniela Zuluaga (SCL/SCL) - Email: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha de ultima modificacion 21 de Junio de 2017
+Versión 2012: Yessenia Loaysa
+ Alvaro Altamirano (LMK/SCL) - Email: alvaroalt@iadb.org, 24 de junio de 2020
+Última versión: Cesar Lins (SCL/GDI) Marzo 2021
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -71,9 +69,9 @@ replace region_c=2  if aglomerado==22                          /*Catamarca*/
 replace region_c=3  if aglomerado==8                           /*Chaco*/
 replace region_c=4  if aglomerado==9 | aglomerado==91          /*Chubut*/
 replace region_c=5  if aglomerado==32                          /*Ciudad de Buenos Aires*/
-replace region_c=6  if aglomerado==13 | aglomerado==36         /*Có²d¯va*/
+replace region_c=6  if aglomerado==13 | aglomerado==36         /*Córdoba*/
 replace region_c=7  if aglomerado==12                          /*Corrientes*/
-replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre Rî°³*/
+replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
 replace region_c=9  if aglomerado==15                          /*Formosa*/
 replace region_c=10 if aglomerado==19                          /*Jujuy*/
 replace region_c=11 if aglomerado==30                          /*La pampa*/
@@ -119,12 +117,6 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
-		
-			****************************
-			*  VARIABLES DE DISENO     *
-			****************************
-	
-	
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
@@ -132,28 +124,17 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	gen factor_ch=pondera
 	label var factor_ch "Factor de expansion del hogar"
 	
-
-	******************************
-	*factor expansión individio* 
-	*****************************
-
-	gen factor_ci=pondera
-	label var factor_ch "Factor de expansion del individuo"
-
-	*****************************
-	*unidad primaria de muestreo* 
-	*****************************
-
+	*******************************************
+	*unidad primaria de muestreo*
+	*******************************************	
 	gen upm_ci=aglomerado
-	label var upm_ci "Unidad primaria de muestreo"
+
+	*******************************************
+	*estrato*
+	*******************************************	
 	
-	*****************************
-	*unidad primaria de muestreo* 
-	*****************************
-
 	gen estrato_ci=.
-	label var estrato_ci "estrato"
-
+	
 
 		*************************
 		***VARIABLES DEL HOGAR***
@@ -189,7 +170,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	*anio*
 	******
 	
-	gen anio_c=ano4
+	gen anio_c=2020
 
 
 	**********
@@ -208,10 +189,22 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	replace relacion_ci=4 if ch03>=4 & ch03<=9
 	replace relacion_ci=5 if ch03==10 
 	*replace relacion_ci=6 if componente==51 /* no se clasifica mas de esta forma desde 2013 t3)*/
-			
+	
+label define relacion_ci 1 "Jefe/a" 2 "Esposo/a" 3 "Hijo/a" 4  "Otros parientes" 5 "Otros no parientes"
+label variable relacion_ci "Relacion con el jefe del hogar"
+
+
+
 			****************************
 			***VARIABLES DEMOGRAFICAS***
 			****************************
+
+	***********
+	*factor_ci* 
+	***********
+
+	gen factor_ci=pondera
+	
 
 	*********
 	*sexo_ci*
@@ -232,7 +225,8 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	*Estado Civil*
 	**************
 	
-	recode ch07 (1=2) (2=2) (3=3) (4=4) (5=1) (9=.), gen(civil_ci) 
+	recode ch07 (1 2=2 "Union formal o informal") (3=3 "Divorciado o separado") (4=4 "Viudo") (5=1 "Soltero") (else=.), gen(civil_ci) 
+	label variable civil_ci "Estado civil"
 	
 	
 	*********
@@ -340,9 +334,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	
 	gen miembros_ci=(relacion_ci>=1 & relacion_ci<5) 
 
-	
-			
-*******************************************************
+	*******************************************************
 ***           VARIABLES DE DIVERSIDAD               ***
 *******************************************************				
 * Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
@@ -371,7 +363,8 @@ gen dis_ci=.
 	*******************
 	***dis_ch***
 	*******************
-gen dis_ch=. 	
+gen dis_ch=. 
+	
 
 			***********************************
 			***VARIABLES DEL MERCADO LABORAL***
@@ -387,7 +380,7 @@ replace condocup_ci=2 if estado==2
 replace condocup_ci=3 if estado==3 & edad_ci>=10
 replace condocup_ci=. if estado == 0
 replace condocup_ci=4 if estado == 4
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupación ¤e acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 	
@@ -407,8 +400,6 @@ gen desemp_ci=(condocup_ci==2)
 *************
 gen pea_ci=(emp_ci==1 | desemp_ci==1)
 
-
-
 	*************
 	*desalent_ci*
 	*************
@@ -425,14 +416,14 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	*************	
 	*horaspri_ci*
 	*************
-
+	destring pp3e_tot, ignore(",") replace
 	gen horaspri_ci=pp3e_tot
 	replace horaspri_ci=. if pp3e_tot==999
 	
 	************* 
 	*horastot_ci*
 	*************
-
+	destring pp3f_tot, ignore(",") replace
 	gen otrashoras=pp3f_tot if pp3f_tot!=999
 	
 	egen horastot_ci=rsum(horaspri_ci otrashoras), missing 
@@ -529,23 +520,24 @@ tab subemp_ci
 	**********
 	*NOTA: desde 2001 hay otra clasificacion, pero debe estudiarse como hacer las agrupaciones para la 
 	*construccion de la variable tal como esta propuesta para la armonizacion.
+
+tostring pp04d_cod, replace
 gen ocup1=substr(pp04d_cod,1,2)
 gen ocup2=substr(pp04d_cod,3,1)
 gen ocup3=substr(pp04d_cod,4,1)
 gen ocup4=substr(pp04d_cod,5,1)
 
 destring ocup1 ocup2 ocup3 ocup4, replace
-
+/*
 lab var ocup1 "patron"
 lab var ocup2 "asalariados"
-lab var ocup2 "cuenta_propia"
-lab var ocup2 "sin_salario"
-
+lab var ocup3 "cuenta_propia"
+lab var ocup4 "sin_salario"
+*/
 
 *************
 ***ocupa_ci**
 *************
-
 capture drop ocupa_ci	
 gen ocupa_ci=1 if ocup4>=1 & ocup4<=2
 replace ocupa_ci=2 if ocup1>=0 & ocup1<=7 & ocupa_ci !=1
@@ -588,6 +580,7 @@ label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servici
 label val rama_ci rama_ci
 
 
+	
 	
 	************
 	*durades_ci*
@@ -905,7 +898,7 @@ label val rama_ci rama_ci
 	replace ch14=. if ch14==98 | ch14==99
 	
 	
-	*Variable de Añ¯ de Educación	
+	*Variable de Añ¯ ¤e Educación	
 	
 	gen aedu_ci=.
 	
@@ -987,7 +980,7 @@ label val rama_ci rama_ci
 	***********
 	*edus1c_ci*
 	***********
-
+	*edus1c_ci: primer ciclo de secundaria completa
 	gen byte edus1c_ci=(aedu_ci==9)
 
 	***********
@@ -1027,7 +1020,7 @@ label val rama_ci rama_ci
 	
 
 /** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar añ¯³ de educaciónEsta parte está¡­â³ adelante y por ahora el impacto mâ³ visible es que la población £on educación ¥special se les asigna de manera directa 3 añ¯³ de educación £uando no deberî¢n ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación de los añ¯³ de Educación °ara Argentina se desactive la segunda lî¯¥a del siguiente cód©§o:*/
+Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar añ¯³ de educaciónEsta parte está¡­â³ adelante y por ahora el impacto mâ³ visible es que la población £on educación ¥special se les asigna de manera directa 3 añ¯³ de educación £uando no deberî¢n ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación ¤e los añ¯³ de Educación °ara Argentina se desactive la segunda lî¯¥a del siguiente có¤©§o:*/
 
 
 replace eduno_ci=1	if aedu_ci==0 
@@ -1051,7 +1044,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	gen pqnoasis_ci=.
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
 	
-	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
+	**Daniela Zuluaga- Enero 2019: Se agrega la variable pqnoasis1_ci**
 	
 	**************
 	*pqnoasis1_ci*
@@ -1075,10 +1068,25 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	***********
 	*edupub_ci*
 	***********
+	gen edupub_ci =.
+	replace edupub_ci = 1 if ch11==1
+	replace edupub_ci = 0 if ch11==2 
 	
-	gen edupub_ci=(ch11==1)
+	*************
+	***tecnica_ci**
+	*************
+	* Cambio Angela López noviembre 2019
+	gen     tecnica_ci= .
+	replace tecnica_ci= 1 if ch12==6
 
-
+	gen     universidad_ci= .
+	replace universidad_ci= 1 if ch12==6
+*Ch12==1 corresponde a jardín/preescolar, no hay variable técnica.
+/*
+replace tecnica_ci=1 if ch12==1
+recode tecnica_ci .=0 
+label var tecnica_ci "=1 formacion terciaria tecnica"
+*/
 
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
@@ -1099,7 +1107,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	*************
 
 	gen aguadist_ch=.
-	replace aguadist_ch=iv6
+	replace aguadist_ch=(iv6==1 | iv6==2)
 	replace aguadist_ch=. if iv6==9 | iv6==.
 
 	*************
@@ -1209,8 +1217,6 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	label def techo_ch 1"Materiales permanentes"  0"Materiales no permanentes" 2 "Otros Materiales"
 	label val techo_ch techo_ch 
 	
-
-
 	**********
 	*resid_ch*
 	**********
@@ -1220,7 +1226,6 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	*********
 	*dorm_ch*
 	*********
-
 	gen dorm_ch=ii2 if ii3==2
 	replace dorm_ch=. if ii2==99
 
@@ -1336,7 +1341,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	***************
 	gen vivialqimp_ch=.
 	
-	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
+	**Daniela Zuluaga- Enero 2019: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
 	*********************
     ***aguamejorada_ch***
@@ -1356,17 +1361,21 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creación ¤e nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-/* http://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_16.pdf paginas 7 y 8. calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
+/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_01_18.pdf pÃ¡gina 10. 
+calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
 Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio del hogar indigente en adulto equivalente */ 
+
+
+*promedio julio - diciembre 2020:  https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_2082FA92E916.pdf
 
 *********
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =  4030.3
+gen lp_ci =15167
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1374,7 +1383,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =  1686.3
+gen lpe_ci =6201
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1410,7 +1419,6 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
 
-
 *****************
 *tipocontrato_ci*
 *****************
@@ -1421,7 +1429,6 @@ replace tipocontrato_ci=2 if pp07c==1 & categopri_ci==3
 label var tipocontrato_ci "Tipo de contrato segun su duracion"
 label define tipocontrato_ci 1 "Permanente/indefinido" 2 "Temporal" 3 "Sin contrato/verbal" 
 label value tipocontrato_ci tipocontrato_ci
-
 
 *************
 *cesante_ci* 
@@ -1449,7 +1456,6 @@ label var tamemp_ci "# empleados en la empresa segun rangos"
 label define tamemp_ci 1 "Pequena" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
 
-
 *************
 **pension_ci*
 *************
@@ -1465,6 +1471,7 @@ label var pension_ci "1=Recibe pension contributiva"
 gen aguinpen=v21_m/12 if v2_m>0 & v2_m!=.
 
 egen ypen_ci=rsum(v2_m aguinpen), missing
+replace ypen_ci=. if ypen_ci<0
 label var ypen_ci "Valor de la pension contributiva"
 
 ***************
@@ -1486,24 +1493,11 @@ label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 **salmm_ci***
 *************
 
-* http://servicios.infoleg.gob.ar/infolegInternet/anexos/260000-264999/261591/norma.htm *
-*1 = ARG 2016 II semestre
-gen salmm_ci= 7185
-*promedio 2 semestre
+* https://www.boletinoficial.gob.ar/detalleAviso/primera/213533/20190815 *
+*Salario mínimo fijado en enero 2020
+gen salmm_ci=16875
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=.
-*Ch12==1 corresponde a jardín/preescolar, no hay variable técnica.
-/*
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if ch12==1
-recode tecnica_ci .=0 
-label var tecnica_ci "=1 formacion terciaria tecnica"
-*/
 
 ******************
 ***categoinac_ci**
@@ -1514,7 +1508,7 @@ replace categoinac_ci=2 if cat_inac==3
 replace categoinac_ci=4 if cat_inac==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "Condición ¤e inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1538,16 +1532,14 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 *******************
 *** yseguro_ci  ***
 *******************
-g ybenefdes_ci=v4_m if benefdes_ci==1
+g ybenefdes_ci=v4_m if benefdes_ci==1 & v4_m>0
 label var ybenefdes_ci "Monto de seguro de desempleo"
-
 
 *Se generan las siguientes variables, para las cuales no hay informaciÃ³n en la encuesta*
 gen mes_c=.
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 gen instcot_ci=.
-
 
 
 
@@ -1560,7 +1552,7 @@ gen instcot_ci=.
 	*******************
 	*** migrante_ci ***
 	*******************
-
+	
 	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
 	label var migrante_ci "=1 si es migrante"
 	
@@ -1568,7 +1560,7 @@ gen instcot_ci=.
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migr==1 & inlist(ch16,1,2,3)) if !mi(migr) & !inlist(ch16,6,9)		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) if !inlist(ch16,6,9) & migrante_ci!=.		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1576,24 +1568,26 @@ gen instcot_ci=.
 	**********************
 	
 	cap: tostring ch15_cod, replace
-	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"BOL","BRA","Bol","Bra","CHI","COL","Col") | ///
-	inlist(ch15_cod,"HAI","Mex","MEX","PAR","PER","Pan","Per","URU","VEN") | ///
-	inlist(ch15_cod,"Ven","bol","bra","chi","col","dom","ecu","hai","mex") | ///
-	inlist(ch15_cod,"per","ven")) & migrante_ci==1) if migrante_ci!=. 
+	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
+	replace migrantelac_ci=. if ch15_cod=="999" & ch15!=4
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
-  
-  
+
+
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
+* Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* Verificación ¤e que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1610,13 +1604,31 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-/*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
-para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+/*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
+para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
-rename pp04b_cod codindustria
 
 compress
 
-save "`base_out'", replace
 
-log close
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
+global ruta = "${surveysFolder}"
+
+local PAIS ARG
+local ENCUESTA EPHC
+local ANO "2020"
+local ronda s2 
+
+local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+   
+
+saveold "`base_out'", version(12) replace
+
+cap log close
+

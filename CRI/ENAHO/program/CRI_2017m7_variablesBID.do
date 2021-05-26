@@ -68,18 +68,43 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, region de planificacion"
 
-
 *====================================================================================================================================*
-*                                                    VARIABLES DEL HOGAR                                                             *
+*                                                    VARIABLES DE DISENO 
 *====================================================================================================================================*
-* En total son 8 variables.
 
 ************************************************************
-*** 1.- FACTOR_CH: factor de expansión del hogar         ***
+***  FACTOR_CH: factor de expansión del hogar         ***
 ************************************************************
 
 gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
+
+
+******************************************************************
+*** FACTOR_CI  :Factor de Expansion a nivel individual. ***
+******************************************************************
+gen factor_ci=factor
+label variable factor_ci "Factor de expansion del individuo"
+
+******************************************************************
+*** UPM: Unidad primaria de muestreo ***
+******************************************************************
+gen upm_ci=upm
+label variable factor_ci "unidad primaria de muestreo"
+
+
+******************************************************************
+*** estrato 
+******************************************************************
+
+gen estrato_ci=.
+label variable estrato_ci "estrato"
+
+*====================================================================================================================================*
+*                                                    VARIABLES DEL HOGAR                                                             *
+*====================================================================================================================================*
+* En total son 7 variables.
+
 
 ************************************************************
 *** 2._ IDH_CH: Identificador del hogar                  ***
@@ -144,14 +169,9 @@ label value relacion_ci relacion_ci
 *====================================================================================================================================*
 *                                                          VARIABLES DEMOGRAFICAS                                                    *
 *====================================================================================================================================*
-* En el área de demografía son en total 18 variables.
+* En el área de demografía son en total 17 variables.
 
 
-******************************************************************
-***1._FACTOR_CI  :Factor de Expansion a nivel individual. ***
-******************************************************************
-gen factor_ci=factor
-label variable factor_ci "Factor de expansion del individuo"
 
 ******************************************************************
 ***2._SEXO_CI  :Sexo.                                          ***
@@ -1592,7 +1612,8 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+
+upm_ci estrato_ci  afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -1611,7 +1632,7 @@ rename ramaemppr codindustria
 compress
 
 
-saveold "`base_out'", replace
+save "`base_out'", replace
 
 
 log close

@@ -177,7 +177,7 @@ gen upm_ci=locagr
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=estratogeo_09
+gen estrato_ci=estratogeo09
 
 *10. Sexo
 

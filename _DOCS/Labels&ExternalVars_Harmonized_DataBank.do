@@ -5,7 +5,7 @@
 *                                                     INCLUSIóN DE VARIABLES EXTERNAS                                                *
 *====================================================================================================================================*
 capture drop _merge
-merge m:1 pais_c anio_c using "$ruta\general_documentation\data_externa\poverty\International_Poverty_Lines\5_International_Poverty_Lines_LAC_long",   keepusing(ppp_2005 ppp_2011 cpi_2005 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi ppp_wdi2011)
+merge m:1 pais_c anio_c using "$ruta\general_documentation\data_externa\poverty\International_Poverty_Lines\5_International_Poverty_Lines_LAC_long",   keepusing (ppp_2011 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi ppp_wdi2011)
 
 drop if _merge ==2
 
@@ -16,7 +16,7 @@ g lp19_ci  = lp19_2011
 g lp31_ci  = lp31_2011 
 g lp5_ci   = lp5_2011
 
-drop ppp_2005 ppp_2011 cpi_2005 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi _merge
+drop ppp_2011 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi _merge
 
 
 *====================================================================================================================================*
@@ -206,8 +206,8 @@ label var ypen_ci "Monto de ingreso por pension contributiva"
 label var ypensub_ci "Monto de ingreso por pension subsidiada / no contributiva"
 
 * LINEAS DE POBREZA y OTRAS VARIABLES EXTERNAS DE REFERENCIA
-capture label var lp19_ci  "Línea de pobreza USD1.9 por día en moneda local a precios corrientes a PPA 2011"
-capture label var lp31_ci  "Línea de pobreza USD3.1 por día en moneda local a precios corrientes a PPA 2011"
+capture label var lp19_ci  "Línea de pobreza USD1.9 día en moneda local a precios corrientes a PPA 2011"
+capture label var lp31_ci  "Línea de pobreza USD3.1 día en moneda local a precios corrientes a PPA 2011"
 capture label var lp5_ci "Línea de pobreza USD5 por día en moneda local a precios corrientes a PPA 2011"
 capture label var tc_c "Tasa de cambio LCU/USD Fuente: WB/WDI"
 capture label var ipc_c "Índice de precios al consumidor base 2011=100 Fuente: IMF/WEO"

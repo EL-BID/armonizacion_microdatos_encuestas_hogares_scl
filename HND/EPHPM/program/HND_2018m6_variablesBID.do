@@ -184,11 +184,6 @@ label variable upm_ci "Unidad Primaria de Muestreo"
 gen estrato_ci=.
 label variable estrato_ci "Estrato"
 
-***********
-*factor_ch*
-***********
-gen factor_ch=factor
-label var factor_ch "Factor de Expansion del Hogar"
 
 *********
 *sexo_ci*

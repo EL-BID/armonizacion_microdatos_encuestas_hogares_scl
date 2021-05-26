@@ -25,15 +25,18 @@ local out ="`ruta'\`ronda2'\data_merge\"
 clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Personas.dta", clear
 
-merge m:1 DIRECTORIO SECUENCIA_P using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
+merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\Hogares.dta", force
 drop _merge
-egen id =concat (DIRECTORIO SECUENCIA_P ORDEN)
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA19.dta", keep(match master)
+drop _merge
+
+egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 
-keep  id impa-iof6 impaes-fex_c nper-id li lp
+keep  id impa-iof6 impaes-fex_c nper-id li lp P6080 P6080S1
 save "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -173,8 +176,11 @@ sort id
 merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
 drop _merge
 
+
+
 merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\ETNIA19.dta"
 drop _merge
+
 
 
 foreach v of varlist _all {

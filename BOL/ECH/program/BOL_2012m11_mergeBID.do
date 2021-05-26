@@ -216,5 +216,14 @@ drop _merge
 merge m:1 folio using  "$in\bolivia_gastosalimentarios_2012_reshape.dta", force
 drop _merge
 
+
+
+saveold "$out\BOL_2012m11.dta", replace
+
+
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2012m11.dta", replace
+
 *Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
 save "$out\BOL_2012a.dta", replace
+

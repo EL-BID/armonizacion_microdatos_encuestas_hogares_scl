@@ -1462,7 +1462,7 @@ keep if sexo_ci!=.
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6ip1b,2,3,4,5,6,7,9,10,11,14,15,18,19,20,21,22,23,25,26,27,29,33,34,35,36)) if migrante_ci!=.
+	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6ip1b,2,3,4,5,6,7,9,10,11,14,15,18,19,20,21,22,23,25,26,27,29,33,34,35,36))) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente Censo REDATAM */
 	

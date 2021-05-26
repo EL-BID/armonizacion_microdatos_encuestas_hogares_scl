@@ -1,16 +1,16 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS VEN
 local ENCUESTA EHM
@@ -25,14 +25,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: 
+PaÃ­s: 
 Encuesta: EHM
 Round: s2
-Autores: Mayra Sáenz - saenzmayra.a@gmail.com - mayras@iadb.org - Diciembre 2013
-Versión 2006: Victoria
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: octubre 2013
+Autores: Mayra SÃ¡enz - saenzmayra.a@gmail.com - mayras@iadb.org - Diciembre 2013
+VersiÃ³n 2006: Victoria
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: octubre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -43,7 +43,7 @@ cap qui destring _all, replace
 ***********
 * Region_c *
 ************
-* YL: En este año se considera la antigua division política administrativa (Que existía antes del 2001)
+* YL: En este aÃ±o se considera la antigua division polÃ­tica administrativa (Que existÃ­a antes del 2001)
 gen region_c=  entidad
 label define region_c  ///
 1	"Distrito Federal" ///
@@ -70,14 +70,14 @@ label define region_c  ///
 22	"Amazonas" ///
 23	"Delta Amacuro"
 label value region_c region_c
-label var region_c " Primera División política - Entidades Federativas"
+label var region_c " Primera DivisiÃ³n polÃ­tica - Entidades Federativas"
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
@@ -137,13 +137,13 @@ label var factor_ci "Factor de Expansion del Individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -305,7 +305,7 @@ label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 */
 
-* Cambio edad minima de la encuesta (10 años). MGD 06/10/2014
+* Cambio edad minima de la encuesta (10 aÃ±os). MGD 06/10/2014
 gen condocup_ci=.
 replace condocup_ci=1 if (codigo_sum>=1 & codigo_sum <=3) 
 replace condocup_ci=2 if codigo_sum==4 | codigo_sum==11 
@@ -347,7 +347,7 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -362,26 +362,26 @@ label value tipocontrato_ci tipocontrato_ci
 *************
 /*
 gen tamemp_ci=pp45
-label define tamemp_ci 1"menos de 5 personas" 2"5-10 personas" 3"11-20 personas" 4"Más de 20 personas"
+label define tamemp_ci 1"menos de 5 personas" 2"5-10 personas" 3"11-20 personas" 4"MÃ¡s de 20 personas"
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
 
 gen tamemp_ci=1 if pp45==1 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if pp45==2 | pp45==3
 *Empresas grandes
 replace tamemp_ci=3 if pp45==4 
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw=factor_ci]
 
-/* Sintaxis del consultor requirió modificación
+/* Sintaxis del consultor requiriÃ³ modificaciÃ³n
 *Genera la variable para clasificar a los inactivos
 *Jubilados, pensionados e incapacitados
 
 gen categoinac_ci=1 if pp29==7
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if pp29==5
 *Quehaceres del Hogar
@@ -397,8 +397,8 @@ replace categoinac_ci = 1 if ((pp29==7) & condocup_ci==3)
 replace categoinac_ci = 2 if ((pp29==5) & condocup_ci==3)
 replace categoinac_ci = 3 if ((pp29==6) & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros"
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros"
 label values categoinac_ci categoinac_ci
 
 *************
@@ -406,7 +406,7 @@ label values categoinac_ci categoinac_ci
 *************
 gen pension_ci=0 
 foreach var of varlist pp53a pp53b pp53c pp53d pp53e pp53f pp53g pp53h pp53i {
-replace pension_ci=1 if (`var'==1 | `var'==5 | `var'==6 ) /*A todas las per mayores de diez años */
+replace pension_ci=1 if (`var'==1 | `var'==5 | `var'==6 ) /*A todas las per mayores de diez aÃ±os */
 }
 label var pension_ci "1=Recibe pension contributiva"
  
@@ -455,9 +455,9 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 **salmm_ci***
 *************
 /*Yessenia Loayza/Nota:
-"Con la firma del Decreto Ley de Reconversión Monetaria, 
-el presidente Chávez autorizó la eliminación de tres ceros a
- la moneda nacional a partir del 1º de enero de 2008"
+"Con la firma del Decreto Ley de ReconversiÃ³n Monetaria, 
+el presidente ChÃ¡vez autorizÃ³ la eliminaciÃ³n de tres ceros a
+ la moneda nacional a partir del 1Âº de enero de 2008"
  Bs (Bolivares Actuales)
  Bsf (Bolivares Fuertes)
  
@@ -528,7 +528,7 @@ replace rama_ci=7 if (pp44>=711 & pp44<=720) & emp_ci==1
 replace rama_ci=8 if (pp44>=810 & pp44<=833) & emp_ci==1
 replace rama_ci=9 if (pp44>=910 & pp44<=960) & emp_ci==1
 label var rama_ci "RAMA"
-label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
+label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "ExplotaciÃ³n de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "ConstrucciÃ³n" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
 capture drop horaspri_ci
@@ -553,7 +553,7 @@ g anios=pp41b*12 if pp41b>0
 egen durades_ci = rsum(meses anios), missing
 replace durades_ci=. if condocup_ci==3
 
-*Se ponen como missing values las personas que llevan más tiempo desempleadas que tiempo de vida:
+*Se ponen como missing values las personas que llevan mÃ¡s tiempo desempleadas que tiempo de vida:
 gen edad_meses=edad_ci*12
 replace durades_ci=. if durades_ci>edad_meses
 drop edad_meses
@@ -745,7 +745,7 @@ capture drop asiste_ci
 gen byte asiste_ci=.
 replace asiste_ci=1 if ASIST==1
 replace asiste_ci=0 if ASIST==2
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 capture drop aedu_ci
 gen byte aedu_ci=.
@@ -755,7 +755,7 @@ replace aedu=GRADO+9 if NIVEL==4 & GRADO>0 & GRADO<=2
 replace aedu=11 if NIVEL==4 & GRADO>2
 replace aedu=GRADO+11 if (NIVEL==5 | NIVEL==6) & GRADO>0 
 replace aedu=int(ULTSEM/2)+11 if (NIVEL==5 | NIVEL==6) & ULTSEM>0 
-label variable aedu_ci "Años de Educacion"
+label variable aedu_ci "AÃ±os de Educacion"
 
 
 
@@ -848,21 +848,21 @@ label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educ
 gen eduac_ci=.
 replace eduac=0 if eduui==1 | eduuc==1
 replace eduac=1 if NIVEL==6
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 gen edupub_ci=.
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ** Generating pqnoasis
 gen byte pqnoasis_ci=.
 replace pqnoasis=pp28 if pp28>0
-label variable pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label variable pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Culmino sus estudios" 2 "No hay grado o agnos superiores" 3 "No hay cupo, escuela distante, desordenes estudiantiles, inasistencia de maestros o profesores" /*
 */ 4 "falta de recursos economicos" 5 "esta trabajando" 6 "asiste a un curso de capacitacion" 7 "no quiere estudiar" 8 "enfermedad o defecto fisico" /*
 */ 9 "problemas de conducta o de aprendizaje" 10 "cambio de residencia" 11 "edad mayor que la regular" 12 "tiene que ayudar en la casa" /*
@@ -884,7 +884,7 @@ replace pqnoasis1_ci = 7 if pp28 ==11 | pp28 ==13
 replace pqnoasis1_ci = 8 if pp28 ==2  | pp28 ==3 
 replace pqnoasis1_ci = 9 if pp28 ==6  | pp28 ==10 | pp28 ==15
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1016,15 +1016,15 @@ gen vivialqimp_ch=.
 
 drop YOCUPAPM YOCUPAM YOTROS EDAD NIVEL GRADO ULTSEM ASIST
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

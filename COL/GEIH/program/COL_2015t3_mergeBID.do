@@ -1,5 +1,6 @@
-*Elaboraci髇: Marcela G. Rubio (marcelarubio28@gmail.com | mrubio@iadb.org)
+*Elaboraci贸n: Marcela G. Rubio (marcelarubio28@gmail.com | mrubio@iadb.org)
 *Mayo, 2016
+* Added ETNIA module. Cesar Lins (SCL/GDI) Marzo 2021
 
 *** MERGE COLOMBIA GEIH 2015 ****
 *------------------------------*	
@@ -9,7 +10,7 @@ set more off
 local anio = 2015
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -17,19 +18,22 @@ local t3 ="`ruta'\`ronda2'\data_orig\"
 local out ="`ruta'\`ronda2'\data_merge\"
 
 
-*1. Bases anuales con homologacion de ingresos : NO EST罭 DISPONIBLES A贜
+*1. Bases anuales con homologacion de ingresos : NO EST脕N DISPONIBLES A脷N
 *----------------------------------------------
 
 clear
 use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2015.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2015.dta", force
 drop _merge
+merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA15.dta", keep(match master)
+drop _merge
+
 egen id =concat (directorio secuencia_p orden)
 sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa-iof6 impaes-fex_dpto nper-id
+keep  id impa-iof6 impaes-fex_dpto nper-id P6080 P6080S1
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -39,9 +43,9 @@ saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 foreach zona in cabecera resto {
 
 *Personas
-use "`m7'\`zona' - caracter韘ticas generales (personas).dta", clear
-append using "`m8'\`zona' - caracter韘ticas generales (personas).dta"
-append using "`m9'\`zona' - caracter韘ticas generales (personas).dta"
+use "`m7'\`zona' - caracter铆sticas generales (personas).dta", clear
+append using "`m8'\`zona' - caracter铆sticas generales (personas).dta"
+append using "`m9'\`zona' - caracter铆sticas generales (personas).dta"
 egen id = concat(directorio secuencia_p orden)
 sort id
 saveold "`t3'col_`zona'_personas.dta", replace
@@ -103,6 +107,34 @@ sort idh
 saveold "`t3'col_`zona'_viv.dta", replace
 }
 */
+
+** M贸dulo de migraci贸n 
+
+* Secci贸n incluida por SCL/MIG Fernando Morales 
+
+use "`m7'\Julio_mig.dta", clear
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+append using "`m8'\Agosto_mig.dta"
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+append using "`m9'\Septiembre_mig.dta"
+foreach v of varlist _all {
+	local lowname=lower("`v'")
+	cap: rename `v' `lowname'
+}
+
+egen id = concat(directorio secuencia_p orden)
+sort id
+saveold "`out'\COL_`anio't3migracion.dta", replace
+
+
 *3. Merge de los 8 modulos trimestrales por zona
 *-----------------------------------------------
 foreach zona in cabecera resto {
@@ -142,15 +174,16 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3cabecera.dta", clear
-append using "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3resto.dta" 
+use "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3migracion.dta", nogen
 replace fex_c_2011=fex_c_2011/3
 sort id
 
-merge 1:1 id using "M:\survey\COL\GEIH\2015\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2015\a\data_merge\pov_t3.dta"
 drop _merge
 
-saveold "M:\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2015\t3\data_merge\COL_2015t3.dta", replace
 
 
 

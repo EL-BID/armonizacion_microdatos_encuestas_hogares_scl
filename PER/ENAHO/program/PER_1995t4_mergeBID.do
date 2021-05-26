@@ -1,18 +1,18 @@
 ************************************
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENAHO
@@ -28,12 +28,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Perú
+PaÃ­s: PerÃº
 Encuesta: ENAHO
 Round: a
-Autores: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: octubre 2013
+Autores: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: octubre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -72,39 +72,39 @@ saveold `base_in'\\hogares.dta, replace
 
 
 clear
-use "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", clear
+use "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", clear
 drop idhogar
 egen idhogar = concat(ubi seg hog giiian)
-saveold "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", replace
 
 
 clear
-use "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta", clear
+use "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta", clear
 drop idhogar
 egen idhogar = concat(ubi seg hog gvin)
-saveold "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta", replace
 
 
 clear
-use "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta", clear
+use "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta", clear
 drop idhogar
 egen idhogar = concat(ubi seg hog gviin)
-saveold "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta", replace
 
 
-use "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", clear
-merge m:m idhogar using "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta"
+use "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9543.dta", clear
+merge m:m idhogar using "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9544.dta"
 tab _merge
 capture drop _merge
-merge m:m idhogar using "Y:\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta"
+merge m:m idhogar using "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\ena9545.dta"
 tab _merge
 capture drop _merge
 sort ubi seg viv hog
-saveold "Y:\survey\PER\ENAHO\1995\t4\data_orig\personas.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\personas.dta", replace
 
 sort ubi seg viv hog giiian
-merge m:m ubi seg viv hog using "Y:\survey\PER\ENAHO\1995\t4\data_orig\hogares.dta", force
+merge m:m ubi seg viv hog using "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_orig\hogares.dta", force
 compress
-saveold "Y:\survey\PER\ENAHO\1995\t4\data_merge\PER_1995t4.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\1995\t4\data_merge\PER_1995t4.dta", replace
 
 

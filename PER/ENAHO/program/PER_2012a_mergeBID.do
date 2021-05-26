@@ -3,7 +3,7 @@
 
 clear all
 set more off
-cd "Y:\survey\PER\ENAHO\2012\a\data_orig\"
+cd "${surveysFolder}\survey\PER\ENAHO\2012\a\data_orig\"
 
 **************************************************************************************
 						/*Identificador de hogar*/
@@ -102,5 +102,5 @@ drop _merge
 sort idh_ch
 
 drop idh* idp*
-saveold "Y:\survey\PER\ENAHO\2012\a\data_merge\PER_2012a.dta", replace
+saveold "${surveysFolder}\survey\PER\ENAHO\2012\a\data_merge\PER_2012a.dta", replace
  

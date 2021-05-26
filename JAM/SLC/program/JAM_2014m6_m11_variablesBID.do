@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor ??amente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA SLC
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Jamaica
+PaÃ­s: Jamaica
 Encuesta: SLC
 Round: a
 Autores: Daniela Zuluaga E-mail: danielazu@iadb.org - da.zuluaga@hotmail.com
-Versiones anteriores: Mayra Sáenz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
-Fecha última modificación: Enero de 2018
+Versiones anteriores: Mayra SÃ¡enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+Fecha Ãºltima modificaciÃ³n: Enero de 2018
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -142,7 +142,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-/* It is not a “weighting factor” but a “non response factor”. 
+/* It is not a â€œweighting factorâ€ but a â€œnon response factorâ€. 
 It means that when the weight command is applied, the proportions found are right but absolute numbers cannot be derived. */
 
 ***************
@@ -301,31 +301,31 @@ label variable miembros_ci "Variable dummy que indica las personas que son miemb
 * nmayor21_ch *
 ***************
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 ***************
 * nmenor21_ch *
 ***************
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 ***************
 * nmayor65_ch *
 ***************
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 **************
 * nmenor6_ch *
 **************
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 **************
 * nmenor1_ch *
 **************
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
 
@@ -701,7 +701,7 @@ gen rentaimp_ch =i11
 *	EDUCATION
 ******************************************************************************
 
-/*Se modificó la creación de las variables de educación utilizando como insumo principal
+/*Se modificÃ³ la creaciÃ³n de las variables de educaciÃ³n utilizando como insumo principal
 la variable b4 y no b1 para crear aedu_ci*/
 
 replace b1 =. if b1 ==99
@@ -714,7 +714,7 @@ replace b21= . if (b21==97 | b21==98 | b21==99)
 
 gen asiste_ci= (b1>=1 & b1<18)
 replace asiste_ci=0 if b1==.
-label var asiste "Personas que actualmente asisten a centros de enseñanza"
+label var asiste "Personas que actualmente asisten a centros de enseÃ±anza"
 
 
 ***********
@@ -725,7 +725,7 @@ gen aedu_ci=.
 replace aedu_ci=0 if b4==0
 replace aedu_ci=b4-1 if aedu_ci!=0
 replace aedu_ci=b22 if b4==.
-label variable aedu_ci "Años de Educacion (no incluye terciaria o universitaria)"
+label variable aedu_ci "AÃ±os de Educacion (no incluye terciaria o universitaria)"
 
 
 ************
@@ -782,8 +782,8 @@ label var edusc_ci "1 = personas que han completado el nivel secundario"
 * eduui_ci *
 ************
 
-/*Se hace una aproximación, y se genera la variable para las personas que afirman que este año están atendiendo a la universidad
-o educación terciaria*/
+/*Se hace una aproximaciÃ³n, y se genera la variable para las personas que afirman que este aÃ±o estÃ¡n atendiendo a la universidad
+o educaciÃ³n terciaria*/
  
 gen eduui_ci=(b1==11 | b1==12 | b1==13) 
 replace eduui_ci=. if b1==.
@@ -793,7 +793,7 @@ label var eduui_ci "1 = personas que no han completado el nivel universitario o 
 * eduuc_ci *
 ************
 
-**Se hace una aproximación con los diplomas/ certificaciones obtenidas**
+**Se hace una aproximaciÃ³n con los diplomas/ certificaciones obtenidas**
 
 gen eduuc_ci= (b25_exam==9 | b25_exam==10 | b25_exam==11) 
 replace eduuc_ci=. if b25_exam==.
@@ -833,12 +833,12 @@ la var edus2c_ci "2do ciclo de la secundaria completo"
 * eduac_ci *
 ************
 
-**Se hace una aproximación con los diplomas/ certificaciones obtenidas**
+**Se hace una aproximaciÃ³n con los diplomas/ certificaciones obtenidas**
 
 gen eduac_ci=.
 replace eduac_ci=0 if b1==12 | b1==13 | b21==13 | b21==14
 replace eduac_ci=1 if b1==11 | b21==12
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "Educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 **************
 * tecnica_ci *
@@ -852,7 +852,7 @@ replace tecnica_ci=. if (b1==. & b21==.)
 *************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 ****************
 * repiteult_ci *
@@ -868,7 +868,7 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 gen edupub_ci=.
 replace edupub_ci=1 if b3==1
 replace edupub_ci=0 if b3==2
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 ***************
 * pqnoasis_ci *
@@ -895,7 +895,7 @@ OTHER..................16
 
 g pqnoasis_ci=.
 replace pqnoasis_ci=b10_r1
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
+label var pqnoasis_ci "Razones para no asistir a centros de enseÃ±anza"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Haraganeria" 3 "Trabaja fuera del hogar" 4 "Necesita estar en el hogar" 5 "Dia de mercado" 6 "Problema de Transporte" ///
 7 "Costos del transporte" 8 "Escuela cerrada" 9 "Carece de zapatos o uniforme, sucios, o mojados" 10 "Lluvia" ///
 11 "Problemas monetarios" 12 "Tiene que realizar alguna diligencia" 13 "No esta seguro en la escuela" 14 "No esta seguro en la comunidad" ///
@@ -916,7 +916,7 @@ replace pqnoasis1_ci = 8 if b10_r1==6 | b10_r1==8
 replace pqnoasis1_ci = 9 if b10_r1==10 | (b10_r1>=12 & b10_r1<=16)
 
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1025,7 +1025,7 @@ replace des1_ch = 1 if i5 == 1
 replace des1_ch = 2 if (i5 == 3 | i5==2)	
 replace des1_ch = 3 if i5 == 4
 
-**Nota: Se asume que la opción 4 (otros) correspondería a desemboca en calle o río.**
+**Nota: Se asume que la opciÃ³n 4 (otros) corresponderÃ­a a desemboca en calle o rÃ­o.**
 
 ***********
 * des2_ch *
@@ -1262,15 +1262,15 @@ g  tcylmpri_ci =.
 g tcylmpri_ch=.
 
   /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

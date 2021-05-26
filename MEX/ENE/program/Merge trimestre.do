@@ -7,7 +7,7 @@
 clear all
 set more off
 
-global in "F:\BID_Karina Acevedo\Mexico ENE - ENOE\ENE" 
+global in "${surveysFolder}\BID_Karina Acevedo\Mexico ENE - ENOE\ENE" 
 log using "$in\Do\merge_ene", replace
 
 **************************

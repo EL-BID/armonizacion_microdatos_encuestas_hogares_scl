@@ -10,7 +10,7 @@ clear all
 set more off
 
 
-local in = "\\Sdssrv03\surveys\survey\ECU\ENEMDU\"
+local in = "${surveysFolder}\survey\ECU\ENEMDU\"
 
 local in2003 = "`in'\2003\m12\data_orig\"
 local in2004 = "`in'\2004\m12\data_orig\"
@@ -39,7 +39,7 @@ tab _merge
 drop _merge
 cap drop idhogar
 
-saveold "\\Sdssrv03\surveys\survey\ECU\ENEMDU\\`i'\m12\data_merge\ECU_`i'm12.dta", replace
+saveold "${surveysFolder}\survey\ECU\ENEMDU\\`i'\m12\data_merge\ECU_`i'm12.dta", replace
 }
 
 

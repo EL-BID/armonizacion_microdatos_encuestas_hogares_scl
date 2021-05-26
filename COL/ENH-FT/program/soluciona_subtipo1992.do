@@ -3,7 +3,7 @@
 
 *1. Urbano 1992
 
-/*infix  s67 67 s68 68 s69 69 s71 71 s72 72 s73 73 using"X:\ARM\COL\ENH\1992\Orig_data\urbn.p99"
+/*infix  s67 67 s68 68 s69 69 s71 71 s72 72 s73 73 using"${surveysFolder}\ARM\COL\ENH\1992\Orig_data\urbn.p99"
 tab1 s67- s73
 
 -> tabulation of s67  
@@ -47,7 +47,7 @@ no observations
 no observations
 */
 
-infile using "X:\ARM\COL\ENH\1992\Van_data\diccionario_temp.dct", using("X:\ARM\COL\ENH\1992\Orig_data\urbn.p99")
+infile using "${surveysFolder}\ARM\COL\ENH\1992\Van_data\diccionario_temp.dct", using("${surveysFolder}\ARM\COL\ENH\1992\Orig_data\urbn.p99")
 keep if registro=="2"
 gen uno=1
 bysort ident ide009 : gen dos=sum(uno)

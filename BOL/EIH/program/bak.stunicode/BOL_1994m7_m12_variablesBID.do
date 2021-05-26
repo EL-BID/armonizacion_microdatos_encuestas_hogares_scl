@@ -1,17 +1,17 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA EIH
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: EIH
 Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,7 +54,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
@@ -94,7 +94,7 @@ label value zona_c zona_c
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
  
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -142,7 +142,7 @@ h003:
            3 hijo(a)
            4 yerno/nuera
            5 nieto(a)
-           6 hermano/cu¤ado
+           6 hermano/cuÂ¤ado
            7 padre/suegro
            8 otro pariente
            9 servicio domestico
@@ -333,7 +333,7 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -433,7 +433,7 @@ replace condocup_ci=1 if h025==1 | h026==1 | h028==1
 replace condocup_ci=2 if  h027 == 1 & (h080==1 | h080==2)
 recode condocup_ci .=3
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -445,7 +445,7 @@ replace condocup_ci=1 if h025==1 | h026==1
 replace condocup_ci=2 if (h025==2 | h026==2) & h027==1 
 recode condocup_ci .=3 if edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -466,7 +466,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *tamemp_ci
 *************
 
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if h037>0 & h037<=5
 replace tamemp_ci=2 if h037>5 & h037<=49
@@ -512,15 +512,15 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
-/* Esta sección es para los residentes habituales del hogar mayores a 7 años
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 7 aÃ±os
 */ 
 
 *****************
@@ -700,10 +700,10 @@ replace durades_ci=. if emp_ci~=0
 *******************
 ***antiguedad_ci***
 *******************
-/*En años
+/*En aÃ±os
 */
-/*Sólo para los obreros y empleados
-Esta variable no es comparable con los años siguientes al
+/*SÃ³lo para los obreros y empleados
+Esta variable no es comparable con los aÃ±os siguientes al
 menos que se la acote a este grupo*/
 
 recode h036a (99=.)
@@ -720,8 +720,8 @@ gen categoinac_ci =1 if ( h028 ==5 & condocup_ci==3)& pension_ci==1
 replace categoinac_ci = 2 if  (h028==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (h028==3 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -802,7 +802,7 @@ gen ylnmsec_ci=.
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -963,7 +963,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 5 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 5 aÃ±os de edad*/
 
 gen byte nivel= h016b
 gen byte curso= h016a
@@ -987,7 +987,7 @@ replace aedu_ci=10 if nivel==4 & curso==2
 replace aedu_ci=11 if nivel==4 & curso==3
 replace aedu_ci=12 if nivel==4 & curso==4 
 
-**Para educación normal y universitaria
+**Para educaciÃ³n normal y universitaria
 replace aedu_ci=13 if (nivel==5 | nivel==6) & curso==1 
 replace aedu_ci=14 if (nivel==5 | nivel==6) & curso==2 
 replace aedu_ci=15 if (nivel==5 | nivel==6) & curso==3 
@@ -998,7 +998,7 @@ replace aedu_ci=16 if (nivel==6) & curso==4
 replace aedu_ci=17 if (nivel==6) & (curso==7 | curso==8)
 
 
-/*El nivel 7 que es enseñanza técnica no distingue entre aquellos que son de
+/*El nivel 7 que es enseÃ±anza tÃ©cnica no distingue entre aquellos que son de
 secundaria de aquellos que son terciarios. Por ende los hago missing*/
 
 **************
@@ -1158,7 +1158,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-/*La encuesta no tiene módulo de vivienda*/
+/*La encuesta no tiene mÃ³dulo de vivienda*/
 
 gen aguared_ch=( h156==1 |  h156==2 |  h156==3)
 replace aguared_ch=. if  h156==.
@@ -1167,10 +1167,10 @@ gen aguadist_ch=1 if  h156==1
 replace aguadist_ch=2 if  h156==2
 replace aguadist_ch=3 if  h156>=3 &  h156<=7
 
-*Inclusión Mayra Sáenz Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz Julio 2013
 gen aguamala_ch=(h156==6)
 replace aguamala_ch=. if h156==.
-label var aguamala_ch "Agua unimproved según MDG"
+label var aguamala_ch "Agua unimproved segÃºn MDG"
 /*NA*/
 
 gen aguamide_ch=.
@@ -1269,15 +1269,15 @@ gen vivialqimp_ch=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1295,7 +1295,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
-para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo) 
+para anÃƒÂ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo) 
 BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
 rename h029 codocupa
 

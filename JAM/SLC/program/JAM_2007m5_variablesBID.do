@@ -1,21 +1,21 @@
                  **********************************
-				***ARMONIZACIÓN JAMAICA 2007    ***
+				***ARMONIZACIÃ“N JAMAICA 2007    ***
 				***********************************
 
 
-*Armonización:
-*Mayra Sáenz
+*ArmonizaciÃ³n:
+*Mayra SÃ¡enz
 *Julio 2013
 *Labour Force Survey (LFS)
 
 clear all
 *set mem 500m
-cd "X:\ARM\JAM\2007\LFS\Original Data"
+cd "${surveysFolder}\ARM\JAM\2007\LFS\Original Data"
 set more off
 
 use jam07.dta
 
-* Inclusión Mayra Sáenz - Julio 2013- Cambiar los nombres a minúsculas
+* InclusiÃ³n Mayra SÃ¡enz - Julio 2013- Cambiar los nombres a minÃºsculas
 foreach v of varlist _all {
 	local lowname=lower("`v'")
 	rename `v' `lowname'
@@ -25,20 +25,20 @@ foreach v of varlist _all {
 *====================================================================================================================================*
 *                                                    VARIABLES DEL HOGAR                                                             *
 *====================================================================================================================================*
-* **Inclusión Mayra Sáenz - Julio 2013
+* **InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 ***********
-*  Región  *
+*  RegiÃ³n  *
 ************
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 *************************
-*  factor de expansión  *
+*  factor de expansiÃ³n  *
 *************************
-/* El factor de expansión actual expande la población a 267,745,088,344 individuos, cuando la población de 
-Jamaica al año 2007 fue de 2,782,221 habitantes (PennWorldTable 7.1, 2013).
-Por lo tanto es necesario cambiar las ponderaciones de la misma manera que se trabajó en el año 2002. 
+/* El factor de expansiÃ³n actual expande la poblaciÃ³n a 267,745,088,344 individuos, cuando la poblaciÃ³n de 
+Jamaica al aÃ±o 2007 fue de 2,782,221 habitantes (PennWorldTable 7.1, 2013).
+Por lo tanto es necesario cambiar las ponderaciones de la misma manera que se trabajÃ³ en el aÃ±o 2002. 
 */
 ** POBLACION DA JAMAICA AL 2007 = 2,782,221 **
 
@@ -77,7 +77,7 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 **********************************
-* país***************************
+* paÃ­s***************************
 
 gen pais_c="jam"
 label variable pais_c "Pais"
@@ -100,11 +100,11 @@ label value mes_c mes_c
 
 
 *******************************
-*relación con el jefe de hogar*
+*relaciÃ³n con el jefe de hogar*
 *******************************
 
-*Modificado Mayra Sáenz Julio 2013
-*Antes no se incluía la categoría 4, pero se debe incluir en otros parientes ya que hace referencia al
+*Modificado Mayra SÃ¡enz Julio 2013
+*Antes no se incluÃ­a la categorÃ­a 4, pero se debe incluir en otros parientes ya que hace referencia al
 * yerno o nuera del jefe de hogar.
 /*
 relat
@@ -139,7 +139,7 @@ label value relacion_ci relacion_ci
 *====================================================================================================================================*
 
 ****************************************
-*factor de expansión a nivel individual*
+*factor de expansiÃ³n a nivel individual*
 ****************************************
 
 gen factor_ci=factor_ch
@@ -183,28 +183,28 @@ label variable jefe_ci "Jefe de hogar"
 ******************
 
 by idh_ch, sort: egen nconyuges_ch=sum(relacion_ci==2)
-label variable nconyuges_ch "Número de conyuges"
+label variable nconyuges_ch "NÃºmero de conyuges"
 
 ***************
 ***nhijos_ch***
 ***************
 
 by idh_ch, sort: egen nhijos_ch=sum(relacion_ci==3)
-label variable nhijos_ch "Número de hijos"
+label variable nhijos_ch "NÃºmero de hijos"
 
 ******************
 ***notropari_ch***
 ******************
 
 by idh_ch, sort: egen notropari_ch=sum(relacion_ci==4)
-label variable notropari_ch "Número de otros familiares"
+label variable notropari_ch "NÃºmero de otros familiares"
 
 ********************
 ***notronopari_ch***
 ********************
 
 by idh_ch, sort: egen notronopari_ch=sum(relacion_ci==5)
-label variable notronopari_ch "Número de no familiares"
+label variable notronopari_ch "NÃºmero de no familiares"
 
 
 ****************
@@ -212,7 +212,7 @@ label variable notronopari_ch "Número de no familiares"
 ****************
 
 by idh_ch, sort: egen nempdom_ch=sum(relacion_ci==6)
-label variable nempdom_ch "Número de empleados domésticos"
+label variable nempdom_ch "NÃºmero de empleados domÃ©sticos"
 
 *****************
 ***clasehog_ch***
@@ -240,7 +240,7 @@ label value clasehog_ch clasehog_ch
 ******************
 
 by idh_ch, sort: egen nmiembros_ch=sum(relacion_ci>=1 & relacion_ci<=4)
-label variable nmiembros_ch "Número de familiares en el hogar"
+label variable nmiembros_ch "NÃºmero de familiares en el hogar"
 
 ****************
 ***miembros_ci***
@@ -254,35 +254,35 @@ label variable miembros_ci "miembro del hogar"
 *****************
 
 by idh_ch, sort: egen nmayor21_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad>=21)
-label variable nmayor21_ch "Número de familiares mayores a 21 anios"
+label variable nmayor21_ch "NÃºmero de familiares mayores a 21 anios"
 
 *****************
 ***nmenor21_ch***
 *****************
 
 by idh_ch, sort: egen nmenor21_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad<21)
-label variable nmenor21_ch "Número de familiares menores a 21 anios"
+label variable nmenor21_ch "NÃºmero de familiares menores a 21 anios"
 
 *****************
 ***nmayor65_ch***
 *****************
 
 by idh_ch, sort: egen nmayor65_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad>=65)
-label variable nmayor65_ch "Número de familiares mayores a 65 anios"
+label variable nmayor65_ch "NÃºmero de familiares mayores a 65 anios"
 
 ****************
 ***nmenor6_ch***
 ****************
 
 by idh_ch, sort: egen nmenor6_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad<6)
-label variable nmenor6_ch "Número de familiares menores a 6 anios"
+label variable nmenor6_ch "NÃºmero de familiares menores a 6 anios"
 
 ****************
 ***nmenor1_ch***
 ****************
 
 by idh_ch, sort: egen nmenor1_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad<1)
-label variable nmenor1_ch "Número de familiares menores a 1 anio"
+label variable nmenor1_ch "NÃºmero de familiares menores a 1 anio"
 
 
 
@@ -303,7 +303,7 @@ label var emp_ci "Ocupado (empleado)"
 
 gen desemp1_ci=1 if q43==1
 replace desemp1_ci=0 if desemp1_ci==.
-label var desemp1_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp1_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
 ************
 *desemp2_ci*
 ************
@@ -331,14 +331,14 @@ label var pea1_ci "Poblacion economicamente activa utilizando la definicion 'des
 *************
 gen pea2_ci=0
 replace pea2_ci=1 if emp_ci==1 |desemp2_ci==1
-label var pea2_ci "Población Económicamente Activa con desemp2_ci"
+label var pea2_ci "PoblaciÃ³n EconÃ³micamente Activa con desemp2_ci"
 
 
 *************
 ***pea3_ci***
 *************
 gen pea3_ci=1 if emp_ci==1 |desemp3_ci==1
-label var pea3_ci "Población Económicamente Activa con desemp3_ci"
+label var pea3_ci "PoblaciÃ³n EconÃ³micamente Activa con desemp3_ci"
 
 *************
 *desalent_ci*
@@ -352,7 +352,7 @@ label var desalent_ci "Trabajadores desalentados"
 *horas totales trabajadas en la actividad principal*
 ****************************************************
 
-/*sólo se pregunta cuantas horas se trabaja usualmente a la semana. no se pregunta por
+/*sÃ³lo se pregunta cuantas horas se trabaja usualmente a la semana. no se pregunta por
 actividad principal sino por todo. no es posible identificar las horas dedicadas a la actividad principal*/
 gen horaspri_ci=.
 label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
@@ -444,7 +444,7 @@ label var segsoc_ci "Personas que tienen seguridad social en salud por su trabaj
 
 gen nempleos_ci=1 if emp_ci==1
 replace nempleos=2 if q37>=2 & q37<.
-label var nempleos_ci "Número de empleos" 
+label var nempleos_ci "NÃºmero de empleos" 
 
 *************
 *firmapeq_ci*
@@ -473,11 +473,11 @@ not stated								9
 gen spublico_ci=.
 replace spublico_ci=1 if q323==1 | q323==2
 replace spublico_ci=0 if spublico_ci==.
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 
 ***************************************
-*ocupación laboral actividad principal*
+*ocupaciÃ³n laboral actividad principal*
 ***************************************
 gen ocupa=string(q38m)
 gen ocupa_ci=real(substr(ocupa,1,1))
@@ -500,8 +500,8 @@ gen rama_ci=real(substr(rama1,1,1))
 replace rama_ci=. if rama_ci==0 
 drop rama1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -670,7 +670,7 @@ label var nrylmpri_ch "Id. hogar si algun miembro no sabe o no respond el ingres
 **************************************************
 
 gen tcylmpri_ch=.
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 *****************************************************************
 *identificador de top-code del ingreso de la actividad principal*
@@ -762,41 +762,41 @@ label var ylmho_ci "Salario  monetario de todas las actividades"
 
 
 *====================================================================================================================================*
-*                                                   VARIABLES DE EDUCACIÓN
+*                                                   VARIABLES DE EDUCACIÃ“N
 *====================================================================================================================================*	
 
 /*
 __________________________________________________________________________________________________________
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-NOTA METODOLÓGICA DEL CÁLCULO DE EDUCACIÓN EN JAMAICA
+NOTA METODOLÃ“GICA DEL CÃLCULO DE EDUCACIÃ“N EN JAMAICA
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Mayra Sáenz-Julio 2013
+Mayra SÃ¡enz-Julio 2013
 
-*Años de educacion adicional a primaria.
-En Jamaica el sistema de Educación es distinto al resto de América Latina.
+*AÃ±os de educacion adicional a primaria.
+En Jamaica el sistema de EducaciÃ³n es distinto al resto de AmÃ©rica Latina.
 
-*La primaria tiene seis años (1-6 grado).
+*La primaria tiene seis aÃ±os (1-6 grado).
 
-*La secundaria puede extenderse a más de 7 años y se divide en lower level (7-9 grado) y 
-upper level (10-11 grado) y para aprobar la secundaria deben rendir determinados exámenes que
-se encuentran en distintas categorías.
+*La secundaria puede extenderse a mÃ¡s de 7 aÃ±os y se divide en lower level (7-9 grado) y 
+upper level (10-11 grado) y para aprobar la secundaria deben rendir determinados exÃ¡menes que
+se encuentran en distintas categorÃ­as.
 
-Así, CXC basic, JSC 5 SSC;  CXC Gen, GCE 'O' 1-2 ;  CXC Gen, GCE 'O' 3-4;  CXC Gen, GCE 'O' 5+
-Estos cuatro exámenes corresponden a los Caribbean Examination Council's O'Level (Nivel Ordinario) school leaving
-examinations - Basic or General Proficiency levels. Los cuales están calificados del 1 al 6, en donde 1=
-pasar con distinción, 2= pasar con créditos , 3= pasar con nivel satisfactorio, 4 o más = 'basic level' pass.
+AsÃ­, CXC basic, JSC 5 SSC;  CXC Gen, GCE 'O' 1-2 ;  CXC Gen, GCE 'O' 3-4;  CXC Gen, GCE 'O' 5+
+Estos cuatro exÃ¡menes corresponden a los Caribbean Examination Council's O'Level (Nivel Ordinario) school leaving
+examinations - Basic or General Proficiency levels. Los cuales estÃ¡n calificados del 1 al 6, en donde 1=
+pasar con distinciÃ³n, 2= pasar con crÃ©ditos , 3= pasar con nivel satisfactorio, 4 o mÃ¡s = 'basic level' pass.
 
-Al finalizar el grado 11 pueden optar por extender su educación secundaria hasta dos años más. Esta extensión
+Al finalizar el grado 11 pueden optar por extender su educaciÃ³n secundaria hasta dos aÃ±os mÃ¡s. Esta extensiÃ³n
 se denomina 'Sixth Form', la misma que se divide en upper sixth (grado 13) y lower sixth (grado 12).
-Esta extensión también se conoce como 'advanced post secondary program', al final del cual se debe rendir los 
-exámenes CAPE (Caribbean Advanced Proficiency Exams), los mismos que equivalen a los GCE (General Certificate
-Education) A-level examinations que eran estándar hasta el año 2003.
+Esta extensiÃ³n tambiÃ©n se conoce como 'advanced post secondary program', al final del cual se debe rendir los 
+exÃ¡menes CAPE (Caribbean Advanced Proficiency Exams), los mismos que equivalen a los GCE (General Certificate
+Education) A-level examinations que eran estÃ¡ndar hasta el aÃ±o 2003.
 
-* La educación terciaria completa sólo puede ser alcanzada en la universidad y corresponde a los que declaran 
-´degree´ en la pregunta: What is the highest academic examination that you have / has passed.
+* La educaciÃ³n terciaria completa sÃ³lo puede ser alcanzada en la universidad y corresponde a los que declaran 
+Â´degreeÂ´ en la pregunta: What is the highest academic examination that you have / has passed.
 
-Además, esta base considera sólo a las personas mayores de 15 años.
+AdemÃ¡s, esta base considera sÃ³lo a las personas mayores de 15 aÃ±os.
 __________________________________________________________________________________________________________
 */
 
@@ -812,7 +812,7 @@ replace aedu_ci=q422a if q422a>0 & q422a<99
 *inactivos
 replace aedu_ci=q514a if q514a<99
 replace aedu_ci=q515a if q515a>0 & q515a<99
-label var aedu_ci "Años de educación"
+label var aedu_ci "AÃ±os de educaciÃ³n"
 
 gen exam = .
 replace exam = 1 if  (q322==1) | (q423==1) | (q516 ==1)
@@ -868,13 +868,13 @@ label variable edusi_ci "Secundaria incompleta"
 *edusc_ci*
 **********
 /*
-Para el caso de Jamaica, tendrán secundaria completa los que tengan más de once años de educación
-pero que NO declaren tener título universitario (serían los de terciaria completa). Además. que
-hayan rendido los exámenes de culminación de secundaria ya sea cualquiera de las ordinarias CXC gen, GCE 'O'
-o las avanzadas GCE 'A' , CAPE. Por otro lado, tendrán cero los que tengan menos de once años de educación.
+Para el caso de Jamaica, tendrÃ¡n secundaria completa los que tengan mÃ¡s de once aÃ±os de educaciÃ³n
+pero que NO declaren tener tÃ­tulo universitario (serÃ­an los de terciaria completa). AdemÃ¡s. que
+hayan rendido los exÃ¡menes de culminaciÃ³n de secundaria ya sea cualquiera de las ordinarias CXC gen, GCE 'O'
+o las avanzadas GCE 'A' , CAPE. Por otro lado, tendrÃ¡n cero los que tengan menos de once aÃ±os de educaciÃ³n.
 
-A PESAR DE QUE ESTA SINTAXIS ES MAS PRECISA, AL HACER UN TAB NO COINCIDE CON EL NÙMERO DE CASOS DE LA VARIABLE
-DE AÑOS DE ESCOLARIDAD.
+A PESAR DE QUE ESTA SINTAXIS ES MAS PRECISA, AL HACER UN TAB NO COINCIDE CON EL NÃ™MERO DE CASOS DE LA VARIABLE
+DE AÃ‘OS DE ESCOLARIDAD.
 
 gen edusc_ci=1 if ((aedu_ci>=11)&(exam!=8))& aedu_ci!=. 
 replace edusc_ci=1 if (exam >=2 & exam<=7) & ((aedu_ci>=11)& aedu_ci!=.) & edusc_ci !=1
@@ -923,7 +923,7 @@ label variable eduui_ci "Superior incompleto"
 **********
 *eduuc_ci*
 **********
-/* Se podría considerar a los que respondieron degree, sin embargo, al evaluar esta variable con ese criterio se 
+/* Se podrÃ­a considerar a los que respondieron degree, sin embargo, al evaluar esta variable con ese criterio se 
 evidencian individuos que no acaban ni la secundaria y responden degree.
 
 gen eduuc_ci=0 if aedu_ci!=.
@@ -942,13 +942,13 @@ gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************************************************************************
-***Educación terciaria académica versus educación terciaria no-académica***
+***EducaciÃ³n terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica***
 ***************************************************************************
 gen eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************************************************************************
-***Personas que actualmente asisten a centros de enseñanza.
+***Personas que actualmente asisten a centros de enseÃ±anza.
 ***************************************************************************
 gen asiste_ci=1 if q21a==5
 replace asiste_ci=0 if asiste_ci==.
@@ -958,35 +958,35 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***Razones para no asistir a la escuela.***
 ***************************************************************************
 gen pqnoasis=.
-label variable pqnoasis  " Razón por que no asiste a la escuela"
+label variable pqnoasis  " RazÃ³n por que no asiste a la escuela"
 
 
 ******************************************************
-*Personas que han repetido al menos un año o grado.***
+*Personas que han repetido al menos un aÃ±o o grado.***
 ******************************************************
 
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un grado o año"
+label var repite_ci "Personas que han repetido al menos un grado o aÃ±o"
 
 ******************************************************
 ***Personas que han repetido el ultimo grado.
 ******************************************************
 
 gen repiteult_ci=.
-label var repite_ci "Personas que han repetido el último grado"
+label var repite_ci "Personas que han repetido el Ãºltimo grado"
 
 ********************************************************
-***Personas que asisten a centros de enseñanza publicos.
+***Personas que asisten a centros de enseÃ±anza publicos.
 ********************************************************
 gen edupub_ci=.
-label var edupub_ci "Personas asisten a centros de enseñanza públicos"
+label var edupub_ci "Personas asisten a centros de enseÃ±anza pÃºblicos"
 
 
 
-save "X:\ARM\JAM\2007\LFS\Arm data\jam2007ea_bid.dta", replace
+save "${surveysFolder}\ARM\JAM\2007\LFS\Arm data\jam2007ea_bid.dta", replace
 
-/*sólo es posible determinar los anios de educación hasta finalizar la secundaria. posteriormente se pregunta sobre 
-los exámenes cxc pero no es posible determinar el nivel educativo con estos
+/*sÃ³lo es posible determinar los anios de educaciÃ³n hasta finalizar la secundaria. posteriormente se pregunta sobre 
+los exÃ¡menes cxc pero no es posible determinar el nivel educativo con estos
 
 
 fin encuesta lfs
@@ -994,7 +994,7 @@ fin encuesta lfs
 
 
 */
-**Verificación de que se encuentren todas las variables
+**VerificaciÃ³n de que se encuentren todas las variables
 qui desc factor_ch	idh_ch	idp_c	zona_c	pais_c	anio_c	mes_c	relacion_ci	factor_ci	sexo_ci	edad_ci	civil_ci	///
 jefe_ci	nconyuges_ch	nhijos_ch	notropari_ch	notronopari_ch	nempdom_ch	clasehog_ch	nmiembros_ch	///
 miembros_ci	nmayor21_ch	nmenor21_ch	nmayor65_ch	nmenor6_ch	nmenor1_ch	ocupa_ci	rama_ci	horaspri_ci	///
@@ -1006,7 +1006,7 @@ categopri_ci	categosec_ci	contrato_ci	segsoc_ci	nempleos_ci	firmapeq_ci	spublico
 edupi_ci	edupc_ci	edusi_ci	edusc_ci	eduui_ci	eduuc_ci	edus1i_ci	edus1c_ci	edus2i_ci ///
 edus2c_ci	edupre_ci	eduac_ci	asiste_ci	pqnoasis	repite_ci	repiteult_ci	edupub_ci	
 
-/*Estas variables son del módulo de vivienda que no está contemplado en esta encuesta.
+/*Estas variables son del mÃ³dulo de vivienda que no estÃ¡ contemplado en esta encuesta.
 aguared_ch	aguadist_ch	aguamala_ch	aguamide_ch	luz_ch	luzmide_ch	combust_ch	bano_ch	banoex_ch	///
 des1_ch	des2_ch	piso_ch	pared_ch	techo_ch	resid_ch	dorm_ch	cuartos_ch	cocina_ch	telef_ch ///
 refrig_ch	freez_ch	auto_ch	compu_ch	internet_ch	cel_ch	vivi1_ch	vivi2_ch	viviprop_ch	///

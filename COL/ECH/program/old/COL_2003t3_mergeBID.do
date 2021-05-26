@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Noviembre 29, 2013
 
 *** MERGE COLOMBIA ECH 2003 ****
@@ -8,7 +8,7 @@ clear
 set more off
 local anio = 2003
 local anioab="03" 
-local ruta ="\\Sdssrv03\surveys\survey\COL\ECH\\`anio'\"
+local ruta ="${surveysFolder}\survey\COL\ECH\\`anio'\"
 local m7   ="`ruta'm7\data_orig\"
 local m8   ="`ruta'm8\data_orig\"
 local m9   ="`ruta'm9\data_orig\"

@@ -21,8 +21,4 @@ foreach pais of local paises {
 			
 	}
 }
-			
-			
 	
-
-

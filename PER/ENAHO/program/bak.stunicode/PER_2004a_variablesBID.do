@@ -1,17 +1,17 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENAHO
@@ -27,13 +27,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Perú
+PaÃ­s: PerÃº
 Encuesta: ENAHO
 Round: a
-Autores: Mayra Sáenz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com
-Fecha última modificación: agosto 2013
+Autores: Mayra SÃ¡enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com
+Fecha Ãºltima modificaciÃ³n: agosto 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -68,7 +68,7 @@ label define region_c ///
 19"Pasco"	          ///
 20"Piura"	          ///
 21"Puno"	          ///
-22"San Martín"	      ///
+22"San MartÃ­n"	      ///
 23"Tacna"	          ///
 24"Tumbes"	          ///
 25"Ucayali"	
@@ -76,11 +76,11 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento"
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -115,7 +115,7 @@ label variable idp_ci "ID de la persona en el hogar"
 **********
 /*
 Variable estrato:
-Área Urbana:	
+Ãrea Urbana:	
 1. mayor de 100,000 viviendas
 2. de 20,001 a 100,000 viviendas
 3. de 10,001 a 20,000 viviendas
@@ -179,10 +179,10 @@ label value relacion_ci relacion_ci
 ***raza_ci***
 *************
 
-/* Sólo se pregunta al jefe y a su cónyuge
-¿POR SUS ANTEPASADOS Y DE ACUERDO A SUS
+/* SÃ³lo se pregunta al jefe y a su cÃ³nyuge
+Â¿POR SUS ANTEPASADOS Y DE ACUERDO A SUS
 COSTUMBRES UD. SE CONSIDERA:
-Indígena de la Amazonía? .............................1
+IndÃ­gena de la AmazonÃ­a? .............................1
 De Origen Quechua? .....................................2
 De Origen Aymara? .......................................3
 De Origen Negro / Mulato / Zambo?..............4
@@ -198,12 +198,12 @@ bys idh_ch: egen razjef1 = max(razjef)
 replace raza_ci=razjef1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop razjef razjef1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" */
 
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 gen raza_ci=.
 replace raza_ci= 1 if  p46 == 1 |  p46 == 2 |  p46 ==3 | p47 ==1 |  p47 == 2 |  p47 ==3 
 replace raza_ci= 2 if  p46 ==4 |  p47 == 4
@@ -212,7 +212,7 @@ bys idh_ch: egen razjef1 = max(razjef)
 replace raza_ci=razjef1 if (raza_ci ==. & (p203 ==3 | p203==5)) 
 replace raza_ci=3 if raza_ci==. 
 drop razjef razjef1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -222,7 +222,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -396,7 +396,7 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 14 años */ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 14 aÃ±os */ 
 
 
 ****************
@@ -427,7 +427,7 @@ gen tipopen_ci=.
 *** instcot_ci *****
 ********************
 gen instcot_ci=. /*La variable */
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *cotizando_ci***
@@ -453,13 +453,13 @@ gen tamemp_ci=p512b
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
 gen tamemp_ci=1 if p512b>=1 &  p512b<=5 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if p512b>=6 &  p512b<=50
 *Empresas grandes
 replace tamemp_ci=3 if p512b>=51 &  p512b<=9998
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw=fac500]
 
 ****************
@@ -469,8 +469,8 @@ gen categoinac_ci =1 if (p546==6 & condocup_ci==3)
 replace categoinac_ci = 2 if  (p546==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (p546==5 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros"
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros"
 label value categoinac_ci categoinac_ci
 
 
@@ -503,7 +503,7 @@ replace ypen_ci=. if pjub==. & pviudz==.
 label var ypen_ci "Valor de la pension contributiva"
 
 
-/*Modificación Mayra Sáenz- Julio 2015: Se reemplazan por variables originales
+/*ModificaciÃ³n Mayra SÃ¡enz- Julio 2015: Se reemplazan por variables originales
 * 2004-2014:
 gen     ypen_ci = 0
 replace ypen_ci = d556t1/3 if pension_ci==1
@@ -561,7 +561,7 @@ gen lpe_ci =linpe
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -651,7 +651,7 @@ replace tiempoparc_ci=. if emp_ci==0
 ******************
 ***categopri_ci***
 ******************
-* 10/20/2015 MGD: se añade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se aÃ±ade la categoria otra clasificacion para sacarlos de los no remunerados
 gen categopri_ci=.
 replace categopri_ci=0 if p507==7
 replace categopri_ci=1 if p507==1
@@ -659,7 +659,7 @@ replace categopri_ci=2 if p507==2
 replace categopri_ci=3 if p507==3 | p507==4 | p507==6 
 replace categopri_ci=4 if p507==5 /*| p507==7*/
 
-label define categopri_ci 0 "Otra clasificación" 1"Patron" 2"Cuenta propia" 
+label define categopri_ci 0 "Otra clasificaciÃ³n" 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4" No remunerado", add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
@@ -668,7 +668,7 @@ label variable categopri_ci "Categoria ocupacional trabajo principal"
 ******************
 ***categosec_ci***
 ******************
-* 10/20/2015 MGD: se añade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se aÃ±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categosec_ci=.
 replace categosec_ci=0 if p517==7
@@ -677,7 +677,7 @@ replace categosec_ci=2 if p517==2
 replace categosec_ci=3 if p517==3 | p517==4 | p517==6
 replace categosec_ci=4 if p517==5 /*| p517==7*/
 
-label define categosec_ci 0 "Otra clasificación" 1"Patron" 2"Cuenta propia"
+label define categosec_ci 0 "Otra clasificaciÃ³n" 1"Patron" 2"Cuenta propia"
 label define categosec_ci 3"Empleado" 4 "No remunerado" , add
 label value categosec_ci categosec_ci
 label variable categosec_ci "Categoria ocupacional trabajo secundario"
@@ -781,7 +781,7 @@ replace antiguedad_ci=anios_ant+meses_ant/12
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Mayra SÃ¡enz- Julio 2015: En este quietly se encuentra la generaciÃ³n de ingresos anterior.
+*Mayra SÃƒÂ¡enz- Julio 2015: En este quietly se encuentra la generaciÃƒÂ³n de ingresos anterior.
 /*
 quietly {
 
@@ -800,8 +800,8 @@ replace ypridbd=. if p524d1==999999
 
 replace ypridbd=0 if categopri_ci==4 
 /* A los trabajadores no remunerados que trabajan menos de 15 horas la encuesta no les
-pregunta acerca de sus ingresos y los manda a la sección de desempleo. Como este grupo en
-realidad está trabajando, reemplazo su ingreso missing por cero*/
+pregunta acerca de sus ingresos y los manda a la secciÃ³n de desempleo. Como este grupo en
+realidad estÃ¡ trabajando, reemplazo su ingreso missing por cero*/
 
 replace ypridbd=. if categopri_ci<=2
 
@@ -1079,7 +1079,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1163,7 +1163,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
 */
 *==================================================================================================================================================================*
-* Mayra SÃ¡enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estadÃ­stica del paÃ­s, de acuerdo a sintaxis elaborada por Marcos Robles.
+* Mayra SÃƒÂ¡enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estadÃƒÂ­stica del paÃƒÂ­s, de acuerdo a sintaxis elaborada por Marcos Robles.
 *==================================================================================================================================================================*
 *** Las variables son las mismas para 2004-2014 
 
@@ -1252,7 +1252,7 @@ gen ynlnm_ci = (ig06hd+ig08hd+sig24+sig26+gru13hd1+gru13hd2+gru13hd3+gru23hd1+gr
 *-Monetarias
 * 2004-2008
 gen trac_pri = d556t1/12 if p5561a==1 | p5562a==1 | p5563a==1 | p5567a==1
-*ModificaciÃ³n SGR 2017 06
+*ModificaciÃƒÂ³n SGR 2017 06
 gen trac_pub = d556t1/12 if p5566a==1  
 *gen trac_pub = d556t1/12 if p5561a==6 
 
@@ -1312,7 +1312,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1378,7 +1378,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 *gen rentaimp_ch=p106
 *replace rentaimp=. if p106==99999
 
-*ModificaciÃ³n Mayra SÃ¡enz - Julio 2015
+*ModificaciÃƒÂ³n Mayra SÃƒÂ¡enz - Julio 2015
 gen rentaimp_ch= vivialqimp
 
 
@@ -1400,7 +1400,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-*Los q responden con antiguo sistema de prima(p301b): habian cinco años de primaria.
+*Los q responden con antiguo sistema de prima(p301b): habian cinco aÃ±os de primaria.
 gen byte aedu_ci=.
 replace aedu_ci=0  if p301a==1 | p301a==2
 replace aedu_ci=1  if p301a==3 & p301b==0
@@ -1408,7 +1408,7 @@ replace aedu_ci=2  if p301a==3 & p301b==1
 replace aedu_ci=3  if p301a==3 & p301b==2
 replace aedu_ci=4  if p301a==3 & p301b==3
 replace aedu_ci=5  if p301a==3 & p301b==4
-*Como se responde actual sist prim (p301c): seis años de primaria.
+*Como se responde actual sist prim (p301c): seis aÃ±os de primaria.
 replace aedu_ci=0  if p301a==3 & p301c==0 & p301b==0
 replace aedu_ci=1  if p301a==3 & p301c==1 & p301b==0
 replace aedu_ci=2  if p301a==3 & p301c==2 & p301b==0
@@ -1567,7 +1567,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***pqnoasis***
 **************
 
-*Modificado Mayra Sáenz - Junio 2016- antes se generaba como missing
+*Modificado Mayra SÃ¡enz - Junio 2016- antes se generaba como missing
 
 gen pqnoasis_ci=p313
 
@@ -1596,7 +1596,7 @@ replace pqnoasis1_ci = 7 if p313==6
 replace pqnoasis1_ci = 8 if p313==3 | p313==4
 replace pqnoasis1_ci = 9 if p313==1 | p313==10 | p313==13
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1731,7 +1731,7 @@ gen vivialq_ch=p105b if viviprop_ch==0
 *replace vivialqimp_ch=. if p106==99999
 
 
-*Modificación Mayra Sáenz - Julio 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Julio 2015
 gen vivialqimp_ch= vivialqimp
 
 gen refrig_ch=(p6124==1)
@@ -1743,21 +1743,21 @@ gen compu_ch=(p61220==1)
 gen parentco=p203 
 gen edad = p208a
 gen sexo = p207
-*gen factorex=round(f_trimes,1) /* Factor de Expansión Trimestral */
+*gen factorex=round(f_trimes,1) /* Factor de ExpansiÃ³n Trimestral */
 
 /*
 ESTRATO 
 
-Estrato Geográfico
- 1 Centros poblados de más de 100,000 viviendas
+Estrato GeogrÃ¡fico
+ 1 Centros poblados de mÃ¡s de 100,000 viviendas
  2 Centros poblados de 20,001 a 100,000 viviendas
  3 Centros poblados de 10,001 a 20,000 viviendas
  4 Centros poblados de 4,001 a 10,000 viviendas
  5 Centros poblados de 401 a 4,000 viviendas
 
  6 Centros poblados con menos de 401 viviendas
- 7 Area de Empadronamiento Rural Compuesta – AER Compuesto
- 8 Area de Empadronamiento Simple – AER Simple
+ 7 Area de Empadronamiento Rural Compuesta â€“ AER Compuesto
+ 8 Area de Empadronamiento Simple â€“ AER Simple
 */
 
 gen area=1 if 	  (estrato>=1 & estrato<=5)
@@ -1765,13 +1765,13 @@ replace area=2 if (estrato>=6 & estrato<=8)
 
 ** Years of education. 
 /* 
-Mayores de 3 años de edad(inclusive)
-301. ¿CUAL ES EL ULTIMO AÑO O GRADO DE ESTUDIOS Y NIVEL QUE APROBO?
+Mayores de 3 aÃ±os de edad(inclusive)
+301. Â¿CUAL ES EL ULTIMO AÃ‘O O GRADO DE ESTUDIOS Y NIVEL QUE APROBO?
 
 p301a					p301b	p301c
-Nivel educativo que aprobó		Año	Grado
+Nivel educativo que aprobÃ³		AÃ±o	Grado
 1 Sin nivel				---	---
-2 Educación Inicial			---	---
+2 EducaciÃ³n Inicial			---	---
 3 Primaria incompleta			0-4	0-5
 4 Primaria completa			0,5-6	6
 5 Secundaria incomplet			1-4	---
@@ -1818,7 +1818,7 @@ replace anoest=20 if 	(p301a==11) & p301b==4 /* No obs */
 /*
 ocu500
 indicador de la	pea  (inei)	Freq.	Percent	Cum.
-14 años y más			
+14 aÃ±os y mÃ¡s			
 0. ---
 1. ocupado
 2. desocupado abierto	
@@ -1838,15 +1838,15 @@ replace tasadeso=1 if peaa==2
 ************************
 /*
 p204
-204. ¿ES MIEMBRO DEL HOGAR?
+204. Â¿ES MIEMBRO DEL HOGAR?
  1. Si
  2. No
 
-Mayores de 3 años de edad
-301. ¿CUAL ES EL ULTIMO AÑO O GRADO DE ESTUDIOS Y NIVEL QUE APROBO?
+Mayores de 3 aÃ±os de edad
+301. Â¿CUAL ES EL ULTIMO AÃ‘O O GRADO DE ESTUDIOS Y NIVEL QUE APROBO?
 
 p301a					p301b	p301c	p301d Centro de estudios
-Nivel educativo que aprobó		Año	Grado	1. Estatal 2.No Estatal
+Nivel educativo que aprobÃ³		AÃ±o	Grado	1. Estatal 2.No Estatal
 1 Sin nivel				---	---	1-2
 2 Inicial				---	---	1-2
 3 Primaria incompleta			0-5	0-5	1-2
@@ -1861,34 +1861,34 @@ Nivel educativo que aprobó		Año	Grado	1. Estatal 2.No Estatal
 99 Missing value			
 
 p302 
-302. ¿Sabe leer y escribir?
+302. Â¿Sabe leer y escribir?
 
 p303 
-En el 2002, ¿Estuvo matriculado en algún centro o programa de enseñanza regular?
+En el 2002, Â¿Estuvo matriculado en algÃºn centro o programa de enseÃ±anza regular?
 1 Si ==> 304 ==> 305 ==>306
 2 No ==> 306
 . Missing value
 
 p304a Nivel educativo al que asiste
-p304b Año de estudios al que asiste
+p304b AÃ±o de estudios al que asiste
 p304c Grado de estudios al que asiste
 p304d Centro de estudios al que asiste
 p305 El resultado que obtuvo en el 2002 fue?
 
 p306 
-306. Este año, ¿Está matriculado en algún centro o programa de enseñanza regular?
+306. Este aÃ±o, Â¿EstÃ¡ matriculado en algÃºn centro o programa de enseÃ±anza regular?
 1 Si
 2 No ==>
 . Missing value
 
-p307 Actualmente, asiste a algún centro de enseñanza regular?
+p307 Actualmente, asiste a algÃºn centro de enseÃ±anza regular?
 1 Si
 2 No
 . Missing value
 
 p308a 					p308b	p308c	p308d Centro de estudios
-308. Nivel educativo al que asiste	Año	Grado	1. Estatal 2.No Estatal
- 1 Educación Inicial			---	---	1-2
+308. Nivel educativo al que asiste	AÃ±o	Grado	1. Estatal 2.No Estatal
+ 1 EducaciÃ³n Inicial			---	---	1-2
  2 Primaria				0	1-6	1-2
  3 Secundaria				1-5	---	1-2
  4 Superior No Universitaria		1-5	---	1-2
@@ -1896,7 +1896,7 @@ p308a 					p308b	p308c	p308d Centro de estudios
  6 Post-grado Universitario, 		1-2	---	1-2
 
 p310
-310. EN LOS ULTIMOS 12 MESES, ¿ASISTIO A ALGUN CENTRO DE
+310. EN LOS ULTIMOS 12 MESES, Â¿ASISTIO A ALGUN CENTRO DE
 ESTUDIOS NO REGULAR COMO ACADEMIA, CEOS U OTROS?
 */
 
@@ -1999,16 +1999,16 @@ replace RATIOLITRW=1 if ((p302==1 | (p301a>=4 & p301a<=11)) & (edad>=15 & edad<=
 
 /*
 p507						p506
-507. EN SU CENTRO DE TRABAJO UD. ERA:		¿A QUE SE DEDICA EL NEGOCIO, ORGANISMO
+507. EN SU CENTRO DE TRABAJO UD. ERA:		Â¿A QUE SE DEDICA EL NEGOCIO, ORGANISMO
 						O EMPRESA EN LA QUE TRABAJO?
-1. ¿Empleador o patrono? 
-2. ¿Trabajador Independiente?
-3. ¿Empleado? 			=>510
-4. ¿Obrero?			=>510
-5. ¿Trabajador Familiar No
+1. Â¿Empleador o patrono? 
+2. Â¿Trabajador Independiente?
+3. Â¿Empleado? 			=>510
+4. Â¿Obrero?			=>510
+5. Â¿Trabajador Familiar No
     Remunerado? 		=>511
-6. ¿Trabajador del Hogar?	=>511
-7. ¿Otro?			=>510
+6. Â¿Trabajador del Hogar?	=>511
+7. Â¿Otro?			=>510
 */
 
 * Without Domestic Service
@@ -2027,11 +2027,11 @@ replace WENASD=1 if (edad>=15 & edad<=64) & (p507==3 | p507==4 | p507==6) & (p50
 ** Access to Electricity ** Additional Indicator
 
 /*
-112. ¿CUAL ES EL TIPO DE ALUMBRADO QUE TIENE SU HOGAR?
-(Acepte una o más alternativas)
+112. Â¿CUAL ES EL TIPO DE ALUMBRADO QUE TIENE SU HOGAR?
+(Acepte una o mÃ¡s alternativas)
 1. Electricidad				p1121
-2. Kerosene (mechero/lamparín)		p1122
-3. Petróleo/gas (lámpara)		p1123
+2. Kerosene (mechero/lamparÃ­n)		p1122
+3. PetrÃ³leo/gas (lÃ¡mpara)		p1123
 4. Vela 				p1124
 5. Generador 				p1125
 6. Otro 				p1126
@@ -2044,14 +2044,14 @@ replace ELEC=1 if p204==1 & (p1121==1 | p1125==1)
 
 ** Target 9, Indicator: Proportion of the population using solidfuels (%)
 /*
-113. ¿CUAL ES EL COMBUSTIBLE QUE USAN EN EL
+113. Â¿CUAL ES EL COMBUSTIBLE QUE USAN EN EL
 HOGAR PARA COCINAR SUS ALIMENTOS?
-(Acepte una o más alternativas)
+(Acepte una o mÃ¡s alternativas)
 1. Electricidad 	p1131
 2. Gas 			p1132
 3. Kerosene 		p1133
-4. Carbón		p1134
-5. Leña 		p1135
+4. CarbÃ³n		p1134
+5. LeÃ±a 		p1135
 6. Otro(Especifique)	p1136
 7. NO COCINAN		p1137
 */
@@ -2069,13 +2069,13 @@ replace SFUELS=1 if p204==1 & (solidfuels==1 & otherfuel==0)	/* Exclusive use of
 /*
 p110
 110. EL ABASTECIMIENTO DE AGUA EN SU HOGAR PROCEDE DE:
- 1. ¿Red pública, dentro de la vivienda?
- 2. ¿Red pública, fuera de la vivienda pero dentro del edificio?
- 3. ¿Pilón de uso público? 
- 4. ¿Camión - cisterna u otro similar?
- 5. ¿Pozo? 
- 6. ¿Río, acequia, manantial o similar ?
- 7. ¿Otra?
+ 1. Â¿Red pÃºblica, dentro de la vivienda?
+ 2. Â¿Red pÃºblica, fuera de la vivienda pero dentro del edificio?
+ 3. Â¿PilÃ³n de uso pÃºblico? 
+ 4. Â¿CamiÃ³n - cisterna u otro similar?
+ 5. Â¿Pozo? 
+ 6. Â¿RÃ­o, acequia, manantial o similar ?
+ 7. Â¿Otra?
 */
 
 gen WATER=0 if     p204==1 & (p110>=1 & p110<=7)
@@ -2085,11 +2085,11 @@ replace WATER=1 if p204==1 & ((p110>=1 & p110<=3)|p110==5)
 /*
 p111
 111. EL SERVICIO HIGIENICO QUE TIENE SU HOGAR ESTA CONECTADO A:
- 1. ¿Red pública, dentro de la vivienda?
- 2. ¿Red pública, fuera de la vivienda pero dentro del edificio?
- 3. ¿Pozo séptico?
- 4. ¿Pozo ciego o negro/letrina?
- 5. ¿Río, acequia o canal ?
+ 1. Â¿Red pÃºblica, dentro de la vivienda?
+ 2. Â¿Red pÃºblica, fuera de la vivienda pero dentro del edificio?
+ 3. Â¿Pozo sÃ©ptico?
+ 4. Â¿Pozo ciego o negro/letrina?
+ 5. Â¿RÃ­o, acequia o canal ?
  6. NO TIENE
 */
  
@@ -2103,52 +2103,52 @@ replace SANITATION=1 if p204==1 & (p111>=1 & p111<=3)
  1. Casa independiente
  2. Departamento en edificio
  3. Vivienda en quinta 
- 4. Vivienda en casa de vecindad (Callejón, solar o corralón) 
- 5. Choza o cabaña 
+ 4. Vivienda en casa de vecindad (CallejÃ³n, solar o corralÃ³n) 
+ 5. Choza o cabaÃ±a 
  6. Vivienda improvisada
- 7. Local no destinado para habitación humana
+ 7. Local no destinado para habitaciÃ³n humana
  8. Otro
 
 ** Datos del hogar
 p105a
 105. LA VIVIENDA QUE OCUPA SU HOGAR ES:
- 1. ¿Alquilada?
- 2. ¿Propia, totalmente pagada?
- 3. ¿Propia, por invasión?
- 4. ¿Propia, comprándola a plazos?
- 5. ¿Cedida por el centro de trabajo?
- 6. ¿Cedida por otro hogar o institución? 
- 7. ¿Otra forma?
+ 1. Â¿Alquilada?
+ 2. Â¿Propia, totalmente pagada?
+ 3. Â¿Propia, por invasiÃ³n?
+ 4. Â¿Propia, comprÃ¡ndola a plazos?
+ 5. Â¿Cedida por el centro de trabajo?
+ 6. Â¿Cedida por otro hogar o instituciÃ³n? 
+ 7. Â¿Otra forma?
 
 ** Datos de vivienda
 102. EL MATERIAL PREDOMINANTE EN LAS PAREDES
 EXTERIORES ES:
- 1. ¿Ladrillo o bloque de cemento?
- 2. ¿Piedra o sillar con cal o cemento?
- 3. ¿Adobe o tapia?
- 4. ¿Quincha (caña con barro)?
- 5. ¿Piedra con barro?
- 6. ¿Madera?
- 7. ¿Estera?
- 8. ¿Otro material?
+ 1. Â¿Ladrillo o bloque de cemento?
+ 2. Â¿Piedra o sillar con cal o cemento?
+ 3. Â¿Adobe o tapia?
+ 4. Â¿Quincha (caÃ±a con barro)?
+ 5. Â¿Piedra con barro?
+ 6. Â¿Madera?
+ 7. Â¿Estera?
+ 8. Â¿Otro material?
 
 ** Datos de vivienda
 103. EL MATERIAL PREDOMINANTE EN LOS PISOS ES:
- 1. ¿Parquet o madera pulida?
- 2. ¿Láminas asfálticas, vinílicos o similares? 
- 3. ¿Losetas, terrazos o similares?
- 4. ¿Madera (entablados)?
- 5. ¿Cemento?
- 6. ¿Tierra? 
- 7. ¿Otro material?
+ 1. Â¿Parquet o madera pulida?
+ 2. Â¿LÃ¡minas asfÃ¡lticas, vinÃ­licos o similares? 
+ 3. Â¿Losetas, terrazos o similares?
+ 4. Â¿Madera (entablados)?
+ 5. Â¿Cemento?
+ 6. Â¿Tierra? 
+ 7. Â¿Otro material?
 
 ** Datos de vivienda
-104. SIN CONTAR BAÑO, COCINA, PASADIZOS NI
-GARAJE ¿CUANTAS HABITACIONES EN TOTAL
+104. SIN CONTAR BAÃ‘O, COCINA, PASADIZOS NI
+GARAJE Â¿CUANTAS HABITACIONES EN TOTAL
 TIENE LA VIVIENDA?
 */
 
-* Hogar. Número secuencial del hogar 
+* Hogar. NÃºmero secuencial del hogar 
 * 11-55 => 1st Digit => Household number, 
 *	=> 2nd Digit => Number of households in the dwelling
 
@@ -2184,13 +2184,13 @@ replace SECTEN=0 if p204==1 & (((tenencia==5 | tenencia==6 | tenencia==7) | (tip
 /*
 ** Datos de vivienda
 103. EL MATERIAL PREDOMINANTE EN LOS PISOS ES:
- 1. ¿Parquet o madera pulida?
- 2. ¿Láminas asfálticas, vinílicos o similares? 
- 3. ¿Losetas, terrazos o similares?
- 4. ¿Madera (entablados)?
- 5. ¿Cemento?
- 6. ¿Tierra? 
- 7. ¿Otro material?
+ 1. Â¿Parquet o madera pulida?
+ 2. Â¿LÃ¡minas asfÃ¡lticas, vinÃ­licos o similares? 
+ 3. Â¿Losetas, terrazos o similares?
+ 4. Â¿Madera (entablados)?
+ 5. Â¿Cemento?
+ 6. Â¿Tierra? 
+ 7. Â¿Otro material?
 */
 
 gen DIRT=0 if     p204==1 & (piso>=1 & piso<=7)
@@ -2206,11 +2206,11 @@ replace UNMPLYMENT15=1 if p204==1 & (edad>=15 & edad<=24) & (tasadeso==1)
 ** Target 18, Indicator: "Telephone lines and cellular subscribers per 100 population"
 /*
 114. SU HOGAR TIENE :
-(Acepte una o más alternativas)
-1. ¿Teléfono (fijo)? 		p1141
-2. ¿Celular?			p1142
-3. ¿Beeper? 			p1143
-4. ¿Internet?			p1144
+(Acepte una o mÃ¡s alternativas)
+1. Â¿TelÃ©fono (fijo)? 		p1141
+2. Â¿Celular?			p1142
+3. Â¿Beeper? 			p1143
+4. Â¿Internet?			p1144
 5. NO TIENE			p1145
 */
 
@@ -2256,15 +2256,15 @@ gen COMPUTER=.
 ** Target 18, Indicator: "Internet users per 100 population"
 /*
 114. SU HOGAR TIENE :
-(Acepte una o más alternativas)
-1. ¿Teléfono (fijo)? 		p1141
-2. ¿Celular?			p1142
-3. ¿Beeper? 			p1143
-4. ¿Internet?			p1144
+(Acepte una o mÃ¡s alternativas)
+1. Â¿TelÃ©fono (fijo)? 		p1141
+2. Â¿Celular?			p1142
+3. Â¿Beeper? 			p1143
+4. Â¿Internet?			p1144
 5. NO TIENE			p1145
 
 p314 
-En el mes anterior, hizo uso del servicio de Interner por cabina pública?
+En el mes anterior, hizo uso del servicio de Interner por cabina pÃºblica?
  1 Si
  2 No
  9 Missing value
@@ -2286,9 +2286,9 @@ gen PERSROOM2=persroom if parentco==1
 *** Disconnected Youths
  /*
 p549
-549. ¿POR QUE NO BUSCO TRABAJO?
+549. Â¿POR QUE NO BUSCO TRABAJO?
 1. No hay trabajo 
-2. Se cansó de buscar  
+2. Se cansÃ³ de buscar  
 3. Por su edad 
 4. Falta de experiencia 
 5. Sus estudios no le permiten  
@@ -2297,8 +2297,8 @@ no le permiten
 7. Razones de Salud  
 8. Falta de capital  
 9. Otro  
-10. Ya encontró trabajo 
-11. Si buscó trabajo 
+10. Ya encontrÃ³ trabajo 
+11. Si buscÃ³ trabajo 
 */
 
 gen DISCONN=0 if     p204==1 & (edad>=15 & edad<=24) 
@@ -2307,15 +2307,15 @@ replace DISCONN=1 if p204==1 & (edad>=15 & edad<=24) & (peaa==. | peaa==3) & p30
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -2334,7 +2334,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
-para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para anÃƒÂ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 clonevar codocupa = p505 
 clonevar codindustria = p506
 

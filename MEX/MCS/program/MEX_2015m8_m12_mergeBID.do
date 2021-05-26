@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 
@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\MCS\2015\m8_m11\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\MCS\2015\m8_m11\data_orig"
 
 local PAIS MEX
 local ENCUESTA MCS
 local ANO "2015"
 local ronda m8_m11
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -28,20 +28,20 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
+PaÃ­s: Mexico
 Encuesta: MCS 
 Round: Agosto-Noviembre
 Autores:
-Versión 2013: Daniela Zuluaga
-Última versión: Daniela Zuluaga - Email: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Agosto de 2017
+VersiÃ³n 2013: Daniela Zuluaga
+Ãšltima versiÃ³n: Daniela Zuluaga - Email: danielazu@iadb.org, da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Agosto de 2017
 
 							SCL/LMK - IADB
 ****************************************************************************/
 
 
 
-*Mayra Sáenz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
+*Mayra SÃ¡enz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
 *pero con algunas modificaciones, y generando nuevas variables.
 
 
@@ -50,14 +50,14 @@ Fecha última modificación: Agosto de 2017
 *Bienestar (ingresos)
 *********************************************************
 
-/*Para la construcción del ingreso corriente del hogar es necesario utilizar
-información sobre la condición de ocupación y los ingresos de los individuos.
-Se utiliza la información contenida en la base "$ruta\trabajo.dta" para 
-identificar a la población ocupada que declara tener como prestación laboral aguinaldo, 
+/*Para la construcciÃ³n del ingreso corriente del hogar es necesario utilizar
+informaciÃ³n sobre la condiciÃ³n de ocupaciÃ³n y los ingresos de los individuos.
+Se utiliza la informaciÃ³n contenida en la base "$ruta\trabajo.dta" para 
+identificar a la poblaciÃ³n ocupada que declara tener como prestaciÃ³n laboral aguinaldo, 
 ya sea por su trabajo principal o secundario, a fin de incorporar los ingresos por este 
-concepto en la medición*/
+concepto en la mediciÃ³n*/
 
-*Creación del ingreso monetario deflactado a pesos de agosto del 2015
+*CreaciÃ³n del ingreso monetario deflactado a pesos de agosto del 2015
 
 *Ingresos
 /*
@@ -84,7 +84,7 @@ drop _merge
 
 gen trab=1
 
-label var trab "Población con al menos un empleo"
+label var trab "PoblaciÃ³n con al menos un empleo"
 
 gen aguinaldo1=.
 replace aguinaldo1=1 if pres_21==2
@@ -133,11 +133,11 @@ sort folioviv foliohog numren
 /*Una vez realizado lo anterior, se procede a deflactar el ingreso recibido
 por los hogares a precios de agosto de 2015. Para ello, se utilizan las 
 variables meses, las cuales toman los valores 2 a 10 e indican el mes en
-que se recibió el ingreso respectivo*/
+que se recibiÃ³ el ingreso respectivo*/
 
 sort folioviv foliohog numren
 
-*Definición de los deflactores 2015 
+*DefiniciÃ³n de los deflactores 2015 
 
 scalar	dic14	=	0.9973017796	
 scalar	ene15	=	0.9963995085	
@@ -201,8 +201,8 @@ replace ing_1=(ing_1/dic14)/12 if clave=="P009" | clave=="P016"
 
 recode ing_2 ing_3 ing_4 ing_5 ing_6 (0=.) if clave=="P008" | clave=="P009" | clave=="P015" | clave=="P016"
 
-/*Una vez realizada la deflactación, se procede a obtener el 
-ingreso mensual promedio en los últimos seis meses, para 
+/*Una vez realizada la deflactaciÃ³n, se procede a obtener el 
+ingreso mensual promedio en los Ãºltimos seis meses, para 
 cada persona y clave de ingreso*/
 
 egen double ing_mens=rmean(ing_1 ing_2 ing_3 ing_4 ing_5 ing_6)
@@ -227,7 +227,7 @@ las claves de ingreso correspondientes*/
 gen double ing_tran=ing_mens if (clave>="P032" & clave<="P048")
 
 
-*Modificación Mayra Sáenz - Agosto 2015 - Se divide al ingreso laboral en principal y secundario
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015 - Se divide al ingreso laboral en principal y secundario
 
 gen double ing_trab1=ing_mens if (clave>="P001" & clave<="P009") | (clave>="P011" & clave<="P013") 
 gen double ing_trab2=ing_mens if (clave>="P014" & clave<="P016") | (clave>="P018" & clave<="P020") | (clave=="P067")
@@ -237,16 +237,16 @@ gen double ing_negp2=ing_mens if (clave>="P075" & clave<="P081") | (clave>="P021
 
 
 *Modificacion Mayra Saenz -Julio, 2015: Se desagrega el ingreso no laboral monetario
-g double ypension = ing_mens  if  (clave=="P032" )                                    //Jubilaciones y pensiones originados dentro del país P032, No se incluyen las provenientes de otros países P033
+g double ypension = ing_mens  if  (clave=="P032" )                                    //Jubilaciones y pensiones originados dentro del paÃ­s P032, No se incluyen las provenientes de otros paÃ­ses P033
 g double trat_pr  = ing_mens  if  ((clave>="P034" & clave<="P036") | clave=="P041")    //Indemnizaciones recibidas de seguros contra riesgos y terceros,  Indemnizaciones por accidentes de trabajo, Indemnizaciones por despido y retiro voluntario ,Ingresos provenientes de otros paises
-g double trat_pu  = ing_mens  if  (clave>="P042"  & clave<="P048")                      //Desde 1996 aparece PROCAMPO, en 2002 se incluye Beneficio de Oportunidades en 2008 se incluye programa para adultos mayores y beneficios de otros programas sociales en 2010 Se desagregan los programas de adultos mayores y los otros programas sociales: Beneficio del programa 70 y más, Beneficio de otros programas para adultos mayores, Beneficio del programa Alimentario, Beneficio del programa Empleo Temporal, Beneficios de otros programas sociales.
+g double trat_pu  = ing_mens  if  (clave>="P042"  & clave<="P048")                      //Desde 1996 aparece PROCAMPO, en 2002 se incluye Beneficio de Oportunidades en 2008 se incluye programa para adultos mayores y beneficios de otros programas sociales en 2010 Se desagregan los programas de adultos mayores y los otros programas sociales: Beneficio del programa 70 y mÃ¡s, Beneficio de otros programas para adultos mayores, Beneficio del programa Alimentario, Beneficio del programa Empleo Temporal, Beneficios de otros programas sociales.
 g double dona_pu  = ing_mens  if  (clave=="P038")                                      //Becas provenientes del gobierno                      
 g double dona_pr  = ing_mens  if  (clave=="P037" | clave=="P039" | clave=="P040")      //Becas y donativos provenientes de organizaciones no gubernamentales Regalos o donativos en dinero provenientes de otros hogares
-g double otros    = ing_mens  if  ((clave>="P049" & clave<="P066"))                    //Otros ingresos no considerados en los anteriores (especifique) ¿cuánto dinero recibió por rendimientos de acciones que posea de alguna empresa en la que no trabajó? Retiro de inversiones, ahorros, tandas, cajas de ahorro, etc.  Pagos recibidos de préstamos que usted hizo a personas no miembros del hogar  Préstamos recibidos de personas no miembros del hogar o instituciones Venta de monedas, metales preciosos, joyas y obras de arte Venta de acciones Venta de bonos Venta de cédulas Venta de marcas, patentes y derechos de autor Herencias, dotes y legados Loterías y juegos de azar  Venta de casas, terrenos, condominios, etc. que están dentro del país propiedad de algún miembro del hogar  Venta de casas, terrenos, condominios, etc.que están fuera del país propiedad de algún miembro del hogar Venta de maquinaria, equipos, animales de producción, vehículos, etc. utilizados en el negocio propiedad del hogar Venta de vehículos, aparátos eléctricos de segunda mano, etc.  Préstamos hipotecarios por bienes inmuebles: casa, terrenos, edificios y locales Seguro de vida Otras percepciones financieras de capital no consideradas en las anteriores (especifique).
+g double otros    = ing_mens  if  ((clave>="P049" & clave<="P066"))                    //Otros ingresos no considerados en los anteriores (especifique) Å¼cuÃ¡nto dinero recibiÃ³ por rendimientos de acciones que posea de alguna empresa en la que no trabajÃ³? Retiro de inversiones, ahorros, tandas, cajas de ahorro, etc.  Pagos recibidos de prÃ©stamos que usted hizo a personas no miembros del hogar  PrÃ©stamos recibidos de personas no miembros del hogar o instituciones Venta de monedas, metales preciosos, joyas y obras de arte Venta de acciones Venta de bonos Venta de cÃ©dulas Venta de marcas, patentes y derechos de autor Herencias, dotes y legados LoterÃ­as y juegos de azar  Venta de casas, terrenos, condominios, etc. que estÃ¡n dentro del paÃ­s propiedad de algÃºn miembro del hogar  Venta de casas, terrenos, condominios, etc.que estÃ¡n fuera del paÃ­s propiedad de algÃºn miembro del hogar Venta de maquinaria, equipos, animales de producciÃ³n, vehÃ­culos, etc. utilizados en el negocio propiedad del hogar Venta de vehÃ­culos, aparÃ¡tos elÃ©ctricos de segunda mano, etc.  PrÃ©stamos hipotecarios por bienes inmuebles: casa, terrenos, edificios y locales Seguro de vida Otras percepciones financieras de capital no consideradas en las anteriores (especifique).
 g double remesas  = ing_mens  if  (clave=="P041")                                      //Ingresos provenientes de otros paises
 
 
-*Modificación Mayra Sáenz Julio 2015
+*ModificaciÃ³n Mayra SÃ¡enz Julio 2015
 levelsof clave, local(clave)
 foreach k of local clave {
 g `k' = ing_mens if clave == "`k'"
@@ -297,7 +297,7 @@ saveold "$ruta\ingreso_deflactado15_per.dta", replace
 
 *********************************************************
 
-/*Creación del ingreso no monetario deflactado a pesos de 
+/*CreaciÃ³n del ingreso no monetario deflactado a pesos de 
 agosto del 2015.*/
 
 *********************************************************
@@ -313,15 +313,15 @@ label var base "Origen del monto"
 label define base 1 "Monto del hogar" 2 "Monto de personas"
 label value base base
 
-/*En el caso de la información de gasto no monetario, para 
+/*En el caso de la informaciÃ³n de gasto no monetario, para 
 deflactar se utiliza la decena de levantamiento de la 
-encuesta, la cual se encuentra en la octava posición del 
+encuesta, la cual se encuentra en la octava posiciÃ³n del 
 folio de la vivienda. En primer lugar se obtiene una variable que 
 identifique la decena de levantamiento*/
 
 gen decena=real(substr(folioviv,8,1))
 
-*Definición de los deflactores
+*DefiniciÃ³n de los deflactores
 
 *Rubro 1.1 semanal, Alimentos;		
 scalar d11w07=	0.9977551691	
@@ -330,7 +330,7 @@ scalar d11w09=	1.0058606120
 scalar d11w10=	1.0087468232	
 scalar d11w11=	1.0125389839	
 		
-*Rubro 1.2 semanal, Bebidas alcohólicas y tabaco		
+*Rubro 1.2 semanal, Bebidas alcohÃ³licas y tabaco		
 scalar d12w07=	0.9993722536	
 scalar d12w08=	1.0000000000	
 scalar d12w09=	1.0033662900	
@@ -350,20 +350,20 @@ scalar d3m09=	1.0010377232
 scalar d3m10=	1.0152391568	
 scalar d3m11=	1.0316217307	
 		
-*Rubro 4.2 mensual, Accesorios y artículos de limpieza para el hogar		
+*Rubro 4.2 mensual, Accesorios y artÃ­culos de limpieza para el hogar		
 scalar d42m07=	0.9967082541	
 scalar d42m08=	1.0000000000	
 scalar d42m09=	1.0011171469	
 scalar d42m10=	1.0040251401	
 scalar d42m11=	1.0080758637	
 		
-*Rubro 4.2 trimestral, Accesorios y artículos de limpieza para el hogar	
+*Rubro 4.2 trimestral, Accesorios y artÃ­culos de limpieza para el hogar	
 scalar d42t05=	0.9946502023	
 scalar d42t06=	0.9964495763	
 scalar d42t07=	0.9992751337	
 scalar d42t08=	1.0017140957	
 		
-*Rubro 4.1 semestral, Muebles y aparatos dómesticos		
+*Rubro 4.1 semestral, Muebles y aparatos dÃ³mesticos		
 scalar d41s02=	0.9967813039	
 scalar d41s03=	0.9979614394	
 scalar d41s04=	0.9998009218	
@@ -375,7 +375,7 @@ scalar d51t06=	0.9976925199
 scalar d51t07=	1.0006549007	
 scalar d51t08=	1.0036562969	
 		
-*Rubro 6.1.1 semanal, Transporte público urbano	
+*Rubro 6.1.1 semanal, Transporte pÃºblico urbano	
 scalar d611w07=	0.9946556014	
 scalar d611w08=	1.0000000000	
 scalar d611w09=	1.0050088391	
@@ -395,7 +395,7 @@ scalar d6s03=	0.9945662104
 scalar d6s04=	0.9962424233	
 scalar d6s05=	0.9981940329	
 		
-*Rubro 7 mensual, Educación y esparcimiento		
+*Rubro 7 mensual, EducaciÃ³n y esparcimiento		
 scalar d7m07=	0.9995785200	
 scalar d7m08=	1.0000000000	
 scalar d7m09=	1.0108896669	
@@ -433,7 +433,7 @@ G3 Gasto no monetario procedente de autoconsumo
 G4 Gasto no monetario por remuneraciones en especie
 G5 Gasto no monetario por regalos recibidos de otro hogar
 G6 Gasto no monetario por transferencias de instituciones
-G7 Gasto imputado por estimación del alquiler
+G7 Gasto imputado por estimaciÃ³n del alquiler
 */
            
 *Modificado Mayra Saenz- Abril 2017
@@ -497,7 +497,7 @@ replace veca_nm=veca_nm/d2t07 if decena==8
 replace veca_nm=veca_nm/d2t08 if decena==9
 replace veca_nm=veca_nm/d2t08 if decena==0
 
-*Gasto en Vivienda y servicios de conservación deflactado (mensual)
+*Gasto en Vivienda y servicios de conservaciÃ³n deflactado (mensual)
 
 gen viv_nm=gasnomon if (clave>="G001" & clave<="G016") | (clave>="R001" & clave<="R004") | clave=="R013"
 
@@ -513,7 +513,7 @@ replace viv_nm=viv_nm/d3m09 if decena==8
 replace viv_nm=viv_nm/d3m10 if decena==9
 replace viv_nm=viv_nm/d3m10 if decena==0
 
-*Gasto en Artículos de limpieza deflactado (mensual)
+*Gasto en ArtÃ­culos de limpieza deflactado (mensual)
 
 gen lim_nm=gasnomon if (clave>="C001" & clave<="C024")
 
@@ -528,7 +528,7 @@ replace lim_nm=lim_nm/d42m09 if decena==8
 replace lim_nm=lim_nm/d42m10 if decena==9
 replace lim_nm=lim_nm/d42m10 if decena==0
 
-*Gasto en Cristalería y blancos deflactado (trimestral)
+*Gasto en CristalerÃ­a y blancos deflactado (trimestral)
 
 gen cris_nm=gasnomon if (clave>="I001" & clave<="I026")
 
@@ -543,7 +543,7 @@ replace cris_nm=cris_nm/d42t07 if decena==8
 replace cris_nm=cris_nm/d42t08 if decena==9
 replace cris_nm=cris_nm/d42t08 if decena==0
 
-*Gasto en Enseres domésticos y muebles deflactado (semestral)
+*Gasto en Enseres domÃ©sticos y muebles deflactado (semestral)
 
 gen ens_nm=gasnomon if (clave>="K001" & clave<="K037")
 
@@ -574,7 +574,7 @@ replace sal_nm=sal_nm/d51t07 if decena==8
 replace sal_nm=sal_nm/d51t08 if decena==9
 replace sal_nm=sal_nm/d51t08 if decena==0
 
-*Gasto en Transporte público deflactado (semanal)
+*Gasto en Transporte pÃºblico deflactado (semanal)
 
 gen tpub_nm=gasnomon if (clave>="B001" & clave<="B007")
 
@@ -589,7 +589,7 @@ replace tpub_nm=tpub_nm/d611w10 if decena==8
 replace tpub_nm=tpub_nm/d611w10 if decena==9
 replace tpub_nm=tpub_nm/d611w11 if decena==0
 
-*Gasto en Transporte foráneo deflactado (semestral)
+*Gasto en Transporte forÃ¡neo deflactado (semestral)
 
 gen tfor_nm=gasnomon if (clave>="M001" & clave<="M018") | (clave>="F007" & clave<="F014")
 
@@ -619,7 +619,7 @@ replace com_nm=com_nm/d6m09 if decena==8
 replace com_nm=com_nm/d6m10 if decena==9
 replace com_nm=com_nm/d6m10 if decena==0
 
-*Gasto en Educación y recreación deflactado (mensual)
+*Gasto en EducaciÃ³n y recreaciÃ³n deflactado (mensual)
 
 gen edre_nm=gasnomon if (clave>="E001" & clave<="E034") | (clave>="H134" & clave<="H135") | (clave>="L001" & clave<="L029") | (clave>="N003" & clave<="N005") | clave=="R009"
 
@@ -635,7 +635,7 @@ replace edre_nm=edre_nm/d7m09 if decena==8
 replace edre_nm=edre_nm/d7m10 if decena==9
 replace edre_nm=edre_nm/d7m10 if decena==0
 
-*Gasto en Educación básica deflactado (mensual)
+*Gasto en EducaciÃ³n bÃ¡sica deflactado (mensual)
 
 gen edba_nm=gasnomon if (clave>="E002" & clave<="E003") | (clave>="H134" & clave<="H135")
 
@@ -715,7 +715,7 @@ save "$ruta\ingresonomonetario_def15.dta", replace
 
 use "$ruta\ingresonomonetario_def15.dta", clear
 
-*Construcción de la base de pagos en especie a partir de la base 
+*ConstrucciÃ³n de la base de pagos en especie a partir de la base 
 *de gasto no monetario
 
 keep if esp==1
@@ -747,7 +747,7 @@ sort folioviv foliohog
 save "$ruta\esp_def15.dta", replace
 
 
-*Construcción de base de regalos a partir de la base no monetaria
+*ConstrucciÃ³n de base de regalos a partir de la base no monetaria
 
 use "$ruta\ingresonomonetario_def15.dta", clear
 
@@ -781,32 +781,32 @@ sort folioviv foliohog
 save "$ruta\reg_def15.dta", replace
 
 
-*Modificación Mayra Saenz, Abril 2017
+*ModificaciÃ³n Mayra Saenz, Abril 2017
 
-*Construcción de base de gasto monetario en educación
+*ConstrucciÃ³n de base de gasto monetario en educaciÃ³n
 
 use "$ruta\ingresonomonetario_def15.dta", clear
 
 *********************************************************
 
-/*Creación del gasto monetario deflactado a pesos de 
+/*CreaciÃ³n del gasto monetario deflactado a pesos de 
 agosto del 2015.*/
 
 *********************************************************
 *Modificado Mayra Saenz- Abril 2017
-*Gasto monetario en educación
+*Gasto monetario en educaciÃ³n
 
 /*use "$ruta\gastoshogar.dta", clear
 
-/*En el caso de la información de gasto no monetario, para 
+/*En el caso de la informaciÃ³n de gasto no monetario, para 
 deflactar se utiliza la decena de levantamiento de la 
-encuesta, la cual se encuentra en la octava posición del 
+encuesta, la cual se encuentra en la octava posiciÃ³n del 
 folio de la vivienda. En primer lugar se obtiene una variable que 
 identifique la decena de levantamiento*/
 
 gen decena=real(substr(folioviv,8,1))
 
-*Rubro 7 mensual, Educación y esparcimiento;		
+*Rubro 7 mensual, EducaciÃ³n y esparcimiento;		
 scalar d7m07=	0.9995785200	
 scalar d7m08=	1.0000000000	
 scalar d7m09=	1.0108896669	
@@ -822,7 +822,7 @@ G3 Gasto no monetario procedente de autoconsumo
 G4 Gasto no monetario por remuneraciones en especie
 G5 Gasto no monetario por regalos recibidos de otro hogar
 G6 Gasto no monetario por transferencias de instituciones
-G7 Gasto imputado por estimación del alquiler
+G7 Gasto imputado por estimaciÃ³n del alquiler
 */
 
 
@@ -830,11 +830,11 @@ G7 Gasto imputado por estimación del alquiler
 gen double gasmon=gasto_tri/3
 
 
-keep if tipo_gasto=="G1" // Sólo gasto dentro del hogar
+keep if tipo_gasto=="G1" // SÃ³lo gasto dentro del hogar
 
 
 
-*Gasto monetario sólo educación
+*Gasto monetario sÃ³lo educaciÃ³n
 gen edu_gtosm=gasmon if (clave>="E001" & clave<="E021") | (clave>="H134" & clave<="H135") 
 
 replace edu_gtosm=edu_gtosm/d7m07 if decena==1
@@ -863,17 +863,17 @@ save "$ruta\edu_gtosmh", replace
 
 use "$ruta\gastospersona.dta", clear
 
-/*En el caso de la información de gasto no monetario, para 
+/*En el caso de la informaciÃ³n de gasto no monetario, para 
 deflactar se utiliza la decena de levantamiento de la 
-encuesta, la cual se encuentra en la octava posición del 
+encuesta, la cual se encuentra en la octava posiciÃ³n del 
 folio de la vivienda. En primer lugar se obtiene una variable que 
 identifique la decena de levantamiento*/
 
 gen decena=real(substr(folioviv,8,1))
 
-*Definición de los deflactores
+*DefiniciÃ³n de los deflactores
 
-*Rubro 7 mensual, Educación y esparcimiento	
+*Rubro 7 mensual, EducaciÃ³n y esparcimiento	
 scalar d7m07=	0.9995785200	
 scalar d7m08=	1.0000000000	
 scalar d7m09=	1.0108896669	
@@ -890,18 +890,18 @@ G3 Gasto no monetario procedente de autoconsumo
 G4 Gasto no monetario por remuneraciones en especie
 G5 Gasto no monetario por regalos recibidos de otro hogar
 G6 Gasto no monetario por transferencias de instituciones
-G7 Gasto imputado por estimación del alquiler
+G7 Gasto imputado por estimaciÃ³n del alquiler
 */
 
 
 gen double gasmon=gasto_tri/3
 
 
-keep if tipo_gasto=="G1" // Sólo gasto dentro del hogar
+keep if tipo_gasto=="G1" // SÃ³lo gasto dentro del hogar
 
 
 
-*Gasto monetario sólo educación
+*Gasto monetario sÃ³lo educaciÃ³n
 gen edu_gtosm=gasmon if (clave>="E001" & clave<="E021") | (clave>="H134" & clave<="H135") 
 
 replace edu_gtosm=edu_gtosm/d7m07 if decena==1
@@ -928,7 +928,7 @@ save "$ruta\edu_gtosmp", replace*/
 
 *********************************************************
 
-*Construcción del ingreso corriente total
+*ConstrucciÃ³n del ingreso corriente total
 
 *********************************************************
 
@@ -937,7 +937,7 @@ use "$ruta\concentradohogar.dta", clear
 *keep proyecto folioviv foliohog tam_loc factor tot_integ est_dis upm ubica_geo
 
 
-/*Incorporación de la base de ingreso monetario deflactado
+/*IncorporaciÃ³n de la base de ingreso monetario deflactado
 
 sort proyecto folioviv foliohog
 
@@ -945,7 +945,7 @@ merge proyecto folioviv foliohog using "$ruta\ingreso_deflactado14.dta"
 tab _merge
 drop _merge*/
 
-*Incorporación de la base de ingreso no monetario deflactado: pago en especie
+*IncorporaciÃ³n de la base de ingreso no monetario deflactado: pago en especie
 
 *sort proyecto folioviv foliohog
 sort folioviv foliohog
@@ -965,7 +965,7 @@ merge 1:1 folioviv foliohog using "$ruta\esp_def15.dta"
 tab _merge
 drop _merge
 
-*Incorporación de la base de ingreso no monetario deflactado: regalos en especie
+*IncorporaciÃ³n de la base de ingreso no monetario deflactado: regalos en especie
 
 sort folioviv foliohog
 
@@ -991,7 +991,7 @@ egen double nomon=rsum(pago_esp reg_esp)
 label var nomon "Ingreso corriente no monetario"
 label var pago_esp "Ingreso corriente no monetario pago especie"
 label var reg_esp "Ingreso corriente no monetario regalos especie"
-/*label var gtos_edu "Gastos en Educación - ya están incluidos en pago_esp y reg_esp"*/
+/*label var gtos_edu "Gastos en EducaciÃ³n - ya estÃ¡n incluidos en pago_esp y reg_esp"*/
 
 sort  folioviv foliohog
 
@@ -1027,7 +1027,7 @@ use "$ruta\trabajos.dta",clear
 	saveold "$ruta\trabajos_reshape.dta", replace
 
 *_________________________________________________________________________________________________________*
-* Modificación Mayra Sáenz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
+* ModificaciÃ³n Mayra SÃ¡enz: Se unifica con la base de personas con la de ingresos, de vivienda y de gastos
 *_________________________________________________________________________________________________________*
 
 
@@ -1052,10 +1052,10 @@ drop _merge
 /*merge m:1 folioviv foliohog using "$ruta\edu_gtosmh.dta"
 drop _merge*/
 
-*Modificación Mayra Sáenz: Total Ingreso monetario del hogar
+*ModificaciÃ³n Mayra SÃ¡enz: Total Ingreso monetario del hogar
 bys folio: egen ing_monh = sum(ing_mon)
 
-egen double ict=rsum(ing_monh nomon)  if parentesco=="101" | parentesco=="102" //Mayra Sáenz Agosto 2015 - Aumento esta condición porque esta base está a nivel de personas
+egen double ict=rsum(ing_monh nomon)  if parentesco=="101" | parentesco=="102" //Mayra SÃ¡enz Agosto 2015 - Aumento esta condiciÃ³n porque esta base estÃ¡ a nivel de personas
 
 label var  ict "Ingreso corriente total"
 

@@ -15,7 +15,7 @@ clear all
 set more off  
  
 
-global ruta = "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\sdssrv03\Surveys"
+global ruta = "${surveysFolder}\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\sdssrv03\Surveys"
 
 local PAIS COL
 local ENCUESTA GEIH

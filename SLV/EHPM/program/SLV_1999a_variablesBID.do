@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -29,7 +29,7 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: El Salvador
+PaÃ­s: El Salvador
 Encuesta: EHPM
 Round: a
 Autores: Marcela Rubio (mrubio@iadb.org)
@@ -55,7 +55,7 @@ use "`base_in'", clear
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -64,22 +64,22 @@ label value region_BID_c region_BID_c
 ************
 
 gen region_c= r004
-label define region_c 1 "Ahuachapán" ///
+label define region_c 1 "AhuachapÃ¡n" ///
 2 "Santa Ana" ///
 3 "Sonsonate" ///
 4 "Chalatenango" ///
 5 "La Libertad" ///
 6 "San Salvador" ///
-7 "Cuscatlán" ///
+7 "CuscatlÃ¡n" ///
 8 "La Paz" ///
-9 "Cabañas" ///
+9 "CabaÃ±as" ///
 10 "San Vicente" ///
-11 "Usulután" ///
+11 "UsulutÃ¡n" ///
 12 "San Miguel" ///
-13 "Morazán" ///
-14 "La Unión" 
+13 "MorazÃ¡n" ///
+14 "La UniÃ³n" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -321,13 +321,13 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
@@ -515,7 +515,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -539,9 +539,9 @@ replace tamemp_ci=1 if r420>=1 & r420<=5
 replace tamemp_ci=2 if r420>=6 & r420<=50
 replace tamemp_ci=3 if r420>50 & r420<.
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de la empresa"
+label var tamemp_ci "TamaÃ±o de la empresa"
 
 *************
 **pension_ci*
@@ -555,7 +555,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 gen ypen_ci=r4420m*r4420n/12 if pension_ci==1
-* Conversión Colones a dólares
+* ConversiÃ³n Colones a dÃ³lares
 replace ypen_ci= ypen_ci/8.76
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -600,7 +600,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -625,7 +625,7 @@ replace categoinac_ci=1 if r407==8 & condocup_ci==3
 replace categoinac_ci=2 if (r407==4 | r407==10) & condocup_ci==3
 replace categoinac_ci=3 if r407==7 & condocup_ci==3
 recode categoinac_ci .=4 if condocup_ci==3
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -641,7 +641,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *******************************INGRESOS**********************************************
 *************************************************************************************
 
-*Conversión Colones a dólares
+*ConversiÃ³n Colones a dÃ³lares
 /*
 Fuente: http://www.iadb.org/en/research-and-data/latin-american-and-caribbean-macro-watch,8633.html
 1999-Jan	8.76
@@ -702,7 +702,7 @@ replace yprijbi=ingrneto/12 if r426==5
 replace yprijbi=ingrneto if r426==6
 replace yprijbi=. if categopri_ci>2
 
-/*Ojo con esto último. Originalmente la encuesta conputa una serie de 
+/*Ojo con esto Ãºltimo. Originalmente la encuesta conputa una serie de 
 missings que no corresponden a casos de no respuesta, sino
 que es un grupo de trabajadores independientes considerados como productores 
 agropecuarios, para ser consistente con el tratamiento de las encuestas anteriores
@@ -712,14 +712,14 @@ egen ylmpri_ci=rsum(yprijbi yprid), missing
 replace ylmpri_ci=. if yprijbi==999999 | yprid==999999
 replace ylmpri_ci=. if yprid==. & yprijbi==.
 replace ylmpri_ci=. if emp==0
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylmpri_ci= ylmpri_ci/8.76
 
 egen ylmpri1_ci=rsum(yprijbi yprijbd), missing
 replace ylmpri1_ci=. if yprijbi==999999 | yprijbd==999999
 replace ylmpri1_ci=. if yprijbd==. & yprijbi==.
 replace ylmpri1_ci=. if emp==0
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylmpri1_ci =ylmpri1_ci/8.76
 
 ********************************
@@ -766,7 +766,7 @@ replace otross1=0 if emp==1 & r4240u==.
 egen ylnmpri_ci=rsum(food1 ropa1 merca1 vivi1 trans1 segur1 otross1), missing
 replace ylnmpri_ci=. if food1==. &  ropa1==. & merca1==. & vivi1==. & trans1==. & segur1==. & otross1==. 
 replace ylnmpri_ci=. if emp_ci==0
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylnmpri_ci= ylnmpri_ci/8.76
 
 
@@ -777,7 +777,7 @@ rename r430 valaut
 egen ylnmpri1_ci=rsum(ylnmpri_ci valaut), missing
 replace ylnmpri1_ci=. if ylnmpri_ci==. & valaut==.
 replace ylnmpri1_ci=. if emp_ci==0
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylnmpri1_ci=ylnmpri1_ci/8.76
 
 ***************
@@ -799,13 +799,13 @@ gen bonificaciones=.
 replace bonificacionesd=r4340g*r4340h/12
 
 gen ylmsec_ci=ysec1
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylmsec_ci=ylmsec_ci/8.76
 
 egen ylmsec1_ci=rsum(ysec1 hrsextras vacaciones aguinaldo bonificaciones), missing
 replace ylmsec1_ci=. if ysec1==. & hrsextras==. & vacaciones==. & aguinaldo==. & bonificaciones==. 
 replace ylmsec1_ci=. if emp_ci==0 | r431 ==2
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylmsec1_ci=ylmsec1_ci/8.76
 
 ******************
@@ -843,7 +843,7 @@ replace otross2=0 if emp==1 & r4340u==.
 egen ylnmsec_ci=rsum(food2 ropa2 merca2 vivi2 trans2 segur2 otross2), missing
 replace ylnmsec_ci=. if food2==. &  ropa2==. & merca2==. & vivi2==. & trans2==. & segur2==. & otross2==. 
 replace ylnmsec_ci=. if emp_ci==0
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ylnmsec_ci=ylnmsec_ci/8.76
 
 **********************
@@ -919,7 +919,7 @@ replace otross=r4430g/12
 
 egen ynlm_ci=rsum(remesasext ayuda cuotalim alqui alqneg jubil deveh otros utilidades dividendos intereses herencias indemnizacion ayudagob otross), missing
 replace ynlm_ci=. if remesasext==. & ayuda==. & cuotalim==. & alqui==. & alqneg==. & jubil==. & deveh==. & otros==. & utilidades==. & dividendos==. & intereses==. & herencias==. & indemnizacion==. & ayudagob==. & otross==. 
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace ynlm_ci=ynlm_ci/8.76
 
 gen ynlnm_ci=.
@@ -929,16 +929,16 @@ gen ynlnm_ci=.
 ****************
 
 gen remesas_ci=remesasext
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace remesas_ci=remesas_ci/8.76
 
 ************************
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 **********************************
 *** nrylmpri_ch & nrylmpri1_ch ***
@@ -998,7 +998,7 @@ by idh_ch, sort: egen ynlnm_ch=sum(ynlnm_ci) if miembros_ci==1
 
 gen autocons_ci=valaut
 
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace autocons_ci= autocons_ci/8.76
 
 *******************
@@ -1012,7 +1012,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 *******************
 
 gen rentaimp_ch=r311
-* Conversión de colones a dolares
+* ConversiÃ³n de colones a dolares
 replace rentaimp_ch= rentaimp_ch/8.76 
 
 *****************
@@ -1034,8 +1034,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
 gen byte aedu_ci=.
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 
 replace aedu_ci=0 if r204==0 
@@ -1074,13 +1074,13 @@ replace aedu_ci=13 if r204==5 & r205==1
 replace aedu_ci=14 if r204==5 & r205==2 
 replace aedu_ci=15 if r204==5 & r205==3 
 
-* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completó
+* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completÃ³
 replace aedu_ci=aedu_ci-1 if aedu_ci!=0
 
 
-/* Ahora obtenemos los años de educación para aquellos que
+/* Ahora obtenemos los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento educativo, no se tiene en
-cuenta la educación especial*/
+cuenta la educaciÃ³n especial*/
 
 replace aedu_ci=0 if r219a==0 & r217==1
 replace aedu_ci=0 if r219a==1 & r217==1
@@ -1125,7 +1125,7 @@ replace aedu_ci=0 if r203==2 & r217==2
 replace aedu_ci=. if edad<=3
 
 replace aedu_ci=. if aedu_ci>edad & aedu_ci~=. 
-/*Hay 3 casos en donde los años de educación son mayores a la edad por eso lo ajustamos de 
+/*Hay 3 casos en donde los aÃ±os de educaciÃ³n son mayores a la edad por eso lo ajustamos de 
 esta forma*/
 
 **************
@@ -1285,7 +1285,7 @@ replace pqnoasis1_ci = 5 if r221 ==2
 replace pqnoasis1_ci = 7 if r221 ==6
 replace pqnoasis1_ci = 9 if r221 ==7
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1316,12 +1316,12 @@ replace edupub_ci=2 if r210==2 | r210==3
 
 
 /* Variable centroen:
-1: Centro de enseñanza oficial: 
-Es aquel cuya administración y funcionamiento depende del gobierno.
-2: Centro de Enseñanza Laico: 
+1: Centro de enseÃ±anza oficial: 
+Es aquel cuya administraciÃ³n y funcionamiento depende del gobierno.
+2: Centro de EnseÃ±anza Laico: 
 Son todos los centros educativos privados no religiosos. 
-3: Centro de Enseñanza religioso: 
-Son todos los centros educativos que pertenecen a una Congregación Religiosa. 
+3: Centro de EnseÃ±anza religioso: 
+Son todos los centros educativos que pertenecen a una CongregaciÃ³n Religiosa. 
 */
 
 
@@ -1355,13 +1355,13 @@ gen bano_ch=(r317>=1 & r317<=6)
 
 gen banoex_ch=(r317>=4 & r317<=6)
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 3, pero genero de la misma manera que los aÃ±os anteriores
 gen des1_ch=.
 replace des1_ch = 0 if r317==7
 replace des1_ch = 1 if r317>=1 & r317<=2
 replace des1_ch = 2 if r317>=3 & r317<=6
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 2, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 2, pero genero de la misma manera que los aÃ±os anteriores
 gen des2_ch=.
 replace des2_ch = 0 if r317==7
 replace des2_ch = 1 if des1_ch==1 | des1_ch==2
@@ -1445,12 +1445,12 @@ gen viviitit_ch=.
 
 gen vivialq_ch=r308c if r308a==1
 replace vivialq_ch=. if r308c==99999
-*Conversión Colones a dólares
+*ConversiÃ³n Colones a dÃ³lares
 replace vivialq_ch= vivialq_ch/8.76
 
 gen vivialqimp_ch=r311
 replace vivialqimp_ch=. if r311==99999
-* Conversión Colones a dólares
+* ConversiÃ³n Colones a dÃ³lares
 replace vivialqimp_ch= vivialqimp_ch/8.76
 
 *variables que faltan generar
@@ -1463,15 +1463,15 @@ gen vivitit_ch=.
 gen categosec_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

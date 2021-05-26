@@ -43,8 +43,8 @@ set matsize 2000
 *Directorios:
 	
 *Directorios:
-global RAW    "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\PRY\EIGyCV\RAW"
-global data_arm  "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\PRY\EIGyCV\data_arm"
+global RAW    "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\PRY\EIGyCV\RAW"
+global data_arm  "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\PRY\EIGyCV\data_arm"
 	
 	
 

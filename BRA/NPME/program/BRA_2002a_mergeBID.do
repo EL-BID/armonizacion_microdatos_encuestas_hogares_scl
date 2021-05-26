@@ -1,8 +1,8 @@
-*Elaboración: María Laura Oliveri (mloliveri@iadb.org / lauraoliveri@yahoo.com)
+*ElaboraciÃ³n: MarÃ­a Laura Oliveri (mloliveri@iadb.org / lauraoliveri@yahoo.com)
 *Diciembre, 2015
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 *bases originales (mensuales)
 local base_in = "$ruta\survey\BRA\NPME"
@@ -16,7 +16,7 @@ local anio = 2002
 *1 - Append 
 clear
 set more off
-use "`base_in'/`anio'/m01/data_orig/PME20021.dta" /*esta base no se descargó de la web*/
+use "`base_in'/`anio'/m01/data_orig/PME20021.dta" /*esta base no se descargÃ³ de la web*/
 foreach v of varlist _all {
       capture rename `v' `=lower("`v'")'
    }
@@ -24,7 +24,7 @@ foreach v of varlist _all {
      destring v035 v040 v050 v055 v063 v070 v075, replace
 save  "`base_in'/`anio'/m01/data_orig/PME20021_aux.dta", replace
    
-use "`base_in'/`anio'/m02/data_orig/PME20022.dta"   /*esta base no se descargó de la web*/
+use "`base_in'/`anio'/m02/data_orig/PME20022.dta"   /*esta base no se descargÃ³ de la web*/
 gen mes_c=2 
 foreach v of varlist _all {
       capture rename `v' `=lower("`v'")'

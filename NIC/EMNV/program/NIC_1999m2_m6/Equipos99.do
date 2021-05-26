@@ -1,20 +1,20 @@
 
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS NIC
 local ENCUESTA EMNV
@@ -32,13 +32,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Nicaragua
+Pa铆s: Nicaragua
 Encuesta: EMNV
 Round: Febrero-Junio
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 10 de Septiembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 10 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/

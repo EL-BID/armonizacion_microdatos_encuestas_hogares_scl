@@ -1,6 +1,6 @@
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -92,10 +92,10 @@ local data29 = "`base_in'\rawsonhog023ba.dta";
 local data30 = "`base_in'\sannichog023ba.dta";
 local data31 = "`base_in'\viedmahog023ba.dta";
 
-*MGR Jul, 2015: se había agregado una base de personas por lo que habían muchos duplicados.
+*MGR Jul, 2015: se habÃ­a agregado una base de personas por lo que habÃ­an muchos duplicados.
 *Igual existen un par de duplicados (4) del aglomerado 4, haremos un drops de los casos con valores missing. 
 
-* Otro problema está en que base de personas tiene variables con el mismo nombre de variables de vivienda, renombramos estas para hacer merge
+* Otro problema estÃ¡ en que base de personas tiene variables con el mismo nombre de variables de vivienda, renombramos estas para hacer merge
 * Bases originales quedan en carpeta backup
 
 /*
@@ -118,7 +118,7 @@ duplicates tag codusu aglomerado, gen(dupli)
 drop if codusu=="4-02-3-0094" & dupli==1 & (p01_hog-r06_hog==.)
 drop if codusu=="4-02-3-0095" & dupli==1 & (p01_hog-r06_hog==.)
 drop if codusu=="4-02-3-0097" & dupli==1 & (p01_hog-r06_hog==.)
-drop if codusu=="4-02-3-0159" & dupli==1 & (p01_hog==1) /*único caso donde ambos casos tienen valores y hago drop de una de los dos aleatoriamente*/
+drop if codusu=="4-02-3-0159" & dupli==1 & (p01_hog==1) /*Ãºnico caso donde ambos casos tienen valores y hago drop de una de los dos aleatoriamente*/
 drop dupli
 
 

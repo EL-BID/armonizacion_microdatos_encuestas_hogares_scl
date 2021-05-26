@@ -1,18 +1,18 @@
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
@@ -32,13 +32,13 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Argentina
+Pa√≠s: Argentina
 Encuesta: EPHC
 Round: ISem-2012
 Autores: 
-VersiÛn 2012: Yessenia Loaysa
-⁄ltima versiÛn: MarÌa Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha ˙ltima modificaciÛn: 2 de Enero de 2014
+Versi√≥n 2012: Yessenia Loaysa
+√öltima versi√≥n: Mar√≠a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha √∫ltima modificaci√≥n: 2 de Enero de 2014
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -71,9 +71,9 @@ replace region_c=2  if aglomerado==22                          /*Catamarca*/
 replace region_c=3  if aglomerado==8                           /*Chaco*/
 replace region_c=4  if aglomerado==9 | aglomerado==91          /*Chubut*/
 replace region_c=5  if aglomerado==32                          /*Ciudad de Buenos Aires*/
-replace region_c=6  if aglomerado==13 | aglomerado==36         /*CÛrdova*/
+replace region_c=6  if aglomerado==13 | aglomerado==36         /*C√≥rdova*/
 replace region_c=7  if aglomerado==12                          /*Corrientes*/
-replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre RÌos*/
+replace region_c=8  if aglomerado==6 | aglomerado==14          /*Entre R√≠os*/
 replace region_c=9  if aglomerado==15                          /*Formosa*/
 replace region_c=10 if aglomerado==19                          /*Jujuy*/
 replace region_c=11 if aglomerado==30                          /*La pampa*/
@@ -81,7 +81,7 @@ replace region_c=12 if aglomerado==25                          /*La Rioja*/
 replace region_c=13 if aglomerado==10                          /*Mendoza*/
 replace region_c=14 if aglomerado==7                           /*Misiones*/
 replace region_c=15 if aglomerado==17                          /*Neuquen*/
-replace region_c=16 if aglomerado==93                          /*RÌo Negro*/ 
+replace region_c=16 if aglomerado==93                          /*R√≠o Negro*/ 
 replace region_c=17 if aglomerado==23                          /*Salta*/
 replace region_c=18 if aglomerado==27                          /*San Juan*/ 
 replace region_c=19 if aglomerado==26                          /*San Luis*/
@@ -97,9 +97,9 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	3"Chaco"                  /// 
 	4"Chubut"                 ///
 	5"Ciudad de Buenos Aires" ///
-	6"CÛrdoba"                ///
+	6"C√≥rdoba"                ///
 	7"Corrientes"             ///
-	8"Entre RÌos"             ///
+	8"Entre R√≠os"             ///
 	9"Formosa"                ///
 	10"Jujuy"                 ///
 	11"La Pampa"              ///
@@ -107,7 +107,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	13"Mendoza"               ///
 	14"Misiones"              ///
 	15"Neuquon"               ///
-	16"RÌo Negro"             ///
+	16"R√≠o Negro"             ///
 	17"Salta"                 ///
 	18"San Juan"              ///
 	19"San Luis"              ///
@@ -115,7 +115,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	21"Santa Fe"              ///
 	22"Santiago del Estero"   ///
 	23"Tierra del Fuego"      ///
-	24"Tucum·n"               
+	24"Tucum√°n"               
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
@@ -333,7 +333,7 @@ replace condocup_ci=2 if estado==2
 replace condocup_ci=3 if estado==3 & edad_ci>=10
 replace condocup_ci=. if estado == 0
 replace condocup_ci=4 if estado == 4
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 	
@@ -370,8 +370,8 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	
 	gen desemp1_ci=(estado==2)
 
-*Note: Aunque la definiciÛn de desempleado a travÈs de la variable estado (la busqueda de empleo 
-*es el mes)encaja m·s en la variable desemp3, se decide ponerla en desemp1_ci para cuando toque hacer agregaciones de 
+*Note: Aunque la definici√≥n de desempleado a trav√©s de la variable estado (la busqueda de empleo 
+*es el mes)encaja m√°s en la variable desemp3, se decide ponerla en desemp1_ci para cuando toque hacer agregaciones de 
 *America Latina, Argentina no tenga missing en el desempleo. 
 
 	************
@@ -418,7 +418,7 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	
 	gen desalent_ci=.
 
-*Note: Se deberÌa incrementar la categoria 4 "hay poco trabajo en esta epoca de aÒo"
+*Note: Se deber√≠a incrementar la categoria 4 "hay poco trabajo en esta epoca de a√±o"
 
 	*************	
 	*horaspri_ci*
@@ -485,7 +485,7 @@ tab subemp_ci
 	*segsoc_ci* 
 	*********We don't consider the people that declare to have 
 	*aguinaldo (4), vacaciones (8), Vacaciones y Aguinaldo (12), Indemnizacion (32),
-	*Indemnizacion y Aguinaldo (36)	indemnizaciÛn y Vacaciones (40) and IndemnizaciÛn, 
+	*Indemnizacion y Aguinaldo (36)	indemnizaci√≥n y Vacaciones (40) and Indemnizaci√≥n, 
 	*vacaciones y aguinaldo (44).
 	*AHORA:
 	*Sigue siendo solo para empleados (categopri_ci==3) solo se incluyen jubilaciones PERO LO QUE SE QUIERE VER ES 
@@ -589,8 +589,8 @@ replace rama_ci = 7 if ((pp04b_caes>=4900 & pp04b_caes<=5300) | pp04b_caes==49) 
 replace rama_ci = 8 if ((pp04b_caes>=6400 & pp04b_caes<=8200) ) & emp_ci==1
 replace rama_ci = 9 if ((pp04b_caes>=5800 & pp04b_caes<=6300) |(pp04b_caes>=8300 &  pp04b_caes<=9900) | pp04b_caes==85 | pp04b_caes==63 | pp04b_caes==61  | pp04b_caes==58) & emp_ci==1
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÛn de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÛn" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotaci√≥n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcci√≥n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -653,7 +653,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace antiguedad2=. if pp05b2_mes==0 & pp05b2_ano==0 	
 
 	*Para Empleados y obreros
-	*CREO QUE NO ES POSIBLE CONSTRUIR LA VARIABLE ANTIGUEDAD, PERO A CONTINUACI”N LA MEJOR MANERA DE APROXIMARLA
+	*CREO QUE NO ES POSIBLE CONSTRUIR LA VARIABLE ANTIGUEDAD, PERO A CONTINUACI√ìN LA MEJOR MANERA DE APROXIMARLA
 	*Para empleados USO EL VALOR MEDIO DE CADA RANGO DE ANIOS, LA ESTOY CREANDO TRUNCADA,
 	* HAY QUE REVISAR ESTO!!!!
 	* Yanira: no estoy de acuerdo con esto.  Posiblemente sea mejor convertir a discretas las 
@@ -686,7 +686,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace antiguedad_ci= antiguedad2 if antiguedad2!=.
 	replace antiguedad_ci= antiguedad3 if antiguedad3!=.
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
-*Note: A los empleados e independientes se les esta dejando un m·ximo de 5 aÒos de antiguedad.
+*Note: A los empleados e independientes se les esta dejando un m√°ximo de 5 a√±os de antiguedad.
 	
 
 			**************************
@@ -785,7 +785,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	
 
 /*
-	*Para ignorar el 0.5% m·s alto y m·s bajo de los ingreso se hace lo siguiente:
+	*Para ignorar el 0.5% m√°s alto y m√°s bajo de los ingreso se hace lo siguiente:
 	foreach var in ylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylnm_ci ynlm_ci {
 	sort `var'
 	cap pctile pct = `var' if `var'>=0 & `var'!=. & emp_ci==1, nq(200) genp(percent)
@@ -889,9 +889,9 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	*********
 	*aedu_ci* 
 	*********
-	*NOTA: Como terciario, universitario y posgrado tienen una duraciÛn variable se supone 
+	*NOTA: Como terciario, universitario y posgrado tienen una duraci√≥n variable se supone 
 	*que terciario completo implica 3 anios de educacion adicional a la secundaria, 5 adicionales a universitario 
-	*y 2 a postgrado. Esto solo se basa en el criterio de que la modas de finalizaciÛn estos niveles suelen
+	*y 2 a postgrado. Esto solo se basa en el criterio de que la modas de finalizaci√≥n estos niveles suelen
 	*ser estas. ESTO SE DEBE DISCUTIR 
 /*
 	gen aedu_ci=0 if (ch10==0 | ch10==3) 
@@ -944,18 +944,18 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
    *Ajustando variables
 	replace ch10=. if ch10==9
-	replace ch12=. if ch12==99 | ch12==9 // El ˙ltimo condicional es para sacar a la poblaciÛn con educaciÛn especial
+	replace ch12=. if ch12==99 | ch12==9 // El √∫ltimo condicional es para sacar a la poblaci√≥n con educaci√≥n especial
 	replace ch13=. if ch13==9
 	destring ch14, replace
 	replace ch14=. if ch14==98 | ch14==99
 	
 	
-	*Variable de AÒo de EducaciÛn
+	*Variable de A√±o de Educaci√≥n
 	gen aedu_ci=.
 	
-	*Para quienes no terminaron el ˙ltimo nivel educativo al que asistiÛ
+	*Para quienes no terminaron el √∫ltimo nivel educativo al que asisti√≥
 	
-	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero aÒos de educaciÛn para aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 aÒos.
+	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero a√±os de educaci√≥n para aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 a√±os.
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
 	replace aedu_ci=ch14+7 if ch12==4 & ch13==2
@@ -964,7 +964,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
 	replace aedu_ci=ch14+17 if ch12==8 & ch13==2
 		
-	*Para quienes terminaron el ˙ltimo nivel educativo al que asistiÛ
+	*Para quienes terminaron el √∫ltimo nivel educativo al que asisti√≥
 	
 	replace aedu_ci=7 if ch12==2 & ch13==1
 	replace aedu_ci=9 if ch12==3 & ch13==1
@@ -974,7 +974,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
-	*Imputando para los que tenemos certeza del nivel educativo m·s alto alcanzado
+	*Imputando para los que tenemos certeza del nivel educativo m√°s alto alcanzado
 	replace aedu_ci=7 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
@@ -1057,7 +1057,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	************
 	*asispre_ci*
 	************
-	*Nueva variable incoporada 01/11/2017 por Iv·n Bornacelly
+	*Nueva variable incoporada 01/11/2017 por Iv√°n Bornacelly
 	g asispre_ci=.
 	replace asispre_ci=1 if ch10==1 & ch12==1 & ch06>=4
 	recode asispre_ci (.=0)
@@ -1070,8 +1070,8 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	
 
 /** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar aÒos de educaciÛn
-Esta parte est· m·s adelante y por ahora el impacto m·s visible es que la poblaciÛn con educaciÛn especial se les asigna de manera directa 3 aÒos de educaciÛn cuando no deberÌan ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputaciÛn de los aÒos de EducaciÛn para Argentina se desactive la segunda lÌnea del siguiente cÛdigo:*/
+Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar a√±os de educaci√≥n
+Esta parte est√° m√°s adelante y por ahora el impacto m√°s visible es que la poblaci√≥n con educaci√≥n especial se les asigna de manera directa 3 a√±os de educaci√≥n cuando no deber√≠an ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputaci√≥n de los a√±os de Educaci√≥n para Argentina se desactive la segunda l√≠nea del siguiente c√≥digo:*/
 
 
 replace eduno_ci=1	if aedu_ci==0 
@@ -1385,7 +1385,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	*********************
     ***aguamejorada_ch***
     *********************
-	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicaciÛn del grifo porque no se detallan las fuentes de agua
+	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicaci√≥n del grifo porque no se detallan las fuentes de agua
 	replace aguamejorada_ch = 0 if iv7 == 4
 		
 	*********************
@@ -1399,7 +1399,7 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	
 
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -1553,7 +1553,7 @@ label var salmm_ci "Salario minimo legal"
 ***tecnica_ci**
 *************
 gen tecnica_ci=.
-*Ch12==1 corresponde a jard√≠n/preescolar, no hay variable t√©cnica.
+*Ch12==1 corresponde a jard√É¬≠n/preescolar, no hay variable t√É¬©cnica.
 /*
 replace tecnica_ci=1 if ch12==1
 recode tecnica_ci .=0 
@@ -1569,7 +1569,7 @@ replace categoinac_ci=2 if cat_inac==3
 replace categoinac_ci=4 if cat_inac==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "CondiciÛn de inactividad"
+label var categoinac_ci "Condici√≥n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1607,8 +1607,8 @@ gen instcot_ci=.
 
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* TambiÈn se incluyen variables que se manejaban en versiones anteriores, estas son:
+* Verificaci√≥n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* Tambi√©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 
@@ -1639,7 +1639,7 @@ set more off
 compress
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 
 saveold "`base_out'", replace

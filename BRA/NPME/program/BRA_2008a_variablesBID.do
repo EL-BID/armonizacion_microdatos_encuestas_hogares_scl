@@ -1,17 +1,17 @@
-* (versión Stata 13)
+* (versiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA NPME
@@ -27,11 +27,11 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+PaÃ­s: Brasil
 Encuesta: NPME
 Round: a
-Autores: María Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
-Fecha última modificación: Diciembre, 2015
+Autores: MarÃ­a Laura Oliveri (mloliveri@iadb.org / lauraoliveri@iadb.org)
+Fecha Ãºltima modificaciÃ³n: Diciembre, 2015
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -59,7 +59,7 @@ horaspri_ci
 tamemp_ci
 ylmpri_ci
 
-el resto está pendiente de armonizar*/
+el resto estÃ¡ pendiente de armonizar*/
 
 ***************
 *entrevista_ci*
@@ -83,13 +83,13 @@ label define region_c 1 "REC" 2 "SAL" 3 "BHO" 4 "RJA" 5 "SPA" 6 "POA" 7 "CUR"
 ***************
 ****anio_c*****
 ***************
-*gen anio_c=. /*se generó en do file merge*/
+*gen anio_c=. /*se generÃ³ en do file merge*/
 label var anio_c "Anio de la encuesta" 
 ***************
 ****pais_c*****
 ***************
 gen pais_c="BRA"
-label var pais_c "Nombre del País"
+label var pais_c "Nombre del PaÃ­s"
 
 ***************
 ****factor_ci**
@@ -124,11 +124,11 @@ label var zona_c "Zona del pais"
 	label value zona_c zona_c
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=4 
 label var region_BID_c "Regiones BID"
-	label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+	label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 	label value region_BID_c region_BID_c
 
 ***************
@@ -141,7 +141,7 @@ gen relacion_ci = 1 if v206==1
 	replace relacion_ci = 5 if v206==5 | v206==6 | v206==8
 	replace relacion_ci = 6 if v206==7
 label var relacion_ci "Relacion o parentesco con el jefe del hogar"
-	label define relacion_ci 1 "Jefe/a" 2 "Conyuge/esposo/compañero" 3 "Hijo/a" 4 "Otros_parientes" 5 "Otros_no_Parientes" 6 "Empleado/a_domestico/a", add modify 
+	label define relacion_ci 1 "Jefe/a" 2 "Conyuge/esposo/compaÃ±ero" 3 "Hijo/a" 4 "Otros_parientes" 5 "Otros_no_Parientes" 6 "Empleado/a_domestico/a", add modify 
 	label values relacion_ci relacion_ci
 
 ***************
@@ -161,7 +161,7 @@ label var idp_ci "ID de la persona en el hogar"
 ****edad_ci****
 ***************
 gen edad_ci=v234
-label var edad_ci "Edad del individuo en años"
+label var edad_ci "Edad del individuo en aÃ±os"
 
 ***************
 ****sexo_ci****
@@ -191,8 +191,8 @@ gen aedu_ci =  0 if (v302==2 & v306==2) | v303==6 | v303==7 | v307==7 | v307==8 
 	replace aedu_ci = 14 if (v303==5 & v305>=4 & v305<=6) | (v307==6 & v310>=3 & v310<=6 & v311==2)
 	replace aedu_ci = 15 if  v303==9 | (v307==6 & v311==1) | v307==9
 
-recode aedu_ci (0/8=1 "[0,8]") (9/13=2 "[9,13]") (14/max=3 "14+ años"), gen(edu_group)
-label var edu_group "Años de educación"
+recode aedu_ci (0/8=1 "[0,8]") (9/13=2 "[9,13]") (14/max=3 "14+ aÃ±os"), gen(edu_group)
+label var edu_group "AÃ±os de educaciÃ³n"
 
 label var aedu_ci "Anios de educacion aprobados"
 
@@ -203,7 +203,7 @@ gen condocup_ci = 1 if vd1 == 1
 	replace condocup_ci = 2 if vd1 == 2 
 	replace condocup_ci = 3 if vd1 == 3
 	replace condocup_ci = 4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 	label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "No_responde_por_menor_edad", add modify
 	label value condocup_ci condocup_ci
 	
@@ -231,7 +231,7 @@ label define categopri_ci 1"Patron" 2"Cuenta propia" 3"Empleado" 4" No_remunerad
 ****spublico_ci*
 ****************
 gen spublico_ci=v411==2 
-label var spublico_ci "=1: Personas que trabajan en el sector público"
+label var spublico_ci "=1: Personas que trabajan en el sector pÃºblico"
 
 ****************
 ****horaspri_ci*
@@ -247,8 +247,8 @@ gen tamemp_ci=. /*PME only gives categorical variables for firm size*/
 	replace tamemp_ci=2 if v412==2   /*Asalariados: de 6 a 10 empleados */
 	replace tamemp_ci=3 if v412==3	 /*Asalariados: 11+ empleados */
 	replace tamemp_ci=1 if (v409==3 | v409==4) & v421==2     /* independientes */
-	replace tamemp_ci=v422 if (v409==3 | v409==4) & v421==1  /* independientes con más de un empleado */
-replace tamemp_ci=v426 if (v409==3 | v409==4) & v421==2  /* independientes con más de un empleado */
+	replace tamemp_ci=v422 if (v409==3 | v409==4) & v421==1  /* independientes con mÃ¡s de un empleado */
+replace tamemp_ci=v426 if (v409==3 | v409==4) & v421==2  /* independientes con mÃ¡s de un empleado */
 label var tamemp_ci "# empleados en la empresa segun rangos"
 	label define tamemp_ci 1 "Pequena" 2 "Mediana" 3 "Grande", add modify
 	label value tamemp_ci tamemp_ci
@@ -286,8 +286,8 @@ replace asiste_ci = 0 if v302==2
 label var asiste_ci "=1 si asiste actualmente a la escuela"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* VerificaciÃ³n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* TambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 /*
@@ -307,7 +307,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 */
 
-* por ahora dejo solo las variables armonizadas para reducir el tamaño de la base
+* por ahora dejo solo las variables armonizadas para reducir el tamaÃ±o de la base
 keep entrevista_ci region_c anio_c pais_c factor_ci trimestre_c mes_c zona_c region_BID_c relacion_ci ///
 idh_ch idp_ci edad_ci sexo_ci aedu_ci edu_group condocup_ci formal_ci categopri_ci spublico_ci ///
 horaspri_ci tamemp_ci ylmpri_ci durades_ci asiste_ci

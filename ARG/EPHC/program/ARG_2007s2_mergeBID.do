@@ -2,7 +2,7 @@
 * ARGENTINA EPH. CONTINUA. 2oSem. 2007
 * nO HUBO RELEVAMIENTO EN III 2007- Se armo el semestre con I 2008
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local log_file = "$ruta\harmonized\ARG\EPHC\log\ARG_2007s2_mergeBID.log"
 

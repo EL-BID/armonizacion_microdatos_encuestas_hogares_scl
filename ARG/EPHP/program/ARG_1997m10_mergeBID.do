@@ -1,6 +1,6 @@
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHP
@@ -281,7 +281,7 @@ replace aglomerado=aglomera if aglomerado==.
 
 /*Daniela Zuluaga- Enero 2018:
 Se reemplazan los nombres de las variables p01 a p08 por p01_hogar a p08_hogar y r01 a r06 por r01_hogar a r06_hogar dado que la base de individuos contiene variables con 
-el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la información al hacer el merge entre hogares e individuos*/
+el mismo nombre. Esto estaba generando errores al armonizar las bases, pues se reemplazaba la informaciÃ³n al hacer el merge entre hogares e individuos*/
 
 forvalues i=1/8 {
 rename p0`i' p0`i'_hogar
@@ -306,7 +306,7 @@ save  "`base_in'\gbahogyper973ba.dta", replace
 
 * merge de hogares e individuos (sin gba)
 
-*Modificación Mayra Sáenz- Marzo 2014
+*ModificaciÃ³n Mayra SÃ¡enz- Marzo 2014
 clear
 use "`base_in'\gbahogyper973ba.dta", clear
 gen codusu = substr(codu,8,4)
@@ -329,7 +329,7 @@ drop if _merge!=3
 *ren cod codusu /*`ANO'>=1992 & `ANO'<=1997*/
 
 * append de gba
-*append using "`base_in'\gbahogyper973ba.dta" /*Modificación Mayra Sáenz - Marzo 2014*/
+*append using "`base_in'\gbahogyper973ba.dta" /*ModificaciÃ³n Mayra SÃ¡enz - Marzo 2014*/
 append using "`base_in'\gbahogyper973ba_.dta"
 
 * Comprime y guarda base

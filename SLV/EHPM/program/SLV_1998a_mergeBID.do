@@ -9,7 +9,7 @@ set mem 400m
 set more off
 clear
 
-global ruta = "D:\DATA.IDB\Documents\Marcela\Research\Sociometro\"
+global ruta = "${surveysFolder}\DATA.IDB\Documents\Marcela\Research\Sociometro\"
 
 
 local PAIS SLV
@@ -28,7 +28,7 @@ sort tipo_de_ folio
 save "$ruta\\`PAIS'\\`ANO'\slv98ident.dta",  replace
 clear
 
-*** DEMOGRAFIA & EDUCACIÓN
+*** DEMOGRAFIA & EDUCACIÃ“N
 use "`in'\t1eh1.dta", clear
 duplicates report tipo_de_ folio r101_num
 rename r101_num nrorden

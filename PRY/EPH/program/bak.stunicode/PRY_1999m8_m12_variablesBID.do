@@ -1,19 +1,19 @@
 
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PRY
 local ENCUESTA EPH
@@ -31,13 +31,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Paraguay
+Pa铆s: Paraguay
 Encuesta: EPH
 Round: Agosto-Diciembre
 Autores:
-Versi髇 2013: Mayra S醗nz
-趌tima versi髇: Mayra S醗nz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha 鷏tima modificaci髇: 4 de Septiembre de 2013
+Versi贸n 2013: Mayra S谩enz
+脷ltima versi贸n: Mayra S谩enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha 煤ltima modificaci贸n: 4 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -50,10 +50,10 @@ use `base_in', clear
 ************
 * Region_c *
 ************
-*Inclusi髇 Mayra S醗nz - Julio 2013
+*Inclusi贸n Mayra S谩enz - Julio 2013
 
 gen region_c=  .
-label var region_c "Divisi髇 pol韙ica"
+label var region_c "Divisi贸n pol铆tica"
 
 
 ***************
@@ -104,12 +104,12 @@ gen anio_c=1999
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region seg鷑 BID ***
+*** region seg煤n BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=4 if pais=="PRY" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroam閞ica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam茅rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -324,7 +324,7 @@ label variable miembros_ci "Miembro del hogar"
 
 
 /************************************************************************************************************
-* 3. Creaci髇 de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci贸n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -404,7 +404,7 @@ replace condocup_ci=3 if peagru==3 & edad_ci>=10
 replace condocup_ci=. if peagru == 0
 replace condocup_ci=4 if edad_ci<10 
 
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -416,7 +416,7 @@ replace condocup_ci=2 if (peades==2 | peades==7)
 recode condocup_ci .=3 if (peades==3 | peades==6) | (condocup_ci==. & edad>=10)
 recode condocup_ci .=4 if edad_ci<10
 
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -534,7 +534,7 @@ gen horastot_ci=hr_sem_s  if emp_ci==1
 /*gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if tothoras>=30 & deseamas==6 & emp_ci==1 */
 
-*10/21/15 MGD: correcci髇 de sintaxis
+*10/21/15 MGD: correcci贸n de sintaxis
 gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if horaspri_ci>=1 & horaspri_ci<30 & deseamas==6 & emp_ci==1
 
@@ -543,11 +543,11 @@ replace tiempoparc_ci=1 if horaspri_ci>=1 & horaspri_ci<30 & deseamas==6 & emp_c
 ******************
 /*
 0: No aplicable 9: No responde
-1: Empleado p鷅lico 2: Empleado privado 3: Obrero p鷅lico 4: Obrero privado 
-5: Empleador o patr髇
+1: Empleado p煤blico 2: Empleado privado 3: Obrero p煤blico 4: Obrero privado 
+5: Empleador o patr贸n
 6: Trabajador por cuenta propia
 7: Trabajador familiar no remunerado
-8: Empleado dom閟tico
+8: Empleado dom茅stico
 
 */
 
@@ -612,7 +612,7 @@ replace firmapeq_ci=1 if tamestp >=1 & tamestp<=5
 *****************
 ***spublico_ci***
 *****************
-* 10/21/2015 MGD: correcci髇 peque馻 para que se tomen en cuenta a todos los ocupados.
+* 10/21/2015 MGD: correcci贸n peque帽a para que se tomen en cuenta a todos los ocupados.
 gen spublico_ci=0 if emp_ci==1
 replace spublico_ci=1 if (categ==1 | categ==3) & emp_ci==1
 
@@ -682,20 +682,20 @@ replace antiguedad_ci=. if categopri!=3
 *******************
 ***tamemp_ci***
 *******************
-*Paraguay Peque馻 1 a 5, Mediana 6 a 50, Grande M醩 de 50
+*Paraguay Peque帽a 1 a 5, Mediana 6 a 50, Grande M谩s de 50
 
 gen tamemp_ci = 1 if tamestp>=1 & tamestp<=5
 replace tamemp_ci = 2 if (tamestp>=6 & tamestp<=50)
 replace tamemp_ci = 3 if (tamestp>50 & tamestp<9999)
 /*
-*Modificaci髇 Mayra S醗nz - Marzo 2014
+*Modificaci贸n Mayra S谩enz - Marzo 2014
 replace tamemp_ci =1 if tamestp==0 & (categopri_ci >=1& categopri_ci <=4) & tamemp_ci ==.
-*Modificaci髇 MLO - 2015/12
-con este supuesto salen mal el indicador de personas asalariadas en empresas peque馻s - por eso se elimina
+*Modificaci贸n MLO - 2015/12
+con este supuesto salen mal el indicador de personas asalariadas en empresas peque帽as - por eso se elimina
 */
-label define tamemp_ci 1 "Peque馻" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "Peque帽a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tama駉 de empresa"
+label var tamemp_ci "Tama帽o de empresa"
 
 *******************
 ***categoinac_ci*** 
@@ -704,8 +704,8 @@ gen categoinac_ci =1 if (pqnotra7==16 & condocup_ci==3)
 replace categoinac_ci = 2 if  (pqnotra7==12 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pqnotra7==7 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categor韆 de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom閟ticos" 4 "Otros" 
+label var categoinac_ci "Categor铆a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom茅sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -832,9 +832,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas dom閟ticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas dom茅sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas dom閟ticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas dom茅sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -1246,7 +1246,7 @@ gen piso_ch=.
 replace piso_ch=1 if piso>0
 replace piso_ch=0 if piso==1 | piso==4
 replace piso_ch=2 if piso==8 
-opci髇 4 = lecherada es cemento
+opci贸n 4 = lecherada es cemento
 */
 
 gen piso_ch=.
@@ -1431,7 +1431,7 @@ gen raza_ci=1 if idioma==1
 replace raza_ci=0 if idioma==2 | idioma==3 | idioma==4 | idioma==5
 */
 
-*Mayra S醗nz- Octubre 2013
+*Mayra S谩enz- Octubre 2013
 
 /*
 gen raza_ci=.
@@ -1442,14 +1442,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Ind韌ena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "Ind铆gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
 */
 
 
-*Modificaci髇 Mayra S醗nz 10/20/2015: modificaciones realizadas en base a metodolog韆 enviada por SCL/GDI Maria Olga Pe馻
+*Modificaci贸n Mayra S谩enz 10/20/2015: modificaciones realizadas en base a metodolog铆a enviada por SCL/GDI Maria Olga Pe帽a
 
 gen raza_idioma_ci=.
 replace raza_idioma_ci= 1 if idioma ==1 
@@ -1459,7 +1459,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & parentco ==3)  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Ind韌ena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "Ind铆gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
@@ -1468,7 +1468,7 @@ gen raza_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Ind韌ena" 0 "Otros" 
+label define id_ind_ci 1 "Ind铆gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -1481,15 +1481,15 @@ label var id_afro_ci "Afro-descendiente"
 
 ren ocup ocup_old
 /*_____________________________________________________________________________________________________*/
-* Asignaci髇 de etiquetas e inserci髇 de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), l韓eas de pobreza
+* Asignaci贸n de etiquetas e inserci贸n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l铆neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificaci髇 de que se encuentren todas las variables armonizadas 
+* Verificaci贸n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

@@ -1,6 +1,6 @@
-*Elaboración: Mayra Sáenz
+*ElaboraciÃ³n: Mayra SÃ¡enz
 *Marzo,2017
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS TTO
 local ENCUESTA CSSP

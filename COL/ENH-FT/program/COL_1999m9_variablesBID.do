@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA ENH-FT
@@ -29,13 +29,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Colombia
+PaÃ­s: Colombia
 Encuesta: ENH-FT
 Round: m9
 Autores: 
-Generación nuevas variables LMK: 
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
-Fecha última modificación: noviembre 2013
+GeneraciÃ³n nuevas variables LMK: 
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com | yessenial@iadb.org
+Fecha Ãºltima modificaciÃ³n: noviembre 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,8 +54,8 @@ Personas no ocupadas QUE RESPONDEN A LA PREGUNTA DE PENSIONES, quedaron con miss
 PREGUNTAR Y QUEDA SUJETO A CAMBIO
 
 *revision  Octubre 20 de 2005
-Corrección en la construcción de la variable rama_ci. La construcción de esta variable parece responder a 
-los codigos CIIU revision 3, pero todas las encuestas anteriores al 2001 se realizaron con la codificación 
+CorrecciÃ³n en la construcciÃ³n de la variable rama_ci. La construcciÃ³n de esta variable parece responder a 
+los codigos CIIU revision 3, pero todas las encuestas anteriores al 2001 se realizaron con la codificaciÃ³n 
 CIIU revision 2.
 
 * Revision Marzo 2006 miembros: 
@@ -92,24 +92,24 @@ spublico1_ci que solo tiene valores para urbano
 gen region_c=real(ca_7_T10_2)
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -133,7 +133,7 @@ label var region_c "division politico-administrativa, departamento"
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -243,7 +243,7 @@ label variable edad_ci "Edad del individuo"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -387,7 +387,7 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -426,7 +426,7 @@ replace condocup_ci=1 if  ca_13_T50 == 1 | ca_14_T501==1 | ca_14_T502==1 | ca_15
 replace condocup_ci=2 if (condocup_ci!=1)& ( ca_13_T50 == 2 | ca_17_T50==1 | (ca_18_T50==1 & ca_19_T50>=1 & ca_19_T50<=4 ) )
 recode condocup_ci .=3 if  edad>=12
 recode condocup_ci .=4 if edad_ci<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -449,14 +449,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -1441,24 +1441,24 @@ use `base_in2', clear
 gen region_c=real(re_7_T10_2)
 label define region_c       /// 
 	5  "Antioquia"	        ///
-	8  "Atlántico"	        ///
-	11 "Bogotá, D.C"	    ///
-	13 "Bolívar" 	        ///
-	15 "Boyacá"	            ///
+	8  "AtlÃ¡ntico"	        ///
+	11 "BogotÃ¡, D.C"	    ///
+	13 "BolÃ­var" 	        ///
+	15 "BoyacÃ¡"	            ///
 	17 "Caldas"	            ///
-	18 "Caquetá"	        ///
+	18 "CaquetÃ¡"	        ///
 	19 "Cauca"	            ///
-	20 "Cesár"	            ///
-	23 "Córdoba"	        ///
+	20 "CesÃ¡r"	            ///
+	23 "CÃ³rdoba"	        ///
 	25 "Cundinamarca"       ///
-	27 "Chocó"	            ///
+	27 "ChocÃ³"	            ///
 	41 "Huila"	            ///
 	44 "La Guajira"	        ///
 	47 "Magdalena"	        ///
 	50 "Meta"	            ///
-	52 "Nariño"	            ///
+	52 "NariÃ±o"	            ///
 	54 "Norte de Santander"	///
-	63 "Quindío"	        ///
+	63 "QuindÃ­o"	        ///
 	66 "Risaralda"	        ///
 	68 "Santander"	        ///
 	70 "Sucre"	            ///
@@ -1482,7 +1482,7 @@ label var region_c "division politico-administrativa, departamento"
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -1771,7 +1771,7 @@ replace condocup_ci=1 if  (re_19_T50 == 1 | re_20_T50==1 | re_21_T50==1 | re_22_
 replace condocup_ci=2 if condocup_ci!=1 & (re_19_T50 == 2 | re_24_T50 ==1 | re_25_T50==3)  & edad_ci>=12 
 recode condocup_ci .=3 if  edad>=12
 recode condocup_ci .=4 if edad_ci<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -1794,14 +1794,14 @@ label var cotizando_ci "1 Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *instpen_ci*****
 ****************
 gen instpen_ci=.
 label var instpen_ci "Institucion proveedora de la pension - variable original de cada pais" 
-label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "Regímenes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
+label define instpen_ci 1 "Fondo privado" 2 "ISS, Cajanal" 3 "RegÃ­menes especiales (FFMM, Ecopetrol etc)" 4 "Fondo Subsidiado (Prosperar,etc.)" 
 label value instpen_ci instpen_ci
 
 *****************
@@ -2771,7 +2771,7 @@ append using "`base_out1'"
 order re_* ca_*
 
 /*Alvaro AM 07-2019: genero este nuevo id porque el destring no recoge todos los digitos del string
-de id para COL-1999, lo que resulta en ids de hogar duplicados y en una subestimaciÃ³n de pobreza
+de id para COL-1999, lo que resulta en ids de hogar duplicados y en una subestimaciÃƒÂ³n de pobreza
 porque se sobreestiman los ingresos familiares. 
 Ver: https://www.statalist.org/forums/forum/general-stata-discussion/general/1371814-problem-with-format-of-variable-after-using-destring-stata-13-1-mp-on-windows-7
 */
@@ -2780,15 +2780,15 @@ destring idh_ch, replace
 replace idh_ch=numeric_id
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

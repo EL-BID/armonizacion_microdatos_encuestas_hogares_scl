@@ -1,8 +1,8 @@
 *ELaboracion: Yessenia Loayza
-*Última actualización: Marcela G. Rubio
+*Ãšltima actualizaciÃ³n: Marcela G. Rubio
 clear all
 set more off
-cd "\\Sdssrv03\surveys\survey\PER\ENAHO\2011\a\data_orig\"
+cd "${surveysFolder}\survey\PER\ENAHO\2011\a\data_orig\"
 
 **************************************************************************************
 						/*Identificador de hogar*/
@@ -117,7 +117,7 @@ drop _merge
 sort idh_ch
 
 drop idh* idp*
-save "M:\survey\PER\ENAHO\2011\a\data_merge\PER_2011a.dta", replace
+save "${surveysFolder}\survey\PER\ENAHO\2011\a\data_merge\PER_2011a.dta", replace
  
 
  

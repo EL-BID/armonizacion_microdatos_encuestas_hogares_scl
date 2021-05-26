@@ -2,7 +2,7 @@
 *Fecha: Octubre, 2013
 
 clear
-cd "\\sdssrv03\Surveys\survey\VEN\EHM\2011\s1\data_orig\"  
+cd "${surveysFolder}\survey\VEN\EHM\2011\s1\data_orig\"  
 
 use per111.dta, clear
 cap drop id_*
@@ -33,6 +33,6 @@ joinby entidad control linea serie num_hog using per111.dta, _merge(_merge)
 tab _merge
 drop _merge
 
-saveold "\\Sdssrv03\surveys\survey\VEN\EHM\2011\s1\data_merge\VEN_2011s1.dta", replace
+saveold "${surveysFolder}\survey\VEN\EHM\2011\s1\data_merge\VEN_2011s1.dta", replace
 
 

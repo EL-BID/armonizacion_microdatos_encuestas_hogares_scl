@@ -12,7 +12,7 @@ set more off
 *****	Adecuando los archivos a unir		***
 ***************************************************
 
-cd "Z:\Colombia\2008\ECV\Datos Originales\Stata" 
+cd "${surveysFolder}\Colombia\2008\ECV\Datos Originales\Stata" 
 
 use viviendas.dta, clear
 egen llave=group(periodo directorio)
@@ -31,7 +31,7 @@ drop _merge
 sort periodo directorio secuencia_encuesta
 egen llave_h=group(periodo directorio secuencia_encuesta)
 sort llave_h
-save "Z:\Colombia\2008\ECV\Data\col08_ecv.dta", replace
+save "${surveysFolder}\Colombia\2008\ECV\Data\col08_ecv.dta", replace
 
 
 use personas.dta, clear
@@ -39,11 +39,11 @@ egen llave_h=group(periodo directorio secuencia_p)
 sort llave_h
 save personas.dta,replace
 
-merge llave_h using "Z:\Colombia\2008\ECV\Data\col08_ecv.dta"
+merge llave_h using "${surveysFolder}\Colombia\2008\ECV\Data\col08_ecv.dta"
 tab _merge
 drop _merge
 
 compress
-save "Z:\Colombia\2008\ECV\Data\col08_ecv.dta", replace
+save "${surveysFolder}\Colombia\2008\ECV\Data\col08_ecv.dta", replace
 
 

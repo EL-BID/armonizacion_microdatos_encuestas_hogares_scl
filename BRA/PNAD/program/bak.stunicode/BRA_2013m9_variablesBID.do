@@ -1,17 +1,17 @@
-* (Versión Stata 13)
+* (VersiÃ³n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNAD
@@ -27,12 +27,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Brasil
+PaÃ­s: Brasil
 Encuesta: PNAD
 Round: m9
 Autores: Marcela Rubio mrubio@iadb.org | marcelarubio28@gmail.com
-Última modificación: Daniela Zuluaga E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com
-Fecha última modificación: Octubre de 2017
+Ãšltima modificaciÃ³n: Daniela Zuluaga E-mail: danielazu@iadb.org, da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Octubre de 2017
 
 							
 ****************************************************************************/
@@ -44,7 +44,7 @@ use `base_in', clear
 
 
 								********************************
-								**** ARMONIZACIÓN PNAD 2013 **** 
+								**** ARMONIZACIÃ“N PNAD 2013 **** 
 								********************************
 				*************************
 				***VARIABLES DEL HOGAR***
@@ -57,42 +57,42 @@ use `base_in', clear
 gen region_c = uf
 destring region_c, replace
 label define region_c ///
-11 "Rondônia" ///
+11 "RondÃ´nia" ///
 12 "Acre" ///
 13 "Amazonas" ///
 14 "Roraima" ///
-15 "Pará" ///
-16 "Amapá" ///
+15 "ParÃ¡" ///
+16 "AmapÃ¡" ///
 17 "Tocantins" ///
-21 "Maranhão" ///
-22 "Piauí" ///
-23 "Ceará" ///
+21 "MaranhÃ£o" ///
+22 "PiauÃ­" ///
+23 "CearÃ¡" ///
 24 "Rio Grande do Norte" ///
-25 "Paraíba" ///
+25 "ParaÃ­ba" ///
 26 "Pernambuco" ///
 27 "Alagoas" ///
 28 "Sergipe" ///
 29 "Bahia" ///
 31 "Minas Gerais" ///
-32 "Espírito Santo" ///
+32 "EspÃ­rito Santo" ///
 33 "Rio de Janeiro" ///
-35 "São Paulo" ///
-41 "Paraná" ///
+35 "SÃ£o Paulo" ///
+41 "ParanÃ¡" ///
 42 "Santa Catarina" ///
 43 "Rio Grande do Sul" ///
 50 "Mato Grosso do Sul" ///
 51 "Mato Grosso" ///
-52 "Goiás" ///
+52 "GoiÃ¡s" ///
 53 "Distrito Federal"
 label value region_c region_c
 label var region_c "division politico-administrativa"
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
    
    
@@ -100,7 +100,7 @@ label value region_BID_c region_BID_c
 ***factor_ch***
 ***************
 gen factor_ch=v4732
-label variable factor_ch "Factor de expansión del hogar"
+label variable factor_ch "Factor de expansiÃ³n del hogar"
 
 ***************
 ****idh_ch*****
@@ -128,7 +128,7 @@ label value zona_c zona_c
 ****pais****
 ************
 gen str3 pais_c="BRA"
-label variable pais_c "País"
+label variable pais_c "PaÃ­s"
 
 **********
 ***anio***
@@ -148,19 +148,19 @@ label variable mes_c "mes de la encuesta"
 gen relacion_ci=v0402
 replace relacion_ci=5 if v0402==5| v0402==6| v0402==8
 replace relacion_ci=6 if v0402==7
-label var relacion_ci "Relación de parentesco con el  jefe de hogar"
+label var relacion_ci "RelaciÃ³n de parentesco con el  jefe de hogar"
 label define relacion_ci 1 "Jefe" 2 "Conyuge" 3 "Hijo" 4 "Otros Parientes" 5 "Otros no Parientes" 6 "Servicio Domestico"
 label values relacion_ci relacion_ci
 
 				****************************
-				***VARIABLES DEMOGRÁFICAS***
+				***VARIABLES DEMOGRÃFICAS***
 				****************************
 				
 ***************
 ***factor_ci***
 ***************
 gen factor_ci=v4729
-label variable factor_ci "Factor de expansión de personas"
+label variable factor_ci "Factor de expansiÃ³n de personas"
 
 **********
 ***sexo***
@@ -182,7 +182,7 @@ label variable edad_ci "Edad del individuo"
 ***civil_ci***
 **************
 
-* MGR Nov 2015: correccion en sintaxis no se incluian a los que indican vivir en compañia de conyugue
+* MGR Nov 2015: correccion en sintaxis no se incluian a los que indican vivir en compaÃ±ia de conyugue
 
 gen civil_ci=.
 replace civil_ci=1 if v4011==0
@@ -316,7 +316,7 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*COR OU RACA v0404
 2 BRANCA
@@ -330,7 +330,7 @@ gen raza_ci=.
 replace raza_ci= 1 if  (v0404 ==0)
 replace raza_ci= 2 if  (v0404 ==4 | v0404 ==8)
 replace raza_ci= 3 if (v0404==2 | v0404==6 | v0404== 9)& raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -339,7 +339,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -361,23 +361,23 @@ replace condocup_ci=1 if (v9001==1 | v9002==2 | v9003==1 | v9004==2)
 replace condocup_ci=2 if  v9004==4 & (v9115==1 & (v9119>=1 & v9119<=8)) /*tomaron alguna providencia en la semana de referencia*/
 replace condocup_ci=3 if  condocup_ci!=1 & condocup_ci!=2
 replace condocup_ci=4 if edad_ci<10
-label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 años"
+label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor 10 aÃ±os"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 
 /*
 Definiciones:
-* População ocupada: Aquelas pessoas que, num determinado período de referência,
-trabalharam ou tinham trabalho mas não trabalharam (por exemplo, pessoas em férias).
+* PopulaÃ§Ã£o ocupada: Aquelas pessoas que, num determinado perÃ­odo de referÃªncia,
+trabalharam ou tinham trabalho mas nÃ£o trabalharam (por exemplo, pessoas em fÃ©rias).
 
-* População Desocupada: aquelas pessoas que não tinham trababalho, num determinado 
-período de referência, mas estavam dispostas a trabalhar, e que, para isso, tomaram
-alguma providência efetiva (consultando pessoas, jornais, etc.).
+* PopulaÃ§Ã£o Desocupada: aquelas pessoas que nÃ£o tinham trababalho, num determinado 
+perÃ­odo de referÃªncia, mas estavam dispostas a trabalhar, e que, para isso, tomaram
+alguma providÃªncia efetiva (consultando pessoas, jornais, etc.).
 
-População Não Economicamente Ativa: pessoas não classificadas como ocupadas ou 
+PopulaÃ§Ã£o NÃ£o Economicamente Ativa: pessoas nÃ£o classificadas como ocupadas ou 
 desocupadas
 
-PET: >=10 años de edad
+PET: >=10 aÃ±os de edad
 */
 
 ****************
@@ -416,7 +416,7 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -436,7 +436,7 @@ replace `var'=. if `var'>=999999
 }
 
 gen pension_ci=0 
-replace pension_ci=1 if (v1252>0 & v1252!=.) | (v1255>0 & v1255!=.) | (v1258>0 & v1258!=.) | (v1261>0 & v1261!=.) /*A todas las per mayores de diez años*/
+replace pension_ci=1 if (v1252>0 & v1252!=.) | (v1255>0 & v1255!=.) | (v1258>0 & v1258!=.) | (v1261>0 & v1261!=.) /*A todas las per mayores de diez aÃ±os*/
 label var pension_ci "1=Recibe pension contributiva"
  
 *************
@@ -486,7 +486,7 @@ replace region=4	if region_c>=41 & region_c<=43
 replace region=5	if region_c>=50 & region_c<=53
 label define region 1"norte" 2"Nordeste" 3"Sudeste/leste" 4"sul" 5"Centro_Oeste"
 label value region region
-label var region "distribución regional del país"
+label var region "distribuciÃ³n regional del paÃ­s"
 
 gen area=.
 replace area=1 if zona_c==1
@@ -500,7 +500,7 @@ replace area=3 if v4727==1
 *lp_ci***
 *********
 
-*MR: se agregan líneas de pobreza y pobreza extrema nacionales
+*MR: se agregan lÃ­neas de pobreza y pobreza extrema nacionales
 
 gen lp_ci=.			
 replace lp_ci= 281.41 	if region_c==33	& area==3                /*Rio de janeiro-metropolitano*/	
@@ -510,10 +510,10 @@ replace lp_ci= 283.11 	if region_c==35	& area==3	             /*Sao Paulo-metrop
 replace lp_ci= 250.71 	if region_c==35	& area==1	             /*Sao paulo-urbano*/
 replace lp_ci= 204.66 	if region_c==35	& area==2	             /*Sao paulo-rural*/
 replace lp_ci= 313.81 	if region==4	& area==3	& region_c==43 /*Porto alegre: sur-metropolitana-rio grande de sul*/
-replace lp_ci= 259.24 	if region==4	& area==3	& region_c==41 /*curitiba:     sur-metropolitana-paraná*/
+replace lp_ci= 259.24 	if region==4	& area==3	& region_c==41 /*curitiba:     sur-metropolitana-paranÃ¡*/
 replace lp_ci= 247.30 	if region==4	& area==1            /*sur-urbana*/	
 replace lp_ci= 225.13 	if region==4	& area==2            /*sur-rural */	
-replace lp_ci= 223.42  	if region==2	& area==3	& region_c==23 /*Fortaleza:    noreste-metropolitana-ceará*/
+replace lp_ci= 223.42  	if region==2	& area==3	& region_c==23 /*Fortaleza:    noreste-metropolitana-cearÃ¡*/
 replace lp_ci= 293.35 	if region==2	& area==3	& region_c==26 /*recife:       noreste-metropolitana-pernambuco*/
 replace lp_ci= 276.29 	if region==2	& area==3	& region_c==29 /*salvador:     noreste-metropolitana-bahia*/
 replace lp_ci= 252.41 	if region==2	& area==1            /*noreste-urbana*/	
@@ -521,7 +521,7 @@ replace lp_ci= 225.13 	if region==2	& area==2            /*noreste-rural*/
 replace lp_ci= 220.01 	if region==3	& area==3	& region_c==31 /*belo horizonte:sureste-metropolitana-minas gerais*/
 replace lp_ci= 197.84 	if region==3	& area==1            /*sudeste-urbano*/	
 replace lp_ci= 168.84 	if region==3	& area==2            /*sudeste-rural*/	
-replace lp_ci= 250.71 	if region==1	& area==3	& region_c==15 /*belem: noreste-metropolitana-pará*/
+replace lp_ci= 250.71 	if region==1	& area==3	& region_c==15 /*belem: noreste-metropolitana-parÃ¡*/
 replace lp_ci= 259.24 	if region==1	& area==1            /*norte-urbano*/	
 replace lp_ci= 226.83 	if region==1	& area==2            /*norte-rural */	
 replace lp_ci= 243.89 	if region_c==53	& area==3	             /*Distrito federal-metropolitana*/
@@ -541,10 +541,10 @@ replace lpe_ci= 141.56 	if region_c==35	& area==3		    /*Sao Paulo-metropolitano
 replace lpe_ci= 125.35 	if region_c==35	& area==1		    /*Sao paulo-urbano*/
 replace lpe_ci= 102.33 	if region_c==35	& area==2		    /*Sao paulo-rural*/
 replace lpe_ci= 156.91 	if region==4	& area==3	& region_c==43	/*Porto alegre: sur-metropolitana-rio grande de sul*/
-replace lpe_ci= 129.62 	if region==4	& area==3	& region_c==41	/*curitiba:     sur-metropolitana-paraná*/
+replace lpe_ci= 129.62 	if region==4	& area==3	& region_c==41	/*curitiba:     sur-metropolitana-paranÃ¡*/
 replace lpe_ci= 123.65 	if region==4	& area==1		/*sur-urbana*/
 replace lpe_ci= 112.56 	if region==4	& area==2		/*sur-rural */
-replace lpe_ci= 111.71 	if region==2	& area==3	& region_c==23	/*Fortaleza:    noreste-metropolitana-ceará*/
+replace lpe_ci= 111.71 	if region==2	& area==3	& region_c==23	/*Fortaleza:    noreste-metropolitana-cearÃ¡*/
 replace lpe_ci= 146.67 	if region==2	& area==3	& region_c==26	/*recife:       noreste-metropolitana-pernambuco*/
 replace lpe_ci= 138.15 	if region==2	& area==3	& region_c==29	/*salvador:     noreste-metropolitana-bahia*/
 replace lpe_ci= 126.21 	if region==2	& area==1		/*noreste-urbana*/
@@ -552,7 +552,7 @@ replace lpe_ci= 112.56 	if region==2	& area==2		/*noreste-rural*/
 replace lpe_ci= 110.00 	if region==3	& area==3	& region_c==31	/*belo horizonte:sureste-metropolitana-minas gerais*/
 replace lpe_ci= 98.92 	if region==3	& area==1		/*sudeste-urbano*/
 replace lpe_ci= 84.42 	if region==3	& area==2		/*sudeste-rural*/
-replace lpe_ci= 125.35 	if region==1	& area==3	& region_c==15	/*belem: noreste-metropolitana-pará*/
+replace lpe_ci= 125.35 	if region==1	& area==3	& region_c==15	/*belem: noreste-metropolitana-parÃ¡*/
 replace lpe_ci= 129.62 	if region==1	& area==1		/*norte-urbano*/
 replace lpe_ci= 113.42 	if region==1	& area==2		/*norte-rural */
 replace lpe_ci= 121.94 	if region_c==53	& area==3		    /*Distrito federal-metropolitana*/				
@@ -566,12 +566,12 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *************
 gen salmm_ci=678 
 label var salmm_ci "Salario minimo legal"
-* MR: Salario minimo aumentó de 2012 a 2013
+* MR: Salario minimo aumentÃ³ de 2012 a 2013
 
 *************
 ***tecnica_ci**
 *************
-gen tecnica_ci=. /*No se puede identificar educación técnica superior*/
+gen tecnica_ci=. /*No se puede identificar educaciÃ³n tÃ©cnica superior*/
 label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
@@ -617,7 +617,7 @@ label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
 
 /*yl: creacion de este indicador, construir hacia atras*/
 egen horastot_ci=rsum(horaspri_ci v9101 v9105)
-replace horastot_ci = . if emp_ci==0 /*Necesitamos que sólo se fije en los empleados "adultos"*/
+replace horastot_ci = . if emp_ci==0 /*Necesitamos que sÃ³lo se fije en los empleados "adultos"*/
 replace horastot_ci=. if (horaspri_ci==. & v9101==. & v9105==.) | horastot_ci>150
 label var horastot_ci "Horas trabajadas semanalmente en todos los empleos"
 
@@ -676,7 +676,7 @@ label variable categosec_ci "Categoria ocupacional trabajo secundario"
 
 generat nempleos_ci=1 if v9005==1
 replace nempleos_ci=2 if (v9005>1 & v9005!=.)
-label var nempleos_ci "Número de empleos" 
+label var nempleos_ci "NÃºmero de empleos" 
 
 
 *****************
@@ -684,7 +684,7 @@ label var nempleos_ci "Número de empleos"
 *****************
 gen spublico_ci=(v9032==4)
 replace spublico_ci=. if v9032==9
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 
 **************
 ***ocupa_ci***
@@ -723,8 +723,8 @@ replace rama_ci=8 if v9907>=65000 & v9907<=70002
 replace rama_ci=9 if v9907>=71010 & v9907<=99000
 replace rama_ci=. if emp_ci==0
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"ExplotaciÃ³n de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"ConstrucciÃ³n" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
@@ -734,17 +734,17 @@ label val rama_ci rama_ci
 
 gen durades_ci=.
 *MLO 03,2014
-* anterir definicion se refería a peridodo sin empleo, no a periodo en busqueda de empleo que es lo que intenta medir esta variable.
+* anterir definicion se referÃ­a a peridodo sin empleo, no a periodo en busqueda de empleo que es lo que intenta medir esta variable.
 * no se puede construir la variable en numero de meses, se construye variable alternativa
 * no se puede distinguir entre quienes buscan por mas de 305 dias.
 /*
-V9115	115	Tomou alguma providência para conseguir trabalho na semana de referência (1-si 2-no)
+V9115	115	Tomou alguma providÃªncia para conseguir trabalho na semana de referÃªncia (1-si 2-no)
 		
-V9116	116	Tomou alguma providência para conseguir trabalho no período de captação de 23 dias (2 si 4 no)
+V9116	116	Tomou alguma providÃªncia para conseguir trabalho no perÃ­odo de captaÃ§Ã£o de 23 dias (2 si 4 no)
 		
-V9117	117	Tomou alguma providência para conseguir trabalho no período de captação de 30 dias (1-si 2-no)
+V9117	117	Tomou alguma providÃªncia para conseguir trabalho no perÃ­odo de captaÃ§Ã£o de 30 dias (1-si 2-no)
 		
-V9118	118	Tomou alguma providência para conseguir trabalho no período de captação de 305 dias (2 si 4 no)
+V9118	118	Tomou alguma providÃªncia para conseguir trabalho no perÃ­odo de captaÃ§Ã£o de 305 dias (2 si 4 no)
 	*/	
 		
 gen durades1_ci=1 if v9115==1
@@ -941,92 +941,92 @@ label var remesas_ch "Remesas mensuales del hogar"
 **asiste_ci***
 **************
 gen asiste_ci=(v0602==2)
-label var asiste_ci "Personas que actualmente asisten a un centro de enseñanza"
+label var asiste_ci "Personas que actualmente asisten a un centro de enseÃ±anza"
 
 ***************
 ***edupub_ci***
 ***************
 gen edupub_ci=(v6002==2)
-label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
+label var  edupub_ci "Personas que asisten a centros de enseÃ±anza pÃºblicos"
 
 *************
 ***aedu_ci***
 *************
-/*Modificado Mayra Sáenz 12/10/2014
+/*Modificado Mayra SÃ¡enz 12/10/2014
 *gen aedu_ci=.
-* Si se genera con . se generan alrededor de 10% de hogares con jefe de hogar con missing en educación.
+* Si se genera con . se generan alrededor de 10% de hogares con jefe de hogar con missing en educaciÃ³n.
 gen aedu_ci=0
 label var aedu_ci "Anios de educacion"
 
 /*
 
-01	Elementar (primário)
-02	Médio 1º ciclo (ginasial, etc.)
-03	Médio 2º ciclo (científico, clássico, etc.)
-04	Regular do ensino fundamental ou do 1º grau
-05	Regular do ensino médio ou do 2º grau
-06	Educação de jovens e adultos ou supletivo do ensino fundamental ou do 1º grau
-07	Educação de jovens e adultos ou supletivo de ensino médio ou do 2º grau
-08	Superior de graduação
+01	Elementar (primÃ¡rio)
+02	MÃ©dio 1Âº ciclo (ginasial, etc.)
+03	MÃ©dio 2Âº ciclo (cientÃ­fico, clÃ¡ssico, etc.)
+04	Regular do ensino fundamental ou do 1Âº grau
+05	Regular do ensino mÃ©dio ou do 2Âº grau
+06	EducaÃ§Ã£o de jovens e adultos ou supletivo do ensino fundamental ou do 1Âº grau
+07	EducaÃ§Ã£o de jovens e adultos ou supletivo de ensino mÃ©dio ou do 2Âº grau
+08	Superior de graduaÃ§Ã£o
 09	Mestrado ou doutorado
-10	Alfabetização de jovens e adultos
+10	AlfabetizaÃ§Ã£o de jovens e adultos
 11	Creche
-12	Classe de alfabetização - CA 
-13	Maternal, jardim de infância etc.
+12	Classe de alfabetizaÃ§Ã£o - CA 
+13	Maternal, jardim de infÃ¢ncia etc.
 */
 
 
 
 *PARA LOS QUE NO ASISTEN
 *************************
-*Maternal, jardim de infância etc., creche o alfabetización de adultos
+*Maternal, jardim de infÃ¢ncia etc., creche o alfabetizaciÃ³n de adultos
 replace aedu_ci=0 if (v6007==10| v6007==11 | v6007==12 | v6007==13) & asiste_ci==0
 	*Sistema antiguo
-*Elementar (primário) - se asume que el máximo es 4 - Anteriormente se permitía 6 pero no 5
+*Elementar (primÃ¡rio) - se asume que el mÃ¡ximo es 4 - Anteriormente se permitÃ­a 6 pero no 5
 replace aedu_ci=0  if v6007==1 & v0610==. & v0611!=1 & asiste_ci==0
 replace aedu_ci=min(v0610,4) if v6007==1 & v0610>=1 & v0610<=6 & asiste_ci==0
-*Medio 1 ciclo (ginasial, etc) - se asume que el máximo es 8
+*Medio 1 ciclo (ginasial, etc) - se asume que el mÃ¡ximo es 8
 replace aedu_ci=min(v0610+4,8) if v6007==2 & v0610>=1 & v0610<=5 & asiste_ci==0
 replace aedu_ci=4  if v6007==2 & v0610==. & v0611!=1 & asiste_ci==0
-*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el máximo es 11, pero
-*bajo la lógica anterior deberían se 12, ya que se permite hasta 4 años adicionales en este nivel
-*Aunque solo es necesario tener 11 años de educación para completar la secundaria
+*Medio 2 ciclo (cientifico, clasico, etc, etc) - se asume que el mÃ¡ximo es 11, pero
+*bajo la lÃ³gica anterior deberÃ­an se 12, ya que se permite hasta 4 aÃ±os adicionales en este nivel
+*Aunque solo es necesario tener 11 aÃ±os de educaciÃ³n para completar la secundaria
 replace aedu_ci=min(v0610+8,12) if v6007==3 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8  if v6007==3 & v0610==. & v0611!=1 & asiste_ci==0
 	*Sistema nuevo
 *Primeiro grau - Bajo este sistema la primaria llega hasta el grado 8
 replace aedu_ci=min(v0610,8) if v6007==4 & v0610>=1 & v0610<=8 & asiste_ci==0
 replace aedu_ci=0  if v6007==4 & v0610==. & v0611!=1 & asiste_ci==0
-*Segundo grau - Secundaria son 4 años más
+*Segundo grau - Secundaria son 4 aÃ±os mÃ¡s
 replace aedu_ci=min(v0610+8,12) if v6007==5 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8 if v6007==5 & v0610==. & v0611!=1 & asiste_ci==0
-	*Educação de jovens e adultos ou supletivo do ensino fundamental 
-*1º grau - Bajo este sistema la primaria llega hasta el grado 8
+	*EducaÃ§Ã£o de jovens e adultos ou supletivo do ensino fundamental 
+*1Âº grau - Bajo este sistema la primaria llega hasta el grado 8
 replace aedu_ci=min(v0610,8) if v6007==6 & v0610>=1 & v0610<=8 & asiste_ci==0
 replace aedu_ci=0  if v6007==6 & v0610==. & v0611!=1 & asiste_ci==0
-*2º grau - Secundaria son 4 años más
+*2Âº grau - Secundaria son 4 aÃ±os mÃ¡s
 replace aedu_ci=min(v0610+8,12) if v6007==7 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8 if v6007==7 & v0610==. & v0611!=1 & asiste_ci==0
 *Superior
 replace aedu_ci=min(v0610+11,17) if v6007==8 & v0610>=1 & v0610<=8 & asiste_ci==0
 replace aedu_ci=11 if v6007==8 & v0610==. & v0611!=1 & asiste_ci==0
 *Maestria o doctorado  
-*Para este ciclo no se pregunta el último año aprobado. Por lo tanto se supone que si terminó el ciclo 
-*el individuo cuenta con 19 años de educación (2 años más de educación), si el individuo no terminó se le agrega 
-*1 año más de eduación para quedar con 18 ya que si el último ciclo más alto alcanzado es postgrado, el individuo 
-*por lo menos tuvo que cursar 1 año en ese nivel
+*Para este ciclo no se pregunta el Ãºltimo aÃ±o aprobado. Por lo tanto se supone que si terminÃ³ el ciclo 
+*el individuo cuenta con 19 aÃ±os de educaciÃ³n (2 aÃ±os mÃ¡s de educaciÃ³n), si el individuo no terminÃ³ se le agrega 
+*1 aÃ±o mÃ¡s de eduaciÃ³n para quedar con 18 ya que si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo 
+*por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if v6007==9 & v0611==3 & asiste_ci==0
 replace aedu_ci=19 if v6007==9 & v0611==1 & asiste_ci==0
 
 
 *PARA LOS QUE ASISTEN
 **********************
-*Pre-escolar, creche o alfabetización de adultos
+*Pre-escolar, creche o alfabetizaciÃ³n de adultos
 replace aedu_ci=0 if (v6003==6| v6003==7 | v6003==8 |v6003==9) & asiste_ci==1
-*Regular de 1º grau/ Supletivo de 1º grau   (se asume que el máximo es 8) 
+*Regular de 1Âº grau/ Supletivo de 1Âº grau   (se asume que el mÃ¡ximo es 8) 
 replace aedu_ci=0  if (v6003==1 | v6003==3) & v0605==. & asiste_ci==1
 replace aedu_ci=min(v0605-1,7) if (v6003==1 | v6003==3) & v0605>=1 & v0605<=8 & asiste_ci==1
-*Regular de 2º grau/ Supletivo de 2º grau   (se asume que el máximo es 4, pero con 3 basta para completar el ciclo)
+*Regular de 2Âº grau/ Supletivo de 2Âº grau   (se asume que el mÃ¡ximo es 4, pero con 3 basta para completar el ciclo)
 replace aedu_ci=min(v0605+8-1,11) if (v6003==2 | v6003==4) & v0605>=1 & v0605<=4 & asiste_ci==1
 replace aedu_ci=8  if (v6003==2 | v6003==4) & v0605==. & asiste_ci==1
 *Pre-vestibular
@@ -1035,59 +1035,59 @@ replace aedu_ci=11  if v6003==10 & asiste_ci==1
 replace aedu_ci=min(v0605+11-1,17) if v6003==5 & v0605>=1 & v0605<=8 & asiste_ci==1
 replace aedu_ci=12 if v6003==5 & v0605==. & asiste_ci==1
 *Maestria o doctorado  
-*Si el último ciclo más alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 año en ese nivel
+*Si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if v6003==11  & asiste_ci==1
-*Se deja sólo la información de las personas con 5 años o más
+*Se deja sÃ³lo la informaciÃ³n de las personas con 5 aÃ±os o mÃ¡s
 replace aedu_ci=. if edad_ci<5
 
 
-*Modificación Mayra Sáenz - Agosto 2015: Se incluyen las variables con los cambios sugeridos por 
-*Iván Bornacelly de SCL/EDU : Consideramos que esto no es una argumento fuerte para asignarle 0 años de educación a 64,548 observaciones (2005) – Aproximadamente 15% de la muestra. Además que no tienen información en ninguna de las otras variables de educación.
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: Se incluyen las variables con los cambios sugeridos por 
+*IvÃ¡n Bornacelly de SCL/EDU : Consideramos que esto no es una argumento fuerte para asignarle 0 aÃ±os de educaciÃ³n a 64,548 observaciones (2005) â€“ Aproximadamente 15% de la muestra. AdemÃ¡s que no tienen informaciÃ³n en ninguna de las otras variables de educaciÃ³n.
 
 
 *************
 ***aedu_ci***
 *************
-*Modificado Mayra Sáenz 12/10/2014
+*Modificado Mayra SÃ¡enz 12/10/2014
 *gen aedu_ci=.
-* Si se genera con . se generan alrededor de 10% de hogares con jefe de hogar con missing en educación.
+* Si se genera con . se generan alrededor de 10% de hogares con jefe de hogar con missing en educaciÃ³n.
 gen aedu_ci=3
 label var aedu_ci "Anios de educacion"
 
 
 *PARA LOS QUE NO ASISTEN
 *************************
-*Creche o alfabetización de adultos
+*Creche o alfabetizaciÃ³n de adultos
 replace aedu_ci=. if v6007==10 | v6007==11|v6007==12 
 
-*Maternal, jardim de infância etc., 
+*Maternal, jardim de infÃ¢ncia etc., 
 replace aedu_ci=0 if v6007==13 & asiste_ci==0
 
 	*Sistema antiguo
-*Elementar (primário) – Son obligatorios 4 años. Pueden llegar a ser hasta 6 
+*Elementar (primÃ¡rio) â€“ Son obligatorios 4 aÃ±os. Pueden llegar a ser hasta 6 
 replace aedu_ci=0  if v6007==1 & v0610==. & v0611!=1 & asiste_ci==0
 replace aedu_ci=v0610 if v6007==1 & v0610>=1 & v0610<=6 & asiste_ci==0
-*Medio 1 ciclo (ginasial, etc) - se asume que quienes llegan a ese nivel por lo menos hicieron cuatro años del anterior.
+*Medio 1 ciclo (ginasial, etc) - se asume que quienes llegan a ese nivel por lo menos hicieron cuatro aÃ±os del anterior.
  replace aedu_ci=v0610+4 if v6007==2 & v0610>=1 & v0610<=5 & asiste_ci==0
 replace aedu_ci=4  if v6007==2 & v0610==. & v0611!=1 & asiste_ci==0
-*Medio 2 ciclo (cientifico, clasico, etc, etc) – En este nivel son obligatorios 4 años también. No es importante el nivel máximo que se indique. 
+*Medio 2 ciclo (cientifico, clasico, etc, etc) â€“ En este nivel son obligatorios 4 aÃ±os tambiÃ©n. No es importante el nivel mÃ¡ximo que se indique. 
 replace aedu_ci=v0610+8 if v6007==3 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8  if v6007==3 & v0610==. & v0611!=1 & asiste_ci==0
 
 	*Sistema nuevo
-*Primeiro grau - Bajo este sistema la primaria comprende 8 años obligatorios
+*Primeiro grau - Bajo este sistema la primaria comprende 8 aÃ±os obligatorios
 replace aedu_ci=v0610 if v6007==4 & v0610>=1 & v0610<=9 & asiste_ci==0
 replace aedu_ci=0  if v6007==4 & v0610==. & v0611!=1 & asiste_ci==0
-*Segundo grau - Secundaria son 4 años más
+*Segundo grau - Secundaria son 4 aÃ±os mÃ¡s
 replace aedu_ci=v0610+8 if v6007==5 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8 if v6007==5 & v0610==. & v0611!=1 & asiste_ci==0
 
 
-	*Educação de jovens e adultos ou supletivo do ensino fundamental 
-*1º grau - Bajo este sistema la primaria comprende 8 años obligatorios
+	*EducaÃ§Ã£o de jovens e adultos ou supletivo do ensino fundamental 
+*1Âº grau - Bajo este sistema la primaria comprende 8 aÃ±os obligatorios
 replace aedu_ci=v0610 if v6007==6 & v0610>=1 & v0610<=9 & asiste_ci==0
 replace aedu_ci=0  if v6007==6 & v0610==. & v0611!=1 & asiste_ci==0
-*2º grau - Secundaria son 4 años más
+*2Âº grau - Secundaria son 4 aÃ±os mÃ¡s
 replace aedu_ci=v0610+8 if v6007==7 & v0610>=1 & v0610<=4 & asiste_ci==0
 replace aedu_ci=8 if v6007==7 & v0610==. & v0611!=1 & asiste_ci==0
 
@@ -1097,16 +1097,16 @@ replace aedu_ci=v0610+11 if v6007==8 & v0610>=1 & v0610<=8 & asiste_ci==0
 replace aedu_ci=12 if v6007==8 & v0610==. & v0611!=1 & asiste_ci==0
 
 /**Maestria o doctorado  
-Para este ciclo no se pregunta el último año aprobado. Por lo tanto se supone que si terminó el ciclo 
-el individuo cuenta con 19 años de educación (2 años más de educación), si el individuo no terminó se le agrega 
-1 año más de eduación para quedar con 18 ya que si el último ciclo más alto alcanzado es postgrado, el individuo*/
-*No se puede identificar si la persona tiene maestría o doctorado por separado. Se asume que el nivel *educativo más alto posible logrado en Maestría que dura en promedio dos años. 
-*por lo menos tuvo que cursar 1 año en ese nivel
+Para este ciclo no se pregunta el Ãºltimo aÃ±o aprobado. Por lo tanto se supone que si terminÃ³ el ciclo 
+el individuo cuenta con 19 aÃ±os de educaciÃ³n (2 aÃ±os mÃ¡s de educaciÃ³n), si el individuo no terminÃ³ se le agrega 
+1 aÃ±o mÃ¡s de eduaciÃ³n para quedar con 18 ya que si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo*/
+*No se puede identificar si la persona tiene maestrÃ­a o doctorado por separado. Se asume que el nivel *educativo mÃ¡s alto posible logrado en MaestrÃ­a que dura en promedio dos aÃ±os. 
+*por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if v6007==9 & v0611==3 & asiste_ci==0
 replace aedu_ci=19 if v6007==9 & v0611==1 & asiste_ci==0
 */
 
-*Modificado por Iván Bornacelly - 03/07/2017
+*Modificado por IvÃ¡n Bornacelly - 03/07/2017
 
 *************
 ***aedu_ci***
@@ -1129,17 +1129,17 @@ label var aedu_ci "Anios de educacion"
 *PARA LOS QUE ASISTEN:*
 **********************
 *Creche & Pre-escolar
-replace aedu_ci=0 if nivel_asist==7 | nivel_asist==8 | nivel_asist==9 // Estudiantes de Prescolar y jardín no se les asigna años de educación. Acá se incluyen los que están en Clase de Alfabetización.
+replace aedu_ci=0 if nivel_asist==7 | nivel_asist==8 | nivel_asist==9 // Estudiantes de Prescolar y jardÃ­n no se les asigna aÃ±os de educaciÃ³n. AcÃ¡ se incluyen los que estÃ¡n en Clase de AlfabetizaciÃ³n.
 
-*Primaria / Básica - Nuevo sistema (Regular de ensino Fundamental grado 1)
-*Se le resta 1 por que está asistiendo al grado que reporta, por lo tanto no se debe considerar dentro de los años de educación aprobados.
-replace aedu_ci=grado_asist-1 if nivel_asist==1 & dur_fund_asist==1 // 8 años.
-replace aedu_ci=grado_asist if nivel_asist==1 & dur_fund_asist==3 // 9 años.
+*Primaria / BÃ¡sica - Nuevo sistema (Regular de ensino Fundamental grado 1)
+*Se le resta 1 por que estÃ¡ asistiendo al grado que reporta, por lo tanto no se debe considerar dentro de los aÃ±os de educaciÃ³n aprobados.
+replace aedu_ci=grado_asist-1 if nivel_asist==1 & dur_fund_asist==1 // 8 aÃ±os.
+replace aedu_ci=grado_asist if nivel_asist==1 & dur_fund_asist==3 // 9 aÃ±os.
 
 *Secundaria / Ensino Fundamental 2do Ciclo - Sistema Nuevo (Regular de ensino Fundamental grado 2)
 replace aedu_ci=grado_asist+8-1 if nivel_asist==2
 
-*Primaria / Básica - Supletivo
+*Primaria / BÃ¡sica - Supletivo
 *Seriado
 replace aedu_ci=grado_asist-1 if nivel_asist==3 & seria_asist==2 
 *No Seriado
@@ -1159,7 +1159,7 @@ replace aedu_ci=grado_asist+12-1 if nivel_asist==5 // Universitario - No incluye
 replace aedu_ci=12+5 if nivel_asist==11
 
 *Quitando a quienes no se cuentan:
-replace aedu_ci=. if nivel_asist==6 // Educación para adultos. 
+replace aedu_ci=. if nivel_asist==6 // EducaciÃ³n para adultos. 
 
 *Reemplazando por missing los que tienen como respuesta: Indenterminado (9)
 replace aedu_ci=. if v0605==9
@@ -1167,86 +1167,86 @@ replace aedu_ci=. if v0605==9
 *PARA LOS QUE NO ASISTEN:*
 **************************
 *Creche & Pre-escolar
-replace aedu_ci=0 if nivel_no_asist==11 | nivel_no_asist==12 | nivel_no_asist==13 // Estudiantes de Prescolar y jardín no se les asigna años de educación.
+replace aedu_ci=0 if nivel_no_asist==11 | nivel_no_asist==12 | nivel_no_asist==13 // Estudiantes de Prescolar y jardÃ­n no se les asigna aÃ±os de educaciÃ³n.
 
 *Primaria / Elemental
-*Termino 1er Año
+*Termino 1er AÃ±o
 replace aedu_ci=grado_no_asist if nivel_no_asist==1 & finalizo_1==1
-*No terminó 1er año
+*No terminÃ³ 1er aÃ±o
 replace aedu_ci=0 if nivel_no_asist==1 & finalizo_1==3
 
-*Medio 1 // Se asume que son 4 años obligatorios. Pueden llegar a ser 6.
-*Seriado -> Termino 1er Año 
+*Medio 1 // Se asume que son 4 aÃ±os obligatorios. Pueden llegar a ser 6.
+*Seriado -> Termino 1er AÃ±o 
 replace aedu_ci=grado_no_asist+4 if nivel_no_asist==2 & seria_no_asist==2 & finalizo_1==1 
-*Seriado -> No terminó 1er Año
+*Seriado -> No terminÃ³ 1er AÃ±o
 replace aedu_ci=4 if nivel_no_asist==2 & seria_no_asist==2 & finalizo_1==3 
-*No Seriado -> Si concluyó
+*No Seriado -> Si concluyÃ³
 replace aedu_ci=8 if nivel_no_asist==2 & seria_no_asist==4 & finalizo==1 
-*No Seriado -> No concluyó
+*No Seriado -> No concluyÃ³
 replace aedu_ci=4 if nivel_no_asist==2 & seria_no_asist==4 & finalizo==3 
 
-*Medio 2 // Se asume que son 4 años obligatorios (Adicionales a los anteriores). Pueden llegar a ser 4
-*Seriado -> Terminó 1er Año
+*Medio 2 // Se asume que son 4 aÃ±os obligatorios (Adicionales a los anteriores). Pueden llegar a ser 4
+*Seriado -> TerminÃ³ 1er AÃ±o
 replace aedu_ci=grado_no_asist+4+4 if nivel_no_asist==3 & seria_no_asist==2 & finalizo_1==1 
-*Seriado -> No terminó 1er Año
+*Seriado -> No terminÃ³ 1er AÃ±o
 replace aedu_ci=8 if nivel_no_asist==3 & seria_no_asist==2 & finalizo_1==3
-*No Seriado -> Si concluyó
+*No Seriado -> Si concluyÃ³
 replace aedu_ci=12 if nivel_no_asist==3 & seria_no_asist==4 & finalizo==1
-*No Seriado -> No concluyó
+*No Seriado -> No concluyÃ³
 replace aedu_ci=8 if nivel_no_asist==3 & seria_no_asist==4 & finalizo==1
 
 *Ensino Fundamental
 *Eliminando indeterminados (9)
 replace grado_no_asist=. if grado_no_asist==9 & nivel_no_asist==4
-*Terminó 1er año -> 8 años
+*TerminÃ³ 1er aÃ±o -> 8 aÃ±os
 replace aedu_ci=grado_no_asist if nivel_no_asist==4 & finalizo_1==1 & dur_fund_no_asist==1
-*Terminó 1er año -> 9 años // Se debe sumar 1 año más por que el nuevo sistema educación empieza los cursos a partir del grado cero.
+*TerminÃ³ 1er aÃ±o -> 9 aÃ±os // Se debe sumar 1 aÃ±o mÃ¡s por que el nuevo sistema educaciÃ³n empieza los cursos a partir del grado cero.
 replace aedu_ci=grado_no_asist+1 if nivel_no_asist==4 & finalizo_1==1 & dur_fund_no_asist==3
-*No terminó 1er Año
+*No terminÃ³ 1er AÃ±o
 replace aedu_ci=0 if nivel_no_asist==4 & finalizo_1==3
 
-*Ensino Medio // Se suman 8 años de Ensino Fundamental
+*Ensino Medio // Se suman 8 aÃ±os de Ensino Fundamental
 *Eliminando indeterminados (9)
 replace grado_no_asist=. if grado_no_asist==9 & nivel_no_asist==5
-*Terminó 1er año
+*TerminÃ³ 1er aÃ±o
 replace aedu_ci=grado_no_asist+8 if nivel_no_asist==5 & finalizo_1==1
-*No terminó 1er Año
+*No terminÃ³ 1er AÃ±o
 replace aedu_ci=8 if nivel_no_asist==5 & finalizo_1==3
 
 *Ensino Fundamental Supletivo
-*Seriado -> Terminó 1er año
+*Seriado -> TerminÃ³ 1er aÃ±o
 replace aedu_ci=grado_no_asist if nivel_no_asist==6 & seria_no_asist==2 & finalizo_1==1
-*Seriado -> No terminó 1er año
+*Seriado -> No terminÃ³ 1er aÃ±o
 replace aedu_ci=0 if nivel_no_asist==6 & seria_no_asist==2 & finalizo_1==3
-*No Seriado -> concluyó
+*No Seriado -> concluyÃ³
 replace aedu_ci=8 if nivel_asist==6 & seria_no_asist==4 & finalizo==1
-*No Seriado -> No concluyó
+*No Seriado -> No concluyÃ³
 replace aedu_ci=0 if nivel_asist==6 & seria_no_asist==4 & finalizo==3
 
 *Secundaria  Ensino Fundamental 2do Ciclo - Supletivo
-*Seriado -> Terminó 1er año
+*Seriado -> TerminÃ³ 1er aÃ±o
 replace aedu_ci=grado_no_asist+8 if nivel_no_asist==7 & seria_no_asist==2 & finalizo_1==1
-*Seriado -> No terminó 1er año
+*Seriado -> No terminÃ³ 1er aÃ±o
 replace aedu_ci=8 if nivel_no_asist==7 & seria_no_asist==2 & finalizo_1==3
-*No Seriado -> concluyó
+*No Seriado -> concluyÃ³
 replace aedu_ci=12 if nivel_asist==7 & seria_no_asist==4 & finalizo==1
-*No Seriado -> No concluyó
+*No Seriado -> No concluyÃ³
 replace aedu_ci=8 if nivel_asist==7 & seria_no_asist==4 & finalizo==3
 
 *Superior
-*Termino 1er Año
+*Termino 1er AÃ±o
 replace aedu_ci=grado_no_asist+12 if nivel_no_asist==8 & finalizo_1==1
-*No Termino 1er Año
+*No Termino 1er AÃ±o
 replace aedu_ci=12 if nivel_no_asist==8 & finalizo_1==3
 
 *Maestrado ou dooutorado
-*Concluyó
+*ConcluyÃ³
 replace aedu_ci=17+2 if nivel_no_asist==9 & finalizo==1
-*No Concluyó
+*No ConcluyÃ³
 replace aedu_ci=17+1 if nivel_no_asist==9 & finalizo==3
 
 *Quitando a quienes no se cuentan:
-replace aedu_ci=. if nivel_no_asist==10 // Educación para adultos. 
+replace aedu_ci=. if nivel_no_asist==10 // EducaciÃ³n para adultos. 
 
 *Reemplazando por missing los que tienen como respuesta: Indenterminado (9)
 replace aedu_ci=. if v0610==9
@@ -1254,19 +1254,19 @@ replace aedu_ci=. if v0610==9
 
 /*PARA LOS QUE ASISTEN
 **********************
-*Creche o alfabetización para adultos
+*Creche o alfabetizaciÃ³n para adultos
 replace aedu_ci=. if (v6003==6 | v6003==7 | v6003==8)
 
 *Pre-escolar
 replace aedu_ci=0 if  v6003==9 & asiste_ci==1
 
-*Regular de 1º grau/ Supletivo de 1º grau   
+*Regular de 1Âº grau/ Supletivo de 1Âº grau   
 replace aedu_ci=0  if (v6003==1 | v6003==3) & v0605==. & asiste_ci==1
-* Este “-1” es por que está asistiendo?
+* Este â€œ-1â€ es por que estÃ¡ asistiendo?
 
 replace aedu_ci=(v0605-1) if (v6003==1 | v6003==3) & v0605>=1 & v0605<=8 & asiste_ci==1
-*Regular de 2º grau/ Supletivo de 2º grau   (se asume que el máximo es 4, pero con 3 basta para completar el ciclo)
-* Dónde encuentran que con 3 años es suficientes para completar el ciclo.
+*Regular de 2Âº grau/ Supletivo de 2Âº grau   (se asume que el mÃ¡ximo es 4, pero con 3 basta para completar el ciclo)
+* DÃ³nde encuentran que con 3 aÃ±os es suficientes para completar el ciclo.
 
 replace aedu_ci=v0605+8-1 if (v6003==2 | v6003==4) & v0605>=1 & v0605<=4 & asiste_ci==1
 replace aedu_ci=8  if (v6003==2 | v6003==4) & v0605==. & asiste_ci==1
@@ -1279,10 +1279,10 @@ replace aedu_ci=v0605+11 if v6003==5 & v0605>=1 & v0605<=8 & asiste_ci==1
 replace aedu_ci=12 if v6003==5 & v0605==. & asiste_ci==1
 
 *Maestria o doctorado  
-*Si el último ciclo más alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 año en ese nivel
+*Si el Ãºltimo ciclo mÃ¡s alto alcanzado es postgrado, el individuo por lo menos tuvo que cursar 1 aÃ±o en ese nivel
 replace aedu_ci=18 if v6003==11  & asiste_ci==1
 
-*Se deja sólo la información de las personas con 5 años o más
+*Se deja sÃ³lo la informaciÃ³n de las personas con 5 aÃ±os o mÃ¡s
 replace aedu_ci=. if edad_ci<5
 */
 
@@ -1345,7 +1345,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-*La secundaria sólo dura 4 años. No puede divirse en ciclos
+*La secundaria sÃ³lo dura 4 aÃ±os. No puede divirse en ciclos
 gen edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
@@ -1370,7 +1370,7 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-*Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
+*CreaciÃ³n de la variable asistencia a preescolar por IvÃ¡n Bornacelly - 01/12/17
 	g asispre_ci=.
 	replace asispre_ci=1 if (v6003==7 | v6003==8 | v6003==9) & v8005>=4
 	recode asispre_ci (.=0)
@@ -1403,7 +1403,7 @@ gen pqnoasis1_ci = .
 ***repite_ci***
 ***************
 gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
+label var repite_ci "Personas que han repetido al menos un aÃ±o o grado"
 
 local varlist = "NERP NERS NERS2 LIT LIT2 RATIOPRIM RATIOSEC RATIOTER RATIOALL RATIOLIT2 RATIOLIT WENAS WENASD ELEC SFUELS WATER SANITATION SECTEN UNMPLYMENT15 TELCEL TEL CEL COMPUTER INTUSERS CHILDREN PERSROOM2 PLT2 DISCONN REZ PRIMCOMP AEDUC_15 AEDUC_15_24" 
 foreach var of local varlist {
@@ -1431,7 +1431,7 @@ gen aguadist_ch=1 if v0211==1 |v0213==1
 replace aguadist_ch=2 if v0214==2
 replace aguadist_ch=3 if v0214==4
 replace aguadist_ch=. if v0214==9 
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
 label val aguadist_ch aguadist_ch  
 
@@ -1439,7 +1439,7 @@ label val aguadist_ch aguadist_ch
 ***aguamala_ch***
 *****************
 gen aguamala_ch=(v0212==6) 
-label var aguamala_ch "Agua unimproved según MDG"
+label var aguamala_ch "Agua unimproved segÃºn MDG"
 
 *****************
 ***aguamide_ch***
@@ -1451,7 +1451,7 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 ***luz_ch***
 ************
 gen luz_ch=(v0219==1)
-label var luz_ch  "La principal fuente de iluminación es electricidad"
+label var luz_ch  "La principal fuente de iluminaciÃ³n es electricidad"
 
 ****************
 ***luzmide_ch***
@@ -1486,21 +1486,21 @@ replace des1_ch=2 if v0217==4
 replace des1_ch=3 if v0217>=5 & v0217<=7
 replace des1_ch=0 if bano_ch==0
 replace des1_ch=. if v0217==9
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 
 *************
 ***des2_ch***
 *************
-*El indicador debería ser una reclasificación de des1_ch, por ello se cambia aquí: 
+*El indicador deberÃ­a ser una reclasificaciÃ³n de des1_ch, por ello se cambia aquÃ­: 
 gen des2_ch=0 if des1_ch==0
 replace des2_ch=1 if des1_ch==1 | des1_ch==2 
 replace des2_ch=2 if des1_ch==3
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -1508,27 +1508,27 @@ label val des2_ch des2_ch
 ***piso_ch***
 *************
 gen piso_ch=.
-label var piso_ch "Materiales de construcción del piso" 
+label var piso_ch "Materiales de construcciÃ³n del piso" 
 
 **************
 ***pared_ch***
 **************
-* Se cambia la construcción de la variable incluyendo: tapia sin revestir y de paja 
+* Se cambia la construcciÃ³n de la variable incluyendo: tapia sin revestir y de paja 
 /*
 gen pared_ch=0
 replace pared_ch=1 if v0203==1 | v0203==2 |v0203==4
 replace pared_ch=2 if v0203==6 | v0203==3 |v0203==5
 replace pared_ch=. if v0203==9
-label var pared_ch "Materiales de construcción de las paredes"
+label var pared_ch "Materiales de construcciÃ³n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes" 2"Otros materiales:otros"
 label val pared_ch pared_ch
 */
-* MGR Jul, 2015: se modifica sintáxis para incluir opción 5 (paja) como material impermanente
+* MGR Jul, 2015: se modifica sintÃ¡xis para incluir opciÃ³n 5 (paja) como material impermanente
 gen pared_ch=0 if v0203==5 
 replace pared_ch=1 if v0203==1 | v0203==2 |v0203==4
 replace pared_ch=2 if v0203==6 | v0203==3 
 replace pared_ch=. if v0203==9
-label var pared_ch "Materiales de construcción de las paredes"
+label var pared_ch "Materiales de construcciÃ³n de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes" 2"Otros materiales:otros"
 label val pared_ch pared_ch
 
@@ -1536,19 +1536,19 @@ label val pared_ch pared_ch
 ***techo_ch***
 **************
 /*
-*No se incluían los techos de paja
+*No se incluÃ­an los techos de paja
 gen techo_ch=0
 replace techo_ch=1 if v0204<=5
 replace techo_ch=2 if v0204==7 |v0204==6
 replace techo_ch=. if v0204==9
-label var techo_ch "Materiales de construcción del techo"
+label var techo_ch "Materiales de construcciÃ³n del techo"
 */
-* MGR Jul, 2015: se modifica sintáxis para incluir opción 6 (paja) como material impermanente
+* MGR Jul, 2015: se modifica sintÃ¡xis para incluir opciÃ³n 6 (paja) como material impermanente
 gen techo_ch=0 if v0204==6
 replace techo_ch=1 if v0204<=5
 replace techo_ch=2 if v0204==7
 replace techo_ch=. if v0204==9
-label var techo_ch "Materiales de construcción del techo"
+label var techo_ch "Materiales de construcciÃ³n del techo"
 
 **************
 ***resid_ch***
@@ -1558,8 +1558,8 @@ replace resid_ch=1 if v0218==3
 replace resid_ch=2 if v0218==4 | v0218==5
 replace resid_ch=3 if v0218==6
 replace resid_ch=. if v0218==9
-label var resid_ch "Método de eliminación de residuos"
-label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
+label var resid_ch "MÃ©todo de eliminaciÃ³n de residuos"
+label def resid_ch 0"RecolecciÃ³n pÃºblica o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
@@ -1602,7 +1602,7 @@ label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 **************
 gen telef_ch=(v2020==2)
 replace telef_ch=. if v2020==9
-label var telef_ch "El hogar tiene servicio telefónico fijo"
+label var telef_ch "El hogar tiene servicio telefÃ³nico fijo"
 
 ***************
 ***refrig_ch***
@@ -1635,7 +1635,7 @@ label var compu_ch "El hogar posee computador"
 ***internet_ch***
 *****************
 gen internet_ch=(v0232==2)
-label var internet_ch "El hogar posee conexión a Interne
+label var internet_ch "El hogar posee conexiÃ³n a Interne
 
 ************
 ***cel_ch***
@@ -1677,7 +1677,7 @@ label val viviprop_ch viviprop_ch
 ***vivitit_ch***
 ****************
 gen vivitit_ch=.
-label var vivitit_ch "El hogar posee un título de propiedad"
+label var vivitit_ch "El hogar posee un tÃ­tulo de propiedad"
 
 ****************
 ***vivialq_ch***
@@ -1708,10 +1708,10 @@ replace tamemp_ci=1 if v9049==3 | v9050==6 | v9050==4 | v9050==2 | v9052==2 | v9
 replace tamemp_ci=2 if v9014==8 | v9052==8
 replace tamemp_ci=3 if v9014==0 | v9050==8 | v9052==0 
 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 
 
 ******************
@@ -1722,7 +1722,7 @@ replace categoinac_ci=1 if (v9122==2 | v9123==1) & condocup_ci==3
 replace categoinac_ci=2 if v0602==2 & condocup_ci==3
 replace categoinac_ci=3 if v9121==1 & condocup_ci==3
 recode categoinac_ci .=4 if condocup_ci==3
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
 
@@ -1751,15 +1751,15 @@ gen vivi2_ch =.
 gen tipopen_ci=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

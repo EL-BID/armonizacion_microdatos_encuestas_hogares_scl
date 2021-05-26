@@ -14,7 +14,7 @@ capture log close
 set memory 300m
 set more off
 
-local in="X:\ARM\PER\ENNIV\"
+local in="${surveysFolder}\ARM\PER\ENNIV\"
 use "`in'1997\Orig_data\per_97enniv.dta"
 
 
@@ -88,7 +88,7 @@ label variable mes_c "Mes de la encuesta"
 ***relacion_ci***
 *****************
 
-/*No hay empleados dom閟ticos ni pensionistas*/
+/*No hay empleados dom茅sticos ni pensionistas*/
 
 gen relacion_ci=.
 replace relacion_ci=1 if b1==1
@@ -103,8 +103,8 @@ label define relacion_ci 6 "Empleado/a domestico/a", add
 
 label value relacion_ci relacion_ci
 
-/*Hay unos 9 casos en donde la relaci髇 de parentesco que se reporta es de esposo/a
-pero por la edad se nota que son hijos, adem醩 ya hay una esposa con una edad razonable en 
+/*Hay unos 9 casos en donde la relaci贸n de parentesco que se reporta es de esposo/a
+pero por la edad se nota que son hijos, adem谩s ya hay una esposa con una edad razonable en 
 el hogar. Por eso los recodifico*/
 
 replace relacion_ci=3 if idh_ch==2537 & idp_ci==3
@@ -281,7 +281,7 @@ label variable miembro_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta secci髇 es para los mayores a 6 a駉s.*/ 
+/* Esta secci贸n es para los mayores a 6 a帽os.*/ 
 
 ************
 ***emp_ci***
@@ -291,9 +291,9 @@ gen byte emp_ci=0
 replace emp_ci=1 if k6==1 | k10==8 | k11==1
 
 /*Hay un grupo de 110 personas que dicen tener un empleo fijo aunque
-no trabajaron en la 鷏tima semana, a este grupo no se les hacen las preguntas
-de empleados, por lo que no tenemos informaci髇 sobre las caracter韘ticas del
-empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que est醤 de
+no trabajaron en la 煤ltima semana, a este grupo no se les hacen las preguntas
+de empleados, por lo que no tenemos informaci贸n sobre las caracter铆sticas del
+empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que est谩n de
 vacaciones o licencia. Voy a generar una dummy para identificarlos*/
 
 gen licencia=(k10==8 | k11==1)
@@ -418,7 +418,7 @@ label variable categosec_ci "Categoria ocupacional trabajo secundario"
 *****************
 /*Defino como trabajador con un contrato a aquel que ha
 firmado un contrato por tiempo indefinido o definido.
-Esta pregunta es s髄o para los empleados dependientes*/
+Esta pregunta es s贸lo para los empleados dependientes*/
 
 gen contrato_ci=.
 replace contrato_ci=1 if m14==1 | m14==2
@@ -459,7 +459,7 @@ replace firmapeq_ci=0 if m18>=3 & m18<=8
 *****************
 ***spublico_ci***
 *****************
-/*S髄o para los empleados dependientes*/
+/*S贸lo para los empleados dependientes*/
 
 gen spublico_ci=.
 replace spublico_ci=1 if (m13==1 | m13==3)
@@ -510,7 +510,7 @@ gen durades_ci=k8/4.3 if desemp2_ci==1
 *******************
 ***antiguedad_ci***
 *******************
-/*En a駉s*/
+/*En a帽os*/
 gen ant1=l6a
 gen ant2=l6b/12
 gen ant3=l6c/(52)
@@ -528,7 +528,7 @@ replace antiguedad_ci=. if emp_ci~=1
 ***ylmpri_ci***
 ***************
 
-*Salario b醩ico
+*Salario b谩sico
 gen ypri=.
 replace ypri=l7a*horaspri_ci*4.3  if l7b==1
 replace ypri=l7a*30  if l7b==2
@@ -572,7 +572,7 @@ gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 *** ylnmpri_ci ***
 ******************
 
-*Remuneraci髇 en bienes y servicios
+*Remuneraci贸n en bienes y servicios
 
 gen bsss=.
 replace bsss=m11b*30  if m11c==2
@@ -610,7 +610,7 @@ replace ylnmpri_ci=. if emp_ci~=1
 ***ylmsec_ci***
 ***************
 
-*Salario b醩ico
+*Salario b谩sico
 gen ysec=.
 replace ysec=n7a*30  if n7b==2
 replace ysec=n7a*4.3 if n7b==3
@@ -647,7 +647,7 @@ replace ylmsec_ci=. if emp_ci~=1 | nempleos_ci~=2
 ****ylnmsec_ci****
 ******************
 
-*Remuneraci髇 en bienes y servicios
+*Remuneraci贸n en bienes y servicios
 
 gen bsssec=.
 replace bsssec=o11b*30  if o11c==2
@@ -816,7 +816,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta secci髇 es s髄o para los mayores a 3 a駉s */
+/*En esta secci贸n es s贸lo para los mayores a 3 a帽os */
 
 /*
 gen byte aedu_ci=.
@@ -858,7 +858,7 @@ replace aedu_ci=1+e2b	if e2a==3
 replace aedu_ci=6+e2b	if e2a==4 | e2a==5
 replace aedu_ci=11+e2b if e2a==6 | e2a==7 
 
-label var aedu_ci "Anios de educaci髇"
+label var aedu_ci "Anios de educaci贸n"
 
 * Los que tienen "otro" se asume que tienen primaria completa;
 replace aedu_ci=6 if e2a==8 

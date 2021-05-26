@@ -1,8 +1,8 @@
 * Autor: Alvaro Altamirano
 * Fecha: 15 de Mayo de 2019
 
-global ruta "\\Sdssrv03\surveys\survey\URY\ECH\2018\a\data_orig"
-global out "\\Sdssrv03\surveys\survey\URY\ECH\2018\a\data_merge"
+global ruta "${surveysFolder}\survey\URY\ECH\2018\a\data_orig"
+global out "${surveysFolder}\survey\URY\ECH\2018\a\data_merge"
 set more off
 use "$ruta\H_2018_Terceros.dta", clear
 sort numero

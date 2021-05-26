@@ -6,14 +6,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ENEMDU
@@ -174,64 +174,6 @@ gen region_c=int(ciudad/10000)
 	gen edad_ci=edad if edad<99
 	label variable edad_ci "Edad del individuo"
 	
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-/*
-. label list pe13
-pe13:
-           1 indigena
-           2 blanco
-           3 mestizo
-           4 negro
-           5 mulato
-           6 otro
-*/
- 
- /*
- gen raza_ci=1  if pe13 == 1
- replace raza_ci=2 if pe13 == 4 | pe13 == 5
- bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-   
-   label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-   label value raza_ci raza_ci 
-   label var raza_ci "Raza o etnia del individuo"  
-*/
-
-gen raza_ci=1  if pe13 == 1
-replace raza_ci=2 if pe13 == 4 | pe13 == 5
-bys idh_ch: gen aux=raza_ci if reljefe==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (reljefe ==3 | reljefe==5))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-   
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo"  
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-
-
 	**************
 	***civil_ci***
 	**************
@@ -343,6 +285,48 @@ label var id_afro_ci "Afro-descendiente"
 	gen miembros_ci=(relacion_ci<5)
 	label variable miembros_ci "Miembro del hogar"
 
+	
+	
+	
+         ******************************
+         *** VARIABLES DE DIVERSIDAD **
+         ******************************
+*Nathalia Maya & Antonella Pereira
+*Feb 2021	
+
+		***************
+	***afroind_ci***
+	***************										
+**Pregunta- pe13 (1 indígena, 2 blanco, 3 mestizo, 4 negro, 5 mulato, 6 otro) 
+gen afroind_ci=. 
+replace afroind_ci=1 if pe13 == 1
+replace afroind_ci=2 if pe13 == 4 | pe13 == 5
+replace afroind_ci=3 if pe13 == 2 | pe13 == 3 | pe13 ==6 
+replace afroind_ci=. if pe13==. 
+replace afroind_ci=9 if pe13==. & edad_ci<5
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2002
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+	
 			***********************************
 			***VARIABLES DEL MERCADO LABORAL***
 			***********************************
@@ -1463,14 +1447,14 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

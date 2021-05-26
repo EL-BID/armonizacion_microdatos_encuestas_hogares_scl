@@ -129,13 +129,13 @@ Also, the orginal data was replaced with the new Mecovi versions
 
 clear
 capture log close
-cd X:\ARM\ECU\ECV\1998\Data
+cd ${surveysFolder}\ARM\ECU\ECV\1998\Data
 set mem 130m
 set more off
 
 
 
-use "X:\ARM\ECU\ECV\1998\Data\ecu98ecv.dta" 
+use "${surveysFolder}\ARM\ECU\ECV\1998\Data\ecu98ecv.dta" 
 /*
 rename ciudad CIUDAD
 rename zona ZONA
@@ -145,7 +145,7 @@ rename hogar HOGAR
 */
 
 sort CIUDAD ZONA SECTOR VIVIENDA HOGAR
-merge CIUDAD ZONA SECTOR VIVIENDA HOGAR using "X:\ARM\ECU\ECV\1998\Datos_originales\vivi_ecu98.dta" 
+merge CIUDAD ZONA SECTOR VIVIENDA HOGAR using "${surveysFolder}\ARM\ECU\ECV\1998\Datos_originales\vivi_ecu98.dta" 
 drop _merge
 
 ***************
@@ -542,7 +542,7 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen trabajadores agricolas */
+/*Dentro de la categorÃ­a empleado se incluyen trabajadores agricolas */
 
 ******************
 **dcategopri_ci **
@@ -690,7 +690,7 @@ replace spublico_ci=1 if PA20==1 & emp_ci==1
 replace spublico_ci=0 if PA20~=1 & emp_ci==1
 replace spublico_ci=. if PA20==.
 
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -1023,9 +1023,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1134,16 +1134,16 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 * years of education
 
@@ -1154,7 +1154,7 @@ replace yedc=PE30 if PE29==4 & PE30>=6
 replace yedc=PE30 if PE29==5 
 replace yedc=PE30 if PE29==5 & PE30>=6 
 replace yedc=7+PE30 if PE29==6
-replace yedc=12 if PE29==6 & PE30>=6 /* tiene 7 años de educacion sec pero su titulo es sec*/
+replace yedc=12 if PE29==6 & PE30>=6 /* tiene 7 aÃ±os de educacion sec pero su titulo es sec*/
 replace yedc=12+PE30 if PE29==8 | PE29==7
 replace yedc=17 if PE29==7 & PE30>=6
 replace yedc=14 if PE29==8 & PE30>=2
@@ -1575,7 +1575,7 @@ replace floor=. if piso_ch==.
 
 
 
-save "X:\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", replace
+save "${surveysFolder}\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", replace
 
 ************************************************************************************
 ************************************************************************************
@@ -1617,15 +1617,15 @@ save "X:\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", replace
 
 /*
 PE29
-29. ¿Cuál es o fue el nivel de educación más avanzado que cursa o cursó?
+29. Â¿CuÃ¡l es o fue el nivel de educaciÃ³n mÃ¡s avanzado que cursa o cursÃ³?
 PE30
-30. ¿Cuál es o fue el grado, curso, año  más avanzado de educación que cursa o aprobó?
+30. Â¿CuÃ¡l es o fue el grado, curso, aÃ±o  mÃ¡s avanzado de educaciÃ³n que cursa o aprobÃ³?
 
 PE29
 1. Ninguno
-2. Centro de alfabetización
+2. Centro de alfabetizaciÃ³n
 3. Preprimario
-4. Educación Básica de Adultos (EBA)
+4. EducaciÃ³n BÃ¡sica de Adultos (EBA)
 5. Primario
 6. Secundario
 7. SuPErior universitario
@@ -1684,13 +1684,13 @@ gen ultgrad = PE30
 ************
 
 /*
-pe10 idioma que habla(6 años y más) 
- 1. EsPAñol
+pe10 idioma que habla(6 aÃ±os y mÃ¡s) 
+ 1. EsPAÃ±ol
  2. Quichua
  3. Shuar
- 4. EsPAñol y Quichua
- 5. EsPAñol y Shuar 
- 6. EsPAñol y otro
+ 4. EsPAÃ±ol y Quichua
+ 5. EsPAÃ±ol y Shuar 
+ 6. EsPAÃ±ol y otro
  7. Otros
  9. NA 23obs
 */
@@ -1719,7 +1719,7 @@ pe10 idioma que habla(6 años y más)
 * ISCED 1
 /*
 pe11
-11.Se matriculó en el presente año escolar en:
+11.Se matriculÃ³ en el presente aÃ±o escolar en:
 
 1. Primaria
 2. Educ. Basica. Adultos
@@ -1727,14 +1727,14 @@ pe11
 4. Universidad
 5. Sup. no univ
 6. Postgrado
-7. No se matriculó
+7. No se matriculÃ³
 
 pe14
-En que grado, curso o año se matriculó ... en el presente
-año escolar
+En que grado, curso o aÃ±o se matriculÃ³ ... en el presente
+aÃ±o escolar
 
-pe14a Incluyendo esta, ¿cuántas veces se ha matriculado en este
-grado, curso o año?
+pe14a Incluyendo esta, Â¿cuÃ¡ntas veces se ha matriculado en este
+grado, curso o aÃ±o?
 */
 
  gen	 NERP=0 if (edad>=6 & edad<=11) & (nivmatric>=1 & nivmatric<=7)
@@ -1747,7 +1747,7 @@ grado, curso o año?
  replace NERS=1 if (edad>=12 & edad<=17) & (nivmatric==3)
 
 ** Upper secondary
-* 2o Ciclo de enseñanza secundaria
+* 2o Ciclo de enseÃ±anza secundaria
 
  gen     NERS2=0 if (edad>=15 & edad<=17) & (nivmatric>=1 & nivmatric<=7)
  replace NERS2=1 if (edad>=15 & edad<=17) & (nivmatric==3) & (PE14>=3 & PE14<=6)
@@ -1762,17 +1762,17 @@ grado, curso o año?
 * Read & write
 
 /*
-*PE31 ha obtenido algun documento o certificado por los años de
+*PE31 ha obtenido algun documento o certificado por los aÃ±os de
       estudio que ha realizado	
          1. Si => 32
          2. No => 33
          
-*PE32 último documento que obtuvo
+*PE32 Ãºltimo documento que obtuvo
 1 y 2 PAse a 33
 3 a 8 PAse a 34
 
-*PE33. ¿Sabe leer y escribir? (PErsonas de 6 años y más)
- 1. Sólo leer
+*PE33. Â¿Sabe leer y escribir? (PErsonas de 6 aÃ±os y mÃ¡s)
+ 1. SÃ³lo leer
  2. Leer y escribir
  3. Ninguno
 */
@@ -1870,13 +1870,13 @@ PA20. categoria de ocuPAcion
 ** AGROPECUARIOS
 
 7. Trab. Agrop. a Sueldo y Salario
-8. Jornalero/PEón AgroPEcuario
+8. Jornalero/PEÃ³n AgroPEcuario
 9. PAtrono o socio de la finca
 10. Trab. Agrop. por cuenta propia	
 11. Ayudante agroPEc. del hogar sin PAgo
 12. Ayudante agroPEc. no del hogar sin PAgo
 
-13. Empleado/a doméstico/a		
+13. Empleado/a domÃ©stico/a		
 
 */
 
@@ -1889,7 +1889,7 @@ PA20. categoria de ocuPAcion
 *Proportion of 1 Year Old Children Immunized Against Measles*
 * 1 - 4
 
-* recibió vacuna contra el sarampión
+* recibiÃ³ vacuna contra el sarampiÃ³n
 
  gen	 MEASLES=0 if (edad>=1 & edad<=4) & (sarampion==1 | sarampion==2)
  replace MEASLES=1 if (edad>=1 & edad<=4) & (sarampion==1)
@@ -1898,9 +1898,9 @@ PA20. categoria de ocuPAcion
 
 /*
 15 to 49
-PF14. ¿En su último PArto por quien se hizo atender?
+PF14. Â¿En su Ãºltimo PArto por quien se hizo atender?
 
-1. Médico   
+1. MÃ©dico   
 2. Obstetriz
 3. Comadrona         
 4. Enfermera o auxiliar
@@ -1916,24 +1916,24 @@ PF14. ¿En su último PArto por quien se hizo atender?
 /*Contraceptive Prevalence Rate*/
 /*
 PD05. Estado civil
-1. Unión libre
+1. UniÃ³n libre
 2. Casado 
 3. Soltero
 4. SePArado 
 5. Divorciado
 6. Viudo                
 
-pf21. ¿Utiliza usted algún método PAra no quedar embarazada?
+pf21. Â¿Utiliza usted algÃºn mÃ©todo PAra no quedar embarazada?
 
-pf22. ¿Qué método utiliza?
+pf22. Â¿QuÃ© mÃ©todo utiliza?
 1. Ritmo
 2. Retiro
-3. Píldora
+3. PÃ­ldora
 4. DIU
-5. Condón
-6. Inyección
-7. Métodos vaginales
-8. Vasectomía
+5. CondÃ³n
+6. InyecciÃ³n
+7. MÃ©todos vaginales
+8. VasectomÃ­a
 9. Ligadura
 10. Implantes
 11. Otro
@@ -1953,9 +1953,9 @@ pf22. ¿Qué método utiliza?
 
 /*
 vi26
-26. ¿Con que tipo de alumbrado cuenta principalmente este hogar?
- 1. Empresa eléctrica pública
- 2. Planta eléctrica privada
+26. Â¿Con que tipo de alumbrado cuenta principalmente este hogar?
+ 1. Empresa elÃ©ctrica pÃºblica
+ 2. Planta elÃ©ctrica privada
  3. Vela/candil/gas
  4. Ninguno
 */
@@ -1969,19 +1969,19 @@ vi26
 /*
 
 vi09
-¿En qué sitio de la vivienda cocina los alimentos este hogar?
-1. En un cuarto dedicado sólo para cocinar
-2. En un cuarto utilizado también para dormir
+Â¿En quÃ© sitio de la vivienda cocina los alimentos este hogar?
+1. En un cuarto dedicado sÃ³lo para cocinar
+2. En un cuarto utilizado tambiÃ©n para dormir
 3. En la sala/comedor
 4. En el patio/corredor u otro sitio
 5. No cocinan
 
 vi11 
-¿Con qué se cocina principalmente en este hogar?
+Â¿Con quÃ© se cocina principalmente en este hogar?
 combustible para cocinar.
 			
 1. Gas
-2. Leña/Carbón
+2. LeÃ±a/CarbÃ³n
 3. Electricidad
 4. Otro
 
@@ -1997,23 +1997,23 @@ gen combusti = vi11
 ** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
 
 /*
-18. ¿De dónde obtiene el agua  este hogar?	20. Donde esta ubicado el suministro 	21. El suministro queda
+18. Â¿De dÃ³nde obtiene el agua  este hogar?	20. Donde esta ubicado el suministro 	21. El suministro queda
 						del agua				vi21
 											1. Muy cerca
 * vi18. fuente de agua				*vi20					2. Cerca
 											3. Lejos
-1. red pública			==>19		1. Dentro de la vivienda		4. Muy lejos
+1. red pÃºblica			==>19		1. Dentro de la vivienda		4. Muy lejos
 2. red y carro repartidor   	==>19		2. Fuera de la vivienda, pero dentro del terreno								
-3. pila o llave pública		==>19		3. Fuera de la vivienda, lote o terreno
-4. otra fuente por tubería 	==>20			
+3. pila o llave pÃºblica		==>19		3. Fuera de la vivienda, lote o terreno
+4. otra fuente por tuberÃ­a 	==>20			
 5. carro repartidor/triciclo 	==>20
 6. pozo		 	      	==>20		
-7. río, vertiente o similar	==>20							
+7. rÃ­o, vertiente o similar	==>20							
 8. agua de lluvia		==>20	
 9. otro 			==>20	
 
 vi19
-19. ¿El abastecimiento de agua es?
+19. Â¿El abastecimiento de agua es?
 1. Permanente 	==>20
 2. Irregular	==>20
 */
@@ -2030,10 +2030,10 @@ gen lugabast = vi20
 
 /*								
 * vi13. servicio higienico					vi14. 
-¿Con qué tipo de servicio higiénico cuenta el hogar?		¿Cuántos cuartos de servicio higiénico
+Â¿Con quÃ© tipo de servicio higiÃ©nico cuenta el hogar?		Â¿CuÃ¡ntos cuartos de servicio higiÃ©nico
 								utilizan las personas de este hogar?
 1. excusado y alcantarillado		=>14			vi14	1. En total
-2. excusado y pozo séptico		=>14			vi14a 	2. Exclusivos
+2. excusado y pozo sÃ©ptico		=>14			vi14a 	2. Exclusivos
 3. excusado y pozo ciego		=>14			vi14b 	3. Compartidos
 4. letrina				=>14
 5. no tiene	==>16
@@ -2056,25 +2056,25 @@ gen cuartosexc = vi14a
 La vivienda que ocupa este hogar es:		Tipo de vivienda	
 
 1. En arriendo					1. Casa, villa 
-2. propia y la está pagando			2. Departamento
+2. propia y la estÃ¡ pagando			2. Departamento
 3. propia y totalmente pagada			3. Cuarto en inquilinato
 4. cedida					4. Mediagua
 5. recibida por servicios			5. Rancho/choza/covacha
 6. otra						6. Otro 
  								
 vi04. Piso de la vivienda			vi03. Paredes
-¿Cuál es el material predominante 		¿Cuál es el material predominante 
+Â¿CuÃ¡l es el material predominante 		Â¿CuÃ¡l es el material predominante 
 del piso de la vivienda?			de las paredes de la vivienda?
-1. duela/parket					1. Hormigón/bloque/ladrillo
+1. duela/parket					1. HormigÃ³n/bloque/ladrillo
 2. baldosa/vinyl				2. Adobe o tapia
 3. cemento/ ladrillo				3. Madera
-4. Tabla/tablón					4. Bahereque (caña revestida)
-5. caña						5. Caña
+4. Tabla/tablÃ³n					4. Bahereque (caÃ±a revestida)
+5. caÃ±a						5. CaÃ±a
 6. tierra					6. Otro
 7. otro  	
 
-* vi06 Número de cuartos 
-¿De cuántos cuartos dispone este HOGAR, sin incluir cuartos de cocina, baños, garage o los dedicados
+* vi06 NÃºmero de cuartos 
+Â¿De cuÃ¡ntos cuartos dispone este HOGAR, sin incluir cuartos de cocina, baÃ±os, garage o los dedicados
 exclusivamente para negocios?
 */
 
@@ -2139,7 +2139,7 @@ gen nrocuart = vi06
 */
 
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
-* 30. ¿Tiene este hogar servicio teléfonico?
+* 30. Â¿Tiene este hogar servicio telÃ©fonico?
 
 gen telefono = vi30
 
@@ -2248,4 +2248,4 @@ gen telefono = vi30
 
  gen GFAS=(anoest/(edad-6)) if (edad>=12 & edad<=17) & (anoest>=0 & anoest<99)
 
-save "X:\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", replace
+save "${surveysFolder}\ARM\ECU\ECV\1998\Arm_data\ECU1998EA_BID.dta", replace

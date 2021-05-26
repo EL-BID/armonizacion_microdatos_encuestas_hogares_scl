@@ -11,23 +11,23 @@
 clear all
 set more off
 local anio  2012  
-local outS1 = "Y:\Argentina\\`anio'\1erSem\Data\"
-local outS2 = "Y:\Argentina\\`anio'\2doSem\Data\"
-local outS1S= "X:\ARM\ARG\EPHC\\`anio'_Sem1\Orig_Data\"
-local outS2S= "X:\ARM\ARG\EPHC\\`anio'_Sem2\Orig_Data\"               
+local outS1 = "${surveysFolder}\Argentina\\`anio'\1erSem\Data\"
+local outS2 = "${surveysFolder}\Argentina\\`anio'\2doSem\Data\"
+local outS1S= "${surveysFolder}\ARM\ARG\EPHC\\`anio'_Sem1\Orig_Data\"
+local outS2S= "${surveysFolder}\ARM\ARG\EPHC\\`anio'_Sem2\Orig_Data\"               
 
 foreach x in `anio' {
 
  
 if `x'==2007 {
 local n 07
-		use "Y:\Argentina\\`x'\1erSem\Datos Originales\t1`n'.dta",clear
-		append using "Y:\Argentina\\`x'\1erSem\Datos Originales\t2`n'.dta"
+		use "${surveysFolder}\Argentina\\`x'\1erSem\Datos Originales\t1`n'.dta",clear
+		append using "${surveysFolder}\Argentina\\`x'\1erSem\Datos Originales\t2`n'.dta"
 		save "`outS1'arg`n'_1erSem.dta",replace
 		save "`outS1S'arg`n'_1erSem.dta",replace
 		
-		use "Y:\Argentina\\`x'\2doSem\Datos Originales\t4`n'.dta",clear
-		append using "Y:\Argentina\2008\1erSem\Datos Originales\t108.dta" /*4to trim 2007 se une con 1er trim 2008*/
+		use "${surveysFolder}\Argentina\\`x'\2doSem\Datos Originales\t4`n'.dta",clear
+		append using "${surveysFolder}\Argentina\2008\1erSem\Datos Originales\t108.dta" /*4to trim 2007 se une con 1er trim 2008*/
 		save "`outS2'arg`n'_2doSem.dta",replace
 		save "`outS2S'arg`n'_2doSem.dta",replace
             }
@@ -59,13 +59,13 @@ local n 11
 if `x'==2012 {
 local n 12
 }
-		use "Y:\Argentina\\`x'\1erSem\Datos Originales\t1`n'.dta",clear
-		append using "Y:\Argentina\\`x'\1erSem\Datos Originales\t2`n'.dta"
+		use "${surveysFolder}\Argentina\\`x'\1erSem\Datos Originales\t1`n'.dta",clear
+		append using "${surveysFolder}\Argentina\\`x'\1erSem\Datos Originales\t2`n'.dta"
 		save "`outS1'arg`n'_1erSem.dta",replace
 		save "`outS1S'arg`n'_1erSem.dta",replace
 		
-		use "Y:\Argentina\\`x'\2doSem\Datos Originales\t3`n'.dta",clear
-		append using "Y:\Argentina\\`x'\2doSem\Datos Originales\t4`n'.dta"
+		use "${surveysFolder}\Argentina\\`x'\2doSem\Datos Originales\t3`n'.dta",clear
+		append using "${surveysFolder}\Argentina\\`x'\2doSem\Datos Originales\t4`n'.dta"
 		save "`outS2'arg`n'_2doSem.dta",replace
 		save "`outS2S'arg`n'_2doSem.dta",replace
      }

@@ -1,17 +1,17 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH_NC
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
-Encuesta: ENIGH (Nueva construcción)
+PaÃ­s: Mexico
+Encuesta: ENIGH (Nueva construcciÃ³n)
 Round: Agosto-Noviembre
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,7 +54,7 @@ qui rename `v' `lowname'
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 ******************************************************************************
 *	HOUSEHOLD VARIABLES
@@ -105,12 +105,12 @@ label value zona_c zona_c
 gen str3 pais_c="MEX"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ******************************
@@ -250,8 +250,8 @@ replace condocup_ci=4 if edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "condicion de ocupacion utilizando definicion del pais"
-/*nota: en el esquema de la enoe se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la ley 
+/*nota: en el esquema de la enoe se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la ley 
 federal del trabajo.
 fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -271,7 +271,7 @@ label var tipopen_ci "tipo de pension - variable original de cada pais"
 ****************
 *cotizando_ci***   
 ****************
-gen cotizando_ci=. /*revisar las variables inst_1 ó pres_91 */
+gen cotizando_ci=. /*revisar las variables inst_1 Ã³ pres_91 */
 label var cotizando_ci "cotizante a la seguridad social"
 *nota: solo seguro social publico, con el cual tenga derecho a pensiones en el futuro.
 ****************
@@ -295,7 +295,7 @@ label var instpen_ci "institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
@@ -315,7 +315,7 @@ label var ypen_ci "valor de la pension contributiva"
 egen ypensub_ci=rsum(ing_1p044 ing_1p045) 
 replace ypensub_ci=. if ing_1p044==. & ing_1p045==.
 label var ypensub_ci "valor de la pension subsidiada / no contributiva"
-*programas: beneficio del programa 70 y más; beneficio de otros programas para adultos mayores
+*programas: beneficio del programa 70 y mÃ¡s; beneficio de otros programas para adultos mayores
 
 ***************
 *pensionsub_ci*
@@ -375,7 +375,7 @@ rename ubica_geo ubica_geo
 
 /*la encuesta fue levantada entre agosto-noviembre 2008
 *al preguntarse por los ingresos de los seis meses anteriores 
-se recolectó información correspondiente a los meses de febrero,
+se recolectÃ³ informaciÃ³n correspondiente a los meses de febrero,
 marzo,abril, mayo, junio y julio del 2008*/
 
 
@@ -2851,7 +2851,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -2904,7 +2904,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3151,15 +3151,15 @@ gen antiguedad_ci=.
 ***tamemp_ci***
 *******************
 
-*México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if tam_emp1==1 | tam_emp1==2
 replace tamemp_ci = 2 if (tam_emp1>=3 & tam_emp1<=7)
 replace tamemp_ci = 3 if (tam_emp1>7 & tam_emp1<12)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3168,8 +3168,8 @@ gen categoinac_ci =1 if (bustrab_3==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  (bustrab_5==5 & condocup_ci==3)
 replace categoinac_ci = 3 if  (bustrab_4==4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3465,7 +3465,7 @@ label var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 gen edupre_ci=(nivel==1 | n_instr161==1) 
 replace edupre_ci=. if aedu_ci==.
-label var edupre_ci "Educación preescolar"
+label var edupre_ci "EducaciÃ³n preescolar"
 
 ******************************
 *	eduac_ci
@@ -3590,12 +3590,12 @@ replace des1_ch=1 if drenaje==1 | drenaje==2
 replace des1_ch=2 if drenaje==3
 replace des1_ch=3 if drenaje==4
 
-/*Tipo de desagüe incluyendo la
-definición de "Unimproved" del MDG
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general o a una cámara séptica
-2 El desagüe está conectado a un pozo ciego o es una letrina.
-3 El desagüe se comunica con la superficie: desemboca en un río o en la calle.*/
+/*Tipo de desagÃ¼e incluyendo la
+definiciÃ³n de "Unimproved" del MDG
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general o a una cÃ¡mara sÃ©ptica
+2 El desagÃ¼e estÃ¡ conectado a un pozo ciego o es una letrina.
+3 El desagÃ¼e se comunica con la superficie: desemboca en un rÃ­o o en la calle.*/
 
 ******************************
 *	des2_ch
@@ -3605,9 +3605,9 @@ replace des2_ch=0 if des1_ch==0
 replace des2_ch=1 if (des1_ch==1 | des1_ch==2)
 replace des2_ch=2 if des1_ch==3 
 
-/*des2_ch Tipo de desagüe sin incluir la definición de "Unimproved" del MDG
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general, a una cámara o fosa séptica, o a un pozo ciego o letrina.
+/*des2_ch Tipo de desagÃ¼e sin incluir la definiciÃ³n de "Unimproved" del MDG
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general, a una cÃ¡mara o fosa sÃ©ptica, o a un pozo ciego o letrina.
 2 Cualquier otro caso.*/
 
 ******************************
@@ -3628,9 +3628,9 @@ label var pared_ch "Material Pared"
 
 /*
 1 Material de desecho.
-2 Lamina de cartón.
-3 Lamina metálica o de asbesto.
-4 Carrizo bambú o palma.
+2 Lamina de cartÃ³n.
+3 Lamina metÃ¡lica o de asbesto.
+4 Carrizo bambÃº o palma.
 5 Embarro o Bajareque.
 6 Madera.
 7 Adobe.
@@ -3647,12 +3647,12 @@ replace techo_ch=1 if techos==3 | techos==3 | (techos>=6 & techos<=9)
 
 /*
 1 Material de desecho.
-2 Lamina de cartón.
-3 Lamina metálica.
+2 Lamina de cartÃ³n.
+3 Lamina metÃ¡lica.
 4 Lamina de asbesto.
 5 Palma o paja.
 6 Madera o tejamanil.
-7 Terrado con viguería.
+7 Terrado con viguerÃ­a.
 8 Teja.
 9 Losa de concreto o viguetas con bovedilla.
 */
@@ -3668,11 +3668,11 @@ replace resid_ch=3 if eli_ba==6
 
 
 /*
-1 la tiran a un contenedor la recoge un camión o carrito de basura?
+1 la tiran a un contenedor la recoge un camiÃ³n o carrito de basura?
 2 la queman?
 3 la entierran?
-4 la tiran en el basurero público?
-5 la tiran en un terreno baldío o calle?
+4 la tiran en el basurero pÃºblico?
+5 la tiran en un terreno baldÃ­o o calle?
 6 la tiran al rio lago o barranca?
 */
 
@@ -3765,10 +3765,10 @@ label var viviprop_ch "propiedad de la vivienda"
 /*
 1 es rentada?
 2 es prestada?
-3 es propia pero la están pagando?
+3 es propia pero la estÃ¡n pagando?
 4 es propia?
 5 esta intestada o en litigio?
-6 otra situación.
+6 otra situaciÃ³n.
 */
 
 ******************************
@@ -3801,13 +3801,13 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
 
 */
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci=.
 replace raza_idioma_ci=1 if lengua6==1
@@ -3817,7 +3817,7 @@ replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentesco==301|parentesco
 parentesco==608|parentesco==609|parentesco==610|parentesco==612))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
@@ -3826,7 +3826,7 @@ gen raza_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -3839,15 +3839,15 @@ label var id_afro_ci "Afro-descendiente"
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

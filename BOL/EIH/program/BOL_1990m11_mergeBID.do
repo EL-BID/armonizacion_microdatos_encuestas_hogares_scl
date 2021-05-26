@@ -5,8 +5,8 @@ version 7.0
 set mem 50m
 set more 1
 
-local in = "X:\ARM\BOL\1990\Programs\Van_prog\"
-local out = "X:\ARM\BOL\1990\Van_data\"
+local in = "${surveysFolder}\ARM\BOL\1990\Programs\Van_prog\"
+local out = "${surveysFolder}\ARM\BOL\1990\Van_data\"
 
 
 local basesi = "aseta cupro datge desoc educa inact migra ocup1 ocup2 salu1 salu2 salu3 salu4 salu5"
@@ -15,25 +15,25 @@ local basesh = "carat gedal inlab gaho1 gaho2 vivi1 vivi2 "
 
 foreach y of local basesh {
 
-use "X:\ARM\BOL\1990\Orig_data\390`y'.dta"
+use "${surveysFolder}\ARM\BOL\1990\Orig_data\390`y'.dta"
 renpfix v `y'_
 rename `y'_1 identifi
 sort identifi
 desc
 summ
-save "X:\ARM\BOL\1990\Van_data\390`y'.dta", replace
+save "${surveysFolder}\ARM\BOL\1990\Van_data\390`y'.dta", replace
 clear }
 
 foreach y of local basesi {
 
-use "X:\ARM\BOL\1990\Orig_data\390`y'.dta"
+use "${surveysFolder}\ARM\BOL\1990\Orig_data\390`y'.dta"
 renpfix v `y'_
 rename `y'_1 identifi
 rename `y'_2 hogar
 sort hogar identifi
 desc
 summ
-save "X:\ARM\BOL\1990\Van_data\390`y'.dta", replace
+save "${surveysFolder}\ARM\BOL\1990\Van_data\390`y'.dta", replace
 clear }
 
 

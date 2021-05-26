@@ -9,7 +9,7 @@ set more off
 
 
 ***************************************************
-*****	Creación del Archivo de Hogares		***
+*****	CreaciÃ³n del Archivo de Hogares		***
 ***************************************************
 
 use condic.dta, clear
@@ -26,7 +26,7 @@ sort numero
 save hogares.dta, replace
 
 ***************************************************
-*****	Creación del Archivo de Personas	***
+*****	CreaciÃ³n del Archivo de Personas	***
 ***************************************************
 
 use menores.dta, clear

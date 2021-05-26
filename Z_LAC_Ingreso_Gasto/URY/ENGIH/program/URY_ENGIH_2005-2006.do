@@ -45,8 +45,8 @@ set matsize 2000
 *Directorios:
 	
 *Directorios:
-global RAW    "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\URY\ENGIH\RAW"
-global data_arm  "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\URY\ENGIH\data_arm"
+global RAW    "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\URY\ENGIH\RAW"
+global data_arm  "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\URY\ENGIH\data_arm"
 
 
 *Se utilizan las bases ubicadas en la carpeta RAW*

@@ -5,14 +5,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PAN
 local ENCUESTA EHPM
@@ -38,7 +38,9 @@ Versión 2014: Melany Gualavisi
 Última versión: Melany Gualavisi (MGD) - Email: melanyg@iadb.org
 Fecha última modificación: Octubre de 2017
 Modificación 2014: Melany Gualavisi (MGD) - Email: melanyg@iadb.org
-Última modificación: Daniela Zuluaga (DZ) -Email: danielazu@iadb.org -da.zuluaga@hotmail.com
+Daniela Zuluaga (DZ) -Email: danielazu@iadb.org -da.zuluaga@hotmail.com
+Última versión: Cesar Lins (SCL/GDI) - Marzo 2021
+
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
@@ -227,6 +229,17 @@ label var region_c "División política, provincias"
 gen factor_ci= fac15_e   
 label var factor_ci "Factor de expansion del individuo"
 
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=.
+
+
 ******************************
 *	idh_ch
 ******************************
@@ -306,22 +319,6 @@ label value sexo_ci sexo_ci
 gen edad_ci=p3
 label var edad_ci "Edad del individuo"
 
-**********
-***raza***
-**********
-
-destring indi_rec, replace
-gen raza_ci=1 if indi_rec==2
-replace raza_ci=3 if indi_rec==1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-*nota raza_ci: En el cuestionario no consta una pregunta relacionada con raza.
-
-gen raza_idioma_ci = .
-gen id_ind_ci      = .
-gen id_afro_ci     = .
 
 
 ******************************
@@ -393,6 +390,48 @@ label var nmenor1_ch "Numero de familiares menores a 1 anio"
 ******************************
 gen miembros_ci=(relacion_ci<5)
 label var miembros_ci "Miembro del hogar"
+
+				
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+	***************
+	*** afroind_ci ***
+	***************
+**Pregunta: ¿Se considera usted indígena? (indi_rec) (1 - no indígena; 2 - indígena)
+**No se identifica a personas afrodescendientes. Todos los no-indígenas se categorizan como "otro". 
+**En el 2011 se convierte en la EHPM (no solo EH) 
+
+gen afroind_ci=. 
+replace afroind_ci=1 if indi_rec==2
+replace afroind_ci=2 if indi_rec==0
+replace afroind_ci=3 if indi_rec==1
+
+
+	***************
+	*** afroind_ch ***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	*** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=2001
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
+
 
 ******************************************************************************
 *	LABOR MARKET
@@ -1257,14 +1296,14 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

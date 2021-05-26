@@ -1,4 +1,4 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 
@@ -7,36 +7,36 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\\BHS\LFS\\2008\\a\\data_orig"
+global ruta = "${surveysFolder}\\survey\\BHS\LFS\\2008\\a\\data_orig"
 
 local PAIS BHS
 local ENCUESTA LFS
 local ANO "2008"
 local ronda a
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bahamas
+PaÃ­s: Bahamas
 Encuesta: LFS
 Round: a
 Autores: Melany Gualavisi - Email: mayras@iadb.org
-Última versión: 
-Fecha última modificación: 6/17/2015
+Ãšltima versiÃ³n: 
+Fecha Ãºltima modificaciÃ³n: 6/17/2015
 
 							SCL/LMK - IADB
 ****************************************************************************/
 
-	*CONFORMACIÓN BASE ÚNICA BAHAMAS 2012*
+	*CONFORMACIÃ“N BASE ÃšNICA BAHAMAS 2012*
 
 
 use  "$ruta\Bahamas_LFS_2008_housing.dta", clear

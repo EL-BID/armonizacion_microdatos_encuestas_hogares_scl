@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Versión 2007: Victoria
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2007: Victoria
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -113,7 +113,7 @@ Also, the orginal data was replaced with the new Mecovi versions
 /******************
 VARIABLES DEL HOGAR
 *******************/
-gen factor_ch=expr /*Esta es la expansion que se usa en todos los años anteriores. La provincial recien aparece en el 2000*/
+gen factor_ch=expr /*Esta es la expansion que se usa en todos los aÃ±os anteriores. La provincial recien aparece en el 2000*/
 egen idh_ch=group( r z seg f)
 gen idp_ci=o
 gen zona_c=z
@@ -258,21 +258,21 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 /*
-R25 ¿En Chile, la ley reconoce ocho pueblos originarios o indígenas, ¿pertenece usted a alguno
+R25 Â¿En Chile, la ley reconoce ocho pueblos originarios o indÃ­genas, Â¿pertenece usted a alguno
 de ellos? (Preg. 7)
 r25:
            0 no pertenece a ninguno de ellos
-           1 sí, aymara
-           2 sí, rapa-nui
-           3 sí, quechua
-           4 sí, mapuche
-           5 sí, atacameño
-           6 sí, coya
-           7 sí, kawaskar
-           8 sí, yagán
+           1 sÃ­, aymara
+           2 sÃ­, rapa-nui
+           3 sÃ­, quechua
+           4 sÃ­, mapuche
+           5 sÃ­, atacameÃ±o
+           6 sÃ­, coya
+           7 sÃ­, kawaskar
+           8 sÃ­, yagÃ¡n
            9 no contesta
 
 */
@@ -280,7 +280,7 @@ r25:
 gen raza_ci=.
 replace raza_ci= 1 if  (r25 >=1 & r25 <=8 )
 replace raza_ci= 3 if (r25==0 | r25==9 ) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -289,7 +289,7 @@ gen raza_idioma_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -313,7 +313,7 @@ replace condocup_ci=1 if (o1==1 | o2==1)
 replace condocup_ci=2 if ((o1==2 | o2==2) & (o3==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -408,7 +408,7 @@ Por lo tanto, para crear las horas en el trabajo principal, dividimos las horas 
 
 *************************************************************************************************************/
 
-gen horaspri_ci=o19_hrs/4 /*Da mas bajo que en los otros años, porque la creación de esta variable es muy mala...*/
+gen horaspri_ci=o19_hrs/4 /*Da mas bajo que en los otros aÃ±os, porque la creaciÃ³n de esta variable es muy mala...*/
 
 gen horastot_ci=horaspri_ci
 
@@ -440,7 +440,7 @@ drop aux1
 */
 
 *********
-*ylmpri2_ci: Este además, incluye bonificaciones y ganancias anuales
+*ylmpri2_ci: Este ademÃ¡s, incluye bonificaciones y ganancias anuales
 *********
 /*
 gen aux1=yextaj/12 if o20_t1!=1 & o20_t2!=1 & o21_t==1 
@@ -616,11 +616,11 @@ gen remesas_ch=.
 
 gen durades_ci=o4/4.3
 replace durades_ci=. if o4==999 /*| activ!=2*/
-label var durades_ci "Duración del desempleo"
+label var durades_ci "DuraciÃ³n del desempleo"
 
 g year=anio_c
 g mes=12
-g date1=mdy(o16_mes, 01, o16_año)
+g date1=mdy(o16_mes, 01, o16_aÃ±o)
 g date2=mdy(mes, 31 , year)
 replace date2=. if date1==. 
 format 	date1 %td
@@ -629,9 +629,9 @@ format 	date2 %td
 g tiempotrab=date2-date1
 g antiguedad_ci=tiempotrab/365
 
-/*gen antiguedad_ci=(2003-o16_año)+((11-o16_mes)/12)+1 if o16_mes<=11
-replace antiguedad_ci=(2003-o16_año)+1 if o16_mes==12 | o16_mes==99/*Hay una cita en una de las bananas originales en donde dicen que 
-las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese año se 
+/*gen antiguedad_ci=(2003-o16_aÃ±o)+((11-o16_mes)/12)+1 if o16_mes<=11
+replace antiguedad_ci=(2003-o16_aÃ±o)+1 if o16_mes==12 | o16_mes==99/*Hay una cita en una de las bananas originales en donde dicen que 
+las entrevistas fueron realizadas casi finalizando el ciclo lectivo (y, como consecuencia, se consideraba que ese aÃ±o se 
 sumaba a aedu). Por lo tanto, podemos suponer que las entrevistas se realizaron en noviembre a los efectos de calcular le 
 tenure.*/
 */
@@ -677,13 +677,13 @@ replace firmapeq_ci=. if o14=="X" | emp_ci==0*/
 * Mod MLO incorporacion 2015/10
 gen spublico_ci=(o9==3 | o9==4 | o9==9)
 replace spublico_ci=. if emp_ci!=1
-label var spublico_ci "Personas que trabajan en el sector público"
+label var spublico_ci "Personas que trabajan en el sector pÃºblico"
 /*******************
 VARIABLES EDUCATIVAS
 *******************/
 gen byte aedu_ci=.
 replace aedu_ci=0 if e7t==0 | e7t==1 | e7t==16 
-replace aedu_ci=e7c if e7t==2 | e7t==3 /*El máximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
+replace aedu_ci=e7c if e7t==2 | e7t==3 /*El mÃ¡ximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
 replace aedu_ci=. if e7t==4
 *We assume that 'e7t==4', Diferential Education, will be equivalent to missing
 
@@ -696,7 +696,7 @@ replace aedu_ci=8 if (e7c>=8 & e7t==3)
  table e7c e7t, c(mean edad)
 --------------------------------------------------------------------------------------------------
           |                                          tipo                                         
-    curso |          humanidades  educación media cien  técnica, comercial,   educación media técn
+    curso |          humanidades  educaciÃ³n media cien  tÃ©cnica, comercial,   educaciÃ³n media tÃ©cn
 ----------+---------------------------------------------------------------------------------------
         0 |                                                                                       
         1 |             63.51868               26.9809              62.61818              20.29556
@@ -706,8 +706,8 @@ replace aedu_ci=8 if (e7c>=8 & e7t==3)
         5 |             65.15193                                    62.48571              35.31684
         6 |             65.25408                                    64.89024                      
 --------------------------------------------------------------------------------------------------
-Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 años de primaria) y que las otras dos son 
-parte del sistema nuevo (8 años de primaria)
+Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 aÃ±os de primaria) y que las otras dos son 
+parte del sistema nuevo (8 aÃ±os de primaria)
 */
 replace aedu_ci=e7c+6 if e7t==5 | e7t==7
 replace aedu_ci=e7c+8 if e7t==6 |e7t==8
@@ -743,7 +743,7 @@ gen edusc_ci=edus2c_ci
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing
 gen pqnoasis_ci= e3
 
 **************
@@ -761,7 +761,7 @@ replace pqnoasis1_ci = 7 if e3 ==1
 replace pqnoasis1_ci = 8 if e3 ==3  | e3 ==4
 replace pqnoasis1_ci = 9 if e3 ==2  | e3 ==15 | e3 ==16 | e3 ==19 | e3 ==21
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -895,7 +895,7 @@ gen edupub_ci=.
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -1074,7 +1074,7 @@ replace categoinac_ci=3 if o6==1
 replace categoinac_ci=4 if o6==2 | o6==3 | o6==6 | o6==7 | o6==8 | o6==9 | o6==10
 
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -1096,15 +1096,15 @@ gen autocons_ch=.
 gen region_c=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

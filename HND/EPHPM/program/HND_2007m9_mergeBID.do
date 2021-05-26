@@ -5,7 +5,7 @@ set more off
 
 clear
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -43,7 +43,7 @@ save "`base_in'\viviendas_mod.dta", replace
 
 use "`base_in'\EPHPM_XXXV_STATA_Otrosingresos.dta", clear
 
-**Daniela Zuluaga-Noviembre 2017: Se modifica el merge para la creaci�n adecuada de ingreo no monetario (en especie y monetario)**
+**Daniela Zuluaga-Noviembre 2017: Se modifica el merge para la creación adecuada de ingreo no monetario (en especie y monetario)**
 
 **Se crean variables en especie y efectivo**
 recode LPS(9999999=.)
@@ -136,10 +136,10 @@ replace CV48a=7 if N==6
 label define CV48aa 1"Entraron los ladrones a su casa" ///
 		    3"Le robaron el carro o una moto" ///
 		    2"Le atacaron con violencia, amenazas o armas para robarle" ///
-		    6"¿Le han robado. (sin violencia) estando fuera de la casa?" ///
-		    4"¿Lesiones personales?" ///
-		    7"¿Secuestro?" ///
-		    5"¿Estafa o chantaje?"
+		    6"ÂżLe han robado. (sin violencia) estando fuera de la casa?" ///
+		    4"ÂżLesiones personales?" ///
+		    7"ÂżSecuestro?" ///
+		    5"ÂżEstafa o chantaje?"
 label values CV48a CV48aa
 tab CV48a
 drop four n N NN

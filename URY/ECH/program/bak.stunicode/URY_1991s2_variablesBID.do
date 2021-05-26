@@ -1,15 +1,15 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Uruguay
+PaÃ­s: Uruguay
 Encuesta: ECH
 Round: s2
-Autores: Mayra Sáenz
-Generación de Nuevas Variables de Mercado laboral: Mayra Sáenz
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+Autores: Mayra SÃ¡enz
+GeneraciÃ³n de Nuevas Variables de Mercado laboral: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 30 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -55,7 +55,7 @@ use `base_in', clear
 gen idh_ch=id_hogar
 gen idp_ci=id_pers
 
-* En el diccionario se señala que los factores de expansión son: pesotri, pesosem, pesoan. Sin embargo, en la base
+* En el diccionario se seÃ±ala que los factores de expansiÃ³n son: pesotri, pesosem, pesoan. Sin embargo, en la base
 * no consta ninguno de ellos.
 gen factor_ch=1
 gen zona_c=1 /*La encuesta es solo urbana!*/
@@ -103,7 +103,7 @@ label values relacion_ci relacion_ci
 gen region_BID_c=.
 replace region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
@@ -121,17 +121,17 @@ label define region_c  1 "Montevideo" ///
            8 "Florida" /// 
            9 "Lavalleja" /// 
           10 "Maldonado" /// 
-          11 "Paysandú" /// 
-          12 "Río Negro" /// 
+          11 "PaysandÃº" /// 
+          12 "RÃ­o Negro" /// 
           13 "Rivera" /// 
           14 "Rocha" /// 
           15 "Salto" /// 
-          16 "San José" /// 
+          16 "San JosÃ©" /// 
           17 "Soriano" /// 
-          18 "Tacuarembó" ///
+          18 "TacuarembÃ³" ///
           19 "Treinta y Tres" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 /************************************************************************/
 /*			VARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
@@ -165,24 +165,24 @@ replace des1_ch=2 if hd9==2
 replace des1_ch=3 if hd9==3
 
 /*
-des1_ch Tipo de desagüe incluyendo la definición de "Unimproved" del MDG
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general o a una cámara séptica
-2 El desagüe está conectado a un pozo ciego o es una letrina.
-3 El desagüe se comunica con la superficie: desemboca en un río o en la calle.*/
-label var des1_ch "Tipo de desague según unimproved de MDG"
-label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
-label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
+des1_ch Tipo de desagÃ¼e incluyendo la definiciÃ³n de "Unimproved" del MDG
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general o a una cÃ¡mara sÃ©ptica
+2 El desagÃ¼e estÃ¡ conectado a un pozo ciego o es una letrina.
+3 El desagÃ¼e se comunica con la superficie: desemboca en un rÃ­o o en la calle.*/
+label var des1_ch "Tipo de desague segÃºn unimproved de MDG"
+label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cÃ¡mara sÃ©ptica"
+label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en rÃ­o o calle", add
 label val des1_ch des1_ch
 
 recode des1_ch (1 2=1) (3=2), g (des2_ch)
 
 /*
-0 No corresponde: El hogar no tiene servicio higiénico.
-1 El desagüe está conectado a la red general, a una cámara o fosa séptica, o a un pozo ciego o letrina.
+0 No corresponde: El hogar no tiene servicio higiÃ©nico.
+1 El desagÃ¼e estÃ¡ conectado a la red general, a una cÃ¡mara o fosa sÃ©ptica, o a un pozo ciego o letrina.
 2 Cualquier otro*/
-label var des2_ch "Tipo de desague sin incluir definición MDG"
-label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
+label var des2_ch "Tipo de desague sin incluir definiciÃ³n MDG"
+label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cÃ¡mara sÃ©ptica, pozo o letrina"
 label def des2_ch 2"Cualquier otro caso", add
 label val des2_ch des2_ch
 
@@ -219,7 +219,7 @@ gen telef_ch=.
 gen compu_ch=.
 gen internet_ch=.
 gen cel_ch=.
-*No se puede identificar si es casa o departamento, puesto que ambos están en la misma categoría.
+*No se puede identificar si es casa o departamento, puesto que ambos estÃ¡n en la misma categorÃ­a.
 gen vivi1_ch=.
 
 gen vivi2_ch=(hc1==1)
@@ -240,7 +240,7 @@ replace viviprop_ch=3 if hd3==4 | hd3==5
 gen vivialq_ch=ht14 if viviprop_ch==0
 gen vivialqimp_ch=pg14
 gen vivitit_ch=.
-label var vivitit_ch "El hogar posee un título de propiedad"
+label var vivitit_ch "El hogar posee un tÃ­tulo de propiedad"
 
 
 
@@ -398,7 +398,7 @@ label variable miembros_ci "Miembro del hogar"
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -411,7 +411,7 @@ gen id_afro_ci     = .
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -466,7 +466,7 @@ label var instpen_ci "Institucion a la cual esta afiliado variable original de c
 ********************
 gen instcot_ci=.
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria"
-label var instcot_ci "institución a la cual cotiza por su trabajo"
+label var instcot_ci "instituciÃ³n a la cual cotiza por su trabajo"
 
 *****************
 *tipocontrato_ci*
@@ -521,7 +521,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -647,9 +647,9 @@ la var spublico_ci "Trabaja en sector publico"
 *************
 *tamemp_ci
 *************
-* En el documento base no consta la clasificación de tamaño de empresa para antes de 1995
-* Se utiliza la clasificación de 1995.
-*Uruguay Pequeña 1 a 4 Mediana 5 a 9 Grande más de 9
+* En el documento base no consta la clasificaciÃ³n de tamaÃ±o de empresa para antes de 1995
+* Se utiliza la clasificaciÃ³n de 1995.
+*Uruguay PequeÃ±a 1 a 4 Mediana 5 a 9 Grande mÃ¡s de 9
 
 gen tamemp_ci=.
 replace tamemp_ci=1 if pf082>0 & pf082<=4
@@ -664,8 +664,8 @@ gen categoinac_ci =1 if ((pf1311 ==1 | pf1312==1) & condocup_ci==3)
 replace categoinac_ci = 2 if  (pf133==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pf134==1 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "Jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 label value categoinac_ci categoinac_ci
 
 *******************
@@ -685,9 +685,9 @@ replace formal_ci=1 if formal==1 & (condocup_ci==1 | condocup_ci==2)
 replace formal_ci=0 if formal_ci==. & (condocup_ci==1 | condocup_ci==2) 
 label var formal_ci "1=afiliado o cotizante / PEA"*/
 
-*Modificación Mayra Sáenz - Septiembre 2014
-*También se incluye como formales a los empleados públicos o si son beneficiarios de disse, 
-*pues en este año no se dispone de la variable cotizando
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
+*TambiÃ©n se incluye como formales a los empleados pÃºblicos o si son beneficiarios de disse, 
+*pues en este aÃ±o no se dispone de la variable cotizando
 gen formal=1 if cotizando_ci==1
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1
 replace formal=1 if (pf41==2 | pe6==4) & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 
@@ -735,7 +735,7 @@ gen pg81pm = pg81p/12
 egen ylmpri_ci=rsum(pg11p pg12p pg13p pg14p pg15p pg16p pg21p pg22p pg23p pg24p pg25p pg26p pg31p pg32p pg41p pg42p pg51p pg61pm pg71p pg72p pg81pm) if emp_ci==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 
 *****************
 ***nrylmpri_ci***
@@ -752,9 +752,9 @@ pg27p		235	5	especie publico ppal
 pg33p		250	5	cta.propia especie s/loc ppal  (autoconsumo)
 pg43p		265	5	cta.propia especie c/loc ppal  (autoconsumo)
 *pg52p		275	5	patron especie mes ppal.  
-*pg62p		285	5	especie patron anio ppal (últimos 12 meses)     
+*pg62p		285	5	especie patron anio ppal (Ãºltimos 12 meses)     
 pg73p		300	5	coop. especie mes ppal (autoconsumo)       
-*pg82p		310	5	coop. especie anio ppal  (últimos 12 meses) 
+*pg82p		310	5	coop. especie anio ppal  (Ãºltimos 12 meses) 
 */
 gen pg62pm = pg62p/12
 gen pg82pm = pg82p/12	
@@ -762,7 +762,7 @@ gen pg82pm = pg82p/12
 	label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"   
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 
 	***************
 	***ylmsec_ci***
@@ -785,10 +785,10 @@ pg31o		385	5	cuenta prop. dinero s/loc otro
 pg41o		400	5	cta.propia dinero c/loc otro  
 *pg42o		405	5	cta.propia asig. c/loc otro         
 pg51o		415	5	patron dinero mes otro        
-pg61o		425	5	dinero patron anio otro (últimos 12 meses)       
+pg61o		425	5	dinero patron anio otro (Ãºltimos 12 meses)       
 pg71o		435	5	coop. dinero mes otro         
 *pg72o		440	5	coop. asig. mes otro          
-*pg81o		450	5	coop. dinero anio otro (últimos 12 meses) 
+*pg81o		450	5	coop. dinero anio otro (Ãºltimos 12 meses) 
 */
 
 gen pg61om = pg61o/12
@@ -799,7 +799,7 @@ gen pg81om = pg81o/12
 	label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 	
 	****************
@@ -811,9 +811,9 @@ gen pg81om = pg81o/12
 pg33o		395	5	cta.propia especie s/loc otro (autoconsumo)
 pg43o		410	5	cta.propia especie s/loc otro (autoconsumo)
 *pg52o		420	5	patron especie mes otro   
-*pg62o		430	5	especie patron anio otro (últimos 12 meses)                 
+*pg62o		430	5	especie patron anio otro (Ãºltimos 12 meses)                 
 pg73o		445	5	coop. especie mes otro (autoconsumo)       
-*pg82o		455	5	coop. especie anio otro   (últimos 12 meses)        
+*pg82o		455	5	coop. especie anio otro   (Ãºltimos 12 meses)        
 */
 
 gen pg62om = pg62o/12
@@ -823,14 +823,14 @@ gen pg82om = pg82o/12
 	label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 				**********************************************************************************************
 ***TCYLMPRI_CH : Identificador de los hogares en donde alguno de los miembros reporta como
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -846,7 +846,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral monetario otros trabajos para todos los aÃ±os
 		
 	******************
 	***ylnmotros_ci***
@@ -855,7 +855,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral no monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃ±os
 	
 	************
 	***ylm_ci***
@@ -865,7 +865,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylm_ci "Ingreso laboral monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no había sido incluido
+	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no habÃ­a sido incluido
 	
 	*************
 	***ylnm_ci***
@@ -875,7 +875,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnm_ci "Ingreso laboral NO monetario total"  
 	
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no había sido incluido
+	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no habÃ­a sido incluido
 	
 	*************
 	***ynlm_ci***
@@ -891,8 +891,8 @@ pg102		485	5	subsidios del exterior
 *pg112		495	5	contribuciones exterior       
 pg121		500	5	alquileres del pais           
 pg122		505	5	alquileres del exterior  
-pg131		510	5	intereses pais (últimos 12 meses)               
-pg132		515	5	intereses exterior  (últimos 12 meses)               
+pg131		510	5	intereses pais (Ãºltimos 12 meses)               
+pg132		515	5	intereses exterior  (Ãºltimos 12 meses)               
 */
 
 gen pg131m = pg131/12 
@@ -926,7 +926,7 @@ label var ynlm_ci "Ingreso no laboral monetario"
 	by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 	replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 	replace nrylmpri_ch=. if nrylmpri_ch==.
-	label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+	label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 	************
 	***ylm_ch***
@@ -1022,8 +1022,8 @@ replace aedu_ci=12 if (pe141==5 & pe142==0) | (pe141==6 & pe142==0) | (pe141==7 
 replace aedu_ci=. if pe141==9 | pe141==.
 
 
-/*U.T.U (pe141=4)>><< Enseñanza técnica. Aunque se llama Universidad Tecnica de Uruguay no esta contado como una carrera universitaria, sino que, dado
-que solo pide como requisito el primer ciclo, es como una enseñanza secundaria de segundo ciclo que puede durar muchos años.*/
+/*U.T.U (pe141=4)>><< EnseÃ±anza tÃ©cnica. Aunque se llama Universidad Tecnica de Uruguay no esta contado como una carrera universitaria, sino que, dado
+que solo pide como requisito el primer ciclo, es como una enseÃ±anza secundaria de segundo ciclo que puede durar muchos aÃ±os.*/
 
 **************
 ***eduno_ci***
@@ -1161,15 +1161,15 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

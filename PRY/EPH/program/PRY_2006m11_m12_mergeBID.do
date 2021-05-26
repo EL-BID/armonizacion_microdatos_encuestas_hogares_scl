@@ -5,7 +5,7 @@
 ***************************************************
 
 clear
-cd X:\ARM\PRY\EIH\2006\Orig_data
+cd ${surveysFolder}\ARM\PRY\EIH\2006\Orig_data
 
 capture log close
 log using MERGEPRY2006_BID.log, replace 
@@ -14,51 +14,51 @@ log using MERGEPRY2006_BID.log, replace
 
 * Households
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06.dta", clear
 sort upm nvivi nhoga
-save "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06_s.dta", replace
+save "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06_s.dta", replace
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006.dta", clear
 sort upm nvivi nhoga
-save "X:\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006_s.dta", replace
+save "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006_s.dta", replace
 
 * Individuals
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06.dta", clear
 sort upm nvivi nhoga l02 
-save "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06_s.dta", replace
+save "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06_s.dta", replace
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06.dta", clear
 sort upm nvivi nhoga l02 
-save "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06_s.dta", replace
+save "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06_s.dta", replace
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06.dta", clear
 sort upm nvivi nhoga l02 
-save "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06_s.dta", replace
+save "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06_s.dta", replace
 
-use "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06_s.dta", clear
+use "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r02_06_s.dta", clear
 
-merge upm nvivi nhoga using "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06_s.dta"
+merge upm nvivi nhoga using "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r01_06_s.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-merge upm nvivi nhoga using "X:\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006_s.dta"
+merge upm nvivi nhoga using "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\ingresfam2006_s.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-merge upm nvivi nhoga using "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06_s.dta"
+merge upm nvivi nhoga using "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r03_06_s.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-merge upm nvivi nhoga using "X:\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06_s.dta"
+merge upm nvivi nhoga using "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\Stata\r04_06_s.dta"
 tab _merge
 drop _merge
 sort upm nvivi nhoga l02 
 
-saveold "X:\ARM\PRY\EIH\2006\Orig_data\pry06.dta",replace
+saveold "${surveysFolder}\ARM\PRY\EIH\2006\Orig_data\pry06.dta",replace
 
 clear
 

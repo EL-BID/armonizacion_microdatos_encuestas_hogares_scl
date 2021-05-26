@@ -6,14 +6,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
 
 
-global in = "\\Sdssrv03\surveys\survey\BOL\ECH\2016\m11\data_orig\"
-global out = "\\Sdssrv03\surveys\survey\BOL\ECH\2016\m11\data_merge\"
+global in = "${surveysFolder}\survey\BOL\ECH\2016\m11\data_orig\"
+global out = "${surveysFolder}\survey\BOL\ECH\2016\m11\data_merge\"
 
 
 
@@ -24,8 +24,8 @@ Encuesta: ECH
 Round: m11_m12
 Autores:
 Versión 2016: Mayra Sáenz
-Versión 2017: Stephanie González Rubio
-Última versión: Junio 6, 2018
+Versión 2017: Stephanie González Rubio (Junio 6, 2018)
+Última modificación: Cesar Lins (2021/03/09)
 
 
 							SCL/LMK - IADB
@@ -37,6 +37,8 @@ Detalle de procesamientos o modificaciones anteriores:
 
 *El nombre del módulo y el de las variables cambia par
 use "$in\eh2016_equipamiento.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s10a_01 posee_
 rename s10a_02 nro_
@@ -181,10 +183,16 @@ sort folio
 save "$in\eh2016_gastos_alimentarios_reshape.dta", replace
 */
 use "$in\eh2016_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio nro
 save, replace
 
 use "$in\eh2016_vivienda.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
@@ -197,6 +205,9 @@ save, replace
 * Merge
 
 use "$in\eh2016_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 
 merge m:1 folio using "$in\eh2016_vivienda.dta", force
 drop _merge
@@ -210,4 +221,5 @@ drop _merge
 *merge m:1 folio using "$in\eh2016_gastos_noalimentarios", force
 *drop _merge
 
-saveold "$out\BOL_2016m11.dta", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2016m11.dta", replace

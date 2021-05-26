@@ -1,13 +1,13 @@
 		*************************************************************
-		***PROGRAMA PARA PEGAR LOS MÓDULOS DE LA ENFT OCTUBRE 202004***
+		***PROGRAMA PARA PEGAR LOS MÃ“DULOS DE LA ENFT OCTUBRE 202004***
 		*************************************************************
 *Elaborado por: Yessenia Loayza - july 2012
 
-*Daniela Zuluaga- Noviembre 2017, se considera categoría 26 de otros ingresos.
+*Daniela Zuluaga- Noviembre 2017, se considera categorÃ­a 26 de otros ingresos.
 
 clear
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS HND
 local ENCUESTA EPHPM
@@ -27,7 +27,7 @@ log using "`log_file'", replace
 *Abril, 2013
 
 		***************************************
-		*CONFORMACIÓN BASE ÚNICA HONDURAS 2011*
+		*CONFORMACIÃ“N BASE ÃšNICA HONDURAS 2011*
 		***************************************
 *Nota: se armoniza esta base (mayo) hasta que se obtenga la de septiembre
 clear	

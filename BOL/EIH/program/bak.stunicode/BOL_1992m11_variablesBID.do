@@ -1,16 +1,16 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA EIH
@@ -29,12 +29,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Bolivia
+PaÃ­s: Bolivia
 Encuesta: EIH
 Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -53,7 +53,7 @@ use `base_in', clear
 gen region_BID_c=3
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -96,7 +96,7 @@ label value zona_c zona_c
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -314,11 +314,11 @@ label variable miembros_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los residentes habituales del hogar mayores a 10 años
-OJO QUE EN LAS EMCUESTAS SIGUIENTES LA MUESTRA ES MAYORES DE 7 AÑOS*/ 
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 10 aÃ±os
+OJO QUE EN LAS EMCUESTAS SIGUIENTES LA MUESTRA ES MAYORES DE 7 AÃ‘OS*/ 
 
 ************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -408,7 +408,7 @@ replace condocup_ci=1 if condact==1
 replace condocup_ci=2 if condact==2 | condact==3
 replace condocup_ci=3 if (condact>3 & condact<=8) & edad_ci>=10
 replace condocup_ci=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 */
@@ -420,7 +420,7 @@ replace condocup_ci=1 if trabajo==1 | sondeo==1
 replace condocup_ci=2 if (trabajo==2 | sondeo==1) & bustrab==1 
 recode condocup_ci .=3 if edad_ci>=10
 recode condocup_ci .=4 if edad_ci<10
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor que 10" 
 label value condocup_ci condocup_ci
 
@@ -440,7 +440,7 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *tamemp_ci
 *************
 
-*Bolivia Pequeña 1 a 5 Mediana 6 a 49 Grande Más de 49
+*Bolivia PequeÃ±a 1 a 5 Mediana 6 a 49 Grande MÃ¡s de 49
 gen tamemp_ci=.
 replace tamemp_ci=1 if tamest>0 & tamest<=5
 replace tamemp_ci=2 if tamest>5 & tamest<=49
@@ -491,14 +491,14 @@ label var emp_ci "Ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "Desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "Población Económicamente Activa"
+label var pea_ci "PoblaciÃ³n EconÃ³micamente Activa"
 
 *****************
 ***desalent_ci***
@@ -678,9 +678,9 @@ replace durades_ci=. if emp_ci~=0 | tpobusca==99 | tpobusca==0
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
-/*Sólo para los obreros y empleados
-Esta variable no es comparable con los años siguientes al
+/*En aÃ±os*/
+/*SÃ³lo para los obreros y empleados
+Esta variable no es comparable con los aÃ±os siguientes al
 menos que se la acote a este grupo*/
 recode tpoempre (999=.)
 gen antiguedad_ci=.
@@ -697,8 +697,8 @@ gen categoinac_ci =1 if (pqnobus==5 & condocup_ci==3) & pension_ci==1
 replace categoinac_ci = 2 if  (pqnobus==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pqnobus==3 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -806,7 +806,7 @@ replace ynlm2=. if yinac2==99999
 /*Estos ingresos por otras transferencias pueden ser mensuales
 o anuales. No se provee la variable que permite distinguir entre
 los mismos. Comparando con la encuesta de 1993 que tiene la misma pregunta 
-el 93% declara ingresos mensuales en estas categorías, por ende,
+el 93% declara ingresos mensuales en estas categorÃ­as, por ende,
 asumo que son montos mensuales*/
 
 egen ynlm_ci=rsum(ynlm1 ynlm2), missing
@@ -885,7 +885,7 @@ gen ynlnm_ch=.
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -946,7 +946,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los mayores a los 6 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los mayores a los 6 aÃ±os de edad*/
 
 gen byte nivel=real(substr(string(niveduc),2,1))
 gen byte curso=real(substr(string(niveduc),1,1))
@@ -976,10 +976,10 @@ replace aedu_ci=16 if (nivel==6) & curso==3
 replace aedu_ci=17 if (nivel==7) & curso==3
 
 
-/*El nivel 5 que es enseñanza técnica no distingue entre aquellos que son de
+/*El nivel 5 que es enseÃ±anza tÃ©cnica no distingue entre aquellos que son de
 secundaria de aquellos que son terciarios. Por ende los hago missing
-Adicionalmente, en esta encuesta el códido curso==3 corresponde al nivel
-completo para el caso de la educación superior, eso hace que los años de educación
+Adicionalmente, en esta encuesta el cÃ³dido curso==3 corresponde al nivel
+completo para el caso de la educaciÃ³n superior, eso hace que los aÃ±os de educaciÃ³n
 presenten un quiebre*/
 
 **************
@@ -1136,7 +1136,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-/*La encuesta no tiene módulo de vivienda*/
+/*La encuesta no tiene mÃ³dulo de vivienda*/
 
 gen aguared_ch=(abasagua==1 | abasagua==2 | abasagua==3)
 replace aguared_ch=. if abasagua==. 
@@ -1145,10 +1145,10 @@ gen aguadist_ch=1 if abasagua==1
 replace aguadist_ch=2 if abasagua==2
 replace aguadist_ch=3 if abasagua>=3 & abasagua<=9
 
-*Inclusión Mayra Sáenz Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz Julio 2013
 gen aguamala_ch=(abasagua==6)
 replace aguamala_ch=. if abasagua==.
-label var aguamala_ch "Agua unimproved según MDG"
+label var aguamala_ch "Agua unimproved segÃºn MDG"
 /*NA*/
 
 gen aguamide_ch=.
@@ -1239,15 +1239,15 @@ gen vivialqimp_ch=.
 *ren ocup ocup_old
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

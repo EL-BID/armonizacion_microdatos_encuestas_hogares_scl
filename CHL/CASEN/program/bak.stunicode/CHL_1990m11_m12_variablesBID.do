@@ -1,18 +1,18 @@
-* (Versi髇 Stata 12)
+* (Versi贸n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor 鷑icamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor 煤nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -32,13 +32,13 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-Pa韘: Chile
+Pa铆s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Versi髇 2007: Victoria, Maria Fernanda Prada (MFP)
-趌tima versi髇: Mar韆 Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha 鷏tima modificaci髇: 26 de Agosto de 2013
+Versi贸n 2007: Victoria, Maria Fernanda Prada (MFP)
+脷ltima versi贸n: Mar铆a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha 煤ltima modificaci贸n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -123,7 +123,7 @@ replace relacion_ci=5 if pco1==9
 VARIABLES DE INFRAESTRUCTURA DEL HOGAR
 **************************************/
 
-* Modificaci髇 Marcela Rubio Septiembre 2014: variable aguared_ch  habia sido generada como missing
+* Modificaci贸n Marcela Rubio Septiembre 2014: variable aguared_ch  habia sido generada como missing
 gen aguared_ch= (v8<=3)
 
 gen aguadist_ch=.
@@ -133,12 +133,12 @@ gen luz_ch=.
 gen luzmide_ch=.
 gen combust_ch=.
 
-* Modificaci髇 Marcela Rubio Septiembre 2014: variable aguared_ch  habia sido generada como missing
+* Modificaci贸n Marcela Rubio Septiembre 2014: variable aguared_ch  habia sido generada como missing
 gen bano_ch= (v17!=5)
 
 gen banoex_ch=.
 
-* Modificaci髇 Marcela Rubio Septiembre 2014: variable des1_ch y des2_ch habian sido generadas como missing
+* Modificaci贸n Marcela Rubio Septiembre 2014: variable des1_ch y des2_ch habian sido generadas como missing
 
 gen des1_ch=.
 replace des1_ch = 0 if bano_ch==0 
@@ -248,7 +248,7 @@ replace condocup_ci=1 if o21==1
 replace condocup_ci=2 if o21==2 
 replace condocup_ci=3 if o21==3 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -258,7 +258,7 @@ replace condocup_ci=1 if o1==1 | o2==1
 replace condocup_ci=2 if (o1==2 & o2==2) & o3==1
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupaci髇 de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci贸n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -436,8 +436,8 @@ replace aedu_ci=e3+12 if e4==5 | e4==6 | e4==7
 replace aedu_ci=. if e4==10 | e3==10 | e4==8
 
 /*** VAMOS A RESTAR UN ANO PARA LOS QUE ACTUALMENTE ESTAN ASISTIENDO PORQUE TODAVIA NO HAN TERMINADO ESE ANO.. lo que CASEN asume es que: 
-"Nosotros no le restamos el a駉 para las personas que est醤 asistiendo asumimos que el curso que se馻la es aprobado por el per韔do de 
-levantamiento de la encuesta (15 nov a 20 diciembre)en que ya esta casi finalizando el a駉 escolar."  *****/
+"Nosotros no le restamos el a帽o para las personas que est谩n asistiendo asumimos que el curso que se帽ala es aprobado por el per铆odo de 
+levantamiento de la encuesta (15 nov a 20 diciembre)en que ya esta casi finalizando el a帽o escolar."  *****/
 
 gen byte attend=0 if (e2>1 & e2<13) | e2==.
 replace attend=1 if e2==1 
@@ -609,7 +609,7 @@ gen edupub_ci=.
 
 
 /************************************************************************************************************
-* 3. Creaci髇 de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci贸n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *********
@@ -719,7 +719,7 @@ label value tamemp_ci tamemp_ci
 egen auxpen=rsum(yjubaj), missing
 *no hay otra variable, supongo que estan todos los tipos de pension incluidos en esta
 *gen pension_ci=1 if auxpen>0 
-*Modificaci髇 Mayra S醗nz - Septiembre 2014
+*Modificaci贸n Mayra S谩enz - Septiembre 2014
 *gen pension_ci=1 if auxpen>0  & auxpen!=.
 gen pension_ci=1 if (auxpen>0  & auxpen!=.) & o4==5
 recode pension_ci .=0 
@@ -786,7 +786,7 @@ replace categoinac_ci=3 if o4==1
 replace categoinac_ci=4 if o4==2 | o4==3 | o4==6 | o4==7 | o4==8 | o4==9
 
 
-label var categoinac_ci "Condici髇 de inactividad"
+label var categoinac_ci "Condici贸n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 
@@ -804,7 +804,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodolog韆 enviada por SCL/GDI Maria Olga Pe馻
+* MGR Oct. 2015: modificaciones realizadas en base a metodolog铆a enviada por SCL/GDI Maria Olga Pe帽a
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
@@ -820,15 +820,15 @@ gen region_c=.
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignaci髇 de etiquetas e inserci髇 de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l韓eas de pobreza
+* Asignaci贸n de etiquetas e inserci贸n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  l铆neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificaci髇 de que se encuentren todas las variables armonizadas 
+* Verificaci贸n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

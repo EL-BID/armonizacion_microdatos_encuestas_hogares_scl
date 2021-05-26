@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\1996\m7_m10\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\1996\m7_m10\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "1996"
 local ronda m7_m10
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -70,7 +70,7 @@ Agosto 1, 2006 (Victoria)
 La variable de anios de educacion fue modificada de modo de ser comparbale y coherente entre los distintos anios.
 El codigo anterior se puede ver en la seccion de educacion con * adelante del comando
 El criterio utilizado para asignar a cada nivel un determinado numero de anios de estudio se puede ver en el
-siguiente documento: X:\Sociometro_2005\documentation\Years of education in Mexico. 
+siguiente documento: ${surveysFolder}\Sociometro_2005\documentation\Years of education in Mexico. 
 Tambien se cambiaron las varianles edupi, edupc, edusi, edusc y etc de modo de ser coherente con los siguientes
 anios: Primaria 6, Secundaria 6 (12 acumulado) y Terciaria 5 (17 acumulado).  
 
@@ -112,16 +112,16 @@ Base de concentrado: concentrado96.dta
 En este programa se utilizan tres tipos de archivos, los 
 cuales están ubicados en las siguientes carpetas:
 
-1) Bases originales: "C:\pobreza ingresos\1996\ENIGH"
-2) Bitácoras: "C:\pobreza ingresos\1996\Log"
-3) Bases generadas: "C:\pobreza ingresos\1996\Resultados"
+1) Bases originales: "${surveysFolder}\pobreza ingresos\1996\ENIGH"
+2) Bitácoras: "${surveysFolder}\pobreza ingresos\1996\Log"
+3) Bases generadas: "${surveysFolder}\pobreza ingresos\1996\Resultados"
 
 Para cambiar estas ubicaciones, se modifican los siguientes
 globals  
 
-gl data="C:\pobreza ingresos\1996\ENIGH" 
-gl log="C:\pobreza ingresos\1996\Log" 
-gl bases="C:\pobreza ingresos\1996\Resultados" 
+gl data="${surveysFolder}\pobreza ingresos\1996\ENIGH" 
+gl log="${surveysFolder}\pobreza ingresos\1996\Log" 
+gl bases="${surveysFolder}\pobreza ingresos\1996\Resultados" 
 
 
 log using "$log\Pobreza por ingresos 1996.txt", text replace */

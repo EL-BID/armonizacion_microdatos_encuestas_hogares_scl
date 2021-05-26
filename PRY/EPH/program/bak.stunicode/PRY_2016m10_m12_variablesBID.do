@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PRY
 local ENCUESTA EPH
@@ -30,12 +30,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Paraguay
+PaÃ­s: Paraguay
 Encuesta: EPH
 Round: Octubre-Diciembre
 Autores: Marcela G. Rubio
 
-Última versión: Daniela Zuluaga - Email: danielazu@iadb.org
+Ãšltima versiÃ³n: Daniela Zuluaga - Email: danielazu@iadb.org
 
 
 							SCL/LMK - IADB
@@ -52,28 +52,28 @@ use `base_in', clear
 /*gen region_c=  dpto 
 
 label define region_c  ///
-           0 "Asunción" ///    
-           1 "Concepción" ///  
+           0 "AsunciÃ³n" ///    
+           1 "ConcepciÃ³n" ///  
            2 "San pedro" ///   
            3 "Cordillera" ///  
-           4 "Guairá" ///      
-           5 "Caaguazú" ///    
-           6 "Caazapá" ///     
-           7 "Itapúa" ///      
+           4 "GuairÃ¡" ///      
+           5 "CaaguazÃº" ///    
+           6 "CaazapÃ¡" ///     
+           7 "ItapÃºa" ///      
            8 "Misiones" ///    
-           9 "Paraguarí" ///   
-          10 "Alto paraná" /// 
+           9 "ParaguarÃ­" ///   
+          10 "Alto paranÃ¡" /// 
           11 "Central" ///     
-          12 "ñeembucú" ///    
+          12 "Ã±eembucÃº" ///    
           13 "Amambay" ///     
-          14 "Canindeyú" ///   
+          14 "CanindeyÃº" ///   
           15 "Pdte. hayes" /// 
-          16 "Boquerón" ///
+          16 "BoquerÃ³n" ///
           17 "Alto paraguay"
 label value region_c region_c
-label var region_c "División política, departamento"*/
+label var region_c "DivisiÃ³n polÃ­tica, departamento"*/
 
-*Modificación Mayra Sáenz - Septiembre 2014		  
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014		  
 gen region_c    = 1 if dpto == 0
 replace region_c= 2 if dpto == 2		  
 replace region_c= 3 if dpto == 5		  
@@ -83,15 +83,15 @@ replace region_c= 6 if dpto == 11
 *replace region_c= 7 if dpto == 1 | dpto == 3 | dpto == 4 | dpto == 6 | dpto == 8 | dpto == 9 | (dpto >= 12 & dpto >= 15) 
 replace region_c= 7 if dpto == 20
 label define region_c ///
-1 "Asunción" ///
+1 "AsunciÃ³n" ///
 2 "San Pedro" ///
-3 "Caaguazú" ///
-4 "Itapúa" ///
-5 "Alto Paraná" ///
+3 "CaaguazÃº" ///
+4 "ItapÃºa" ///
+5 "Alto ParanÃ¡" ///
 6 "Central" ///
 7 "Resto" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -146,12 +146,12 @@ gen anio_c=2016
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=4 if pais=="PRY" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ******************************
@@ -356,7 +356,7 @@ label variable miembros_ci "Miembros del hogar"
 
 
 ************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 	
 *********
@@ -437,7 +437,7 @@ replace condocup_ci=2 if (pead==2 | pead==6) & edad_ci >=10
 recode condocup_ci .=3 if (pead==3) | (condocup_ci==. & edad_ci >=10) 
 recode condocup_ci .=4 if edad_ci<10
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -554,7 +554,7 @@ drop min*
 ***tiempoparc_ci***
 *******************
 
-* 10/21/2015 MGD: se considera solo la restricción de si quiere trabajar más.  No la de disponibilidad
+* 10/21/2015 MGD: se considera solo la restricciÃ³n de si quiere trabajar mÃ¡s.  No la de disponibilidad
 gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if (tothoras>=1 & tothoras<30) & emp_ci==1 /*& d01==6*/  & d03==6
 
@@ -580,12 +580,12 @@ gen horastot_ci=hr_sem_s  if emp_ci==1
              principal) |
   ----------------------+
 0 na                      |     11,257       53.47       53.47
-1 empleado/obrero público |        807        3.83       57.30
+1 empleado/obrero pÃºblico |        807        3.83       57.30
 2 empleado/obrero privado |      3,037       14.43       71.73
-3 empleador o patrón      |        467        2.22       73.95
+3 empleador o patrÃ³n      |        467        2.22       73.95
 4 cuenta propia           |      3,678       17.47       91.42
 5 famil. no remunerado    |      1,054        5.01       96.42
-6 empleado doméstico      |        750        3.56       99.99
+6 empleado domÃ©stico      |        750        3.56       99.99
 9 nr                      |          3        0.01      100.00
   ----------------------+
                   Total |
@@ -625,7 +625,7 @@ label variable categosec_ci "Categoria ocupacional trabajo secundario"
 *tipocontrato_ci*
 *****************
 
-*MGR: correción a sintáxis
+*MGR: correciÃ³n a sintÃ¡xis
 /*
 gen tipocontrato_ci=. /* Solo asalariados*/
 replace tipocontrato_ci=1 if b26==1 & categopri_ci==3
@@ -658,7 +658,7 @@ replace nempleos_ci=. if pea_ci==0
 ***spublico_ci***
 *****************
 
-* 10/21/2015 MGD: corrección pequeña para que se tomen en cuenta a todos los ocupados.
+* 10/21/2015 MGD: correcciÃ³n pequeÃ±a para que se tomen en cuenta a todos los ocupados.
 gen spublico_ci=0 if emp_ci==1
 replace spublico_ci=1 if cate_pea==1 & emp_ci==1
 /*replace spublico_ci=0 if cate_pea!=1 & cate_pea!=9
@@ -686,7 +686,7 @@ replace ocupa_ci=9 if ocup_pea==9 &  emp_ci==1
 ***rama_ci***
 *************
 
-* MGR: no habrá categoría 2 ya que Explotación de minas y canteras no es parte de la categoría de rama
+* MGR: no habrÃ¡ categorÃ­a 2 ya que ExplotaciÃ³n de minas y canteras no es parte de la categorÃ­a de rama
 generat rama_ci=. 
 replace rama_ci= 1 if rama_pea==1 & emp_ci==1
 replace rama_ci= 3 if rama_pea==2 & emp_ci==1
@@ -729,20 +729,20 @@ solo
 21 a 50 personas    
 51 a 100 personas   
 101 a 500 personas  
-más de 500 personas 
-empleado doméstico 
+mÃ¡s de 500 personas 
+empleado domÃ©stico 
 no sabe             
 nr         
 */
-*Paraguay Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*Paraguay PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if b08>=1 & b08<=2
 replace tamemp_ci = 2 if (b08>=3 & b08<=5)
 replace tamemp_ci = 3 if (b08>=6 & b08<=8)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 gen tamemp_ci1 = 1 if b08>1 & b08<=2
 replace tamemp_ci1 = 2 if (b08>=3 & b08<=5)
@@ -752,22 +752,22 @@ replace tamemp_ci1 = 3 if (b08>=6 & b08<=8)
 ***categoinac_ci*** 
 *******************
 
-*MGR: modificación sintáxis ya que variable a09 no está disponible
+*MGR: modificaciÃ³n sintÃ¡xis ya que variable a09 no estÃ¡ disponible
 
 /*
 gen categoinac_ci =1 if ((a09==14 | a09==15) & condocup_ci==3)
 replace categoinac_ci = 2 if  (a09==7 & condocup_ci==3)
 replace categoinac_ci = 3 if  (a09==6 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 */
 gen categoinac_ci =1 if ((ra06ya09==7) & condocup_ci==3)
 replace categoinac_ci = 2 if  (ra06ya09==1 & condocup_ci==3)
 replace categoinac_ci = 3 if  (ra06ya09==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -815,7 +815,7 @@ gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 *** ylnmpri_ci***
 *****************
 
-*MGR: modifico sintáxis para incorporar alquiler, comida y vestido en especie
+*MGR: modifico sintÃ¡xis para incorporar alquiler, comida y vestido en especie
 
 *Bebidas y comidas en especie
 gen comida=.
@@ -1002,7 +1002,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
 *******************
 replace v19 = . if v19>=99999999999
 gen rentaimp_ch=v19
-replace rentaimp_ch=. if v19>=99999999999 /*Si tuviera que alquilar esta vivienda cuanto estimaría que le Pag.. por mes*/
+replace rentaimp_ch=. if v19>=99999999999 /*Si tuviera que alquilar esta vivienda cuanto estimarÃ­a que le Pag.. por mes*/
 sort v19
 *****************
 ***ylhopri_ci ***
@@ -1022,21 +1022,21 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 /*
-	0	sin instrucción        
-	101	1º educación especial  
-	102	2º educación especial  
-	103	3º educación especial  
-	104	4º educación especial  
-	105	5º educación especial  
-	106	6º educación especial  
-	107	7º educación especial  
-	108	8º educación especial  
-	109	9º educación especial  
-	110	prejardín educacion especial   
-	111	jardín educación especial      
-	112	preescolar educación especial  
-	210	prejardín     
-	211	jardín        
+	0	sin instrucciÃ³n        
+	101	1Âº educaciÃ³n especial  
+	102	2Âº educaciÃ³n especial  
+	103	3Âº educaciÃ³n especial  
+	104	4Âº educaciÃ³n especial  
+	105	5Âº educaciÃ³n especial  
+	106	6Âº educaciÃ³n especial  
+	107	7Âº educaciÃ³n especial  
+	108	8Âº educaciÃ³n especial  
+	109	9Âº educaciÃ³n especial  
+	110	prejardÃ­n educacion especial   
+	111	jardÃ­n educaciÃ³n especial      
+	112	preescolar educaciÃ³n especial  
+	210	prejardÃ­n     
+	211	jardÃ­n        
 	212	preescolar    
 	301	1er. grado    
 	302	2do. grado    
@@ -1047,73 +1047,73 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 	407	7mo. grado    
 	408	8vo. grado    
 	409	9no. grado    
-	501	1º básico     
-	502	2º básico     
-	503	3º básico     
-	604	4º curso humanístico-científico  
-	605	5º curso humanístico-científico  
-	606	6º curso humanístico-científico  
-	704	4º curso técnico-comercial  
-	705	5º curso técnico-comercial  
-	706	6º curso técnico-comercial  
-	803	3º bachillerato a distancia 
-	901	1º ed. media científica 
-	902	2º ed. media científica 
-	903	3º ed. media científica 
-	1001	1º ed. media técnica 
-	1002	2º ed. media técnica 
-	1003	3º ed. media técnica 
-	1101	1er. ciclo ed. básica bil. de jóvenes y adultos  
-	1102	2do. ciclo ed. básica bil. de jóvenes y adultos  
-	1103	3er. ciclo ed. básica bil. de jóvenes y adultos  
-	1104	4to. ciclo ed. básica bil. de jóvenes y adultos  
-	1201	1er. sem. ed. media a dist. para jóvenes y adultos 
-	1202	2do. sem. ed. media a dist. para jóvenes y adultos 
-	1203	3er. sem. ed. media a dist. para jóvenes y adultos 
-	1204	4to. sem. ed. media a dist. para jóvenes y adultos 
-	1301	1er. sem. ed. básica altern. de jóvenes y adultos  
-	1302	2do. sem. ed. básica altern. de jóvenes y adultos  
-	1303	3er. sem. ed. básica altern. de jóvenes y adultos  
-	1401	1er. sem. ed. media altern. de jóvenes y adultos  
-	1402	2do. sem. ed. media altern. de jóvenes y adultos  
-	1403	3er. sem. ed. media altern. de jóvenes y adultos  
-	1404	4to. sem. ed. media altern. de jóvenes y adultos  
-	1501	1º formación profesional no bachillerao de la media
-	1502	2º formación profesional no bachillerao de la media
-	1503	3º formación profesional no bachillerao de la media
-	1601	programas de alfabetización  
+	501	1Âº bÃ¡sico     
+	502	2Âº bÃ¡sico     
+	503	3Âº bÃ¡sico     
+	604	4Âº curso humanÃ­stico-cientÃ­fico  
+	605	5Âº curso humanÃ­stico-cientÃ­fico  
+	606	6Âº curso humanÃ­stico-cientÃ­fico  
+	704	4Âº curso tÃ©cnico-comercial  
+	705	5Âº curso tÃ©cnico-comercial  
+	706	6Âº curso tÃ©cnico-comercial  
+	803	3Âº bachillerato a distancia 
+	901	1Âº ed. media cientÃ­fica 
+	902	2Âº ed. media cientÃ­fica 
+	903	3Âº ed. media cientÃ­fica 
+	1001	1Âº ed. media tÃ©cnica 
+	1002	2Âº ed. media tÃ©cnica 
+	1003	3Âº ed. media tÃ©cnica 
+	1101	1er. ciclo ed. bÃ¡sica bil. de jÃ³venes y adultos  
+	1102	2do. ciclo ed. bÃ¡sica bil. de jÃ³venes y adultos  
+	1103	3er. ciclo ed. bÃ¡sica bil. de jÃ³venes y adultos  
+	1104	4to. ciclo ed. bÃ¡sica bil. de jÃ³venes y adultos  
+	1201	1er. sem. ed. media a dist. para jÃ³venes y adultos 
+	1202	2do. sem. ed. media a dist. para jÃ³venes y adultos 
+	1203	3er. sem. ed. media a dist. para jÃ³venes y adultos 
+	1204	4to. sem. ed. media a dist. para jÃ³venes y adultos 
+	1301	1er. sem. ed. bÃ¡sica altern. de jÃ³venes y adultos  
+	1302	2do. sem. ed. bÃ¡sica altern. de jÃ³venes y adultos  
+	1303	3er. sem. ed. bÃ¡sica altern. de jÃ³venes y adultos  
+	1401	1er. sem. ed. media altern. de jÃ³venes y adultos  
+	1402	2do. sem. ed. media altern. de jÃ³venes y adultos  
+	1403	3er. sem. ed. media altern. de jÃ³venes y adultos  
+	1404	4to. sem. ed. media altern. de jÃ³venes y adultos  
+	1501	1Âº formaciÃ³n profesional no bachillerao de la media
+	1502	2Âº formaciÃ³n profesional no bachillerao de la media
+	1503	3Âº formaciÃ³n profesional no bachillerao de la media
+	1601	programas de alfabetizaciÃ³n  
 	1700	grado especial  
-	1801	1º técnica superior  
-	1802	2º técnica superior  
-	1803	3º técnica superior  
-	1804	4º técnica superior  
-	1901	1º form. docente     
-	1902	2º form. docente     
-	1903	3º form. docente     
-	1904	4º form. docente     
-	2001	1er. sem. profesionalización docente 
-	2002	2do. sem. profesionalización docente 
-	2003	3er. sem. profesionalización docente 
-	2004	4to. sem. profesionalización docente 
-	2005	5to. sem. profesionalización docente 
-	2006	6to. sem. profesionalización docente 
-	2101	1º form. militar-policial 
-	2102	2º form. militar-policial 
-	2103	3º form. militar-policial 
-	2104	4º form. militar-policial 
-	2201	1º universitario 
-	2202	2º universitario 
-	2203	3º universitario 
-	2204	4º universitario 
-	2205	5º universitario 
-	2206	6º universitario 
+	1801	1Âº tÃ©cnica superior  
+	1802	2Âº tÃ©cnica superior  
+	1803	3Âº tÃ©cnica superior  
+	1804	4Âº tÃ©cnica superior  
+	1901	1Âº form. docente     
+	1902	2Âº form. docente     
+	1903	3Âº form. docente     
+	1904	4Âº form. docente     
+	2001	1er. sem. profesionalizaciÃ³n docente 
+	2002	2do. sem. profesionalizaciÃ³n docente 
+	2003	3er. sem. profesionalizaciÃ³n docente 
+	2004	4to. sem. profesionalizaciÃ³n docente 
+	2005	5to. sem. profesionalizaciÃ³n docente 
+	2006	6to. sem. profesionalizaciÃ³n docente 
+	2101	1Âº form. militar-policial 
+	2102	2Âº form. militar-policial 
+	2103	3Âº form. militar-policial 
+	2104	4Âº form. militar-policial 
+	2201	1Âº universitario 
+	2202	2Âº universitario 
+	2203	3Âº universitario 
+	2204	4Âº universitario 
+	2205	5Âº universitario 
+	2206	6Âº universitario 
 	8888	na 
 	9999	nr nivel y grado 
 */
 
 /*
-*Modificación Mayra Sáenz -02/01/2016: Se incorpora la nueva sintaxis para la generación de las variables
-asiste_ci y aedu_ci elaborada por Iván Bornacelly SCL/EDU.
+*ModificaciÃ³n Mayra SÃ¡enz -02/01/2016: Se incorpora la nueva sintaxis para la generaciÃ³n de las variables
+asiste_ci y aedu_ci elaborada por IvÃ¡n Bornacelly SCL/EDU.
 */
 
 capture drop nivgra
@@ -1122,18 +1122,18 @@ tostring nivgra, gen(nivgra_str)
 gen aedu_temp=substr(nivgra_str,-1,1)
 destring aedu_temp, replace
 replace aedu_temp=. if nivgra==9999 // No sabe no responde
-replace aedu_temp=. if nivgra>=1100 & nivgra<=1900 // Educación para adultos
-replace aedu_temp=. if nivgra>=101 & nivgra<=112 // Educación Especial
+replace aedu_temp=. if nivgra>=1100 & nivgra<=1900 // EducaciÃ³n para adultos
+replace aedu_temp=. if nivgra>=101 & nivgra<=112 // EducaciÃ³n Especial
 
 gen aedu_ci=aedu_temp
-replace aedu_ci=0 if nivgra>=210 & nivgra<=212 // Educación Inicial o Prescolar
-replace aedu_ci=aedu_temp+6 if nivgra>=501 & nivgra<=503 // Ciclo básico de sencudaria antiguo
-replace aedu_ci=aedu_temp+6 if nivgra>=604 & nivgra<=803 // Educación Secundaria y Bachillerato
-replace aedu_ci=aedu_temp+9 if nivgra>=900 & nivgra<=1003 // Educación Media 
-replace aedu_ci=aedu_temp+12 if nivgra>=2000 & nivgra<=2406 // Educación superior (técnica, tecnológica, universitaria)
+replace aedu_ci=0 if nivgra>=210 & nivgra<=212 // EducaciÃ³n Inicial o Prescolar
+replace aedu_ci=aedu_temp+6 if nivgra>=501 & nivgra<=503 // Ciclo bÃ¡sico de sencudaria antiguo
+replace aedu_ci=aedu_temp+6 if nivgra>=604 & nivgra<=803 // EducaciÃ³n Secundaria y Bachillerato
+replace aedu_ci=aedu_temp+9 if nivgra>=900 & nivgra<=1003 // EducaciÃ³n Media 
+replace aedu_ci=aedu_temp+12 if nivgra>=2000 & nivgra<=2406 // EducaciÃ³n superior (tÃ©cnica, tecnolÃ³gica, universitaria)
 replace aedu_ci=aedu_temp+12+5 if ed06c==8 // Doctorado
 replace aedu_ci=aedu_temp+12+2 if ed06c==9 // Maestria
-replace aedu_ci=aedu_temp+12+1 if ed06c==10 // Especialización
+replace aedu_ci=aedu_temp+12+1 if ed06c==10 // EspecializaciÃ³n
 
 
 **************
@@ -1263,25 +1263,25 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 
 /*
-*Modificación Mayra Sáenz -02/01/2016: Se incorpora la nueva sintaxis para la generación de las variables
-asiste_ci y aedu_ci elaborada por Iván Bornacelly SCL/EDU.
+*ModificaciÃ³n Mayra SÃ¡enz -02/01/2016: Se incorpora la nueva sintaxis para la generaciÃ³n de las variables
+asiste_ci y aedu_ci elaborada por IvÃ¡n Bornacelly SCL/EDU.
 
-Iván Bornacelly: La variable ed09 indica quienes de los que asisten están en una institución público,
-privada o privada subvencionada. Los valores que son “missing” no necesariamente indican que no asiste
-a alguna institución. Los valores “missing” también pueden ser por que hay población menor a 5 años de 
-edad a la cuál no se le hace la pregunta y se está incluyendo dentro del conteo. Por lo tanto el código
-debería ser el siguiente:
+IvÃ¡n Bornacelly: La variable ed09 indica quienes de los que asisten estÃ¡n en una instituciÃ³n pÃºblico,
+privada o privada subvencionada. Los valores que son â€œmissingâ€ no necesariamente indican que no asiste
+a alguna instituciÃ³n. Los valores â€œmissingâ€ tambiÃ©n pueden ser por que hay poblaciÃ³n menor a 5 aÃ±os de 
+edad a la cuÃ¡l no se le hace la pregunta y se estÃ¡ incluyendo dentro del conteo. Por lo tanto el cÃ³digo
+deberÃ­a ser el siguiente:
 */
 /*
 gen asiste_ci=.
 replace asiste_ci=1 if ed08>=1 & ed08<=18
 replace asiste_ci=0 if ed08==19
-*Los que “no saben o no responden” quedan como “missing”
+*Los que â€œno saben o no respondenâ€ quedan como â€œmissingâ€
 label variable asiste_ci "Asiste actualmente a la escuela"
 */
 
-/*Modificación Mayra Sáenz -01/23/2017: Se incluye a los que no asisten o no asistieron a una institución de enseñanza educativa ed03==6 porque la ed08 sólo responden los que 
-                                        responden que sí asisten o asistieron a una institución */
+/*ModificaciÃ³n Mayra SÃ¡enz -01/23/2017: Se incluye a los que no asisten o no asistieron a una instituciÃ³n de enseÃ±anza educativa ed03==6 porque la ed08 sÃ³lo responden los que 
+                                        responden que sÃ­ asisten o asistieron a una instituciÃ³n */
 ***************
 ***asiste_ci***
 ***************
@@ -1315,7 +1315,7 @@ replace pqnoasis1_ci = 7 if ed10 ==4
 replace pqnoasis1_ci = 8 if ed10 ==6  | ed10 ==7  | ed10 ==8  | ed10 ==9 | ed10 ==10 
 replace pqnoasis1_ci = 9 if ed10 ==16 | ed10 ==17 | ed10 ==18
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -1365,14 +1365,14 @@ gen aguared_ch=(v06==1 | v06==2 | v06==3| v06==4)
 **aguadist_ch***
 ****************
 
-* MGR: modifico sintáxis para incluir a los que la fuente de agua está fuera de la vivienda y terreno
+* MGR: modifico sintÃ¡xis para incluir a los que la fuente de agua estÃ¡ fuera de la vivienda y terreno
 /*
 gen aguadist_ch=. 
 
 	replace aguadist_ch=1 if v09==2
 	replace aguadist_ch=2 if v09==1| v09==4
 	
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
+	label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 	label val aguadist_ch aguadist_ch
@@ -1383,7 +1383,7 @@ gen aguadist_ch=.
 replace aguadist_ch=1 if v09==2
 replace aguadist_ch=2 if v09==1| v09==4
 replace aguadist_ch=3 if aguadist~=1 & aguadist~=2 & aguadist==. 
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+label var aguadist_ch "UbicaciÃ³n de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 label val aguadist_ch aguadist_ch
@@ -1393,16 +1393,16 @@ label val aguadist_ch aguadist_ch
 **aguamala_ch***
 ****************
 
-*MGR: corrección a sintáxis para sacar a los que reciben agua por medio de aguatero o agua embotellada las cuales no son aguamala
-*cuya fuente de agua es diferente de red pública, privada o de pozo
+*MGR: correcciÃ³n a sintÃ¡xis para sacar a los que reciben agua por medio de aguatero o agua embotellada las cuales no son aguamala
+*cuya fuente de agua es diferente de red pÃºblica, privada o de pozo
 /*
 gen aguamala_ch=0 
 replace aguamala_ch=(v08>=8 & v08 <=13)
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 */
 gen aguamala_ch=0 
 replace aguamala_ch=(v08>=8 & v08 <=10) | v08==13
-label var aguamala_ch "Agua unimproved según MDG" 
+label var aguamala_ch "Agua unimproved segÃºn MDG" 
 
 ****************
 **aguamide_ch***
@@ -1434,7 +1434,7 @@ gen combust_ch=(v14b==4 | v14b==2)
 ****************
 ****bano_ch*****
 ****************
-* Si existe la pregunta tiene baño (v12) pero se obtiene los mismos resultados con la v13 
+* Si existe la pregunta tiene baÃ±o (v12) pero se obtiene los mismos resultados con la v13 
 * que pregunta del tipo de desague sanitario.
 gen bano_ch=(v12==1)
 
@@ -1460,7 +1460,7 @@ replace des1_ch=3 if v13==4
 ****des2_ch*****
 ****************
 
-*MGR: agrego categoría resto
+*MGR: agrego categorÃ­a resto
 /*
 gen des2_ch=.
 replace des2_ch=1 if des1_ch==1| des1_ch==2
@@ -1508,8 +1508,8 @@ replace techo_ch=2 if v05==7 | v05==9
 ****************
 ****resid_ch****
 ****************
-*La etiqueta de la categoría 4 está mal en la base.
-*MGR:La etiqueta de la categoría 4 no está mal, es la correcta de acuerdo a cuestionario: Tira en el arroyo. Corrijo sintáxis
+*La etiqueta de la categorÃ­a 4 estÃ¡ mal en la base.
+*MGR:La etiqueta de la categorÃ­a 4 no estÃ¡ mal, es la correcta de acuerdo a cuestionario: Tira en el arroyo. Corrijo sintÃ¡xis
 /*
 gen basura=v15
 gen resid_ch=0 if basura==2 | basura==3
@@ -1593,7 +1593,7 @@ drop automovil
 ****compu_ch****
 ****************
 
-*MGR: encuesta agrega opción si hogar cuenta con tableta
+*MGR: encuesta agrega opciÃ³n si hogar cuenta con tableta
 *gen compu_ch=(v23a==1)
 gen compu_ch=(v23a1==1 | v23a2==1)
 
@@ -1614,7 +1614,7 @@ gen cel_ch=(v11b ==1)
 ****vivi1_ch****
 ****************
 
-*MGR: corrección error en sintáxis
+*MGR: correcciÃ³n error en sintÃ¡xis
 /*
 gen vivi1_ch=.
 replace vivi1_ch=3 if v01>0
@@ -1630,7 +1630,7 @@ replace vivi1_ch=3 if v01>=3 & v01<9
 ****vivi2_ch****
 ****************
 
-*MGR: corrección error en sintáxis
+*MGR: correcciÃ³n error en sintÃ¡xis
 /*
 gen vivi2_ch=0
 replace vivi2_ch=0 if v01>0
@@ -1677,7 +1677,7 @@ gen raza_ci=1 if ed01==1
 replace raza_ci=0 if ed01==2 | ed01==3 | ed01==4 | ed01==5
 */
 /*
-*Mayra Sáenz- Octubre 2013
+*Mayra SÃ¡enz- Octubre 2013
 gen raza_ci=.
 replace raza_ci= 1 if ed01 ==1 
 replace raza_ci= 3 if ed01 ==2 | ed01 ==3 | ed01 ==4 |raza_ci==.
@@ -1686,14 +1686,14 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
 
 */
 
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci=.
 replace raza_idioma_ci= 1 if ed01 ==1 
@@ -1703,7 +1703,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (p03 ==3|p03==5))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
@@ -1712,7 +1712,7 @@ gen raza_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -1737,15 +1737,15 @@ label var id_afro_ci "Afro-descendiente"
 	label var ybenefdes_ci "Monto de seguro de desempleo"
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

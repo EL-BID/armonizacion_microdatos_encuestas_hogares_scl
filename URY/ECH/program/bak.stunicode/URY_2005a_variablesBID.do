@@ -1,15 +1,15 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS URY
 local ENCUESTA ECH
@@ -28,13 +28,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Uruguay
+PaÃ­s: Uruguay
 Encuesta: ECH
 Round: a
 Autores: 
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 30 de Octubre de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 30 de Octubre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -72,7 +72,7 @@ use `base_in', clear
 
 
 /***************************************************************************************************************************
- 							Harmonización 04-05
+ 							HarmonizaciÃ³n 04-05
 ****************************************************************************************************************************/
 
 /************************************************************************/
@@ -100,13 +100,13 @@ label values relacion_ci relacion_ci
 gen region_BID_c=.
 replace region_BID_c=4 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 destring dpto, replace
 gen region_c=dpto
@@ -120,17 +120,17 @@ label define region_c  1 "Montevideo" ///
            8 "Florida" /// 
            9 "Lavalleja" /// 
           10 "Maldonado" /// 
-          11 "Paysandú" /// 
-          12 "Río Negro" /// 
+          11 "PaysandÃº" /// 
+          12 "RÃ­o Negro" /// 
           13 "Rivera" /// 
           14 "Rocha" /// 
           15 "Salto" /// 
-          16 "San José" /// 
+          16 "San JosÃ©" /// 
           17 "Soriano" /// 
-          18 "Tacuarembó" ///
+          18 "TacuarembÃ³" ///
           19 "Treinta y Tres" 
 label value region_c region_c
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 /************************************************************************/
 /*			VARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
@@ -192,7 +192,7 @@ replace viviprop_ch=3 if d2==4 | d2==5
 gen vivialq_ch=d13 if viviprop_ch==0
 gen vivialqimp_ch=d11
 * Nota Marcela G. Rubio - Abril 2014
-* variable vivialqimp_ch había sido generado como missing pero pregunta d11 todavia existe en el cuestionario de este año
+* variable vivialqimp_ch habÃ­a sido generado como missing pero pregunta d11 todavia existe en el cuestionario de este aÃ±o
 gen vivitit_ch=.
 
 
@@ -332,7 +332,7 @@ label variable miembros_ci "Miembro del hogar"
 ***raza***
 **********
 gen raza_ci= .
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -403,7 +403,7 @@ label var instpen_ci "Institucion a la cual esta afiliado variable original de c
 ********************
 gen instcot_ci=.
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria"
-label var instcot_ci "institución a la cual cotiza por su trabajo"
+label var instcot_ci "instituciÃ³n a la cual cotiza por su trabajo"
 
 *****************
 *tipocontrato_ci*
@@ -418,7 +418,7 @@ label value tipocontrato_ci tipocontrato_ci
 *************
 gen tamemp_ci=f8
 replace tamemp_ci=. if f8==0
-label define tamemp_ci 1"una persona" 2"2-4 personas" 3"5-9 personas" 4 "10-49 personas" 5"50 o más" 6"10-19 personas" 7"20-49 personas"
+label define tamemp_ci 1"una persona" 2"2-4 personas" 3"5-9 personas" 4 "10-49 personas" 5"50 o mÃ¡s" 6"10-19 personas" 7"20-49 personas"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
@@ -531,7 +531,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 drop aux_reg
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -567,7 +567,7 @@ replace ocupa_ci=1 if ((f5_2>=2110 & f5_2<=3480) | (f5_2>=211 & f5_2<=348)) & em
 replace ocupa_ci=2 if ((f5_2>=1110 & f5_2<=1310) | (f5_2>=111 & f5_2<=131)) & emp_ci==1
 replace ocupa_ci=3 if ((f5_2>=4110 & f5_2<=4223) | (f5_2>=411 & f5_2<=422)) & emp_ci==1
 replace ocupa_ci=4 if ((f5_2>=5210 & f5_2<=5230) | (f5_2>=521 & f5_2<=523) | (f5_2>=9110 & f5_2<=9113) | f5_2==911) & emp_ci==1
-replace ocupa_ci=5 if ((f5_2>=5111 & f5_2<=5169) | (f5_2>=511 & f5_2<=516) | (f5_2>=9120 & f5_2<=9172) | (f5_2>=912 & f5_2<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregación a tres digitos de la CIUO-88*/
+replace ocupa_ci=5 if ((f5_2>=5111 & f5_2<=5169) | (f5_2>=511 & f5_2<=516) | (f5_2>=9120 & f5_2<=9172) | (f5_2>=912 & f5_2<=917)) & emp_ci==1 /*Aunque no esta desagregado en la base, esta es la desagregaciÃ³n a tres digitos de la CIUO-88*/
 replace ocupa_ci=6 if ((f5_2>=6110 & f5_2<=6210) | (f5_2>=611 & f5_2<=616) | (f5_2>=9211 & f5_2<=9213) | f5_2==921) & emp_ci==1
 replace ocupa_ci=7 if ((f5_2>=7110 & f5_2<=8340) | (f5_2>=711 & f5_2<=834) | (f5_2>=9311 & f5_2<=9333) | (f5_2>=931 & f5_2<=933)) & emp_ci==1 /*Incluye artesanos y operarios en hilanderias*/
 replace ocupa_ci=8 if (f5_2==11 | f5_2==12)& emp_ci==1
@@ -636,23 +636,23 @@ replace firmapeq_ci=1 if emp_ci==1 & f8==1|f8==2
 replace firmapeq_ci=0 if emp_ci==1 & f8>2*/
 gen spublico_ci=(emp_ci==1 & f7==2)
 
-*Genera la variable para empresas pequeñas
+*Genera la variable para empresas pequeÃ±as
 *drop tamemp_ci
 gen tamemp_ci=1 if f8==1 | f8==2 
-label var  tamemp_ci "Tamaño de Empresa" 
+label var  tamemp_ci "TamaÃ±o de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if f8==4 | f8==3
 *Empresas grandes
 replace tamemp_ci=3 if f8==5
-label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"PequeÃ±a" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaÃ±o
 tab tamemp_ci [iw=factor_ci]
 
 *Genera la variable para clasificar a los inactivos
 *Jubilados y pensionados
 *drop categoinac_ci
 gen categoinac_ci=1 if f40_1==1 | f40_2==1
-label var  categoinac_ci "Condición de Inactividad" 
+label var  categoinac_ci "CondiciÃ³n de Inactividad" 
 *Estudiantes
 replace categoinac_ci=2 if f40_4==1
 *Quehaceres del Hogar
@@ -687,9 +687,9 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 * ylmpri_ci *
 *************
 /*
-SUELDO O JORNALES LÍQUIDOS 	g1_1_1
+SUELDO O JORNALES LÃQUIDOS 	g1_1_1
 COMISIONES, INCENTIVOS, HORAS EXTRAS 	g1_1_2
-VIÁTICOS NO SUJETOS A RENDICIÓN 	g1_1_3
+VIÃTICOS NO SUJETOS A RENDICIÃ“N 	g1_1_3
 PROPINAS 	g1_1_4
 AGUINALDO 	g1_1_5
 SALARIO VACACIONAL 	g1_1_6
@@ -698,7 +698,7 @@ SALARIO VACACIONAL 	g1_1_6
 **Cuenta propia
 RETIRO DE DINERO EL MES PASADO 	g2_1
 	
-DISTRIBUCIÓN DE UTILIDADES EN ULT. 12 MESES 	g2_3
+DISTRIBUCIÃ“N DE UTILIDADES EN ULT. 12 MESES 	g2_3
 
 
 
@@ -709,7 +709,7 @@ gen g2_3m = g2_3/12
 egen ylmpri_ci=rsum(g1_1_1	g1_1_2	g1_1_3	g1_1_4	g1_1_5	g1_1_6 g2_1 g2_3m) if emp_ci==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 
 *****************
 ***nrylmpri_ci***
@@ -729,15 +729,15 @@ MONTO MENSUAL DE RETIRO DE PRODUCTOS 	g2_2	(Autoconsumo)
 	label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"  
 	
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 
 	***************
 	***ylmsec_ci***
 	***************
 /*
-SUELDO O JORNALES LÍQUIDOS 	g1_2_1	
+SUELDO O JORNALES LÃQUIDOS 	g1_2_1	
 COMISIONES, INCENTIVOS, HORAS EXTRAS 	g1_2_2	
-VIÁTICOS NO SUJETOS A RENDICIÓN 	g1_2_3	
+VIÃTICOS NO SUJETOS A RENDICIÃ“N 	g1_2_3	
 PROPINAS 	g1_2_4	
 AGUINALDO 	g1_2_5	
 SALARIO VACACIONAL 	g1_2_6	
@@ -748,7 +748,7 @@ SALARIO VACACIONAL 	g1_2_6
 	label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+	* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 	****************
 	***ylnmsec_ci***
@@ -763,14 +763,14 @@ egen ylnmsec_ci=rsum(g1_2_7 g1_2_8) if emp_ci==1, missing
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 * Nota Marcela G. Rubio - Abril 2014
-* Se filtra ingreso sólo para las personas ocupadas emp_ci==1
+* Se filtra ingreso sÃ³lo para las personas ocupadas emp_ci==1
 	
 **********************************************************************************************
 ***TCYLMPRI_CH : Identificador de los hogares en donde alguno de los miembros reporta como
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -786,7 +786,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 	
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral monetario otros trabajos para todos los aÃ±os
 
 	******************
 	***ylnmotros_ci***
@@ -795,7 +795,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* estimo variable ingreso laboral no monetario otros trabajos para todos los años
+	* estimo variable ingreso laboral no monetario otros trabajos para todos los aÃ±os
 	
 	************
 	***ylm_ci***
@@ -805,7 +805,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylm_ci "Ingreso laboral monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no había sido incluido
+	* Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no habÃ­a sido incluido
 	
 	*************
 	***ylnm_ci***
@@ -815,7 +815,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label var ylnm_ci "Ingreso laboral NO monetario total"  
 
 	* Nota Marcela G. Rubio - Abril 2014
-	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no había sido incluido
+	* Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no habÃ­a sido incluido
 	
 	*************
 	***ynlm_ci***
@@ -831,14 +831,14 @@ CONTRIBUCIONES POR DIVORCIO 	g3_6
 AYUDAS FAMILIARES U OTROS HOGARES 	g3_7
 HOGAR CONSTITUIDO 	g3_8
 G4. OTROS INGRESOS	
-ÚLTIMO MES	
+ÃšLTIMO MES	
 POR ALQUILER 	g4_1_1
-ALGÚN OTRO INGRESO CORRIENTE 	g4_1_2
-ÚLTIMOS DOCE MESES 2/	
+ALGÃšN OTRO INGRESO CORRIENTE 	g4_1_2
+ÃšLTIMOS DOCE MESES 2/	
 POR ARRENDAMIENTO DE TERRENOS 	g4_2_1
 INTERESES DE CTAS. BANC. 	g4_2_2
 UTILIDADES, DIVIDENDOS 	g4_2_3
-INDEMNIZACIÓN POR DESPIDO 	g4_2_4
+INDEMNIZACIÃ“N POR DESPIDO 	g4_2_4
 OTRO INGRESO CORRIENTE 	g4_2_5
 INGRESO EXTRAORDINARIOS (JUEGOS DE AZAR, ETC) 	g4_2_6
 G5. INGRESOS DEL EXTERIOR	
@@ -850,7 +850,7 @@ AYUDAS FAMILIARES U OTROS HOGARES 	g5_6
 ARRENDAMIENTOS DE TIERRAS O TERRENOS 	g5_7
 ALQUILER DE CASAS 	g5_8
 INTERESES PROVENIENTES DE CUENTAS BANC. 	g5_9
-INTERESES PROVENIENTES DE PRÉSTAMOS 	g5_10
+INTERESES PROVENIENTES DE PRÃ‰STAMOS 	g5_10
 UTILIDADES O DIVIDENDOS DE NEGOCIOS 	g5_11
               
 */
@@ -887,7 +887,7 @@ label var ynlm_ci "Ingreso no laboral monetario"
 	by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1
 	replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
 	replace nrylmpri_ch=. if nrylmpri_ch==.
-	label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+	label var nrylmpri_ch "Hogares con algÃºn miembro que no respondiÃ³ por ingresos"
 
 	************
 	***ylm_ch***
@@ -1035,8 +1035,8 @@ by idh_ch: egen remesas_ch=sum(remesas_ci)if relacion_ci!=6
 /*						VARIABLES EDUCATIVAS			  */
 /******************************************************************************************/
 
-** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisión por Iván Bornacelly SCL/EDU **
-** Ajustado Jul,2017 por Iván Bornacelly SCL/EDU
+** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisiÃ³n por IvÃ¡n Bornacelly SCL/EDU **
+** Ajustado Jul,2017 por IvÃ¡n Bornacelly SCL/EDU
 
 replace e11_1=0 if e11_1==0.5
 replace e11_2=0 if e11_2==0.5
@@ -1069,7 +1069,7 @@ replace aedu_ci =12+ e11_4 + e11_5 + e11_6 if (e11_2==6 & e11_3==6)
 */
 
 
-** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisión por Iván Bornacelly SCL/EDU **
+** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisiÃ³n por IvÃ¡n Bornacelly SCL/EDU **
 
 
 gen prim=(e11_2>0 & e11_2<=6)
@@ -1084,7 +1084,7 @@ replace aedu_ci= e11_2        if prim==1 & e11_2<=6
 replace aedu_ci= e11_3 + 6    if secu==1 & e11_3<=6
 *replace aedu_ci= e11_4 + 12   if tecn==1 & e11_4_1==1 & e11_4<=6
 replace aedu_ci= e11_5 + 12   if mag==1  & e11_5<9
-replace aedu_ci= e11_6 + 12   if univ==1 & (e11_6>e11_5) & (e11_6<9) /* se toma los años de mag o univ no la suma de los dos */
+replace aedu_ci= e11_6 + 12   if univ==1 & (e11_6>e11_5) & (e11_6<9) /* se toma los aÃ±os de mag o univ no la suma de los dos */
 replace aedu_ci=0             if e10==2 & (edad>=5 & edad!=.)
 drop prim secu tecn mag univ
 */
@@ -1218,7 +1218,7 @@ gen asiste_ci=(e9==1)
 ****************
 ***asispre_ci***
 ****************
-* Agregada por Iván Bornacelly - 01/23/2017
+* Agregada por IvÃ¡n Bornacelly - 01/23/2017
 	g asispre_ci=.	
 
 /*(Melisa,mmorales, May 2009: 'asiste_ci' should be changed
@@ -1250,15 +1250,15 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1295,15 +1295,15 @@ log close
 /*
 e3 - Parentco 
  1. Jefe
- 2. Esposo o compañero
+ 2. Esposo o compaÃ±ero
  3. Hijo de ambos
- 4. Hijo sólo del jefe
- 5. Hijo sólo del cónyuge
+ 4. Hijo sÃ³lo del jefe
+ 5. Hijo sÃ³lo del cÃ³nyuge
  6. Yerno o nuera
  7. Nieto
  8. Padres o Suegros
  9. Otro pariente
- 10. Servicio doméstico o familiar de éste
+ 10. Servicio domÃ©stico o familiar de Ã©ste
  11. No pariente
 */
 
@@ -1336,40 +1336,40 @@ e3 - Parentco
 ** Years of education. 
 /*
 E9
-9. ¿Asiste actualmente a un establecimiento de enseñanza
-preescolar, primaria, secundaria, superior o técnica?
+9. Â¿Asiste actualmente a un establecimiento de enseÃ±anza
+preescolar, primaria, secundaria, superior o tÃ©cnica?
  1. Si (marque y pase a preg. 11)
  2. No 
 
 E10
-10 Aunque no asiste actualmente, ¿asistió alguna vez a
-un establecimiento de enseñanza preescolar, primaria,
-secundaria, superior o técnica?
+10 Aunque no asiste actualmente, Â¿asistiÃ³ alguna vez a
+un establecimiento de enseÃ±anza preescolar, primaria,
+secundaria, superior o tÃ©cnica?
  1. Si 
- 2. No (marque y pase a Capítulo F) 
+ 2. No (marque y pase a CapÃ­tulo F) 
 
 E11
-11 Indique la cantidad de años aprobados en cada uno
-de los siguientes niveles de educación:
+11 Indique la cantidad de aÃ±os aprobados en cada uno
+de los siguientes niveles de educaciÃ³n:
 
- 1. Preescolar o jardín					E11_1	Años aprobados en preescolar o jardín 	
- 2. Primaria 						E11_2	Años  aprobados en primaria		
- 3. Secundaria 						E11_3	Años  aprobados en secundaria		
- 4. Enseñanza Técnica (UTU, similar) 		(A)	E11_4	Años  aprobados en enseñanza técnica	
-	Para ese curso se exigía:		(A)	E11_4_1						
-	1. Enseñanza Secundaria completa 	(A)		1	Enseñanza Secundaria Completa
-	2. Enseñanza Secundaria 1° Ciclo 	(A)		2	Enseñanza Secundaria 1er. Ciclo
-	3. Enseñanza Primaria completa 		(A)		3	Enseñanza Primaria Completa
+ 1. Preescolar o jardÃ­n					E11_1	AÃ±os aprobados en preescolar o jardÃ­n 	
+ 2. Primaria 						E11_2	AÃ±os  aprobados en primaria		
+ 3. Secundaria 						E11_3	AÃ±os  aprobados en secundaria		
+ 4. EnseÃ±anza TÃ©cnica (UTU, similar) 		(A)	E11_4	AÃ±os  aprobados en enseÃ±anza tÃ©cnica	
+	Para ese curso se exigÃ­a:		(A)	E11_4_1						
+	1. EnseÃ±anza Secundaria completa 	(A)		1	EnseÃ±anza Secundaria Completa
+	2. EnseÃ±anza Secundaria 1Â° Ciclo 	(A)		2	EnseÃ±anza Secundaria 1er. Ciclo
+	3. EnseÃ±anza Primaria completa 		(A)		3	EnseÃ±anza Primaria Completa
 	4. Ninguna 				(A)		4	Ninguna
- 5. Magisterio o Profesorado			(A)	E11_5	Años  aprobados en magisterio o profesorado 
- 6. Universidad o similar 			(A)	E11_6	Años  aprobados en Universidad o similar
+ 5. Magisterio o Profesorado			(A)	E11_5	AÃ±os  aprobados en magisterio o profesorado 
+ 6. Universidad o similar 			(A)	E11_6	AÃ±os  aprobados en Universidad o similar
 							 (El valor 0,5 en la variable indica asistencia al primer 
-							  año del nivel sin haber aprobado ningún año.)
+							  aÃ±o del nivel sin haber aprobado ningÃºn aÃ±o.)
 
-12 ¿Cuál es el curso o carrera? (sólo para quienes respondieron en la parte A):
+12 Â¿CuÃ¡l es el curso o carrera? (sÃ³lo para quienes respondieron en la parte A):
 
 E13
-13 ¿Finalizó el nivel más alto indicado? 
+13 Â¿FinalizÃ³ el nivel mÃ¡s alto indicado? 
  1. Si
  2. No 
 */
@@ -1429,8 +1429,8 @@ E13
 ** Economic Active Population 
 /*
 POBPCOAC
-VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÓMICA		
- 1.  Menor de 14 años
+VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÃ“MICA		
+ 1.  Menor de 14 aÃ±os
  2.  Ocupados
  3.  Desocupados B.T.1.V
  4.  Desocupados propiamente dichos
@@ -1461,31 +1461,31 @@ VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÓMICA
 
 /*
 E9
-9. ¿Asiste actualmente a un establecimiento de enseñanza
-preescolar, primaria, secundaria, superior o técnica?
+9. Â¿Asiste actualmente a un establecimiento de enseÃ±anza
+preescolar, primaria, secundaria, superior o tÃ©cnica?
  1. Si (marque y pase a preg. 11)
  2. No 
 
 E11
-11 Indique la cantidad de años aprobados en cada uno
-de los siguientes niveles de educación:
+11 Indique la cantidad de aÃ±os aprobados en cada uno
+de los siguientes niveles de educaciÃ³n:
 
- 1. Preescolar o jardín					E11_1	Años aprobados en preescolar o jardín 	
- 2. Primaria 						E11_2	Años  aprobados en primaria		
- 3. Secundaria 						E11_3	Años  aprobados en secundaria		
- 4. Enseñanza Técnica (UTU, similar) 		(A)	E11_4	Años  aprobados en enseñanza técnica	
-	Para ese curso se exigía:		(A)	E11_4_1						
-	1. Enseñanza Secundaria completa 	(A)		1 Enseñanza Secundaria Completa
-	2. Enseñanza Secundaria 1° Ciclo 	(A)		2 Enseñanza Secundaria 1er. Ciclo
-	3. Enseñanza Primaria completa 		(A)		3 Enseñanza Primaria Completa
+ 1. Preescolar o jardÃ­n					E11_1	AÃ±os aprobados en preescolar o jardÃ­n 	
+ 2. Primaria 						E11_2	AÃ±os  aprobados en primaria		
+ 3. Secundaria 						E11_3	AÃ±os  aprobados en secundaria		
+ 4. EnseÃ±anza TÃ©cnica (UTU, similar) 		(A)	E11_4	AÃ±os  aprobados en enseÃ±anza tÃ©cnica	
+	Para ese curso se exigÃ­a:		(A)	E11_4_1						
+	1. EnseÃ±anza Secundaria completa 	(A)		1 EnseÃ±anza Secundaria Completa
+	2. EnseÃ±anza Secundaria 1Â° Ciclo 	(A)		2 EnseÃ±anza Secundaria 1er. Ciclo
+	3. EnseÃ±anza Primaria completa 		(A)		3 EnseÃ±anza Primaria Completa
 	4. Ninguna 				(A)		4 Ninguna
- 5. Magisterio o Profesorado			(A)	E11_5	Años  aprobados en magisterio o profesorado 
- 6. Universidad o similar 			(A)	E11_6	Años  aprobados en Universidad o similar
+ 5. Magisterio o Profesorado			(A)	E11_5	AÃ±os  aprobados en magisterio o profesorado 
+ 6. Universidad o similar 			(A)	E11_6	AÃ±os  aprobados en Universidad o similar
 							 (El valor 0,5 en la variable indica asistencia al primer 
-							  año del nivel sin haber aprobado ningún año.)
+							  aÃ±o del nivel sin haber aprobado ningÃºn aÃ±o.)
 
 E13
-13 ¿Finalizó el nivel más alto indicado? 
+13 Â¿FinalizÃ³ el nivel mÃ¡s alto indicado? 
  1. Si
  2. No 
  
@@ -1574,14 +1574,14 @@ E13
 	
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 /*
-F7. En el trabajo que le proporciona los mayores	F6_2 ¿Qué produce o a qué 
+F7. En el trabajo que le proporciona los mayores	F6_2 Â¿QuÃ© produce o a quÃ© 
 ingresos, es: ...					 se dedica principalmente el 
  1. Empleado u obrero privado				 establecimiento u oficina donde 
- 2. Empleado u obrero público				 desarrolla el trabajo de   
- 3. Miembro de cooperativa de producción		 mayores ingresos?
- 4. Patrón con personal a su cargo			
- 5. Trabajador por cuenta propia sin local		F5_2 Ocupación
- 6. Trabajador por cuenta propia con local		913. Personal doméstico y afines, 
+ 2. Empleado u obrero pÃºblico				 desarrolla el trabajo de   
+ 3. Miembro de cooperativa de producciÃ³n		 mayores ingresos?
+ 4. PatrÃ³n con personal a su cargo			
+ 5. Trabajador por cuenta propia sin local		F5_2 OcupaciÃ³n
+ 6. Trabajador por cuenta propia con local		913. Personal domÃ©stico y afines, 
  7. Miembro del hogar no remunerado			 limpiadores, lavanderos y planchadores
 */
 
@@ -1606,11 +1606,11 @@ ingresos, es: ...					 se dedica principalmente el
 ** Target 9, Indicator: Proportion of the population using solidfuels (%)
  
 /*
-9 ¿Cuál es la principal fuente de energía utilizada por este hogar para cocinar?
+9 Â¿CuÃ¡l es la principal fuente de energÃ­a utilizada por este hogar para cocinar?
  1. Electricidad
- 2. Gas por cañería
+ 2. Gas por caÃ±erÃ­a
  3. Supergas
- 4. Otra fuente (queroseno, leña)
+ 4. Otra fuente (queroseno, leÃ±a)
  5. Ninguna
 */
 
@@ -1619,21 +1619,21 @@ ingresos, es: ...					 se dedica principalmente el
 ** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
 /*
 D5
-5. ¿Cuál es el origen del agua utilizada por este hogar para beber y cocinar?
+5. Â¿CuÃ¡l es el origen del agua utilizada por este hogar para beber y cocinar?
  1. Red general 
  2. Pozo surgente (perforado y entubado) 
- 3. Otro (aljibe, arroyo, río, cachimba) 
+ 3. Otro (aljibe, arroyo, rÃ­o, cachimba) 
 
 D6
-6. ¿Cómo le llega esa agua a la vivienda que ocupa este hogar?
- 1. Por cañería dentro de la vivienda 
- 2. Por cañería fuera de la vivienda 
+6. Â¿CÃ³mo le llega esa agua a la vivienda que ocupa este hogar?
+ 1. Por caÃ±erÃ­a dentro de la vivienda 
+ 2. Por caÃ±erÃ­a fuera de la vivienda 
  3. Por otros medios 
 
 ** D6 2000 Survey => 
- *  1. Cañería dentro de la vivienda 					      (94.71 Pop %)
- *  2  Caneria fuera viv" ==> 2a. Cañería fuera de la viv a menos de 100mts    (4.09 Pop %) 
- * 			      2b. Cañería fuera de la vivienda a más de 100mts (0.57 Pop %) 
+ *  1. CaÃ±erÃ­a dentro de la vivienda 					      (94.71 Pop %)
+ *  2  Caneria fuera viv" ==> 2a. CaÃ±erÃ­a fuera de la viv a menos de 100mts    (4.09 Pop %) 
+ * 			      2b. CaÃ±erÃ­a fuera de la vivienda a mÃ¡s de 100mts (0.57 Pop %) 
  *  3. Otros medios 							       (0.63 Pop %)
 */
 
@@ -1645,16 +1645,16 @@ D6
 ** Target 10, Proportion of Population with Access to Improved Sanitation, Urban and Rural
 /*
 D7
-7. ¿Esta vivienda tiene servicio sanitario?
+7. Â¿Esta vivienda tiene servicio sanitario?
  1. Si con cisterna 
  2. Si sin cisterna 
  3. No 			==> 9
 
 D8
-8 La evacuación del servicio sanitario ¿se realiza a:
+8 La evacuaciÃ³n del servicio sanitario Â¿se realiza a:
  0. (3 in D7)
  1. Red general 
- 2. Fosa séptica, pozo negro
+ 2. Fosa sÃ©ptica, pozo negro
  3. Otro (superficie, etc.) 
 */
 
@@ -1672,17 +1672,17 @@ C1
  3. Otro
 
 D2
-2. Con respecto a esta vivienda, ¿este hogar es…
- 1. Propietario y ya la pagó? 
- 2. Propietario y la está pagando?
+2. Con respecto a esta vivienda, Â¿este hogar esâ€¦
+ 1. Propietario y ya la pagÃ³? 
+ 2. Propietario y la estÃ¡ pagando?
  3. Arrendatario? 
  4. Ocupante sin pagar con permiso? 
  5. Ocupante sin pagar sin permiso? 
 
 D3
-3. ¿Cuál es el número total de habitaciones
+3. Â¿CuÃ¡l es el nÃºmero total de habitaciones
 que utiliza este hogar, sin considerar
-baños ni cocinas?
+baÃ±os ni cocinas?
 */
 
  gen persroom=(d16/d3) /* D16 Total de personas en el hogar*/
@@ -1724,10 +1724,10 @@ baños ni cocinas?
 	
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 /*
-10 Este hogar ¿cuenta con:		SI/NO
+10 Este hogar Â¿cuenta con:		SI/NO
  10. Microcomputadora			d10_10
- 11. Conexión a Internet 		d10_11
- 13. Teléfono 				d10_13
+ 11. ConexiÃ³n a Internet 		d10_11
+ 13. TelÃ©fono 				d10_13
 */
 
 * Gender classification of the population refers to the head of the household.
@@ -1777,18 +1777,18 @@ baños ni cocinas?
 ** Disconnected Youths
 /*
 F24
-24.¿Por cuál de las siguientes causas no buscó trabajo,
-ni trató de establecer su propio negocio la semana
+24.Â¿Por cuÃ¡l de las siguientes causas no buscÃ³ trabajo,
+ni tratÃ³ de establecer su propio negocio la semana
 pasada?
- 1. Está incapacitado físicamente
- 2. Volverá a trabajar en 30 días
+ 1. EstÃ¡ incapacitado fÃ­sicamente
+ 2. VolverÃ¡ a trabajar en 30 dÃ­as
  3. Espera resultado de gestiones
- 4. Buscó antes y dejó de buscar
- 5. Ninguna razón especial
+ 4. BuscÃ³ antes y dejÃ³ de buscar
+ 5. Ninguna razÃ³n especial
 
 POBPCOAC
-VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÓMICA		
- 1.  Menor de 14 años
+VARIABLE RESUMEN DE CONDICION DE ACTIVIDAD ECONÃ“MICA		
+ 1.  Menor de 14 aÃ±os
  2.  Ocupados
  3.  Desocupados B.T.1.V
  4.  Desocupados propiamente dichos

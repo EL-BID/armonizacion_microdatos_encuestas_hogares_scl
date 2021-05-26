@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-*global ruta = "\\Sdssrv03\surveys"
+*global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: El Salvador
+PaÃ­s: El Salvador
 Encuesta: EHPM
 Round: a
 Autores: 2006- Analia
 2013 - incoporacion de Variables LMK por Yessenia Loayza (desloay@hotmail.com)
-Última versión: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Fecha última modificación: 23 de Octubre de 2013
+Ãšltima versiÃ³n: Maria Laura Oliveri - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 23 de Octubre de 2013
 
 			  
 							SCL/LMK - IADB
@@ -72,33 +72,33 @@ foreach v of varlist _all {
 gen region_BID_c=1
 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Abril 2014
+*InclusiÃ³n Mayra SÃ¡enz - Abril 2014
 gen region_c= r004
 
 label define region_c  ///
-          1 "Ahuachapán" ///
+          1 "AhuachapÃ¡n" ///
            2 "Santa Ana" ///
            3 "Sonsonate" ///
            4 "Chalatenango" ///
            5 "La Libertad" ///
            6 "San Salvador" ///
-           7 "Cuscatlán" ///
+           7 "CuscatlÃ¡n" ///
            8 "La Paz" ///
-           9 "Cabañas" ///
+           9 "CabaÃ±as" ///
           10 "San Vicente" ///
-          11 "Usulután" ///
+          11 "UsulutÃ¡n" ///
           12 "San Miguel" ///
-          13 "Morazán" ///
-          14 "La Unión" 
+          13 "MorazÃ¡n" ///
+          14 "La UniÃ³n" 
 label value region_c region_c
-label var region_c "División política, departamento"
+label var region_c "DivisiÃ³n polÃ­tica, departamento"
 
 ***************
 ***factor_ch***
@@ -111,7 +111,7 @@ label variable factor_ch "Factor de expansion del hogar"
 ***************
 ****idh_ch*****
 **************
-*Modificación Mayra Sáenz, Abril-2014
+*ModificaciÃ³n Mayra SÃ¡enz, Abril-2014
 sort lote tipo folio viv 
 egen idh_ch=group(lote tipo folio viv)
 label var idh_ch "ID del hogar
@@ -346,13 +346,13 @@ label variable miembros_ci "Miembro del hogar"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
 gen id_afro_ci = .
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
@@ -415,9 +415,9 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 gen byte emp_ci=0
 replace emp_ci=1 if r403 ==1
 replace emp_ci=1 if r403 ==2 &  r404 ==1 
-/*Se podría considerar empleado a aquellos que contestan la pregunta 405 con un 1
+/*Se podrÃ­a considerar empleado a aquellos que contestan la pregunta 405 con un 1
 sin embargo a este individuo no se le sigue preguntando como si fuera empleado
-sino como si fuera desempleado, así que lo consideramos desempleado*/
+sino como si fuera desempleado, asÃ­ que lo consideramos desempleado*/
 
 ****************
 ***desemp1_ci***
@@ -512,15 +512,15 @@ label define categopri_ci 3"Empleado" 4" Familiar no remunerado" , add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 
-/*Dentro de la categoría empleado se incluyen 4 cooperativistas, esta definición es más amplia de 
+/*Dentro de la categorÃ­a empleado se incluyen 4 cooperativistas, esta definiciÃ³n es mÃ¡s amplia de 
 lo usual, principalmemte porque se incluye a los cooperativistas,pero la encuesta considera 
 a todos estos como trabajadores dependientes. 
-En el manual del encuestador: página 59 dice: "En el caso de una persona que está asociada 
-a la cooperativa y además trabaja como patrono o cuenta propia en tierras que son propiedad 
-de la empresa cooperativa, se le anotará código 01 a 03, según el caso. Cuando la persona 
+En el manual del encuestador: pÃ¡gina 59 dice: "En el caso de una persona que estÃ¡ asociada 
+a la cooperativa y ademÃ¡s trabaja como patrono o cuenta propia en tierras que son propiedad 
+de la empresa cooperativa, se le anotarÃ¡ cÃ³digo 01 a 03, segÃºn el caso. Cuando la persona 
 cumple siempre el primer requisito o sea que es asociada y trabaja como jornalero o empleado 
-en el trabajo colectivo de la cooperativa se le anotará código igual 04."
-Por otra parte el grupo "otros" que son 31 casos se incorpora dentro de la categoría empleados ya 
+en el trabajo colectivo de la cooperativa se le anotarÃ¡ cÃ³digo igual 04."
+Por otra parte el grupo "otros" que son 31 casos se incorpora dentro de la categorÃ­a empleados ya 
 que la encuesta los considera empleados dependientes y declaran ingresos*/
 
 ******************
@@ -592,7 +592,7 @@ gen spublico_ci=.
 replace spublico_ci=1 if r419==2
 replace spublico_ci=0 if r419==1
 replace spublico_ci=. if categopri_ci==1 | categopri_ci==2 | categopri_ci==4 | r417==9 | r417==4
-/*Sólo se le hace esta pregunta a los asalariados, aprendices y otros*/
+/*SÃ³lo se le hace esta pregunta a los asalariados, aprendices y otros*/
 
 
 **************
@@ -772,7 +772,7 @@ replace yprijbi=.            if categopri_ci>2
 
 *replace yprijbi=0 if categopri_ci<=2 & yprijbi==. & emp_ci==1 
 
-/*Ojo con esto último. Originalmente la encuesta computa una serie de 
+/*Ojo con esto Ãºltimo. Originalmente la encuesta computa una serie de 
 missings que no corresponden a casos de no respuesta, sino
 que es un grupo de trabajadores independientes considerados como productores 
 agropecuarios, para ser consistente con el tratamiento de las encuestas anteriores
@@ -1028,9 +1028,9 @@ gen remesas_ci=remesasext
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 *********************************
 *** nrylmpri_ch & nrylmpri_ch ***
@@ -1095,7 +1095,7 @@ replace remesas_ch=. if remesasi==. & remesash==. & remesasnm==.
 */
 
 *egen remesas_ch=sum(remesasext) if miembros_ci==1
-*Modificación Mayra Sáenz - Septiembre 2013
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2013
 by idh_ch, sort: egen remesas_ch=sum(remesasext) if miembros_ci==1
 ***************
 *** ynlm_ch ***
@@ -1153,17 +1153,17 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los años de educación
+/* Las variables NIVEDU y NIVELCURSA nos permiten identificar los aÃ±os de educaciÃ³n
 para aquellos individuos que actualmente estan estudiando. 
-Las variables ULTGRADO y ULTNIVEL indican el último nivel alcanzado y el año 
-alcanzado en dicho nivel, permiten calcular los años de educación para aquellos que
+Las variables ULTGRADO y ULTNIVEL indican el Ãºltimo nivel alcanzado y el aÃ±o 
+alcanzado en dicho nivel, permiten calcular los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento escolar.
-En El Salvador, la educación básica dura nueve años y la educación media tres años*/
+En El Salvador, la educaciÃ³n bÃ¡sica dura nueve aÃ±os y la educaciÃ³n media tres aÃ±os*/
 
 gen byte aedu_ci=.
 
-/* Primero obtenemos los años de educacion para aquellos que 
-actualmente están estudiando, no consideramos aquellos que tienen
+/* Primero obtenemos los aÃ±os de educacion para aquellos que 
+actualmente estÃ¡n estudiando, no consideramos aquellos que tienen
 educacion especial*/
 
 replace aedu_ci=0 if r204==0 & r203==1
@@ -1205,12 +1205,12 @@ replace aedu_ci=14 if r204==5 & r205==2
 replace aedu_ci=15 if r204==5 & r205==3
 replace aedu_ci=16 if r204==5 & r205==4
 
-* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completó
+* MGR Aug, 2015: se resta 1 a los que asisten ya que pregunta se hace sobre grado o curso que estudia actualmente, no el que ya completÃ³
 replace aedu_ci=aedu_ci-1 if aedu_ci!=0
 
-/* Ahora obtenemos los años de educación para aquellos que
+/* Ahora obtenemos los aÃ±os de educaciÃ³n para aquellos que
 actualmente no asisten a un establecimiento educativo, no se tiene en
-cuenta la educación especial*/
+cuenta la educaciÃ³n especial*/
 
 replace aedu_ci=0 if r219a==0 & (r217==1 | r217==2)
 replace aedu_ci=0 if r219a==1
@@ -1411,7 +1411,7 @@ replace pqnoasis1_ci = 7 if r221 ==6
 replace pqnoasis1_ci = 8 if r221 ==8  | r221 ==12
 replace pqnoasis1_ci = 9 if r221 ==10 | r221 ==13
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1437,12 +1437,12 @@ replace edupub_ci=1 if r210a==1
 replace edupub_ci=2 if r210a==2 | r210a==3
 
 /* Variable r210a:
-1: Centro de enseñanza oficial: 
-Es aquel cuya administración y funcionamiento depende del gobierno.
-2: Centro de Enseñanza Laico: 
+1: Centro de enseÃ±anza oficial: 
+Es aquel cuya administraciÃ³n y funcionamiento depende del gobierno.
+2: Centro de EnseÃ±anza Laico: 
 Son todos los centros educativos privados no religiosos. 
-3: Centro de Enseñanza religioso: 
-Son todos los centros educativos que pertenecen a una Congregación Religiosa. 
+3: Centro de EnseÃ±anza religioso: 
+Son todos los centros educativos que pertenecen a una CongregaciÃ³n Religiosa. 
 */
 
 
@@ -1476,13 +1476,13 @@ gen bano_ch=(r317>=1 & r317<=6)
 
 gen banoex_ch=(r317>=4 & r317<=6)
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 3, pero genero de la misma manera que los aÃ±os anteriores
 gen des1_ch=.
 replace des1_ch = 0 if r317==7
 replace des1_ch = 1 if r317>=1 & r317<=2
 replace des1_ch = 2 if r317>=3 & r317<=6
 
-* MGR Jul, 2015: variable generada como missing ya que no tenemos opción 2, pero genero de la misma manera que los años anteriores
+* MGR Jul, 2015: variable generada como missing ya que no tenemos opciÃ³n 2, pero genero de la misma manera que los aÃ±os anteriores
 gen des2_ch=.
 replace des2_ch = 0 if r317==7
 replace des2_ch = 1 if des1_ch==1 | des1_ch==2
@@ -1579,7 +1579,7 @@ replace vivialq_ch=. if r308c==99999
  destring, replace
 
 /* 
-103. Relación de parentesco
+103. RelaciÃ³n de parentesco
  1. Jefe(a)
  2. Esposo(a)
  3. Hijo(a)
@@ -1588,7 +1588,7 @@ replace vivialq_ch=. if r308c==99999
  6. Nieto(a)
  7. Suegro(a)
  8. Otros familiares
- 9. Empleada doméstica 
+ 9. Empleada domÃ©stica 
  10.Otros
 */
  
@@ -1649,53 +1649,53 @@ clonevar hasist	 =	r217
 
 /*
 r202a (alfabet)
-202. ¿SABE...(NOMBRE)... LEER Y ESCRIBIR? 
+202. Â¿SABE...(NOMBRE)... LEER Y ESCRIBIR? 
 1. Si 
 2. No Pase a 203
  r202b
- SI CONTESTÓ 1, ¿DÓNDE APRENDIÓ?
+ SI CONTESTÃ“ 1, Â¿DÃ“NDE APRENDIÃ“?
  1. Centro educativo o escuela 4. Escuela nocturna 
  2. Familiares, amigo o vecino 5. Otros
- 3. Círculos de alfabetización
+ 3. CÃ­rculos de alfabetizaciÃ³n
 
 r203 (estudia)
-203. ¿ESTUDIA ACTUALMENTE O ASISTE A UN CENTRO MATERNAL? 
+203. Â¿ESTUDIA ACTUALMENTE O ASISTE A UN CENTRO MATERNAL? 
 1. Si 
-2. No ==> Si es menor de 4 años termine, si no pase a 216
+2. No ==> Si es menor de 4 aÃ±os termine, si no pase a 216
 
 r204 (nivel)						r205  (grado)
-204. ¿QUÉ NIVEL CURSA O ASISTE ACTUALMENTE?		205. ¿QUÉ GRADO O CURSO ESTUDIA ACTUALMENTE EN ESE NIVEL?
+204. Â¿QUÃ‰ NIVEL CURSA O ASISTE ACTUALMENTE?		205. Â¿QUÃ‰ GRADO O CURSO ESTUDIA ACTUALMENTE EN ESE NIVEL?
 0. Maternal 				==> 214			     0
-1. Parvularia 							(1º  a 3º )
-2. Básica   							(1º  a 9º )
-3. Media      							(10º a 12º)
-4. Superior universitario 					(1º  a 15º)
-5. Superior no universitario 					(1º  a 3º ) 
-6. Educación especial 						(1º  a 12º)
+1. Parvularia 							(1Âº  a 3Âº )
+2. BÃ¡sica   							(1Âº  a 9Âº )
+3. Media      							(10Âº a 12Âº)
+4. Superior universitario 					(1Âº  a 15Âº)
+5. Superior no universitario 					(1Âº  a 3Âº ) 
+6. EducaciÃ³n especial 						(1Âº  a 12Âº)
 7. Otros							    ---
 
 r216
-216. ¿SE MATRICULÓ...(NOMBRE)... DURANTE ESTE AÑO LECTIVO?
+216. Â¿SE MATRICULÃ“...(NOMBRE)... DURANTE ESTE AÃ‘O LECTIVO?
 
 r217 (HASIST)
-217. ¿HA ASISTIDO ALGUNA VEZ...(NOMBRE)... A UN CENTRO DE ENSEÑANZA?
+217. Â¿HA ASISTIDO ALGUNA VEZ...(NOMBRE)... A UN CENTRO DE ENSEÃ‘ANZA?
 1. Si
 2. No ==> 221
 
 r218
-218. EL CENTRO DE ENSEÑANZA AL QUE ASISTIÓ ERA?
-1. ¿Oficial? 2. ¿Laico? 3. ¿Religioso?
+218. EL CENTRO DE ENSEÃ‘ANZA AL QUE ASISTIÃ“ ERA?
+1. Â¿Oficial? 2. Â¿Laico? 3. Â¿Religioso?
 
-219 ¿CUÁL FUE EL ÚLTIMO NIVEL Y GRADO QUE APROBÓ?
+219 Â¿CUÃL FUE EL ÃšLTIMO NIVEL Y GRADO QUE APROBÃ“?
 
 r219a	(ultniv)					r219b (ultgrad) 
 0. Ninguno 							     0
-1. Parvularia 							(1º  a 3º ) 
-2. Básica 							(1°  a 9° ) 
-3. Media 							(10° a 12°) 
-4. Superior universitario 					(1º  a 15º)
-5. Superior no universitario 					(1º  a 3º )
-6. Educación especial 						(1º  a 12º)
+1. Parvularia 							(1Âº  a 3Âº ) 
+2. BÃ¡sica 							(1Â°  a 9Â° ) 
+3. Media 							(10Â° a 12Â°) 
+4. Superior universitario 					(1Âº  a 15Âº)
+5. Superior no universitario 					(1Âº  a 3Âº )
+6. EducaciÃ³n especial 						(1Âº  a 12Âº)
 7. Otros
 */
 
@@ -1755,29 +1755,29 @@ Actividad principal
 
 /*
 r202a (alfabet)
-202. ¿SABE...(NOMBRE)... LEER Y ESCRIBIR? 
+202. Â¿SABE...(NOMBRE)... LEER Y ESCRIBIR? 
 1. Si 
 2. No Pase a 203
  r202b
- SI CONTESTÓ 1, ¿DÓNDE APRENDIÓ?
+ SI CONTESTÃ“ 1, Â¿DÃ“NDE APRENDIÃ“?
  1. Centro educativo o escuela 4. Escuela nocturna 
  2. Familiares, amigo o vecino 5. Otros
- 3. Círculos de alfabetización
+ 3. CÃ­rculos de alfabetizaciÃ³n
 
 r203 (estudia)
-203. ¿ESTUDIA ACTUALMENTE O ASISTE A UN CENTRO MATERNAL? 
+203. Â¿ESTUDIA ACTUALMENTE O ASISTE A UN CENTRO MATERNAL? 
 1. Si 
-2. No ==> Si es menor de 4 años termine, si no pase a 216
+2. No ==> Si es menor de 4 aÃ±os termine, si no pase a 216
 
 r204 (nivel)						r205  (grado)
-204. ¿QUÉ NIVEL CURSA O ASISTE ACTUALMENTE?		205. ¿QUÉ GRADO O CURSO ESTUDIA ACTUALMENTE EN ESE NIVEL?
+204. Â¿QUÃ‰ NIVEL CURSA O ASISTE ACTUALMENTE?		205. Â¿QUÃ‰ GRADO O CURSO ESTUDIA ACTUALMENTE EN ESE NIVEL?
 0. Maternal 				==>214			     0
-1. Parvularia 							(1º  a 3º )
-2. Básica   							(1º  a 9º )
-3. Media      							(10º a 12º)
-4. Superior universitario 					(1º  a 15º)
-5. Superior no universitario 					(1º  a 3º ) 
-6. Educación especial 						(1º  a 12º)
+1. Parvularia 							(1Âº  a 3Âº )
+2. BÃ¡sica   							(1Âº  a 9Âº )
+3. Media      							(10Âº a 12Âº)
+4. Superior universitario 					(1Âº  a 15Âº)
+5. Superior no universitario 					(1Âº  a 3Âº ) 
+6. EducaciÃ³n especial 						(1Âº  a 12Âº)
 7. Otros							    ---
 */
 
@@ -1796,7 +1796,7 @@ r204 (nivel)						r205  (grado)
  replace NERS=1 if (edad>=13 & edad<=18) & (estudia==1) & ( (nivel==2 & (grado>=7 & grado<=9)) | (nivel==3 & (grado>=10 & grado<=12)) )
 
 ** Upper secondary
-* Educación Media
+* EducaciÃ³n Media
 
  gen     NERS2=0 if (edad>=16 & edad<=18) & (estudia==1 | estudia==2)
  replace NERS2=1 if (edad>=16 & edad<=18) & (estudia==1) & (nivel==3 & (grado>=10 & grado<=12))
@@ -1881,16 +1881,16 @@ r204 (nivel)						r205  (grado)
 ** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
 /*
 r417 (categ)						r416 (rama)
-EN SU OCUPACION PRINCIPAL TRABAJA EN CALIDAD DE:	¿A QUÉ SE DEDICA LA EMPRESA O INSTITUCIÓN EN LA CUAL TRABAJA?
- 01. ¿Empleador o patrono?				RAMA DE ACTIVIDAD ECONÓMICA  
- 02. ¿Cuenta propia con local? 
- 03. ¿Cuenta propia sin local? 
- 04. ¿Cooperativista?
- 05. ¿Familiar no remunerado? 
- 06. ¿Asalariado permanente? 
- 07. ¿Asalariado temporal? 
- 08. ¿Aprendiz? 
- 09. ¿Servicio doméstico? 
+EN SU OCUPACION PRINCIPAL TRABAJA EN CALIDAD DE:	Â¿A QUÃ‰ SE DEDICA LA EMPRESA O INSTITUCIÃ“N EN LA CUAL TRABAJA?
+ 01. Â¿Empleador o patrono?				RAMA DE ACTIVIDAD ECONÃ“MICA  
+ 02. Â¿Cuenta propia con local? 
+ 03. Â¿Cuenta propia sin local? 
+ 04. Â¿Cooperativista?
+ 05. Â¿Familiar no remunerado? 
+ 06. Â¿Asalariado permanente? 
+ 07. Â¿Asalariado temporal? 
+ 08. Â¿Aprendiz? 
+ 09. Â¿Servicio domÃ©stico? 
  10. Otros
 */
 
@@ -1909,9 +1909,9 @@ EN SU OCUPACION PRINCIPAL TRABAJA EN CALIDAD DE:	¿A QUÉ SE DEDICA LA EMPRESA O I
 
 ** Access to Electricity ** Additional Indicator
 /*
-312. ¿QUÉ TIPO DE ALUMBRADO POSEE ESTA VIVIENDA?
+312. Â¿QUÃ‰ TIPO DE ALUMBRADO POSEE ESTA VIVIENDA?
  1. Electricidad
- 2. Conexión eléctrica vecino
+ 2. ConexiÃ³n elÃ©ctrica vecino
  3. Kerosene (gas)
  4. Candela
  5. Otra clase ________________________
@@ -1925,18 +1925,18 @@ EN SU OCUPACION PRINCIPAL TRABAJA EN CALIDAD DE:	¿A QUÉ SE DEDICA LA EMPRESA O I
 ** Target 9, Indicator: Proportion of the population using solidfuels (%)
 /*
 r319 (combusti)
-319. ¿QUÉ COMBUSTIBLE UTILIZAN PREDOMINANTEMENTE PARA COCINAR? 
+319. Â¿QUÃ‰ COMBUSTIBLE UTILIZAN PREDOMINANTEMENTE PARA COCINAR? 
  1. Electricidad
  2. Kerosene (gas) 
  3. Gas propano
- 4. Leña 
- 5. Carbón
+ 4. LeÃ±a 
+ 5. CarbÃ³n
  6. Ninguno 		==> 321 
  7. Otro
 
-320. ¿DÓNDE SE ENCUENTRA UBICADA LA COCINA?
+320. Â¿DÃ“NDE SE ENCUENTRA UBICADA LA COCINA?
 
-321. ¿EXISTE UNA HABITACION EXCLUSIVA PARA LA COCINA?
+321. Â¿EXISTE UNA HABITACION EXCLUSIVA PARA LA COCINA?
 */
 
 * Gender classification of the population refers to the head of the household.
@@ -1948,30 +1948,30 @@ r319 (combusti)
 /*
 r313 (SERAGUA)
 313. EL ABASTECIMIENTO DE AGUA DE ESTA VIVIENDA PROCEDE DE:
- 1. ¿Cañería dentro de la vivienda?
- 2. ¿Cañería fuera de la vivienda pero dentro de la propiedad?
- 3. ¿Cañería del vecino?
- 4. ¿Pila o chorro público?
- 5. ¿Chorro común?
- 6. ¿Camión, carreta o pipa?
- 7. ¿Pozo (privado o común)?
- 8. ¿Ojo de agua, río o quebrada?
- 9. ¿Otros medios?
+ 1. Â¿CaÃ±erÃ­a dentro de la vivienda?
+ 2. Â¿CaÃ±erÃ­a fuera de la vivienda pero dentro de la propiedad?
+ 3. Â¿CaÃ±erÃ­a del vecino?
+ 4. Â¿Pila o chorro pÃºblico?
+ 5. Â¿Chorro comÃºn?
+ 6. Â¿CamiÃ³n, carreta o pipa?
+ 7. Â¿Pozo (privado o comÃºn)?
+ 8. Â¿Ojo de agua, rÃ­o o quebrada?
+ 9. Â¿Otros medios?
 
-314. ¿CREE UD QUE EL AGUA DE SU CASA ES ADECUADA PARA BEBER?
+314. Â¿CREE UD QUE EL AGUA DE SU CASA ES ADECUADA PARA BEBER?
  1. Si ==> 316
  2. No
 
-315. ¿QUÉ HACE ENTONCES CON EL AGUA QUE BEBE? 
+315. Â¿QUÃ‰ HACE ENTONCES CON EL AGUA QUE BEBE? 
  1. La hierve antes de usarla
- 2. La trata con lejía u otro producto 
+ 2. La trata con lejÃ­a u otro producto 
  3. La filtra
  4. No le hace nada 
  5. Compra agua purificada
  6. La obtiene de otro lugar (pagado o comprado)
  7. Otros
 
-316. EL SERVICIO DE BAÑO LO SATISFACE POR:
+316. EL SERVICIO DE BAÃ‘O LO SATISFACE POR:
 */
 
 * Gender classification of the population refers to the head of the household.
@@ -1982,15 +1982,15 @@ r313 (SERAGUA)
 ** Target 10, Indicator: Proportion of Population with Access to Improved Sanitation, Urban and Rural (%)
 /*
 317. EL SERVICIO SANITARIO QUE TIENE ESTA VIVIENDA ES DE: 
- 1. ¿Inodoro a alcantarillado?
- 2. ¿Inodoro a fosa séptica? 
- 3. ¿Letrina privada? 
- 4. ¿Inodoro común a alcantarillado?
- 5. ¿Inodoro común a fosa séptica? 
- 6. ¿Letrina común?
+ 1. Â¿Inodoro a alcantarillado?
+ 2. Â¿Inodoro a fosa sÃ©ptica? 
+ 3. Â¿Letrina privada? 
+ 4. Â¿Inodoro comÃºn a alcantarillado?
+ 5. Â¿Inodoro comÃºn a fosa sÃ©ptica? 
+ 6. Â¿Letrina comÃºn?
  7. No tiene ==> 319
 
-318. ¿DÓNDE SE ENCUENTRA EL SERVICIO SANITARIO?
+318. Â¿DÃ“NDE SE ENCUENTRA EL SERVICIO SANITARIO?
  1. Dentro de la vivienda
  2. Fuera de la vivienda
 */
@@ -2007,51 +2007,51 @@ r301 (TIPOVIV)
  1. Casa privada o independiente
  2. Apartamento 
  3. Pieza en una Casa 
- 4. Pieza en un Mesón 
+ 4. Pieza en un MesÃ³n 
  5. Casa improvisada 
  6. Rancho 
  7. Temporal (terremoto)
  8. Otro
 
 r308a (TENENCIA)
-308. ¿CUÁL ES LA FORMA DE TENENCIA DE ESTA VIVIENDA?
+308. Â¿CUÃL ES LA FORMA DE TENENCIA DE ESTA VIVIENDA?
  1. Inquilino				==> Cuota mensual	
  2. Propietario de la vivienda 
-    pero la está pagando a plazos	==> Cuota mensual	
+    pero la estÃ¡ pagando a plazos	==> Cuota mensual	
  3. Propietario 
  4. Colono
- 5. Guardián de la Vivienda
+ 5. GuardiÃ¡n de la Vivienda
  6. Ocupante gratuito
  7. Otros
 
 r303 (PAREDES)
 303. EL MATERIAL PREDOMINANTE EN LAS  PAREDES ES:
- 1. ¿Concreto o mixto?
- 2. ¿Bahareque? 
- 3. ¿Adobe? 
- 4. ¿Madera?
- 5. ¿Lámina? 
- 6. ¿Paja o palma? 
- 7. ¿Materiales de desecho? 
- 8. ¿Otros materiales?
+ 1. Â¿Concreto o mixto?
+ 2. Â¿Bahareque? 
+ 3. Â¿Adobe? 
+ 4. Â¿Madera?
+ 5. Â¿LÃ¡mina? 
+ 6. Â¿Paja o palma? 
+ 7. Â¿Materiales de desecho? 
+ 8. Â¿Otros materiales?
 
 r304 (PISO)
 304. EL MATERIAL PREDOMINANTE EN EL PISO ES
- 1. ¿Ladrillo de cemento?
- 2. ¿Ladrillo de barro? 
- 3. ¿Cemento?
- 4. ¿Tierra? 
- 5. ¿Otros materiales?
+ 1. Â¿Ladrillo de cemento?
+ 2. Â¿Ladrillo de barro? 
+ 3. Â¿Cemento?
+ 4. Â¿Tierra? 
+ 5. Â¿Otros materiales?
 
 r305 (NROHABIT)
-305. SIN CONTAR BAÑOS, COCINA, PASILLO NI  GARAGE ¿CUANTAS HABITACIONES 
+305. SIN CONTAR BAÃ‘OS, COCINA, PASILLO NI  GARAGE Â¿CUANTAS HABITACIONES 
 SON DE USO EXCLUSIVO DEL HOGAR?
 
-306. ¿CUÁNTAS HABITACIONES SON UTILIZADAS EXCLUSIVAMENTE
+306. Â¿CUÃNTAS HABITACIONES SON UTILIZADAS EXCLUSIVAMENTE
 COMO DORMITORIOS? 
 
 r307 (NRONEG)
-307. ¿CUÁNTAS HABITACIONES SON UTILIZADAS EXCLUSIVAMENTE PARA TRABAJAR O PARA NEGOCIO? 
+307. Â¿CUÃNTAS HABITACIONES SON UTILIZADAS EXCLUSIVAMENTE PARA TRABAJAR O PARA NEGOCIO? 
 (No lo utilizan o lo comparten anotar 00)
 */
 
@@ -2106,7 +2106,7 @@ r307 (NRONEG)
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 
 /*
-323. ¿TIENE UD. TELEFONO O BEEPER EN USO?
+323. Â¿TIENE UD. TELEFONO O BEEPER EN USO?
 	
 			SI/NO	Cuantos?
 	1. Fijo		r3231a	r3231b
@@ -2140,7 +2140,7 @@ r307 (NRONEG)
 				SI/NO		Cuantos?				
 9. Computadora			r32509a		r32509b
    Internet y/o correo 			
-   electrónico			r32510a		r32509b
+   electrÃ³nico			r32510a		r32509b
 */
 
 * Gender classification of the population refers to the head of the household.
@@ -2179,22 +2179,22 @@ r307 (NRONEG)
 ** Disconnected Youths
 /*
 r407 (PQNOBUS)
-407. ¿POR QUÉ NO BUSCÓ TRABAJO? 
- 01. Creía que no había trabajo disponible en la zona
- 02. No sabía como buscar trabajo 
- 03. Se cansó de buscar trabajo 
- 04. Espera ciclo agrícola
- 05. Asiste a un centro de enseñanza o está de vacaciones escolares 
+407. Â¿POR QUÃ‰ NO BUSCÃ“ TRABAJO? 
+ 01. CreÃ­a que no habÃ­a trabajo disponible en la zona
+ 02. No sabÃ­a como buscar trabajo 
+ 03. Se cansÃ³ de buscar trabajo 
+ 04. Espera ciclo agrÃ­cola
+ 05. Asiste a un centro de enseÃ±anza o estÃ¡ de vacaciones escolares 
  06. Por obligaciones familiares o personales
  07. Enfermedad o accidente
- 08. Quehaceres domésticos 
+ 08. Quehaceres domÃ©sticos 
  09. Jubilado o pensionado
  10. No puede trabajar (discapacitado, anciano, etc.) 
- 11. Asiste a un centro de formación académica
+ 11. Asiste a un centro de formaciÃ³n acadÃ©mica
  12. Otro
- 13. Ya encontró trabajo
+ 13. Ya encontrÃ³ trabajo
  14. Espera respuesta del empleador
- 15. Si buscó trabajo
+ 15. Si buscÃ³ trabajo
 */
 
  gen	 DISCONN=0 if (edad>=15 & edad<=24)
@@ -2292,7 +2292,7 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *****************
 *tipocontrato_ci*
@@ -2395,7 +2395,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -2426,7 +2426,7 @@ replace categoinac_ci=1 if r407==11
 replace categoinac_ci=2 if r407==7 | r407==13
 replace categoinac_ci=3 if r407==10
 recode categoinac_ci .=4 if condocup_ci==3
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -2448,15 +2448,15 @@ gen vivialqimp_ch=.
 gen vivitit_ch=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

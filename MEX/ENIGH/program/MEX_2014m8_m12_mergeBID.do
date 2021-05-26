@@ -7,20 +7,20 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
-global ruta = "\\Sdssrv03\surveys\\survey\MEX\ENIGH\2014\m8_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\2014\m8_m12\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
 local ANO "2014"
 local ronda m8_m12
 
-local log_file = "\\Sdssrv03\surveys\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
-local base_out = "\\Sdssrv03\surveys\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
+local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
+local base_out = "${surveysFolder}\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 
 capture log close
 log using "`log_file'", replace 
@@ -1047,20 +1047,20 @@ gen str folio= folioviv + foliohog
 order folio, first
 sort folio numren, stable
 
-merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta"
+merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta", keep (match master)
 drop _merge
 
-merge 1:1 folio numren using "$ruta\ingreso_deflactado14_per.dta"
+merge 1:1 folio numren using "$ruta\ingreso_deflactado14_per.dta", keep (match master)
 rename _merge _merge_inge
 sort folio numren, stable
 
-merge m:1 folioviv foliohog numren using "$ruta\edu_gtosmp.dta"
+merge m:1 folioviv foliohog numren using "$ruta\edu_gtosmp.dta", keep (match master)
 drop _merge
 
-merge m:1 folioviv foliohog using "$ruta\gtos_autoc14.dta"
+merge m:1 folioviv foliohog using "$ruta\gtos_autoc14.dta", keep (match master)
 drop _merge
 
-merge m:1 folioviv foliohog using "$ruta\edu_gtosmh.dta"
+merge m:1 folioviv foliohog using "$ruta\edu_gtosmh.dta", keep (match master)
 drop _merge
 
 *Modificación Mayra Sáenz: Total Ingreso monetario del hogar

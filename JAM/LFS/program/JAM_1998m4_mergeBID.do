@@ -1,6 +1,6 @@
 
 clear all
-local ruta "Y:\survey\JAM\LFS\1998\m4\data_orig\"
+local ruta "${surveysFolder}\survey\JAM\LFS\1998\m4\data_orig\"
 
 *Base 1
 
@@ -62,4 +62,4 @@ tab _merge1  _merge3
 drop _merge* idbase
 
 
-save "Y:\survey\JAM\LFS\1998\m4\data_merge\JAM_1998m4.dta", replace
+save "${surveysFolder}\survey\JAM\LFS\1998\m4\data_merge\JAM_1998m4.dta", replace

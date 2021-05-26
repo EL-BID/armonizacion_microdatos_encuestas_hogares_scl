@@ -3,7 +3,7 @@
 ***revision agosto 15 de 2005
 1. correccion de la variable firmapeq, se refiere a la pregunta m18 que 
 no existe en la base original, existe una denominada m18r que tiene valore continuos 
-de 0 a 131.3197, la variable de tamaño se llama n24.
+de 0 a 131.3197, la variable de tamaÃ±o se llama n24.
 CODIGO ANTERIOR:
  
 gen firmapeq_ci=.
@@ -28,7 +28,7 @@ capture log close
 set memory 300m
 set more off
 
-local in="X:\ARM\PER\ENNIV\"
+local in="${surveysFolder}\ARM\PER\ENNIV\"
 use "`in'1994\Orig_data\per94.dta"
 
 
@@ -103,7 +103,7 @@ label variable mes_c "Mes de la encuesta"
 ***relacion_ci***
 *****************
 
-/*No hay empleados domésticos ni pensionistas*/
+/*No hay empleados domÃ©sticos ni pensionistas*/
 
 gen relacion_ci=.
 replace relacion_ci=1 if b01==1
@@ -118,8 +118,8 @@ label define relacion_ci 6 "Empleado/a domestico/a", add
 
 label value relacion_ci relacion_ci
 
-/*Hay unos 7 casos en donde la relación de parentesco que se reporta es de esposo/a
-pero por la edad se nota que son hijos, además ya hay una esposa con una edad razonable en 
+/*Hay unos 7 casos en donde la relaciÃ³n de parentesco que se reporta es de esposo/a
+pero por la edad se nota que son hijos, ademÃ¡s ya hay una esposa con una edad razonable en 
 el hogar. Por eso los recodifico*/
 
 replace relacion_ci=3 if idh_ch==893 & idp_ci==3
@@ -295,7 +295,7 @@ label variable miembro_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los mayores a 6 años*/ 
+/* Esta secciÃ³n es para los mayores a 6 aÃ±os*/ 
 
 ************
 ***emp_ci***
@@ -305,9 +305,9 @@ gen byte emp_ci=0
 replace emp_ci=1 if k06==1 | k10==8 | k11==1
 
 /*Hay un grupo de 110 personas que dicen tener un empleo fijo aunque
-no trabajaron en la última semana, a este grupo no se les hacen las preguntas
-de empleados, por lo que no tenemos información sobre las características del
-empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que están de
+no trabajaron en la Ãºltima semana, a este grupo no se les hacen las preguntas
+de empleados, por lo que no tenemos informaciÃ³n sobre las caracterÃ­sticas del
+empleo e ingresos. Lo mismo sucede con un grupo de 8 trabajadores que estÃ¡n de
 vacaciones o licencia. Voy a generar una dummy para identificarlos*/
 
 gen licencia=(k10==8 | k11==1)
@@ -432,7 +432,7 @@ label variable categosec_ci "Categoria ocupacional trabajo secundario"
 *****************
 /*Defino como trabajador con un contrato a aquel que ha
 firmado un contrato por tiempo indefinido o definido.
-Esta pregunta es sólo para los empleados dependientes*/
+Esta pregunta es sÃ³lo para los empleados dependientes*/
 
 gen contrato_ci=.
 replace contrato_ci=1 if m16==1 | m16==2
@@ -473,7 +473,7 @@ replace firmapeq_ci=0 if n24>=3 & n24<=8
 *****************
 ***spublico_ci***
 *****************
-/*Sólo para los empleados dependientes*/
+/*SÃ³lo para los empleados dependientes*/
 
 gen spublico_ci=.
 replace spublico_ci=1 if (m13==1 | m13==3)
@@ -527,7 +527,7 @@ gen durades_ci=k08/4.3 if desemp2_ci==1
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
+/*En aÃ±os*/
 
 gen ant1=l07a
 gen ant2=l07b/12
@@ -546,7 +546,7 @@ replace antiguedad_ci=. if emp_ci~=1
 ***ylmpri_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ypri=.
 replace ypri=l08*horaspri_ci*4.3 if l08c==1
 replace ypri=l08*30  if l08c==2
@@ -590,7 +590,7 @@ gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 *** ylnmpri_ci ***
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsss=.
 replace bsss=m11b*30  if m11c==2
@@ -628,7 +628,7 @@ replace ylnmpri_ci=. if emp_ci~=1
 ***ylmsec_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ysec=.
 replace ysec=o07a*30  if o07b==2
 replace ysec=o07a*4.3 if o07b==3
@@ -666,7 +666,7 @@ replace ylmsec_ci=. if emp_ci~=1 | nempleos_ci~=2
 ****ylnmsec_ci****
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsssec=.
 replace bsssec=p10b*30  if p10c==2
@@ -830,10 +830,10 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para mayores a los 6 años de edad.
+/*En esta secciÃ³n es sÃ³lo para mayores a los 6 aÃ±os de edad.
 Para ser consistentes con las encuestas posteriores que encuestan 
-a los mayores a 3 años, asignamos años de educación cero a los que
-están entre 3 y 6 años*/
+a los mayores a 3 aÃ±os, asignamos aÃ±os de educaciÃ³n cero a los que
+estÃ¡n entre 3 y 6 aÃ±os*/
 
 /*
 gen byte aedu_ci=.
@@ -873,7 +873,7 @@ replace aedu_ci=1+e05b	if e05a==2
 replace aedu_ci=6+e05b	if e05a==3 | e05a==4
 replace aedu_ci=11+e05b if e05a==5 | e05a==6 
 
-label var aedu_ci "Anios de educación"
+label var aedu_ci "Anios de educaciÃ³n"
 
 * Los que tienen "otro" se asume que tienen primaria completa;
 replace aedu_ci=6 if e05a==7 
@@ -986,7 +986,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-/*Esta variable no es comparable con los años que siguen*/
+/*Esta variable no es comparable con los aÃ±os que siguen*/
 
 gen byte edupre_ci=(g28>=1 & g28<=4)
 replace edupre_ci=. if edad>6
@@ -1023,7 +1023,7 @@ gen pqnoasis=.
 ***************
 ***repite_ci***
 ***************
-/*¿Repitió algún año de estudio?*/
+/*Â¿RepitiÃ³ algÃºn aÃ±o de estudio?*/
 
 gen repite_ci=(f21>0)
 replace repite_ci=. if f21==.

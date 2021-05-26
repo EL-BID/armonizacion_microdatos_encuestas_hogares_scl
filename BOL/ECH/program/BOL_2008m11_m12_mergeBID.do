@@ -1,11 +1,11 @@
 *Activar el global cuando se corre por separado este do file.
 
 
-global ruta = "Y:\Bolivia\2008\EH/Data"
+global ruta = "${surveysFolder}\Bolivia\2008\EH/Data"
 clear
 
 set mem 400m
-cd "X:\ARM\BOL\2008\Orig_data"
+cd "${surveysFolder}\ARM\BOL\2008\Orig_data"
 
 use "$ruta/eh08_poblacion.dta", clear
 destring folio, replace

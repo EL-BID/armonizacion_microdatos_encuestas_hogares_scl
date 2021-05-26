@@ -1,17 +1,17 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH_NC
@@ -29,13 +29,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
-Encuesta: ENIGH (Nueva construcción)
+PaÃ­s: Mexico
+Encuesta: ENIGH (Nueva construcciÃ³n)
 Round: Agosto-Noviembre
 Autores:Yessenia Loayza
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -67,23 +67,23 @@ label define region_c ///
 12 "Guerrero" ///
 13 "Hidalgo" ///
 14 "Jalisco" ///
-15 "México" ///
-16 "Michoacán de Ocampo" ///
+15 "MÃ©xico" ///
+16 "MichoacÃ¡n de Ocampo" ///
 17 "Morelos" ///
 18 "Nayarit" ///
-19 "Nuevo León" ///
+19 "Nuevo LeÃ³n" ///
 20 "Oaxaca" ///
 21 "Puebla" ///
-22 "Querétaro" ///
+22 "QuerÃ©taro" ///
 23 "Quintana Roo" ///
-24 "San Luis Potosí" ///
+24 "San Luis PotosÃ­" ///
 25 "Sinaloa" ///
 26 "Sonora" ///
 27 "Tabasco" ///
 28 "Tamaulipas" ///
 29 "Tlaxcala" ///
 30 "Veracruz de Ignacio de la Llave" ///
-31 "Yucatán" ///
+31 "YucatÃ¡n" ///
 32 "Zacatecas" 
 label value region_c region_c
 label var region_c "division politico-administrativa, estados"
@@ -117,7 +117,7 @@ label value zona_c zona_c
 
 /*
 tam_loc:
-1 Localidades con 100 000 y más habitantes
+1 Localidades con 100 000 y mÃ¡s habitantes
 2 Localidades con 15 000 a 99 999 habitantes
 3 Localidades con 2 500 a 14 999 habitantes
 4 Localidades con menos de 2500 habitantes
@@ -135,12 +135,12 @@ gen anio_c=2010
 label var anio_c "Year of the survey"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -276,8 +276,8 @@ replace condocup_ci=4 if edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -299,7 +299,7 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 ****************
 *cotizando_ci***   
 ****************
-gen cotizando_ci=. /*Revisar las variables inst_1 ó pres_91 */
+gen cotizando_ci=. /*Revisar las variables inst_1 Ã³ pres_91 */
 label var cotizando_ci "Cotizante a la Seguridad Social"
 *Nota: solo seguro social publico, con el cual tenga derecho a pensiones en el futuro.
 ****************
@@ -323,7 +323,7 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
@@ -344,7 +344,7 @@ label var ypen_ci "Valor de la pension contributiva"
 gen yp70mas=ing_1P044
 gen yotroam=ing_1P045
 gen yoportuni70=ing_1P042 if edad_ci>=70  /* solo se los dan a los que no entraron por SEDESOL*/
-* Oportunidades : Special cash transfers for every adult 70 years or older who is a member of a beneficiary family meanwhile its incorporated to the SEDESOL´s Program 70 and more.
+* Oportunidades : Special cash transfers for every adult 70 years or older who is a member of a beneficiary family meanwhile its incorporated to the SEDESOLÂ´s Program 70 and more.
 
 egen ypensub_ci=rsum(yp70mas yotroam yoportuni70) 
 replace ypensub_ci=. if yp70mas==. & yotroam==. & yoportuni70==.
@@ -352,7 +352,7 @@ replace ypensub_ci=. if yp70mas==. & yotroam==. & yoportuni70==.
 *egen ypensub_ci=rsum(ing_1P044 ing_1P045 ing_1P042) 
 *replace ypensub_ci=. if ing_1P044==. & ing_1P045==. & ing_1P042==.
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
-*Programas: Beneficio del programa 70 y más; Beneficio de otros programas para adultos mayores; y, Oportunidades
+*Programas: Beneficio del programa 70 y mÃ¡s; Beneficio de otros programas para adultos mayores; y, Oportunidades
 
 ***************
 *pensionsub_ci*
@@ -405,7 +405,7 @@ label var lp3_ci "linea de pobreza de patrimonio"
 
 /*La encuesta fue levantada entre 21 agosto-28 noviembre 2010
 *Al preguntarse por los ingresos de los seis meses anteriores 
-se recolectó información correspondiente a los meses de febrero,
+se recolectÃ³ informaciÃ³n correspondiente a los meses de febrero,
 marzo,abril, mayo, junio y julio del 2010*/
 
 
@@ -2881,7 +2881,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -2934,7 +2934,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3156,9 +3156,9 @@ replace rama_ci=7 if ramat>=481 & ramat<=493
 replace rama_ci=9 if ramat>=511 & ramat<=932
 replace rama_ci=8 if ramat>=520 & ramat<=530
 
-/*Note: Actividad económica a la que se dedica la
-empresa de acuerdo al Sistema de clasificación Industrial de América
-del Norte. México, 2008 */
+/*Note: Actividad econÃ³mica a la que se dedica la
+empresa de acuerdo al Sistema de clasificaciÃ³n Industrial de AmÃ©rica
+del Norte. MÃ©xico, 2008 */
 
 ******************************
 *	ylmpri_ci 
@@ -3360,15 +3360,15 @@ gen antiguedad_ci=.
 *******************
 ***tamemp_ci***
 *******************
-*México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if tam_emp1==1 | tam_emp1==2
 replace tamemp_ci = 2 if (tam_emp1>=3 & tam_emp1<=7)
 replace tamemp_ci = 3 if (tam_emp1>7 & tam_emp1<12)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3377,8 +3377,8 @@ gen categoinac_ci =1 if (bustrab_3=="3" & condocup_ci==3)
 replace categoinac_ci = 2 if  (bustrab_5=="5" & condocup_ci==3)
 replace categoinac_ci = 3 if  (bustrab_4=="4" & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3691,9 +3691,9 @@ label var pared_ch "Material Pared"
 
 /*
 1 Material de desecho.
-2 Lamina de cartón.
-3 Lamina metálica o de asbesto.
-4 Carrizo bambú o palma.
+2 Lamina de cartÃ³n.
+3 Lamina metÃ¡lica o de asbesto.
+4 Carrizo bambÃº o palma.
 5 Embarro o Bajareque.
 6 Madera.
 7 Adobe.
@@ -3710,12 +3710,12 @@ replace techo_ch=1 if techos==3 | techos==3 | (techos>=6 & techos<=9)
 
 /*
 1 Material de desecho.
-2 Lamina de cartón.
-3 Lamina metálica.
+2 Lamina de cartÃ³n.
+3 Lamina metÃ¡lica.
 4 Lamina de asbesto.
 5 Palma o paja.
 6 Madera o tejamanil.
-7 Terrado con viguería.
+7 Terrado con viguerÃ­a.
 8 Teja.
 9 Losa de concreto o viguetas con bovedilla.
 */
@@ -3840,7 +3840,7 @@ label define vivi1_ch 1"Casa" 2"Dpto" 3"Otr"
 02 Departamento en edificio
 03 Vivienda en vecindad
 04 Vivienda en cuarto de azotea
-05 Local no construido para habitación
+05 Local no construido para habitaciÃ³n
 -1 No especificado
 */
 
@@ -3863,10 +3863,10 @@ label var viviprop_ch "Propiedad de la vivienda"
 /*
 1 es rentada?
 2 es prestada?
-3 es propia pero la están pagando?
+3 es propia pero la estÃ¡n pagando?
 4 es propia?
 5 esta intestada o en litigio?
-6 Otra situación.
+6 Otra situaciÃ³n.
 */
 
 ******************************
@@ -3902,12 +3902,12 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"*/
 
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 destring parentesco, replace
 
@@ -3919,7 +3919,7 @@ replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentesco==301|parentesco
 parentesco==608|parentesco==609|parentesco==610|parentesco==612))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
@@ -3928,7 +3928,7 @@ gen raza_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -3941,15 +3941,15 @@ label var id_afro_ci "Afro-descendiente"
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

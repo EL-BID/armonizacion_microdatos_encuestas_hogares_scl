@@ -1,17 +1,17 @@
-* (versión Stata 13)
+* (versiï¿½n Stata 13)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor ï¿½nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOvI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENOE
@@ -27,12 +27,12 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: México
+Paï¿½s: Mï¿½xico
 Encuesta: ENOE
 Round: t1
 Autores: Melany Gualavisi (melanyg@iadb.org)
 ModifiaciÃ³n: Alvaro Altamirano (alvaroalt@iadb.org)
-Fecha última modificación: Octubre 2019
+Fecha ï¿½ltima modificaciï¿½n: Octubre 2019
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -55,10 +55,10 @@ horaspri_ci
 tamemp_ci
 ylmpri_ci
 
-el resto está pendiente de armonizar*/
+el resto estï¿½ pendiente de armonizar*/
 
 ************************
-*** region según BID ***
+*** region segï¿½n BID ***
 ************************
 gen region_BID_c=1 
 label var region_BID_c "Regiones BID"
@@ -139,9 +139,9 @@ label value sexo_ci sexo_ci
 03 Secundaria
 04 Preparatoria o bachillerato
 05 Normal
-06 Carrera técnica
+06 Carrera tï¿½cnica
 07 Profesional
-08 Maestría
+08 Maestrï¿½a
 09 Doctorado
 99 No sabe
 */
@@ -169,7 +169,7 @@ gen condocup_ci=.
 replace condocup_ci=1 if clase1==1 & clase2==1
 replace condocup_ci=2 if clase1==1 & clase2==2
 replace condocup_ci=3 if clase1==2
-* replace condocup_ci=4 if edad<12 * no hay en la encuesta menores de 12 años
+* replace condocup_ci=4 if edad<12 * no hay en la encuesta menores de 12 aï¿½os
 
 label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "No_responde_por_menor_edad", add modify
@@ -235,8 +235,8 @@ label var ylmpri_ci "Ingreso laboral monetario actividad principal"
 
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* También se incluyen variables que se manejaban en versiones anteriores, estas son:
+* Verificaciï¿½n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* Tambiï¿½n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 /*

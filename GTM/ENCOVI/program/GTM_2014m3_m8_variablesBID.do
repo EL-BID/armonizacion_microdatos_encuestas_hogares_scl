@@ -1,17 +1,17 @@
 
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
- global ruta = "\\Sdssrv03\surveys"
+ global ruta = "${surveysFolder}"
 
 local PAIS GTM
 local ENCUESTA ENCOVI
@@ -30,13 +30,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Guatemala
+PaÃ­s: Guatemala
 Encuesta: ENCOVI
 Round: a
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Última modificación: Daniela Zuluaga: danielazu@iadb.org - da.zuluaga@hotmail.com
-Fecha última modificación: Octubre de 2017
+Ãšltima versiÃ³n: Mayra SÃ¡enz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
+Ãšltima modificaciÃ³n: Daniela Zuluaga: danielazu@iadb.org - da.zuluaga@hotmail.com
+Fecha Ãºltima modificaciÃ³n: Octubre de 2017
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -78,7 +78,7 @@ gen region_c=depto
 	
 gen region_BID_c=1
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 
@@ -97,7 +97,7 @@ gen str3 pais_c="GTM"
 label variable pais_c "Nonmbre del Pais"
 
 gen anio_c=2014
-label variable anio_c "Año de la Encuesta"
+label variable anio_c "AÃ±o de la Encuesta"
 
 * Periodo de Referencia: del 07/00 al 11/00.
 * This is the middle of the reference period
@@ -119,7 +119,7 @@ replace relacion_ci=4 if ( ppa05==4 | ppa05==5 | ppa05==6 | ppa05==7 | ppa05==8 
 replace relacion_ci=5 if ( ppa05==12 | ppa05==13 )
 replace relacion_ci=6 if ppa05==11
 label var relacion_ci "parentesco o relacion con el jefe del hogar"
-label define relacion_ci 1 "jefe(a)" 2 "esposo(a) o compañero(a)" 3 "hijo(a)" 4 "otro pariente" 5 "otro no pariente" 6 "empleada domestica" 
+label define relacion_ci 1 "jefe(a)" 2 "esposo(a) o compaÃ±ero(a)" 3 "hijo(a)" 4 "otro pariente" 5 "otro no pariente" 6 "empleada domestica" 
 label value relacion_ci relacion_ci
 
 
@@ -179,23 +179,23 @@ egen nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5 ), by (idh_ch)
 label variable nmiembros_ch "numero de miembros en el hogar"
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad>=21)), by (idh_ch)
-label variable nmayor21_ch "numero de personas de 21 años o mas dentro del hogar"
+label variable nmayor21_ch "numero de personas de 21 aÃ±os o mas dentro del hogar"
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<21)), by (idh_ch)
-label variable nmenor21_ch "numero de personas menores a 21 años dentro del hogar"
+label variable nmenor21_ch "numero de personas menores a 21 aÃ±os dentro del hogar"
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad>=65)), by (idh_ch)
-label variable nmayor65_ch "numero de personas de 65 años o mas dentro del hogar"
+label variable nmayor65_ch "numero de personas de 65 aÃ±os o mas dentro del hogar"
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<6)), by (idh_ch)
-label variable nmenor6_ch "numero de niños menores a 6 años dentro del hogar"
+label variable nmenor6_ch "numero de niÃ±os menores a 6 aÃ±os dentro del hogar"
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5 ) & (edad<1)),  by (idh_ch)
-label variable nmenor1_ch "numero de niños menores a 1 año dentro del hogar"
+label variable nmenor1_ch "numero de niÃ±os menores a 1 aÃ±o dentro del hogar"
 
 
 
-*** estado civil para personas de 10 años o mas de ppa03
+*** estado civil para personas de 10 aÃ±os o mas de ppa03
 gen civil_ci=.  
 replace civil_ci=1 if ppa06==7 /* soltero */
 replace civil_ci=2 if ppa06==1 | ppa06==2 /* union formal o informal */
@@ -216,7 +216,7 @@ capture assert hh==1
 
 *** housing ***
 
-*Mayo 16, 2016 (Mayra Sáenz) : Revisar si las variables de housing constan en otros módulos
+*Mayo 16, 2016 (Mayra SÃ¡enz) : Revisar si las variables de housing constan en otros mÃ³dulos
 
 
 
@@ -365,11 +365,11 @@ replace vivialqimp_ch=p01b02 if p01b02<99999
 *******************************************************************************************
 * variables del mercado laboral
 
-* personas de 5 años y mas de ppa03 *
-* en 1998 este bloque de preguntas estaba dirigido a las personas de 7 años y mas de ppa03 *
+* personas de 5 aÃ±os y mas de ppa03 *
+* en 1998 este bloque de preguntas estaba dirigido a las personas de 7 aÃ±os y mas de ppa03 *
 *******************************************************************************************
 /************************************************************************************************************
-* 3. creación de nuevas variables de ss and lmk a incorporar en armonizadas
+* 3. creaciÃ³n de nuevas variables de ss and lmk a incorporar en armonizadas
 ************************************************************************************************************/
 
 *************
@@ -395,7 +395,7 @@ gen lpe_ci =.
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 
@@ -408,7 +408,7 @@ label var cotizando_ci "cotizante a la seguridad social"
 ****************
 *afiliado_ci****
 ****************
-*Modificado Mayo 2016 - Mayra Sáenz
+*Modificado Mayo 2016 - Mayra SÃ¡enz
 gen afiliado_ci=.	
 replace afiliado_ci=1 if p10b026a==1
 recode afiliado_ci .=0 if p10b026a!=1
@@ -438,13 +438,13 @@ label var instcot_ci "institucion proveedora de la pension - variable original d
 ****************
 
 * se considero ta,bien a quienes buscan trabajo hasta cuatro semanas anteriores. 05/19/2014 mgd
-* mgr: modifico serie en base a correcciones laura castrillo: delimitar la condición de edad para que no tome los missing en caso que existan
+* mgr: modifico serie en base a correcciones laura castrillo: delimitar la condiciÃ³n de edad para que no tome los missing en caso que existan
 gen condocup_ci=.
 replace condocup_ci=1 if (p10a02==1 | p10a04==1)
 replace condocup_ci=2 if condocup_ci!=1 & (p10a02==2 & (p10a04==2 & (p10a06==1 | p10a07==1)))
 recode condocup_ci .=3 if edad_ci>=7 & edad_ci!=.
 replace condocup_ci=4 if edad<7
-label var condocup_ci "condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "ocupado" 2 "desocupado" 3 "inactivo" 4 "menor de pet" 
 label value condocup_ci condocup_ci
 
@@ -492,7 +492,7 @@ label var ypen_ci "valor de la pension contributiva"
 ***************
 *DZ Octubre 2017- Se crea la variable pension subsidiada*
 /*Dado que la variable se encuentra diponible por hogar beneficiario, se encuentra el individuo beneficiario dentro del hogar* El beneficio se otorga a personas de 65 y mas,
-La base de datos contiene información desde 1 a 3 beneficiarios*/
+La base de datos contiene informaciÃ³n desde 1 a 3 beneficiarios*/
 
 gen pen=(p03c01_13==1 & edad_ci>64)
 bys idh_ch pen: gen beneficiarios=_n if pen==1
@@ -568,14 +568,14 @@ label var emp_ci "ocupado (empleado)"
 ***desemp_ci***
 ****************
 gen desemp_ci=(condocup_ci==2)
-label var desemp_ci "desempleado que buscó empleo en el periodo de referencia"
+label var desemp_ci "desempleado que buscÃ³ empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
 *************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
-label var pea_ci "población económicamente activa"
+label var pea_ci "poblaciÃ³n econÃ³micamente activa"
 
 /* trabajadores desalentados
 gen byte desalent_ci=1 if pea2_ci~=1  & (p10a09==9 | p10a09==11) 
@@ -639,7 +639,7 @@ gen firmapeq_ci= .
 replace firmapeq_ci= 1 if p10b25<=5
 recode firmapeq_ci .=0 if p10b26a==1
 
-* tamaño de la firma
+* tamaÃ±o de la firma
 gen byte tamfirma_ci=.
 replace tamfirma_ci=0 if p10b25<=5
 replace tamfirma_ci=1 if p10b25>5 
@@ -668,7 +668,7 @@ gen byte indep=1 if ( p10b04>=5 & p10b04<=8 )
 
 * occupacion
 gen ocupa_ci=.
-* preparado por mlo segun excel y:\survey\gtm\encovi\2000\m7_m11\docsocup_ci_clasificacion_propuesta.xlsx
+* preparado por mlo segun excel ${surveysFolder}\survey\gtm\encovi\2000\m7_m11\docsocup_ci_clasificacion_propuesta.xlsx
 replace ocupa_ci=1 if (p10b02b>=21 & p10b02b<=34) & emp_ci==1
 replace ocupa_ci=2 if (p10b02b>=11 & p10b02b<=13) & emp_ci==1
 replace ocupa_ci=3 if (p10b02b>=41 & p10b02b<=43) & emp_ci==1
@@ -703,11 +703,11 @@ label define rama_ci 1 "agricultura, caza, sivicultura y pesca" 2 "explotacion d
 label values rama_ci rama_ci
 
 
-*** antiguppa03 (años) (en total, cuantos años lleva trabajando (ocup principal)?) 
+*** antiguppa03 (aÃ±os) (en total, cuantos aÃ±os lleva trabajando (ocup principal)?) 
 
 gen antiguedad_ci=.
 *replace antiguedad_ci=p10b07 if p10b07!=99 & emp_ci==1
-label var antiguedad_ci "antiguedad en la ocupacion actual (en años)"
+label var antiguedad_ci "antiguedad en la ocupacion actual (en aÃ±os)"
 
 *** duracion del desempleo
 gen durades_ci=p10e01/4.3 /* solo a los desocupados: cuantas semanas hace que esta buscando trabajo? */
@@ -719,10 +719,10 @@ label var durades_ci "duracion del desempleo (en meses)"
 ******************************************************************************************************
 * variables de educacion
 
-* para personas de 7 años o mas de ppa03 
+* para personas de 7 aÃ±os o mas de ppa03 
 ******************************************************************************************************
 
-* años de educacion
+* aÃ±os de educacion
 
 * there are two variables 'p06b25a' & 'p06b25b' that have nivel and grado 
 
@@ -730,8 +730,8 @@ label var durades_ci "duracion del desempleo (en meses)"
 /* p06b25a: 
 	      ninguno 
 		  preprimaria 
-		  prímaria  
-	      básicos   
+		  prÃ­maria  
+	      bÃ¡sicos   
 		  diversificado   
 	      superior  
 	      postgrado 
@@ -740,7 +740,7 @@ label var durades_ci "duracion del desempleo (en meses)"
 
 gen byte aedu_ci = .
 
-*Modificación Mayra Sáenz - se utiliza la p06b06a p06b06b en lugar de la p06b25a p06b25b
+*ModificaciÃ³n Mayra SÃ¡enz - se utiliza la p06b06a p06b06b en lugar de la p06b25a p06b25b
 
 *** preprimaria
 replace aedu_ci=0 if p06b06a==1 
@@ -764,11 +764,11 @@ replace aedu_ci=12 + p06b06b if p06b06a==5
 replace aedu_ci=17 + p06b06b if p06b06a==6
 
 
-*Para los que no están asistiendo actualmente 
-*replace aedu_ci=aÑosedu if  aedu_ci ==. //Revisar si en otro módulo existe la variable añosEdu
+*Para los que no estÃ¡n asistiendo actualmente 
+*replace aedu_ci=aÃ‘osedu if  aedu_ci ==. //Revisar si en otro mÃ³dulo existe la variable aÃ±osEdu
 
 
-label variable aedu_ci "años de educacion"
+label variable aedu_ci "aÃ±os de educacion"
 
 
 
@@ -836,10 +836,10 @@ replace edus2c=1 if edusc==1
 label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educacion secundaria"
 
 gen eduac_ci=.
-label var eduac_ci "educacion terciaria académica versus educación terciaria no-académica "
+label var eduac_ci "educacion terciaria acadÃ©mica versus educaciÃ³n terciaria no-acadÃ©mica "
 
 gen repite_ci=.
-label var repite_ci "personas que han repetido al menos un año o grado"
+label var repite_ci "personas que han repetido al menos un aÃ±o o grado"
 
 gen repiteult_ci=.
 
@@ -849,15 +849,15 @@ gen asiste_ci=.
 replace asiste_ci=1 if p06b22==1 & p06b05==1
 replace asiste_ci=0 if p06b22==2 & p06b05==1
 replace asiste_ci=0 if p06b05==2
-*modificación mayra sáenz 10/22/2015 : se incluyen a los menores de 5 que están asistiendo a guarder'ia
+*modificaciÃ³n mayra sÃ¡enz 10/22/2015 : se incluyen a los menores de 5 que estÃ¡n asistiendo a guarder'ia
 replace asiste_ci=1 if p06a01==1
-label var asiste_ci "personas que actualmente asisten a centros de enseñanza"
+label var asiste_ci "personas que actualmente asisten a centros de enseÃ±anza"
 
-* por que no asiste (en 1998 la pregunta sobre causa de inasistencia es solo para personas de 7 a 14 años de edad)
+* por que no asiste (en 1998 la pregunta sobre causa de inasistencia es solo para personas de 7 a 14 aÃ±os de edad)
 
 gen pqnoasis_ci=.
 replace pqnoasis_ci=p06b23 if p06b23>0 & p06b23<99
-label var pqnoasis_ci "razon principal por la cual ha abandonado o ha dejado de asistir a clases este año"
+label var pqnoasis_ci "razon principal por la cual ha abandonado o ha dejado de asistir a clases este aÃ±o"
 label define pqnoasis_ci 1 "enfermedad" 2 "falta de maestro" 3 "la madre trabaja" 4 "oficios de la casa" 5 "falta de dinero" ///
 6"trabajo" 7"no le interesa" 8"mal tiempo" 9"embarazo" 10"migracion temporal" 11"acoso de maras" 12"violencia" 98"otra"
 label value pqnoasis_ci pqnoasis_ci
@@ -874,7 +874,7 @@ replace pqnoasis1_ci= 4 if  pqnoasis_ci==7
 replace pqnoasis1_ci= 5 if  pqnoasis_ci==4 | pqnoasis_ci==9
 replace pqnoasis1_ci= 9 if  pqnoasis_ci==98 | pqnoasis_ci==12 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==8 | pqnoasis_ci==2
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 * educacion publica or privada
@@ -883,15 +883,15 @@ label value  pqnoasis1_ci pqnoasis1_ci
        el plantel eductivo donde se |
                   inscribio (..) es: |      freq.     percent        cum.
 -------------------------------------+-----------------------------------
-             ministerio de educación |     11,813       63.89       63.89
+             ministerio de educaciÃ³n |     11,813       63.89       63.89
                              pronade |      1,273        6.88       70.77
     nuevas escuelas unitarias -neus- |         14        0.08       70.85
-otra institución de gobierno central |        533        2.88       73.73
+otra instituciÃ³n de gobierno central |        533        2.88       73.73
                            municipal |        187        1.01       74.74
                          cooperativa |        860        4.65       79.39
                          comunitario |        105        0.57       79.96
                              privado |      3,465       18.74       98.70
-                               ong´s |        146        0.79       99.49
+                               ongÂ´s |        146        0.79       99.49
                                 otro |         94        0.51      100.00
 -------------------------------------+-----------------------------------
                                total |     18,490      100.00
@@ -906,7 +906,7 @@ se han considerado como publicas las opciones 1, 2, 3, 4 y 5 */
 gen edupub_ci=0
 replace edupub_ci=1 if ( p06b09==1 | p06b09==2 | p06b09==3 | p06b09==4 | p06b09==5 )
 replace edupub_ci=. if ( p06b09==. | p06b09==99)
-label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
+label var edupub_ci "1 = personas que asisten a centros de enseÃ±anza publicos"
 
 *************
 **tecnica_ci*
@@ -950,31 +950,31 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "indígena" 2 "afro-descendiente" 3 "otros"
+label define raza_ci 1 "indÃ­gena" 2 "afro-descendiente" 3 "otros"
 label value raza_ci raza_ci 
 label var raza_ci "raza o etnia del individuo" 
 
 g raza_idioma_ci =.
 /*
 p04a11a:
-           1 k´iche´
-           2 q´eqchi´
+           1 kÂ´icheÂ´
+           2 qÂ´eqchiÂ´
            3 kaqchikel
            4 mam
-           5 q´anjob´al
+           5 qÂ´anjobÂ´al
            6 achi
            7 ixil
-           8 itza´
-           9 poqomchi´
+           8 itzaÂ´
+           9 poqomchiÂ´
           10 chuj
           11 awakateko
           12 poqomam
-          13 ch´orti´
+          13 chÂ´ortiÂ´
           14 jakalteko (popti)
           15 sakapulteco
           16 mopan
           17 uspanteko
-          18 tz´utujil
+          18 tzÂ´utujil
           19 tektiteko
           20 sipakapense
           21 chalchiteko
@@ -983,12 +983,12 @@ p04a11a:
           24 garifuna
           29 no indigena
           30 extranjero
-          96 ningún otro idioma
+          96 ningÃºn otro idioma
 
 */
 
 *****************************************************************
-*** ingresos laborales (para pesonas de 5 años o mas de ppa03) ***
+*** ingresos laborales (para pesonas de 5 aÃ±os o mas de ppa03) ***
 *****************************************************************
 
 ***************************
@@ -1199,7 +1199,7 @@ label var ylnm_ci "ingreso laboral no monetario total"
 
 
 ****************************************************************************************************
-*** otras fuentes de ingresos relacionadas con el trabajo(para personas de 7 años o mas de ppa03) ***
+*** otras fuentes de ingresos relacionadas con el trabajo(para personas de 7 aÃ±os o mas de ppa03) ***
 ****************************************************************************************************
 
 *** pensiones ***
@@ -1323,7 +1323,7 @@ replace categoinac_ci=2 if p10f01 ==1 & condocup_ci==3
 replace categoinac_ci=3 if p10f01 ==2 & condocup_ci==3
 recode categoinac_ci .= 0 if condocup_ci==3
 
-label var categoinac_ci "condición de inactividad"
+label var categoinac_ci "condiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 *******************
@@ -1349,12 +1349,12 @@ gen id_ind_ci = .
 gen id_afro_ci = .
 
 /*_____________________________________________________________________________________________________*/
-* verificación de que se encuentren todas las variables del sociometro y las nuevas de mercado laboral
-* también se incluyen variables que se manejaban en versiones anteriores, estas son:
+* verificaciÃ³n de que se encuentren todas las variables del sociometro y las nuevas de mercado laboral
+* tambiÃ©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
 raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///

@@ -4,7 +4,7 @@
 clear
 set more off
 
-cd "\\Sdssrv03\surveys\survey\VEN\EHM\2003\s2\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\2003\s2\data_orig\"
 
 use viv032.dta, clear
 rename peso pesov
@@ -27,4 +27,4 @@ merge entidad control localidad area linea num_hog using hog032_modif.dta
 tab _merge
 drop _merge
 
-saveold "\\Sdssrv03\surveys\survey\VEN\EHM\2003\s2\data_merge\VEN_2003s2", replace
+saveold "${surveysFolder}\survey\VEN\EHM\2003\s2\data_merge\VEN_2003s2", replace

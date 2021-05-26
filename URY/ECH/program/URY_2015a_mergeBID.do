@@ -1,8 +1,8 @@
 * Autor: Marcela G. Rubio
 * Fecha: 24 de junio de 2016
 
-global ruta "M:\survey\URY\ECH\2015\a\data_orig\"
-global out "M:\survey\URY\ECH\2015\a\data_merge\"
+global ruta "${surveysFolder}\survey\URY\ECH\2015\a\data_orig\"
+global out "${surveysFolder}\survey\URY\ECH\2015\a\data_merge\"
 
 use "$ruta\hogares_2015_terceros.dta", clear
 sort numero

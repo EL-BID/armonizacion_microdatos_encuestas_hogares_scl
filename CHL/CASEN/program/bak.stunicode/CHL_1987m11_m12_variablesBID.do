@@ -1,22 +1,22 @@
 
-*Mayra S·enz-Enero 2014: Este do file no corre. Falta armonizar la base de datos.
+*Mayra S√°enz-Enero 2014: Este do file no corre. Falta armonizar la base de datos.
 /*
 
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -36,12 +36,12 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Chile
+Pa√≠s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-⁄ltima versiÛn: MarÌa Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha ˙ltima modificaciÛn: 26 de Agosto de 2013
+√öltima versi√≥n: Mar√≠a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha √∫ltima modificaci√≥n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -63,7 +63,7 @@ gen region_BID_c=4
 *MLO:falta armonizar base (se recomienda bajar nuevamente base original)
 	
 /************************************************************************************************************
-* 3. CreaciÛn de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. Creaci√≥n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *******************
@@ -81,7 +81,7 @@ label var tc_c "Tasa de cambio LCU/USD"
 gen ipc_c = .
 
 
-label var ipc_c "Õndice de precios al consumidor"
+label var ipc_c "√çndice de precios al consumidor"
 
 *******************
 ****** ppp_c ******
@@ -89,7 +89,7 @@ label var ipc_c "Õndice de precios al consumidor"
 
 gen ppp_c = .
 
-label var ppp_c "Factor de conversiÛn PPP LCU/USD"
+label var ppp_c "Factor de conversi√≥n PPP LCU/USD"
 
 ****************
 *lp25_2005_ci***
@@ -97,7 +97,7 @@ label var ppp_c "Factor de conversiÛn PPP LCU/USD"
 
 gen lp25_2005_ci = .
 
-label var lp25_2005_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a precios corrientes a PPP 2005"
+label var lp25_2005_ci  "L√≠nea de pobreza USD2.5 por d√≠a en moneda local a precios corrientes a PPP 2005"
 
 ***************
 *lp4_2005_ci***
@@ -105,7 +105,7 @@ label var lp25_2005_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a preci
 
 gen lp4_2005_ci = .
   
-label var lp4_2005_ci "LÌnea de pobreza USD4 por dÌa en moneda local a precios corrientes a PPP 2005"
+label var lp4_2005_ci "L√≠nea de pobreza USD4 por d√≠a en moneda local a precios corrientes a PPP 2005"
 
 ********* 
 *lpl25_ci
@@ -114,7 +114,7 @@ label var lp4_2005_ci "LÌnea de pobreza USD4 por dÌa en moneda local a precios c
 gen lp25_ci = .
 
  
-label var lp25_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a precios corrientes a PPP 2011"
+label var lp25_ci  "L√≠nea de pobreza USD2.5 por d√≠a en moneda local a precios corrientes a PPP 2011"
 
 *********
 *lpl4_ci*
@@ -122,7 +122,7 @@ label var lp25_ci  "LÌnea de pobreza USD2.5 por dÌa en moneda local a precios co
 
 gen lp4_ci = .
 
-label var lp4_ci "LÌnea de pobreza USD4 por dÌa en moneda local a precios corrientes a PPP 2011"
+label var lp4_ci "L√≠nea de pobreza USD4 por d√≠a en moneda local a precios corrientes a PPP 2011"
 
 *********
 *lp_ci***
@@ -208,7 +208,7 @@ replace condocup_ci=1 if o1==1 | o1==2 & o2==1
 replace condocup_ci=2 if o1==2 & o2==2 & o3==1
 replace condocup_ci=3 if o1==2 & o2==2 & o3==2 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupaciÛn de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaci√≥n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 	
@@ -239,13 +239,13 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *tamemp_ci
 *************
 
-/*o14: Cu·ntas personas trabajan en total en esa empresa (en Chile)?
+/*o14: Cu√°ntas personas trabajan en total en esa empresa (en Chile)?
 	A. 1 persona
 	B. 2 a 5 pers
 	C. 6 a 9 pers
 	D. 10 a 49 pers
 	E. 50 a 199 pers
-	F. 200 o m·s pers
+	F. 200 o m√°s pers
 	X. No sabe*/
 gen tamemp_ci= o14
 
@@ -323,7 +323,7 @@ label value tamemp_ci tamemp_ci
 ****************
 
 gen categoinac_ci=.
-label var categoinac_ci "CondiciÛn de inactividad"
+label var categoinac_ci "Condici√≥n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -339,8 +339,8 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
-* TambiÈn se incluyen variables que se manejaban en versiones anteriores, estas son:
+* Verificaci√≥n de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
+* Tambi√©n se incluyen variables que se manejaban en versiones anteriores, estas son:
 * firmapeq_ci nrylmpri_ch nrylmpri_ci tcylmpri_ch tcylmpri_ci tipopen_ci
 /*_____________________________________________________________________________________________________*/
 

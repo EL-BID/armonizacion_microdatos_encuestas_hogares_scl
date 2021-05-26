@@ -12,7 +12,7 @@ set more off
 local anio =2019
 local ronda1 a
 local ronda2 tmovil(0507)	
-local ruta "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\sdssrv03\Surveys\Survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\sdssrv03\Surveys\Survey\COL\GEIH\\`anio'\"
 local m1 ="`ruta'\`ronda1'\data_orig\m5\" 
 local m2 ="`ruta'\`ronda1'\data_orig\m6\" 
 local m3 ="`ruta'\`ronda1'\data_orig\m7\" 

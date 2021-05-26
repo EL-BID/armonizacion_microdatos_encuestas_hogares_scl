@@ -1,19 +1,19 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PRY
 local ENCUESTA EHM
@@ -31,13 +31,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Paraguay
+PaÃ­s: Paraguay
 Encuesta: EIH
 Round: Agosto 1997 - Julio 1998
 Autores:
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Septiembre de 2013
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 4 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -57,7 +57,7 @@ drop ocupa
 DURADES, CODIGO Y COMENTARIOS ANTERIORES
 gen tdurades_ci=mesesbus
 replace tdurades_ci=. if tdurades_ci==0
-tiene un comportamiento muy estraño
+tiene un comportamiento muy estraÃ±o
 SON unas duraciones pero no son en numeros sino en intervalos
 
 May 19, 2006 (Analia)
@@ -73,10 +73,10 @@ gen aguamala_ch=(agua==3 | agua==4 | agua==7 | agua==8)
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -126,12 +126,12 @@ gen anio_c=1995
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=4 if pais=="PRY" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -345,7 +345,7 @@ label variable miembros_ci "Miembro del hogar"
 
 	
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 	
 *********
@@ -421,7 +421,7 @@ replace condocup_ci=2 if ((trabasal==6 | trainoag==6 | trabag==6) & (asalar==6 |
 recode condocup_ci .=3 if edad_ci>=7
 recode condocup_ci .=4 if edad_ci<7
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 */
@@ -435,7 +435,7 @@ replace condocup_ci=2 if pea==2  & edad_ci>=7
 recode condocup_ci .=3 if (pea==3 | pea==6) | (condocup_ci==. & edad_ci>=7)
 recode condocup_ci (.=4) if edad_ci<7 | pea==0
 
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -553,7 +553,7 @@ gen horastot_ci=hr_sem_s  if emp_ci==1
 
 /*gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if tothoras>=30 & deseamas==6 & emp_ci==1 */
-*10/21/15 MGD: corrección de sintaxis
+*10/21/15 MGD: correcciÃ³n de sintaxis
 gen tiempoparc_ci=0
 replace tiempoparc_ci=1 if horaspri_ci>=1 & horaspri_ci<30 & deseamas==6 & emp_ci==1
 
@@ -562,15 +562,15 @@ replace tiempoparc_ci=1 if horaspri_ci>=1 & horaspri_ci<30 & deseamas==6 & emp_c
 ******************
 /*
 0: No aplicable
-1: Empleado público  
+1: Empleado pÃºblico  
 2: Empleado privado 
-3 Obrero público 
+3 Obrero pÃºblico 
 4: Obrero privado
-5: Empleador o patrón
+5: Empleador o patrÃ³n
 6: Trabajador por cuenta propia
 7: Trabajador familiar remunerado
 8: Trabajador familiar no remunerado
-9: Empleado doméstico
+9: Empleado domÃ©stico
 10: Trabajador independiente agropecuario
 */
 /*
@@ -587,13 +587,13 @@ label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
 */
 
-*Mélany Gualavisí - Septiembre 2014
+*MÃ©lany GualavisÃ­ - Septiembre 2014
 /*En lo de Cuenta propia de Paraguay los saltos que se dan desde 1995 hasta 1990 se deben a lo siguiente:
-•	En el 95, se cambia la clasificación agregándose dos categorías extra solo en este año: trabajador agropecuario independiente que se va a cuenta propia y trabajador familiar remunerado que se va a empleados.
-•	Del 90 al 94 se vuelve a la clasificación anterior; sin embargo, los saltos del 94 y 93 es porque esas encuestas son solo urbanas.  Para el 90-92 ya son completas, por eso sube el porcentaje.
+â€¢	En el 95, se cambia la clasificaciÃ³n agregÃ¡ndose dos categorÃ­as extra solo en este aÃ±o: trabajador agropecuario independiente que se va a cuenta propia y trabajador familiar remunerado que se va a empleados.
+â€¢	Del 90 al 94 se vuelve a la clasificaciÃ³n anterior; sin embargo, los saltos del 94 y 93 es porque esas encuestas son solo urbanas.  Para el 90-92 ya son completas, por eso sube el porcentaje.
 */
-*Modificado Mayra Sáenz - Septiembre de 2014
-*retiro a las dos categorías extra de este año para hacerle comparable con el resto de la serie
+*Modificado Mayra SÃ¡enz - Septiembre de 2014
+*retiro a las dos categorÃ­as extra de este aÃ±o para hacerle comparable con el resto de la serie
 gen categopri_ci=.
 replace categopri_ci=1 if categ==5
 replace categopri_ci=2 if categ==6
@@ -618,7 +618,7 @@ gen categosec_ci=.
 *tipocontrato_ci*
 *****************
 /*
-CONTRP12 ¿BAJO QUÉ TIPO DE CONTRATO TRABAJA EN ESTA OCUPACIÓN? (Pregunta 10)
+CONTRP12 Â¿BAJO QUÃ‰ TIPO DE CONTRATO TRABAJA EN ESTA OCUPACIÃ“N? (Pregunta 10)
 0: No aplicable
 1: Contrato indefinido (nombrado)
 2: Contrato definido
@@ -771,7 +771,7 @@ drop empleos horagro prisec iahp prochp talhp
 *****************
 /*
 
-TAMESP12 ¿CUÁNTAS PERSONAS APROXIMADAMENTE TRABAJAN EN EL ESTABLECIMIENTO DONDE TRABAJA?
+TAMESP12 Â¿CUÃNTAS PERSONAS APROXIMADAMENTE TRABAJAN EN EL ESTABLECIMIENTO DONDE TRABAJA?
 (Pregunta 11)
 0: No aplicable
 1: Solo
@@ -779,9 +779,9 @@ TAMESP12 ¿CUÁNTAS PERSONAS APROXIMADAMENTE TRABAJAN EN EL ESTABLECIMIENTO DONDE 
 3: 6 a 10 personas
 4: 11 a 20 personas
 5: 21 a 50 personas
-6: Más de 50 personas
+6: MÃ¡s de 50 personas
 7: No sabe el informante
-8: Empleado doméstico
+8: Empleado domÃ©stico
 9: No responde
 
 */
@@ -793,7 +793,7 @@ replace firmapeq_ci=0 if tamesp12>=3 & tamesp12<=6
 *****************
 ***spublico_ci***
 *****************
-* 10/21/2015 MGD: corrección pequeña para que se tomen en cuenta a todos los ocupados.
+* 10/21/2015 MGD: correcciÃ³n pequeÃ±a para que se tomen en cuenta a todos los ocupados.
 gen spublico_ci=0 if emp_ci==1
 replace spublico_ci=1 if (categ==1 | categ==3) & emp_ci==1
 
@@ -908,7 +908,7 @@ replace tenurem=1 if (semp12>=4 & semp12<8) & tientrab==1
 replace tenurem=2 if (semp12>=8 & semp12<12) & tientrab==1
 
 /*note: there are 9 people who will have missings reported for both tenurem
-& tenurey even though they declared their first job to be either dep't or indep't no agrícola. For those who are agrícola tenurem & tenurey are not available
+& tenurey even though they declared their first job to be either dep't or indep't no agrÃ­cola. For those who are agrÃ­cola tenurem & tenurey are not available
 */
 *** now create one variable for paraguay 95 using tenurey and tenurem
 
@@ -931,14 +931,14 @@ replace antiguedad_ci=.
 *******************
 ***tamemp_ci***
 *******************
-*Paraguay Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*Paraguay PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if tamesp12>=1 & tamesp12<=2
 replace tamemp_ci = 2 if (tamesp12>=3 & tamesp12<=5)
 replace tamemp_ci = 3 if (tamesp12==6)
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -947,8 +947,8 @@ gen categoinac_ci =1 if (pqnotra7==12 & condocup_ci==3)
 replace categoinac_ci = 2 if  (pqnotra7==2 & condocup_ci==3)
 replace categoinac_ci = 3 if  (pqnotra7==17 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -1077,9 +1077,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -1359,7 +1359,7 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***asiste_ci***
 ***************
 
-* Sólo se pregunta a personas de 5-35 años de edad
+* SÃ³lo se pregunta a personas de 5-35 aÃ±os de edad
 gen asiste_ci=.
 replace asiste_ci=1 if asiste==1 
 replace asiste_ci=0 if asiste==6
@@ -1693,33 +1693,33 @@ replace raza_ci=0 if idioma==2 | idioma==3 | idioma==4 | idioma==5
 
 
 /*
-*Mayra Sáenz- Octubre 2013
+*Mayra SÃ¡enz- Octubre 2013
 gen raza_ci=.
 replace raza_ci= 1 if idioma ==1 
 replace raza_ci= 3 if idioma ==2 | idioma ==3 | idioma ==4 |raza_ci==.
 
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
 
 */
 
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+*ModificaciÃ³n Mayra SÃ¡enz 10/20/2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 gen raza_idioma_ci=.
 replace raza_idioma_ci= 1 if idioma ==1 
 replace raza_idioma_ci= 3 if idioma ==2 | idioma ==3 | idioma ==4 |raza_idioma_ci==.
 
 gen raza_ci=.
 
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
+label define raza_idioma_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros" 
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo" 
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
+label define id_ind_ci 1 "IndÃ­gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -1735,15 +1735,15 @@ label var id_afro_ci "Afro-descendiente"
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

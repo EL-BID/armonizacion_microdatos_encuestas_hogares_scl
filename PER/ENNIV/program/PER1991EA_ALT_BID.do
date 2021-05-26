@@ -15,7 +15,7 @@ capture log close
 set memory 300m
 set more off
 
-local in="X:\ARM\PER\ENNIV\"
+local in="${surveysFolder}\ARM\PER\ENNIV\"
 use "`in'1991\Orig_data\per91.dta"
 
 
@@ -53,19 +53,19 @@ label variable idp_ci "ID de la persona en el hogar"
 ***zona***
 **********
 
-/*El ámbito geográfico de la investigación no abarcó a todo el
-territorio nacional; no se incluyó la costa rural, la costa centro
+/*El Ã¡mbito geogrÃ¡fico de la investigaciÃ³n no abarcÃ³ a todo el
+territorio nacional; no se incluyÃ³ la costa rural, la costa centro
 urbana (excepto Lima Metropolitana), la selva y los departamentos
-de Ayacucho, Apurímac y Huancavelica. Las razones de no inclui r
-estas áreas fueron varias; en primer lugar, los recursos
-financieros fueron limitados lo que determinó la priorización de
-áreas de investigación de mayor interés inmediato tales como: el
-área urbana porque concentra el mayor porcentaje de la població n
-nacional, y la sierra rural porque es el área históricamente más
-deprimida del país. Los departamentos mencionados, localizados en
+de Ayacucho, ApurÃ­mac y Huancavelica. Las razones de no inclui r
+estas Ã¡reas fueron varias; en primer lugar, los recursos
+financieros fueron limitados lo que determinÃ³ la priorizaciÃ³n de
+Ã¡reas de investigaciÃ³n de mayor interÃ©s inmediato tales como: el
+Ã¡rea urbana porque concentra el mayor porcentaje de la poblaciÃ³ n
+nacional, y la sierra rural porque es el Ã¡rea histÃ³ricamente mÃ¡s
+deprimida del paÃ­s. Los departamentos mencionados, localizados en
 la sierra central, no se consideraron por estar catalogados como
-peligrosos por la actividad terrorista; la selva no se incluyó por
-cuestión de costos; la costa rural porque en su lugar se priorizó
+peligrosos por la actividad terrorista; la selva no se incluyÃ³ por
+cuestiÃ³n de costos; la costa rural porque en su lugar se priorizÃ³
 la sierra rural; y el resto de la costa centro urbana por estar muy
 cerca de Lima Metropolitana.*/
 
@@ -103,7 +103,7 @@ label variable mes_c "Mes de la encuesta"
 ***relacion_ci***
 *****************
 
-/*No hay empleados domésticos ni pensionistas*/
+/*No hay empleados domÃ©sticos ni pensionistas*/
 
 gen relacion_ci=.
 replace relacion_ci=1 if A0302==1
@@ -283,7 +283,7 @@ label variable miembro_ci "Miembro del hogar"
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
-/* Esta sección es para los mayores a 6 años.*/ 
+/* Esta secciÃ³n es para los mayores a 6 aÃ±os.*/ 
 
 ************
 ***emp_ci***
@@ -450,7 +450,7 @@ gen firmapeq_ci=.
 *****************
 ***spublico_ci***
 *****************
-/*Sólo para los empleados dependientes*/
+/*SÃ³lo para los empleados dependientes*/
 
 gen spublico_ci=.
 replace spublico_ci=1 if (A1216==1 | A1216==3)
@@ -502,7 +502,7 @@ gen durades_ci=A1011/4.3 if desemp2_ci==1
 *******************
 ***antiguedad_ci***
 *******************
-/*En años*/
+/*En aÃ±os*/
 
 gen ant1=A1108A
 gen ant2=A1108B/12
@@ -521,7 +521,7 @@ replace antiguedad_ci=. if emp_ci~=1
 ***ylmpri_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ypri=.
 replace ypri=A1110B*30  if A1110E==2
 replace ypri=A1110B*4.3 if A1110E==3
@@ -564,7 +564,7 @@ gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 *** ylnmpri_ci ***
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsss=.
 replace bsss=A1214B*30  if A1214D==2
@@ -600,7 +600,7 @@ replace ylnmpri_ci=. if emp_ci~=1
 ***ylmsec_ci***
 ***************
 
-*Salario básico
+*Salario bÃ¡sico
 gen ysec=.
 replace ysec=A1308B*30  if A1308D==2
 replace ysec=A1308B*4.3 if A1308D==3
@@ -635,7 +635,7 @@ replace ylmsec_ci=. if emp_ci~=1 | nempleos_ci~=2
 ****ylnmsec_ci****
 ******************
 
-*Remuneración en bienes y servicios
+*RemuneraciÃ³n en bienes y servicios
 
 gen bsssec=.
 replace bsssec=A1413B*30  if A1413D==2
@@ -797,10 +797,10 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para mayores a los 6 años de edad.
+/*En esta secciÃ³n es sÃ³lo para mayores a los 6 aÃ±os de edad.
 Para ser consistentes con las encuestas posteriores que encuestan 
-a los mayores a 3 años, asignamos años de educación cero a los que
-están entre 3 y 6 años*/
+a los mayores a 3 aÃ±os, asignamos aÃ±os de educaciÃ³n cero a los que
+estÃ¡n entre 3 y 6 aÃ±os*/
 
 /*
 gen byte aedu_ci=.
@@ -842,7 +842,7 @@ replace aedu_ci=1+A0605B if A0605A==2
 replace aedu_ci=6+A0605B if A0605A==3 | A0605A==4
 replace aedu_ci=11+A0605B if A0605A==5 | A0605A==6 
 
-label var aedu_ci "Anios de educación"
+label var aedu_ci "Anios de educaciÃ³n"
 
 
 * Los que tienen "otro" se asume que tienen primaria completa;
@@ -956,7 +956,7 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-/*Esta variable no es comparable con los años que siguen*/
+/*Esta variable no es comparable con los aÃ±os que siguen*/
 
 gen byte edupre_ci=(A0727>="1" & A0727<="4")
 replace edupre_ci=. if edad>6

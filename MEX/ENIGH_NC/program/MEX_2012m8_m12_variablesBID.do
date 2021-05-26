@@ -1,18 +1,18 @@
-* (VersiÛn Stata 12)
+* (Versi√≥n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor ˙nicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor √∫nicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH_NC
@@ -30,13 +30,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-PaÌs: Mexico
-Encuesta: ENIGH (Nueva construcciÛn)
+Pa√≠s: Mexico
+Encuesta: ENIGH (Nueva construcci√≥n)
 Round: Septiembre-Diciembre
 Autores: Yessenia Loayza
-VersiÛn 2013: Mayra S·enz
-⁄ltima versiÛn: Mayra S·enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha ˙ltima modificaciÛn: 19 de Agosto de 2013
+Versi√≥n 2013: Mayra S√°enz
+√öltima versi√≥n: Mayra S√°enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha √∫ltima modificaci√≥n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -73,23 +73,23 @@ label define region_c ///
 12 "Guerrero" ///
 13 "Hidalgo" ///
 14 "Jalisco" ///
-15 "MÈxico" ///
-16 "Michoac·n de Ocampo" ///
+15 "M√©xico" ///
+16 "Michoac√°n de Ocampo" ///
 17 "Morelos" ///
 18 "Nayarit" ///
-19 "Nuevo LeÛn" ///
+19 "Nuevo Le√≥n" ///
 20 "Oaxaca" ///
 21 "Puebla" ///
-22 "QuerÈtaro" ///
+22 "Quer√©taro" ///
 23 "Quintana Roo" ///
-24 "San Luis PotosÌ" ///
+24 "San Luis Potos√≠" ///
 25 "Sinaloa" ///
 26 "Sonora" ///
 27 "Tabasco" ///
 28 "Tamaulipas" ///
 29 "Tlaxcala" ///
 30 "Veracruz de Ignacio de la Llave" ///
-31 "Yucat·n" ///
+31 "Yucat√°n" ///
 32 "Zacatecas" 
 label value region_c region_c
 label var region_c "division politico-administrativa, estados"
@@ -127,7 +127,7 @@ label value zona_c zona_c
 
 /*
 tam_loc:
-1 Localidades con 100 000 y m·s habitantes
+1 Localidades con 100 000 y m√°s habitantes
 2 Localidades con 15 000 a 99 999 habitantes
 3 Localidades con 2 500 a 14 999 habitantes
 4 Localidades con menos de 2500 habitantes
@@ -145,12 +145,12 @@ gen anio_c=2012
 label var anio_c "Year of the survey"
 
 *****************
-*** region seg˙n BID ***
+*** region seg√∫n BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "CentroamÈrica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "Centroam√©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ******************************
@@ -182,23 +182,23 @@ con parentesco de 301 a 304; Parientes: contar los
 registros con parentesco de 601 a 623; NoParientes:
 contar los registros con parentesco de 501 a 503.
 
-*CÛdigos de parentesco
+*C√≥digos de parentesco
 101 Jefe(a)
 102 Persona sola
-201 Esposo(a), compaÒero(a), cÛnyuge, pareja, marido, mujer, seÒor(a), consorte
+201 Esposo(a), compa√±ero(a), c√≥nyuge, pareja, marido, mujer, se√±or(a), consorte
 202 Concubino(a)
 203 Amasio(a)
 204 Querido(a), amante
-301 Hijo(a), hijo(a) consanguÌneo, hijo(a) reconocido
+301 Hijo(a), hijo(a) consangu√≠neo, hijo(a) reconocido
 302 Hijo(a) adoptivo(a)
 303 Hijastro(a), entenado(a)
 304 Hijo(a) de crianza
 305 Hijo(a) recogido(a)
-401 Trabajador(a) domÈstico(a)
+401 Trabajador(a) dom√©stico(a)
 402 Recamarero(a)
 403 Cocinero(a)
 404 Lavandera(o)
-405 Nana, niÒera, nodriza
+405 Nana, ni√±era, nodriza
 406 Mozo
 407 Jardinero(a)
 408 Velador, vigilante
@@ -206,12 +206,12 @@ contar los registros con parentesco de 501 a 503.
 410 Chofer
 411 Ama de llaves
 412 Mayordomo
-413 Dama de compaÒÌa, acompaÒante
-421 Esposo(a) del(la) trabajador(a) domÈstico(a)
-431 Hijo(a) del(la) trabajador(a) domÈstico(a)
-441 Madre, padre del(la) trabajador(a) domÈstico(a)
-451 Nieto(a) del(la) trabajador(a) domÈstico(a)
-461 Otro pariente del(la) trabajador(a) domÈstico(a)
+413 Dama de compa√±√≠a, acompa√±ante
+421 Esposo(a) del(la) trabajador(a) dom√©stico(a)
+431 Hijo(a) del(la) trabajador(a) dom√©stico(a)
+441 Madre, padre del(la) trabajador(a) dom√©stico(a)
+451 Nieto(a) del(la) trabajador(a) dom√©stico(a)
+461 Otro pariente del(la) trabajador(a) dom√©stico(a)
 501 No tiene parentesco
 502 Tutor(a)
 503 Tutelado(a), pupilo(a), alumno(a)
@@ -226,24 +226,24 @@ contar los registros con parentesco de 501 a 503.
 609 Nieto(a)
 610 Bisnieto(a)
 611 Tataranieto(a)
-612 TÌo(a)
+612 T√≠o(a)
 613 Sobrino(a)
 614 Primo(a)
 615 Suegro(a)
 616 Consuegro(a)
 617 Nuera, yerno
-618 CuÒado(a)
-619 ConcuÒo(a)
+618 Cu√±ado(a)
+619 Concu√±o(a)
 620 Padrino, madrina
 621 Ahijado(a)
 622 Compadre, comadre
 623 Familiar, otro parentesco
-701 HuÈsped, abonado(a), pensionista
-711 Esposo(a) del(la) huÈsped
-712 Hijo(a) del(la) huÈsped
-713 Madre o padre del(la) huÈsped
-714 Nieto(a) pariente del(la) huÈsped
-715 Otro(a) pariente del(la) huÈsped
+701 Hu√©sped, abonado(a), pensionista
+711 Esposo(a) del(la) hu√©sped
+712 Hijo(a) del(la) hu√©sped
+713 Madre o padre del(la) hu√©sped
+714 Nieto(a) pariente del(la) hu√©sped
+715 Otro(a) pariente del(la) hu√©sped
 999 Parentesco no especificado
 
 */
@@ -281,12 +281,12 @@ label value civil_ci civil_ci
 
 /*
 Valor Etiqueta
-1 Vive con su pareja o en uniÛn libre
-2 Est· separada(o)
-3 Est· divorciada(o)
-4 Est· viuda(o)
-5 Est· soltera(o)
-6 Est· casada(o)
+1 Vive con su pareja o en uni√≥n libre
+2 Est√° separada(o)
+3 Est√° divorciada(o)
+4 Est√° viuda(o)
+5 Est√° soltera(o)
+6 Est√° casada(o)
 */
 
 ******************************
@@ -373,8 +373,8 @@ replace condocup_ci=4 if edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la poblaciÛn en edad de 
-trabajar como aquella de catorce aÒos en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaci√≥n en edad de 
+trabajar como aquella de catorce a√±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -396,7 +396,7 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 ****************
 *cotizando_ci***   
 ****************
-gen cotizando_ci=. /*Revisar las variables inst_1 Û pres_91 */
+gen cotizando_ci=. /*Revisar las variables inst_1 √≥ pres_91 */
 label var cotizando_ci "Cotizante a la Seguridad Social"
 *Nota: solo seguro social publico, con el cual tenga derecho a pensiones en el futuro.
 ****************
@@ -420,7 +420,7 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "instituciÛn a la cual cotiza"
+label var instcot_ci "instituci√≥n a la cual cotiza"
 
 
 *************
@@ -442,7 +442,7 @@ label var ypen_ci "Valor de la pension contributiva"
 gen yp70mas=ing_1P044
 gen yotroam=ing_1P045
 gen yoportuni70=ing_1P042 if edad_ci>=70  /* solo se los dan a los que no entraron por SEDESOL*/
-* Oportunidades : Special cash transfers for every adult 70 years or older who is a member of a beneficiary family meanwhile its incorporated to the SEDESOL¥s Program 70 and more.
+* Oportunidades : Special cash transfers for every adult 70 years or older who is a member of a beneficiary family meanwhile its incorporated to the SEDESOL¬¥s Program 70 and more.
 
 egen ypensub_ci=rsum(yp70mas yotroam yoportuni70) 
 replace ypensub_ci=. if yp70mas==. & yotroam==. & yoportuni70==.
@@ -450,7 +450,7 @@ replace ypensub_ci=. if yp70mas==. & yotroam==. & yoportuni70==.
 *egen ypensub_ci=rsum(ing_1P044 ing_1P045 ing_1P042) 
 *replace ypensub_ci=. if ing_1P044==. & ing_1P045==. & ing_1P042==.
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
-*Programas: Beneficio del programa 70 y m·s; Beneficio de otros programas para adultos mayores; y, Oportunidades
+*Programas: Beneficio del programa 70 y m√°s; Beneficio de otros programas para adultos mayores; y, Oportunidades
 
 ***************
 *pensionsub_ci*
@@ -506,7 +506,7 @@ label var lp3_ci "linea de pobreza de patrimonio"
 
 /*La encuesta fue levantada entre 21 agosto-28 noviembre 2010
 *Al preguntarse por los ingresos de los seis meses anteriores 
-se recolectÛ informaciÛn correspondiente a los meses de febrero,
+se recolect√≥ informaci√≥n correspondiente a los meses de febrero,
 marzo,abril, mayo, junio y julio del 2010*/
 
 
@@ -2982,7 +2982,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignaciÛn del SML"
+label var zona_salmm "estructura zonal para asignaci√≥n del SML"
         }
   
   
@@ -3035,7 +3035,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignaciÛn del SML"
+label var zona_salmm "estructura zonal para asignaci√≥n del SML"
    }
    }
 
@@ -3183,13 +3183,13 @@ label var segsoc_ci "1=Cuenta con SS"
 *****************
 *tipocontrato_ci*
 *****************
-/*13. øEn su trabajo cuenta con un contrato escrito?
+/*13. ¬øEn su trabajo cuenta con un contrato escrito?
 1-si
 2-no
 3-no sabe
 14. El contrato...
-1-øEs temporal o por obra determinada?..........
-2-øEs de base, planta o por tiempo indeterminado?...............................................
+1-¬øEs temporal o por obra determinada?..........
+2-¬øEs de base, planta o por tiempo indeterminado?...............................................
 3-No sabe..........................................................
 */
 generat tipocontrato_ci=. /* Solo disponible para asalariados y trab independ*/
@@ -3270,9 +3270,9 @@ replace rama_ci=7 if ramat>=481 & ramat<=493
 replace rama_ci=9 if ramat>=511 & ramat<=932
 replace rama_ci=8 if ramat>=520 & ramat<=530
 
-/*Note: Actividad econÛmica a la que se dedica la
-empresa de acuerdo al Sistema de clasificaciÛn Industrial de AmÈrica
-del Norte. MÈxico, 2008 */
+/*Note: Actividad econ√≥mica a la que se dedica la
+empresa de acuerdo al Sistema de clasificaci√≥n Industrial de Am√©rica
+del Norte. M√©xico, 2008 */
 
 ******************************
 *	ylmpri_ci 
@@ -3477,19 +3477,19 @@ gen antiguedad_ci=.
 *******************
 /*
 gen tamemp_ci=tam_emp1 
-label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16-20 personas" 6"21-30 personas" 7"31-50 personas" 8"51-100 personas" 9"101-250 personas" 10"251-500 personas" 11"501 a m·s personas" 12"No sabe"
+label define tamemp_ci 1"1 persona" 2"2-5 personas" 3"6-10 personas" 4"11-15 personas" 5"16-20 personas" 6"21-30 personas" 7"31-50 personas" 8"51-100 personas" 9"101-250 personas" 10"251-500 personas" 11"501 a m√°s personas" 12"No sabe"
 label value tamemp_ci tamemp_ci
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
-*MÈxico PequeÒa 1 a 5, Mediana 6 a 50, Grande M·s de 50
+*M√©xico Peque√±a 1 a 5, Mediana 6 a 50, Grande M√°s de 50
 
 gen tamemp_ci = 1 if tam_emp1==1 | tam_emp1==2
 replace tamemp_ci = 2 if (tam_emp1>=3 & tam_emp1<=7)
 replace tamemp_ci = 3 if (tam_emp1>7 & tam_emp1<12)
 
-label define tamemp_ci 1 "PequeÒa" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "Peque√±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "TamaÒo de empresa"
+label var tamemp_ci "Tama√±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3501,8 +3501,8 @@ gen categoinac_ci =1 if (act_pensio==3 & condocup_ci==3)
 replace categoinac_ci = 2 if  (act_estudi==5 & condocup_ci==3)
 replace categoinac_ci = 3 if  (act_quehac==4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "CategorÌa de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÈsticos" 4 "Otros" 
+label var categoinac_ci "Categor√≠a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres dom√©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3547,21 +3547,21 @@ Valor Etiqueta
 1 Preescolar
 2 Primaria
 3 Secundaria
-4 Carrera tÈcnica con secundaria terminada
+4 Carrera t√©cnica con secundaria terminada
 5 Preparatoria o bachillerato
-6 Carrera tÈcnica con preparatoria terminada
+6 Carrera t√©cnica con preparatoria terminada
 7 Normal
 8 Profesional
-9 MaestrÌa o doctorado
+9 Maestr√≠a o doctorado
 #33 grado: Grado escolar al que
 
 Valor Etiqueta
-1 Primer aÒo
-2 Segundo aÒo
-3 Tercer aÒo
-4 Cuarto aÒo
-5 Quinto aÒo
-6 Sexto aÒo
+1 Primer a√±o
+2 Segundo a√±o
+3 Tercer a√±o
+4 Cuarto a√±o
+5 Quinto a√±o
+6 Sexto a√±o
 */
 *asisten
 gen aedu_ci=.
@@ -3834,9 +3834,9 @@ label var pared_ch "Material Pared"
 
 /*
 1 Material de desecho.
-2 Lamina de cartÛn.
-3 Lamina met·lica o de asbesto.
-4 Carrizo bamb˙ o palma.
+2 Lamina de cart√≥n.
+3 Lamina met√°lica o de asbesto.
+4 Carrizo bamb√∫ o palma.
 5 Embarro o Bajareque.
 6 Madera.
 7 Adobe.
@@ -3853,12 +3853,12 @@ replace techo_ch=1 if mat_techos==3 | mat_techos==4 | (mat_techos>=6 & mat_techo
 
 /*
 1 Material de desecho.
-2 Lamina de cartÛn.
-3 Lamina met·lica.
+2 Lamina de cart√≥n.
+3 Lamina met√°lica.
 4 Lamina de asbesto.
 5 Palma o paja.
 6 Madera o tejamanil.
-7 Terrado con viguerÌa.
+7 Terrado con viguer√≠a.
 8 Teja.
 9 Losa de concreto o viguetas con bovedilla.
 */
@@ -3984,7 +3984,7 @@ label define vivi1_ch 1"Casa" 2"Dpto" 3"Otr"
 02 Departamento en edificio
 03 Vivienda en vecindad
 04 Vivienda en cuarto de azotea
-05 Local no construido para habitaciÛn
+05 Local no construido para habitaci√≥n
 -1 No especificado
 */
 
@@ -4007,10 +4007,10 @@ label var viviprop_ch "Propiedad de la vivienda"
 /*
 1 es rentada?
 2 es prestada?
-3 es propia pero la est·n pagando?
+3 es propia pero la est√°n pagando?
 4 es propia?
 5 esta intestada o en litigio?
-6 Otra situaciÛn.
+6 Otra situaci√≥n.
 */
 
 ******************************
@@ -4047,13 +4047,13 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
 replace raza_ci=3 if raza_ci==. 
 drop aux aux1
-label define raza_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo"
 */
 
-*ModificaciÛn Mayra S·enz 10/20/2015: modificaciones realizadas en base a metodologÌa enviada por SCL/GDI Maria Olga PeÒa
+*Modificaci√≥n Mayra S√°enz 10/20/2015: modificaciones realizadas en base a metodolog√≠a enviada por SCL/GDI Maria Olga Pe√±a
 destring parentesco, replace
 gen raza_idioma_ci=.
 replace raza_idioma_ci=1 if(hablaind=="1")
@@ -4062,7 +4062,7 @@ bys idh_ch: egen aux1 = max(aux)
 replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentesco==301 | parentesco==301 | parentesco==609 | parentesco==610 | parentesco==611))  
 replace raza_idioma_ci=3 if raza_idioma_ci==. 
 drop aux aux1
-label define raza_idioma_ci 1 "IndÌgena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_idioma_ci 1 "Ind√≠gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_idioma_ci raza_idioma_ci 
 label value raza_idioma_ci raza_idioma_ci
 label var raza_idioma_ci "Raza o etnia del individuo"
@@ -4071,7 +4071,7 @@ gen raza_ci=.
 
 gen id_ind_ci = 0
 replace id_ind_ci=1 if raza_idioma_ci==1 
-label define id_ind_ci 1 "IndÌgena" 0 "Otros" 
+label define id_ind_ci 1 "Ind√≠gena" 0 "Otros" 
 label value id_ind_ci id_ind_ci 
 label var id_ind_ci  "Indigena" 
 
@@ -4083,15 +4083,15 @@ label var id_afro_ci "Afro-descendiente"
 
 
 /*_____________________________________________________________________________________________________*/
-* AsignaciÛn de etiquetas e inserciÛn de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), lÌneas de pobreza
+* Asignaci√≥n de etiquetas e inserci√≥n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), l√≠neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* VerificaciÛn de que se encuentren todas las variables armonizadas 
+* Verificaci√≥n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

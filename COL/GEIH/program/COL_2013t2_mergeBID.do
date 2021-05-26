@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Enero, 2014
 
 *** MERGE COLOMBIA GEIH 2013 ****
@@ -8,7 +8,7 @@ clear
 set more off
 local anio = 2013
 local anioab ="13" 	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'm4\data_orig\" 
 local m8 ="`ruta'm5\data_orig\" 
 local m9 ="`ruta'm6\data_orig\" 
@@ -21,10 +21,10 @@ local out  ="`ruta't2\data_merge\"
 
 /* Pendiente hasta que el DANE suba a su pagina el homologado de ingresos
 clear
-use "\\sdssrv03\Surveys\survey\COL\GEIH\2012\a\data_orig\personas 2012.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\personas 2012.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-merge idh using "\\sdssrv03\Surveys\survey\COL\GEIH\2012\a\data_orig\hogares 2012.dta"
+merge idh using "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\hogares 2012.dta"
 tab _merge
 drop _merge
 egen id =concat (directorio secuencia_p orden)
@@ -32,7 +32,7 @@ sort id
 destring mes, replace
 keep if mes>=7 & mes<=9
 keep  id impa- fex_c nper- fex_dpto_c
-save "Y:\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
 */
 *2. Append entre meses
 *------------------------

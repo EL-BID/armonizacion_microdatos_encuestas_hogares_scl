@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS MEX
 local ENCUESTA ENIGH
@@ -31,14 +31,14 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Mexico
+PaÃ­s: Mexico
 Encuesta: ENIGH (tradicional)
 Round: Julio-Octubre
 Autores: 
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 19 de Agosto de 2013
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 19 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -50,10 +50,10 @@ use `base_in', clear
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013
 
 gen region_c=  .
-label var region_c "División política"
+label var region_c "DivisiÃ³n polÃ­tica"
 
 ***************
 ***factor_ch***
@@ -101,7 +101,7 @@ label value zona_c zona_ci
 
 */
 
-/* Modificación Mayra Sáenz- Septiembre 2013. Se modifica la sintaxis por la siguiente recomendación:
+/* ModificaciÃ³n Mayra SÃ¡enz- Septiembre 2013. Se modifica la sintaxis por la siguiente recomendaciÃ³n:
 Sept 7, 2006 (Mafe) minor error in the program with huge consequences in te size of rural areas
 content of the variable estrato changed and the program didn't include that change 
 previous code.
@@ -115,7 +115,7 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_ci
 */
 
-*Modificación Mayra Sáenz - Agosto 2015 Se reemplaza la clasificación de zona por la que consta en la sintaxis de CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015 Se reemplaza la clasificaciÃ³n de zona por la que consta en la sintaxis de CONEVAL
 destring estrato, replace 
 
 gen byte zona_c= 1 if estrato<=2 
@@ -139,12 +139,12 @@ gen anio_c=1996
 label variable anio_c "Anio de la encuesta"
 
 *****************
-*** region según BID ***
+*** region segÃºn BID ***
 *****************
 gen region_BID_c=.
 replace region_BID_c=1 if pais=="MEX" 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *********
@@ -153,7 +153,7 @@ label value region_BID_c region_BID_c
 
 *gen mes_c=real(substr(meses,1,2))
 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen mes_c=mes_ref
 
 label variable mes_c "Mes de la encuesta"
@@ -368,8 +368,8 @@ replace condocup_ci=4 if  edad<12
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 12"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
-/*Nota: En el esquema de la ENOE se considera a la población en edad de 
-trabajar como aquella de catorce años en adelante, de acuerdo con la Ley 
+/*Nota: En el esquema de la ENOE se considera a la poblaciÃ³n en edad de 
+trabajar como aquella de catorce aÃ±os en adelante, de acuerdo con la Ley 
 Federal del Trabajo.
 Fuente:http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/comunicados/ocupbol.asp */
 
@@ -417,13 +417,13 @@ gen instcot_ci= . /*No estoy segura de si se debe crearla*/
 replace instcot_ci=presta1 if (presta1>=1 & presta1<=5) 
 label define instcot_ci 1"IMSS" 2"ISSSTE" 3"PEMEX" 4"SECMAR" 5 "SEDENA" 
 label value instcot_ci instcot_ci
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
 *************
 *generat pension_ci=(ing_jub>0 & ing_jub!=.) /* A todas las per mayores de cinco*/
-*Modificación Mayra Sáenz - Agosto 2015: No se puede distinguir si la pensión es nacional o del extranjero.
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: No se puede distinguir si la pensiÃ³n es nacional o del extranjero.
 g pension_ci = (ypension>0 & ypension!=.)
 
 label var pension_ci "1=Recibe pension contributiva"
@@ -432,7 +432,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *ypen_ci*
 *************
 *gen ypen_ci=ing_jub  if pension_ci==1
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 gen ypen_ci=ypension  if pension_ci==1
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -481,13 +481,13 @@ label var lp_ci "linea de pobreza de patrimonio oficial del pais"
 *************
 /*
 La encuesta fue levantada entre los meses de julio y octubre 1996, 
-y por tanto, al preguntarse por los ingresos de los últimos seis meses,
-se recolectó información correspondiente a febrero-julio, marzo-agosto, 
+y por tanto, al preguntarse por los ingresos de los Ãºltimos seis meses,
+se recolectÃ³ informaciÃ³n correspondiente a febrero-julio, marzo-agosto, 
 abril-septiembre,y mayo-octubre 1996
 */
 
 gen entidad=substr(folio,2,2)
-label var  entidad "entidad federativa del país"
+label var  entidad "entidad federativa del paÃ­s"
 quietly {
 capture confirm variable ubica_geo
 if !_rc {
@@ -2960,7 +2960,7 @@ replace zona_salmm=3	if municipio=="32058"
 
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
         }
   
   
@@ -3013,7 +3013,7 @@ replace zona_salmm=3	if entidad=="31"
 replace zona_salmm=3	if entidad=="32"
 label define zona_salmm 1"A" 2"B" 3"C"
 label value zona_salmm zona_salmm
-label var zona_salmm "estructura zonal para asignación del SML"
+label var zona_salmm "estructura zonal para asignaciÃ³n del SML"
    }
    }
 
@@ -3088,12 +3088,12 @@ gen horastot_ci=hr_seman+hr_sem_s  if emp_ci==1
 POSICION EN LA OCUPACION
 CODIGO DESCRIPCION
 1 Obrero o Empleado no Agropecuario
-2 Jornalero Rural o Peón de Campo
-3 Patrón Empresario, Empleador o Propietario de un negocio (de 1 a 5 trabajadores)
-4 Patrón Empresario, Empleador o Propietario de un negocio (de 6 o más trabajadores)
+2 Jornalero Rural o PeÃ³n de Campo
+3 PatrÃ³n Empresario, Empleador o Propietario de un negocio (de 1 a 5 trabajadores)
+4 PatrÃ³n Empresario, Empleador o Propietario de un negocio (de 6 o mÃ¡s trabajadores)
 5 Trabajador por Cuenta Propia
-6 Trabajador Familiar sin Retribución de un Negocio Propiedad del Hogar
-7 Trabajador sin Retribución de una Empresa que no es Propiedad del Hogar
+6 Trabajador Familiar sin RetribuciÃ³n de un Negocio Propiedad del Hogar
+7 Trabajador sin RetribuciÃ³n de una Empresa que no es Propiedad del Hogar
 8 Miembro de una Cooperativa
 */
 
@@ -3266,15 +3266,15 @@ gen antiguedad_ci=.
 *************
  gen byte tot_tra=real(numper)
 replace tot_tra=. if tot_tra==99999   
-*México Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*MÃ©xico PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 
 gen tamemp_ci = 1 if (tot_tra>=1 & tot_tra<=5)
 replace tamemp_ci = 2 if (tot_tra>=6 & tot_tra<=50)
 replace tamemp_ci = 3 if (tot_tra>50)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci***
@@ -3283,8 +3283,8 @@ gen categoinac_ci =1 if ( no_traba==14 & condocup_ci==3)
 replace categoinac_ci = 2 if  (no_traba==15 & condocup_ci==3)
 replace categoinac_ci = 3 if  (no_traba==16 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -3306,7 +3306,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *************************************************************************************
 *******************************INGRESOS**********************************************
 *************************************************************************************
-*Modificación Mayra Sáenz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015: Se reemplazan los ingresos por los generados con base en CONEVAL
 
 /*
 ****************
@@ -3405,9 +3405,9 @@ gen ynlnm_ci=.
 *** HOUSEHOLD INCOME ***
 ************************
 
-/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domésticas
+/*Dado que el ingreso del hogar no tiene en cuenta el ingreso de las empleadas domÃ©sticas
 voy a crear una flag que me identifique a las mismas como para que en este caso figure un missing
-en el ingreso del hogar, las empleadas domésticas en este caso se identifican con un 9 en la variable parentco*/
+en el ingreso del hogar, las empleadas domÃ©sticas en este caso se identifican con un 9 en la variable parentco*/
 
 ******************
 *** nrylmpri_ch***
@@ -3665,7 +3665,7 @@ bys idh_ch: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
 *******************
 *** rentaimp_ch ***
 *******************
-*Modificacion Mayra Sáenz - Agosto 2015- Antes estaba generada como missing.
+*Modificacion Mayra SÃ¡enz - Agosto 2015- Antes estaba generada como missing.
 gen rentaimp_ch= est_alq
 
 *****************
@@ -3938,7 +3938,7 @@ destring  pisos num_cua cua_coc cua_dor  tipo_viv tenencia,replace
 *gen aguared_ch=real(substr(agua,1,1))
 *replace aguared_ch=0 if aguared_ch==2
 
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 destring agua*, replace
 
 gen aguared_ch=1 if agua17 ==1
@@ -3947,7 +3947,7 @@ replace aguared_ch=0 if agua17==2 | agua17==0
 ****************
 **aguadist_ch***
 ****************
-*Modificación Mayra Sáenz - Agosto 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Agosto 2015
 *gen aguadist_ch=real(substr(agua,2,1))
 
 gen aguadist_ch=.
@@ -3958,7 +3958,7 @@ replace aguadist_ch=2 if agua16==2
 ****************
 **aguamala_ch***
 ****************
-*Modificacion Mayra Sáenz - Agosto 2015 : antes se generaba como missing
+*Modificacion Mayra SÃ¡enz - Agosto 2015 : antes se generaba como missing
 
 gen aguamala_ch= 1     if (agua21 >=5 & agua21 <=6)
 replace aguamala_ch= 0 if (agua21 >=1 & agua21 <=4)
@@ -3978,7 +3978,7 @@ gen aguamide_ch=.
 *gen luz_ch=real(substr(com_luz,2,1))
 *replace luz_ch=0 if luz_ch==2
 
-*Modificacion Mayra Sáenz - Agosto 2015
+*Modificacion Mayra SÃ¡enz - Agosto 2015
 destring luz33,replace
 gen     luz_ch= 1 if luz33 ==1
 replace luz_ch= 0 if luz33 ==2 | luz33 ==0
@@ -3999,7 +3999,7 @@ replace combust_ch=1 if combust_ch==4
 
 */
 
-*Modificacion Mayra Sáenz - Agosto 2015
+*Modificacion Mayra SÃ¡enz - Agosto 2015
 destring combust, replace
 gen combust_ch = 1     if combusti==4 | combusti==5
 replace combust_ch = 0 if (combusti>=1 & combusti<=3) | (combusti>=6 & combusti<=7)
@@ -4014,7 +4014,7 @@ gen bano_ch=real(substr(bano,1,1))
 replace bano_ch=0 if bano_ch==2
 */
 
-*Modificacion Mayra Sáenz - Agosto 2015
+*Modificacion Mayra SÃ¡enz - Agosto 2015
 gen bano_ch=real(substr(bano23,1,1))
 replace bano_ch=0 if bano_ch==2
 
@@ -4026,13 +4026,13 @@ replace bano_ch=0 if bano_ch==2
 
 *gen banoex_ch=real(substr(bano,4,1))
 *replace banoex_ch=0 if banoex_ch==2
-*Modificacion Mayra Sáenz - Agosto 2015
+*Modificacion Mayra SÃ¡enz - Agosto 2015
 gen banoex_ch=.
 ****************
 ****des1_ch*****
 ****************
 
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 /*gen drenaje2=real(substr(drenaje,3,1))
 gen des1_ch=.
 replace des1_ch=0 if drenaje2==0 
@@ -4070,7 +4070,7 @@ replace piso_ch=1 if pisos==2 | pisos==3
 *gen muros1=real(substr(muros,1,2))
 
 
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 gen muros1=real(substr(muros08,1,2))
 
 gen pared_ch=.
@@ -4084,7 +4084,7 @@ drop muros1
 ****************
 *gen techo1=real(substr(techos,1,2))
 
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 gen techo1=real(substr(techos11,1,2))
 
 gen techo_ch=.
@@ -4103,7 +4103,7 @@ replace resid_ch=1 if basura==2 | basura==4
 replace resid_ch=2 if basura==1 | basura==3
 replace resid_ch=3 if basura==5 | basura==7
 drop basura*/
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 destring basura*, replace
 
 g resid_ch =.
@@ -4155,7 +4155,7 @@ replace cocina_ch=1 if cua_coc==1
 ****************
 
 *gen telef_ch=real(substr(telefono,1,1))
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 gen telef_ch=real(substr(telefono37,1,1))
 replace telef_ch=0 if telef_ch==2
 
@@ -4165,7 +4165,7 @@ replace telef_ch=0 if telef_ch==2
 ****************
 
 *gen refrig1=real(substr(aparatos,26,2))
-**Modificacion Mayra Sáenz - Agosto 2015
+**Modificacion Mayra SÃ¡enz - Agosto 2015
 gen refrig1=real(substr(aparatos2,11,2))
 gen refrig_ch=.
 replace refrig_ch=1 if refrig1>0
@@ -4185,7 +4185,7 @@ gen freez_ch=.
 *gen automovil=real(substr(vehiculo,1,2))
 *gen camioneta=real(substr(vehiculo,3,2))
 
-**Modificacion Mayra Sáenz - Agosto 2015  - Cambio de variable porque se cambia de base.
+**Modificacion Mayra SÃ¡enz - Agosto 2015  - Cambio de variable porque se cambia de base.
 gen automovil=real(substr(vehiculos,1,2))
 gen camioneta=real(substr(vehiculos,3,2))
 
@@ -4198,7 +4198,7 @@ drop automovil camioneta
 ****compu_ch****
 ****************
 
-*Modificaciones Marcela Rubio Septiembre 2014: a partir de este año se toman dos dígitos por cada aparato es decir a partir de la columna 13 no 14
+*Modificaciones Marcela Rubio Septiembre 2014: a partir de este aÃ±o se toman dos dÃ­gitos por cada aparato es decir a partir de la columna 13 no 14
 /*
 gen computa=real(substr(aparatos,14,2))
 gen compu_ch=. 
@@ -4209,7 +4209,7 @@ drop computa
 
 *gen computa=real(substr(aparatos,13,2))
 
-**Modificacion Mayra Sáenz - Agosto 2015 - Cambio de variable porque se cambia de base.
+**Modificacion Mayra SÃ¡enz - Agosto 2015 - Cambio de variable porque se cambia de base.
 gen computa=real(substr(aparatos1,13,2))
 gen compu_ch= (computa>0)
 drop computa
@@ -4269,7 +4269,7 @@ gen vivialq_ch=.
 ****vivialqimp_ch****
 *********************
 
-*Modificacion Mayra Sáenz - Agosto 2015- Antes estaba generada como missing.
+*Modificacion Mayra SÃ¡enz - Agosto 2015- Antes estaba generada como missing.
 gen vivialqimp_ch=est_alq
 
 
@@ -4286,15 +4286,15 @@ aorder
 
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

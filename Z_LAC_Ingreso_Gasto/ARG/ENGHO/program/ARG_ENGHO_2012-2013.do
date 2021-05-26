@@ -46,8 +46,8 @@ set matsize 2000
  *************************************************************************/
 	
 *Directorios:
-	global RAW    "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\ARG\ENGHO\RAW"
-	global data_arm  "\\Sdssrv03\surveys\harmonized\Z_LAC_Ingreso_Gasto\ARG\ENGHO\data_arm"
+	global RAW    "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\ARG\ENGHO\RAW"
+	global data_arm  "${surveysFolder}\harmonized\Z_LAC_Ingreso_Gasto\ARG\ENGHO\data_arm"
 
 	
 /*	____________________________________________________________________________

@@ -5,7 +5,7 @@
 
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\VEN\EHM\1996\s2\data_orig\"
+cd "${surveysFolder}\survey\VEN\EHM\1996\s2\data_orig\"
 use "viv962.dta", clear
 destring _all, replace
 ren num_hogare num_hog
@@ -19,4 +19,4 @@ destring _all, replace
 sort entidad control area linea num_hog subdominio, stable
 merge entidad control area linea num_hog subdominio using "viv962_ci.dta"
 
-saveold "\\Sdssrv03\surveys\survey\VEN\EHM\1996\s2\data_merge\VEN_1996s2.dta", replace
+saveold "${surveysFolder}\survey\VEN\EHM\1996\s2\data_merge\VEN_1996s2.dta", replace

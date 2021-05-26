@@ -1,18 +1,18 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -32,14 +32,14 @@ log using "`log_file'", replace
 log off
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Chile
+PaÃ­s: Chile
 Encuesta: CASEN
 Round: Noviembre- Diciembre
 Autores: 
-Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
-Versión 2007: Victoria, Maria Fernanda Prada (MFP)
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+ModificaciÃ³n 2014: Mayra SÃ¡enz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
+VersiÃ³n 2007: Victoria, Maria Fernanda Prada (MFP)
+Ãšltima versiÃ³n: MarÃ­a Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
+Fecha Ãºltima modificaciÃ³n: 26 de Agosto de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -264,7 +264,7 @@ replace condocup_ci=1 if (o1==1 | o2==1)
 replace condocup_ci=2 if ((o1==2 | o2==2) & (o3==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
-label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
+label var condocup_ci "Condicion de ocupaciÃ³n de acuerdo a def de cada pais"
 label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
@@ -419,8 +419,8 @@ replace categopri_ci=4 if o7==6
 replace categopri_ci=. if emp_ci==0
 gen categosec_ci=.
 /*
-gen contrato_ci=(o8==1) /*Crear esta variable, para este año en particular, es un poco problemático, porque no tenemos cuestionario. Entonces, 
-uno tendería a replicar los mismos patrones que en años anterioes (o8>=1 & o8<=3). Sin embargo cuando miramos el siguiente tabulado:
+gen contrato_ci=(o8==1) /*Crear esta variable, para este aÃ±o en particular, es un poco problemÃ¡tico, porque no tenemos cuestionario. Entonces, 
+uno tenderÃ­a a replicar los mismos patrones que en aÃ±os anterioes (o8>=1 & o8<=3). Sin embargo cuando miramos el siguiente tabulado:
 ----------------------
        o8 |      Freq.
 ----------+-----------
@@ -429,8 +429,8 @@ uno tendería a replicar los mismos patrones que en años anterioes (o8>=1 & o8<=3
         8 |      3,224
         9 |         37
 ----------------------
-nos damos cuenta que esa suposición esta mal. Un educated guess nos diría que 1=si, 2=no y 8, 9=NS/NC. Por lo tanto, esta sera la clasificacion
-que seguiremos. Aun mas, al hacer esto, las tasas de contrato se vuelven consistentes con el resto de los años*/
+nos damos cuenta que esa suposiciÃ³n esta mal. Un educated guess nos dirÃ­a que 1=si, 2=no y 8, 9=NS/NC. Por lo tanto, esta sera la clasificacion
+que seguiremos. Aun mas, al hacer esto, las tasas de contrato se vuelven consistentes con el resto de los aÃ±os*/
 replace contrato_ci=. if emp_ci==0
 
 gen segsoc_ci=(o11<5)
@@ -525,7 +525,7 @@ gen edusc_ci=(edus2c_ci==1)
 *****************
 ***pqnoasis_ci***
 *****************
-*Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing
+*Modificado Mayra SÃ¡enz Junio, 2016: antes se generaba como missing
 gen pqnoasis_ci= e7
 
 **************
@@ -542,7 +542,7 @@ replace pqnoasis1_ci = 7 if e7 ==10
 replace pqnoasis1_ci = 8 if e7 ==1  | e7 ==2  | e7 ==3
 replace pqnoasis1_ci = 9 if e7 ==11 | e7 ==12 | e7 ==15 | e7 ==17 | e7 ==18
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 **************
@@ -674,10 +674,10 @@ gen edupub_ci=.
 
 
 /*
-save "X:\ARM\CHL\1994\Van_data\CHL1994.dta", replace
+save "${surveysFolder}\ARM\CHL\1994\Van_data\CHL1994.dta", replace
 clear
 
-infile using "X:\ARM\CHL\1994\Programs\Van_prog\asiste.dct"
+infile using "${surveysFolder}\ARM\CHL\1994\Programs\Van_prog\asiste.dct"
 compress
 egen idh_ch=group(r p c z s f)
 *egen idh_ch=group(r p c z seg f)
@@ -687,16 +687,16 @@ sort idh sexo edad
 drop r p c z s f o
 *drop r p c z seg f o
 compress
-save "X:\ARM\CHL\1994\Van_data\asiste.dta", replace
+save "${surveysFolder}\ARM\CHL\1994\Van_data\asiste.dta", replace
 clear
 
-use "X:\ARM\CHL\1994\Van_data\CHL1994.dta"
+use "${surveysFolder}\ARM\CHL\1994\Van_data\CHL1994.dta"
 sort idh_ch sexo edad
 /* we sort by sexo and edad because there was an error in the previous banana,
 the parentco variable had only 1 digit, so the person 10, 11 or 12, it was considered  0,1 or 2. Now, the problem is fixed. '
 We have also now included here the nucleo variable and the parentnu variable*/
 
-merge idh_ch sexo edad using X:\ARM\CHL\1994\Van_data\asiste.dta
+merge idh_ch sexo edad using ${surveysFolder}\ARM\CHL\1994\Van_data\asiste.dta
 drop idp_ci
 rename idpersox idp_ci
 sort idh_ch idp_ci
@@ -713,7 +713,7 @@ replace ban_aedu=aedu_ci-1 if asiste_ci==1 & aedu_ci!=. & aedu_ci!=0
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 *********
 *lp_ci***
@@ -892,7 +892,7 @@ replace categoinac_ci=2 if o4==4
 replace categoinac_ci=3 if o4==1
 replace categoinac_ci=4 if o4==2 | o4==3 | o4==6 | o4==7 | o4==8 | o4==9
 
-label var categoinac_ci "Condición de inactividad"
+label var categoinac_ci "CondiciÃ³n de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	
@@ -910,7 +910,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 *** VARIABLES DE RAZA ***
 *************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+* MGR Oct. 2015: modificaciones realizadas en base a metodologÃ­a enviada por SCL/GDI Maria Olga PeÃ±a
 
 gen raza_idioma_ci = . 
 gen id_ind_ci = .
@@ -927,15 +927,15 @@ gen freez_ch=.
 gen region_c=.
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///

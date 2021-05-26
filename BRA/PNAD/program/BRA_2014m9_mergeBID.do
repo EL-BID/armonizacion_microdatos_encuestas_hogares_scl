@@ -1,4 +1,4 @@
-* Elaboración: Marcela Rubio (mrubio@iadb.org | marcelarubio28@gmail.com)
+* ElaboraciÃ³n: Marcela Rubio (mrubio@iadb.org | marcelarubio28@gmail.com)
 * Diciembre 2015
 *** MERGE BRASIL 2014 ****
 *------------------------*
@@ -9,7 +9,7 @@
 *1 - Conversion Bases de datos
 clear
 set more off
-cd "\\Sdssrv03\surveys\survey\BRA\PNAD\2014\m9\data_orig\"
+cd "${surveysFolder}\survey\BRA\PNAD\2014\m9\data_orig\"
 infile using "input_PES_2014.do", using("PES2014.txt")
 foreach v of varlist _all {
       capture rename `v' `=lower("`v'")'
@@ -47,5 +47,5 @@ keep if v0201==1 & v0104==1 /*Hogares permanentes y encuestas realizadas*/
 tab _merge
 more
 drop _merge
-saveold "\\Sdssrv03\surveys\survey\BRA\PNAD\2014\m9\data_merge\BRA_2014m9.dta", replace
+saveold "${surveysFolder}\survey\BRA\PNAD\2014\m9\data_merge\BRA_2014m9.dta", replace
 

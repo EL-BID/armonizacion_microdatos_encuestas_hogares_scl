@@ -1,8 +1,8 @@
 clear all
 set mem 500m
 set more off
-*cd "X:\ARM\JAM\2006\JSLC\Orig_data"
-use "Z:\survey\JAM\SLC\2006\m5\data_merge\JAM_2006m5.dta"
+*cd "${surveysFolder}\ARM\JAM\2006\JSLC\Orig_data"
+use "${surveysFolder}\survey\JAM\SLC\2006\m5\data_merge\JAM_2006m5.dta"
 
 ***********
 *factor_ch*
@@ -734,7 +734,7 @@ gen vivialqimp_ch=.
 cap ren idp_c idp_ci
 */
 
-saveold "Z:\harmonized\JAM\SLC\data_arm\JAM2006EA_BIDConConsumo.dta", replace
+saveold "${surveysFolder}\harmonized\JAM\SLC\data_arm\JAM2006EA_BIDConConsumo.dta", replace
 
 
 

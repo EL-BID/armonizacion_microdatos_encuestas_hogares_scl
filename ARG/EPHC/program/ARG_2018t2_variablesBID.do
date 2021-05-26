@@ -14,7 +14,7 @@ Noviembre, 2020 Version Stata 14
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************/
-global ruta = "C:\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys"
+global ruta = "${surveysFolder}\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys"
 
 local PAIS ARG
 local ENCUESTA EPHC
@@ -1497,7 +1497,7 @@ gen raza_ci=.
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\Harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación ¤e que se encuentren todas las variables armonizadas 

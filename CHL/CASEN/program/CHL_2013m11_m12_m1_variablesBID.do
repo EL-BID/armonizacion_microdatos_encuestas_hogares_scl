@@ -5,14 +5,14 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -155,6 +155,16 @@ label val relacion_ci relacion_ci
 gen factor_ci=expr
 label variable factor_ci "Factor de expansion del individuo"
 
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=.
+
 ***************
 * sexo_ci     * 
 ***************
@@ -162,49 +172,6 @@ gen sexo_ci=sexo
 label var sexo_ci "Sexo del individuo" 
 label define sexo_ci 1 "Hombre" 2 "Mujer"
 label value sexo_ci sexo_ci
-
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-/*
-r6
-En Chile, la ley reconoce nueve pueblos indígenas, ¿pertenece usted o es descendiente de alguno de ellos?
-1 Aymara
-2 Rapa Nui (Pascuense)
-3 Quechua
-4 Mapuche
-5 Atacameño (Likán Antai)
-6 Coya
-7 Kawésqar (Alacalufes)
-8 Yagán (Yámana)
-9 Diaguita
-10 No pertenece a ningún pueblo indígena
-99 NS/NR
-*/
-
-gen raza_ci=.
-replace raza_ci= 1 if  (r6 >=1 & r6 <=9 )
-replace raza_ci= 3 if (r6==10 | r6==99) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo"
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
 
 
 ***************
@@ -317,6 +284,48 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 ****************
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
+
+
+
+         ******************************
+         *** VARIABLES DE DIVERSIDAD **
+         ******************************
+*Nathalia Maya & Antonella Pereira
+*Feb 2021	
+
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: Pueblos indígenas, pertenece usted o es descendiente de alguno de ellos? (r6) (Aimara 1; Rapa-Nui o Pascuenses 2; Quechua 3; Mapuche 4; Atacame�o (Likan-Antai) 5; Collas 6; Kawashkar o Alacalufes 7; Y�mana o Yag�n 8; Diaguita 9; No pertenece a ning�n pueblo ind�gena 10; No sabe/no responde 99)
+gen afroind_ci=. 
+replace afroind_ci=1 if (r6 >=1 & r6 <=9 )
+replace afroind_ci=2 if r6==0
+replace afroind_ci=3 if r6==10
+replace afroind_ci=. if  r6==99 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2006
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
+
 
 		*********************************
 		* VARIABLES DEL MERCADO LABORAL *
@@ -1578,14 +1587,14 @@ gen tcylmpri_ch =.
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

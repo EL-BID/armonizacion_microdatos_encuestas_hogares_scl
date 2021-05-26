@@ -9,7 +9,7 @@ set mem 400m
 set more off
 clear
 
-global ruta = "D:\DATA.IDB\Documents\Marcela\Research\Sociometro\SLV\1998\"
+global ruta = "${surveysFolder}\DATA.IDB\Documents\Marcela\Research\Sociometro\SLV\1998\"
 
 
 local PAIS SLV

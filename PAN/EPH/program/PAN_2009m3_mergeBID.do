@@ -5,7 +5,7 @@
 					***MERGE 2009***
 					****************
 					
-cd "Z:\Panama\2009\EPH\Datos originales"
+cd "${surveysFolder}\Panama\2009\EPH\Datos originales"
 
 use hogar.dta, clear
 sort prov dist corre estra unidad cuest hogar

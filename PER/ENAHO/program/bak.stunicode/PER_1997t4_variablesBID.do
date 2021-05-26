@@ -1,17 +1,17 @@
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS PER
 local ENCUESTA ENAHO
@@ -27,13 +27,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Perú
+PaÃ­s: PerÃº
 Encuesta: ENAHO
 Round: t4
-Autores: Mayra Sáenz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
-Generación nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
-Última versión: Yessenia Loayza - Email: desloay@hotmail.com
-Fecha última modificación: agosto 2013
+Autores: Mayra SÃ¡enz E-mail: saenzmayra.a@gmail.com - mayras@iadb.org
+GeneraciÃ³n nuevas variables LMK: Yessenia Loayza (desloay@hotmail.com)
+Ãšltima versiÃ³n: Yessenia Loayza - Email: desloay@hotmail.com
+Fecha Ãºltima modificaciÃ³n: agosto 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -74,7 +74,7 @@ label define region_c ///
 19"Pasco"	          ///
 20"Piura"	          ///
 21"Puno"	          ///
-22"San Martín"	      ///
+22"San MartÃ­n"	      ///
 23"Tacna"	          ///
 24"Tumbes"	          ///
 25"Ucayali"	
@@ -82,11 +82,11 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento" 
 
 ************************
-*** region según BID ***
+*** region segÃºn BID ***
 ************************
 gen region_BID_c=3 
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 ***************
@@ -167,7 +167,7 @@ label define relacion_ci 6 "Empleado/a domestico/a", add
 
 label value relacion_ci relacion_ci
 
-/*En este año no hay empleados domésticos ni pensionistas*/
+/*En este aÃ±o no hay empleados domÃ©sticos ni pensionistas*/
 
 
 ****************************
@@ -334,7 +334,7 @@ label variable miembros_ci "Miembro del hogar"
 ***raza_ci***
 *************
 gen raza_ci=.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
+label define raza_ci 1 "IndÃ­gena" 2 "Afro-descendiente" 3 "Otros"
 label value raza_ci raza_ci 
 label value raza_ci raza_ci
 label var raza_ci "Raza o etnia del individuo" 
@@ -350,7 +350,7 @@ gen id_afro_ci     = .
 *** VARIABLES DEL MERCADO LABORAL***
 ************************************
 
-/* Esta sección es para los residentes habituales del hogar mayores a 14 años*/
+/* Esta secciÃ³n es para los residentes habituales del hogar mayores a 14 aÃ±os*/
 
 
 */
@@ -383,7 +383,7 @@ gen tipopen_ci=.
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 ****************
 *cotizando_ci***
@@ -409,17 +409,17 @@ label value tipocontrato_ci tipocontrato_ci
 *************
 /*
 gen tamemp_ci=ocprango 
-label define  tamemp_ci 1"menos de 100" 2"de 100 a 499" 3"de 500 y más p"
+label define  tamemp_ci 1"menos de 100" 2"de 100 a 499" 3"de 500 y mÃ¡s p"
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 */
 gen tamemp_ci=1 if ocpnrotr>=1 &  ocpnrotr<=5 
-label var  tamemp_ci "tamaño de empresa" 
+label var  tamemp_ci "tamaÃ±o de empresa" 
 *empresas medianas
 replace tamemp_ci=2 if ocpnrotr>=6 &  ocpnrotr<=50
 *empresas grandes
 replace tamemp_ci=3 if ocpnrotr>=51 &  ocpnrotr<=9998
-label define tamaño 1"pequeña" 2"mediana" 3"grande"
-label values tamemp_ci tamaño
+label define tamaÃ±o 1"pequeÃ±a" 2"mediana" 3"grande"
+label values tamemp_ci tamaÃ±o
 
 ****************
 **categoinac_ci*
@@ -428,8 +428,8 @@ gen categoinac_ci =1 if (actsempa==6 & condocup_ci==3)
 replace categoinac_ci = 2 if  (actsempa==4 & condocup_ci==3)
 replace categoinac_ci = 3 if  (actsempa==5 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros"
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros"
 label value categoinac_ci categoinac_ci
 
 *******************
@@ -504,7 +504,7 @@ gen lpe_ci =linea97
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 *************
@@ -597,7 +597,7 @@ replace tiempoparc_ci=. if emp_ci==0
 ******************
 ***categopri_ci***
 ******************
-* 10/20/2015 MGD: se añade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se aÃ±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categopri_ci=.
 replace categopri_ci=0 if ocpcateg==7
@@ -606,7 +606,7 @@ replace categopri_ci=2 if ocpcateg==2
 replace categopri_ci=3 if ocpcateg==3 | ocpcateg==4 | ocpcateg==6 
 replace categopri_ci=4 if ocpcateg==5 /*| ocpcateg==7*/
 
-label define categopri_ci 0 "Otra clasificación" 1"Patron" 2"Cuenta propia" 
+label define categopri_ci 0 "Otra clasificaciÃ³n" 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4" No remunerado", add
 label value categopri_ci categopri_ci
 label variable categopri_ci "Categoria ocupacional trabajo principal"
@@ -615,7 +615,7 @@ label variable categopri_ci "Categoria ocupacional trabajo principal"
 ******************
 ***categosec_ci***
 ******************
-* 10/20/2015 MGD: se añade la categoria otra clasificacion para sacarlos de los no remunerados
+* 10/20/2015 MGD: se aÃ±ade la categoria otra clasificacion para sacarlos de los no remunerados
 
 gen categosec_ci=.
 replace categosec_ci=0 if ocscateg==7
@@ -624,7 +624,7 @@ replace categosec_ci=2 if ocscateg==2
 replace categosec_ci=3 if ocscateg==3 | ocscateg==4 | ocscateg==6
 replace categosec_ci=4 if ocscateg==5 /*| ocscateg==7*/
 
-label define categosec_ci 0 "Otra clasificación"  1"Patron" 2"Cuenta propia" 
+label define categosec_ci 0 "Otra clasificaciÃ³n"  1"Patron" 2"Cuenta propia" 
 label define categosec_ci 3"Empleado" 4 "No remunerado" , add
 label value categosec_ci categosec_ci
 label variable categosec_ci "Categoria ocupacional trabajo secundario"
@@ -704,7 +704,7 @@ gen antiguedad_ci=.
 *************************************************************************************
 
 
-*Mayra SÃ¡enz- Julio 2015: En este quietly se encuentra la generaciÃ³n de ingresos anterior.
+*Mayra SÃƒÂ¡enz- Julio 2015: En este quietly se encuentra la generaciÃƒÂ³n de ingresos anterior.
 /*
 quietly {
 
@@ -723,8 +723,8 @@ replace ypridbd=. if ingdliq==99999
 
 replace ypridbd=0 if categopri_ci==4 
 /* A los trabajadores no remunerados que trabajan menos de 15 horas la encuesta no les
-pregunta acerca de sus ingresos y los manda a la sección de desempleo. Como este grupo en
-realidad está trabajando, reemplazo su ingreso missing por cero*/
+pregunta acerca de sus ingresos y los manda a la secciÃ³n de desempleo. Como este grupo en
+realidad estÃ¡ trabajando, reemplazo su ingreso missing por cero*/
 
 replace ypridbd=. if categopri_ci<=2
 
@@ -908,7 +908,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algún miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃºn miembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -985,7 +985,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
 */
 *==================================================================================================================================================================*
-* Mayra SÃ¡enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estadÃ­stica del paÃ­s, de acuerdo a sintaxis elaborada por Marcos Robles.
+* Mayra SÃƒÂ¡enz- Julio 2015: Se reemplazan los ingresos por los originales del instituto de estadÃƒÂ­stica del paÃƒÂ­s, de acuerdo a sintaxis elaborada por Marcos Robles.
 *==================================================================================================================================================================*
 
 **************
@@ -1132,7 +1132,7 @@ by idh_ch, sort: egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algò® ­iembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algÃ²Â®Â Â­iembro reporta como top-code el ingr de activ. principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -1190,7 +1190,7 @@ by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 *gen rentaimp_ch=alqmens2
 *replace rentaimp_ch=. if alqmens2==9999
 
-*ModificaciÃ³n Mayra SÃ¡enz - Julio 2015
+*ModificaciÃƒÂ³n Mayra SÃƒÂ¡enz - Julio 2015
 gen rentaimp_ch= vivialqimp
 *****************
 ***ylhopri_ci ***
@@ -1210,8 +1210,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ***VARIABLES DE EDUCACION***
 ****************************
 
-/*En esta sección es sólo para los residentes habituales 
-mayores a los 3 años de edad*/
+/*En esta secciÃ³n es sÃ³lo para los residentes habituales 
+mayores a los 3 aÃ±os de edad*/
 
 destring anoaprob, replace
 
@@ -1386,7 +1386,7 @@ label define pqnoasis_ci 4 "Prob. econ", add
 label define pqnoasis_ci 5 "Prob.fam", add
 label define pqnoasis_ci 6 "Bajas notas", add
 label define pqnoasis_ci 7 "Termino", add
-label define pqnoasis_ci 8 "Otra razón", add
+label define pqnoasis_ci 8 "Otra razÃ³n", add
 label define pqnoasis_ci 99 "Missing", add
 label value pqnoasis_ci pqnoasis_ci
 
@@ -1402,7 +1402,7 @@ replace pqnoasis1_ci = 4 if razdejes==2
 replace pqnoasis1_ci = 6 if razdejes==7
 replace pqnoasis1_ci = 9 if razdejes==6 | razdejes==8
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
@@ -1531,19 +1531,19 @@ gen vivialq_ch=alqmens1 if viviprop_ch==0 & alqmens1~=9999
 /*gen vivialqimp_ch=alqmens2
 replace vivialqimp_ch=. if alqmens2==9999*/
 
-*Modificación Mayra Sáenz - Julio 2015
+*ModificaciÃ³n Mayra SÃ¡enz - Julio 2015
 gen vivialqimp_ch= vivialqimp
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1561,7 +1561,7 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
-para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
+para anÃƒÂ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 clonevar codocupa = ocprinci 
 clonevar codindustria = ocpciiuu 
 

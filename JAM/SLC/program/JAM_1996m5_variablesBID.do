@@ -1,4 +1,4 @@
-*Mayra Sáenz - Septiembre 2015
+*Mayra SÃ¡enz - Septiembre 2015
 *Esta base no contiene todas las variables armonizadas, se debe armonizar el resto de variables.
 
 
@@ -13,7 +13,7 @@ set matsize 800
 *****                            LFS 2002 (LABOUR FORCE SURVEY)                                       *****
 *****                                         ABRIL                                                   *****
 ***********************************************************************************************************
-use "Z:\survey\JAM\SLC\1996\m5\data_merge\JAM_1996m5.dta"
+use "${surveysFolder}\survey\JAM\SLC\1996\m5\data_merge\JAM_1996m5.dta"
 
 gen str pais_c="JAM"
 
@@ -57,7 +57,7 @@ label var relacion_ci "Relacion con el Jefe de Hogar"
 label define relacion_ci 1 "Jefe de Hogar" 2 "Conyuge/Pareja" 3 "Hijo(a)/Hijastro(a)" 4 "Otros Parientes" 5 "Otros No parientes" 6 "Servicio Domestico"
 label value relacion_ci relacion_ci
 
-*Jamaica no necesita factor de expansión.
+*Jamaica no necesita factor de expansiÃ³n.
 g factor_ch =1
 label var factor_ch "Factor de expasion"
 
@@ -126,19 +126,19 @@ replace miembros_ci=0 if relacion_ci==6 /*Empleados domesticos y sus familiares 
 label variable miembros_ci "Variable dummy que indica las personas que son miembros del Hogar"
 
 egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=21)), by (idh)
-label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
+label variable nmayor21_ch "Numero de personas de 21 aÃ±os o mas dentro del Hogar"
 
 egen nmenor21_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<21)), by (idh)
-label variable nmenor21_ch "Numero de personas menores a 21 años dentro del Hogar"
+label variable nmenor21_ch "Numero de personas menores a 21 aÃ±os dentro del Hogar"
 
 egen nmayor65_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci>=65)), by (idh)
-label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hogar"
+label variable nmayor65_ch "Numero de personas de 65 aÃ±os o mas dentro del Hogar"
 
 egen nmenor6_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<6)), by (idh)
-label variable nmenor6_ch "Numero de niños menores a 6 años dentro del Hogar"
+label variable nmenor6_ch "Numero de niÃ±os menores a 6 aÃ±os dentro del Hogar"
 
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<=5) & (edad_ci<1)),  by (idh)
-label variable nmenor1_ch "Numero de niños menores a 1 año dentro del Hogar"
+label variable nmenor1_ch "Numero de niÃ±os menores a 1 aÃ±o dentro del Hogar"
 
 
-saveold "Z:\harmonized\JAM\SLC\data_arm\JAM1996EA_BID_incompleta.dta", replace
+saveold "${surveysFolder}\harmonized\JAM\SLC\data_arm\JAM1996EA_BID_incompleta.dta", replace

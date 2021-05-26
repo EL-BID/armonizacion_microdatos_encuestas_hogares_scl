@@ -1,5 +1,5 @@
 clear all
-cd "Z:\harmonized\ARG\EPHC\program"
+cd "${surveysFolder}\harmonized\ARG\EPHC\program"
 set more off
 foreach file in ARG_2003s2_mergeBID.do ARG_2003s2_variablesBID.do ARG_2004-2012s2_variablesBID_old.do ARG_2004-2012t3_mergeBID_old.do ARG_2004s1_mergeBID.do ARG_2004s1_variablesBID.do ARG_2004s2_mergeBID.do ///
 ARG_2004s2_variablesBID.do ARG_2005s1_mergeBID.do ARG_2005s1_variablesBID.do ARG_2005s2_mergeBID.do ARG_2005s2_variablesBID.do ARG_2006s1_mergeBID.do ARG_2006s1_variablesBID.do ///
@@ -17,7 +17,7 @@ unicode translate  "`file'"
 
 
 clear all
-cd "Z:\harmonized\ECU\ENEMDU\program"
+cd "${surveysFolder}\harmonized\ECU\ENEMDU\program"
 set more off
 foreach file in ECU_2017m12_mergeBID.do ECU_2017m12_variablesBID.do ECU_2018m12_mergeBID.do ECU_2018m12_variablesBID.do{
 unicode analyze  "`file'"
@@ -27,7 +27,7 @@ unicode translate  "`file'"
 *
 
 clear all
-cd "Z:\harmonized\ARG\EPHC\program"
+cd "${surveysFolder}\harmonized\ARG\EPHC\program"
 set more off
 foreach file in ARG_2003s2_variablesBID.do ARG_2004s1_variablesBID.do ARG_2004s2_variablesBID.do ARG_2005s1_variablesBID.do ARG_2005s2_variablesBID.do ARG_2006s1_variablesBID.do ///
 ARG_2006s2_variablesBID.do ARG_2007s1_variablesBID.do ARG_2007s2_variablesBID.do ARG_2008s1_variablesBID.do ///

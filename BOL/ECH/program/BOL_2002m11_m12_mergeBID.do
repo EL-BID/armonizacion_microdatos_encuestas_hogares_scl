@@ -2,7 +2,7 @@
 ** MERGE BOLIVIA 2002 **
 ************************
 
-* Última versión: Marcela G. Rubio 
+* Ãšltima versiÃ³n: Marcela G. Rubio 
 
 /*
 clear
@@ -29,7 +29,7 @@ clear
 set more off
 set mem 100m
 
-cd "\\Sdssrv03\surveys\survey\BOL\ECH\2002\m11_m12\data_orig"
+cd "${surveysFolder}\survey\BOL\ECH\2002\m11_m12\data_orig"
 
 use "hogar.dta", clear
 sort folio
@@ -41,4 +41,4 @@ sort folio
 merge m:1 folio using "hogar.dta", force
 drop _merge
 
-save "\\Sdssrv03\surveys\survey\BOL\ECH\2002\m11_m12\data_merge\BOL_2002m11_m12.dta", replace
+save "${surveysFolder}\survey\BOL\ECH\2002\m11_m12\data_merge\BOL_2002m11_m12.dta", replace

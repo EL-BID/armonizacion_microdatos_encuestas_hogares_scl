@@ -30,10 +30,9 @@ log using "`log_file'", replace
 País: Colombia
 Encuesta: GEIH
 Round: t3
-Autores: 
 Autores: Nathalia Maya S. 
 Ultima version: Daniela Zuluaga (danielazu@iadb.org)
-Fecha última modificación: Junio 2021
+Fecha Última modificación: Junio 2021
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -308,41 +307,31 @@ replace afroind_ci=1  if p6080 == 1
 replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
 replace afroind_ci=3 if p6080 == 2 | p6080 == 6
 replace afroind_ci=. if p6080 ==.
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
-label var afroind_ci "Raza o etnia del individuo"
+
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
-label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
 drop afroind_jefe
 
 	*******************
 	***afroind_ano_c***
 	*******************
 gen afroind_ano_c=2006
-label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 
 	*******************
 	***dis_ci***
 	*******************
 gen dis_ci=. 
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+
 
 	*******************
 	***dis_ch***
 	*******************
 gen dis_ch=. 
-lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-lab val dis_ch dis_ch 
-lab var dis_ch "Hogares con miembros con discapacidad"
+
 	
 
 		************************************
@@ -655,17 +644,17 @@ la var subemp_ci "Personas en subempleo por horas"
 *************
 ***rama_ci***
 *************
-	destring rama2d, replace
+	destring rama2d_r4, replace
 	g rama_ci = .
-	replace rama_ci = 1 if rama2d >=  1 & rama2d <=  5
-	replace rama_ci = 2 if rama2d >= 10 & rama2d <= 14
-	replace rama_ci = 3 if rama2d >= 15 & rama2d <= 37
-	replace rama_ci = 4 if rama2d >= 40 & rama2d <= 41
-	replace rama_ci = 5 if rama2d == 45
-	replace rama_ci = 6 if rama2d >= 50 & rama2d <= 55
-	replace rama_ci = 7 if rama2d >= 60 & rama2d <= 64
-	replace rama_ci = 8 if rama2d >= 65 & rama2d <= 71
-	replace rama_ci = 9 if rama2d >= 72 & rama2d <= 99
+	replace rama_ci = 1 if rama2d_r4 >=  1 & rama2d_r4 <=  5
+	replace rama_ci = 2 if rama2d_r4 >= 10 & rama2d_r4 <= 14
+	replace rama_ci = 3 if rama2d_r4 >= 15 & rama2d_r4 <= 37
+	replace rama_ci = 4 if rama2d_r4 >= 40 & rama2d_r4 <= 41
+	replace rama_ci = 5 if rama2d_r4 == 45
+	replace rama_ci = 6 if rama2d_r4 >= 50 & rama2d_r4 <= 55
+	replace rama_ci = 7 if rama2d_r4 >= 60 & rama2d_r4 <= 64
+	replace rama_ci = 8 if rama2d_r4 >= 65 & rama2d_r4 <= 71
+	replace rama_ci = 9 if rama2d_r4 >= 72 & rama2d_r4 <= 99
 	replace rama_ci = . if emp_ci == 0
 	
 	la var rama_ci "Rama de actividad"
@@ -1426,14 +1415,14 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo) */
-rename  rama2d codindustria
+rename  rama2d_r4 codindustria
 rename  oficio codocupa
 compress
 
 compress
 
 
-saveold "$ruta\harmonized\\COL\\GEIH\data_arm\COL_2020t3_BID.dta", replace
+save "$ruta\harmonized\\COL\\GEIH\data_arm\COL_2020t3_BID.dta", replace
 
 
 log close

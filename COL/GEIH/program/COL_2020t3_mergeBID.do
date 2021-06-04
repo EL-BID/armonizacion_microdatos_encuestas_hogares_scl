@@ -188,7 +188,7 @@ clear
 use "${surveysFolder}\survey\COL\GEIH\2020\t3\data_merge\COL_2020t3cabecera.dta", clear
 append using "${surveysFolder}\survey\COL\GEIH\2020\t3\data_merge\COL_2020t3resto.dta", nolabel 
 merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2020\t3\data_merge\COL_2020t3migracion.dta", nogen
-replace fex_c_2011=fex_c_2011
+replace fex_c_2011=fex_c_2011/3
 sort id
 
 rename *, lower /* poverty data is lowercase and final output is planned to be lowercase too */

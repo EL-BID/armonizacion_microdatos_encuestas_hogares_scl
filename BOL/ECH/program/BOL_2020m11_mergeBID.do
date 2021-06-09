@@ -94,7 +94,7 @@ rename producto item
 keep folio depto area item s09a_ s09b_ s09c_ s09d_ s09e_ upm estrato factor
 
 reshape wide s09a_ s09b_ s09c_ s09d_ s09e_ , i(folio factor) j(item)
-
+*pasó de 75 items en 2019 a 57 items en 2020
 foreach i of numlist 1/57 {
 label var s09a_`i' "¿En el último mes en su hogar compraron, consiguieron o consumieron.."
 label var s09b_`i' "¿Con qué frecuencia compra ....?"

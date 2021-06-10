@@ -82,20 +82,6 @@ gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
 
 ************************************************************
-*** _ UPM                 ***
-************************************************************
-
-gen upm_ci=upm
-label var upm_ci "Unidad primaria de muestreo"
-
-************************************************************
-*** _ estrato                ***
-************************************************************
-
-gen estrato_ci=.
-label var upm_ci "estrato"
-
-************************************************************
 *** 2._ IDH_CH: Identificador del hogar                  ***
 ************************************************************
 
@@ -1614,7 +1600,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch estrato_ci	upm_ci 	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///

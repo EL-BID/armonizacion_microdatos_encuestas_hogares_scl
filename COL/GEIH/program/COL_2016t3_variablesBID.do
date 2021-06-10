@@ -5,13 +5,13 @@ set more off
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
- * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
+ * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
 
-global ruta = "\\Sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS COL
 local ENCUESTA GEIH
@@ -307,16 +307,15 @@ gen estrato_ci=.
 	***************
 **Pregunta: De acuerdo con su cultura, pueblo o rasgos físicos, … es o se reconoce como:(P6080) (1- Indigena 2- Gitano - Rom 3- Raizal del archipiélago de San Andrés y providencia 4- Palenquero de San basilio o descendiente 5- Negro(a), mulato(a), Afrocolombiano(a) o Afrodescendiente 6- Ninguno de los anteriores (mestizo, blanco, etc)) 
 gen afroind_ci=. 
-replace afroind_ci=1  if p6080 == 1 
-replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
-replace afroind_ci=3 if p6080 == 2 | p6080 == 6
-replace afroind_ci=. if p6080 ==.
-
+replace afroind_ci=1  if P6080 == 1 
+replace afroind_ci=2 if P6080 == 3 | P6080 == 4 | P6080 == 5
+replace afroind_ci=3 if P6080 == 2 | P6080 == 6
+replace afroind_ci=. if P6080 ==.
 	***************
 	***afroind_ch***
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
-egen afroind_ch  = sum(afroind_jefe), by(idh_ch) 
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe
 
 	*******************
@@ -1379,7 +1378,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

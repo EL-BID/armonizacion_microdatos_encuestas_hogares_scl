@@ -1,4 +1,11 @@
+
+* (Versión Stata 12)
+clear
+set more off
+
+
 * Marcela G. Rubio 
+* Última versión: 2021/03/09 (Cesar Lins)
 
 
 global in = "${surveysFolder}\survey\BOL\ECH\2013\m11\data_original\"
@@ -7,6 +14,8 @@ global out = "${surveysFolder}\survey\BOL\ECH\2013\m11\data_merge\"
 *Modificación Mayra Sáenz - Noviembre 2016, se incluye el módulo de equipamiento y de gastos alimentarios
 
 use "$in\bolivia_equipamiento_2013.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8_18 posee_
 rename s8_19 nro_
@@ -51,6 +60,8 @@ sort folio
 saveold "$in\bolivia_equipamiento_2013_reshape.dta", replace
 
 use "$in\bolivia_gastosalimentarios_2013.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8_06   s8a_
 rename s8_07   s8b_
@@ -161,20 +172,32 @@ save "$in\bolivia_gastosalimentarios_2013_reshape.dta", replace
 
 
 use "$in\bolivia_gastosnoalimentarios_2013.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio
 save, replace
 
 use "$in\bolivia_vivienda_2013.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio
 save, replace
 
 use "$in\bolivia_personas_2013.dta", clear
+
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio nro2a
 save, replace
 
 * Merge
 
 use  "$in\bolivia_personas_2013.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 merge m:1 folio using  "$in\bolivia_vivienda_2013.dta", force
 drop _merge
@@ -189,6 +212,7 @@ merge m:1 folio using  "$in\bolivia_gastosalimentarios_2013_reshape.dta", force
 drop _merge
 
 
-saveold "$out\BOL_2013m11.dta", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2013m11.dta", replace
 
 

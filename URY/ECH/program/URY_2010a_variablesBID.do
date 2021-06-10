@@ -177,7 +177,7 @@ gen upm_ci=locagr
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=estratogeo_09
+gen estrato_ci=estratogeo09
 
 *10. Sexo
 
@@ -1963,7 +1963,7 @@ lab val atencion_ci atencion_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

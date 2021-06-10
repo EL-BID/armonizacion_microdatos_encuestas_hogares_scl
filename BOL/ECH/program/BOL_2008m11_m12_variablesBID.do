@@ -324,11 +324,11 @@ label variable miembros_ci "Miembro del hogar"
 **Pregunta: pertenencia a algun pueblo originario o indigena? (s1_12) (quechua 1; aymara 2; guarani 3; chiquitano 4; moje�o 5; otro 6; ninguno 7) NO AFRODESCENDENTS 
 
 gen afroind_ci=. 
-replace afroind_ci=1  if S1_12!=7 | S1_12!=8
-replace afroind_ci=2 if S1_12==0
-replace afroind_ci=3 if S1_12 ==7
-replace afroind_ci=. if S1_12 ==8 | S1_12 ==. 
-replace afroind_ci=9 if S1_12==. & edad_ci<12
+replace afroind_ci=1  if s1_12!=7 | s1_12!=8
+replace afroind_ci=2 if s1_12==0
+replace afroind_ci=3 if s1_12 ==7
+replace afroind_ci=. if s1_12 ==8 | s1_12 ==. 
+replace afroind_ci=9 if s1_12==. & edad_ci<12
 
 	***************
 	***afroind_ch***
@@ -2194,7 +2194,7 @@ label var vivialqimp_ch "Alquiler mensual imputado"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

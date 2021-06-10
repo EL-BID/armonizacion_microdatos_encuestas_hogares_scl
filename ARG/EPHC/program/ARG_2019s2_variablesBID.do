@@ -1,3 +1,5 @@
+
+
 * (Versión stata 12)
 clear
 set more off
@@ -117,13 +119,43 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+	
+			****************************
+			*  VARIABLES DE DISENO     *
+			****************************
+	
+	
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
 
 	gen factor_ch=pondera
 	label var factor_ch "Factor de expansion del hogar"
+	
 
+	******************************
+	*factor expansión individio* 
+	*****************************
+
+	gen factor_ci=pondera
+	label var factor_ch "Factor de expansion del individuo"
+
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen upm_ci=aglomerado
+	label var upm_ci "Unidad primaria de muestreo"
+	
+	*****************************
+	*unidad primaria de muestreo* 
+	*****************************
+
+	gen estrato_ci=.
+	label var estrato_ci "estrato"
+	
+	
+	
 		*************************
 		***VARIABLES DEL HOGAR***
 		*************************
@@ -187,11 +219,7 @@ label variable relacion_ci "Relacion con el jefe del hogar"
 			***VARIABLES DEMOGRAFICAS***
 			****************************
 
-	***********
-	*factor_ci* 
-	***********
 
-	gen factor_ci=pondera
 	
 
 	*********
@@ -1528,6 +1556,7 @@ gen instcot_ci=.
 
 
 
+
 ******************************
 *** VARIABLES DE MIGRACION ***
 ******************************
@@ -1563,19 +1592,23 @@ gen instcot_ci=.
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
 
 
+
 /*_____________________________________________________________________________________________________*/
 * Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  lî¯¥as de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación ¤e que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
+
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
@@ -1589,6 +1622,7 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
+
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
@@ -1601,7 +1635,9 @@ local longlabel: var label `i'
 local shortlabel = substr(`"`longlabel'"',1,79)
 label var `i' `"`shortlabel'"'
 }
+
 global ruta = "${surveysFolder}"
+
 
 local PAIS ARG
 local ENCUESTA EPHC
@@ -1613,7 +1649,9 @@ local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
    
 
+
 saveold "`base_out'", version(12) replace
 
 log close
+
 

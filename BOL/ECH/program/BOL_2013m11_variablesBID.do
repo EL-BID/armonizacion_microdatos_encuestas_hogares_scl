@@ -80,6 +80,16 @@ label var region_c "division politica, estados"
 gen factor_ch= factor
 label variable factor_ch "Factor de expansion del hogar"
 
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci***
+	***************
+gen estrato_ci=estrato
+
+
 ***************
 ****idh_ch*****
 ***************
@@ -293,7 +303,7 @@ gen afroind_ci=.
 replace afroind_ci=1  if s3_02a==1 
 replace afroind_ci=2 if s3_02a==0
 replace afroind_ci=3 if s3_02a ==2 
-replace afroind_ci=9 if sa_02a==3 
+replace afroind_ci=9 if s3_02a==3 
 
 
 	***************
@@ -2058,7 +2068,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

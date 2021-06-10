@@ -70,16 +70,43 @@ label var region_c "División política, region de planificacion"
 
 
 *====================================================================================================================================*
-*                                                    VARIABLES DEL HOGAR                                                             *
+*                                                    VARIABLES DE DISENO 
 *====================================================================================================================================*
-* En total son 8 variables.
 
 ************************************************************
-*** 1.- FACTOR_CH: factor de expansión del hogar         ***
+***  FACTOR_CH: factor de expansión del hogar         ***
 ************************************************************
 
 gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
+
+
+******************************************************************
+*** FACTOR_CI  :Factor de Expansion a nivel individual. ***
+******************************************************************
+gen factor_ci=factor
+label variable factor_ci "Factor de expansion del individuo"
+
+******************************************************************
+*** UPM: Unidad primaria de muestreo ***
+******************************************************************
+gen upm_ci=upm
+label variable factor_ci "unidad primaria de muestreo"
+
+
+******************************************************************
+*** estrato 
+******************************************************************
+
+gen estrato_ci=.
+label variable estrato_ci "estrato"
+
+
+*====================================================================================================================================*
+*                                                    VARIABLES DEL HOGAR                                                             *
+*====================================================================================================================================*
+* En total son 7 variables.
+
 
 ************************************************************
 *** 2._ IDH_CH: Identificador del hogar                  ***
@@ -90,13 +117,13 @@ egen idh_ch = group(upm cuestionario hogar)
 label var idh_ch "ID del hogar"
 
 ************************************************************
-*** 3.- IDP_CI: Identificador de personas                ***
+*** - IDP_CI: Identificador de personas                ***
 ************************************************************
 gen idp_ci= linea
 label var idp_ci "ID de la persona en el hogar"
 
 ************************************************************
-***4.- ZONA_C: Zona Urbana vs Rural                      ***
+***- ZONA_C: Zona Urbana vs Rural                      ***
 ************************************************************
 gen zona_c=0 if zona==2
 replace zona_c=1 if zona==1
@@ -105,20 +132,20 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 ************************************************************
-****5._ PAIS_C: Nombre del país.                         ***
+****_ PAIS_C: Nombre del país.                         ***
 ************************************************************
 gen str3 pais_c="CRI"
 label variable pais_c "Pais"
 
 
 ************************************************************
-***6._ANIO_C  :Año de la Encuesta.                       ***
+***_ANIO_C  :Año de la Encuesta.                       ***
 ************************************************************
 gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 ************************************************************
-***7._MES_C  :Mes de la Encuesta.***
+***_MES_C  :Mes de la Encuesta.***
 ************************************************************
 gen mes_c=7
 label variable mes_c "Mes de la encuesta"
@@ -126,7 +153,7 @@ label define mes_c 7 "Julio"
 label value mes_c mes_c
 
 ******************************************************************
-***8._RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
+***_RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
 ******************************************************************
 gen relacion_ci=1 		if a3==1
 replace relacion_ci=2 	if a3==2
@@ -144,31 +171,27 @@ label value relacion_ci relacion_ci
 *====================================================================================================================================*
 *                                                          VARIABLES DEMOGRAFICAS                                                    *
 *====================================================================================================================================*
-* En el área de demografía son en total 18 variables.
+* En el área de demografía son en total 17 variables.
+
+
 
 
 ******************************************************************
-***1._FACTOR_CI  :Factor de Expansion a nivel individual. ***
-******************************************************************
-gen factor_ci=factor
-label variable factor_ci "Factor de expansion del individuo"
-
-******************************************************************
-***2._SEXO_CI  :Sexo.                                          ***
+***_SEXO_CI  :Sexo.                                          ***
 ******************************************************************
 gen sexo_ci=a4
 label define sexo_ci 1 "Hombre" 2 "Mujer"
 label value sexo_ci sexo_ci
 
 ******************************************************************
-***3._EDAD_CI  :Edad.***
+***_EDAD_CI  :Edad.***
 ******************************************************************
 gen edad_ci=a5
 replace edad_ci=. if a5==99 
 label variable edad_ci "Edad del individuo"
 
 ******************************************************************
-***4._CIVIL_CI  :Estado Civil.***
+***_CIVIL_CI  :Estado Civil.***
 ******************************************************************
 /*
 a6:
@@ -194,43 +217,43 @@ label define civil_ci 3 "Divorciado o separado" 4 "Viudo" , add
 label value civil_ci civil_ci
 
 ******************************************************************
-***5._JEFE_CI  :Jefe de Hogar declarado. ***
+***_JEFE_CI  :Jefe de Hogar declarado. ***
 ******************************************************************
 gen jefe_ci=(relacion_ci==1)
 label variable jefe_ci "Jefe de hogar"
 
 ******************************************************************
-***6._NCONYUGES_CH  :Numero de Conyuges o Esposos/as.***
+***_NCONYUGES_CH  :Numero de Conyuges o Esposos/as.***
 ******************************************************************
 by idh_ch, sort: egen nconyuges_ch=sum(relacion_ci==2)
 label variable nconyuges_ch "Numero de conyuges"
 
 ******************************************************************
-***7._NHIJOS_CH  :Numero de Hijos/as.                         ***
+***_NHIJOS_CH  :Numero de Hijos/as.                         ***
 ******************************************************************
 by idh_ch, sort: egen nhijos_ch=sum(relacion_ci==3)
 label variable nhijos_ch "Numero de hijos"
 
 ******************************************************************
-***8._NOTROPARI_CH  :Numero de Otros Parientes.***
+***_NOTROPARI_CH  :Numero de Otros Parientes.***
 ******************************************************************
 by idh_ch, sort: egen notropari_ch=sum(relacion_ci==4)
 label variable notropari_ch "Numero de otros familiares"
 
 ******************************************************************
-***9._NOTRONOPARI_CH  :Numero de Otros No Parientes.***
+***_NOTRONOPARI_CH  :Numero de Otros No Parientes.***
 ******************************************************************
 by idh_ch, sort: egen notronopari_ch=sum(relacion_ci==5)
 label variable notronopari_ch "Numero de no familiares"
 
 ******************************************************************
-***10._NEMPDOM_CH  :Numero de Empleados Domesticos.***
+***_NEMPDOM_CH  :Numero de Empleados Domesticos.***
 ******************************************************************
 by idh_ch, sort: egen nempdom_ch=sum(relacion_ci==6)
 label variable nempdom_ch "Numero de empleados domesticos"
 
 ******************************************************************
-***11._CLASEHOG_CH  :Tipo de Hogar.***
+***_CLASEHOG_CH  :Tipo de Hogar.***
 ******************************************************************
 gen byte clasehog_ch=0
 **** unipersonal
@@ -249,43 +272,43 @@ label define clasehog_ch 4 "Compuesto" 5 " Corresidente", add
 label value clasehog_ch clasehog_ch
 
 ******************************************************************
-***12._NMIEMBROS_CH  :Numero Total de miembros del Hogar.***
+***_NMIEMBROS_CH  :Numero Total de miembros del Hogar.***
 ******************************************************************
 by idh_ch, sort: egen nmiembros_ch=sum(relacion_ci>=1 & relacion_ci<=4)
 label variable nmiembros_ch "Numero de familiares en el hogar"
 
 ******************************************************************************************************************
-***13._MIEMBROS_CI  :Indica las personas que son miembros del hogar. Sirve para construir el ingreso del hogar.***
+***_MIEMBROS_CI  :Indica las personas que son miembros del hogar. Sirve para construir el ingreso del hogar.***
 ******************************************************************************************************************
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
 ******************************************************************************************************************
-***14._NMAYOR21_CH  :Numero de miembros del Hogar con 21 años o mas de edad.***
+***_NMAYOR21_CH  :Numero de miembros del Hogar con 21 años o mas de edad.***
 ******************************************************************************************************************
 by idh_ch, sort: egen nmayor21_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci>=21)
 label variable nmayor21_ch "Numero de familiares mayores a 21 anios"
 
 **********************************************************************************
-***15._NMENOR21_CH  :Numero de miembros del Hogar con menos de 21 años de edad.***
+***_NMENOR21_CH  :Numero de miembros del Hogar con menos de 21 años de edad.***
 **********************************************************************************
 by idh_ch, sort: egen nmenor21_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci<21)
 label variable nmenor21_ch "Numero de familiares menores a 21 anios"
 
 *******************************************************************************
-***16._NMAYOR65_CH  :Numero de miembros del Hogar con 65 años o mas de edad.***
+***_NMAYOR65_CH  :Numero de miembros del Hogar con 65 años o mas de edad.***
 *******************************************************************************
 by idh_ch, sort: egen nmayor65_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci>=65)
 label variable nmayor65_ch "Numero de familiares mayores a 65 anios"
 
 ********************************************************************************
-***17._NMENOR6_CH  :Numero de miembros del Hogar con menos de 6 años de edad.***
+***_NMENOR6_CH  :Numero de miembros del Hogar con menos de 6 años de edad.***
 ********************************************************************************
 by idh_ch, sort: egen nmenor6_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci<6)
 label variable nmenor6_ch "Numero de familiares menores a 6 anios"
 
 ********************************************************************************
-***18._NMENOR1_CH  :Numero de miembros del Hogar con menos de 1 año de edad.***
+***_NMENOR1_CH  :Numero de miembros del Hogar con menos de 1 año de edad.***
 ********************************************************************************
 by idh_ch, sort: egen nmenor1_ch=sum((relacion_ci>=1 & relacion_ci<=4) & edad_ci<1)
 label variable nmenor1_ch "Numero de familiares menores a 1 anio"
@@ -1594,14 +1617,15 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+
+upm_ci estrato_ci afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -1620,7 +1644,7 @@ rename ramaemppr codindustria
 compress
 
 
-saveold "`base_out'", replace
+save "`base_out'", replace
 
 
 log close

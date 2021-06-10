@@ -23,8 +23,8 @@ País: Bolivia
 Encuesta: ECH
 Round: m11_m12
 Autores:
-Versión 2016: Mayra Sáenz
-Última versión: Noviembre 4, 2016
+Versión 2016: Mayra Sáenz (Noviembre 4, 2016)
+Última versión: 2021/03/09 (Cesar Lins)
 
 
 							SCL/LMK - IADB
@@ -34,7 +34,10 @@ Detalle de procesamientos o modificaciones anteriores:
 
 ****************************************************************************/
 
-use "$in\eh2015_gastos_equipamiento.dta", clear
+*Modificación Cesar Lins - Feb 2021, file name lost second underscore
+use "$in\eh2015_gastos equipamiento.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8_13 posee_
 rename s8_14 nro_
@@ -77,7 +80,10 @@ duplicates report folio
 sort folio
 save "$in\eh2015_gastos_equipamiento_reshape.dta", replace
 
-use "$in\eh2015_gastos_alimentarios.dta", clear
+*Modificación Cesar Lins - Feb 2021, file name lost second underscore
+use "$in\eh2015_gastos alimentarios.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 rename s8a_01  s8a_
 rename s8a_02  s8b_
@@ -179,14 +185,29 @@ sort folio
 save "$in\eh2015_gastos_alimentarios_reshape.dta", replace
 
 use "$in\eh2015_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio nro
 save, replace
 
 use "$in\eh2015_vivienda.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
+
 use "$in\eh2015_gastos_noalimentarios", clear
+*Modificación Cesar Lins - Feb 2021, file name lost second underscore
+use "$in\eh2015_gastos_noalimentarios", clear
+
+*Modificación Cesar Lins - Feb 2021, file name lost second underscore
+use "$in\eh2015_gastos noalimentarios", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
+
 sort folio 
 save, replace
 
@@ -194,6 +215,8 @@ save, replace
 * Merge
 
 use "$in\eh2015_persona.dta", clear
+*Modificación Cesar Lins - Feb 2021, data was updated by INE and some variable names changed to UPPERCASE
+rename *, lower
 
 merge m:1 folio using "$in\eh2015_vivienda.dta", force
 drop _merge
@@ -207,4 +230,5 @@ drop _merge
 merge m:1 folio using "$in\eh2015_gastos_noalimentarios", force
 drop _merge
 
-saveold "$out\BOL_2015m11.dta", replace
+*Modificación Cesar Lins - Feb 2021 / saveold didn't work because labels are too long
+save "$out\BOL_2015m11.dta", replace

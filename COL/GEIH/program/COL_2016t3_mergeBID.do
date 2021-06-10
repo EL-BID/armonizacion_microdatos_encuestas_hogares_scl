@@ -12,7 +12,7 @@ set more off
 local anio =2016
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -36,7 +36,7 @@ saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 
-keep  id impa-iof6 impaes-fex_c nper-id
+keep  id impa-iof6 impaes-fex_c nper-id P6080 P6080S1
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -132,6 +132,9 @@ foreach v of varlist _all {
 	local lowname=lower("`v'")
 	cap: rename `v' `lowname'
 }
+replace directorio=Directorio if directorio==.
+replace secuencia_p=Secuencia_p if secuencia_p==.
+replace orden=Orden if orden==.
 
 egen id = concat(directorio secuencia_p orden)
 sort id
@@ -177,16 +180,25 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
+
 use "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
 append using "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
 merge 1:1 id using "Z:\survey\COL\GEIH\2016\t3\COL_2016t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3migracion.dta", nogen
+
+use "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\COL_2016t3migracion.dta", nogen
+
 replace fex_c_2011=fex_c_2011/3
 sort id
 
-merge 1:1 id using "Z:\survey\COL\GEIH\2016\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\a\data_merge\pov_t3.dta"
 drop _merge
 
-saveold "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3.dta", replace
 
 
 

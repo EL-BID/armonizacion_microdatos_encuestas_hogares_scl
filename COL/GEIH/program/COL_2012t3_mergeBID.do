@@ -1,4 +1,4 @@
-*Elaboración: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
+*ElaboraciÃ³n: Yessenia Loayza (desloay@hotmail.com | yessenial@iadb.org)
 *Enero, 2014
 
 *** MERGE COLOMBIA GEIH 2012 ****
@@ -8,7 +8,7 @@ clear
 set more off
 local anio = 2012
 local anioab ="12" 	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'm7\data_orig\" 
 local m8 ="`ruta'm8\data_orig\" 
 local m9 ="`ruta'm9\data_orig\" 
@@ -19,10 +19,10 @@ local out  ="`ruta't3\data_merge\"
 *1. Bases anuales con homologacion de ingresos
 /*----------------------------------------------
 clear
-use "\\sdssrv03\Surveys\survey\COL\GEIH\2012\a\data_orig\personas 2012.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\personas 2012.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-merge idh using "\\sdssrv03\Surveys\survey\COL\GEIH\2012\a\data_orig\hogares 2012.dta"
+merge idh using "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\hogares 2012.dta"
 tab _merge
 drop _merge
 egen id =concat (directorio secuencia_p orden)
@@ -30,7 +30,7 @@ sort id
 destring mes, replace
 keep if mes>=7 & mes<=9
 keep  id impa- fex_c nper- fex_dpto_c
-save "Y:\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
+save "${surveysFolder}\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
 
 *2. Append entre meses
 *------------------------
@@ -38,9 +38,9 @@ save "Y:\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
 foreach zona in cabecera resto {
 
 *Personas
-use "`m7'\`zona' - características generales (personas).dta", clear
-append using "`m8'\`zona' - características generales (personas).dta"
-append using "`m9'\`zona' - características generales (personas).dta"
+use "`m7'\`zona' - caracterÃ­sticas generales (personas).dta", clear
+append using "`m8'\`zona' - caracterÃ­sticas generales (personas).dta"
+append using "`m9'\`zona' - caracterÃ­sticas generales (personas).dta"
 egen id = concat(directorio secuencia_p orden)
 sort id
 saveold "`t3'col_`zona'_personas.dta", replace
@@ -157,7 +157,7 @@ append using "`out'COL_`anio't3resto.dta"
 replace fex_c_2012=fex_c_2012/3
 sort id
 
-merge id using "Y:\survey\COL\GEIH\2012\a\data_merge\pov.dta"
+merge id using "${surveysFolder}\survey\COL\GEIH\2012\a\data_merge\pov.dta"
 tab _merge
 drop _merge
 

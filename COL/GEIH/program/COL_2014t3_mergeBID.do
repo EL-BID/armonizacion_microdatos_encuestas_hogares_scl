@@ -10,7 +10,7 @@ set more off
 local anio = 2014
 local ronda1 a
 local ronda2 t3	
-local ruta "\\sdssrv03\Surveys\survey\COL\GEIH\\`anio'\"
+local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
 local m7 ="`ruta'\`ronda1'\data_orig\m7\" 
 local m8 ="`ruta'\`ronda1'\data_orig\m8\" 
 local m9 ="`ruta'\`ronda1'\data_orig\m9\" 
@@ -22,7 +22,7 @@ local out ="`ruta'\`ronda2'\data_merge\"
 *----------------------------------------------
 
 clear
-use "`ruta'\`rondaa'\data_orig\anual_homologado_DANE\personas 2014.dta", clear
+use "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\personas 2014.dta", clear
 merge m:1 directorio secuencia_p using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\hogares 2014.dta", force
 drop _merge
 merge 1:1 directorio secuencia_p orden using "`ruta'\`ronda1'\data_orig\anual_homologado_DANE\ETNIA14.dta", keep(match master)
@@ -33,7 +33,7 @@ sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa- fex_c nper- fex_dpto_c
+keep  id impa- fex_c nper- fex_dpto_c P6080 P6080S1
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -146,15 +146,15 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 *---------------
 
 clear
-use "M:\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3cabecera.dta", clear
-append using "M:\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3resto.dta" 
+use "${surveysFolder}\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3resto.dta" 
 replace fex_c_2011=fex_c_2011/3
 sort id
 
-merge 1:1 id using "M:\survey\COL\GEIH\2014\a\data_merge\pov_t3.dta"
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2014\a\data_merge\pov_t3.dta"
 drop _merge
 
-saveold "M:\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3.dta", replace
+saveold "${surveysFolder}\survey\COL\GEIH\2014\t3\data_merge\COL_2014t3.dta", replace
 
 
 

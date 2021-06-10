@@ -413,9 +413,9 @@ label var miembros_ci "Miembro del hogar"
 **En el 2011 se convierte en la EHPM (no solo EH) 
 
 gen afroind_ci=. 
-replace afroind_ci=1 if indi_rec==2
-replace afroind_ci=2 if indi_rec==0
-replace afroind_ci=3 if indi_rec==1
+replace afroind_ci=1 if indi_rec=="2"
+replace afroind_ci=2 if indi_rec=="0"
+replace afroind_ci=3 if indi_rec=="1"
 
 
 	***************
@@ -1300,7 +1300,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

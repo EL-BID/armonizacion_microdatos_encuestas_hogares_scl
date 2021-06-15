@@ -927,7 +927,7 @@ gen g145_ = g145/12
 gen g146_ = g146/12
 gen g147_ = g147/12*/
 
-gen ylmpri_ci=.
+gen ylmpri_ci= pt2 if emp_ci==1
 /*egen ylmpri_ci=rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7  g142 g143_ g145_ g146_ g147_ g133_2) if emp_ci==1 , missing
 replace ylmpri_ci=. if (g126_1==. & g126_2==. & g126_3==. &  g126_4==. &  g126_5==. &  g126_6==. &  g126_7==. &  g143_==. & g145_==. & g146_==. & g147_==.)*/
 
@@ -937,10 +937,9 @@ replace ylmpri_ci=. if (g126_1==. & g126_2==. & g126_3==. &  g126_4==. &  g126_5
 *****************
 ***nrylmpri_ci***
 *****************
-g nrylmpri_ci=.
-/*g nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
+g nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
 replace nrylmpri_ci=. if emp_ci!=1 | categopri_ci==4 /*excluding unpaid workers*/
-label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal" */
+label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 
 *30. Ingreso laboral no monetario actividad principal
 *BOLETOS DE TRANSPORTE	                                g126_8	
@@ -1079,9 +1078,9 @@ gen ynlnm_ch=.
 
 *37. Ingreso laboral monetario total
 
-gen ylm_ci=.
+gen ylm_ci=pt4
 *egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci) 
-*replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
+replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
 
 * Nota Marcela G. Rubio - Abril 2014
 * Incluyo ingreso laboral monetario otros como parte del ingreso laboral monetario total ya que no había sido incluido
@@ -1161,10 +1160,10 @@ bys idh_ch: egen numper = sum(miembros_ci)
 bys idh_ch: egen npermax = max(numper)
 drop numper
 * Los ingresos a nivel de hogar se dividen para los miembros del hogar y se obtiene un per capita.
-gen inghog1 =.
+gen inghog1 = ht11
 *egen inghog1 = rsum(h155_1 h160_1m h160_2m h163_1m h163_2m h164m h165m h166m h167_1_1m h167_1_2m h170_1m h170_2m h171_1m h172_1m h173_1m), missing
-gen inghog=.
-*gen inghog= inghog1/npermax
+
+gen inghog= inghog1/npermax
 
 *Transferencias de programas sociales
 
@@ -1245,8 +1244,7 @@ gen tcylmpri_ch=.
 
 
 *43. Ingreso laboral monetario del hogar	
-gen ylm_ch=.
-*by idh_ch: egen ylm_ch=sum(ylm_ci)if relacion_ci!=6
+by idh_ch: egen ylm_ch=sum(ylm_ci)if relacion_ci!=6
 
 ****************
 *** ylmnr_ch ***
@@ -1273,15 +1271,13 @@ gen ynlm_ch=.
 
 *47. Salario monetario de la actividad principal en horas
 
-gen ylmhopri_ci=.
-*gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.2)
-*replace ylmhopri_ci=. if ylmhopri_ci<=0
+gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.2)
+replace ylmhopri_ci=. if ylmhopri_ci<=0
 
 *48. Salario monetario de todas las actividades
 
-gen ylmho_ci=.
-*gen ylmho_ci=ylm_ci/(horastot_ci*4.2)
-*replace ylmho_ci=. if ylmho_ci<=0
+gen ylmho_ci=ylm_ci/(horastot_ci*4.2)
+replace ylmho_ci=. if ylmho_ci<=0
 
 
 

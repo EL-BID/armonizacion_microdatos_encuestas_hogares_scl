@@ -11,7 +11,7 @@ set more off
  *________________________________________________________________________________________________________________*
 
 
-/*
+
 global ruta = "${surveysFolder}"
 
 local PAIS BOL
@@ -28,7 +28,7 @@ local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ro
 capture log close
 log using "`log_file'", replace 
 
-*/
+
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Bolivia
@@ -826,7 +826,7 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 *******************
 ***formal***
 *******************
-gen formal=1 if cotizando_ci==1
+gen formal_ci=1 if cotizando_ci==1
 /*
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="BOL"   /* si se usa afiliado, se restringe a ocupados solamente*/
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="CRI"
@@ -1532,12 +1532,11 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 
 ***************
 ***ylmho_ci ***
-***************
-/*
+****************
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
-*/
+
 
 ****************************
 ***VARIABLES DE EDUCACION***
@@ -1802,7 +1801,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***pqnoasis***
 **************
 
-gen pqnoasis=.
+gen pqnoasis_ci=.
 /*
 clonevar pqnoasis_ci=s05b_11
 
@@ -1951,11 +1950,12 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 ****************
 ***combust_ch***
 ****************
-/*
-gen combust_ch= (s01a_25==4 |  s01a_25==6)
-replace combust_ch = . if s01a_25==.
+
+gen combust_ch=. 
+*(s01a_25==4 |  s01a_25==6)
+*replace combust_ch = . if s01a_25==.
 label var combust_ch "Principal combustible gas o electricidad" 
-*/
+
 
 *************
 ***bano_ch***
@@ -1967,10 +1967,11 @@ label var bano_ch "El hogar tiene servicio sanitario"
 ***************
 ***banoex_ch***
 ***************
-/*
-gen banoex_ch=(s01a_17==1)
+
+gen banoex_ch=.
+*(s01a_17==1)
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
-*/
+
 
 *************
 ***des1_ch***
@@ -2348,7 +2349,7 @@ lab val pnc_ci pnc_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl_DOCS\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
@@ -2374,7 +2375,7 @@ para análisis de trends (en el marco de estudios sobre el futuro del trabajo)
 BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
 
 *Modificación Cesar Lins - Feb 2021, s06b_110 -> s06b_11a_cod
-rename s06b_11a_cod codocupa
+*rename s06b_11a_cod codocupa
 rename caeb_op codindustria
 
 compress

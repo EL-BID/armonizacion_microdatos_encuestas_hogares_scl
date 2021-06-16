@@ -1,7 +1,7 @@
 * (Versi󮠓tata 12)
-clear
+clear all
 set more off
-
+capture log close
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
@@ -15,7 +15,7 @@ global ruta = "${surveysFolder}\\survey\PRY\EPHC\2020\t4\data_orig"
 
 local PAIS PRY
 local ENCUESTA EPHC
-local ANO "2019"
+local ANO "2020"
 local ronda t4
 
 local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"
@@ -46,7 +46,7 @@ https://www.ine.gov.py/datos/encuestas/eph/
 *Hago rename de las bases descargadas y luego las sorteo
 
 forvalues i = 1/2 {
-importsav "$ruta\reg0`i'_ephc2020.sav"
+import spss "$ruta\reg0`i'_ephc2020.sav", clear
 rename *, lower
 cap sort upm nvivi nhoga
 cap sort upm nvivi nhoga l02
@@ -54,7 +54,7 @@ save "$ruta\reg0`i'_ephc2020.dta", replace
 }
 
 /*Importo la base de Ingreso familiar*/
-importsav "$ruta\ingrefam_ephc2020.sav"
+import spss "$ruta\ingrefam_ephc2020.sav", clear
 rename *, lower
 cap sort upm nvivi nhoga
 cap sort upm nvivi nhoga l02
@@ -63,7 +63,7 @@ save "$ruta\ingrefam_ephc2020.dta", replace
 
 /*Importo el 4 Trimestre*/
 
-importsav "$ruta\REG02_EPHC_T4-2020.SAV"
+import spss "$ruta\REG02_EPHC_T4-2020.SAV", clear
 rename *, lower
 cap sort upm nvivi nhoga
 cap sort upm nvivi nhoga l02
@@ -90,8 +90,9 @@ sort upm nvivi nhoga
 *https://www.ine.gov.py/datos/encuestas/eph/
 merge m:m upm nvivi nhoga l02 using "$ruta\reg02_ephc2020.dta", force
 
-drop _merge
+drop _merge área
 sort upm nvivi nhoga
 
 saveold "`base_out'", v(12) replace
 
+log close

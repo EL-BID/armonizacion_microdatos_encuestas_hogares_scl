@@ -1279,7 +1279,7 @@ egen ylnm_ci = rowtotal(ylnmprid ylnmprii ylnmsecd ylnmseci), missing
 ***ynlm_ci***
 *************
 
-gen transltot = d556t1/12
+gen transltot = d556t1_e/12
 gen transetot = d556t2/12
 gen remesas_ci= d556t2/12 if p5563a==1
 *Modificación SGR Julio 2020, se evita colocar ingreso 0 cuando las personas no reportan ingreso.
@@ -2151,7 +2151,7 @@ lab val atencion_ci atencion_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$ruta\harmonized\_DOCS\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

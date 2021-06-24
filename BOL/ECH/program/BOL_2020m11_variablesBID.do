@@ -390,13 +390,13 @@ label var cotizando_ci "Cotizante a la Seguridad Social"
 ****************
 *afiliado_ci****
 ****************
-gen afiliado_ci=.
+destring s04f_39, replace i("NA")
 
-*gen afiliado_ci= s06h_59==1	
+gen afiliado_ci= s04f_39==1	
 	*Solo eisten missing para los p_aspirantes condact==3 en la variable de afiliacón. Los condact>=3 son inactivos.
 	*tab condact s06h_59, missing
-*recode afiliado_ci .=0  if condact>=1 & condact<=3
-*label var afiliado_ci "Afiliado a la Seguridad Social"
+recode afiliado_ci .=0  if condact>="1" & condact<="3"
+label var afiliado_ci "Afiliado a la Seguridad Social"
 
 ****************
 *tipopen_ci*****
@@ -826,8 +826,8 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 *******************
 ***formal***
 *******************
-gen formal_ci=1 if cotizando_ci==1
-/*
+gen formal=1 if cotizando_ci==1
+
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="BOL"   /* si se usa afiliado, se restringe a ocupados solamente*/
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="CRI"
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="GTM" & anio_c>1998
@@ -842,7 +842,7 @@ replace formal_ci=0 if formal_ci==. & (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=afiliado_ci
-*/
+
 **************
 ***INGRESOS***
 **************
@@ -2345,7 +2345,6 @@ lab val ptmc_ch ptmc_ch
 
 lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
 lab val pnc_ci pnc_ci
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

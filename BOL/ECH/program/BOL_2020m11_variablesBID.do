@@ -395,7 +395,7 @@ destring s04f_39, replace i("NA")
 gen afiliado_ci= s04f_39==1	
 	*Solo eisten missing para los p_aspirantes condact==3 en la variable de afiliacón. Los condact>=3 son inactivos.
 	*tab condact s06h_59, missing
-recode afiliado_ci .=0  if condact>="1" & condact<="3"
+recode afiliado_ci .=0  if condact>=1 & condact<=3
 label var afiliado_ci "Afiliado a la Seguridad Social"
 
 ****************

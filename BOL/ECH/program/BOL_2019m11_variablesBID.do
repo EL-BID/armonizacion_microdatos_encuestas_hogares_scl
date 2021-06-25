@@ -303,7 +303,7 @@ gen afroind_ci=.
 replace afroind_ci=1 if s03a_04==1
 replace afroind_ci=2 if s03a_04==0 
 replace afroind_ci=3 if s03a_04==2 
-replace afroind_ci=9 if s03a_04==3 //por qué se incluye no boliviano como que no se le preguntó?
+replace afroind_ci=9 if s03a_04==3 
 
 
 	***************

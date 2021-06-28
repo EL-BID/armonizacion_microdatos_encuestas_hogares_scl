@@ -45,7 +45,6 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 
-
 /************************************************************************/
 /*				VARIABLES DEL HOGAR			*/
 /************************************************************************/
@@ -160,9 +159,7 @@ gen factor_ci=pesomen
 	***************
 	***upm_ci***
 	***************
-* MM en 2020 no hay variable loc_agr_13
-* gen upm_ci=loc_agr_13
-gen upm_ci=.
+gen upm_ci=loc_agr_13
 
 	***************
 	***estrato_ci***
@@ -358,21 +355,19 @@ label variable miembros_ci "Miembro del hogar"
 **Pregunta: ¿Cree tener ascendencia...? ¿Cuál considera principal de las declaradas?:(e29_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
 **En Uruguay puedes reportar más de una identidad pero la pregunta e29_6 pregunta cuál es la identidad principal. 
 
-* MM en 2020 no hay variables e29
 gen afroind_ci=. 
-/*replace afroind_ci=1 if e29_6 == 4
+replace afroind_ci=1 if e29_6 == 4
 replace afroind_ci=2 if e29_6 == 1 
 replace afroind_ci=3 if e29_6 == 2 | e29_6 == 3 | e29_6 == 5
-replace afroind_ci=. if e29_6 ==. */
+replace afroind_ci=. if e29_6 ==.
 
 	***************
 	*** afroind_ch ***
 	***************
-gen afroind_ch  =.
-/*gen afroind_jefe= afroind_ci if relacion_ci==1
+gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch)
 
-drop afroind_jefe */
+drop afroind_jefe
 
 	*******************
 	*** afroind_ano_c ***
@@ -436,46 +431,46 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 *https://www.ine.gub.uy/documents/10181/30913/Pobreza0321/c18681f1-7aa9-4d0a-bd6b-265049f3e26e
 
 gen lp_ci =.
-replace lp_ci =  10644 if mes==1 & region_3==1
-replace lp_ci =  11093 if mes==2 & region_3==1
-replace lp_ci =  11158 if mes==3 & region_3==1
-replace lp_ci =  11241 if mes==4 & region_3==1
-replace lp_ci =  11458 if mes==5 & region_3==1
-replace lp_ci =  11503 if mes==6 & region_3==1
-replace lp_ci =  11526 if mes==7 & region_3==1
-replace lp_ci =  11618 if mes==8 & region_3==1
-replace lp_ci =  11718 if mes==9 & region_3==1
-replace lp_ci =  11773 if mes==10 & region_3==1
-replace lp_ci =  11837 if mes==11 & region_3==1
-replace lp_ci =  11897 if mes==12 & region_3==1
+replace lp_ci =  10644 if mes==1 & region_3=="01"
+replace lp_ci =  11093 if mes==2 & region_3=="01"
+replace lp_ci =  11158 if mes==3 & region_3=="01"
+replace lp_ci =  11241 if mes==4 & region_3=="01"
+replace lp_ci =  11458 if mes==5 & region_3=="01"
+replace lp_ci =  11503 if mes==6 & region_3=="01"
+replace lp_ci =  11526 if mes==7 & region_3=="01"
+replace lp_ci =  11618 if mes==8 & region_3=="01"
+replace lp_ci =  11718 if mes==9 & region_3=="01"
+replace lp_ci =  11773 if mes==10 & region_3=="01"
+replace lp_ci =  11837 if mes==11 & region_3=="01"
+replace lp_ci =  11897 if mes==12 & region_3=="01"
 
 
-replace lp_ci =   5832 if mes==1 & region_3==2
-replace lp_ci =   6155 if mes==2 & region_3==2
-replace lp_ci =   6175 if mes==3 & region_3==2
-replace lp_ci =   6234 if mes==4 & region_3==2
-replace lp_ci =   6404 if mes==5 & region_3==2
-replace lp_ci =   6431 if mes==6 & region_3==2
-replace lp_ci =   6459 if mes==7 & region_3==2
-replace lp_ci =   6493 if mes==8 & region_3==2
-replace lp_ci =   6538 if mes==9 & region_3==2
-replace lp_ci =   6550 if mes==10 & region_3==2
-replace lp_ci =   6587 if mes==11 & region_3==2
-replace lp_ci =   6609 if mes==12 & region_3==2
+replace lp_ci =   5832 if mes==1 & region_3=="02"
+replace lp_ci =   6155 if mes==2 & region_3=="02"
+replace lp_ci =   6175 if mes==3 & region_3=="02"
+replace lp_ci =   6234 if mes==4 & region_3=="02"
+replace lp_ci =   6404 if mes==5 & region_3=="02"
+replace lp_ci =   6431 if mes==6 & region_3=="02"
+replace lp_ci =   6459 if mes==7 & region_3=="02"
+replace lp_ci =   6493 if mes==8 & region_3=="02"
+replace lp_ci =   6538 if mes==9 & region_3=="02"
+replace lp_ci =   6550 if mes==10 & region_3=="02"
+replace lp_ci =   6587 if mes==11 & region_3=="02"
+replace lp_ci =   6609 if mes==12 & region_3=="02"
 
 
-replace lp_ci =   3253 if mes==1 & region_3==3
-replace lp_ci =   3365 if mes==2 & region_3==3
-replace lp_ci =   3379 if mes==3 & region_3==3
-replace lp_ci =   3424 if mes==4 & region_3==3
-replace lp_ci =   3490 if mes==5 & region_3==3
-replace lp_ci =   3509 if mes==6 & region_3==3
-replace lp_ci =   3523 if mes==7 & region_3==3
-replace lp_ci =   3542 if mes==8 & region_3==3
-replace lp_ci =   3567 if mes==9 & region_3==3
-replace lp_ci =   3574 if mes==10 & region_3==3
-replace lp_ci =   3595 if mes==11 & region_3==3
-replace lp_ci =   3611 if mes==12 & region_3==3
+replace lp_ci =   3253 if mes==1 & region_3=="03"
+replace lp_ci =   3365 if mes==2 & region_3=="03"
+replace lp_ci =   3379 if mes==3 & region_3=="03"
+replace lp_ci =   3424 if mes==4 & region_3=="03"
+replace lp_ci =   3490 if mes==5 & region_3=="03"
+replace lp_ci =   3509 if mes==6 & region_3=="03"
+replace lp_ci =   3523 if mes==7 & region_3=="03"
+replace lp_ci =   3542 if mes==8 & region_3=="03"
+replace lp_ci =   3567 if mes==9 & region_3=="03"
+replace lp_ci =   3574 if mes==10 & region_3=="03"
+replace lp_ci =   3595 if mes==11 & region_3=="03"
+replace lp_ci =   3611 if mes==12 & region_3=="03"
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -483,44 +478,44 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci =   3855 if mes==1 & region_3==1
-replace lpe_ci =   3866 if mes==2 & region_3==1
-replace lpe_ci =   3866 if mes==3 & region_3==1
-replace lpe_ci =   3933 if mes==4 & region_3==1
-replace lpe_ci =   4086 if mes==5 & region_3==1
-replace lpe_ci =   4132 if mes==6 & region_3==1
-replace lpe_ci =   4105 if mes==7 & region_3==1
-replace lpe_ci =   4109 if mes==8 & region_3==1
-replace lpe_ci =   4120 if mes==9 & region_3==1
-replace lpe_ci =   4168 if mes==10 & region_3==1
-replace lpe_ci =   4185 if mes==11 & region_3==1
-replace lpe_ci =   4168 if mes==12 & region_3==1
+replace lpe_ci =   3855 if mes==1 & region_3=="01"
+replace lpe_ci =   3866 if mes==2 & region_3=="01"
+replace lpe_ci =   3866 if mes==3 & region_3=="01"
+replace lpe_ci =   3933 if mes==4 & region_3=="01"
+replace lpe_ci =   4086 if mes==5 & region_3=="01"
+replace lpe_ci =   4132 if mes==6 & region_3=="01"
+replace lpe_ci =   4105 if mes==7 & region_3=="01"
+replace lpe_ci =   4109 if mes==8 & region_3=="01"
+replace lpe_ci =   4120 if mes==9 & region_3=="01"
+replace lpe_ci =   4168 if mes==10 & region_3=="01"
+replace lpe_ci =   4185 if mes==11 & region_3=="01"
+replace lpe_ci =   4168 if mes==12 & region_3=="01"
 
-replace lpe_ci =   3552 if mes==1 & region_3==2
-replace lpe_ci =   3568 if mes==2 & region_3==2
-replace lpe_ci =   3568 if mes==3 & region_3==2
-replace lpe_ci =   3648 if mes==4 & region_3==2
-replace lpe_ci =   3814 if mes==5 & region_3==2
-replace lpe_ci =   3843 if mes==6 & region_3==2
-replace lpe_ci =   3820 if mes==7 & region_3==2
-replace lpe_ci =   3824 if mes==8 & region_3==2
-replace lpe_ci =   3823 if mes==9 & region_3==2
-replace lpe_ci =   3860 if mes==10 & region_3==2
-replace lpe_ci =   3879 if mes==11 & region_3==2
-replace lpe_ci =   3864 if mes==12 & region_3==2
+replace lpe_ci =   3552 if mes==1 & region_3=="02"
+replace lpe_ci =   3568 if mes==2 & region_3=="02"
+replace lpe_ci =   3568 if mes==3 & region_3=="02"
+replace lpe_ci =   3648 if mes==4 & region_3=="02"
+replace lpe_ci =   3814 if mes==5 & region_3=="02"
+replace lpe_ci =   3843 if mes==6 & region_3=="02"
+replace lpe_ci =   3820 if mes==7 & region_3=="02"
+replace lpe_ci =   3824 if mes==8 & region_3=="02"
+replace lpe_ci =   3823 if mes==9 & region_3=="02"
+replace lpe_ci =   3860 if mes==10 & region_3=="02"
+replace lpe_ci =   3879 if mes==11 & region_3=="02"
+replace lpe_ci =   3864 if mes==12 & region_3=="02"
 
-replace lpe_ci =  3189 if mes==1 & region_3==3
-replace lpe_ci =  3203 if mes==2 & region_3==3
-replace lpe_ci =  3207 if mes==3 & region_3==3
-replace lpe_ci =  3278 if mes==4 & region_3==3
-replace lpe_ci =  3428 if mes==5 & region_3==3
-replace lpe_ci =  3454 if mes==6 & region_3==3
-replace lpe_ci =  3434 if mes==7 & region_3==3
-replace lpe_ci =  3439 if mes==8 & region_3==3
-replace lpe_ci =  3438 if mes==9 & region_3==3
-replace lpe_ci =  3473 if mes==10 & region_3==3
-replace lpe_ci =  3489 if mes==11 & region_3==3
-replace lpe_ci =  3473 if mes==12 & region_3==3
+replace lpe_ci =  3189 if mes==1 & region_3=="03"
+replace lpe_ci =  3203 if mes==2 & region_3=="03"
+replace lpe_ci =  3207 if mes==3 & region_3=="03"
+replace lpe_ci =  3278 if mes==4 & region_3=="03"
+replace lpe_ci =  3428 if mes==5 & region_3=="03"
+replace lpe_ci =  3454 if mes==6 & region_3=="03"
+replace lpe_ci =  3434 if mes==7 & region_3=="03"
+replace lpe_ci =  3439 if mes==8 & region_3=="03"
+replace lpe_ci =  3438 if mes==9 & region_3=="03"
+replace lpe_ci =  3473 if mes==10 & region_3=="03"
+replace lpe_ci =  3489 if mes==11 & region_3=="03"
+replace lpe_ci =  3473 if mes==12 & region_3=="03"
 
 label var lpe_ci "Linea de indigencia oficial del pais"
 
@@ -552,32 +547,30 @@ label var cotizasec_ci "Cotizante a la Seguridad Social por su trabajo secundari
 ****************
 *afiliado_ci****
 ****************
-* MM en 2020 no hay variables e45
 
 gen msp =.
-*replace msp =1 if (e45_1_1==1) &  e45_1==1
-*replace msp =0 if (e45_1_1==2) |  e45_1==2
+replace msp =1 if (e45_1_1_cv==1) &  e45_cv==1
+replace msp =0 if (e45_1_1_cv==2) |  e45_cv!=1
 
 gen iamc=.
-*replace iamc=1 if (e45_2_1==1) &  e45_2==1
-*replace iamc=0 if (e45_2_1==2) |  e45_2==2
+replace iamc=1 if (e45_2_1_cv==1) &  e45_cv==2
+replace iamc=0 if (e45_2_1_cv==2) |  e45_cv!=2
 
 gen spm =.
-*replace spm =1 if (e45_3_1==1) & e45_3==1
-*replace spm =0 if (e45_3_1>=2 & e45_3_1<=3) | e45_3==2
+replace spm =1 if (e45_3_1_cv==1) & e45_cv==3
+replace spm =0 if (e45_3_1_cv>=2 & e45_3_1_cv<=3) | e45_cv!=3
 
 gen hpm =.
-*replace hpm=1 if e45_4==1
-*replace hpm=0 if e45_4==2
+replace hpm=1 if e45_cv==4
+replace hpm=0 if e45_cv!=4
 
 gen bps=.
-*replace bps=1 if e45_5==1
-*replace bps=0 if e45_5==2
+replace bps=1 if e45_cv==5
+replace bps=0 if e45_cv!=5
 
-gen afiliado_ci=.
-*gen afiliado_ci=(msp==1 | iamc==1 | spm==1 | hpm==1 | bps==1)
-*replace afiliado_ci=. if msp==. & iamc==. & spm==. & hpm==. & bps==.
-*label var afiliado_ci "Afiliado a la Seguridad Social"
+gen afiliado_ci=(msp==1 | iamc==1 | spm==1 | hpm==1 | bps==1)
+replace afiliado_ci=. if msp==. & iamc==. & spm==. & hpm==. & bps==.
+label var afiliado_ci "Afiliado a la Seguridad Social"
 drop msp iamc spm hpm bps
 *Nota: seguridad social comprende solo los que en el futuro me ofrecen una pension. */
 
@@ -598,15 +591,11 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 *** instcot_ci *****
 ********************
 
-* MM en 2020 no hay variables f83
-
-gen instcot_ci=.
-/*
 gen instcot_ci=f83
 replace instcot_ci=. if instcot_ci==0
 label define  instcot_ci 1"bps" 2"bps y afap" 3"policial" 4"militar" 5"profesional" 6 "notarial" 7"bancaria" 8"en el exterior"
 label value instcot_ci instcot_ci
-label var instcot_ci "institución a la cual cotiza por su trabajo" */
+label var instcot_ci "institución a la cual cotiza por su trabajo"
 
 
 *****************
@@ -622,28 +611,20 @@ label value tipocontrato_ci tipocontrato_ci
 *cesante_ci* 
 *************
 
-* MM en 2020 no hay variables f116
-gen cesante_ci=.
-/*
 gen cesante_ci=1 if f116==1 & condocup_ci==2
 replace cesante_ci=0 if f116==2 & condocup_ci==2
-label var cesante_ci "Desocupado - definicion oficial del pais"	*/
+label var cesante_ci "Desocupado - definicion oficial del pais"
 
 *************
 **pension_ci*
 *************
 
-* MM en 2020 no hay variables empezando con g
-/*
 *Alvaro, mayo 2019, incluí ingresos por jubilación AFAP (g148_#_12). 
 egen aux1=rowtotal(g148_1_1 g148_1_2 g148_1_3 g148_1_4 g148_1_5 g148_1_6 g148_1_7 g148_1_8 g148_1_9 g148_1_12), mis /*Se excluyen pensiones recibidas del exterior*/
 egen aux2=rowtotal(g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12), mis /*Se excluyen pensiones recibidas del exterior*/
 
 * MGR, Aug 2015: correción en sintáxis, se generaba como el 100%
 egen ypension = rowtotal(aux1 aux2), missing
-*/
-gen pension_ci=.
-/*
 gen pension_ci= (ypension>0 & ypension!=.)
 label var pension_ci "1=Recibe pension contributiva"
 
@@ -654,12 +635,9 @@ label var pension_ci "1=Recibe pension contributiva"
 
 * Cambio MGD 07/2015:mal generada, hay que sumar
 recode aux1 aux2 (0=.)
-*/
-gen 	ypen_ci=.
-/*
 egen 	ypen_ci=rsum(aux1 aux2),m
 replace ypen_ci=. if pension_ci==0
-label var ypen_ci "Valor de la pension contributiva" */
+label var ypen_ci "Valor de la pension contributiva"
 
 ***************
 *pensionsub_ci*
@@ -784,9 +762,6 @@ replace spublico =. if emp_ci==.
 
 * Modificacion MGD 07/15/2014: mal generada la variable, se dejaban de  lado categorias.
 *Genera la variable para empresas pequeñas
-* MM en 2020 no existe variable f77
-gen tamemp_ci=.
-/*
 gen tamemp_ci=1 if f77==1 | f77==2 
 label var  tamemp_ci "Tamaño de Empresa" 
 *Empresas medianas
@@ -795,13 +770,10 @@ replace tamemp_ci=2 if f77==3 | f77==6 | f77==7
 replace tamemp_ci=3 if f77==5
 label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
 label values tamemp_ci tamaño
-tab tamemp_ci [iw=pesoano] */
+tab tamemp_ci [iw=pesomen]
 
 *Genera la variable para clasificar a los inactivos
 *Jubilados y pensionados
-* MM en 2020 no existe variable f124
-gen categoinac_ci=.
-/*
 gen categoinac_ci=1 if f124_1==1 | f124_2==1
 label var  categoinac_ci "Condición de Inactividad" 
 *Estudiantes
@@ -812,7 +784,7 @@ replace categoinac_ci=3 if f124_5==1
 replace categoinac_ci=4 if f124_3==1 
 label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
 label values categoinac_ci inactivo
-tab categoinac_ci [iw=pesoano] */
+tab categoinac_ci [iw=pesomen]
 
 
 *******************
@@ -829,12 +801,11 @@ gen byte formal_1=(cotizando_ci1==1)
 *25. Ocupación laboral actividad principal *** 
 
 * Modificacion MGD 07/15/2014: mal clasificado, se usa la CIUO-08.
-* MM en 2020 no hay variable f71
 
-*destring f71_2, replace
+destring f71_2, replace
 
 gen ocupa_ci=.
-/*replace ocupa_ci=1 if (f71_2>=2111 & f71_2<=3522) & emp_ci==1
+replace ocupa_ci=1 if (f71_2>=2111 & f71_2<=3522) & emp_ci==1
 replace ocupa_ci=2 if (f71_2>=1111 & f71_2<=1439) & emp_ci==1
 replace ocupa_ci=3 if (f71_2>=4110 & f71_2<=4419 | f71_2>=410 & f71_2<=430) & emp_ci==1
 replace ocupa_ci=4 if ((f71_2>=5211 & f71_2<=5249) | (f71_2>=9510 & f71_2<=9520)) & emp_ci==1
@@ -849,12 +820,10 @@ label define ocupa_ci 1"Profesional y tecnico" 2"Director o funcionario sup" 3"A
 label define ocupa_ci  4 "Comerciantes y vendedores" 5 "En servicios" 6 "Trabajadores agricolas", add
 label define ocupa_ci  7 "Obreros no agricolas, conductores de maq y ss de transporte", add
 label define ocupa_ci  8 "FFAA" 9 "Otras ", add
-label value ocupa_ci ocupa_ci */
+label value ocupa_ci ocupa_ci
 
 
 *26. Rama laboral de la actividad principal
-* MM en 2020 no hay variable f72
-/*
 /*
 destring f72_2, replace force
 recode f72_2 (0000/0400=1 "Agricultura, caza, silvicultura y pesca") (0500/1000=2 "Explotación de minas y canteras") (1010/3400=3 "Industrias manufactureras") /*
@@ -863,9 +832,9 @@ recode f72_2 (0000/0400=1 "Agricultura, caza, silvicultura y pesca") (0500/1000=
 */ (8400/9900=9 "Servicios sociales y comunales"),gen(rama_ci)
 replace rama_ci=. if condocup_ci !=1
 */
-destring f72_2, replace force */
+destring f72_2, replace force
 gen rama_ci=.
-/*replace rama_ci=1 if (f72_2>0 & f72_2<=400) & emp_ci==1
+replace rama_ci=1 if (f72_2>0 & f72_2<=400) & emp_ci==1
 replace rama_ci=2 if (f72_2>=500 & f72_2<=1000) & emp_ci==1
 replace rama_ci=3 if (f72_2>=1010 & f72_2<=3400) & emp_ci==1
 replace rama_ci=4 if (f72_2>=3500 & f72_2<=4000) & emp_ci==1
@@ -873,33 +842,25 @@ replace rama_ci=5 if (f72_2>=4100 & f72_2<=4400) & emp_ci==1
 replace rama_ci=6 if ((f72_2>=4500 & f72_2<=4800) | (f72_2>=5500 & f72_2<=5700))& emp_ci==1
 replace rama_ci=7 if ((f72_2>=4900 & f72_2<=5400) | (f72_2>=6100 & f72_2<=6199)) & emp_ci==1
 replace rama_ci=8 if (f72_2>=6400 & f72_2<=8300) & emp_ci==1
-replace rama_ci=9 if ((f72_2>=5800 & f72_2<=6090) | (f72_2>=6200 & f72_2<=6399) | (f72_2>=8400 & f72_2<=9900))& emp_ci==1 */
+replace rama_ci=9 if ((f72_2>=5800 & f72_2<=6090) | (f72_2>=6200 & f72_2<=6399) | (f72_2>=8400 & f72_2<=9900))& emp_ci==1
 
 *55a. Duración del desempleo
 
-* MM en 2020 no hay variable f113
-gen durades_ci=.
-/*
 gen durades_ci=f113/4.3 if f113>0
-replace durades_ci=. if f116==2 */
+replace durades_ci=. if f116==2
 
 *****************
 **antiguedad_ci**
 *****************
-* MM en 2020 no hay variable f88
-gen antigenanio=.
-gen antiguedad_ci=.
-/*
 *Modificación MLO
 gen antigenanio=(f88_1/12)
 egen antiguedad_ci=rowtotal(antigenanio  f88_2)
-recode antiguedad_ci 0=. if condocup_ci !=1 */
+recode antiguedad_ci 0=. if condocup_ci !=1
 	
 *********************************************************************************************************
 *                                       INGRESOS                                                        *
 *********************************************************************************************************
 
-* MM en 2020 no hay ninguna variable de ingresos
 
 
 *29. Ingreso laboral monetario actividad principal
@@ -922,14 +883,13 @@ Trabajador agropecuario
 RETIRO REALIZADO PARA GASTOS DEL HOGAR	g142	$
 */
 
-/*gen g143_ = g143/12
+gen g143_ = g143/12
 gen g145_ = g145/12
 gen g146_ = g146/12
-gen g147_ = g147/12*/
+gen g147_ = g147/12
 
-gen ylmpri_ci= pt2 if emp_ci==1
-/*egen ylmpri_ci=rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7  g142 g143_ g145_ g146_ g147_ g133_2) if emp_ci==1 , missing
-replace ylmpri_ci=. if (g126_1==. & g126_2==. & g126_3==. &  g126_4==. &  g126_5==. &  g126_6==. &  g126_7==. &  g143_==. & g145_==. & g146_==. & g147_==.)*/
+egen ylmpri_ci=rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7  g142 g143_ g145_ g146_ g147_ g133_2) if emp_ci==1 , missing
+replace ylmpri_ci=. if (g126_1==. & g126_2==. & g126_3==. &  g126_4==. &  g126_5==. &  g126_6==. &  g126_7==. &  g143_==. & g145_==. & g146_==. & g147_==.)
 
 * Nota Marcela G. Rubio - Abril 2014
 * Se filtra ingreso sólo para las personas ocupadas emp_ci==1
@@ -964,10 +924,8 @@ g127_3	$	Otros - Monto estimado
 */
 
 
-gen desay=.
-gen almue=.
-/*gen desay=(g127_1*mto_desay)
-gen almue= (g127_2*mto_almue)*/
+gen desay=(g127_1*mto_desay)
+gen almue= (g127_2*mto_almue)
 *gen cuota = En este año no se pregunta acerca de la cuota mutual.
 /*
 DERECHO A PASTOREO	g132_1	Nº	Vacunos
@@ -976,17 +934,13 @@ DERECHO A PASTOREO	g132_3	Nº	Equinos
 */
 
 
-gen vacas =.
-gen oveja =.
-gen caballo =.
-/*gen vacas = (g132_1*mto_vacas)
+gen vacas = (g132_1*mto_vacas)
 gen oveja = (g132_2*mto_oveja)
-gen caballo = (g132_3*mto_caball)*/
+gen caballo = (g132_3*mto_caball)
 
 *No costa la variable disse en el formulario.
 
-gen ylnmpri_ci=.
-*egen ylnmpri_ci= rsum( desay almue vacas oveja caballo g126_8 g127_3  g128_1 g129_2 g130_1 g131_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5 ) if emp_ci==1, missing
+egen ylnmpri_ci= rsum( desay almue vacas oveja caballo g126_8 g127_3  g128_1 g129_2 g130_1 g131_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5 ) if emp_ci==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
 * Se filtra ingreso sólo para las personas ocupadas emp_ci==1
@@ -1003,8 +957,7 @@ PAGOS ATRASADOS	g134_7
 DERECHO A CULTIVO PARA CONSUMO PROPIO g141_2	$	Monto percibido por la venta de esos productos
 */
 
-gen ylmsec_ci=.
-*egen ylmsec_ci=rsum(g134_1 g134_2  g134_3  g134_4  g134_5  g134_6  g134_7 g141_2) if emp_ci == 1, missing 
+egen ylmsec_ci=rsum(g134_1 g134_2  g134_3  g134_4  g134_5  g134_6  g134_7 g141_2) if emp_ci == 1, missing 
 
 * Nota Marcela G. Rubio - Abril 2014
 * Se filtra ingreso sólo para las personas ocupadas emp_ci==1
@@ -1027,37 +980,29 @@ DERECHO A PASTOREO	g140_2	Nº	Ovinos
 DERECHO A PASTOREO	g140_3	Nº	Equinos
 */
 
-gen desaysec=.
-gen almuesec=.
-*gen desaysec=(g135_1*mto_desay)
-*gen almuesec= (g135_2*mto_almue)
+gen desaysec=(g135_1*mto_desay)
+gen almuesec= (g135_2*mto_almue)
 *gen cuota = En este año no se pregunta acerca de la cuota mutual.
 
-gen vacassec =.
-gen ovejasec =.
-gen caballosec =.
-*gen vacassec = (g140_1*mto_vacas)
-*gen ovejasec = (g140_2*mto_oveja)
-*gen caballosec = (g140_3*mto_caball)
+gen vacassec = (g140_1*mto_vacas)
+gen ovejasec = (g140_2*mto_oveja)
+gen caballosec = (g140_3*mto_caball)
 
-gen ylnmsec_ci=.
-*egen ylnmsec_ci=rsum(desaysec almuesec vacassec ovejasec caballosec g134_8 g135_3 g136_1 g137_2 g138_1 g139_1 g141_1) if emp_ci ==1, missing
+egen ylnmsec_ci=rsum(desaysec almuesec vacassec ovejasec caballosec g134_8 g135_3 g136_1 g137_2 g138_1 g139_1 g141_1) if emp_ci ==1, missing
 
 * Nota Marcela G. Rubio - Abril 2014
 * Se filtra ingreso sólo para las personas ocupadas emp_ci==1
 
 *33. Ingreso laboral monetario otros trabajos
 
-gen ylmotros_ci=.
-*egen ylmotros_ci=rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7  g142 g143_ g145_ g146_ g147_ g133_2 g134_1 g134_2  g134_3  g134_4  g134_5  g134_6  g134_7 g141_2) if emp_ci==0 , missing
+egen ylmotros_ci=rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7  g142 g143_ g145_ g146_ g147_ g133_2 g134_1 g134_2  g134_3  g134_4  g134_5  g134_6  g134_7 g141_2) if emp_ci==0 , missing
 
 * Nota Marcela G. Rubio - Abril 2014
 * estimo variable ingreso laboral monetario otros trabajos para todos los años
 
 *34. Ingreso laboral no monetario otros trabajos
 
-gen ylnmotros_ci=.
-*egen ylnmotros_ci=rsum(desay almue vacas oveja caballo g126_8 g127_3  g128_1 g129_2 g130_1 g131_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5 desaysec almuesec vacassec ovejasec caballosec g134_8 g135_3 g136_1 g137_2 g138_1 g139_1 g141_1) if emp_ci==0, missing
+egen ylnmotros_ci=rsum(desay almue vacas oveja caballo g126_8 g127_3  g128_1 g129_2 g130_1 g131_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5 desaysec almuesec vacassec ovejasec caballosec g134_8 g135_3 g136_1 g137_2 g138_1 g139_1 g141_1) if emp_ci==0, missing
 
 * Nota Marcela G. Rubio - Abril 2014
 * estimo variable ingreso laboral no monetario otros trabajos para todos los años
@@ -1078,8 +1023,7 @@ gen ynlnm_ch=.
 
 *37. Ingreso laboral monetario total
 
-gen ylm_ci=pt4
-*egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci) 
+egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci) 
 replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
 
 * Nota Marcela G. Rubio - Abril 2014
@@ -1087,9 +1031,8 @@ replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
 
 *38. Ingreso laboral no monetario total
 
-gen ylnm_ci=.
-*egen ylnm_ci=rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci) 
-*replace ylnm_ci=. if ylnmpri_ci==. & ylnmsec_ci==. & ylnmotros_ci==.
+egen ylnm_ci=rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci) 
+replace ylnm_ci=. if ylnmpri_ci==. & ylnmsec_ci==. & ylnmotros_ci==.
 
 * Nota Marcela G. Rubio - Abril 2014
 * Incluyo ingreso laboral no monetario otros como parte del ingreso laboral no monetario total ya que no había sido incluido
@@ -1152,15 +1095,14 @@ remesas	RECIBIÓ ALGUNA COLABORACIÓN ECONÓMICA DE ALGÚN FAMILIAR EN EL EXTERI
 */
 
 foreach i in h160_1 h160_2 h163_1 h163_2 h164 h165 h166 h167_1_1 h167_1_2 h170_1 h170_2 h171_1 h172_1 h173_1{
-gen `i'm=.
-*gen `i'm=`i'/12 /*Estos estan definidos en base anual!*/
+gen `i'm=`i'/12 /*Estos estan definidos en base anual!*/
 }
 
 bys idh_ch: egen numper = sum(miembros_ci)
 bys idh_ch: egen npermax = max(numper)
 drop numper
 * Los ingresos a nivel de hogar se dividen para los miembros del hogar y se obtiene un per capita.
-gen inghog1 = ht11
+gen inghog1 = HT11
 *egen inghog1 = rsum(h155_1 h160_1m h160_2m h163_1m h163_2m h164m h165m h166m h167_1_1m h167_1_2m h170_1m h170_2m h171_1m h172_1m h173_1m), missing
 
 gen inghog= inghog1/npermax
@@ -1187,10 +1129,8 @@ correspondía a la canasta de Pensionistas se convierte ahora en la canasta para
 *Alvaro Altamirano, mayo 2019: En la base de 2018 solo aparecen los siguientes prograsmas = Uruguay Crece Contigo (UCC), Celíacos, y Emergencia
 
 *gen canasta_1 = (e247* indaucc) if e246 ==12
-gen canasta_2 =.
-gen canasta_3 =.
-*gen canasta_2 = (e247 * indaceliac) if e246 ==7
-*gen canasta_3 = (e247 * indaemer) if e246 ==13
+gen canasta_2 = (e247 * indaceliac) if e246 ==7
+gen canasta_3 = (e247 * INDAEMER) if e246 ==13
 
 
 *gen salvcana = (e249*mto_almu) este año no existe esta variable
@@ -1199,12 +1139,10 @@ gen canasta_3 =.
 *COBRA HOGAR CONSTITUIDO	g149	1 = Sí / 2 = No	
 *	g149_1	1 = Sí / 2 = No	Declarado en el sueldo
 
-gen hogcosnt =.
-*gen hogcosnt = mto_hogcon if g149==1 & g149_1==2
+gen hogcosnt = mto_hogcon if g149==1 & g149_1==2
 
 * Total transferencias
-gen transf=.
-*egen transf= rsum(canasta_* hogcosnt), missing
+egen transf= rsum(canasta_* hogcosnt), missing
 
 /* Marcela Rubio - Abril 2014
 Cambios en nombre de variables de encuesta 2012 a encuesta 2013
@@ -1216,14 +1154,12 @@ g148_2_11 = g148_2_c pensiones recibido de otro pais
 g148_2_12 = g148_2_a pensiones recibido de AFAP
 */
 
-gen ynlm_ci=.
-*egen ynlm_ci=rsum(inghog transf g148_1_1 g148_1_2  g148_1_3 g148_1_4  g148_1_5  g148_1_6  g148_1_7  g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12 g148_2_10 g148_2_11 g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2 g154_1 )
+egen ynlm_ci=rsum(inghog transf g148_1_1 g148_1_2  g148_1_3 g148_1_4  g148_1_5  g148_1_6  g148_1_7  g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12 g148_2_10 g148_2_11 g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2 g154_1 )
 
 *40. Ingreso no laboral no monetario
 
-gen ynlnm_ci=.
-*gen ynlnm_ci= (h156_1/npermax)
-*label var ynlnm_ci "Ingreso no laboral no monetario" 
+gen ynlnm_ci= (h156_1/npermax)
+label var ynlnm_ci "Ingreso no laboral no monetario" 
 
 *41. Identificador de los hogares en donde alguno de los miembros no sabe/No responde el ingreso de
 *la actividad principal.
@@ -1250,23 +1186,20 @@ by idh_ch: egen ylm_ch=sum(ylm_ci)if relacion_ci!=6
 *** ylmnr_ch ***
 ****************
 
-gen ylmnr_ch=.
-*by idh_ch, sort: egen ylmnr_ch=sum(ylm_ci) if miembros_ci==1
-*replace ylmnr_ch=. if nrylmpri_ch==1
+by idh_ch, sort: egen ylmnr_ch=sum(ylm_ci) if miembros_ci==1
+replace ylmnr_ch=. if nrylmpri_ch==1
 
 *44. Ingreso laboral no monetario del hogar
 
-gen ylnm_ch=.
-*by idh_ch: egen ylnm_ch=sum(ylnm_ci)if relacion_ci!=6
+by idh_ch: egen ylnm_ch=sum(ylnm_ci)if relacion_ci!=6
 
 
 *45. Ingreso no laboral monetario del hogar
 
 
 *46. Ingreso no laboral monetario del hogar
-* gen ylmnr_ch=. if nrylmpri_ch==1
-gen ynlm_ch=.
-*by idh_ch: egen ynlm_ch=sum(ynlm_ci) if relacion_ci!=6
+*gen ylmnr_ch=. if nrylmpri_ch==1
+by idh_ch: egen ynlm_ch=sum(ynlm_ci) if relacion_ci!=6
 
 
 *47. Salario monetario de la actividad principal en horas
@@ -1294,84 +1227,68 @@ RETIRO DE PRODUCTOS PARA CONSUMO PROPIO (trabajador agropecuario)
 	g144_2_5	$	Valor consumido en otros alimentos
 */
 
-gen autocons_ci=.
-*egen autocons_ci=rsum(g141_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5), missing
+egen autocons_ci=rsum(g141_1 g133_1 g144_1 g144_2_1 g144_2_2 g144_2_3 g144_2_4 g144_2_5), missing
 
 
 *52. Autoconsumo del hogar
 
-gen autocons_ch=.
-*bys idh_ch: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
+bys idh_ch: egen autocons_ch=sum(autocons_ci) if miembros_ci==1
 la var autocons_ch "Autoconsumo del Hogar"
 
 *53. Remesas reportadas por el individuo
 
-gen remesas_ci=.
-*gen remesas_ci= (h172_1m/npermax)
+gen remesas_ci= (h172_1m/npermax)
 label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
 	****************
 	***remesas_ch***
 	****************
-	gen remesas_ch=.
-	*by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
+	by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 	label var remesas_ch "Remesas mensuales del hogar"	
 
 
 *55. Antigüedad en la actividad actual
 
-*MM en 2020 no hay variables e51
 *74. Anios de educación
-gen post=.
-*gen post=1 if e51_11>=1 & e51_11!=9
-*replace post=0 if e51_11==0
+gen post=1 if e51_11>=1 & e51_11!=9
+replace post=0 if e51_11==0
 
-gen terc=.
-*gen terc=1 if e51_10>=1 & e51_10!=9
-*replace terc=0 if e51_10==0
+gen terc=1 if e51_10>=1 & e51_10!=9
+replace terc=0 if e51_10==0
 
-gen univ=.
-*gen univ=1 if e51_9>=1 & e51_9!=9
-*replace univ=0 if e51_9==0
+gen univ=1 if e51_9>=1 & e51_9!=9
+replace univ=0 if e51_9==0
 
-gen mag=.
-*gen mag=1 if e51_8>=1 & e51_8!=9
-*replace mag=0 if e51_8==0
+gen mag=1 if e51_8>=1 & e51_8!=9
+replace mag=0 if e51_8==0
 
-gen enst=.
-*gen enst=1 if e51_7>=1 & e51_7!=9
-*replace enst=0 if e51_7==0
+gen enst=1 if e51_7>=1 & e51_7!=9
+replace enst=0 if e51_7==0
 
-gen bachtec=.
-*gen bachtec=1 if e51_6>=1 & e51_6!=9
-*replace bachtec=0 if e51_6==0
+gen bachtec=1 if e51_6>=1 & e51_6!=9
+replace bachtec=0 if e51_6==0
 
-gen bachsec=.
-*gen bachsec=1 if e51_5>=1 & e51_5!=9
-*replace bachsec=0 if e51_5==0
+gen bachsec=1 if e51_5>=1 & e51_5!=9
+replace bachsec=0 if e51_5==0
 
-gen cbliceo=.
-*gen cbliceo=1 if e51_4>=1 & e51_4!=9
-*replace cbliceo=0 if e51_4==0
+gen cbliceo=1 if e51_4>=1 & e51_4!=9
+replace cbliceo=0 if e51_4==0
 
-gen priesp=.
-*gen priesp=1 if e51_3>=1 & e51_3!=9
-*replace priesp=0 if e51_3==0
+gen priesp=1 if e51_3>=1 & e51_3!=9
+replace priesp=0 if e51_3==0
 
-gen pricom=.
-*gen pricom=1 if e51_2>=1 & e51_2!=9
-*replace pricom=0 if e51_2==0
+gen pricom=1 if e51_2>=1 & e51_2!=9
+replace pricom=0 if e51_2==0
 
-gen preesc=.
-*gen preesc=1 if e193==1 | e193==2
-*replace preesc=0 if  e193==3
+gen preesc=1 if e193==1 | e193==2
+replace preesc=0 if  e193==3
 
 /*  Criterios para la elaboración de años de educación aprobados:
        > No se toma en cuenta los años de preescolar
 	   > Los años de educacion primaria especial también son 6 años, como la primaria comun
 */
 
-/*
+
 *Ajustando 9  No saben/No responden 
 gen e51_2n=e51_2 // Primaria Común
 replace e51_2n=0 if e51_2==9
@@ -1389,20 +1306,19 @@ gen e51_10n=e51_10 // Terciario No Universitario
 replace e51_10n=0 if e51_10==9
 gen e51_11n=e51_11 // Postgrados
 replace e51_11n=0 if e51_11==9
-gen aedu_ci=.
+/*gen aedu_ci=.
 replace aedu_ci=0 if preesc==1
 replace aedu_ci= e51_2n  + e51_4n + e51_5n+  e51_8n + e51_9n + e51_10n + e51_11n if e51_5n>=e51_6n
 replace aedu_ci= e51_2n  + e51_4n + e51_6n + e51_8n + e51_9n + e51_10n + e51_11n if e51_6n> e51_5n 
 replace aedu_ci=.  if e51_3>=1 & e51_3<=9 // Educación Especial
 replace aedu_ci=.  if e51_7_1>=1 & e51_7_1<=9 // Educación para Adultos
-replace aedu_ci=0 if e51_2n==0 & e51_4n==0 & e51_5n==0 & e51_6n==0 & e51_8n==0 & e51_9n==0 & e51_10n==0 & e51_11n==0
-*/
+replace aedu_ci=0 if e51_2n==0 & e51_4n==0 & e51_5n==0 & e51_6n==0 & e51_8n==0 & e51_9n==0 & e51_10n==0 & e51_11n==0 */
 
 ** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisión por Iván Bornacelly SCL/EDU **
 ** Ajustado: Jul, 2017 por Iván Bornacelly SCL/EDU
 
 gen aedu_ci=.
-/*replace aedu_ci= 0            if preesc==1 
+replace aedu_ci= 0            if preesc==1 
 replace aedu_ci= 0           if (e51_2==9  | e51_3==9)
 replace aedu_ci= e51_3        if priesp==1  & e51_3<9
 replace aedu_ci= e51_2        if pricom==1  & e51_2<9 
@@ -1415,7 +1331,7 @@ replace aedu_ci= e51_9 + 12   if univ==1 & e51_9<9
 replace aedu_ci= e51_10 + 12  if terc==1 & (e51_10>e51_9) & e51_10<9
 replace aedu_ci= e51_11 + 17  if post==1 & e51_11<9 
 replace aedu_ci=0             if e49==2 & (edad>=5 & edad!=.)
-replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // Población que declara estar asistiendo o haber asistido, pero no reporta ningún nivel o años de educación aprobado */
+replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // Población que declara estar asistiendo o haber asistido, pero no reporta ningún nivel o años de educación aprobado
 
 **************
 ***eduno_ci***
@@ -1510,17 +1426,16 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-gen edupre_ci=.
-*gen edupre_ci=(e193==1)
-*replace edupre_ci=. if aedu_ci==.
+gen edupre_ci=(e193==1)
+replace edupre_ci=. if aedu_ci==.
 label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 	g asispre_ci=.
-	/*replace asispre_ci=1 if e193==1 & e27>=4
-	recode asispre_ci (.=0)*/
+	replace asispre_ci=1 if e193==1 & e27>=4
+	recode asispre_ci (.=0)
 	la var asispre_ci "Asiste a educacion prescolar"
 
 ***************
@@ -1531,9 +1446,9 @@ label variable edupre_ci "Educacion preescolar"
 * e51_10: años educación terciario no universitario
 
 gen eduac_ci=.
-/*replace eduac_ci = 1 if e51_9>0
+replace eduac_ci = 1 if e51_9>0
 replace eduac_ci = 0 if e51_10>0
-replace eduac_ci =. if e51_9>=10 | e51_10>=10*/
+replace eduac_ci =. if e51_9>=10 | e51_10>=10
 
 /* Nota Marcela G. Rubio - Abril 2014
 Variable había sido generada como missing, estimo variable con las respectivas preguntas de educación universitaria y no universitaria /// 
@@ -1541,15 +1456,13 @@ de cuestionario*/
 
 *88. Personas que actualmente asisten a centros de ensenanza
 
-* MM en 2020 no hay variables e197 e201 e212 e215 e218
 gen asiste_ci=.
 *cambio MLO 01,2014
 *replace asiste_ci=1 if e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
 * cambio MGR 06,2015
 *Daniela Zuluaga-Enero 2019: Se agrega también asistencia de educación inicial
 *replace asiste_ci=1 if e238==1 | e193==1 | e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
-*recode asiste_ci .=0
-/* 
+recode asiste_ci .=0
 *Primaria
 replace asiste_ci= 1 if e197 == 1
 replace asiste_ci= 0 if e197 == 2 | e197 == 3
@@ -1571,7 +1484,7 @@ replace asiste_ci= 0 if e221 == 2 | e221 == 3
 *Postgrado
 replace asiste_ci= 1 if e224 == 1
 replace asiste_ci= 0 if e224 == 2 | e224 == 3
- */
+
 
 *89. Razones para no asistir a la escuela
 * Se genera como mising porque no hay para todas las preguntas. 
@@ -1596,8 +1509,9 @@ gen repiteult_ci=.
 
 gen edupub_ci=.
 *Inicial
-/*replace edupub_ci=1 if e239 ==1 & e238 == 1
-replace edupub_ci=0 if e239 ==2 & e238 == 1
+* MM 2021 en la encuesta de 2020 no hay variables e 238 ni e239
+*replace edupub_ci=1 if e239 ==1 & e238 == 1
+*replace edupub_ci=0 if e239 ==2 & e238 == 1
 *Prescolar
 replace edupub_ci=1 if e194 ==1 & e193 == 1
 replace edupub_ci=0 if e194 ==2 & e193 == 1
@@ -1621,7 +1535,7 @@ replace edupub_ci=1 if e222 ==1 & e221 == 1
 replace edupub_ci=0 if e222 ==2 & e221 == 1
 *Postgrado
 replace edupub_ci=1 if e225 ==1 & e224 == 1
-replace edupub_ci=0 if e225 ==2 & e224== 1*/
+replace edupub_ci=0 if e225 ==2 & e224== 1
 
 
 *************
@@ -1629,8 +1543,8 @@ replace edupub_ci=0 if e225 ==2 & e224== 1*/
 *************
 
 gen tecnica_ci=.
-/*replace tecnica_ci=1 if e51_10>=1 & e51_10<=9
-replace tecnica_ci=0 if e51_9>=1 & e51_9<=9*/
+replace tecnica_ci=1 if e51_10>=1 & e51_10<=9
+replace tecnica_ci=0 if e51_9>=1 & e51_9<=9
 label var tecnica_ci "1=formacion terciaria tecnica"
 
 *************
@@ -1638,8 +1552,8 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 *************
 
 gen universidad_ci=.
-/*replace universidad_ci=1 if e51_9>=1 & e51_9<=9
-replace universidad_ci=0 if e51_10>=1 & e51_10<=9*/
+replace universidad_ci=1 if e51_9>=1 & e51_9<=9
+replace universidad_ci=0 if e51_10>=1 & e51_10<=9
 label var universidad_ci "1=formacion terciaria tecnica"
 
 *93. Acceso a una fuente de agua por red
@@ -1850,16 +1764,14 @@ gen rentaimp_ch=.
 ***  seguro_ci  ***
 *******************
 
-g benefdes_ci=.
-/*g benefdes_ci=0 if desemp_ci==1
-replace benefdes_ci=1 if  f117==1  & desemp_ci==1*/
+g benefdes_ci=0 if desemp_ci==1
+replace benefdes_ci=1 if  f117==1  & desemp_ci==1
 label var benefdes_ci "=1 si tiene seguro de desempleo"
 
 *******************
 *** yseguro_ci  ***
 *******************
-g ybenefdes_ci=.
-*g ybenefdes_ci=g148_3 if benefdes_ci==1
+g ybenefdes_ci=g148_3 if benefdes_ci==1
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 *******************
@@ -1870,30 +1782,28 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 *** cobsalud_ci ***
 *******************
 
-gen cobsalud_ci=.
-*gen cobsalud_ci=1 if e45_1==1 | e45_2==1 | e45_3==1 | e45_4==1 | e45_5==1 | e45_6==1 | e45_7==1 
-*recode cobsalud_ci (.=0)
+gen cobsalud_ci=1 if e45_cv>0 & e45_cv<7
+recode cobsalud_ci (.=0)
 
 label var cobsalud_ci "Tiene cobertura de salud"
-*label define cobsalud_ci 0 "No" 1 "Si" 
-*label value cobsalud_ci cobsalud_ci
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
 
 ************************
 *** tipocobsalud_ci  ***
 ************************
-gen tipocobsalud_ci=.
-/*gen tipocobsalud_ci=1 if e45_1==1
-replace tipocobsalud_ci=2 if e45_2==1
-replace tipocobsalud_ci=3 if e45_3==1
-replace tipocobsalud_ci=4 if e45_4==1
-replace tipocobsalud_ci=5 if e45_5==1
-replace tipocobsalud_ci=6 if e45_6==1
-replace tipocobsalud_ci=7 if e45_7==1
-recode tipocobsalud_ci (.=0)*/
+gen tipocobsalud_ci=1 if e45_cv==1
+replace tipocobsalud_ci=2 if e45_cv==2
+replace tipocobsalud_ci=3 if e45_cv==3
+replace tipocobsalud_ci=4 if e45_cv==4
+replace tipocobsalud_ci=5 if e45_cv==5
+replace tipocobsalud_ci=6 if e45_cv==6
+replace tipocobsalud_ci=0 if e45_cv==7
+recode tipocobsalud_ci (.=0)
 
 label var tipocobsalud_ci "Tipo cobertura de salud"
-/*lab def tipocobsalud_ci 1 "ASSE" 2 "IAMC" 3 "Privado" 4 "pol/mil" 5"BPS" 6"Municipal" 7"otro" 0"Sin Cobertura"
-lab val tipocobsalud_ci tipocobsalud_ci*/
+lab def tipocobsalud_ci 1 "ASSE" 2 "IAMC" 3 "Privado" 4 "pol/mil" 5"BPS" 6"Municipal" 0"Sin Cobertura"
+lab val tipocobsalud_ci tipocobsalud_ci
 
 *********************
 *** distancia_ci  ***
@@ -1987,10 +1897,9 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-gen codindustria =.
-gen codocupa =.
-*rename f72_2 codindustria
-*rename f71_2 codocupa
+
+rename f72_2 codindustria
+rename f71_2 codocupa
 compress
 
 saveold "`base_out'", v(12) replace

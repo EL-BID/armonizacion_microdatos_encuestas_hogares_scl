@@ -324,9 +324,9 @@ gen afroind_ch  = .
 /*
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-
-drop afroind_jefe
 */
+drop afroind_jefe
+
 	*******************
 	***afroind_ano_c***
 	*******************
@@ -347,12 +347,13 @@ recode dis_ci 0=1 if s04a_06`i'==`j'
 }
 recode dis_ci nonmiss=. if s04a_06a==9 & s04a_06b==9 & s04a_06c==9 & s04a_06d==9 & s04a_06e==9 & s04a_06f==9 
 recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=. & s04a_06e>=. & s04a_06f>=.
-
+*/
 	*************
 	***dis_ch***
 	**************	
-egen dis_ch = sum(dis_ci), by(idh_ch) 
-*/
+egen dis_ch =.
+*sum(dis_ci), by(idh_ch) 
+
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
@@ -1754,7 +1755,8 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-/*	g asispre_ci=.	
+	g asispre_ci=.
+	/*
 	replace asispre_ci=1 if s05b_10==1 & s05a_06a==13
 	recode asispre_ci (.=0)
 	replace asispre_ci = 0 if s05b_10 == 2

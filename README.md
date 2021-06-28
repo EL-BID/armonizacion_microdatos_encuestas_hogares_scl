@@ -66,9 +66,13 @@ Con el objetivo de mantener estructurado y estandarizado el proceso de armonizac
 Debido a que el trabajo de armonización principalmente se realiza de forma paralela entre varios desarrolladores, se requiere que cada uno trabaje con una branch personal donde se solucione o trabaje en el feature requerido y se deben seguir los siguientes pasos: 
 
 1)	Para trabajar en el feature, se debe crear una Branch que sea la copia de la versión de Development. La Branch debe tener el nombre estandarizado “type-task-division”. 
+
     **a.	Type:** hace referencia a el proceso que se va a llevar a cabo (un feature, fix, refactor, test, docs, chore)
+    
     **b.	Task:** Hace referencia a una breve descripción de la tarea a realizar
+    
     **c.	Division:** El nombre de la división a la que pertenece el desarrollador que trabaja en el proceso. 
+    
 2)	Una vez terminado el proceso de modificación o ajuste de los scripts se debe realizar el pull request para realizar el merge. Se debe tener en cuenta que el merge siempre se debe solicitar para realiza en la Branch de Development. 
 3)	Una vez se realiza la solitud de merge, se revisa y verifica que no existan errores en el nuevo pull antes de aceptar el merge a la brach principal. 
 

@@ -324,9 +324,9 @@ gen afroind_ch  = .
 /*
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-
-drop afroind_jefe
 */
+drop afroind_jefe
+
 	*******************
 	***afroind_ano_c***
 	*******************
@@ -351,7 +351,8 @@ recode dis_ci nonmiss=. if s04a_06a>=. & s04a_06b>=. & s04a_06c>=. & s04a_06d>=.
 	*************
 	***dis_ch***
 	**************	
-egen dis_ch = sum(dis_ci), by(idh_ch) 
+egen dis_ch =.
+*sum(dis_ci), by(idh_ch) 
 */
 
 ************************************
@@ -1754,7 +1755,8 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-/*	g asispre_ci=.	
+	g asispre_ci=.
+	/*
 	replace asispre_ci=1 if s05b_10==1 & s05a_06a==13
 	recode asispre_ci (.=0)
 	replace asispre_ci = 0 if s05b_10 == 2

@@ -1791,11 +1791,8 @@ los otros años*/
 *Modificación Daniela Zuluaga Nov-2018: Se pone la condición de escolaridad con & y se elimina la opción de "culminó estudios"
 *replace asiste_ci=0 if (s05b_10==2 | s05a_05==2  |s04c_22 ==2) & asiste_ci==.
 
-gen asiste_ci=.
+gen asiste_ci =((s03a_04==1) & (s03a_05a>=13 & s03a_05a<=80))
 label variable asiste_ci "Asiste actualmente a la escuela"
-
-gen asiste_ci1 =((s03a_04==1) & (s03a_05a>=13 & s03a_05a<=80))
-label variable asiste_ci1 "Asiste actualmente a la escuela (Def. Covid)"
 
 /*
 replace asiste_ci=0 if (s05b_10==2 | s05a_05==2  |s04c_22 ==2)

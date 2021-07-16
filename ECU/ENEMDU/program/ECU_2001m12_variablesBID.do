@@ -173,45 +173,6 @@ gen region_c=int(ciudad/10000)
 	label variable edad_ci "Edad del individuo"
 
 	
-*************************
-*** VARIABLES DE RAZA ***
-*************************
-
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-	
- /*
- A pesar de que en el cuestionario se especifica que esta pregunta es para mayores de 15 años,
- sí se categorizan a todos los individuos.
- pe14
- 1 "Blanco" 2 "Negro" 3 "Indigena" 4 "Mestizo" 5 "Mulato"
-          
-  */       
-  
-gen raza_ci=.
-replace raza_ci= 1 if  (pe14==3)
-replace raza_ci= 2 if (pe14==2 | pe14 == 5)
-replace raza_ci=3 if raza_ci==. 
-
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo"
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-
-
 	**************
 	***civil_ci***
 	**************
@@ -319,6 +280,39 @@ label var id_afro_ci "Afro-descendiente"
 	gen miembros_ci=(relacion_ci<5)
 	label variable miembros_ci "Miembro del hogar"
 
+		  
+		  ******************************
+          *** VARIABLES DE DIVERSIDAD **
+          ******************************
+*Nathalia Maya & Antonella Pereira
+*Julio 2021	
+
+**Este año la variable de raza/etnia presenta inconsistencias, por eso se decide no armonizar.
+
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 			***********************************
 			***VARIABLES DEL MERCADO LABORAL***

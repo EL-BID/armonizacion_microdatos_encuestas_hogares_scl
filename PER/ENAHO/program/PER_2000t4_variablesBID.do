@@ -168,64 +168,6 @@ label value relacion_ci relacion_ci
 
 /*En este año no hay empleados domésticos ni pensionistas*/
 
-*************
-***raza_ci***
-*************
-
-/* Sólo se pregunta al jefe y a su cónyuge
-¿POR SUS ANTEPASADOS Y DE ACUERDO A SUS
-COSTUMBRES UD. SE CONSIDERA:
-Indígena de la Amazonía? .............................1
-De Origen Quechua? .....................................2
-De Origen Aymara? .......................................3
-De Origen Negro / Mulato / Zambo?..............4
-De Origen Mestizo? .......................................5
-Otro? _______________________________6
-
-*/
-
-/*gen raza_ci=.
-replace raza_ci= 1 if  p46 == 1 |  p46 == 2 |  p46 ==3 | p47 ==1 |  p47 == 2 |  p47 ==3 
-replace raza_ci= 2 if  p46 ==4 |  p47 == 4
-bys idh_ch: gen razjef=raza_ci if relacion_ci==1
-bys idh_ch: egen razjef1 = max(razjef)
-replace raza_ci=razjef1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop razjef razjef1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" */
-
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_ci=.
-replace raza_ci= 1 if  p46 == 1 |  p46 == 2 |  p46 ==3 | p47 ==1 |  p47 == 2 |  p47 ==3 
-replace raza_ci= 2 if  p46 ==4 |  p47 == 4
-bys idh_ch: gen razjef=raza_ci if p203==1
-bys idh_ch: egen razjef1 = max(razjef)
-replace raza_ci=razjef1 if (raza_ci ==. & p203 ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop razjef razjef1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2 
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente"
-
 
 ****************************
 ***VARIABLES DEMOGRAFICAS***
@@ -385,6 +327,51 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
+
+
+		  ******************************
+          *** VARIABLES DE DIVERSIDAD **
+          ******************************
+*Nathalia Maya & Antonella Pereira
+*Julio 2021	
+
+	***************
+	***afroind_ci***
+	***************
+	
+**Pregunta (solo al jefe y cónyugue) por sus antepasados y de acuerdo a sus costumbres, �ud. se considera:(p46) (1 quechua; 2 aymara; 3 nativo o indígena de la amazonía; 4 negro/ mulato/zambo; 5 blanco; 6 mestizo; 7 otro; 8 no sabe)
+gen afroind_ci=.
+replace afroind_ci=1 if (p46 == 1 | p46 == 2 | p46 ==3) & relacion_ci==1
+replace afroind_ci=1 if (p47 == 1 | p47 == 2 | p47 ==3) & relacion_ci==2 
+replace afroind_ci=2 if p46 == 4 & relacion_ci==1
+replace afroind_ci=2 if p47 == 4 & relacion_ci==2
+replace afroind_ci=3 if (p46 == 5 | p46 == 6 | p46 ==7) & relacion_ci==1
+replace afroind_ci=3 if (p47 == 5 | p47 == 6 | p47 ==7) & relacion_ci==2 
+replace afroind_ci=. if p46==8 & relacion_ci==1
+replace afroind_ci=. if p47==8 & relacion_ci==2
+replace afroind_ci=9 if relacion_ci!=1 & relacion_ci!=2
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2000
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 
 
@@ -2235,7 +2222,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

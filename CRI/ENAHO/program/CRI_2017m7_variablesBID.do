@@ -1649,6 +1649,7 @@ lab val pnc_ci pnc_ci
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
+
 *_____________________________________________________________________________________________________*
 
 *  Pobres extremos, pobres moderados, vulnerables y no pobres 

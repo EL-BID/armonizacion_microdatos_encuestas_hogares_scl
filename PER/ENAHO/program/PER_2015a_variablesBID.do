@@ -2080,6 +2080,42 @@ lab val atencion_ci atencion_ci
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de peru (redatam)
 
+
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC:  Juntos (ingtpu01)
+* PNC: 	 Pensión 65 (ingtpu03)
+
+
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Beneficiarios 
+gen ptmc_ci=(ingtpu01>0 & ingtpu01!=.)
+bys idh_ch: egen ptmc_ch=max(ptmc_ci)
+
+gen pnc_ci=(ingtpu03>0 & ingtpu03!=.)
+
+* Montos
+gen ing_ptmc=ingtpu01/12
+gen ing_pension=ingtpu03/12
+
+gen y_pc     = y_hog / nmiembros_ch 
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / nmiembros_ch
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
+
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2088,6 +2124,36 @@ lab val atencion_ci atencion_ci
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

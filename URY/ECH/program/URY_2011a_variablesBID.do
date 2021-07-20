@@ -110,7 +110,7 @@ A partir de 2006 se incluye una muestra rural, sin embargo en 2006-2009 sÃÂ�
  (3) interior con menos de 5000 habitantes y (4) rural. 
  Por lo tanto, para hacer comparables los datos se genera la variable zona considerando a las zonas de
  menos de 5000 habitantes como rural. Es decir, zona rural=interior con menos de 5000 habitantes y rural.*/
-rename regiÃ³n region
+rename región region
 gen zona_c=.
 replace zona_c=1 if region == 1 | region == 2  
 replace zona_c=0 if region == 3 | region == 4
@@ -172,7 +172,7 @@ gen upm_ci=locagr
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=estratogeo_09
+gen estrato_ci=estratogeo09
 
 *10. Sexo
 
@@ -1085,7 +1085,7 @@ label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 *** top-code el ingreso de la actividad principal. .
 ***********************************************************************************************
 gen tcylmpri_ch = .
-label var tcylmpri_ch "Id hogar donde algÃÂºn miembro reporta como top-code el ingr de activ. principal"
+label var tcylmpri_ch "Id hogar donde algun miembro reporta como top-code el ingr de activ.principal"
 
 ***********************************************************************************************
 ***TCYLMPRI_CI : Identificador de top-code del ingreso de la actividad principal.
@@ -2011,7 +2011,24 @@ rename f72_2 codindustria
 rename f71_2 codocupa 
 compress
 
-
+label var h170_1 "recibido por utilidades y dividendos generados en el país negocio"
+label var h170_2 "recibido por utilidades y dividendos generados en el extreangero negocio"
+label var h171 "algún miembro del hogar recibió indemnizacion por despido los últimos 12 mes"
+labe var e51_6 "años aprobados en educacion media tecnológica (bachillerato tecnológico" 
+label var e58  "recibe algún tipo de alimentación de algún programa público"
+label var f67 "hizo algo para afuera o ayudó en negocio,cuidado de animales,cultivos o huerta" 
+label var f120_2   "a qué se dedicaba o produce el establecimiento en que realizaba sus tareas"
+label var g127_1 "recibió alimentos o bebidas:número de desayunos/meriendas en empleo de mayore" 
+label var g127_2 "recibió alimentos o bebidas: número de almuerzos / cenas en empleo de mayores"
+label var g127_3 "recibió alimentos o bebidas:otros-monto estimado en empleo de mayores ingreso"
+label var g128_1 "tiques alimentación:valor recibido el mes pasado en empleo de mayores ingres"
+label var g129_2 "monto que habría tenido que pagar por dicho alojamiento en empleo de mayores"
+label var g131 "recibió algún otro tipo de complemento pagado por el empleador empleo de mayo"
+label var g138_1 "otras ocupaciones dependientes:monto que habría tenido que pagar por bienes"
+label var g139 "otras ocupaciones dependientes: recibió algún otro tipo de complemento pagado"
+label var g141_1 "otras ocupaciones dependientes:monto que pagar por esos produ"
+label var g153_1 "monto pensión alimenticia o alguna contribución por separación del pa"
+label var g153_2 "monto pensión alimenticia o alguna contribución por separación del ex"
 saveold "`base_out'",   replace
 
 

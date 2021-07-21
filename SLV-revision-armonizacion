@@ -32,10 +32,7 @@ append using `temp'`i', force
 }
 save temporal_SLV, replace
 
-*------------------------------------------------------------------------------------*
-*          (2) REVISION DE LAS VARIABLES ARMONIZADAS                                 *
-*------------------------------------------------------------------------------------*
-
+* (2) REVISION DE LAS VARIABLES ARMONIZADAS
 
 use temporal_SLV, replace
 collapse zona_c - ipcm, by(anio_c)
@@ -80,7 +77,7 @@ gen rezago  = (edad_ci - 6 - aedu_ci)>=2 if (edad_ci>=13 & edad_ci<=17) & aedu_c
 table pais_c anio_c [iw=factor_ch], c(mean rezago) f(%6.3f)
 
 * pobre, vulnerable, clase media; ingreso per capita PPP
-
+/*
 keep if ipcm>0 & ipcm~=. & factor_ch~=.
 g ppoor31 = (ipcm < lp31_ci)*100
 g ppoor50 = (ipcm < lp31_ci*1.6)*100
@@ -97,7 +94,7 @@ encode pais_c, g(country)
 egen gini_t  = gini(ipcm), by(country anio_c) weight(facpob)
 g gini = gini_t
 table pais_c anio_c, c(mean gini) f(%6.3f)
-
+*/
 *-----------------------------------------------------------------------------*
 *                       Export all results                                    *
 *-----------------------------------------------------------------------------*
@@ -109,7 +106,7 @@ g female = (sexo_ci == 2)
 *******		
 
 
-forvalues k = 29(1)32 {
+forvalues k = 2017(1)2020 {
 
 sum female if anio_c ==`k' [iw=factor_ch]
 scalar mean_female_`k' = `=r(mean)'
@@ -156,7 +153,7 @@ scalar mean_rezago_`k' = `=r(mean)'
 
 *
 
-forvalues k = 29(1)32 {
+forvalues k = 2017(1)2020 {
 
 	foreach sexo in "" "1" "2" {
 
@@ -173,34 +170,31 @@ scalar mean_plf2564_`k'_``sexo'_sexo' = `=r(mean)'
 ** EXCEL
 *********************************
 
-*putexcel set "/Users/martafurtadoluzes/Dropbox/IDB-Projects-Marta/Stewardship/EH_Harmonizacion/Check/Salvador_check.xlsx", sheet("Salvador") modify
+*putexcel set "/Users/martafurtadoluzes/Dropbox/IDB-Projects-Marta/Stewardship/EH_Harmonizacion/Check/Salvador_check_copia.xlsx", sheet("Salvador") modify
 *change path to excel masterfile
 
 	putexcel describe
-	putexcel D14 = (`=mean_female_29') E14 = (`=mean_nmiembros_ch_29') F14 = (`=mean_aedu_ci_29' ) G14 = (`=mean_formal_ci_29') H14=(`=mean_pension_ci_29')
-	putexcel D15 = (`=mean_female_30') E15 = (`=mean_nmiembros_ch_30') F15 = (`=mean_aedu_ci_30' ) G15 = (`=mean_formal_ci_30') H15=(`=mean_pension_ci_30')
-	putexcel D16 = (`=mean_female_31') E16 = (`=mean_nmiembros_ch_31') F16 = (`=mean_aedu_ci_31' ) G16 = (`=mean_formal_ci_31') H16=(`=mean_pension_ci_31')
-	putexcel D17 = (`=mean_female_32') E17 = (`=mean_nmiembros_ch_32') F17 = (`=mean_aedu_ci_32' ) G17 = (`=mean_formal_ci_32') H17=(`=mean_pension_ci_32')
+	putexcel D14 = (`=mean_female_2017') E14 = (`=mean_nmiembros_ch_2017') F14 = (`=mean_aedu_ci_2017' )G14 = (`=mean_formal_ci_2017') H14=(`=mean_pension_ci_2017')
+	putexcel D15 = (`=mean_female_2018') E15 = (`=mean_nmiembros_ch_2018') F15 = (`=mean_aedu_ci_2018' )G15 = (`=mean_formal_ci_2018') H15=(`=mean_pension_ci_2018')
+	putexcel D16 = (`=mean_female_2019') E16 = (`=mean_nmiembros_ch_2019') F16 = (`=mean_aedu_ci_2019' )G16 = (`=mean_formal_ci_2019') H16=(`=mean_pension_ci_2019')
+	putexcel D17 = (`=mean_female_2020') E17 = (`=mean_nmiembros_ch_2020') F17 = (`=mean_aedu_ci_2020' )G17 = (`=mean_formal_ci_2020') H17=(`=mean_pension_ci_2020')
 
-	putexcel I14 = (`=mean_ocup_25_64_29') J14 = (`=mean_ocup_15_24_29')
-	putexcel I15 = (`=mean_ocup_25_64_30') J15 = (`=mean_ocup_15_24_30')
-	putexcel I16 = (`=mean_ocup_25_64_31') J16 = (`=mean_ocup_15_24_31')	
-	putexcel I17 = (`=mean_ocup_25_64_32') J17 = (`=mean_ocup_15_24_32')	
+	putexcel I14 = (`=mean_ocup_25_64_2017') J14 = (`=mean_ocup_15_24_2017')
+	putexcel I15 = (`=mean_ocup_25_64_2018') J15 = (`=mean_ocup_15_24_2018')
+	putexcel I16 = (`=mean_ocup_25_64_2019') J16 = (`=mean_ocup_15_24_2019')	
+	putexcel I17 = (`=mean_ocup_25_64_2020') J17 = (`=mean_ocup_15_24_2020')	
 
-	putexcel K14 = (`=mean_plf2564_29_') L14 = (`=mean_plf1824_29_')
-	putexcel K15 = (`=mean_plf2564_30_') L15 = (`=mean_plf1824_30_')	
-	putexcel K16 = (`=mean_plf2564_31_') L16 = (`=mean_plf1824_31_')	
-	putexcel K17 = (`=mean_plf2564_32_') L17 = (`=mean_plf1824_32_')	
+	putexcel K14 = (`=mean_plf2564_2017_') L14 = (`=mean_plf1824_2017_')
+	putexcel K15 = (`=mean_plf2564_2018_') L15 = (`=mean_plf1824_2018_')	
+	putexcel K16 = (`=mean_plf2564_2019_') L16 = (`=mean_plf1824_2019_')	
+	putexcel K17 = (`=mean_plf2564_2020_') L17 = (`=mean_plf1824_2020_')	
 
-	putexcel M14 = (`=mean_unem1524_29') N14 = (`=mean_unem2564_29') O14 = (`=mean_ninik_29') 
-	putexcel M15 = (`=mean_unem1524_30') N15 = (`=mean_unem2564_30') O15 = (`=mean_ninik_30')
-	putexcel M16 = (`=mean_unem1524_31') N16 = (`=mean_unem2564_31') O16 = (`=mean_ninik_31')
-	putexcel M17 = (`=mean_unem1524_32') N17 = (`=mean_unem2564_32') O17 = (`=mean_ninik_32')
+	putexcel M14 = (`=mean_unem1524_2017') N14 = (`=mean_unem2564_2017') O14 = (`=mean_ninik_2017') 
+	putexcel M15 = (`=mean_unem1524_2018') N15 = (`=mean_unem2564_2018') O15 = (`=mean_ninik_2018')
+	putexcel M16 = (`=mean_unem1524_2019') N16 = (`=mean_unem2564_2019') O16 = (`=mean_ninik_2019')
+	putexcel M17 = (`=mean_unem1524_2020') N17 = (`=mean_unem2564_2020') O17 = (`=mean_ninik_2020')
 
-	putexcel P14 = (`=mean_asiste_ci_612_29') Q14 = (`=mean_asiste_ci_1317_29') R14 = (`=mean_asiste_ci_1824_29')  S14 = (`=mean_rezago_29') 
-	putexcel P15 = (`=mean_asiste_ci_612_30') Q15 = (`=mean_asiste_ci_1317_30') R15 = (`=mean_asiste_ci_1824_30')  S15 = (`=mean_rezago_30') 
-	putexcel P16 = (`=mean_asiste_ci_612_31') Q16 = (`=mean_asiste_ci_1317_31') R16 = (`=mean_asiste_ci_1824_31')  S16 = (`=mean_rezago_31') 
-	putexcel P17 = (`=mean_asiste_ci_612_32') Q17 = (`=mean_asiste_ci_1317_32') R17 = (`=mean_asiste_ci_1824_32')  S17 = (`=mean_rezago_32') 
-
-
-	
+	putexcel P14 = (`=mean_asiste_ci_612_2017') Q14 = (`=mean_asiste_ci_1317_2017') R14 = (`=mean_asiste_ci_1824_2017')  S14 = (`=mean_rezago_2017') 
+	putexcel P15 = (`=mean_asiste_ci_612_2018') Q15 = (`=mean_asiste_ci_1317_2018') R15 = (`=mean_asiste_ci_1824_2018')  S15 = (`=mean_rezago_2018') 
+	putexcel P16 = (`=mean_asiste_ci_612_2019') Q16 = (`=mean_asiste_ci_1317_2019') R16 = (`=mean_asiste_ci_1824_2019')  S16 = (`=mean_rezago_2019') 
+	putexcel P17 = (`=mean_asiste_ci_612_2020') Q17 = (`=mean_asiste_ci_1317_2020') R17 = (`=mean_asiste_ci_1824_2020')  S17 = (`=mean_rezago_2020') 

@@ -105,6 +105,11 @@ la var idp_ci "ID de la persona en el hogar"
 **********
 destring clase, replace
 g zona_c = clase == 1
+
+**La variable clase es missing para todas las observaciones de la zona urbana en el mes de julio 
+**porque el DANE omitió el módulo donde se encuentra esta variable de abril a julio. La siguiente línea lo corrige:
+
+replace zona_c=1 if zona_c==.
 la var zona_c "Zona del país"
 la de zona_c 1 "Urbana" 0 "Rural"
 la val zona_c zona_c

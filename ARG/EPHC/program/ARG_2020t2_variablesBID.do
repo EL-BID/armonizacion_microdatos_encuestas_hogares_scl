@@ -14,7 +14,7 @@ Noviembre, 2020 Version Stata 14
 							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************/
-global ruta = "${surveysFolder}\Users\CAROLINA\OneDrive - El Colegio de México A.C\Escritorio\Armonización\sdssrv03\Surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC

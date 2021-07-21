@@ -16,6 +16,17 @@ g lp19_ci  = lp19_2011
 g lp31_ci  = lp31_2011 
 g lp5_ci   = lp5_2011
 
+*----------------------------------------------------------------------------------------------*
+*se debe eliminar una vez se actualice la linea de pobreza en Oct. 2021: lp31_ci2020= lp31_ci2019* (1.42015)
+
+replace lp31_ci = 2800.9949*1.420151 if anio_c==2020 & pais_c=="ARG" 
+
+replace lp19_ci = 1716.7388*1.420151 if anio_c==2020 & pais_c=="ARG" 
+
+replace lp5_ci = 4517.7334*1.420151 if anio_c==2020 & pais_c=="ARG" 
+
+*--------------------------------------------------------------------------------------------*
+
 drop ppp_2011 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi _merge
 
 

@@ -96,7 +96,7 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1028
+gen factor_ch=v1028/4
 label variable factor_ch "Factor de expansión del hogar"
 
 ***************

@@ -17,7 +17,7 @@ global ruta = "${surveysFolder}"
 local PAIS JAM
 local ENCUESTA LFS
 local ANO "2016"
-local ronda m4 
+local ronda m1 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_orig\\`PAIS'_`ANO'`ronda'.dta"
@@ -44,14 +44,17 @@ Fecha última modificación: Julio 2021
 /***************************************************************************
 ****************************************************************************/
 
-
 /*
- import delimited "G:\2_BID\BID_2021\Armonización\JAM\JAN2016_lfsdata_anon_Including new variables.csv"
- save "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m4.dta", replace
- use "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m4.dta, clear
 
- */
+ import spss using "C:\Users\Carolina\Downloads\JAN2016_lfsdata_anon_Including new variables.sav", clear
+ save "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m1.dta", replace
+ use "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m1.dta", clear
+
+
 use `base_in', clear
+*/
+
+rename *, lower
 
 ***********
 * Region_c *

@@ -83,6 +83,7 @@ Para ampliar la explicación del flujo de trabajo en el repositorio ver **“M.2
 ## Cómo citar el uso del banco de datos armonizado
 
 >"Fuente: Banco Interamericano de Desarrollo (año de consulta), Encuestas de Hogares Armonizadas de América Latina y el Caribe" 
+
 >“Source: Inter-American Development Bank (year of consultation), Harmonized Household Surveys of Latin America and the Caribbean”
 
 Se sugiere hacer referencia al año de consulta, dado que la información contenida en ellas podría cambiar. Asimismo, se agradece una copia de las publicaciones o informes que utilicen la información contenida en este banco de datos para nuestros registros.

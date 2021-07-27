@@ -49,10 +49,10 @@ Fecha última modificación: Julio 2021
  import spss using "C:\Users\Carolina\Downloads\JAN2016_lfsdata_anon_Including new variables.sav", clear
  save "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m1.dta", replace
  use "G:\2_BID\BID_2021\Armonización\JAM\JAM_2016m1.dta", clear
+*/
 
 
 use `base_in', clear
-*/
 
 rename *, lower
 

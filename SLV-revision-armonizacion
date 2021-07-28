@@ -9,12 +9,23 @@
 
 clear all
 set more off
-cd C:\Users\marcosr\Documents
 
-local in29 = "\\sdssrv03\surveys\harmonized\SLV\EHPM\data_arm\SLV_2017a_BID.dta"
-local in30 = "\\sdssrv03\surveys\harmonized\SLV\EHPM\data_arm\SLV_2018a_BID.dta"
-local in31 = "\\sdssrv03\surveys\harmonized\SLV\EHPM\data_arm\SLV_2019a_BID.dta"
-local in32 = "\\sdssrv03\surveys\harmonized\SLV\EHPM\data_arm\SLV_2020a_BID.dta"
+* Paths 
+global ruta = "${surveysFolder}"
+
+local PAIS SLV
+local ENCUESTA EHPM
+local ANO1 "2017"  // record each year
+local ANO2 "2018"
+local ANO3 "2019"
+local ANO4 "2020"
+local ronda a 
+
+local in29 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO1'`ronda'_BID.dta"
+local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO2'`ronda'_BID.dta"
+local in31 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO3'`ronda'_BID.dta"
+local in32 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO4'`ronda'_BID.dta"
+
 *
 forvalues k = 29(1)32 {
 tempfile temp`k'
@@ -86,15 +97,6 @@ g middle  = ((ipcm >= lp31_ci*4)   & (ipcm < lp31_ci*20))*100
 g ipcd    = ipcm * 3.1 * 365 / lp31_ci        // ingreso per capita anualizado (en USD PPP de 2011)
 table anio_c [iw=factor_ch], c(mean ppoor31 mean ppoor50 mean vulnera mean middle mean ipcd) f(%5.3f)
 
-* Gini oefficient
-keep if relacion_ci==1
-g facpob = factor_ch*nmiembros_ch
-keep pais_c anio_c facpob nmiembros_ch ipcm
-encode pais_c, g(country)
-egen gini_t  = gini(ipcm), by(country anio_c) weight(facpob)
-g gini = gini_t
-table pais_c anio_c, c(mean gini) f(%6.3f)
-*/
 *-----------------------------------------------------------------------------*
 *                       Export all results                                    *
 *-----------------------------------------------------------------------------*
@@ -105,96 +107,173 @@ g female = (sexo_ci == 2)
 
 *******		
 
-
 forvalues k = 2017(1)2020 {
 
 sum female if anio_c ==`k' [iw=factor_ch]
 scalar mean_female_`k' = `=r(mean)'
+scalar desves_female_`k' = `=r(sd)'
 
 sum nmiembros_ch if anio_c ==`k' &  relacion_ci==1 [iw=factor_ch]
 scalar mean_nmiembros_ch_`k' = `=r(mean)'
+scalar desves_nmiembros_ch_`k' = `=r(sd)'
 
 sum aedu_ci if anio_c ==`k' & (edad_ci>=18&edad_ci<=64) & aedu_ci~=. [iw=factor_ch]
 scalar mean_aedu_ci_`k' = `=r(mean)'
+scalar desves_aedu_ci_`k' = `=r(sd)'
 
 sum formal_ci if anio_c ==`k'& (edad_ci>=25&edad_ci<=64) & condocup_ci==1 [iw=factor_ch]
 scalar mean_formal_ci_`k' = `=r(mean)'
+scalar desves_formal_ci_`k' = `=r(sd)'
 
 sum pension_ci if anio_c ==`k' &  (edad_ci>=65&edad_ci<=130) [iw=factor_ch]
 scalar mean_pension_ci_`k' = `=r(mean)'
+scalar desves_pension_ci_`k' = `=r(sd)'
 
 sum ocup if anio_c ==`k' & (edad_ci>=25&edad_ci<=64) [iw=factor_ch]
 scalar mean_ocup_25_64_`k' = `=r(mean)'
+scalar desves_ocup_25_64_`k' = `=r(sd)'
 
 sum ocup if anio_c ==`k' & (edad_ci>=15&edad_ci<=24) [iw=factor_ch]
 scalar mean_ocup_15_24_`k' = `=r(mean)'
+scalar desves_ocup_15_24_`k' = `=r(sd)'
 
 sum unem1524 if anio_c ==`k' [iw=factor_ch]
 scalar mean_unem1524_`k' = `=r(mean)'
+scalar desves_unem1524_`k' = `=r(sd)'
 
 sum unem2564 if anio_c ==`k'  [iw=factor_ch]
 scalar mean_unem2564_`k' = `=r(mean)'
+scalar desves_unem2564_`k' = `=r(sd)'
 
 sum ninik if anio_c ==`k' [iw=factor_ch]
 scalar mean_ninik_`k' = `=r(mean)'
+scalar desves_ninik_`k' = `=r(sd)'
 
 sum asiste_ci if anio_c ==`k' & (edad_ci>=6  & edad_ci<=12) & asiste_ci~=. [iw=factor_ch]
 scalar mean_asiste_ci_612_`k' = `=r(mean)'
+scalar desves_asiste_ci_612_`k' = `=r(sd)'
 
 sum asiste_ci if anio_c ==`k'  & (edad_ci>=13 & edad_ci<=17) & asiste_ci~=. [iw=factor_ch]
 scalar mean_asiste_ci_1317_`k'  = `=r(mean)'
+scalar desves_asiste_ci_1317_`k' = `=r(sd)'
 
 sum asiste_ci if anio_c ==`k' & (edad_ci>=18 & edad_ci<=24) & asiste_ci~=. [iw=factor_ch]
 scalar mean_asiste_ci_1824_`k'  = `=r(mean)'
+scalar desves_asiste_ci_1824_`k' = `=r(sd)'
 
 sum rezago if anio_c ==`k' [iw=factor_ch]
 scalar mean_rezago_`k' = `=r(mean)'
+scalar desves_rezago_`k' = `=r(sd)'
+
+sum ppoor31 if anio_c ==`k' [iw=factor_ch]
+scalar mean_ppoor31_`k' = `=r(mean)'
+scalar desves_ppoor31_`k' = `=r(sd)'
+
+sum ppoor50 if anio_c ==`k' [iw=factor_ch]
+scalar mean_ppoor50_`k' = `=r(mean)'
+scalar desves_ppoor50_`k' = `=r(sd)'
+
+sum vulnera if anio_c ==`k' [iw=factor_ch]
+scalar mean_vulnera_`k' = `=r(mean)'
+scalar desves_vulnera_`k' = `=r(sd)'
+
+sum middle if anio_c ==`k' [iw=factor_ch]
+scalar mean_middle_`k' = `=r(mean)'
+scalar desves_middle_`k' = `=r(sd)'
+
+sum ipcd if anio_c ==`k' [iw=factor_ch] 
+scalar mean_ipcd_`k' = `=r(mean)'  
+scalar desves_ipcd_`k' = `=r(sd)'
+
 }
 
 *
 
 forvalues k = 2017(1)2020 {
 
-	foreach sexo in "" "1" "2" {
+sum plf1824 if anio_c ==`k'  [iw=factor_ch]
+scalar mean_plf1824_`k' = `=r(mean)'
+scalar desves_plf1824_`k' = `=r(sd)'
 
-sum plf1824 if anio_c ==`k' ``sexo'_cond_sexo'  [iw=factor_ch]
-scalar mean_plf1824_`k'_``sexo'_sexo' = `=r(mean)'
+sum plf2564 if anio_c ==`k'  [iw=factor_ch]
+scalar mean_plf2564_`k' = `=r(mean)'
+scalar desves_plf2564_`k' = `=r(sd)'
 
-sum plf2564 if anio_c ==`k' ``sexo'_cond_sexo'  [iw=factor_ch]
-scalar mean_plf2564_`k'_``sexo'_sexo' = `=r(mean)'
 }
 
-}
+
+
 
 *********************************
 ** EXCEL
 *********************************
 
-*putexcel set "/Users/martafurtadoluzes/Dropbox/IDB-Projects-Marta/Stewardship/EH_Harmonizacion/Check/Salvador_check_copia.xlsx", sheet("Salvador") modify
+putexcel set "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_check_ANO1_ANO4.xlsx", sheet("Total") modify
 *change path to excel masterfile
 
+* mean
 	putexcel describe
-	putexcel D14 = (`=mean_female_2017') E14 = (`=mean_nmiembros_ch_2017') F14 = (`=mean_aedu_ci_2017' )G14 = (`=mean_formal_ci_2017') H14=(`=mean_pension_ci_2017')
-	putexcel D15 = (`=mean_female_2018') E15 = (`=mean_nmiembros_ch_2018') F15 = (`=mean_aedu_ci_2018' )G15 = (`=mean_formal_ci_2018') H15=(`=mean_pension_ci_2018')
-	putexcel D16 = (`=mean_female_2019') E16 = (`=mean_nmiembros_ch_2019') F16 = (`=mean_aedu_ci_2019' )G16 = (`=mean_formal_ci_2019') H16=(`=mean_pension_ci_2019')
-	putexcel D17 = (`=mean_female_2020') E17 = (`=mean_nmiembros_ch_2020') F17 = (`=mean_aedu_ci_2020' )G17 = (`=mean_formal_ci_2020') H17=(`=mean_pension_ci_2020')
+	putexcel D4 = (`=mean_female_2017') D5 = (`=mean_nmiembros_ch_2017') D6 = (`=mean_aedu_ci_2017' ) D7 = (`=mean_formal_ci_2017') D8=(`=mean_pension_ci_2017')
+	putexcel E4 = (`=mean_female_2018') E5 = (`=mean_nmiembros_ch_2018') E6 = (`=mean_aedu_ci_2018' ) E7 = (`=mean_formal_ci_2018') E8=(`=mean_pension_ci_2018')
+	putexcel F4 = (`=mean_female_2019') F5 = (`=mean_nmiembros_ch_2019') F6 = (`=mean_aedu_ci_2019' ) F7 = (`=mean_formal_ci_2019') F8=(`=mean_pension_ci_2019')
+	putexcel G4 = (`=mean_female_2020') G5 = (`=mean_nmiembros_ch_2020') G6 = (`=mean_aedu_ci_2020' ) G7 = (`=mean_formal_ci_2020') G8=(`=mean_pension_ci_2020')
 
-	putexcel I14 = (`=mean_ocup_25_64_2017') J14 = (`=mean_ocup_15_24_2017')
-	putexcel I15 = (`=mean_ocup_25_64_2018') J15 = (`=mean_ocup_15_24_2018')
-	putexcel I16 = (`=mean_ocup_25_64_2019') J16 = (`=mean_ocup_15_24_2019')	
-	putexcel I17 = (`=mean_ocup_25_64_2020') J17 = (`=mean_ocup_15_24_2020')	
+	putexcel D9 = (`=mean_ocup_25_64_2017') D10 = (`=mean_ocup_15_24_2017')
+	putexcel E9 = (`=mean_ocup_25_64_2018') E10 = (`=mean_ocup_15_24_2018')
+	putexcel F9 = (`=mean_ocup_25_64_2019') F10 = (`=mean_ocup_15_24_2019')	
+	putexcel G9 = (`=mean_ocup_25_64_2020') G10 = (`=mean_ocup_15_24_2020')	
 
-	putexcel K14 = (`=mean_plf2564_2017_') L14 = (`=mean_plf1824_2017_')
-	putexcel K15 = (`=mean_plf2564_2018_') L15 = (`=mean_plf1824_2018_')	
-	putexcel K16 = (`=mean_plf2564_2019_') L16 = (`=mean_plf1824_2019_')	
-	putexcel K17 = (`=mean_plf2564_2020_') L17 = (`=mean_plf1824_2020_')	
+	putexcel D11 = (`=mean_plf2564_2017') D12 = (`=mean_plf1824_2017')
+	putexcel E11 = (`=mean_plf2564_2018') E12 = (`=mean_plf1824_2018')	
+	putexcel F11 = (`=mean_plf2564_2019') F12 = (`=mean_plf1824_2019')	
+	putexcel G11 = (`=mean_plf2564_2020') G12 = (`=mean_plf1824_2020')	
 
-	putexcel M14 = (`=mean_unem1524_2017') N14 = (`=mean_unem2564_2017') O14 = (`=mean_ninik_2017') 
-	putexcel M15 = (`=mean_unem1524_2018') N15 = (`=mean_unem2564_2018') O15 = (`=mean_ninik_2018')
-	putexcel M16 = (`=mean_unem1524_2019') N16 = (`=mean_unem2564_2019') O16 = (`=mean_ninik_2019')
-	putexcel M17 = (`=mean_unem1524_2020') N17 = (`=mean_unem2564_2020') O17 = (`=mean_ninik_2020')
+	putexcel D13 = (`=mean_unem1524_2017') D14 = (`=mean_unem2564_2017') D15 = (`=mean_ninik_2017') 
+	putexcel E13 = (`=mean_unem1524_2018') E14 = (`=mean_unem2564_2018') E15 = (`=mean_ninik_2018')
+	putexcel F13 = (`=mean_unem1524_2019') F14 = (`=mean_unem2564_2019') F15 = (`=mean_ninik_2019')
+	putexcel G13 = (`=mean_unem1524_2020') G14 = (`=mean_unem2564_2020') G15 = (`=mean_ninik_2020')
 
-	putexcel P14 = (`=mean_asiste_ci_612_2017') Q14 = (`=mean_asiste_ci_1317_2017') R14 = (`=mean_asiste_ci_1824_2017')  S14 = (`=mean_rezago_2017') 
-	putexcel P15 = (`=mean_asiste_ci_612_2018') Q15 = (`=mean_asiste_ci_1317_2018') R15 = (`=mean_asiste_ci_1824_2018')  S15 = (`=mean_rezago_2018') 
-	putexcel P16 = (`=mean_asiste_ci_612_2019') Q16 = (`=mean_asiste_ci_1317_2019') R16 = (`=mean_asiste_ci_1824_2019')  S16 = (`=mean_rezago_2019') 
-	putexcel P17 = (`=mean_asiste_ci_612_2020') Q17 = (`=mean_asiste_ci_1317_2020') R17 = (`=mean_asiste_ci_1824_2020')  S17 = (`=mean_rezago_2020') 
+	putexcel D16 = (`=mean_asiste_ci_612_2017') D17 = (`=mean_asiste_ci_1317_2017') D18 = (`=mean_asiste_ci_1824_2017')  D19 = (`=mean_rezago_2017') 
+	putexcel E16 = (`=mean_asiste_ci_612_2018') E17 = (`=mean_asiste_ci_1317_2018') E18 = (`=mean_asiste_ci_1824_2018')  E19 = (`=mean_rezago_2018') 
+	putexcel F16 = (`=mean_asiste_ci_612_2019') F17 = (`=mean_asiste_ci_1317_2019') F18 = (`=mean_asiste_ci_1824_2019')  F19 = (`=mean_rezago_2019') 
+	putexcel G16 = (`=mean_asiste_ci_612_2020') G17 = (`=mean_asiste_ci_1317_2020') G18 = (`=mean_asiste_ci_1824_2020')  G19 = (`=mean_rezago_2020') 
+
+	putexcel D20 = (`=mean_ppoor31_2017') D21 = (`=mean_ppoor50_2017') D22 = (`=mean_vulnera_2017')  D23 = (`=mean_middle_2017') D24 = (`=mean_ipcd_2017')
+	putexcel E20 = (`=mean_ppoor31_2018') E21 = (`=mean_ppoor50_2018') E22 = (`=mean_vulnera_2018')  E23 = (`=mean_middle_2018') E24 = (`=mean_ipcd_2018')
+	putexcel F20 = (`=mean_ppoor31_2019') F21 = (`=mean_ppoor50_2019') F22 = (`=mean_vulnera_2019')  F23 = (`=mean_middle_2019') F24 = (`=mean_ipcd_2019')
+	putexcel G20 = (`=mean_ppoor31_2020') G21 = (`=mean_ppoor50_2020') G22 = (`=mean_vulnera_2020')  G23 = (`=mean_middle_2020') G24 = (`=mean_ipcd_2020')
+
+*std. Dev
+	
+	putexcel describe
+	putexcel H4 = (`=desves_female_2017') H5 = (`=desves_nmiembros_ch_2017') H6 = (`=desves_aedu_ci_2017' ) H7 = (`=desves_formal_ci_2017') H8=(`=desves_pension_ci_2017')
+	putexcel I4 = (`=desves_female_2018') I5 = (`=desves_nmiembros_ch_2018') I6 = (`=desves_aedu_ci_2018' ) I7 = (`=desves_formal_ci_2018') I8=(`=desves_pension_ci_2018')
+	putexcel J4 = (`=desves_female_2019') J5 = (`=desves_nmiembros_ch_2019') J6 = (`=desves_aedu_ci_2019' ) J7 = (`=desves_formal_ci_2019') J8=(`=desves_pension_ci_2019')
+	putexcel K4 = (`=desves_female_2020') K5 = (`=desves_nmiembros_ch_2020') K6 = (`=desves_aedu_ci_2020' ) K7 = (`=desves_formal_ci_2020') K8=(`=desves_pension_ci_2020')
+
+	putexcel H9 = (`=desves_ocup_25_64_2017') H10 = (`=desves_ocup_15_24_2017')
+	putexcel I9 = (`=desves_ocup_25_64_2018') I10 = (`=desves_ocup_15_24_2018')
+	putexcel J9 = (`=desves_ocup_25_64_2019') J10 = (`=desves_ocup_15_24_2019')	
+	putexcel K9 = (`=desves_ocup_25_64_2020') K10 = (`=desves_ocup_15_24_2020')	
+
+	putexcel H11 = (`=desves_plf2564_2017') H12 = (`=desves_plf1824_2017')
+	putexcel I11 = (`=desves_plf2564_2018') I12 = (`=desves_plf1824_2018')	
+	putexcel J11 = (`=desves_plf2564_2019') J12 = (`=desves_plf1824_2019')	
+	putexcel K11 = (`=desves_plf2564_2020') K12 = (`=desves_plf1824_2020')	
+
+	putexcel H13 = (`=desves_unem1524_2017') H14 = (`=desves_unem2564_2017') H15 = (`=desves_ninik_2017') 
+	putexcel I13 = (`=desves_unem1524_2018') I14 = (`=desves_unem2564_2018') I15 = (`=desves_ninik_2018')
+	putexcel J13 = (`=desves_unem1524_2019') J14 = (`=desves_unem2564_2019') J15 = (`=desves_ninik_2019')
+	putexcel K13 = (`=desves_unem1524_2020') K14 = (`=desves_unem2564_2020') K15 = (`=desves_ninik_2020')
+
+	putexcel H16 = (`=desves_asiste_ci_612_2017') H17 = (`=desves_asiste_ci_1317_2017') H18 = (`=desves_asiste_ci_1824_2017')  H19 = (`=desves_rezago_2017') 
+	putexcel I16 = (`=desves_asiste_ci_612_2018') I17 = (`=desves_asiste_ci_1317_2018') I18 = (`=desves_asiste_ci_1824_2018')  I19 = (`=desves_rezago_2018') 
+	putexcel J16 = (`=desves_asiste_ci_612_2019') J17 = (`=desves_asiste_ci_1317_2019') J18 = (`=desves_asiste_ci_1824_2019')  J19 = (`=desves_rezago_2019') 
+	putexcel K16 = (`=desves_asiste_ci_612_2020') K17 = (`=desves_asiste_ci_1317_2020') K18 = (`=desves_asiste_ci_1824_2020')  K19 = (`=desves_rezago_2020') 
+
+	putexcel H20 = (`=desves_ppoor31_2017') H21 = (`=desves_ppoor50_2017') H22 = (`=desves_vulnera_2017')  H23 = (`=desves_middle_2017') H24 = (`=desves_ipcd_2017')
+	putexcel I20 = (`=desves_ppoor31_2018') I21 = (`=desves_ppoor50_2018') I22 = (`=desves_vulnera_2018')  I23 = (`=desves_middle_2018') I24 = (`=desves_ipcd_2018')
+	putexcel J20 = (`=desves_ppoor31_2019') J21 = (`=desves_ppoor50_2019') J22 = (`=desves_vulnera_2019')  J23 = (`=desves_middle_2019') J24 = (`=desves_ipcd_2019')
+	putexcel K20 = (`=desves_ppoor31_2020') K21 = (`=desves_ppoor50_2020') K22 = (`=desves_vulnera_2020')  K23 = (`=desves_middle_2020') K24 = (`=desves_ipcd_2020')
+
+	

@@ -1102,8 +1102,8 @@ bys idh_ch: egen numper = sum(miembros_ci)
 bys idh_ch: egen npermax = max(numper)
 drop numper
 * Los ingresos a nivel de hogar se dividen para los miembros del hogar y se obtiene un per capita.
-gen inghog1 = HT11
-*egen inghog1 = rsum(h155_1 h160_1m h160_2m h163_1m h163_2m h164m h165m h166m h167_1_1m h167_1_2m h170_1m h170_2m h171_1m h172_1m h173_1m), missing
+
+egen inghog1 = rsum(h155_1 h160_1m h160_2m h163_1m h163_2m h164m h165m h166m h167_1_1m h167_1_2m h170_1m h170_2m h171_1m h172_1m h173_1m), missing
 
 gen inghog= inghog1/npermax
 

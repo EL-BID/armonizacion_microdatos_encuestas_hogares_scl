@@ -48,8 +48,8 @@ foreach ano of local anos {
 }
 
 
-       infile using "${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\input_visita_2020.do", using("${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\PNADC_2020_visita1.txt")
-		save   "${output}\PNADC_`ano'_visita.dta", replace
+ *      infile using "${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\input_2020.do", using("${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\PNADC_2020a.txt")
+*		save   "${output}\PNADC_`ano'_visita.dta", replace
 
 /*==================================================
               2: append bases 

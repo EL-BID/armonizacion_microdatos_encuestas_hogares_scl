@@ -82,7 +82,7 @@ label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(
 label value region_BID_c region_BID_c
 
 *1. Factor de expansión del hogar: 
-gen factor_ch=pesomen
+gen factor_ch=pesomen/12
 
 *2. Identificador del hogar
 gen idh_ch=numero
@@ -153,7 +153,7 @@ label values relacion_ci relacion_ci
 *9. Factor de expansión a nivel individual
 
 * MM no hay variable pesoano en 2020, pero hay pesomen que es aproximado
-gen factor_ci=pesomen 
+gen factor_ci=pesomen/12
 
 
 	***************

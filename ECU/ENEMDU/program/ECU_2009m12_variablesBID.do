@@ -344,7 +344,7 @@ drop afroind_jefe
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=2002
+gen afroind_ano_c=2004
 
 	*******************
 	***dis_ci***

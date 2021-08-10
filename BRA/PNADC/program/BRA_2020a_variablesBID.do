@@ -96,7 +96,7 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1028
+gen factor_ch=v1028/4
 label variable factor_ch "Factor de expansión del hogar"
 
 ***************
@@ -131,7 +131,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2017
+gen anio_c=2020
 label variable anio_c "Anio de la encuesta"
 
 *********************
@@ -558,7 +558,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *************
 **salmm_ci***
 *************
-gen salmm_ci=954 // 2018
+gen salmm_ci=1045 //https://www.in.gov.br/web/dou/-/medida-provisoria-n-919-de-30-de-janeiro-de-2020-240824899
 label var salmm_ci "Salario minimo legal"
 
 *************

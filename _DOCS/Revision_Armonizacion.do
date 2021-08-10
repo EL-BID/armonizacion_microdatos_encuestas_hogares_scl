@@ -24,10 +24,10 @@ local ANO3 "2019"
 local ANO4 "2020"
 local ronda a 
 
-local in29 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO1'`ronda'_BID.dta"
-local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO2'`ronda'_BID.dta"
-local in31 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO3'`ronda'_BID.dta"
-local in32 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\`PAIS'_`ANO4'`ronda'_BID.dta"
+local in29 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO1'`ronda'_BID.dta"
+local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO2'`ronda'_BID.dta"
+local in31 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO3'`ronda'_BID.dta"
+local in32 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO4'`ronda'_BID.dta"
  
 * START *
 
@@ -62,44 +62,33 @@ use temporal_SLV, replace
 tab  relacion_ci anio_c
 
 * household size, schooling, formal employment, old age pension, employment rate
-table pais_c anio_c if relacion_ci==1 [iw=factor_ch], c(mean nmiembros_ch) f(%4.2f) 
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=18&edad_ci<=64) & aedu_ci~=., c(mean aedu_ci) f(%6.2f)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=25&edad_ci<=64) & condocup_ci==1, c(mean formal_ci) f(%6.3f)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=65&edad_ci<=130), c(mean pension_ci) f(%6.3f)
 
 g ocup = condocup_ci==1
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=25&edad_ci<=64), c(mean ocup) f(%6.3f)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=15&edad_ci<=24), c(mean ocup) f(%6.3f)
+
 
 
 * Labor participation
 g plf1824 = (condocup_ci==1 | condocup_ci==2) if (edad_ci>=18 & edad_ci<=24)
 g plf2564 = (condocup_ci==1 | condocup_ci==2) if (edad_ci>=25 & edad_ci<=64) 
-table sexo_ci anio_c [iw=factor_ch], c(mean plf1824 ) f(%6.3f)
-table sexo_ci anio_c [iw=factor_ch], c(mean plf2564) f(%6.3f)
+
 
 * Unemployment; Not study, work or seek employment
 g unem1524 = condocup_ci==2 if (condocup_ci==1 | condocup_ci==2) & (edad_ci>=15& edad_ci<=24)
 g unem2564 = condocup_ci==2 if (condocup_ci==1 | condocup_ci==2) & (edad_ci>=25& edad_ci<=64) 
 g ninik = (asiste_ci==0 & condocup_ci==3) if (edad_ci>=15 & edad_ci<=24) & asiste_ci~=. 
-table anio_c [iw=factor_ch], c(mean unem1524 mean unem2564 mean ninik) f(%6.3f) 
+
 
 * School attendance (6-12, 13-17,18-24); Two or more year overage for grade (13-17)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=6  & edad_ci<=12) & asiste_ci~=., c(mean asiste_ci) f(%6.3f)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=13 & edad_ci<=17) & asiste_ci~=., c(mean asiste_ci) f(%6.3f)
-table pais_c anio_c [iw=factor_ch] if (edad_ci>=18 & edad_ci<=24) & asiste_ci~=., c(mean asiste_ci) f(%6.3f)
 gen rezago  = (edad_ci - 6 - aedu_ci)>=2 if (edad_ci>=13 & edad_ci<=17) & aedu_ci~=.
-table pais_c anio_c [iw=factor_ch], c(mean rezago) f(%6.3f)
 
 * pobre, vulnerable, clase media; ingreso per capita PPP
-/*
+
 keep if ipcm>0 & ipcm~=. & factor_ch~=.
 g ppoor31 = (ipcm < lp31_ci)*100
 g ppoor50 = (ipcm < lp31_ci*1.6)*100
 g vulnera = ((ipcm >= lp31_ci*1.6) & (ipcm < lp31_ci*4))*100
 g middle  = ((ipcm >= lp31_ci*4)   & (ipcm < lp31_ci*20))*100
-g ipcd    = ipcm * 3.1 * 365 / lp31_ci        // ingreso per capita anualizado (en USD PPP de 2011)
-table anio_c [iw=factor_ch], c(mean ppoor31 mean ppoor50 mean vulnera mean middle mean ipcd) f(%5.3f)
+
 
 *-----------------------------------------------------------------------------*
 *                       Export all results                                    *
@@ -186,9 +175,9 @@ sum middle if anio_c ==`k' [iw=factor_ch]
 scalar mean_middle_`k' = `=r(mean)'
 scalar desves_middle_`k' = `=r(sd)'
 
-sum ipcd if anio_c ==`k' [iw=factor_ch] 
-scalar mean_ipcd_`k' = `=r(mean)'  
-scalar desves_ipcd_`k' = `=r(sd)'
+sum ipcm if anio_c ==`k' [iw=factor_ch] 
+scalar mean_ipcm_`k' = `=r(mean)'  
+scalar desves_ipcm_`k' = `=r(sd)'
 
 }
 
@@ -210,7 +199,7 @@ scalar desves_plf2564_`k' = `=r(sd)'
 * generate overall avarage per indicator, accounting for years
 local indicadores female nmiembros_ch aedu_ci formal_ci pension_ci ocup_25_64 ocup_15_24 ///
 plf2564 plf1824 unem1524 unem2564 ninik asiste_ci_612 asiste_ci_1317 asiste_ci_1824 rezago ///
-ppoor31 ppoor50 vulnera middle ipcd
+ppoor31 ppoor50 vulnera middle ipcm
 
 
 foreach var of local indicadores {
@@ -268,10 +257,10 @@ putexcel set "`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
 	putexcel F16 = (`=mean_asiste_ci_612_`ANO3'') F17 = (`=mean_asiste_ci_1317_`ANO3'') F18 = (`=mean_asiste_ci_1824_`ANO3'')  F19 = (`=mean_rezago_`ANO3'') 
 	putexcel G16 = (`=mean_asiste_ci_612_`ANO4'') G17 = (`=mean_asiste_ci_1317_`ANO4'') G18 = (`=mean_asiste_ci_1824_`ANO4'')  G19 = (`=mean_rezago_`ANO4'') 
 
-	putexcel D20 = (`=mean_ppoor31_`ANO1'') D21 = (`=mean_ppoor50_`ANO1'') D22 = (`=mean_vulnera_`ANO1'')  D23 = (`=mean_middle_`ANO1'') D24 = (`=mean_ipcd_`ANO1'')
-	putexcel E20 = (`=mean_ppoor31_`ANO2'') E21 = (`=mean_ppoor50_`ANO2'') E22 = (`=mean_vulnera_`ANO2'')  E23 = (`=mean_middle_`ANO2'') E24 = (`=mean_ipcd_`ANO2'')
-	putexcel F20 = (`=mean_ppoor31_`ANO3'') F21 = (`=mean_ppoor50_`ANO3'') F22 = (`=mean_vulnera_`ANO3'')  F23 = (`=mean_middle_`ANO3'') F24 = (`=mean_ipcd_`ANO3'')
-	putexcel G20 = (`=mean_ppoor31_`ANO4'') G21 = (`=mean_ppoor50_`ANO4'') G22 = (`=mean_vulnera_`ANO4'')  G23 = (`=mean_middle_`ANO4'') G24 = (`=mean_ipcd_`ANO4'')
+	putexcel D20 = (`=mean_ppoor31_`ANO1'') D21 = (`=mean_ppoor50_`ANO1'') D22 = (`=mean_vulnera_`ANO1'')  D23 = (`=mean_middle_`ANO1'') D24 = (`=mean_ipcm_`ANO1'')
+	putexcel E20 = (`=mean_ppoor31_`ANO2'') E21 = (`=mean_ppoor50_`ANO2'') E22 = (`=mean_vulnera_`ANO2'')  E23 = (`=mean_middle_`ANO2'') E24 = (`=mean_ipcm_`ANO2'')
+	putexcel F20 = (`=mean_ppoor31_`ANO3'') F21 = (`=mean_ppoor50_`ANO3'') F22 = (`=mean_vulnera_`ANO3'')  F23 = (`=mean_middle_`ANO3'') F24 = (`=mean_ipcm_`ANO3'')
+	putexcel G20 = (`=mean_ppoor31_`ANO4'') G21 = (`=mean_ppoor50_`ANO4'') G22 = (`=mean_vulnera_`ANO4'')  G23 = (`=mean_middle_`ANO4'') G24 = (`=mean_ipcm_`ANO4'')
 
 *std. Dev
 	
@@ -301,10 +290,10 @@ putexcel set "`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
 	putexcel J16 = (`=desves_asiste_ci_612_`ANO3'') J17 = (`=desves_asiste_ci_1317_`ANO3'') J18 = (`=desves_asiste_ci_1824_`ANO3'')  J19 = (`=desves_rezago_`ANO3'') 
 	putexcel K16 = (`=desves_asiste_ci_612_`ANO4'') K17 = (`=desves_asiste_ci_1317_`ANO4'') K18 = (`=desves_asiste_ci_1824_`ANO4'')  K19 = (`=desves_rezago_`ANO4'') 
 
-	putexcel H20 = (`=desves_ppoor31_`ANO1'') H21 = (`=desves_ppoor50_`ANO1'') H22 = (`=desves_vulnera_`ANO1'')  H23 = (`=desves_middle_`ANO1'') H24 = (`=desves_ipcd_`ANO1'')
-	putexcel I20 = (`=desves_ppoor31_`ANO2'') I21 = (`=desves_ppoor50_`ANO2'') I22 = (`=desves_vulnera_`ANO2'')  I23 = (`=desves_middle_`ANO2'') I24 = (`=desves_ipcd_`ANO2'')
-	putexcel J20 = (`=desves_ppoor31_`ANO3'') J21 = (`=desves_ppoor50_`ANO3'') J22 = (`=desves_vulnera_`ANO3'')  J23 = (`=desves_middle_`ANO3'') J24 = (`=desves_ipcd_`ANO3'')
-	putexcel K20 = (`=desves_ppoor31_`ANO4'') K21 = (`=desves_ppoor50_`ANO4'') K22 = (`=desves_vulnera_`ANO4'')  K23 = (`=desves_middle_`ANO4'') K24 = (`=desves_ipcd_`ANO4'')
+	putexcel H20 = (`=desves_ppoor31_`ANO1'') H21 = (`=desves_ppoor50_`ANO1'') H22 = (`=desves_vulnera_`ANO1'')  H23 = (`=desves_middle_`ANO1'') H24 = (`=desves_ipcm_`ANO1'')
+	putexcel I20 = (`=desves_ppoor31_`ANO2'') I21 = (`=desves_ppoor50_`ANO2'') I22 = (`=desves_vulnera_`ANO2'')  I23 = (`=desves_middle_`ANO2'') I24 = (`=desves_ipcm_`ANO2'')
+	putexcel J20 = (`=desves_ppoor31_`ANO3'') J21 = (`=desves_ppoor50_`ANO3'') J22 = (`=desves_vulnera_`ANO3'')  J23 = (`=desves_middle_`ANO3'') J24 = (`=desves_ipcm_`ANO3'')
+	putexcel K20 = (`=desves_ppoor31_`ANO4'') K21 = (`=desves_ppoor50_`ANO4'') K22 = (`=desves_vulnera_`ANO4'')  K23 = (`=desves_middle_`ANO4'') K24 = (`=desves_ipcm_`ANO4'')
 
 * Z score
 
@@ -334,11 +323,9 @@ putexcel set "`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
 	putexcel N16 = (`=Z_asiste_ci_612_`ANO3'') N17 = (`=Z_asiste_ci_1317_`ANO3'') N18 = (`=Z_asiste_ci_1824_`ANO3'')  N19 = (`=Z_rezago_`ANO3'') 
 	putexcel O16 = (`=Z_asiste_ci_612_`ANO4'') O17 = (`=Z_asiste_ci_1317_`ANO4'') O18 = (`=Z_asiste_ci_1824_`ANO4'')  O19 = (`=Z_rezago_`ANO4'') 
 
-	putexcel L20 = (`=Z_ppoor31_`ANO1'') L21 = (`=Z_ppoor50_`ANO1'') L22 = (`=Z_vulnera_`ANO1'')  L23 = (`=Z_middle_`ANO1'') L24 = (`=Z_ipcd_`ANO1'')
-	putexcel M20 = (`=Z_ppoor31_`ANO2'') M21 = (`=Z_ppoor50_`ANO2'') M22 = (`=Z_vulnera_`ANO2'')  M23 = (`=Z_middle_`ANO2'') M24 = (`=Z_ipcd_`ANO2'')
-	putexcel N20 = (`=Z_ppoor31_`ANO3'') N21 = (`=Z_ppoor50_`ANO3'') N22 = (`=Z_vulnera_`ANO3'')  N23 = (`=Z_middle_`ANO3'') N24 = (`=Z_ipcd_`ANO3'')
-	putexcel O20 = (`=Z_ppoor31_`ANO4'') O21 = (`=Z_ppoor50_`ANO4'') O22 = (`=Z_vulnera_`ANO4'')  O23 = (`=Z_middle_`ANO4'') O24 = (`=Z_ipcd_`ANO4'')
+	putexcel L20 = (`=Z_ppoor31_`ANO1'') L21 = (`=Z_ppoor50_`ANO1'') L22 = (`=Z_vulnera_`ANO1'')  L23 = (`=Z_middle_`ANO1'') L24 = (`=Z_ipcm_`ANO1'')
+	putexcel M20 = (`=Z_ppoor31_`ANO2'') M21 = (`=Z_ppoor50_`ANO2'') M22 = (`=Z_vulnera_`ANO2'')  M23 = (`=Z_middle_`ANO2'') M24 = (`=Z_ipcm_`ANO2'')
+	putexcel N20 = (`=Z_ppoor31_`ANO3'') N21 = (`=Z_ppoor50_`ANO3'') N22 = (`=Z_vulnera_`ANO3'')  N23 = (`=Z_middle_`ANO3'') N24 = (`=Z_ipcm_`ANO3'')
+	putexcel O20 = (`=Z_ppoor31_`ANO4'') O21 = (`=Z_ppoor50_`ANO4'') O22 = (`=Z_vulnera_`ANO4'')  O23 = (`=Z_middle_`ANO4'') O24 = (`=Z_ipcm_`ANO4'')
 
 
-
-	

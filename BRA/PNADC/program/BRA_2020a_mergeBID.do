@@ -81,8 +81,8 @@ label var `i' `"`shortlabel'"'
 *upa estrato v1008 v1016 v1027
 
 compress
-save   "${output}\PNADC_`anos'a.dta", replace
-save   "${final}\BRA_20a_BID.dta", replace
+*save   "${output}\PNADC_`anos'a.dta", replace
+save   "${output}\BRA_2020a.dta", replace
 exit
 
 

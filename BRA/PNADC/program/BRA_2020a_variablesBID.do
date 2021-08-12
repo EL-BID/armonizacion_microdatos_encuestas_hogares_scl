@@ -32,7 +32,7 @@ Encuesta: PNADC
 Round: anual
 Autores: Angela Lopez alop@iadb.org
  Alvaro Altamirano alvaroalt@iadb.org - Junio de 2020
-Última modificación: Cesar Lins - Marzo 2021
+Última modificación: Cesar Lins - Marzo 2021,
 
 ****************************************************************************/
 ****************************************************************************/

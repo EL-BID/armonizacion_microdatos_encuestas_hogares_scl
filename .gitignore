@@ -24,3 +24,5 @@
 *.oka
 *.oku
 *.t
+.DS_Store
+*.DS_Store

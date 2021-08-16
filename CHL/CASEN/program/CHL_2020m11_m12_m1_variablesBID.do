@@ -5,7 +5,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
-local ANO "2017"
+local ANO "2020"
 local ronda m11_m12_m1
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -22,8 +22,7 @@ log off
 Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
-*use `base_in', clear
-use "/Users/juancamiloperdomo/OneDrive - Inter-American Development Bank Group/Armonización/Encuestas_hogares/CHL/2020/CHL_2020m11_m12_m1.dta", clear
+use `base_in', clear
 
 		/*********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -1518,10 +1517,6 @@ gen dis_ci =. // No está la pregunta en la encuesta 2020
 gen antiguedad_ci=. // No está la pregunta en la encuesta 2020
 gen durades_ci=. // No está la pregunta en la encuesta 2020
 gen desalent_ci=. // No está la pregunta en la encuesta 2020
-gen ipc_c=. // No está la pregunta en la encuesta 2020
-gen lp19_c=. // No está la pregunta en la encuesta 2020
-gen lp31_c=. // No está la pregunta en la encuesta 2020
-gen lp5_c =. // No está la pregunta en la encuesta 2020
 gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
 	
 /*_____________________________________________________________________________________________________*/

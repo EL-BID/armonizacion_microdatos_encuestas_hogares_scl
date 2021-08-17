@@ -718,7 +718,7 @@ label val rama_ci rama_ci
 gen durades_ci=.
 replace durades_ci=v40761 if v4071==1 & condocup_ci==2 & v40761!=. //buscando empleo durante menos de un anio
 replace durades_ci=v40762+12 if v4071==1 & condocup_ci==2 & v40762!=.  //buscando empleo durante 1 a 2 anios
-replace durades_ci=v40763*24 if v4071==1 & condocup_ci==2 & v40763!=. //buscando empleo durante más de 2 anios
+replace durades_ci=v40763+24 if v4071==1 & condocup_ci==2 & v40763!=. //buscando empleo durante más de 2 anios
 label val durades_ci durades1_ci
 label variable durades_ci "Duracion del desempleo en meses"
 label variable durades_ci "Duracion del desempleo en meses"
@@ -1519,10 +1519,11 @@ gen tipopen_ci=.
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
 /*_____________________________________________________________________________________________________*/
 
-*do "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl/_DOCS/Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl/_DOCS/Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
+/*_____________________________________________________________________________________________________*/
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///

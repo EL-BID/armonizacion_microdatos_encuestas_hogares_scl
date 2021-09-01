@@ -65,7 +65,8 @@ tab  relacion_ci anio_c
 
 g ocup = condocup_ci==1
 
-
+* population 
+gen uno = 1 
 
 * Labor participation
 g plf1824 = (condocup_ci==1 | condocup_ci==2) if (edad_ci>=18 & edad_ci<=24)
@@ -102,6 +103,9 @@ g female = (sexo_ci == 2)
 
 
 forvalues k = 2017(1)2020 {
+
+sum uno if anio_c ==`k' [iw=factor_ci]
+scalar pob_tot_`k'  = `=r(sum_w)'
 
 sum female if anio_c ==`k' [iw=factor_ch]
 scalar mean_female_`k' = `=r(mean)'
@@ -262,6 +266,11 @@ putexcel set "`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
 	putexcel F20 = (`=mean_ppoor31_`ANO3'') F21 = (`=mean_ppoor50_`ANO3'') F22 = (`=mean_vulnera_`ANO3'')  F23 = (`=mean_middle_`ANO3'') F24 = (`=mean_ipcm_`ANO3'')
 	putexcel G20 = (`=mean_ppoor31_`ANO4'') G21 = (`=mean_ppoor50_`ANO4'') G22 = (`=mean_vulnera_`ANO4'')  G23 = (`=mean_middle_`ANO4'') G24 = (`=mean_ipcm_`ANO4'')
 
+	putexcel D25 = (`=pob_tot_`ANO1'') 
+	putexcel E25 = (`=pob_tot_`ANO2'')
+	putexcel F25 = (`=pob_tot_`ANO3'') 
+	putexcel G25 = (`=pob_tot_`ANO4'') 
+	
 *std. Dev
 	
 	putexcel describe

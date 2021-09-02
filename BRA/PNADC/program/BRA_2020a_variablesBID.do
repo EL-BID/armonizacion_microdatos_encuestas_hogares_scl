@@ -15,7 +15,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNADC
-local ANO "2018"
+local ANO "2020"
 local ronda a 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
@@ -32,7 +32,7 @@ Encuesta: PNADC
 Round: anual
 Autores: Angela Lopez alop@iadb.org
  Alvaro Altamirano alvaroalt@iadb.org - Junio de 2020
-Última modificación: Cesar Lins - Marzo 2021
+Última modificación: Cesar Lins - Marzo 2021,
 
 ****************************************************************************/
 ****************************************************************************/
@@ -40,7 +40,7 @@ Autores: Angela Lopez alop@iadb.org
 use `base_in', clear
 
 **********************************
-**** ARMONIZACIÓN PNAD_C 2018 **** 
+**** ARMONIZACIÓN PNAD_C 2020 **** 
 **********************************
 				
 				
@@ -131,7 +131,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2017
+gen anio_c=2020
 label variable anio_c "Anio de la encuesta"
 
 *********************
@@ -558,7 +558,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *************
 **salmm_ci***
 *************
-gen salmm_ci=954 // 2018
+gen salmm_ci=1045 //https://www.in.gov.br/web/dou/-/medida-provisoria-n-919-de-30-de-janeiro-de-2020-240824899
 label var salmm_ci "Salario minimo legal"
 
 *************

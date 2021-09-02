@@ -61,6 +61,7 @@ Recuerde que **NO** se deben modificar los paths ya establecidos en cada uno de 
 Con el objetivo de mantener estructurado y estandarizado el proceso de armonización de las bases de las encuestas de hogares, el repositorio cuenta con dos branches principales: 1) Master y 2) Development que ayudan a minimizar los errores y hacer más efectivo el trabajo:
 
 **1)	Master:** La versión contenida en esta Branch siempre es la versión más actualizada y la cual está revisada y aprobada para ejecutarse. Esta Branch no se debe modificar a menos que todos los cambios sean aprobados en la Branch de Development. 
+
 **2)	Depeloment:** Esta Branch es la designada para testear y probar los cambios o adiciones que se realicen en los scripts. De esta Branch se desligan las Branch de cada una de lo feature que se generen para el trabajo en los scripts. 
 
 Debido a que el trabajo de armonización principalmente se realiza de forma paralela entre varios desarrolladores, se requiere que cada uno trabaje con una branch personal donde se solucione o trabaje en el feature requerido y se deben seguir los siguientes pasos: 
@@ -83,6 +84,7 @@ Para ampliar la explicación del flujo de trabajo en el repositorio ver **“M.2
 ## Cómo citar el uso del banco de datos armonizado
 
 >"Fuente: Banco Interamericano de Desarrollo (año de consulta), Encuestas de Hogares Armonizadas de América Latina y el Caribe" 
+
 >“Source: Inter-American Development Bank (year of consultation), Harmonized Household Surveys of Latin America and the Caribbean”
 
 Se sugiere hacer referencia al año de consulta, dado que la información contenida en ellas podría cambiar. Asimismo, se agradece una copia de las publicaciones o informes que utilicen la información contenida en este banco de datos para nuestros registros.

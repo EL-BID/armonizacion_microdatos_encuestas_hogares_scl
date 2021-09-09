@@ -5,14 +5,14 @@ global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
-local ANO "2020"
+local ANO "2017"
 local ronda m11_m12_m1
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-   
+
+
 capture log close
 log using "`log_file'", replace 
 
@@ -22,16 +22,17 @@ log off
 Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 
-use `base_in', clear
+*use `base_in', clear
+use "/Users/juancamiloperdomo/OneDrive - Inter-American Development Bank Group/Armonización/Encuestas_hogares/CHL/2020/CHL_2020m11_m12_m1.dta", clear
 
 		/*********************************
 		***VARIABLES DEL IDENTIFICACION***
 		*********************************/
-		
+
 	****************
 	* region_BID_c *
 	****************
-	
+
 gen region_BID_c=4
 
 	***************
@@ -56,7 +57,7 @@ gen region_BID_c=4
 	15"Arica y Parinacota"
    label value region_c region_c
    label var region_c "division politico-administrativa, region"
-   
+
 *************
 * factor_ch *
 *************
@@ -264,7 +265,7 @@ label variable miembros_ci "Miembro del hogar"
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************	
-	
+
 	***************
 	***afroind_ci***
 	***************
@@ -340,7 +341,7 @@ label var horastot_ci "Horas totales trabajadas en todas las actividades"
 gen subemp_ci=0
 replace subemp_ci=1 if (horaspri_ci<=30)
 label var subemp_ci "Personas en subempleo por horas"
- 
+
 ****************
 *tiempoparc_ci * 
 **************** 
@@ -391,7 +392,7 @@ replace nempleos_ci=2 if o29==1
 label var nempleos_ci "Número de empleos" 
 label def nempleos_ci 1"Un empleo" 2"Más de un empleo"
 label val nempleos_ci nempleos_ci
- 
+
 ****************
 * spublico_ci  * 
 **************** 
@@ -472,7 +473,7 @@ label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"
 gen ylmsec_ci=ytrabajocor-yoprcor  if emp_ci==1 
 replace ylmsec_ci=. if ylmsec_ci==0 // y6 (br ylmsec_ci y6 if ylmsec_ci != . | y6 != .)
 label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
- 
+
 ****************
 * ylnmsec_ci   * 
 **************** 
@@ -527,12 +528,10 @@ label var ynlm_ci "Ingreso no laboral monetario"
 foreach var of varlist y0401 y0402 y0403 y0404{
 gen `var'_m = `var'/12
 } 
-
 *asalariados
 egen aympri=rsum(y0101c y0301 y0302 y0303 y0304 y0305 y0306 y0401 y0402 y0403 y0404), missing 
 replace aympri = . if y0101c==. & y0301==. & y0302==. & y0303==. & y0304==. & y0305==. & y0306==. & y0401==. & y0402==. & y0403==. & y0404==. 
 replace aympri=. if emp_ci==0
-
 *independientes
 gen venta_m = y0901/12
 egen iympri= rsum(y0701c y0901)
@@ -540,11 +539,9 @@ replace iympri = . if y0701c ==. & y0901==.
 egen ylmpri_ci=rsum(aympri iympri)
 replace ylmpri_ci=. if aympri==. & iympri==.
 label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
-
 ****************
 * ylnmpri_ci   * 
 **************** 
-
 *asalariados
 egen aylnmpri = rsum(y0501  y0502  y0503 y0504 y0505 y0506 y0507 y0508 y0509 y0510 y0511 y0512), missing
 replace aylnmpri = . if y0501==. & y0502==. &  y0503==. & y0504==. & y0505==. & y0506==. & y0507==. & y0508==. & y0509==. & y0510==. & y0511==. & y0512==. 
@@ -851,11 +848,9 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ****************
 gen pqnoasis_ci=e5a
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-
 **************
 *pqnoasis1_ci*
 **************
-
 gen     pqnoasis1_ci = 1 if e5a ==11
 replace pqnoasis1_ci = 2 if e5a ==12
 replace pqnoasis1_ci = 3 if e5a ==3 | e5a ==4 | e5a ==5
@@ -865,7 +860,6 @@ replace pqnoasis1_ci = 6 if e5a ==7
 replace pqnoasis1_ci = 7 if e5a ==8 
 replace pqnoasis1_ci = 8 if e5a ==15  | e5a ==16
 replace pqnoasis1_ci = 9 if e5a ==9 | e5a==10 | e5a==13 | e5a ==14 | e5a==17
-
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 */
@@ -1034,7 +1028,7 @@ label var techo_ch "Materiales de construcción del techo"
 gen resid_ch=. // No está la pregunta en la encuesta 2020
 label var resid_ch "Método de eliminación de residuos"
 
-	
+
  *********************
  ***aguamejorada_ch***
  *********************
@@ -1388,7 +1382,7 @@ replace categoinac_ci=4 if (o7>=1 & o7<=9 ) | (o7>= 13 & o7<=17)
 label var categoinac_ci "Condición de inactividad"
 label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 label value categoinac_ci categoinac_ci
-	
+
 ***************
 ***formal_ci***
 ***************
@@ -1448,7 +1442,7 @@ lab val tipocobsalud_ci tipocobsalud_ci
 *********************
 *** probsalud_ci  ***
 *********************
- 
+
 gen probsalud_ci=1 if  s16==1
 replace probsalud_ci=0 if s16==2
 label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
@@ -1491,21 +1485,21 @@ lab val atencion_ci atencion_ci
 	*******************
 	*** migrante_ci ***
 	*******************
-	
+
 	gen migrante_ci=(r1b==3) if r1b!=9 & !mi(r1b)
 	label var migrante_ci "=1 si es migrante"
-	
+
 	**********************
 	*** migantiguo5_ci ***
 	**********************
-	
+
 	gen migantiguo5_ci=(migrante_ci==1 & inlist(r2,2,3)) if migrante_ci!=. & r2!=. & r2!=9 & r2!=1
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-		
+
 	**********************
 	*** migrantelac_ci ***
 	**********************
-	
+
 	gen migrantelac_ci=(inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1) if migrante_ci!=. & r1b_p_cod!=999 & r1b_p_cod!=888
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
@@ -1517,8 +1511,12 @@ gen dis_ci =. // No está la pregunta en la encuesta 2020
 gen antiguedad_ci=. // No está la pregunta en la encuesta 2020
 gen durades_ci=. // No está la pregunta en la encuesta 2020
 gen desalent_ci=. // No está la pregunta en la encuesta 2020
+gen ipc_c=. // No está la pregunta en la encuesta 2020
+gen lp19_c=. // No está la pregunta en la encuesta 2020
+gen lp31_c=. // No está la pregunta en la encuesta 2020
+gen lp5_c =. // No está la pregunta en la encuesta 2020
 gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
-	
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
@@ -1547,6 +1545,8 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo) */
 rename rama4 codindustria
+rename oficio4 codocupa
+compress
 
 saveold "`base_out'", replace
 

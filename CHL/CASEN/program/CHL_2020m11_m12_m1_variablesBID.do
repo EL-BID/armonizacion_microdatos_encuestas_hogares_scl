@@ -1547,8 +1547,6 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo) */
 rename rama4 codindustria
-rename oficio4 codocupa
-compress
 
 saveold "`base_out'", replace
 

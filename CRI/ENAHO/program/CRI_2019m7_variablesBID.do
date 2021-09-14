@@ -1623,7 +1623,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 
 * Ingreso del hogar
 egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
-bys idh_ch: egen yhog = sum(ingreso_total)
+bys idh_ch: egen y_hog = sum(ingreso_total)
 drop ingreso_total
 
 * Monto de PTMC
@@ -1634,13 +1634,13 @@ bys idh_ch: egen ing_ptmc = sum(tmc)
 gen percibe_ptmc=(a9a==1 | a9a==5)
 bys idh_ch: egen ptmc_ch=max(percibe_ptmc)
 
-replace ing_ptmc=. if yhog==.
+replace ing_ptmc=. if y_hog==.
 replace ptmc_ch  = 1 if (ing_ptmc>0 & ing_ptmc!=.)
 
 * Beneficiarios PNC
 gen pnc_ci=(a11==6)
 gen ing_pnc = 0
-replace ing_pnc=. if yhog==.
+replace ing_pnc=. if y_hog==.
 
 * Adultos mayores
 gen mayor64_ci=(edad_ci>64 & edad_ci!=.)
@@ -1698,7 +1698,6 @@ lab val grupo_int grupo_int
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-
 upm_ci estrato_ci afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///

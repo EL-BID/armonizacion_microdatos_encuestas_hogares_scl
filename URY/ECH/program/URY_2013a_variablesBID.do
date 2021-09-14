@@ -162,7 +162,7 @@ gen factor_ci=pesoano
 	***************
 	***upm_ci***
 	***************
-gen upm_ci=locagr
+gen upm_ci=loc_agr
 	***************
 	***estrato_ci***
 	***************

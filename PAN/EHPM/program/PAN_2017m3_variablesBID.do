@@ -1459,7 +1459,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & (p4p_cuando=="1" | (inlist(p4p_anio,2010,2011,2012) & p4p_cuando=="2"))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4p_cuando!="3"
+	gen migantiguo5_ci=(migrante_ci==1 & (p4p_cuando==1 | (inlist(p4p_anio,2010,2011,2012) & p4p_cuando==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4p_cuando!=3
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************

@@ -1603,7 +1603,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 
 * Ingreso del hogar
 egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
-bys idh_ch: egen yhog = sum(ingreso_total)
+bys idh_ch: egen y_hog = sum(ingreso_total)
 drop ingreso_total
 
 * Monto de PTMC
@@ -1614,13 +1614,13 @@ bys idh_ch: egen ing_ptmc = sum(tmc)
 gen percibe_ptmc=(a9a==1 | a9a==5)
 bys idh_ch: egen ptmc_ch=max(percibe_ptmc)
 
-replace ing_ptmc=. if yhog==.
+replace ing_ptmc=. if y_hog==.
 replace ptmc_ch  = 1 if (ing_ptmc>0 & ing_ptmc!=.)
 
 * Beneficiarios PNC
 gen pnc_ci=(a11==6)
 gen ing_pnc = 0
-replace ing_pnc=. if yhog==.
+replace ing_pnc=. if y_hog==.
 
 * Adultos mayores
 gen mayor64_ci=(edad_ci>64 & edad_ci!=.)

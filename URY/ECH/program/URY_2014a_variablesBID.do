@@ -163,7 +163,7 @@ gen upm_ci=loc_agr_13
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=estratogeo13
+gen estrato_ci=estred13
 
 *10. Sexo
 

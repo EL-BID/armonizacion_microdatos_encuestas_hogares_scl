@@ -1447,7 +1447,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio=="2010" & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
+	gen migantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio==2010 & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1485,7 +1485,12 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
-
+*Versión 12 no acepta labels con más de 79 caracteres
+ foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
 
 compress
 

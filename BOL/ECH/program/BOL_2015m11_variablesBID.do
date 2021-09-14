@@ -2145,6 +2145,48 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: Bono juancito pinto 
+* PNC:  Renta dignidad
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+drop ingreso_total
+
+* Personas que perciben transferencias
+gen percibe_ptmc_ci = (s5a_8==1)
+bys idh_ch: egen ptmc_ch = max(percibe_ptmc)
+
+* Se imputa el ingreso del bono juancito pinto el cual es de Bs. 200 anuales 
+* por estudiente que asiste a la escuela y tiene entre 6-20 años
+gen ing_bjp = (200/12) if ptmc ==1 & (edad_ci>5 & edad_ci<21) &  asiste_ci==1
+bys idh_ch: egen ing_ptmc = sum(ing_bjp)
+drop ing_bjp
+
+replace ing_ptmc=. if y_hog==.
+replace ptmc_ch  = ((percibe_ptmc==1)| (ing_ptmc>0 & ing_ptmc!=.))
+
+* Personas que reciben pensión no contributiva
+gen mayor64_ci=(edad>64 & edad!=.)
+gen pnc_ci= (s7a_1ea==1)
+
+* Monto pension no contributiva
+bys idh_ch: egen ing_pension = sum(s7a_1eb)
+replace ing_pension=. if y_hog==.
+
+* Ingreso neto del hogar
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / nmiembros_ch
+drop y_hog 
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2153,6 +2195,34 @@ lab val tipocobsalud_ci tipocobsalud_ci
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

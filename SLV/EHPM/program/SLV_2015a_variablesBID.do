@@ -1544,6 +1544,42 @@ lab val atencion_ci atencion_ci
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+* PTMC: bonos comunidades solidarias rurales/urbanas (r325a3 r325a4) 
+* PNC: 	pensión bósica universal r325a5
+* Del 2012 al 2015 no se preguntan montos 
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Transferencias
+gen percibe_ptmc_ci  = (r325a3==1 | r325a4==1) 
+bys idh_ch: egen ptmc_ch=max(percibe_ptmc)  
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+gen pnc_ci = (r325a5==1) & mayor64_ci==1
+
+*Se mensualiza la frecuencia de los apoyos
+gen ing_ptmc=0
+replace ing_ptmc=60 if ptmc_ch==1
+bys idh_ch: egen ing_pension=total(mayor64_ci)
+replace ing_pension=40*ing_pension
+replace ing_ptmc=. if y_hog==.
+replace ing_pension=. if y_hog==.
+
+* Ingreso neto del hogar
+gen y_pc     = y_hog / nmiembros_ch 
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / nmiembros_ch
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1552,6 +1588,35 @@ lab val atencion_ci atencion_ci
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

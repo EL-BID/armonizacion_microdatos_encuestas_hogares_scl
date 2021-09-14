@@ -16,9 +16,9 @@ local PAIS BRA
 local ENCUESTA PNADC
 local ANO "2019"
 local ronda a 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`ENCUESTA'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+local log_file = "$ruta/harmonized/`PAIS'/`ENCUESTA'/log/`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "$ruta/survey/`PAIS'/`ENCUESTA'/`ANO'/`ronda'/data_merge/`ENCUESTA'_`ANO'`ronda'.dta"
+local base_out = "$ruta/harmonized/`PAIS'/`ENCUESTA'/data_arm/`PAIS'_`ANO'`ronda'_BID.dta"
           
 capture log close
 log using "`log_file'", replace
@@ -95,7 +95,7 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1032/4
+gen factor_ch=v1032
 label variable factor_ch "Factor de expansión del hogar"
 
 ***************
@@ -155,7 +155,7 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=v1032/4 // se divide en 4 pues las bases originales son trimestrales
+gen factor_ci=v1032
 label variable factor_ci "Factor de expansión de personas"
 
 	***************
@@ -716,10 +716,11 @@ label val rama_ci rama_ci
 ****************
 *AJAM, 06-18, base nueva permite construir la variable en número de meses, debido a mayor detalle de variables	
 gen durades_ci=.
-replace durades_ci=v40761 if v4071==1 & condocup_ci==2 //buscando empleo durante menos de un anio
-replace durades_ci=v40762+12 if v4071==1 & condocup_ci==2 //buscando empleo durante 1 a 2 anios
-replace durades_ci=v40763*12 if v4071==1 & condocup_ci==2 //buscando empleo durante más de 2 anios
+replace durades_ci=v40761 if v4071==1 & condocup_ci==2 & v40761!=. //buscando empleo durante menos de un anio
+replace durades_ci=v40762+12 if v4071==1 & condocup_ci==2 & v40762!=.  //buscando empleo durante 1 a 2 anios
+replace durades_ci=v40763+24 if v4071==1 & condocup_ci==2 & v40763!=. //buscando empleo durante más de 2 anios
 label val durades_ci durades1_ci
+label variable durades_ci "Duracion del desempleo en meses"
 label variable durades_ci "Duracion del desempleo en meses"
 
 *******************
@@ -1555,7 +1556,7 @@ lab val pnc_ci pnc_ci
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
 /*_____________________________________________________________________________________________________*/
 
-do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl/_DOCS/Labels&ExternalVars_Harmonized_DataBank.do"
 
 
 *_____________________________________________________________________________________________________*
@@ -1589,6 +1590,7 @@ lab val grupo_int grupo_int
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
+/*_____________________________________________________________________________________________________*/
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///

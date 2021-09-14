@@ -25,9 +25,9 @@ Creation Date:    25 Jun 2019 - 10:57:54
 ==================================================*/
 version 15.1
 drop _all
-
-global input  "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig"
-global output "${surveysFolder}\survey\BRA\PNADC\2018\a\data_merge" 
+global surveysFolder "\\Sdssrv03\surveys"
+global input  "${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig"
+global output "${surveysFolder}\survey\BRA\PNADC\2020\a\data_merge" 
 global final  "${surveysFolder}\harmonized\BRA\PNADC\data_arm" 
 
 /*==================================================
@@ -41,27 +41,27 @@ foreach ano of local anos {
 	foreach trim of local trimestre {
 		clear
 		* Se debe utilizar el input publicado por el IBGE para el formato de la base:
-		infile using "${input}\input_2018.do", using("${input}\PNADC_`trim'`ano'.txt")
+		infile using "${input}\input_2020.do", using("${input}\PNADC_`trim'`ano'.txt")
 		save   "${output}\PNADC_`trim'`ano'.dta", replace
 		clear
 	}
 }
 
 
-       infile using "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\input_visita_2018.do", using("${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\PNADC_2018_visita1.txt")
-		save   "${output}\PNADC_`ano'_visita.dta", replace
+ *      infile using "${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\input_2020.do", using("${surveysFolder}\survey\BRA\PNADC\2020\a\data_orig\PNADC_2020a.txt")
+*		save   "${output}\PNADC_`ano'_visita.dta", replace
 
 /*==================================================
               2: append bases 
 ==================================================*/
-local trimestre 02 03 04 
-local anos 2018
+local trimestre t2 t3 t4 
+local anos 2020
 
-use "${output}\PNADC_012018.dta"
+use "${output}\PNADC_2020t1.dta"
 
 foreach ano of local anos {
 	foreach trim of local trimestre {
-		append using "${output}\PNADC_`trim'`ano'.dta"
+		append using "${output}\PNADC_`ano'`trim'.dta"
 	}
 }
 
@@ -81,8 +81,8 @@ label var `i' `"`shortlabel'"'
 *upa estrato v1008 v1016 v1027
 
 compress
-save   "${output}\PNADC_`anos'a.dta", replace
-save   "${final}\BRA_2018a_BID.dta", replace
+*save   "${output}\PNADC_`anos'a.dta", replace
+save   "${output}\BRA_2020a.dta", replace
 exit
 
 

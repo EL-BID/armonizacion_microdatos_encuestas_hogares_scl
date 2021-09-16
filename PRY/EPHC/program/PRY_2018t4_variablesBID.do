@@ -677,34 +677,27 @@ replace spublico_ci=. if emp_ci~=1*/
 
 ***ocupa_ci***
 **************
-/*no habra categoria 5 porque servicios y comerciantes estan en la misma codificacion
-OCUP: 5112 a 5230: Trabajadores de los servicios y vendedores de comercios y mercados
-Ultima actualización Alvaro AM, con inclusión de CIUO a 4 dígitos provista por instituto de estadística*/
-gen ocupa_ci=.
-replace ocupa_ci=1 if (b01rec>=2113 & b01rec<=3480)  & emp_ci==1
-replace ocupa_ci=2 if (b01rec>=1110 & b01rec<=1236) & emp_ci==1
-replace ocupa_ci=3 if (b01rec>=4111 & b01rec<=4223) & emp_ci==1
-replace ocupa_ci=4 if ((b01rec>=5210 & b01rec<=5230) | (b01rec>=9111 & b01rec<=9113)) & emp_ci==1
-replace ocupa_ci=5 if ((b01rec>=5111 & b01rec<=5169) | (b01rec>=9120 & b01rec<=9170)) & emp_ci==1
-replace ocupa_ci=6 if ((b01rec>=6111 & b01rec<=6153) | (b01rec>=9211 & b01rec<=9212)) & emp_ci==1
-replace ocupa_ci=7 if ((b01rec>=7111 & b01rec<=8340) | (b01rec>=9311 & b01rec<=9339))& emp_ci==1
-replace ocupa_ci=8 if b01rec==110 & emp_ci==1
-replace ocupa_ci=9 if (b01rec>9339 & b01rec<=9999) & emp_ci==1
+
+clonevar ocupa_ci=b01rec
+replace ocupa_ci =. if b01rec==99
 
 *************
 ***rama_ci***
 *************
-g rama_ci=.
-replace rama_ci=1 if (b02rec>=111 & b02rec<=500) & emp_ci==1
-replace rama_ci=2 if (b02rec>=1010 & b02rec<=1429) & emp_ci==1
-replace rama_ci=3 if (b02rec>=1511 & b02rec<=3720) & emp_ci==1
-replace rama_ci=4 if (b02rec>=4010 & b02rec<=4100) & emp_ci==1
-replace rama_ci=5 if (b02rec>=4510 & b02rec<=4550) & emp_ci==1
-replace rama_ci=6 if (b02rec>=5010 & b02rec<=5520) & emp_ci==1
-replace rama_ci=7 if (b02rec>=6010 & b02rec<=6420) & emp_ci==1
-replace rama_ci=8 if (b02rec>=6511 & b02rec<=7020) & emp_ci==1
-replace rama_ci=9 if (b02rec>=7111 & b02rec<=9999) & emp_ci==1
 
+g rama_ci=.
+replace rama_ci=1 if (b02rec==1) & emp_ci==1
+replace rama_ci=3 if (b02rec==2) & emp_ci==1
+replace rama_ci=4 if (b02rec==3) & emp_ci==1
+replace rama_ci=5 if (b02rec==4) & emp_ci==1
+replace rama_ci=6 if (b02rec==5) & emp_ci==1
+replace rama_ci=7 if (b02rec==6) & emp_ci==1
+replace rama_ci=8 if (b02rec==7) & emp_ci==1
+replace rama_ci=9 if (b02rec==8) & emp_ci==1
+
+label variable rama_ci "Rama de actividad laboral de la ocupacion principal-Grandes Divisiones (ISIC Rev"
+label define rama_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
+label value rama_ci rama_ci
 
 ****************
 ***durades_ci***

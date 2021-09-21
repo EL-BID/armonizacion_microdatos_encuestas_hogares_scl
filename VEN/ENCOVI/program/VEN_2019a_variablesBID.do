@@ -365,12 +365,12 @@ label values ocupa_ci ocupa_ci
 *****************
 ***horastot_ci***
 *****************
-tab s9q16, mi
+//tab s9q16, mi
 
-recode s9q16 (98=.) (99=.)
+recode s9q18 (98=.) (99=.)
 
 gen byte horastot_ci=.
-replace horastot_ci=s9q16 if s9q16>=0 & s9q16 <168
+replace horastot_ci=s9q18 if s9q18>=0 & s9q18 <168 //fixed, it was mistakenly using s9q16, which is horaspri_ci
 label var horastot_ci "Horas totales trabajadas la semana pasada en todas las Actividades"
 
 *27 obs que debieron responder 

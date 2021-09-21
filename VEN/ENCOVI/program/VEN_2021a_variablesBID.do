@@ -30,7 +30,8 @@ País:
 Encuesta: ENCOVI
 Round: a
 Autores: Lina Arias -Email: lm.arias405@uniandes.edu.co
-Fecha última modificación: Julio 2020
+Cesar Lins - clins@iadb.org, cesar.lins@gmail.com
+Fecha última modificación: Sept 2021
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -337,6 +338,11 @@ gen dis_ci=.
 	*******************
 gen dis_ch=. 
 
+************************************
+*** VARIABLES DEL MERCADO LABORAL***
+************************************
+
+
 *************************************************************************************
 *******************************INGRESOS**********************************************
 *************************************************************************************
@@ -364,16 +370,13 @@ label values ocupa_ci ocupa_ci
 ***horastot_ci***
 *****************
 
-recode s9q16 (98=.) (99=.)
+recode s9q18 (98=.) (99=.) /* formerly using s9q16, which is actually horaspri_ci */
 
 gen byte horastot_ci=.
-replace horastot_ci=s9q16 if s9q16>=0 & s9q16 <168
+replace horastot_ci=s9q18 if s9q18>=0 & s9q18 <168
 label var horastot_ci "Horas totales trabajadas la semana pasada en todas las Actividades"
 
 *27 obs que debieron responder 
-************************************
-*** VARIABLES DEL MERCADO LABORAL***
-************************************
 
 ****************
 ****condocup_ci*
@@ -396,8 +399,8 @@ label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 gen categopri_ci=.
 replace categopri_ci=1 if s9q15==5 & condocup_ci==1
 replace categopri_ci=2 if (s9q15==6 | s9q15==7 | s9q15==9)  & condocup_ci==1
-replace categopri_ci=3 if (s9q15 >=1 & s9q15  <=4)   & condocup_ci==1
-replace categopri_ci=4 if s9q15 ==8 & condocup_ci==1
+replace categopri_ci=3 if (s9q15==1 | s9q15==3)   & condocup_ci==1
+replace categopri_ci=4 if s9q15 ==8 & condocup_ci==1	/** s915 incluye remunerado y no remunerado **/
 label var categopri_ci "CATEGORIA OCUPACIONAL ACTIVIDAD PRINCIPAL"
 label define categopri_ci 1 "Patron" 2 "Cuenta Propia" 3 "Asalariado" 4 "Trabajador No Remunerado" //5 obs que son missing en la pregunta original s9q15
 label values categopri_ci categopri_ci
@@ -533,21 +536,14 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 *************
 /*La encuesta fue levantada entre noviembre 2019 y abril 2020, se toman los dos periodos para el salario dependiendo de la fecha de la encuesta
 Se toma el salario de octubre 2019 y enero 2020, http://www.sistematemis.com.ve/Salarios-Minimos-Venezuela?action=  */
+
 /***** 2021: No se encuentra el website donde se toma el valor del salario minimo ****/
 tempvar ano
 gen `ano'=substr(fechae, 1, 4)
 tab `ano'
-gen salmm_ci=250000.00 if `ano'=="2020"
-replace salmm_ci=150000.00 if `ano'=="2019" 
+gen salmm_ci=250000.00 /* utilizando 2020 */
 label var salmm_ci "Salario minimo legal"
 
-
-*************
-***tecnica_ci**
-*************
-
-gen tecnica_ci=(s7q11==7)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
 ***emp_ci***
@@ -666,7 +662,7 @@ label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 *** ylmhopri_ci ***
 *******************
 gen ylmhopri_ci=.
-replace ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
+replace ylmhopri_ci=ylmpri_ci/(horastot_ci*4.3) //UNA VEZ que el ingreso es el total, horas también debe ser
 label var ylmhopri_ci "Salario Horario Monetario de la Actividad Principal"
 
 g nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
@@ -878,33 +874,29 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 recode s7q11* s7q4*  (99=.) (98=.)
 recode s7q11b (7/2014=7)
 
+/**** cambió s7q11a a s7q11b *****/
 gen byte aedu_ci=.
 replace aedu_ci=0                 if s7q11==1 | s7q11==2
-replace aedu_ci=s7q11a           if s7q11==3
+replace aedu_ci=s7q11b           if s7q11==3 /* 1-9 años */ | s7q11==5 /* 1-6 años */
 
-replace aedu_ci=s7q11a+9           if s7q11==4
-replace aedu_ci=s7q11b+9 if s7q11==4 & aedu_ci==. //reportaron el grado donde tenian que reportar los anhos de educacion superior
+replace aedu_ci=s7q11b+9           if s7q11==4 //regimen anterior
+replace aedu_ci=s7q11b+6         if s7q11==6 //regimen actual
 
-replace aedu_ci=s7q11a           if s7q11==5
 
-replace aedu_ci=s7q11a+6         if s7q11==6
-replace aedu_ci=s7q11b+6 if s7q11==6 & aedu_ci==.
-
-replace aedu_ci = 12 + s7q11b if /*s7q11ba==1 &*/ (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11b if /*s7q11ba==1 &*/ s7q11==9 // postgrado
-replace aedu_ci = 12 + s7q11c*0.5 if /*s7q11ba==2 &*/ (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11c*0.5 if /*s7q11ba==2 &*/ s7q11==9 //posgrado
-replace aedu_ci = 12 + s7q11d*0.25 if /*s7q11ba==3 &*/ (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11d*0.25 if /*s7q11ba==3 &*/ s7q11==9 //posgrado
-
-**para los que tienen missing en el regimen de estudio
-replace aedu_ci = 12 + s7q11b if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11b if s7q11==9 & aedu_ci==. // postgrado
-/*replace aedu_ci = 12 + s7q11c*0.5 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11c*0.5 if s7q11==9 & aedu_ci==. //posgrado
-replace aedu_ci = 12 + s7q11d*0.25 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11d*0.25 if s7q11==9 & aedu_ci==. //posgrado
+/* Explanation:
+ For TSU, universitario, and postgrado, the s7q11b variable 
+ may be defined in years, semesters or trimesters.
+ This information is stored in s7q11a (1=year, 2=sem., 3=tri.).
+ Thus, to calculate it in years, we need to multiply s7q11b
+ for the correct factor:
+   s7q11b*1.0 if it is reported in years
+   s7q11b*0.5 if it is reported in semesters
+   s7q11b*0.25 if it is reported in trimesters.
+  The formula below does exactly that.
 */
+replace aedu_ci = 12 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci = 17 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & s7q11==9 // postgrado
+
 label variable aedu_ci "Años de Educacion"
 
 							
@@ -912,16 +904,16 @@ label variable aedu_ci "Años de Educacion"
 ***eduno_ci***
 **************
 gen eduno_ci=.
-replace eduno=1 if s7q4==1
-replace eduno=0 if s7q4>1 & s7q4<=7
+replace eduno=1 if s7q11==1 
+replace eduno=0 if s7q11>1
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if s7q4==2
-/** replace edupre=0 if s7q4d>2 | s7q4d==1 **/
+replace edupre=1 if s7q11==2
+replace edupre=0 if s7q11>2 | s7q11==1
 label var edupre_ci "Educacion preescolar"
 
 	
@@ -1011,6 +1003,14 @@ replace `x'_ci=. if aedu_ci==.
 **************
 gen eduac_ci=.
 label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
+
+
+*************
+***tecnica_ci**
+*************
+
+gen tecnica_ci=(s7q11==7)
+label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 
 ***************
@@ -1103,8 +1103,11 @@ gen aguamide_ch=.
 ************
 ***luz_ch***
 ************
-
+/* En los últimos 3 meses, el servicio eléctrico
+de esta vivienda ha sido suministrado por ? */
 gen luz_ch=.
+replace luz_ch=1 if s4q7__4==0 
+replace luz_ch=0 if s4q7__4==1 /* no tiene servicio electrico */
 label var luz_ch "La principal fuente de iluminación es electricidad"
 
 ****************
@@ -1121,8 +1124,8 @@ gen combust_ch=.
 ***bano_ch***
 *************
 gen bano_ch=.
-replace bano_ch = 1 if s4q9__1==1 | s4q9__2==1 | s4q9__3==1 | s4q9__4==1
-replace bano_ch = 0 if s4q9__5==1 | s4q9__6==1 | s4q9__7==1
+replace bano_ch = 1 if s4q10==1 | s4q10==2 | s4q10==3 | s4q10==4 //formerly s4q9
+replace bano_ch = 0 if s4q10==5
 
 label var bano_ch "El hogar tiene algun tipo de servicio higienico"
 
@@ -1140,9 +1143,9 @@ label var banoex_ch "El servicio higiénico es de uso exclusivo del hogar"
 *************
 
 gen des1_ch=.
-replace des1_ch=0 if /*s4q9==5*/ bano_ch==0
-replace des1_ch=1 if s4q9__1==1 | s4q9__2==1 
-replace des1_ch=2 if s4q9__4==1 | s4q9__3==1
+replace des1_ch=0 if s4q10==5
+replace des1_ch=1 if s4q10==1 | s4q10==2 
+replace des1_ch=2 if s4q10==4 | s4q10==3
 label var des1_ch "Tipo de desagüe incluyendo definición de unimproved del MDG"
 
 *************
@@ -1151,8 +1154,8 @@ label var des1_ch "Tipo de desagüe incluyendo definición de unimproved del MDG
 
 
 gen des2_ch=.
-replace des2_ch=0 if /*s4q9==5*/ bano_ch==0
-replace des2_ch=1 if /*s4q9==1 | s4q9==2 | s4q9==3 | s4q9==4*/ bano_ch==1
+replace des2_ch=0 if s4q10==5
+replace des2_ch=1 if s4q10==1 | s4q10==2 | s4q10==3 | s4q10==4
 label var des2_ch "Tipo de desagüe sin incluir la definición de unimproved de los MDG"
 
 *************
@@ -1197,7 +1200,12 @@ label values techo_ch techo_ch
 ***resid_ch***
 **************
 gen resid_ch=.
-*Se elimina la pregunta en 2016
+*Se elimina la pregunta en 2016, retornó en 2021 como s4q9
+replace resid_ch=0 if s4q9__1==1
+replace resid_ch=1 if s4q9__5==1
+replace resid_ch=2 if s4q9__6==1
+replace resid_ch=3 if s4q9__2==1 | s4q9__3==1 | s4q9__7==1
+
 label var resid_ch "Método de eliminación de residuos"
 label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
@@ -1240,7 +1248,7 @@ label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 ***telef_ch***
 **************
 
-gen telef_ch=(s5q6__12==1)
+gen telef_ch=(s5q17__7==1) //formerly s5q6__12, que fué cambiado a cable TV
 label var telef_ch "Hogar tiene servicio telefónico fijo"
 label values telef_ch telef_ch
 
@@ -1263,18 +1271,20 @@ gen freez_ch=.
 *************
 ***auto_ch***
 *************
-gen auto_ch=. /*(s5q4a >=1 & s5q4a <5)
+gen auto_ch=. 
+replace auto_ch=1 if s5q6__20==1 
+replace auto_ch=0 if s5q6__20==0
 label var auto_ch "El hogar posee automóvil particular"
 label define auto_ch 0 "No" 1 "Sí"
-label values auto_ch auto_ch*/
+label values auto_ch auto_ch
 
 **************
 ***compu_ch***
 **************
 
 gen compu_ch=.
-replace compu_ch=1 if s5q6__4 ==1
-replace compu_ch=0 if s5q6__4 ==0
+replace compu_ch=1 if s5q6__4 ==1 | s5q6__5==1 //including both PC and laptop, formerly only PC was included
+replace compu_ch=0 if s5q6__4 ==0 & s5q6__5==0
 label var compu_ch "El hogar posee computadora"
 label define compu_ch 0 "No" 1 "Sí"
 label values compu_ch compu_ch
@@ -1285,13 +1295,13 @@ label values compu_ch compu_ch
 *****************
 
 gen internet_ch=.
-replace internet_ch=1 if s5q6__5==1
-replace internet_ch=0 if s5q6__5==0
+replace internet_ch=1 if s5q6__10==1 //formerly s5q6__5
+replace internet_ch=0 if s5q6__10==0
 label var internet_ch "El hogar posee conexión a internet"
 label define internet_ch 0 "No" 1 "Sí"
 label values internet_ch internet_ch
 
-************
+************	
 ***cel_ch***
 ************
 gen cel_ch=.

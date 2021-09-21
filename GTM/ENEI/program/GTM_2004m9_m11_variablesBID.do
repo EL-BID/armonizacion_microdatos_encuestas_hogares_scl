@@ -359,76 +359,45 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<6)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
+		  ******************************
+          *** VARIABLES DE DIVERSIDAD **
+          ******************************
+*Nathalia Maya & Antonella Pereira
+*Julio 2021	
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+	
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: Usted se considera perteneciente a uno de los siguientes pueblos índigenas del país? (p03a04) (1 kiché; 2 Qeqchí; 3 Kaqchikel; 4 Mam; 98 Otro pueblo índígena, ¿cuál? 5 Garífuna 6 Ladino 7 Extranjero 98 Otro, ¿cual?) 
+gen afroind_ci=. 
+replace afroind_ci=1  if p03a03 != 6 & p03a03 !=8
+replace afroind_ci=3 if p03a03 ==6 
+replace afroind_ci=9 if p03a03 ==8
+replace afroind_ci=. if p03a03 ==.
 
-/*
-gen raza_ci= 1 if (p03a03 >=1 & p03a03 <=4) | (p03a03 ==7) |(p03a03 >=9 & p03a03 <=98)
-replace raza_ci= 2 if (p03a03 ==5)& raza_ci==.
-replace raza_ci= 3 if (p03a03 ==6 | p03a03 ==8) & raza_ci==.
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo" 
-*/ 
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
 
-/*
-p03a03:
-           1 kiché
-           2 kaqchiquel
-           3 mam
-           4 q'eqchi
-           5 garífuna
-           6 ladino
-           7 xinca
-           8 extranjero
-           9 ixil
-          11 poqomam
-          12 poqomchi
-          13 qanjobal
-          14 sakapulteco
-          17 itzaj
-          19 jacalteco
-          20 achí
-          22 awakateko
-          55 ch'orti
-          66 chuj
-          98 otro
-*/
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2002
 
-gen raza_ci= 1 if (p03a03 >=1 & p03a03 <=4) | (p03a03 ==7) |(p03a03 >=9 & p03a03 <=98)
-replace raza_ci= 4 if (p03a03 ==5)& raza_ci==.
-replace raza_ci= 3 if (p03a03 ==6 | p03a03 ==8) & raza_ci==.
-bys idh_ch: gen aux=raza_ci if ppa06==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (ppa06 ==3 | ppa06==5))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 4 "Afro-indígena"
-label value raza_ci raza_ci 
-label var raza_ci "Raza o etnia del individuo" 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
 
-gen raza_idioma_ci=.
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1 | raza_ci==4
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2 | raza_ci==4
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-  
 
 	************************************
 	*** VARIABLES DEL MERCADO LABORAL***
@@ -1900,7 +1869,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

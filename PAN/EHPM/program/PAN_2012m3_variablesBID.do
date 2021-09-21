@@ -290,7 +290,7 @@ drop afroind_jefe
 	*******************
 	*** afroind_ano_c ***
 	*******************
-gen afroind_ano_c=2001
+gen afroind_ano_c=2005
 
 	*******************
 	*** dis_ci ***

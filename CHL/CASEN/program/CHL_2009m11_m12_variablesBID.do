@@ -1451,6 +1451,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 rename c_o13 codindustria
 rename c_o12 codocupa
+rename cviv calgobviv
 compress
 
 

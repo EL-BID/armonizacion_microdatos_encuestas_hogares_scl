@@ -33,7 +33,7 @@ Fecha última modificación: Junio 2020
 ****************************************************************************/
 *Nota: Hay 76 personas que no tienen hogar. Estas personas se borran de la muestra*
 
-use "$ruta\survey\VEN\ENCOVI\2019\a\data_orig\personas_VI-IX_XVI.dta", clear
+use "$ruta\survey\VEN\ENCOVI\2021\a\data_orig\personas_VI-IX_XVI.dta", clear
 
 *hago el merge con viviendas
 mmerge interview__key interview__id  using "\$ruta\survey\VEN\ENCOVI\2021\a\data_orig\hogares_II-V_IXc_XIII.dta", t(n:1)

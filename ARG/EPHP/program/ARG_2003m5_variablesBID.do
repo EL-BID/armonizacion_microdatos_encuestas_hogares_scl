@@ -1027,6 +1027,39 @@ label var  eduui_ci "Universitaria o Terciaria Incompleta"
 label var  eduuc_ci  "Universitaria o Terciaria Completa"
 		
 
+			
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+			
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
+
 /*******************************************************************************************************************************************
 VARIABLES DE INFRAESTRUCTURA DEL HOGAR: Como estas Bananas estan armadas solo con el archivo de personas, prefieron "no tocarlo" y escribir 
 otro programa para las variables del hogar y luego mergear las bases: 
@@ -1198,7 +1231,7 @@ rename ocupa ocupa_ci
 *faltan las variables de LMK
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
-gen raza_ci=.
+
 gen tipopen_ci=.
 gen desemp_ci=.
 * MLO, 2015 02, incorporacion de SM
@@ -1235,7 +1268,7 @@ gen repiteult_ci=.
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_ci relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch	notropari_ch notronopari_ch	nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch	notropari_ch notronopari_ch	nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

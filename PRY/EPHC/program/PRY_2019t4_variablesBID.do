@@ -679,12 +679,19 @@ replace spublico_ci=. if emp_ci~=1*/
 ***ocupa_ci***
 **************
 
-clonevar ocupa_ci=b01rec
-replace ocupa_ci =. if b01rec==99
+* Esta variable no es posible crearla debido a que la codificación de la variable b01rec en la EPHC no es compatible con la codificación que se utiliza en los manuales de armonización del BID
+
+* Para tener información sobre la ocupación se genera una variable alternativa clonando b01rec y manteniendo su codificación original
+
+*clonevar ocupacion_PRY=b01rec
+*replace ocupacion_PRY =. if b01rec==99
+
 
 *************
 ***rama_ci***
 *************
+
+* Se corrigió la codificación de la variable rama_ci para compatibilizar las categorías de la EPHC con las categorías de las bases armonizadas del BID. El único problema que se presenta, es que al parecer la encuesta no se realizó sobre ningún trabajador de la rama_ci ==2 "Explotación_de_minas_y_canteras
 
 g rama_ci=.
 replace rama_ci=1 if (b02rec==1) & emp_ci==1

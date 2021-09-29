@@ -677,7 +677,7 @@ replace spublico_ci=. if emp_ci~=1*/
 
 ***ocupa_ci***
 **************
-
+gen ocupa_ci=.
 * Esta variable no es posible crearla debido a que la codificación de la variable b01rec en la EPHC no es compatible con la codificación que se utiliza en los manuales de armonización del BID
 
 * Para tener información sobre la ocupación se genera una variable alternativa clonando b01rec y manteniendo su codificación original

@@ -912,22 +912,21 @@ label variable aedu_ci "Años de Educacion"
 
 							
 **************
-***eduno_ci***
+***eduno_ci*** // ningún nivel de instrucción
 **************
 gen eduno_ci=.
-replace eduno=1 if s7q4==1
-replace eduno=0 if s7q4>1 & s7q4<=7
+replace eduno=1 if s7q11==1 // ningún nivel, asiste y no asiste
+replace eduno=0 if s7q11>1 // preescolar para arriba, asiste y no asiste
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if s7q4==2
-replace edupre=0 if s7q4d>2 | s7q4d==1
+replace edupre=1 if s7q11==2 // preescolar asiste y no asiste
+replace edupre=0 if s7q11==1 | s7q11>2 // ningún nivel y básica o más, asiste o no asiste
 label var edupre_ci "Educacion preescolar"
 
-	
 **************
 ***edupi_ci***
 **************

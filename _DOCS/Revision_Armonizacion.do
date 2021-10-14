@@ -31,7 +31,7 @@ local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO2'`ronda
 local in31 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO3'`ronda'_BID.dta"
 local in32 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO4'`ronda'_BID.dta"
  
-* START *
+* START **
 
 forvalues k = 29(1)32 {
 tempfile temp`k'

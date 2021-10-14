@@ -456,39 +456,39 @@ label val rama_ci rama_ci
 ****************
 * ylmpri_ci    * 
 ****************
-egen ylmpri_ci=rsum(yoprcor y3a y3b y3c y3d y3e y3f y4a y4b y4c y4d), missing
+gen ylmpri_ci=yoprcor 
 replace ylmpri_ci=. if emp_ci==0
-label var ylmpri_ci "Ingreso laboral monetario actividad principal" 		
+label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
 ****************
 * ylnmpri_ci   * 
 **************** 
-egen ylnmpri_ci=rsum (y5a y5b y5c y5d y5e y5f y5g y5h y5i y5j y5k y5l)
+gen ylnmpri_ci=.
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
 
 ****************
 * ylmsec_ci    * 
 **************** 
 gen ylmsec_ci=ytrabajocor-yoprcor  if emp_ci==1 
-replace ylmsec_ci=. if ylmsec_ci==0 // y6 (br ylmsec_ci y6 if ylmsec_ci != . | y6 != .)
+replace ylmsec_ci=. if ylmsec_ci==0
 label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
  
 ****************
 * ylnmsec_ci   * 
 **************** 
-gen ylnmsec_ci=. // No está la pregunta en la encuesta 2020
-label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria" 
+gen ylnmsec_ci=.
+label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 ****************
 * ylmotros_ci  * 
 **************** 
-gen ylmotros_ci= y9 + y10
+gen ylmotros_ci=.
 label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 
 ****************
 * ylnmotros_ci * 
 **************** 
-gen ylnmotros_ci=. // No está la pregunta en la encuesta 2020
+gen ylnmotros_ci=.
 label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 ****************
@@ -501,14 +501,14 @@ label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 ****************
 * ylm_ci       * 
 **************** 
-gen ylm_ci= ylmpri_ci + ylmsec_ci + ylmotros_ci
+gen ylm_ci= ytrabajocor
 replace ylm_ci=. if emp_ci!=1
 label var ylm_ci "Ingreso laboral monetario total" 
 
 ****************
 * ylnm_ci      * 
 **************** 
-gen ylnm_ci= . // Yo agregaría el de la actividad principal
+gen ylnm_ci=.
 label var ylnm_ci "Ingreso laboral NO monetario total"  
 
 ****************
@@ -519,14 +519,33 @@ egen ynlm_ci = rsum (yautcor  inglab  ysub), missing
 replace ynlm_ci=. if yautcor==. & inglab==. & ysub==. 
 label var ynlm_ci "Ingreso no laboral monetario"  
 
-/* Son las mismas variables de arriba, pero otra forma de medirlas
+/* Nota:
+
+ytotcorh = yautcorh yaimcorh ysubh
+
+yautaj= ingresos autonomos (la suma de todos los pagos que reciben las 
+personas, provenientes tanto del trabajo como de la propiedad de los activos)
+
+ytrabaj = ingreso laboral (Corresponden a los ingresos que obtienen las 
+personas en su ocupación por concepto de sueldos y salarios, monetarios y 
+en especies ganancias provenientes del trabajo independiente la auto-provisión
+de bienes producidos por el hogar)
+
+ysubaj=todos los aportes en dinero que reciben las personas y los hogares del 
+Estado a través de los programas sociales.
+
+*/
+
+/*
 ****************
 * ylmpri_ci    * 
 ****************
-*La variable de la base ya ha sido mensualizada
+
+/*La variable de la base ya ha sido mensualizada
 foreach var of varlist y0401 y0402 y0403 y0404{
 gen `var'_m = `var'/12
 } 
+*/
 
 *asalariados
 egen aympri=rsum(y0101c y0301 y0302 y0303 y0304 y0305 y0306 y0401 y0402 y0403 y0404), missing 
@@ -534,39 +553,71 @@ replace aympri = . if y0101c==. & y0301==. & y0302==. & y0303==. & y0304==. & y0
 replace aympri=. if emp_ci==0
 
 *independientes
-gen venta_m = y0901/12
+/* gen venta_m = y0901/12 esta variable ya fue mensualizada*/
+
+/*
+y0701c: independientes	principal	-	efectivo
+y0901: independientes	principal	-	ventas anuales
+*/
+
 egen iympri= rsum(y0701c y0901)
 replace iympri = . if y0701c ==. & y0901==.
+
 egen ylmpri_ci=rsum(aympri iympri)
 replace ylmpri_ci=. if aympri==. & iympri==.
+
 label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
 ****************
 * ylnmpri_ci   * 
 **************** 
 
+/*
+y0501:asalariados	principal	-	alimentos y bebidas
+y0502: asalariados	principal	-	vales de alimentación
+y0503: asalariados	principal	-	vivienda o alojamiento
+y0504: asalariados	principal	-	vehículo para uso privado
+y0505: asalariados	principal	-	servicio de transporte
+y0506: asalariados	principal	-	estacionamiento gratuito
+y0507: asalariados	principal	-	teléfono
+y0508: asalariados	principal	-	vestimenta
+y0509: asalariados	principal	-	servicios de guardería o sala cuna
+y0510: asalariados	principal	-	leña
+y0511: asalariados	principal	-	bienes o servicios del empleador
+y0512: asalariados	principal	-	otros similares en especies
+y0801: independientes principal - especies
+*/
+
 *asalariados
 egen aylnmpri = rsum(y0501  y0502  y0503 y0504 y0505 y0506 y0507 y0508 y0509 y0510 y0511 y0512), missing
 replace aylnmpri = . if y0501==. & y0502==. &  y0503==. & y0504==. & y0505==. & y0506==. & y0507==. & y0508==. & y0509==. & y0510==. & y0511==. & y0512==. 
+
 *independientes
 gen iylnmpri = y0801
+
 egen ylnmpri_ci= rsum(aylnmpri iylnmpri)
 replace ylnmpri_ci=. if aylnmpri==. & iylnmpri==.
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
+
 ****************
 * ylmsec_ci    * 
 **************** 
+
 egen ylmsec_ci= rsum(yosa  yosi), missing
 replace ylmsec_ci=. if yosa==. & yosi==.
 label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
+
+
 ****************
 * ylnmsec_ci   * 
 **************** 
 gen ylnmsec_ci=.
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
+
 ****************
 * ylmotros_ci  * 
 **************** 
+
 * ytro: remuneración por trabajos ocasionales
 * ydes: seguro de desempleo o cesantía
 * yta1: trabajos de antes - asalariados
@@ -574,64 +625,86 @@ label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 * y1101: ingresos del trabajo de familiares no remunerados, desocupados e inactivos
 egen ylmotros_ci= rsum(ytro ydes  yta1 yta2 y1101), missing
 label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
+
 ****************
 * ylnmotros_ci * 
 **************** 
 gen ylnmotros_ci=.
 label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
+
 ****************
 * nrylmpri_ci  * 
+
 **************** 
 gen nrylmpri_ci=(emp_ci==1 & ylmpri_ci==.)
 replace nrylmpri_ci=. if emp_ci!=1
 label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"  
+
 ****************
 * ylm_ci       * 
 **************** 
 egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci), missing
 replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
 label var ylm_ci "Ingreso laboral monetario total"  
+
 ****************
 * ylnm_ci      * 
 **************** 
 egen ylnm_ci=rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci), missing
 replace ylnm_ci=. if ylnmpri_ci==. & ylnmsec_ci==. & ylnmotros_ci==.
 label var ylnm_ci "Ingreso laboral NO monetario total"  
+
 ****************
 * ynlm_ci      * 
 **************** 
- La variable de la base ya ha sido mensualizada
+
+/* La variable de la base ya ha sido mensualizada
 foreach var of varlist yah1 yah2 yrut yre2 yre3 yac2 yids ydon ydim yotr{
 gen `var'_m = `var'/12
-egen ynlm_ci = rsum(subsidio pension arriendo interes dividendo util autocons indem dona devolu otros familiar), missing
-replace ynlm_ci = . if subsidio==. & pension==. & arriendo==. & interes==. & dividendo==. & util==. & autocons==. & ///
-indem==. & dona==. & devolu==. & otros==. & familiar==. 
 }
 */
 
 gen interes = yah1
+
 gen dividendo = yah2
+
 gen util = yrut
+
 egen arriendo = rsum(yre1 yama  yre2   yre3), missing  
+
 gen autocons = yac2
+
 gen indem = yids
+
 gen dona = ydon
+
 gen devolu = ydim
+
 gen otros = yotr
+
 gen subsidio = ysub
+
 egen familiar = rsum(yfa1 yfa2), missing
+
+* no podemos utilizar numper o idh porque el numero actual de personas en el hogar difiere en ambos casos y al expandir la variable a nivel hogar nos da un monto diferente
 gen aux = 1
 bys idh_ch: egen id = sum(aux)
 drop aux
 gen alquiler_pc = yaimcorh/id
-egen pension = rsum(y2801 y280201c yesp y2803c yinv03 ymon yorf yotp ymes), missing
-replace pension=. if y280201c==. & yesp==. & y2803c==. & yinv03==. & ymon==. & yorf==. & yotp==. & ymes==.
+
+egen pension = rsum(y2701c yinv ymon yorf yotp ymes), missing
+replace pension=. if y2701c==. &  yinv==. & ymon==. & yorf==. & yotp==. & ymes==.
+
+egen ynlm_ci = rsum(subsidio pension arriendo interes dividendo util autocons indem dona devolu otros familiar), missing
+replace ynlm_ci = . if subsidio==. & pension==. & arriendo==. & interes==. & dividendo==. & util==. & autocons==. & ///
+indem==. & dona==. & devolu==. & otros==. & familiar==. 
+*/
 
 ****************
 * ynlnm_ci     * 
 **************** 
-gen ynlnm_ci=. // No está la pregunta en la encuesta 2020
-label var ynlnm_ci "Ingreso no laboral no monetario"
+gen ynlnm_ci=.
+label var ynlnm_ci "Ingreso no laboral no monetario" 
 
 
 ****************
@@ -670,7 +743,7 @@ label var ynlm_ch "Ingreso no laboral monetario del hogar"
 *************
 * ynlnm_ch  *
 *************
-gen ynlnm_ch=. // No está la pregunta en la encuesta 2020
+gen ynlnm_ch=.
 label var ynlnm_ch "Ingreso no laboral no monetario del hogar"
 
 *****************
@@ -688,32 +761,50 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 ****************
 * rentaimp_ch  * 
 **************** 
-g rentaimp_ch=. // No está la pregunta en la encuesta 2020
-label var rentaimp_ch "Rentas imputadas del hogar"
+/*MGD Octubre 2016: REVISAR variable
+gen rentaimp_ch=yaimhaj
+label var rentaimp_ch "Rentas imputadas del hogar"*/
+g rentaimp_ch=.
 
 ****************
 * autocons_ci  * 
 **************** 
-gen autocons_ci=y8
+gen autocons_ci=.
 label var autocons_ci "Autoconsumo reportado por el individuo"
 
 ****************
-* autocons_ch  *
+* autocons_ci  * 
 **************** 
-by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
+gen autocons_ch=.
 label var autocons_ch "Autoconsumo del hogar"
 
 ****************
 * remesas_ci   * 
 **************** 
-gen remesas_ci=y13c
+gen remesas_ci=.
 label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
 ****************
 * remesas_ch   * 
 **************** 
-by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1, missing
+gen remesas_ch=.
 label var remesas_ch "Remesas mensuales del hogar"
+
+****************
+* durades_ci   * 
+**************** 
+*gen durades_ci=o8/4.3 // Variable no encontrada en formulario 2020
+*replace durades_ci=. if o8==999 /*| activ!=2*/
+*label var durades_ci "Duración del desempleo en meses"
+
+****************
+* antiguedad_ci* 
+**************** 
+*recode o13 (9999=.) (9998=.) // Variable no encontrada en formulario 2020
+*recode o13 (2016 = 2015)
+*gen antiguedad_ci=(2015-o13)+1
+*replace antiguedad_ci=. if  emp_ci!=1 | antiguedad_ci>edad_ci
+*label var antiguedad_ci "Antiguedad en la actividad actual"
 
 ************************
 * VARIABLES EDUCATIVAS *
@@ -1205,13 +1296,13 @@ label var vivialqimp_ch "Alquiler mensual imputado"
 *********
 *lp_ci***
 *********
-gen lp_ci =  . // No está la pregunta en la encuesta 2020
+gen lp_ci =  . 
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
-gen lpe_ci =  . // No está la pregunta en la encuesta 2020
+gen lpe_ci =  . 
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************

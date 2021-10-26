@@ -1424,7 +1424,7 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 *pensionsub_ci*
 ***************
-egen auxpens=rsum(y28_1a  y28_1d), missing
+egen auxpens=rsum(y28_2amonto  y28_2dmonto), missing
 gen pensionsub_ci=1 if auxpens>0 & auxpens!=.
 recode pensionsub_ci .=0 
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
@@ -1569,7 +1569,7 @@ lab val costo_ci costo_ci
 ********************
 gen atencion_ci=.
 replace atencion_ci=0 if s18<=13
-replace atencion_ci=1 if s18==11 | s18==16 | s18==17 // Se incluyeron las opciones de respuesta 16 y 17, integradas debido a la pandemia de la COVID-19
+replace atencion_ci=1 if s18==11  // Se incluyeron las opciones de respuesta 16 y 17, integradas debido a la pandemia de la COVID-19 | s18==16 | s18==17
 label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci

@@ -12,24 +12,26 @@ set more off
 
 * Paths 
 global ruta = "${surveysFolder}"
+global home = "${localpath}"
 
-local PAIS SLV
-local ENCUESTA EHPM
+local PAIS  CHL
+local ENCUESTA CASEN
 
 // change according to years 
 
-local ANO1 "2017"  // record each year
-local ANO2 "2018"
-local ANO3 "2019"
+local ANO1 "2013"  // record each year	
+local ANO2 "2015"
+local ANO3 "2017"
 local ANO4 "2020"
-local ronda a 
+global years "`ANO1' `ANO2' `ANO3' `ANO4'"
+local ronda m11_m12_m1 
 
 local in29 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO1'`ronda'_BID.dta"
 local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO2'`ronda'_BID.dta"
 local in31 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO3'`ronda'_BID.dta"
 local in32 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO4'`ronda'_BID.dta"
  
-* START *
+* START **
 
 forvalues k = 29(1)32 {
 tempfile temp`k'
@@ -45,18 +47,18 @@ use `temp'29, clear
 forvalues i = 30(1)32 {
 append using `temp'`i', force
 }
-save temporal_SLV, replace
+save "$home/temporal_`PAIS'", replace
 
 * (2) REVISION DE LAS VARIABLES ARMONIZADAS
 
-use temporal_SLV, replace
+use "$home/temporal_`PAIS'", replace
 collapse zona_c - ipcm, by(anio_c)
 xpose, clear varname
 br
 
 * (3) REVISION DE 15 INDICADORES CLAVES CONSTRUIDAS CON LAS ARMONIZADAS
 
-use temporal_SLV, replace
+use "$home/temporal_`PAIS'", replace
 
 * sample (hogare = # jefes)
 tab  relacion_ci anio_c
@@ -98,11 +100,9 @@ g middle  = ((ipcm >= lp31_ci*4)   & (ipcm < lp31_ci*20))*100
 g female = (sexo_ci == 2)
 		local 1_sexo = "masc_"
 		local 2_sexo = "fem_"
+	
 
-*******		
-
-
-forvalues k = 2017(1)2020 {
+foreach k of global years {
 
 sum uno if anio_c ==`k' [iw=factor_ci]
 scalar pob_tot_`k'  = `=r(sum_w)'
@@ -187,7 +187,7 @@ scalar desves_ipcm_`k' = `=r(sd)'
 
 *
 
-forvalues k = 2017(1)2020 {
+foreach k of global years {
 
 sum plf1824 if anio_c ==`k'  [iw=factor_ch]
 scalar mean_plf1824_`k' = `=r(mean)'
@@ -217,7 +217,7 @@ gen med_`var'_`ANO4' = ( `=mean_`var'_`ANO1'' + `=mean_`var'_`ANO2'' + `=mean_`v
 * generate Z score
 
 foreach var of local indicadores {
-forvalues k = 2017(1)2020 {
+foreach k of global years  {
 
 gen Z_`var'_`k'= (`=mean_`var'_`k''-med_`var'_`k')/`=desves_`var'_`k''
 sum Z_`var'_`k'
@@ -231,7 +231,7 @@ scalar Z_`var'_`k'= `=r(mean)'
 *********************************
 
 *change path to excel masterfile (CHOOSE PATH)
-putexcel set "`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
+putexcel set "$home/`PAIS'_`ENCUESTA'_check_`ANO1'_`ANO4'.xlsx", sheet("Total") modify
 
 * mean
 

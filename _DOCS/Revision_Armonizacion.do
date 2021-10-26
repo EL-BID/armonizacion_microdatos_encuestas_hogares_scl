@@ -40,12 +40,12 @@ keep *_c*
 egen ing   = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci) if miembros_ci==1, missing
 egen sing  = sum(ing), by(idh_ch)
 g ipcm     = sing  / nmiembros_ch
-save `temp'`k', replace
+save "$home/`temp'`k'", replace
 }
 set more off
-use `temp'29, clear
+use "$home/`temp'29", clear
 forvalues i = 30(1)32 {
-append using `temp'`i', force
+append using "$home/`temp'`i'", force
 }
 save "$home/temporal_`PAIS'", replace
 

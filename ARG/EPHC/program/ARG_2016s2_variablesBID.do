@@ -1582,6 +1582,28 @@ gen instcot_ci=.
 	inlist(ch15_cod,"per","ven")) & migrante_ci==1) if migrante_ci!=. 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci = 1 if inlist(ch16,1,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if inlist(ch16,4,5) & migrante_ci==1
+	replace migrantiguo5_ci = . if inlist(ch16,6,9) | migrante_ci==0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	****** miglac_ci *****
+	**********************
+	gen miglac_ci = 1 if (inlist(ch15_cod,"BOL","BRA","Bol","Bra","CHI","COL","Col")) & migrante_ci == 1
+	replace miglac_ci = 1 if inlist(ch15_cod,"HAI","Mex","MEX","PAR","PER") & migrante_ci == 1
+	replace miglac_ci = 1 if inlist(ch15_cod,"Pan","Per","URU","VEN","ECU") & migrante_ci == 1	
+	replace miglac_ci = 1 if inlist(ch15_cod,"Ven","bol","bra","chi","col") & migrante_ci == 1
+	replace miglac_ci = 1 if inlist(ch15_cod,"dom","ecu","hai","mex","Par") & migrante_ci == 1
+	replace miglac_ci = 1 if inlist(ch15_cod,"per","ven","bel","bah","Cub") & migrante_ci == 1
+	replace miglac_ci = 1 if inlist(ch15_cod,"Cub","CUB","BAR","Chi","uru") & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci =. if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
   
   
 /*_____________________________________________________________________________________________________*/

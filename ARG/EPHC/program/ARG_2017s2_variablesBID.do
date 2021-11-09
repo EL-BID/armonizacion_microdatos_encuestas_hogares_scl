@@ -1644,6 +1644,26 @@ gen instcot_ci=.
 	
 	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
 
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci = 1 if inlist(ch16,1,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if inlist(ch16,4,5) & migrante_ci==1
+	replace migrantiguo5_ci = . if inlist(ch16,6,9) | migrante_ci==0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	****** miglac_ci *****
+	**********************
+	gen miglac_ci = 1 if (inlist(ch15_cod,"201","202","203","205","206","207","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci =. if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 

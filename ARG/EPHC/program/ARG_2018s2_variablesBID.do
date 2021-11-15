@@ -1621,7 +1621,7 @@ gen instcot_ci=.
 	inlist(ch15_cod,"239","240")) & migrante_ci == 1
 	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
 	replace miglac_ci =. if migrante_ci == 0
-	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC" 
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación ¤e etiquetas e inserción ¤e variables externas: tipo de cambio, Indice de Precios al 

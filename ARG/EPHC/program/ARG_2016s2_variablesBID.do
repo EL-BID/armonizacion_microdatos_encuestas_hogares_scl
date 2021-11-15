@@ -1603,7 +1603,7 @@ gen instcot_ci=.
 	replace miglac_ci = 1 if inlist(ch15_cod,"Cub","CUB","BAR","Chi","uru") & migrante_ci == 1
 	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
 	replace miglac_ci =. if migrante_ci == 0
-	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC" 
   
   
 /*_____________________________________________________________________________________________________*/

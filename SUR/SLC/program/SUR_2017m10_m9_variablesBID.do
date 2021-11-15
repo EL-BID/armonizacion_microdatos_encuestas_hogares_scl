@@ -1389,6 +1389,24 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen migrantelac_ci=(migrante_ci==1 & (inlist(q2_01,3,4) | inlist(q2_02,"Argentinie","Haiti","Haitie","Colombia","JAMAICA","Jamaica") | inlist(q2_02,"dominicaanse republi","Trinidad","VENEZUELA","haiti","venezuela"))) if migrante_ci!=. 
 	replace migrantelac_ci=. if (q2_01==7 & mi(q2_02))
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & q2_07>4) if migrante_ci!=. & !inrange(edad_ci,0,4)
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci==1
+	replace migrantiguo5_ci=. if (q2_07==. & q2_03==1) | migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & (inlist(q2_01,3,4) | inlist(q2_02,"Argentinie","Haiti","Haitie","Colombia","JAMAICA","Jamaica") | inlist(q2_02,"dominicaanse republi","Trinidad","VENEZUELA","haiti","venezuela"))) if migrante_ci!=. 
+	replace miglac_ci = 0 if migrantiguo5_ci != 1 & migrante_ci==1
+	replace miglac_ci=. if (q2_01==7 & mi(q2_02)) | migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	
 /*_____________________________________________________________________________________________________*/

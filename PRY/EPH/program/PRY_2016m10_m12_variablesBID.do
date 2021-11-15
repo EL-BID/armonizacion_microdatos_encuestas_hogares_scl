@@ -1775,6 +1775,24 @@ replace vivialqimp_ch=. if v19==99999999999
 	gen migrantelac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,24,28,31,32)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & p11a<20) if migrante_ci!=. & p11a!=. & p11a!=99 & !inrange(edad_ci,0,4)
+	replace migrantiguo5_ci= 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci= . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,24,28,31,32)) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 ******************************
 * Variables SPH - PMTC y PNC *
 ******************************

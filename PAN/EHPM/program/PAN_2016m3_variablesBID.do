@@ -1469,6 +1469,20 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

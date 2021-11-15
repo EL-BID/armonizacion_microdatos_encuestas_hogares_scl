@@ -1697,6 +1697,23 @@ lab val atencion_ci atencion_ci
 	
 	gen migrantelac_ci=(inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1) if migrante_ci!=. & r1b_p_cod!=999 & r1b_p_cod!=888
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci= 1 if inlist(r2,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if (r2 == 4 & migrante_ci == 1)
+	replace migrantiguo5_ci = . if migrante_ci == 0 | r2!=. & r2==9 & r2==1
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci= 1 if inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2017.pdf */
 				

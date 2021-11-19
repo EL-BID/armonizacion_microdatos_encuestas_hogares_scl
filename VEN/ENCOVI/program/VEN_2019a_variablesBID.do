@@ -48,7 +48,7 @@ gen str pais_c="VEN"
 **********
 ***anio***
 **********
-gen anio_c=2019
+gen anio_c=2020
 
 *********
 ***mes***
@@ -661,8 +661,7 @@ label var spublico "Personas que trabajan en el sector publico"
 ***ylmpri_ci ***
 ****************
 *ESTA INCLUIDO EL INGRESO POR TODOS LOS TRABAJOS REALIZADOS. 
-recode ing1 (99=.) (98=.)
-gen ylmpri_ci=ylabor_asa
+egen ylmpri_ci= rowtotal(ylabor_asa ylabor_patron ylabor_ctapro), m
 label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 
 *******************
@@ -1437,7 +1436,10 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 
 compress
 
-
+**********
+***anio***
+**********
+replace anio_c=2019
 
 save "`base_out'", replace
 

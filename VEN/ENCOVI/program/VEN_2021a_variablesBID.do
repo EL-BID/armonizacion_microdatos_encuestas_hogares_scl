@@ -654,7 +654,8 @@ label var spublico "Personas que trabajan en el sector publico"
 ***ylmpri_ci ***
 ****************
 *ESTA INCLUIDO EL INGRESO POR TODOS LOS TRABAJOS REALIZADOS. 
-egen ylmpri_ci= rowtotal(ylabor_asa ylabor_patron ylabor_ctapro), m
+recode ing1 (99=.) (98=.)
+gen ylmpri_ci=ylabor_asa
 label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 
 *******************

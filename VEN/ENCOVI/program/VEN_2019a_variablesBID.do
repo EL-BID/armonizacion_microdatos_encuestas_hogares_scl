@@ -662,7 +662,7 @@ label var spublico "Personas que trabajan en el sector publico"
 ****************
 *ESTA INCLUIDO EL INGRESO POR TODOS LOS TRABAJOS REALIZADOS. 
 recode ing1 (99=.) (98=.)
-egen ylmpri_ci== rowtotal(ylabor_asa ylabor_asaesp ylabor_patron ylabor_ctapro), m
+egen ylmpri_ci= rowtotal(ylabor_asa ylabor_patron ylabor_ctapro), m
 label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 
 *******************
@@ -1440,7 +1440,7 @@ compress
 **********
 ***anio***
 **********
-gen anio_c=2019
+replace anio_c=2019
 
 save "`base_out'", replace
 

@@ -1440,7 +1440,7 @@ compress
 **********
 ***anio***
 **********
-gen anio_c=2019
+replace anio_c=2019
 
 save "`base_out'", replace
 

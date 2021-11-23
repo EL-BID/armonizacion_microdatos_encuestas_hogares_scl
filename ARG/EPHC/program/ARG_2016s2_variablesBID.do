@@ -1594,7 +1594,7 @@ gen instcot_ci=.
 	**********************
 	****** miglac_ci *****
 	**********************
-	gen miglac_ci = 1 if (inlist(ch15_cod,"BOL","BRA","Bol","Bra","CHI","COL","Col")) & migrante_ci == 1
+	gen miglac_ci = 1 if (ch15==4|(inlist(ch15_cod,"BOL","BRA","Bol","Bra","CHI","COL","Col")) & migrante_ci == 1)
 	replace miglac_ci = 1 if inlist(ch15_cod,"HAI","Mex","MEX","PAR","PER") & migrante_ci == 1
 	replace miglac_ci = 1 if inlist(ch15_cod,"Pan","Per","URU","VEN","ECU") & migrante_ci == 1	
 	replace miglac_ci = 1 if inlist(ch15_cod,"Ven","bol","bra","chi","col") & migrante_ci == 1

@@ -1404,7 +1404,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**********************
 	
 	gen miglac_ci=(migrante_ci==1 & (inlist(q2_01,3,4) | inlist(q2_02,"Argentinie","Haiti","Haitie","Colombia","JAMAICA","Jamaica") | inlist(q2_02,"dominicaanse republi","Trinidad","VENEZUELA","haiti","venezuela"))) if migrante_ci!=. 
-	replace miglac_ci = 0 if migrantiguo5_ci != 1 & migrante_ci==1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci==1
 	replace miglac_ci=. if (q2_01==7 & mi(q2_02)) | migrante_ci == 0
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 

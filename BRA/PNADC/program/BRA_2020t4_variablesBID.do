@@ -856,7 +856,7 @@ label var ylmsec_ci "Ingreso laboral monetario segunda actividad"
 ****************
 ***ylnmsec_ci***
 ****************
-gen ylnmsec_ci=v405022
+gen ylnmsec_ci=v405022 if v40502==2
 replace ylnmsec_ci=. if v405022<0 | v405022>=999999 | emp_ci!=1
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
@@ -870,8 +870,8 @@ label var ylmotros_ci "Ingreso laboral monetario de otros trabajos"
 ******************
 ***ylnmotros_ci***
 ******************
-gen ylnmotros_ci=v405822 if edad_ci>=10
-replace ylnmotros_ci=. if v405822<0 | v405822>=20000 | emp_ci!=1
+gen ylnmotros_ci=v405822 if v40582==2
+replace ylnmotros_ci=. if v405822<0 | v405822>=999999 | emp_ci!=1
 label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 ************
@@ -891,13 +891,18 @@ label var ylnm_ci "Ingreso laboral NO monetario total"
 *************
 ***ynlm_ci*** // sale modulo de caracteristicas de la vivienda y otros rendimientos 
 *************
+
 /*
 foreach var of varlist v5004a2 v5006a2 v5007a2 v5001a2 v5002a2 v5003a2 { 
 replace `var'=. if `var'>=999999 | `var'<0
 }
 egen ynlm_ci=rsum(v5004a2 v5006a2 v5007a2 v5001a2 v5002a2 v5003a2 v5001a2) if edad_ci>=10
 replace ynlm_ci=. if (v5004a2==. &  v5006a2==. &  v5007a2==. &  v5001a2==. &  v5002a2==. &  v5003a2==. & v5001a2==.) | ynlm_ci<0
-label var ynlm_ci "Ingreso no laboral monetario"  */
+label var ynlm_ci "Ingreso no laboral monetario"
+*/
+
+*Estas variables no están más, por eso no se puede crear la variable.
+*Igualmente no entiendo el if edad_ci>=10.
 
 gen ynlm_ci= .
 label var ynlm_ci "Ingreso no laboral monetario"
@@ -914,7 +919,6 @@ label var ynlnm_ci "Ingreso no laboral no monetario"
 by idh_ch, sort: egen ylm_ch=sum(ylm_ci) if miembros_ci==1
 label var ylm_ch "Ingreso laboral monetario del hogar"
 
-
 ***************
 *** ylnm_ch ***
 ***************
@@ -928,7 +932,7 @@ sort idh_ch
 by idh_ch: egen nrylmpri_ch=max(nrylmpri_ci) if miembros_ci==1
 by idh_ch, sort: egen ylmnr_ch=sum(ylm_ci) if miembros_ci==1
 replace ylmnr_ch=. if nrylmpri_ch==1
-label var ylmnr_ch "Ingreso laboral monetario del hogar"
+label var ylmnr_ch "Ingreso laboral monetario no respuesta del hogar"
 
 ***************
 *** ynlm_ch ***
@@ -939,7 +943,7 @@ label var ynlm_ch "Ingreso no laboral monetario del hogar"
 **************
 ***ynlnm_ch***
 **************
-gen ynlnm_ch=.
+by idh_ch, sort: egen ynlnm_ch1=sum(ynlnm_ci) if miembros_ci==1
 label var ynlnm_ch "Ingreso no laboral no monetario del hogar"
 
 *****************

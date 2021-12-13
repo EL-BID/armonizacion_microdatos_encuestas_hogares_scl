@@ -1084,7 +1084,7 @@ rename x3 x_3
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=(inlist(ntlty,1,2,3,4,5,7)) if ntlty!=9 & !mi(ntlty)
+	gen migrante_ci = (ntlty != 0) if ntlty != 9
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
@@ -1098,8 +1098,24 @@ rename x3 x_3
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=.
+	gen migrantelac_ci= (ntlty == 1 | ntlty == 2)
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci = .
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci= (ntlty == 1 | ntlty == 2) if migrante_ci == 1
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	
 /*_____________________________________________________________________________________________________*/

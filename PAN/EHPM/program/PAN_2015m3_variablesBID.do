@@ -1458,6 +1458,25 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio==2010 & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci = . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p4h,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==.0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

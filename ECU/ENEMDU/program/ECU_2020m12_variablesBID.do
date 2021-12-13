@@ -1444,11 +1444,10 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 
 	
 	******************************
-	*** VARIABLES DE MIGRACION *** 
+	*** VARIABLES DE MIGRACION ***
 	******************************
 
-	/* 
-	***** En el 2020 algunas de estas variables fueron excluidas
+	* Variables incluidas por SCL/MIG Fernando Morales
 
 	*******************
 	*** migrante_ci ***
@@ -1461,7 +1460,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*** migantiguo5_ci ***
 	**********************
 	 
-	gen migantiguo5_ci=(migrante_ci==1 & inlist(p15ca,1,2,3)) if migrante_ci!=. & p15ca!=5
+	gen migantiguo5_ci=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1470,8 +1469,22 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	
 	gen migrantelac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-
-*/
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	 
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if !inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ******************************
 * Variables SPH - PMTC y PNC *

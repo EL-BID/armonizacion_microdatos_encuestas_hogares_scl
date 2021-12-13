@@ -1018,7 +1018,6 @@ replace train_ocup2=6 if ((occuptr>=6000 & occuptr<=6999) | (occuptr>=9200 & occ
 replace train_ocup2=7 if ((occuptr>=7000 & occuptr<=8999) | (occuptr>=9300 & occuptr<=9333))
 replace train_ocup2=9 if (occuptr==9999)
 
-
 g edus2i_ci=.
 g edus2c_ci=.
 g nrylmpri_ci=.
@@ -1067,6 +1066,49 @@ g edus1c_ci=.
 rename x1 x_1
 rename x2 x_2
 rename x3 x_3
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci = (ntlty != 0) if ntlty != 9
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci= (ntlty == 1 | ntlty == 2)
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci = .
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci= (ntlty == 1 | ntlty == 2) if migrante_ci == 1
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

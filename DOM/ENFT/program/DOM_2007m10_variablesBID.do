@@ -1835,7 +1835,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=(pais_reside!=647) if pais_reside!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
@@ -1849,7 +1849,24 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=.
+	gen migrantelac_ci=(migrante_ci==1 & inlist(pais_reside,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850)) if migrante_ci!=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* Codigos obtenidos de la carpeta de docs originales de DOM de 2005, archivo llamado Diccionario ENFT Octubre 2005 */
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & inlist(pais_reside,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850)) if migrante_ci!=.
+	replace miglac_ci = 0 if !inlist(pais_reside,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850) & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==0 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	

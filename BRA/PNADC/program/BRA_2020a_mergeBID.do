@@ -51,5 +51,5 @@ label var `i' `"`shortlabel'"'
 ==================================================*/
 
 compress
-save   "${output}\PNADC_`anio'a.dta", replace
+save   "${output}\BRA_`anio'a.dta", replace
 exit

@@ -160,6 +160,7 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
+
 gen factor_ci=v1032
 label variable factor_ci "Factor de expansión de personas"
 

@@ -97,7 +97,7 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1032/4
+gen factor_ch=v1032
 label variable factor_ch "Factor de expansión del hogar"
 
 *************
@@ -160,7 +160,7 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=v1032/4 // se divide en 4 pues las bases originales son trimestrales
+gen factor_ci=v1032
 label variable factor_ci "Factor de expansión de personas"
 
 ************

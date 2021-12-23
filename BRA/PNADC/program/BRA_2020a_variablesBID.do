@@ -160,7 +160,8 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=v1032 // se divide en 4 pues las bases originales son trimestrales
+
+gen factor_ci=v1032
 label variable factor_ci "Factor de expansión de personas"
 
 ************

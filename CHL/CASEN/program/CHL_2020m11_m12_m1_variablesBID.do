@@ -264,16 +264,19 @@ label variable miembros_ci "Miembro del hogar"
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************	
-	
+/*	r3. En Chile, la ley reconoce diez |
+           pueblos indígenas, ¿[NOMBRE] |
+                             pertenece?
+	*/
 	***************
 	***afroind_ci***
 	***************
 
 gen afroind_ci=. 
-replace afroind_ci=1 if (r3 >=1 & r3 <=9 )
+replace afroind_ci=1 if (r3 >=1 & r3 <=10 ) /* se incluyó "10. Chango" a la lista */
 replace afroind_ci=2 if r3==0
-replace afroind_ci=3 if r3==10
-replace afroind_ci=. if r3==99 
+replace afroind_ci=3 if r3==11  /* changed to "11. Otro" this year */
+
 
 	***************
 	***afroind_ch***

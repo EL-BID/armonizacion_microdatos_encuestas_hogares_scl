@@ -15,7 +15,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNADC
-local ANO "2020"
+local ANO "2018"
 local ronda t1 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'_BID.dta"
@@ -130,7 +130,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2020
+gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 *********************

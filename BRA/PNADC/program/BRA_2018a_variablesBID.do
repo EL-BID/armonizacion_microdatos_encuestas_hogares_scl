@@ -131,7 +131,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2017
+gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 *********************

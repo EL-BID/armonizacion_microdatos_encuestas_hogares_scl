@@ -1640,7 +1640,7 @@ replace aedu_ci = 0 if (s03a_02a>=61 & s03a_02a<=65)
 * Superior
 
 replace aedu_ci = s03a_02c + 12     	if s03a_02c <= 5 & (s03a_02a ==71 | s03a_02a ==72) // normal, universidad y técnico-tecnológico
-replace aedu_ci = s03a_02c + 12 		if s03a_02c >=76 & s03a_02a <=81
+replace aedu_ci = s03a_02c + 12 		if s03a_02a >=76 & s03a_02a <=81
 replace aedu_ci = s03a_02c + 12 + 5 	if s03a_02c <= 5 & (s03a_02a ==73 | s03a_02a ==74) // postgrado, maestria
 replace aedu_ci = s03a_02c + 12 + 5 + 2 if s03a_02c <= 5 & (s03a_02a ==75) // doctorado
 

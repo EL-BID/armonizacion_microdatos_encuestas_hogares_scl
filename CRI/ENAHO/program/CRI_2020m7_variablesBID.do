@@ -1058,7 +1058,7 @@ replace aedu_ci=20 if a14==72 | a14==102 | a14==112
 replace aedu_ci=21 if a14==73 | a14==103 | a14==113
 replace aedu_ci=22 if a14==74 | a14==104 | a14==114
 
-
+*No sé qué está pasando acá, pero hay un tema con las edades.
 replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
 
 ********************************************************************************************************************************
@@ -1189,6 +1189,8 @@ label variable edupre_ci "Educacion preescolar"
 ***14._EDUAC_CI : Educación terciaria académica versus educación terciaria no-académica***
 ********************************************************************************************************************************
 gen eduac_ci=.
+replace eduac_ci=1 if a14>=52 & a14<=56
+replace eduac_ci=0 if a14>=41 & a14<=43
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ********************************************************************************************************************************
@@ -1261,12 +1263,12 @@ recode tecnica_ci .=0
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
 *************
-***tecnica_ci**
+***universidad_ci**
 *************
 gen universidad_ci=.
 replace universidad_ci=1 if a14>=51 & a14<=56
 recode universidad_ci .=0 
-label var tecnica_ci "=1 formacion terciaria tecnica"
+label var universidad_ci "=1 formacion terciaria universitaria"
 
 *====================================================================================================================================*
 *                                                     VARIABLES DE LA VIVIENDA                                                       *

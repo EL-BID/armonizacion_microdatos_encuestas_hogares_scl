@@ -911,14 +911,14 @@ replace e6b=. if e6b==99
 replace aedu_ci=0              if e6a>=1 & e6a<=3    /*Pre-escolar, o ninguna*/
 *replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, especial o ninguna*/
 
-replace aedu_ci=min(e6b,6)     if e6a==5             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=min(e6b,8)     if e6a==6             /*Básica (Sist. nuevo) */
-replace aedu_ci=min(e6b,12)  if e6a==7             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==8             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=min(e6b+6,12)  if e6a==9             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==10            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=min(e6b+12,17) if e6a>=11 & e6a<=12  /*Superior */
-replace aedu_ci=e6b+12         if e6a==13	        /*Posgrado*/
+replace aedu_ci=min(e6b,6)     if e6a==5 & !missing(e6b)              /*Preparatoria  (Sist. antiguo)*/
+replace aedu_ci=min(e6b,8)     if e6a==6 & !missing(e6b)              /*Básica (Sist. nuevo) */
+replace aedu_ci=min(e6b+6,12)  if e6a==7 & !missing(e6b)              /*Humanidades (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==8 & !missing(e6b)              /*Educación Media Científico Humanística (Sist. nuevo)*/
+replace aedu_ci=min(e6b+6,12)  if e6a==9 & !missing(e6b)              /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==10 & !missing(e6b)              /*Educación Media Técnica Profesional (Sist. nuevo)*/  
+replace aedu_ci=min(e6b+12,17) if e6a>=11 & e6a<=12 & !missing(e6b)   /*Superior */
+replace aedu_ci=e6b+12         if e6a==13& !missing(e6b)          /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
 *Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
 
@@ -983,25 +983,33 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=.
+gen edus1i_ci=0 // 
+replace edus1i_ci=1 if aedu_ci>=6 & aedu_ci<8 
+replace edus1i_ci=. if aedu==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=. 
+gen edus1c_ci=0 //
+replace edus1c_ci=1 if aedu_ci==8 
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=. 
+gen edus2i_ci=0 // 
+replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
+replace edus2i_ci=1 if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=. 
+gen edus2c_ci=0 //
+replace edus2c_ci=1  if aedu_ci==12
+replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 ***************
@@ -1065,6 +1073,10 @@ label var repiteult_ci "Personas que han repetido el último grado"
 *edupub_ci   *
 **************
 gen edupub_ci=.
+replace edupub_ci=1 if inlist(e8depen, 1, 2, 5, 6, 7, 8) & asiste_ci==1 //Municipales, corporaciones, junji, integra, CRUCH
+replace edupub_ci=0 if inlist(e8depen, 3, 4, 9) & asiste_ci==1 // Particular pagado, particular subvencionado, universidad privada
+replace edupub_ci=. if inlist(e8depen,10,11) & asiste_ci==1 //Instituto Profesional, Centro de Formación técnica (no se sabe sin son publicos o no)
+
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 
 		******************************************

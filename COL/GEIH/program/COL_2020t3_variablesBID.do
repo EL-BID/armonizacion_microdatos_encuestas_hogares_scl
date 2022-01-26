@@ -1013,6 +1013,8 @@ la var subemp_ci "Personas en subempleo por horas"
 ***eduac_ci***
 **************
 	g byte eduac_ci = .
+	replace eduac_ci = 0 if p6220==3 & p6210==6 //Educacion tecnica o tecnologica
+	replace eduac_ci = 1 if (p6220==4 | p6220==5) & p6210==6 //Educacion universitaria o de postgrado
 	la var eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
@@ -1060,6 +1062,7 @@ g       pqnoasis1_ci = .
 **************
 
 gen tecnica_ci = (p6220==3)
+replace tecnica_ci=. if p6220==.
 label var tecnica_ci "1=formacion terciaria tecnica"
 
 ***************
@@ -1068,6 +1071,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 
 gen universidad_ci = (p6220==4)
+replace universidad_ci=. if p6220==.
 label var universidad_ci "1=formacion universitaria"
 
 	

@@ -412,11 +412,15 @@ gen afroind_ano_c=2010
 	*************
 	***dis_ci***
 	**************
+//Variables changed in 2020
+// One variable for each type of disability. Values 1-3 correspond to levels of disability. Value 4 is no disability and "&" means NA.
+// disc_camin disc_ver disc_brazo disc_apren disc_oir disc_vest disc_habla disc_acti	
+	
 gen dis_ci= .
-replace dis_ci=1 if (disc_acti=="1" | disc_acti=="2") // Cambió variable respecto a 2018
-*replace dis_ci="." if inlist(disc1,"&","7")
-destring dis_ci, replace			
-*recode  dis_ci (8 = 0) (1/6=1)
+replace dis_ci=0 if (disc_camin=="4" & disc_ver=="4" & disc_brazo=="4" & disc_apren=="4" & disc_oir=="4" & disc_vest=="4" & disc_habla=="4" & disc_acti=="4")
+replace dis_ci=1 if dis_ci!=0
+replace dis_ci=. if (disc_camin=="&" & disc_ver=="&" & disc_brazo=="&" & disc_apren=="&" & disc_oir=="&" & disc_vest=="&" & disc_habla=="&" & disc_acti=="&")
+
 
 	*************
 	***dis_ch***

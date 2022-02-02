@@ -103,7 +103,7 @@ label variable factor_ch "Factor de expansión del hogar"
 ***************
 format %14.0g upa
 sort trimestre upa v1008 v1014
-egen idh_ch=group(trimestre upa v1008 v1014)
+egen idh_ch=group(trimestre upa estrato v1008 v1014)
 label variable idh_ch "ID del hogar"
 
 *************
@@ -1244,9 +1244,9 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 ***des1_ch***
 *************
 *En esta base no existe opción de fossa rudimentar, la cuál se clasificaba como 2"Letrina o conectado a pozo ciego"
-gen des1_ch=1 if s01012==1 | s01012==2
-*replace des1_ch=2 if s01012==
-replace des1_ch=3 if s01012>=3 & s01012<=5
+gen des1_ch=1 if s01012==1 | s01012==2 | s01012==3
+replace des1_ch=2 if s01012==4
+replace des1_ch=3 if s01012>=5 & s01012<=6
 replace des1_ch=. if s01012==.
 replace des1_ch=0 if bano_ch==0
 label var des1_ch "Tipo de desague según unimproved de MDG"

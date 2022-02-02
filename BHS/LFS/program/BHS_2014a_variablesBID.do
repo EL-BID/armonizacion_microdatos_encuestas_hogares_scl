@@ -63,13 +63,6 @@ gen region_c=.
 label var region_c "division politico-administrativa, dominio estudio encuesta"
 
 
-***************
-***factor_ch***
-***************
-
-gen factor_ch= weights
-label variable factor_ch "Factor de expansion del hogar"
-
 
 ******************************
 *	idh_ch
@@ -83,6 +76,16 @@ la var idh_ch "Household ID"
 ******************************
 egen idp_ci= concat(idh_ch ind_no)
 la var idp_ci "Individual ID"
+
+***************
+***factor_ch***
+***************
+
+gen factor_ch= weights
+bys idh_ch: egen aux = max(factor_ch)
+replace factor_ch=aux if factor_ch==.
+drop aux
+label variable factor_ch "Factor de expansion del hogar"
 
 **********
 ***zona***

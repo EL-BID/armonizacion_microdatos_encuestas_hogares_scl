@@ -14,17 +14,17 @@ set more off
 global ruta = "${surveysFolder}"
 global home = "${localpath}"
 
-local PAIS  CHL
-local ENCUESTA CASEN
+local PAIS  BRA
+local ENCUESTA PNADC
 
 // change according to years 
 
-local ANO1 "2013"  // record each year	
-local ANO2 "2015"
-local ANO3 "2017"
+local ANO1 "2017"  // record each year	
+local ANO2 "2018"
+local ANO3 "2019"
 local ANO4 "2020"
 global years "`ANO1' `ANO2' `ANO3' `ANO4'"
-local ronda m11_m12_m1 
+local ronda a 
 
 local in29 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO1'`ronda'_BID.dta"
 local in30 = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO2'`ronda'_BID.dta"

@@ -140,7 +140,7 @@ label value relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=hweight 
+gen factor_ci=weight 
 label variable factor_ci "Factor de expansion del individuo"
 
 **********

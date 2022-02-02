@@ -204,7 +204,7 @@ label variable edad_ci "Edad del individuo"
 
 gen civil_ci=.
 replace civil_ci=1 if v4011==0
-replace civil_ci=2 if v4111==1 
+replace civil_ci=2 if v4111==1 | v4011==1
 replace civil_ci=3 if v4011==3 |v4011==5
 replace civil_ci=4 if v4011==7
 label variable civil_ci "Estado civil"

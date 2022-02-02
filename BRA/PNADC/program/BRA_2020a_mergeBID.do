@@ -39,7 +39,8 @@ infile using "$input\input_2020.do", using("$input/PNADC_2020_visita5.txt")
 foreach v of varlist _all {
       capture rename `v' `=lower("`v'")'
    }
-*Versión 12 no acepta labels con más de 79 caracteres
+
+   *Versión 12 no acepta labels con más de 79 caracteres
  foreach i of varlist _all {
 local longlabel: var label `i'
 local shortlabel = substr(`"`longlabel'"',1,79)

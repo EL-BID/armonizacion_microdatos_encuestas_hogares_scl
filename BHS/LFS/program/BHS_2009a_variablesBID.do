@@ -130,10 +130,7 @@ label value relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-* MGD 04/2016: Creación de un fcator de expansión alternagtivo que incluya a toda la población ya que el factor solo esta generado para activos.
-* Población: 354780
-* Observaciones: 8000
-g factor_ci= 354780/8000
+g factor_ci= weight
 
 *gen factor_ci=weight 
 label variable factor_ci "Factor de expansion del individuo"
@@ -142,7 +139,7 @@ label variable factor_ci "Factor de expansion del individuo"
 ***factor_ch***
 ***************
 
-gen factor_ch= factor_ci
+gen factor_ch= weight
 label variable factor_ch "Factor de expansion del hogar"
 
 **********

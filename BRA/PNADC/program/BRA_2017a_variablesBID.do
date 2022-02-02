@@ -102,8 +102,8 @@ label variable factor_ch "Factor de expansión del hogar"
 ****idh_ch*****
 ***************
 format %14.0g upa
-sort trimestre upa estrato v1008 v2001 vd2004 s01005 s01006
-egen idh_ch=group(trimestre upa estrato v1008 v2001 vd2004 s01005 s01006)
+sort trimestre upa v1008 v1014
+egen idh_ch=group(trimestre upa estrato v1008 v1014)
 label variable idh_ch "ID del hogar"
 
 *************

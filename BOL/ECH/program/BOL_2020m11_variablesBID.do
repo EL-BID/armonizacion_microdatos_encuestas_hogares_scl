@@ -2153,7 +2153,7 @@ label var internet_ch "El hogar posee conexión a Internet"
 ***cel_ch***
 ************
 
-bys idh_ch: egen cel_ch= max(s03c_13)
+gen cel_ch= (s03c_13==1)
 label var cel_ch "El hogar tiene servicio telefonico celular"
 
 

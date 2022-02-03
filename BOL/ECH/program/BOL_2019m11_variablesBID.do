@@ -2050,16 +2050,16 @@ label var telef_ch "El hogar tiene servicio telefónico fijo"
 ********
 ***NA***
 ********
-gen refrig_ch=(posee_3==1)
+gen refrig_ch=(posee_5==1)
 label var refrig_ch "El hogar posee refrigerador o heladera"
 
 gen freez_ch=.
 label var freez_ch "El hogar posee congelador"
 
-gen auto_ch=(posee_10==1)
+gen auto_ch=(posee_15==1)
 label var auto_ch "El hogar posee automovil particular"
 
-gen compu_ch=(posee_4==1)
+gen compu_ch=(posee_7==1)
 label var compu_ch "El hogar posee computador"
 
 

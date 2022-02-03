@@ -17,13 +17,13 @@ local ANO "2018"
 local ronda m11 
 
 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+*local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 *local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
                                                     
-capture log close
-log using "`log_file'", replace 
+*capture log close
+*log using "`log_file'", replace 
 
 
 /***************************************************************************
@@ -2046,16 +2046,16 @@ label var telef_ch "El hogar tiene servicio telefónico fijo"
 ********
 ***NA***
 ********
-gen refrig_ch=(posee_3==1)
+gen refrig_ch=(posee_4==1)
 label var refrig_ch "El hogar posee refrigerador o heladera"
 
 gen freez_ch=.
 label var freez_ch "El hogar posee congelador"
 
-gen auto_ch=(posee_10==1)
+gen auto_ch=(posee_11==1)
 label var auto_ch "El hogar posee automovil particular"
 
-gen compu_ch=(posee_4==1)
+gen compu_ch=(posee_5==1)
 label var compu_ch "El hogar posee computador"
 
 
@@ -2233,7 +2233,7 @@ gen mayor64_ci=(edad>64 & edad!=.)
 gen pnc_ci= (s07a_01e==1)
 
 * Monto pension no contributiva
-bys idh_ch: egen ing_pension = sum(s07a_010)
+bys idh_ch: egen ing_pension = sum(s07a_01e0) 
 replace ing_pension=. if y_hog==.
 
 * Ingreso neto del hogar

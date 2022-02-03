@@ -12,7 +12,7 @@ set more off
 
 
 
-global ruta = "\\sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH

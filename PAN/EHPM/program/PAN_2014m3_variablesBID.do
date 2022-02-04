@@ -446,9 +446,9 @@ label var miembros_ci "Miembro del hogar"
 **En el 2011 se convierte en la EHPM (no solo EH) 
 
 gen afroind_ci=. 
-replace afroind_ci=1 if indi_rec==2
-replace afroind_ci=2 if indi_rec==0
-replace afroind_ci=3 if indi_rec==1
+replace afroind_ci=1 if indi_rec=="2"
+replace afroind_ci=2 if indi_rec=="0"
+replace afroind_ci=3 if indi_rec=="1"
 
 
 	***************
@@ -461,7 +461,7 @@ drop afroind_jefe
 	*******************
 	*** afroind_ano_c ***
 	*******************
-gen afroind_ano_c=2001
+gen afroind_ano_c=2005
 
 	*******************
 	*** dis_ci ***

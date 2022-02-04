@@ -1464,6 +1464,67 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & (p4p_cuando==1 | (p4p_anio<2015 & p4p_cuando==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4p_cuando!=3
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci = . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p4o_pais,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==.0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC:  Subsidios..? Transferencia (p72g1)
+*		 Subsidios..? SENAPAN (p72g2)
+*		 Becas universal (p72f2)
+* PNC: 	 Subsidios..? 100 a los 70 (p72g5)
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Beneficiario
+gen ptmc_ci =(p72g1!=. | p72g2!=. | p72f2!=.)
+bys idh_ch: egen ptmc_ch = max(ptmc_ci)
+
+* Monto
+egen aux= rowtotal(p72g2 p72g1 p72f2), m
+bys idh_ch: egen ing_ptmc  = sum(aux)
+drop aux
+replace ing_ptmc=. if y_hog==.
+replace ptmc_ch = (ptmc_ci==1 | (ing_ptmc>0 & ing_ptmc!=.))
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+
+* Personsa que reciben pension no contributiva
+gen pnc_ci = (p72g5==120 & mayor64_ci==1)
+bys idh_ch: egen ing_pension=sum(p72g5)
+
+*ingreso neto del hogar
+gen y_pc     = y_hog / nmiembros_ch 
+gen y_pc_net = (y_hog - ing_ptmc -ing_pension) / nmiembros_ch
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
+
+	
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1472,6 +1533,35 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

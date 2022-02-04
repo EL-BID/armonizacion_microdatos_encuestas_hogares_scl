@@ -130,10 +130,7 @@ label value relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-* MGD 04/2016: Creación de un fcator de expansión alternagtivo que incluya a toda la población ya que el factor solo esta generado para activos.
-* Población: 354780
-* Observaciones: 8000
-g factor_ci= 354780/8000
+g factor_ci= weight
 
 *gen factor_ci=weight 
 label variable factor_ci "Factor de expansion del individuo"
@@ -142,7 +139,7 @@ label variable factor_ci "Factor de expansion del individuo"
 ***factor_ch***
 ***************
 
-gen factor_ch= factor_ci
+gen factor_ch= weight
 label variable factor_ch "Factor de expansion del hogar"
 
 **********
@@ -1297,6 +1294,49 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 rename education education_1
+
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Jua Camilo Perdomo
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 
 
 /*_____________________________________________________________________________________________________*/

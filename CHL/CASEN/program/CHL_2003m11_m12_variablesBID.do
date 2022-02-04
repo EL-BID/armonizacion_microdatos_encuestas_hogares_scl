@@ -254,50 +254,44 @@ by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1)
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+          ******************************
+          *** VARIABLES DE DIVERSIDAD **
+          ******************************
+*Nathalia Maya & Antonella Pereira
+*Julio 2021	
 
-/*
-R25 ¿En Chile, la ley reconoce ocho pueblos originarios o indígenas, ¿pertenece usted a alguno
-de ellos? (Preg. 7)
-r25:
-           0 no pertenece a ninguno de ellos
-           1 sí, aymara
-           2 sí, rapa-nui
-           3 sí, quechua
-           4 sí, mapuche
-           5 sí, atacameño
-           6 sí, coya
-           7 sí, kawaskar
-           8 sí, yagán
-           9 no contesta
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: Pueblos indígenas, pertenece usted o es descendiente de alguno de ellos? (r25) (Aimara 1; Rapa-Nui 2; Quechua 3; Mapuche 4; Atacameño 5; Coya 6; Kawashkar 7; Yagán 8; No pertenece a ningún pueblo indígena 0; sin dato 9)
+gen afroind_ci=. 
+replace afroind_ci=1 if (r25 >=1 & r25 <=8 )
+replace afroind_ci=3 if r25==0
+replace afroind_ci=. if r25==9
 
-*/
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+drop afroind_jefe
 
-gen raza_ci=.
-replace raza_ci= 1 if  (r25 >=1 & r25 <=8 )
-replace raza_ci= 3 if (r25==0 | r25==9 ) & raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2000
 
-gen raza_idioma_ci=.
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
 
 
 /***************************
@@ -1124,7 +1118,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

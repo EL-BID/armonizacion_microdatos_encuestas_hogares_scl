@@ -1868,6 +1868,20 @@ lab val atencion_ci atencion_ci*/
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente: https://www.ine.gub.uy/documents/10181/33944/CODIGO+PAISES.pdf/568e72c7-fc36-4e3a-a2c0-eb3d9af1d3b6 */
 
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

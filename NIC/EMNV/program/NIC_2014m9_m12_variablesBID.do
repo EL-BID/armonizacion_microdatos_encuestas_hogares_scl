@@ -1465,7 +1465,25 @@ keep if sexo_ci!=.
 	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6ip1b,2,3,4,5,6,7,9,10,11,14,15,18,19,20,21,22,23,25,26,27,29,33,34,35,36))) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente Censo REDATAM */
+
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
 	
+	gen migrantiguo5_ci=(migrante_ci==1 & inlist(s6ip4a,1,2)) if migrante_ci!=. & s6ip4a!=.
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci = . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & (inlist(s6ip1b,2,3,4,5,6,7,9,10,11,14,15,18,19,20,21,22,23,25,26,27,29,33,34,35,36))) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* Fuente Censo REDATAM */
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1473,7 +1491,7 @@ keep if sexo_ci!=.
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

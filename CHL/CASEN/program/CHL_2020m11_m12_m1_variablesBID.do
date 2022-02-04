@@ -95,7 +95,7 @@ label variable pais_c "Pais"
 *************
 * anio_c    *
 *************
-gen anio_c=year(fecha_entrev)
+gen anio_c=2020
 label variable anio_c "Anio de la encuesta"
 
 *************
@@ -264,16 +264,19 @@ label variable miembros_ci "Miembro del hogar"
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************	
-	
+/*	r3. En Chile, la ley reconoce diez |
+           pueblos indígenas, ¿[NOMBRE] |
+                             pertenece?
+	*/
 	***************
 	***afroind_ci***
 	***************
 
 gen afroind_ci=. 
-replace afroind_ci=1 if (r3 >=1 & r3 <=9 )
+replace afroind_ci=1 if (r3 >=1 & r3 <=10 ) /* se incluyó "10. Chango" a la lista */
 replace afroind_ci=2 if r3==0
-replace afroind_ci=3 if r3==10
-replace afroind_ci=. if r3==99 
+replace afroind_ci=3 if r3==11  /* changed to "11. Otro" this year */
+
 
 	***************
 	***afroind_ch***
@@ -297,12 +300,12 @@ gen afroind_ano_c=2020
 ****************
 
 gen condocup_ci=.
-replace condocup_ci=1 if (o1==1 | o2==1 | o3==1 | o3b == 1)
+replace condocup_ci=1 if (o1==1 | o2==1 | o3==1)
 replace condocup_ci=2 if ((o1==2 | o2==2 | o3==2) & (o6==1))
 recode condocup_ci (.=3) if edad_ci>=12 
 replace condocup_ci=4 if edad<12
 label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
-label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET"
+label define condocup_ci 1 "Ocupado" 2 "Desocupado" 3 "Inactivo" 4 "Menor de PET" 
 label value condocup_ci condocup_ci
 
 ************
@@ -456,39 +459,39 @@ label val rama_ci rama_ci
 ****************
 * ylmpri_ci    * 
 ****************
-egen ylmpri_ci=rsum(yoprcor y3a y3b y3c y3d y3e y3f y4a y4b y4c y4d), missing
+gen ylmpri_ci=yoprcor 
 replace ylmpri_ci=. if emp_ci==0
-label var ylmpri_ci "Ingreso laboral monetario actividad principal" 		
+label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
 ****************
 * ylnmpri_ci   * 
 **************** 
-egen ylnmpri_ci=rsum (y5a y5b y5c y5d y5e y5f y5g y5h y5i y5j y5k y5l)
+gen ylnmpri_ci=.
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
 
 ****************
 * ylmsec_ci    * 
 **************** 
 gen ylmsec_ci=ytrabajocor-yoprcor  if emp_ci==1 
-replace ylmsec_ci=. if ylmsec_ci==0 // y6 (br ylmsec_ci y6 if ylmsec_ci != . | y6 != .)
+replace ylmsec_ci=. if ylmsec_ci==0
 label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
  
 ****************
 * ylnmsec_ci   * 
 **************** 
-gen ylnmsec_ci=. // No está la pregunta en la encuesta 2020
-label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria" 
+gen ylnmsec_ci=.
+label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 
 ****************
 * ylmotros_ci  * 
 **************** 
-gen ylmotros_ci= y9 + y10
+gen ylmotros_ci=.
 label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
 
 ****************
 * ylnmotros_ci * 
 **************** 
-gen ylnmotros_ci=. // No está la pregunta en la encuesta 2020
+gen ylnmotros_ci=.
 label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
 
 ****************
@@ -501,14 +504,14 @@ label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"
 ****************
 * ylm_ci       * 
 **************** 
-gen ylm_ci= ylmpri_ci + ylmsec_ci + ylmotros_ci
+gen ylm_ci= ytrabajocor
 replace ylm_ci=. if emp_ci!=1
 label var ylm_ci "Ingreso laboral monetario total" 
 
 ****************
 * ylnm_ci      * 
 **************** 
-gen ylnm_ci= . // Yo agregaría el de la actividad principal
+gen ylnm_ci=.
 label var ylnm_ci "Ingreso laboral NO monetario total"  
 
 ****************
@@ -519,14 +522,33 @@ egen ynlm_ci = rsum (yautcor  inglab  ysub), missing
 replace ynlm_ci=. if yautcor==. & inglab==. & ysub==. 
 label var ynlm_ci "Ingreso no laboral monetario"  
 
-/* Son las mismas variables de arriba, pero otra forma de medirlas
+/* Nota:
+
+ytotcorh = yautcorh yaimcorh ysubh
+
+yautaj= ingresos autonomos (la suma de todos los pagos que reciben las 
+personas, provenientes tanto del trabajo como de la propiedad de los activos)
+
+ytrabaj = ingreso laboral (Corresponden a los ingresos que obtienen las 
+personas en su ocupación por concepto de sueldos y salarios, monetarios y 
+en especies ganancias provenientes del trabajo independiente la auto-provisión
+de bienes producidos por el hogar)
+
+ysubaj=todos los aportes en dinero que reciben las personas y los hogares del 
+Estado a través de los programas sociales.
+
+*/
+
+/*
 ****************
 * ylmpri_ci    * 
 ****************
-*La variable de la base ya ha sido mensualizada
+
+/*La variable de la base ya ha sido mensualizada
 foreach var of varlist y0401 y0402 y0403 y0404{
 gen `var'_m = `var'/12
 } 
+*/
 
 *asalariados
 egen aympri=rsum(y0101c y0301 y0302 y0303 y0304 y0305 y0306 y0401 y0402 y0403 y0404), missing 
@@ -534,39 +556,71 @@ replace aympri = . if y0101c==. & y0301==. & y0302==. & y0303==. & y0304==. & y0
 replace aympri=. if emp_ci==0
 
 *independientes
-gen venta_m = y0901/12
+/* gen venta_m = y0901/12 esta variable ya fue mensualizada*/
+
+/*
+y0701c: independientes	principal	-	efectivo
+y0901: independientes	principal	-	ventas anuales
+*/
+
 egen iympri= rsum(y0701c y0901)
 replace iympri = . if y0701c ==. & y0901==.
+
 egen ylmpri_ci=rsum(aympri iympri)
 replace ylmpri_ci=. if aympri==. & iympri==.
+
 label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
 ****************
 * ylnmpri_ci   * 
 **************** 
 
+/*
+y0501:asalariados	principal	-	alimentos y bebidas
+y0502: asalariados	principal	-	vales de alimentación
+y0503: asalariados	principal	-	vivienda o alojamiento
+y0504: asalariados	principal	-	vehículo para uso privado
+y0505: asalariados	principal	-	servicio de transporte
+y0506: asalariados	principal	-	estacionamiento gratuito
+y0507: asalariados	principal	-	teléfono
+y0508: asalariados	principal	-	vestimenta
+y0509: asalariados	principal	-	servicios de guardería o sala cuna
+y0510: asalariados	principal	-	leña
+y0511: asalariados	principal	-	bienes o servicios del empleador
+y0512: asalariados	principal	-	otros similares en especies
+y0801: independientes principal - especies
+*/
+
 *asalariados
 egen aylnmpri = rsum(y0501  y0502  y0503 y0504 y0505 y0506 y0507 y0508 y0509 y0510 y0511 y0512), missing
 replace aylnmpri = . if y0501==. & y0502==. &  y0503==. & y0504==. & y0505==. & y0506==. & y0507==. & y0508==. & y0509==. & y0510==. & y0511==. & y0512==. 
+
 *independientes
 gen iylnmpri = y0801
+
 egen ylnmpri_ci= rsum(aylnmpri iylnmpri)
 replace ylnmpri_ci=. if aylnmpri==. & iylnmpri==.
 label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal" 
+
 ****************
 * ylmsec_ci    * 
 **************** 
+
 egen ylmsec_ci= rsum(yosa  yosi), missing
 replace ylmsec_ci=. if yosa==. & yosi==.
 label var ylmsec_ci "Ingreso laboral monetario segunda actividad" 
+
+
 ****************
 * ylnmsec_ci   * 
 **************** 
 gen ylnmsec_ci=.
 label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
+
 ****************
 * ylmotros_ci  * 
 **************** 
+
 * ytro: remuneración por trabajos ocasionales
 * ydes: seguro de desempleo o cesantía
 * yta1: trabajos de antes - asalariados
@@ -574,64 +628,86 @@ label var ylnmsec_ci "Ingreso laboral NO monetario actividad secundaria"
 * y1101: ingresos del trabajo de familiares no remunerados, desocupados e inactivos
 egen ylmotros_ci= rsum(ytro ydes  yta1 yta2 y1101), missing
 label var ylmotros_ci "Ingreso laboral monetario de otros trabajos" 
+
 ****************
 * ylnmotros_ci * 
 **************** 
 gen ylnmotros_ci=.
 label var ylnmotros_ci "Ingreso laboral NO monetario de otros trabajos" 
+
 ****************
 * nrylmpri_ci  * 
+
 **************** 
 gen nrylmpri_ci=(emp_ci==1 & ylmpri_ci==.)
 replace nrylmpri_ci=. if emp_ci!=1
 label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"  
+
 ****************
 * ylm_ci       * 
 **************** 
 egen ylm_ci=rsum(ylmpri_ci ylmsec_ci ylmotros_ci), missing
 replace ylm_ci=. if ylmpri_ci==. & ylmsec_ci==. & ylmotros_ci==.
 label var ylm_ci "Ingreso laboral monetario total"  
+
 ****************
 * ylnm_ci      * 
 **************** 
 egen ylnm_ci=rsum(ylnmpri_ci ylnmsec_ci ylnmotros_ci), missing
 replace ylnm_ci=. if ylnmpri_ci==. & ylnmsec_ci==. & ylnmotros_ci==.
 label var ylnm_ci "Ingreso laboral NO monetario total"  
+
 ****************
 * ynlm_ci      * 
 **************** 
- La variable de la base ya ha sido mensualizada
+
+/* La variable de la base ya ha sido mensualizada
 foreach var of varlist yah1 yah2 yrut yre2 yre3 yac2 yids ydon ydim yotr{
 gen `var'_m = `var'/12
-egen ynlm_ci = rsum(subsidio pension arriendo interes dividendo util autocons indem dona devolu otros familiar), missing
-replace ynlm_ci = . if subsidio==. & pension==. & arriendo==. & interes==. & dividendo==. & util==. & autocons==. & ///
-indem==. & dona==. & devolu==. & otros==. & familiar==. 
 }
 */
 
 gen interes = yah1
+
 gen dividendo = yah2
+
 gen util = yrut
+
 egen arriendo = rsum(yre1 yama  yre2   yre3), missing  
+
 gen autocons = yac2
+
 gen indem = yids
+
 gen dona = ydon
+
 gen devolu = ydim
+
 gen otros = yotr
+
 gen subsidio = ysub
+
 egen familiar = rsum(yfa1 yfa2), missing
+
+* no podemos utilizar numper o idh porque el numero actual de personas en el hogar difiere en ambos casos y al expandir la variable a nivel hogar nos da un monto diferente
 gen aux = 1
 bys idh_ch: egen id = sum(aux)
 drop aux
 gen alquiler_pc = yaimcorh/id
-egen pension = rsum(y2801 y280201c yesp y2803c yinv03 ymon yorf yotp ymes), missing
-replace pension=. if y280201c==. & yesp==. & y2803c==. & yinv03==. & ymon==. & yorf==. & yotp==. & ymes==.
+
+egen pension = rsum(y2701c yinv ymon yorf yotp ymes), missing
+replace pension=. if y2701c==. &  yinv==. & ymon==. & yorf==. & yotp==. & ymes==.
+
+egen ynlm_ci = rsum(subsidio pension arriendo interes dividendo util autocons indem dona devolu otros familiar), missing
+replace ynlm_ci = . if subsidio==. & pension==. & arriendo==. & interes==. & dividendo==. & util==. & autocons==. & ///
+indem==. & dona==. & devolu==. & otros==. & familiar==. 
+*/
 
 ****************
 * ynlnm_ci     * 
 **************** 
-gen ynlnm_ci=. // No está la pregunta en la encuesta 2020
-label var ynlnm_ci "Ingreso no laboral no monetario"
+gen ynlnm_ci=.
+label var ynlnm_ci "Ingreso no laboral no monetario" 
 
 
 ****************
@@ -670,7 +746,7 @@ label var ynlm_ch "Ingreso no laboral monetario del hogar"
 *************
 * ynlnm_ch  *
 *************
-gen ynlnm_ch=. // No está la pregunta en la encuesta 2020
+gen ynlnm_ch=.
 label var ynlnm_ch "Ingreso no laboral no monetario del hogar"
 
 *****************
@@ -688,32 +764,50 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 ****************
 * rentaimp_ch  * 
 **************** 
-g rentaimp_ch=. // No está la pregunta en la encuesta 2020
-label var rentaimp_ch "Rentas imputadas del hogar"
+/*MGD Octubre 2016: REVISAR variable
+gen rentaimp_ch=yaimhaj
+label var rentaimp_ch "Rentas imputadas del hogar"*/
+g rentaimp_ch=.
 
 ****************
 * autocons_ci  * 
 **************** 
-gen autocons_ci=y8
+gen autocons_ci=.
 label var autocons_ci "Autoconsumo reportado por el individuo"
 
 ****************
-* autocons_ch  *
+* autocons_ci  * 
 **************** 
-by idh_ch, sort: egen autocons_ch=sum(autocons_ci) if miembros_ci==1, missing
+gen autocons_ch=.
 label var autocons_ch "Autoconsumo del hogar"
 
 ****************
 * remesas_ci   * 
 **************** 
-gen remesas_ci=y13c
+gen remesas_ci=.
 label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
 ****************
 * remesas_ch   * 
 **************** 
-by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1, missing
+gen remesas_ch=.
 label var remesas_ch "Remesas mensuales del hogar"
+
+****************
+* durades_ci   * 
+**************** 
+*gen durades_ci=o8/4.3 // Variable no encontrada en formulario 2020
+*replace durades_ci=. if o8==999 /*| activ!=2*/
+*label var durades_ci "Duración del desempleo en meses"
+
+****************
+* antiguedad_ci* 
+**************** 
+*recode o13 (9999=.) (9998=.) // Variable no encontrada en formulario 2020
+*recode o13 (2016 = 2015)
+*gen antiguedad_ci=(2015-o13)+1
+*replace antiguedad_ci=. if  emp_ci!=1 | antiguedad_ci>edad_ci
+*label var antiguedad_ci "Antiguedad en la actividad actual"
 
 ************************
 * VARIABLES EDUCATIVAS *
@@ -735,14 +829,14 @@ replace aedu_ci=.  if e6a==5 // Educación Especial
 replace e6a=. if e6a==99
 replace e6b=. if e6b==99
 replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
-replace aedu_ci=min(e6b,6)     if e6a==6             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=min(e6b,8)     if e6a==7             /*Básica (Sist. nuevo) */
-replace aedu_ci=min(e6b,12)    if e6a==8             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=min(e6b+6,12)  if e6a==10             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==11            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=min(e6b+12,17) if e6a>=12 & e6a<=15  /*Superior */
-replace aedu_ci=e6b+12         if e6a==16 | e6a==17	        /*Posgrado*/
+replace aedu_ci=min(e6b,6)     if e6a==6 & !missing(e6b)             /*Preparatoria  (Sist. antiguo)*/
+replace aedu_ci=min(e6b,8)     if e6a==7 & !missing(e6b)             /*Básica (Sist. nuevo) */
+replace aedu_ci=min(e6b+6,12)    if e6a==8 & !missing(e6b)             /*Humanidades (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==9 & !missing(e6b)             /*Educación Media Científico Humanística (Sist. nuevo)*/
+replace aedu_ci=min(e6b+6,12)  if e6a==10 & !missing(e6b)             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==11 & !missing(e6b)            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
+replace aedu_ci=min(e6b+12,17) if e6a>=12 & e6a<=15  & !missing(e6b) /*Superior */
+replace aedu_ci=e6b+12         if e6a==16 | e6a==17	 & !missing(e6b)        /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************
@@ -804,25 +898,33 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=. // No está la pregunta en la encuesta 2020
+gen edus1i_ci=0 // usando los anios de educacion
+replace edus1i_ci=1 if aedu_ci>=6 & aedu_ci<8 
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=. // No está la pregunta en la encuesta 2020
+gen edus1c_ci=0 // usando los anios de educacion
+replace edus1c_ci=1 if aedu_ci==8 
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=. // No está la pregunta en la encuesta 2020
+gen edus2i_ci=0 // usando los anios de educacion
+replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=. // No está la pregunta en la encuesta 2020
+gen edus2c_ci=0 // usando los anios de educacion
+replace edus2c_ci=1  if aedu_ci==12
+replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 ***************
@@ -1205,13 +1307,13 @@ label var vivialqimp_ch "Alquiler mensual imputado"
 *********
 *lp_ci***
 *********
-gen lp_ci =  . // No está la pregunta en la encuesta 2020
+gen lp_ci =  . 
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
-gen lpe_ci =  . // No está la pregunta en la encuesta 2020
+gen lpe_ci =  . 
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1333,7 +1435,7 @@ label var ypen_ci "Valor de la pension contributiva"
 ***************
 *pensionsub_ci*
 ***************
-egen auxpens=rsum(y28_1a  y28_1d), missing
+egen auxpens=rsum(y28_2amonto  y28_2dmonto), missing
 gen pensionsub_ci=1 if auxpens>0 & auxpens!=.
 recode pensionsub_ci .=0 
 label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
@@ -1478,7 +1580,7 @@ lab val costo_ci costo_ci
 ********************
 gen atencion_ci=.
 replace atencion_ci=0 if s18<=13
-replace atencion_ci=1 if s18==11 | s18==16 | s18==17 // Se incluyeron las opciones de respuesta 16 y 17, integradas debido a la pandemia de la COVID-19
+replace atencion_ci=1 if s18==11  // Se incluyeron las opciones de respuesta 16 y 17, integradas debido a la pandemia de la COVID-19 | s18==16 | s18==17
 label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci
@@ -1508,6 +1610,23 @@ lab val atencion_ci atencion_ci
 	
 	gen migrantelac_ci=(inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1) if migrante_ci!=. & r1b_p_cod!=999 & r1b_p_cod!=888
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci= 1 if inlist(r2,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if (r2 == 4 & migrante_ci == 1)
+	replace migrantiguo5_ci = . if migrante_ci == 0 | r2!=. & r2==9 & r2==1
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci= 1 if inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ***************************************************************
 *** VARIABLES NO INCLUIDAS EN LA ENCUESTA TOMADAS COMO M.V. ***
@@ -1547,8 +1666,15 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo) */
 rename rama4 codindustria
-rename oficio4 codocupa
+rename oficio4_88 codocupa
 compress
+
+*Versión 12 no acepta labels con más de 79 caracteres
+ foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
 
 saveold "`base_out'", replace
 

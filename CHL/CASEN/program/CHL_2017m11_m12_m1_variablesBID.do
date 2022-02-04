@@ -917,14 +917,14 @@ replace e6b=. if e6b==99
 replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
 *replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, especial o ninguna*/
 
-replace aedu_ci=min(e6b,6)     if e6a==6             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=min(e6b,8)     if e6a==7             /*Básica (Sist. nuevo) */
-replace aedu_ci=min(e6b,12)  if e6a==8             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=min(e6b+6,12)  if e6a==10             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=min(e6b+8,12)  if e6a==11            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=min(e6b+12,17) if e6a>=12 & e6a<=15  /*Superior */
-replace aedu_ci=e6b+12         if e6a==16 | e6a==17	        /*Posgrado*/
+replace aedu_ci=min(e6b,6)     if e6a==6 & !missing(e6b)             /*Preparatoria  (Sist. antiguo)*/
+replace aedu_ci=min(e6b,8)     if e6a==7 & !missing(e6b)             /*Básica (Sist. nuevo) */
+replace aedu_ci=min(e6b+6,12)  if e6a==8 & !missing(e6b)             /*Humanidades (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==9 & !missing(e6b)             /*Educación Media Científico Humanística (Sist. nuevo)*/
+replace aedu_ci=min(e6b+6,12)  if e6a==10 & !missing(e6b)             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
+replace aedu_ci=min(e6b+8,12)  if e6a==11 & !missing(e6b)            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
+replace aedu_ci=min(e6b+12,17) if e6a>=12 & e6a<=15 & !missing(e6b)  /*Superior */
+replace aedu_ci=e6b+12         if e6a==16 | e6a==17	& !missing(e6b)         /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
 *Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
 
@@ -987,25 +987,33 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=.
+gen edus1i_ci=0
+replace edus1i_ci=1 if aedu_ci>=6 & aedu_ci<8 
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=. 
+gen edus1c_ci=0
+replace edus1c_ci=1 if aedu_ci==8 
+replace edus1c_ci=. if aedu_ci==. 
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=. 
+gen edus2i_ci=0
+replace edus2i_ci=1 if aedu_ci>=9 & aedu_ci<12
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=. 
+gen edus2c_ci=0
+replace edus2c_ci=1 if  aedu_ci==12
+replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 ***************
@@ -1697,6 +1705,23 @@ lab val atencion_ci atencion_ci
 	
 	gen migrantelac_ci=(inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci==1) if migrante_ci!=. & r1b_p_cod!=999 & r1b_p_cod!=888
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci= 1 if inlist(r2,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if (r2 == 4 & migrante_ci == 1)
+	replace migrantiguo5_ci = . if migrante_ci == 0 | r2!=. & r2==9 & r2==1
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci= 1 if inlist(r1b_p_cod,406,408,409,412,413,414,416,417,418,420,501,502,503,505,506,508,509,512,513) & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2017.pdf */
 				

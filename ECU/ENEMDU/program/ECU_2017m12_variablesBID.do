@@ -1444,6 +1444,52 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen migrantelac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Fuente https://aplicaciones2.ecuadorencifras.gob.ec/SIN/descargas/cu.pdf */
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	 
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if !inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: p75 Bono de desarrollo humano (incluye vejez)
+* PNC: p76 Monto que recibió por el bono de desarrollo humano
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Ingreso por transferencias
+bys idh_ch: egen ing_ptmc = sum(p76)
+replace ing_ptmc=. if y_hog==.
+
+* Ingreso per capita neto (sin lo recibido por las transferencias)
+gen y_pc_net = (y_hog - ing_ptmc) / nmiembros_ch
+
+* Beneficiarios
+gen percibe_ptmc_ci = (p75==1) // si recibe el bono de desarrollo humano 
+bys idh_ch: egen ptmc_ch=max(percibe_ptmc_ci) 
+replace ptmc_ch = (percibe==1 | (ing_ptmc>0 & ing_ptmc!=.)) 
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+	
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
 
 	
 /*_____________________________________________________________________________________________________*/
@@ -1453,6 +1499,35 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

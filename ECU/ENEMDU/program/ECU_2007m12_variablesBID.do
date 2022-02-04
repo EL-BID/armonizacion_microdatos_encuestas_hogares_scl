@@ -334,7 +334,7 @@ drop afroind_jefe
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=2002
+gen afroind_ano_c=2004
 
 	*******************
 	***dis_ci***
@@ -1433,26 +1433,41 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 
 	* Variables incluidas por SCL/MIG Fernando Morales
 
-		*******************
-		*** migrante_ci ***
-		*******************
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
-		gen migrante_ci=.
-		label var migrante_ci "=1 si es migrante"
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
-		**********************
-		*** migantiguo5_ci ***
-		**********************
-		
-		gen migantiguo5_ci=.
-		label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-			
-		**********************
-		*** migrantelac_ci ***
-		**********************
-		
-		gen migrantelac_ci=.
-		label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	
 /*_____________________________________________________________________________________________________*/

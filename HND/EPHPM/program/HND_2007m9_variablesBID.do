@@ -1690,6 +1690,50 @@ replace aguamejorada_ch = 0 if (v06 >=5 & v06 <=7) | v06==9
 g       banomejorado_ch = 1 if ( h05 ==1 & ((h06 >=1 & h06 <=2) | (h06 >=5 & h06 <=8)) & h07 ==1)
 replace banomejorado_ch = 0 if ( h05 ==1 & ((h06 >=1 & h06 <=2) | (h06 >=5 & h06 <=8)) & h07 ==2) | (h06 >=3 & h06 <=4) | (h05==2)
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	/* Base con error en la pregunta de migrante, no se puede rescatar */
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	/* Encuesta pregunta sobre años viviendo en este lugar, no sabemos si pudo vivir en Honduras y mudarse de ciudad */
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	/* Encuesta pregunta sobre años viviendo en este lugar, no sabemos si pudo vivir en Honduras y mudarse de ciudad */
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

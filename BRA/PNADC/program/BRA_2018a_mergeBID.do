@@ -28,42 +28,21 @@ drop _all
 
 global input  "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig"
 global output "${surveysFolder}\survey\BRA\PNADC\2018\a\data_merge" 
-global final  "${surveysFolder}\harmonized\BRA\PNADC\data_arm" 
 
+local anos 2018
 /*==================================================
               1: txt. to .dta 
 ==================================================*/
 
-local trimestre 01 02 03 04 
-local anos 2018
-
-foreach ano of local anos {
-	foreach trim of local trimestre {
-		clear
-		* Se debe utilizar el input publicado por el IBGE para el formato de la base:
-		infile using "${input}\input_2018.do", using("${input}\PNADC_`trim'`ano'.txt")
-		save   "${output}\PNADC_`trim'`ano'.dta", replace
-		clear
-	}
-}
-
-
-       infile using "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\input_visita_2018.do", using("${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\PNADC_2018_visita1.txt")
-		save   "${output}\PNADC_`ano'_visita.dta", replace
+       infile using "${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\input_2018.do", using("${surveysFolder}\survey\BRA\PNADC\2018\a\data_orig\PNADC_2018_visita1.txt")
+		save   "${output}\PNADC_`anos'_visita1.dta", replace
 
 /*==================================================
               2: append bases 
 ==================================================*/
-local trimestre 02 03 04 
-local anos 2018
 
-use "${output}\PNADC_012018.dta"
 
-foreach ano of local anos {
-	foreach trim of local trimestre {
-		append using "${output}\PNADC_`trim'`ano'.dta"
-	}
-}
+use "${output}\PNADC_2018_visita1.dta"
 
 foreach v of varlist _all {
       capture rename `v' `=lower("`v'")'
@@ -81,8 +60,7 @@ label var `i' `"`shortlabel'"'
 *upa estrato v1008 v1016 v1027
 
 compress
-save   "${output}\PNADC_`anos'a.dta", replace
-save   "${final}\BRA_2018a_BID.dta", replace
+save   "${output}\BRA_`anos'a.dta", replace
 exit
 
 

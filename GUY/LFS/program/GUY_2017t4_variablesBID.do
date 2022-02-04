@@ -1363,6 +1363,23 @@ gen tcylmpri_ch =.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Nota: No podemos construir la variable para paises LAC porque en las opciones no se puede desagregar por paises y no es correcto asignar todos los paises del caribe en esta variable */
 	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & inlist(q1_10,1,2,3)) if migrante_ci!=. & !inrange(edad_ci,0,4) & q1_10!=5 /* q1_10=5 no esta en el cuestionario, es un typo */
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci = . if migrante_ci == 0
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* Nota: No podemos construir la variable para paises LAC porque en las opciones no se puede desagregar por paises y no es correcto asignar todos los paises del caribe en esta variable */
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

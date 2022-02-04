@@ -296,72 +296,37 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
+			
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+			
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
 
-/*
-* Cambian las opciones de la pregunta 9, la 6 es raza negra, 7 ninguno y 8 otro. LCM Dic2013
-gen raza_ci=.
-replace raza_ci= 1 if  (grupo ==1 | grupo ==2 | grupo ==4 | grupo ==5 |grupo ==8)
-replace raza_ci= 1 if (idiapren==1 | idiapren==2 | idiapren== 4 | idiapren== 5) & raza_ci==.
-replace raza_ci= 2 if  grupo ==6 
-replace raza_ci= 3 if (grupo ==3 | grupo ==7) 
-replace raza_ci= 3 if (idiapren==3 | idiapren==6 | idiapren== 7)& raza_ci==.
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-*/
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
 
-*Raza usando idioma
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
 
-gen raza_idioma_ci = .
-replace raza_idioma_ci= 1 if (idiapren==1 | idiapren==2 | idiapren== 4 | idiapren== 7) & raza_idioma_ci==.
-replace raza_idioma_ci= 3 if (idiapren==3 | idiapren==5)& raza_idioma_ci==.
-bys idh_ch, sort: gen aux=raza_idioma_ci if parentco==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentco==3|parentco==5))  
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
 
-*Raza usando la definicion mas apropiada
-gen raza_ci=.
-replace raza_ci= 1 if  (grupo ==1 | grupo ==2 | grupo ==4 | grupo ==5 |grupo ==8)
-replace raza_ci= 2 if  grupo ==6 
-replace raza_ci= 3 if (grupo ==7) 
-bys idh_ch: gen aux=raza_ci if parentco==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (parentco==3|parentco==5))
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 
 ************************************
@@ -1558,7 +1523,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

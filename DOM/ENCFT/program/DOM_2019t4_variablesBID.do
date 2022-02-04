@@ -1754,7 +1754,67 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 	gen migrantelac_ci=(migrante_ci==1 & inlist(pais_nacimiento,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* Codigos obtenidos de la carpeta de docs originales de DOM de 2005, archivo llamado Diccionario ENFT Octubre 2005 */
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & inlist(pais_nacimiento,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850)) if migrante_ci!=.
+	replace miglac_ci = 0 if !inlist(pais_nacimiento,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850) & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==0 
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
 
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC:  Comer primero (ps_comer_es_p gob_comer_pri)
+*		 Incentivo de asistencia escoalr (ps_incentivo_ gob_inc_asis_)
+* 		 Bono de estudiante (bono_estudiante_progreso gob_bono_estu)
+* PNC: 	 Apoyo de adultos mayores (gob_proteccio ps_apoyo_adul)
+* 		 Bonos (ps_bono_luz ps_bono_gas gob_bono_luz_ gob_bonogas_h)
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Personas que reciben transferencias monetarias condicionadas
+egen aux = rowtotal(gob_comer_primero_monto gob_inc_asis_escolar_monto ///
+			gob_bono_estudiante_prog_monto),m
+bys idh_ch: egen ing_ptmc = sum(aux)
+drop aux
+
+gen ptmc_ci=(ps_comer_es_primero==1) | (ps_incentivo_asist_escolar==1) ///
+| (bono_estudiante_progreso==1)
+
+bys idh_ch: egen ptmc_ch=max(ptmc_ci)
+replace ing_ptmc=. if y_hog==.
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+
+* PNC
+bys idh_ch: egen ing_pension = sum(gob_proteccion_vejez_monto)
+replace ing_pension=. if y_hog==.
+gen pnc_ci=(ps_apoyo_adultos_mayores==1)
+
+*ingreso neto del hogar
+gen y_pc     = y_hog / nmiembros_ch 
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / nmiembros_ch
+
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1763,6 +1823,35 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

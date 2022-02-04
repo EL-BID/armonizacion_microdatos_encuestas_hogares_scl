@@ -636,6 +636,39 @@ replace antiguedad_ci=s5p15a /48 if s5p15b==2
 replace antiguedad_ci=s5p15a /365 if s5p15b==1
 replace antiguedad_ci=. if emp_ci==0
 
+		  ******************************
+          *** VARIABLES DE DIVERSIDAD **
+          ******************************
+*Nathalia Maya & Antonella Pereira
+*Julio 2021	
+
+	
+	
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 
 
 /****************************
@@ -840,64 +873,6 @@ label variable repiteult_ci "Esta repitendo ultimo grado o curso"
 *************
 gen tecnica_ci=(s4p17a==8)
 label var tecnica_ci "=1 formacion terciaria tecnica"	
-*********
-*raza_ci*
-*********
-/*
-s2p10:
-           1 mestizo del pacifico
-           2 mestizo coste¤o
-           3 blanco
-           4 criollo
-           5 creole/negro
-           6 miskito
-           7 mayagna(sumu)
-           8 rama
-           9 otro,cual
-          10 no sabe
-          99 ignorado
-*/
-
-/*
-gen raza_ci=.
-replace raza_ci= 1 if  s2p10 ==2| s2p10 ==6 | s2p10 ==7 | s2p10 ==8
-replace raza_ci= 2 if s2p10 ==4 | s2p10 ==5
-replace raza_ci= 3 if s2p10 ==1 | s2p10 ==3 | s2p10 ==9|raza_ci==.
-
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo"*/
-
-
-*Modificación Mayra Sáenz 10/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_ci=.
-replace raza_ci= 1 if  s2p10 ==6 | s2p10 ==7 | s2p10 ==8
-replace raza_ci= 2 if s2p10 ==4 | s2p10 ==5
-replace raza_ci= 3 if s2p10 ==1 | s2p10 ==2 | s2p10 ==3 | s2p10 ==9|raza_ci==.
-
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"  
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo"
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1 
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2 
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-
-
-
 
 
 /*
@@ -1666,7 +1641,7 @@ do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

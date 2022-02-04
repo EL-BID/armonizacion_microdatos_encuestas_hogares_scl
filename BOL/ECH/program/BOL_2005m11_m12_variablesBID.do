@@ -2188,6 +2188,51 @@ replace vivialqimp_ch=vivialqimp_ch*8.1 if s7_04b=="B"
 label var vivialqimp_ch "Alquiler mensual imputado"
 
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(s2_01==3) if s2_01!=. 	
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & s2_03a==2) if migrante_ci!=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci = 1 if s2_03a==2 & migrante_ci==1 
+	replace migrantiguo5_ci = 0 if s2_03a == 1 & migrante_ci==1 
+	replace migrantiguo5_ci = . if migrante_ci!=1 
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=. 
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

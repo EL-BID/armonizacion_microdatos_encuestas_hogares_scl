@@ -150,58 +150,6 @@ label values sexo_ci sexo
 gen edad_ci=age
 label var edad_ci "edad del individuo"
 
-***********
-*  RAZA   *
-***********
-
-*Modificación Marcela Rubio 12/20/2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
-
-gen raza_ci=.
-replace raza_ci= 1 if  (ethnic1 ==4)
-replace raza_ci= 2 if  (ethnic1 ==1 | ethnic1==3)
-replace raza_ci= 3 if (ethnic1==2 | ethnic1==5 | ethnic1==6 | ethnic1==7 | ethnic1==8 | ethnic1==9 | ethnic1==99)& raza_ci==.
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-
-gen raza_ci_aux=.
-replace raza_ci_aux= 1 if  (ethnic1 ==4)
-replace raza_ci_aux= 2 if  (ethnic1 ==1)
-replace raza_ci_aux= 3 if (ethnic1==2 | ethnic1==5 | ethnic1==6 | ethnic1==7 | ethnic1==8 | ethnic1==9 | ethnic1==99)& raza_ci_aux==.
-replace raza_ci_aux= 4 if ethnic1==3
-label define raza_ci_aux 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 4 "Afroindigena"
-label value raza_ci_aux raza_ci_aux 
-label var raza_ci_aux "Raza o etnia del individuo auxiliar" 
-
-gen raza_idioma_ci=.
-
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci  "Indigena" 
-
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
-tab raza_ci
-tab raza_ci [iw=weight]
-
-
-*la variable ethnic2 tiene una clasificación
-*1= Creole
-*2= East Indian
-*3= Garifuna
-*4= Maya
-*5= Mennonite
-*6= Mestizo
-*7= Chinese
-*8= Caucasian/White
-*9= Other
-*99= DK/NS
 
 *******************
 *  ESTADO CIVIL   *
@@ -318,6 +266,38 @@ label variable nmenor6_ch "Miembros menores a 6 años dentro del Hogar"
 egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (age2<1)),  by (idh_ch)
 label variable nmenor1_ch "Miembros menores a 1 año dentro del Hogar"
 
+
+	
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+
+			
+	***************
+	*** afroind_ci ***
+	***************
+gen afroind_ci=. 
+
+	***************
+	*** afroind_ch ***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	*** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
 
 
 
@@ -1323,7 +1303,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

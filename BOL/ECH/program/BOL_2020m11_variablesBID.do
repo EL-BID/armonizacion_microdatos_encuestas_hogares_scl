@@ -1640,7 +1640,7 @@ replace aedu_ci = 0 if (s03a_02a>=61 & s03a_02a<=65)
 * Superior
 
 replace aedu_ci = s03a_02c + 12     	if s03a_02c <= 5 & (s03a_02a ==71 | s03a_02a ==72) // normal, universidad y técnico-tecnológico
-replace aedu_ci = s03a_02c + 12 		if s03a_02c >=76 & s03a_02a <=81
+replace aedu_ci = s03a_02c + 12 		if s03a_02a >=76 & s03a_02a <=81
 replace aedu_ci = s03a_02c + 12 + 5 	if s03a_02c <= 5 & (s03a_02a ==73 | s03a_02a ==74) // postgrado, maestria
 replace aedu_ci = s03a_02c + 12 + 5 + 2 if s03a_02c <= 5 & (s03a_02a ==75) // doctorado
 
@@ -2153,7 +2153,7 @@ label var internet_ch "El hogar posee conexión a Internet"
 ***cel_ch***
 ************
 
-bys idh_ch: egen cel_ch= max(s03c_13)
+gen cel_ch= (s03c_13==1)
 label var cel_ch "El hogar tiene servicio telefonico celular"
 
 
@@ -2298,6 +2298,24 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	
+	/*
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s03a_01a,1,2)) if !mi(migrante_ci) & s03a_01a!=4
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	*/
+	
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ******************************
 ********* PTMC y PNC *********
@@ -2352,6 +2370,35 @@ lab val pnc_ci pnc_ci
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

@@ -103,7 +103,7 @@ label variable factor_ch "Factor de expansión del hogar"
 ***************
 format %14.0g upa
 sort trimestre upa v1008 v1014
-egen idh_ch=group(trimestre upa v1008 v1014)
+egen idh_ch=group(trimestre upa estrato v1008 v1014)
 label variable idh_ch "ID del hogar"
 
 *************
@@ -1244,9 +1244,9 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 ***des1_ch***
 *************
 *En esta base no existe opción de fossa rudimentar, la cuál se clasificaba como 2"Letrina o conectado a pozo ciego"
-gen des1_ch=1 if s01012==1 | s01012==2
-*replace des1_ch=2 if s01012==
-replace des1_ch=3 if s01012>=3 & s01012<=5
+gen des1_ch=1 if s01012==1 | s01012==2 | s01012==3
+replace des1_ch=2 if s01012==4
+replace des1_ch=3 if s01012>=5 & s01012<=6
 replace des1_ch=. if s01012==.
 replace des1_ch=0 if bano_ch==0
 label var des1_ch "Tipo de desague según unimproved de MDG"
@@ -1513,6 +1513,57 @@ gen tipopen_ci=.
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: Recibió bolsa familia
+* PNC: Benefício de Prestação Continuada
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+drop ingreso_total
+
+* PTMC y PNC: montos y beneficiarios 
+gen percibe_ptmc =(v5002a == 1)
+gen pnc_ci=(v5001a==1)
+bys idh_ch: egen ptmc_ch=max(percibe_ptmc)
+
+gen ptmc = (v5002a2)
+gen pens=v5001a2 
+
+egen ing_pension = sum(pens), by(idh_ch)
+egen    ing_ptmc    = sum(ptmc), by(idh_ch) 
+drop ptmc pens
+
+* Ingreso neto del hogar
+egen miembros  = sum(1), by(idh_ch) 
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / miembros
+drop miembros
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64)
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1520,6 +1571,36 @@ gen tipopen_ci=.
 /*_____________________________________________________________________________________________________*/
 
 do "$gitFolder/armonizacion_microdatos_encuestas_hogares_scl/_DOCS/Labels&ExternalVars_Harmonized_DataBank.do"
+
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

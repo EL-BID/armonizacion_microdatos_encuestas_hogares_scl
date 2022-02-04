@@ -96,15 +96,15 @@ label value region_BID_c region_BID_c
 ***************
 ***factor_ch***
 ***************
-gen factor_ch=v1028/4
+gen factor_ch=v1032
 label variable factor_ch "Factor de expansión del hogar"
 
 ***************
 ****idh_ch*****
 ***************
 format %14.0g upa
-sort trimestre upa estrato v1008 v1016 v1027  // varibles numero de cuartos y numero de cuartos utilizados como dormitorios salen de la encuesta
-egen idh_ch=group(trimestre upa estrato v1008 v1016 v1027)
+
+egen idh_ch=group(trimestre upa estrato v1008 v1014)
 label variable idh_ch "ID del hogar"
 
 *************
@@ -131,7 +131,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2017
+gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 *********************
@@ -147,8 +147,8 @@ label variable mes_c "trimestre de la encuesta"
 
 gen relacion_ci=v2005
 recode relacion_ci (2=3)
-recode relacion_ci (4=5)
-replace relacion_ci=4 if v2005>=6 & v2005<=14
+recode relacion_ci (4/6=3)
+replace relacion_ci=4 if v2005>=7 & v2005<=14
 replace relacion_ci=5 if (v2005>=15 & v2005<=17) | v2005 ==19
 replace relacion_ci=6 if v2005==18
 label var relacion_ci "Relación de parentesco con el  jefe de hogar"
@@ -162,7 +162,7 @@ label values relacion_ci relacion_ci
 ***************
 ***factor_ci***
 ***************
-gen factor_ci=v1028/4 // se divide en 4 pues las bases originales son trimestrales
+gen factor_ci=v1032 // se divide en 4 pues las bases originales son trimestrales
 label variable factor_ci "Factor de expansión de personas"
 
 	***************
@@ -815,17 +815,15 @@ label var ylnm_ci "Ingreso laboral NO monetario total"
 *************
 ***ynlm_ci*** // sale modulo de caracteristicas de la vivienda y otros rendimientos 
 *************
-/*
+
 foreach var of varlist v5004a2 v5006a2 v5007a2 v5001a2 v5002a2 v5003a2 { 
 replace `var'=. if `var'>=999999 | `var'<0
 }
 
 egen ynlm_ci=rsum(v5004a2 v5006a2 v5007a2 v5001a2 v5002a2 v5003a2 v5001a2) if edad_ci>=10
 replace ynlm_ci=. if (v5004a2==. &  v5006a2==. &  v5007a2==. &  v5001a2==. &  v5002a2==. &  v5003a2==. & v5001a2==.) | ynlm_ci<0
-label var ynlm_ci "Ingreso no laboral monetario"  */
+label var ynlm_ci "Ingreso no laboral monetario"  
 
-gen ynlm_ci= .
-label var ynlm_ci "Ingreso no laboral monetario"
 
 **************
 ***ylnm_ci****
@@ -934,7 +932,7 @@ gen Ensino_8_9=.
 gen finalizo_1=v3012
 gen seria_asist=v3005a
 gen seria_no_asist=v3011a
-gen dur_fund_asist=v3004
+*gen dur_fund_asist=v3004
 gen dur_fund_no_asist=v3010
 
 gen aedu_ci=.
@@ -948,8 +946,9 @@ replace aedu_ci=0 if nivel_asist==3
 
 *Primaria / Básica - Nuevo sistema (Regular de ensino Fundamental grado 1)
 *Se le resta 1 por que está asistiendo al grado que reporta, por lo tanto no se debe considerar dentro de los años de educación aprobados.
-replace aedu_ci=grado_asist -1 if nivel_asist==4 & dur_fund_asist==1  // 8 años.
-replace aedu_ci=grado_asist-1 if nivel_asist==4 & dur_fund_asist==2  // 9 años, Se debe sumar 1 año más por que el nuevo sistema educación empieza los cursos a partir del grado cero.
+replace aedu_ci=grado_asist -1 if nivel_asist==4   // 8 años.
+*replace aedu_ci=grado_asist-1 if nivel_asist==4 & dur_fund_asist==2  // 9 años, Se debe sumar 1 año más por que el nuevo sistema educación empieza los cursos a partir del grado cero.
+
 
 *Secundaria / Ensino Medio Regular
 replace aedu_ci=grado_asist+9-1 if nivel_asist==6 
@@ -1264,9 +1263,8 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 ***des1_ch***
 *************
 *En esta base no existe opción de fossa rudimentar, la cuál se clasificaba como 2"Letrina o conectado a pozo ciego"
-gen des1_ch=.
-/*
-*gen des1_ch=1 if s01012==1 | s01012==2
+
+gen des1_ch=1 if s01012==1 | s01012==2
 *replace des1_ch=2 if s01012==
 replace des1_ch=3 if s01012>=3 & s01012<=5
 replace des1_ch=. if s01012==.
@@ -1274,7 +1272,7 @@ replace des1_ch=0 if bano_ch==0
 label var des1_ch "Tipo de desague según unimproved de MDG"
 label def des1_ch 0"No tiene servicio sanitario" 1"Conectado a red general o cámara séptica"
 label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
-label val des1_ch des1_ch*/
+label val des1_ch des1_ch
 
 *************
 ***des2_ch***
@@ -1563,7 +1561,59 @@ gen tipopen_ci=.
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: Recibió bolsa familia
+* PNC: Benefício de Prestação Continuada
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+drop ingreso_total
+
+* PTMC y PNC: montos y beneficiarios 
+gen percibe_ptmc =(v5002a == 1)
+gen pnc_ci=(v5001a==1)
+bys idh_ch: egen ptmc_ch=max(percibe_ptmc)
+
+gen ptmc = (v5002a2)
+gen pens=v5001a2 
+
+egen ing_pension = sum(pens), by(idh_ch)
+egen    ing_ptmc    = sum(ptmc), by(idh_ch) 
+drop ptmc pens
+
+* Ingreso neto del hogar
+egen miembros  = sum(1), by(idh_ch) 
+gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / miembros
+drop miembros
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64)
+
+lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
+lab val ptmc_ch ptmc_ch
+
+lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
+lab val pnc_ci pnc_ci
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1571,6 +1621,34 @@ gen tipopen_ci=.
 /*_____________________________________________________________________________________________________*/
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+*_____________________________________________________________________________________________________*
+
+*  Pobres extremos, pobres moderados, vulnerables y no pobres 
+* con base en ingreso neto (Sin transferencias)
+* y líneas de pobreza internacionales
+gen     grupo_int = 1 if (y_pc_net<lp31_ci)
+replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
+replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
+replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
+
+tab grupo_int, gen(gpo_ingneto)
+
+* Crear interacción entre recibirla la PTMC y el gpo de ingreso
+gen ptmc_ingneto1 = 0
+replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
+
+gen ptmc_ingneto2 = 0
+replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
+
+gen ptmc_ingneto3 = 0
+replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
+
+gen ptmc_ingneto4 = 0
+replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
+
+lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
+lab val grupo_int grupo_int
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

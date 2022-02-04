@@ -1447,7 +1447,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio=="2010" & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
+	gen migantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio==2010 & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1456,6 +1456,25 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	
 	gen migrantelac_ci=(inlist(p4h,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & (p4i==1 | (p4i_anio==2010 & p4i==2))) if migrante_ci!=. & !inrange(edad_ci,0,4) & p4i!=3
+	replace migrantiguo5_ci = 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci = . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p4h,107,211,212,213,214,217,218,232,233,234,235,242,243,244,249,311,312,313,314,321,331,333,341,343,351,353,361,381) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci==1
+	replace miglac_ci = . if migrante_ci==.0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 	** Fuente: Los codigos de paises se obtiene del censo de panama (redatam)
 	
 /*_____________________________________________________________________________________________________*/
@@ -1485,7 +1504,12 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
-
+*Versión 12 no acepta labels con más de 79 caracteres
+ foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
 
 compress
 

@@ -948,9 +948,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace anoinst= 0 if (nivinst == 1)
 
 	*09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
-	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 	"Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
-	label values p10a P10a
-	
 	gen aedu_ci = .
 	replace aedu_ci = 0          if nivinst==1
 	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
@@ -1075,8 +1072,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	gen eduac_ci=.
 	label variable eduac_ci "Superior universitario vs superior no universitario"
-	replace eduac_ci=1 if p10a==9
-	replace eduac_ci=0 if p10a==8
 
 	***************
 	***asiste_ci***

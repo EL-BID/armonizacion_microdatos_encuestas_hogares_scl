@@ -977,41 +977,49 @@ replace aedu_ci=q422a if q422a>0 & q422a<99
 replace aedu_ci=q514a if q514a<99
 replace aedu_ci=q515a if q515a>0 & q515a<99
 
+
+// imputando valores perdidos.
+
+replace aedu_ci=6 if q320a==99 & q321a!=99 & aedu_ci==.
+replace aedu_ci=6 if q421a==99 & q422a!=99 & aedu_ci==.
+replace aedu_ci=6 if q514a==99 & q515a!=99 & aedu_ci==.
+
+
 **********
 *eduno_ci*
 **********
-gen eduno_ci=1 if aedu_ci==0
-replace eduno_ci=0 if aedu_ci>0 & aedu_ci!=.
+gen eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==.
 
 **********
 *edupi_ci*
 **********
 
-gen edupi_ci=1 if (aedu_ci >=1 & aedu_ci<6)
-replace edupi_ci=0 if aedu_ci>=6 & aedu_ci!=.
+gen edupi_ci=(aedu_ci >=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
 
 
 **********
 *edupc_ci*
 **********
 
-gen edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if edupc_ci==.
+gen edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
 
 **********
 *edusi_ci*
 **********
 
-gen edusi_ci=0 if aedu_ci!=.
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<11)
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 **********
 *edusc_ci*
 **********
 
-gen edusc_ci=1 if aedu_ci>=11 & aedu_ci!=.
-replace edusc_ci=0 if aedu_ci<11
+gen edusc_ci=(aedu_ci>=11)
+replace edusc_ci=. if aedu_ci==.
 
 **********
 *eduui_ci*
@@ -1030,31 +1038,31 @@ gen eduuc_ci=.
 *edus1i_ci*
 ***********
 
-gen edus1i_ci=0 if aedu_ci!=.
-replace edus1i_ci=1 if (aedu_ci>=7 & aedu_ci<9)& aedu_ci!=.
+gen edus1i_ci=(aedu_ci>=7 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
 ***********
 *edus1c_ci*
 ***********
 
-gen edus1c_ci=0 if aedu_ci!=.
-replace edus1c_ci=1 if aedu_ci==9 & aedu_ci!=.
+gen edus1c_ci=aedu_ci==9
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***********
 *edus2i_ci*
 ***********
-gen edus2i_ci=0 if aedu_ci!=.
-replace edus2i_ci=1 if aedu_ci==10 
+gen edus2i_ci=(aedu_ci==10) 
+replace edus2i_ci=. if aedu_ci==.  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***********
 *edus2c_ci*
 ***********
 
-gen edus2c_ci=1 if aedu_ci>=11 & aedu_ci!=.
-replace edus2c_ci=0 if aedu_ci<11
-
+gen edus2c_ci=(aedu_ci>=11)
+replace edus2c_ci=. if aedu_ci==.
+label variable edus2c_ci "2do ciclo de la secundaria completo"
 ************************
 ***Educacion preescolar.
 ************************
@@ -1079,9 +1087,10 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***********
 *asiste_ci*
 ***********
-
+// la pregunta dice "most of the time"
 gen asiste_ci=1 if q21a==5
-replace asiste_ci=0 if asiste_ci==. 
+replace asiste_ci=0 if q21a!=5
+replace asiste_ci=. if  q21a==. 
 
 ***************************************************************************
 ***Razones para no asistir a la escuela.***
@@ -1117,7 +1126,17 @@ label var repite_ci "Personas que han repetido el último grado"
 
 gen edupub_ci=.
 
+***************
+***tecnica_ci**
+***************
+gen tecnica_ci=.
+label var tecnica_ci "1=formacion terciaria tecnica"
 
+***************
+***universidad_ci**
+***************
+gen universidad_ci=.
+label var universidad_ci "1=formacion terciaria universitaria"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

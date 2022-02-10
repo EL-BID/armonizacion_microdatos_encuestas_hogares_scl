@@ -12,7 +12,7 @@ set more off
 
 
 
-global ruta = "\\sdssrv03\surveys"
+global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -1640,7 +1640,7 @@ replace aedu_ci = 0 if (s03a_02a>=61 & s03a_02a<=65)
 * Superior
 
 replace aedu_ci = s03a_02c + 12     	if s03a_02c <= 5 & (s03a_02a ==71 | s03a_02a ==72) // normal, universidad y técnico-tecnológico
-replace aedu_ci = s03a_02c + 12 		if s03a_02c >=76 & s03a_02a <=81
+replace aedu_ci = s03a_02c + 12 		if s03a_02a >=76 & s03a_02a <=81
 replace aedu_ci = s03a_02c + 12 + 5 	if s03a_02c <= 5 & (s03a_02a ==73 | s03a_02a ==74) // postgrado, maestria
 replace aedu_ci = s03a_02c + 12 + 5 + 2 if s03a_02c <= 5 & (s03a_02a ==75) // doctorado
 
@@ -2298,6 +2298,24 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	
+	/*
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s03a_01a,1,2)) if !mi(migrante_ci) & s03a_01a!=4
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+	*/
+	
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ******************************
 ********* PTMC y PNC *********

@@ -929,63 +929,37 @@ replace miembros_ci=0 if factor_ci==.
 label variable miembros_ci "variable dummy que indica las personas que son miembros del hogar"
 
 sort idh_ch
+			
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-**********
-***raza***
-**********
-/*
-gen ethnic2=1 if ( p05b05>=1 & p05b05<=5 )  maya 
-replace ethnic2=2 if ( p05b05==6 | p05b05==7 )  no maya 
-replace ethnic2=3 if  p05b05==8  no indigena 
+			
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
 
-gen ethnic=1 if ethnic2==1 | ethnic2==2  indigena 
-replace ethnic=2 if ethnic2==3  no indigena */
-*/
-gen raza_ci=.
-replace raza_ci=1 if  p04a11a>=1 & p04a11a<=23
-replace raza_ci=2 if  (p04a11a==24) & raza_ci==.
-replace raza_ci=3 if  (p04a11a==29 |  p04a11a==30 |  p04a11a==96) & raza_ci==.
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "indígena" 2 "afro-descendiente" 3 "otros"
-label value raza_ci raza_ci 
-label var raza_ci "raza o etnia del individuo" 
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
 
-g raza_idioma_ci =.
-/*
-p04a11a:
-           1 k´iche´
-           2 q´eqchi´
-           3 kaqchikel
-           4 mam
-           5 q´anjob´al
-           6 achi
-           7 ixil
-           8 itza´
-           9 poqomchi´
-          10 chuj
-          11 awakateko
-          12 poqomam
-          13 ch´orti´
-          14 jakalteko (popti)
-          15 sakapulteco
-          16 mopan
-          17 uspanteko
-          18 tz´utujil
-          19 tektiteko
-          20 sipakapense
-          21 chalchiteko
-          22 akateko
-          23 xinka
-          24 garifuna
-          29 no indigena
-          30 extranjero
-          96 ningún otro idioma
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
 
-*/
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 *****************************************************************
 *** ingresos laborales (para pesonas de 5 años o mas de ppa03) ***
@@ -1357,7 +1331,7 @@ gen id_afro_ci = .
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

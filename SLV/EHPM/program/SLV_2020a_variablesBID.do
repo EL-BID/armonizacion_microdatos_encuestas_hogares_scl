@@ -832,108 +832,111 @@ label var aedu_ci "Anios de educacion aprobados"
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen eduno_ci=aedu_ci==0
+replace eduno_ci=. if aedu_ci==.
 label var eduno_ci "Sin educacion"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci==(aedu_ci>=1 & aedu_ci<6) 
+replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6 
+gen edupc_ci=aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<12) 
+gen edusi_ci=(aedu_ci>6 & aedu_ci<=10)
+replace edusi_ci=1 if (aedu_ci==11) & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
+replace edusi_ci=. if aedu_ci==.  
 label var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=(aedu_ci==12)
+gen edusc_ci=(aedu_ci==11) & (r217==2) //11 anios y titulo de bachiller general
+replace edusc_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
 replace edusc_ci=. if aedu_ci==.
 label var edusc_ci "Secundaria Completa"
 
 **************
 ***eduui_ci***
 **************
-gen eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+gen eduui_ci=(aedu_ci>=12) &  (r217==2)  // mayor o igual a 12 anios de estudio, bachiller general
+replace eduui_ci=1 if (aedu_ci>=13) & (r217==3| r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
+replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen eduuc_ci=(aedu_ci>=17)
+gen eduuc_ci=(aedu_ci>12) & (r217>=4 & r217<=9) // mas de 12 anios de estudio pero con titulo terciario. incluye profesorado
+replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
 ***************
 ***edus1i_ci***
 ***************
-gen  edus1i_ci=0
-replace edus1i_ci=1 if (aedu_ci>=6 & aedu_ci<9)
+gen  edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label var edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen byte edus1c_ci=aedu_ci==9
+replace edus1c_ci=. if aedu_ci==.
 label var edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+gen edus2i_ci=(aedu_ci>9 & aedu_ci<=10)
+replace edus2i_ci=1 if (aedu_ci==11) & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
+replace edus2i_ci=. if aedu_ci==.
 label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=(aedu_ci==12)
+gen edus2c_ci=(aedu_ci==11) & (r217==2) //11  anios y titulo de bachiller general
+replace edus2c_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
+replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
 ***************
-gen edupre_ci=.
-*gen edupre_ci=(r204==0 |r204==1) 
+gen edupre_ci=(r209==1) 
 label var edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 *Agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if r203==1 & r204==1
-	recode asispre_ci (.=0)
+	g asispre_ci=r203==1 & r204==1
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if r214==4
+replace eduac_ci=0 if r214==5
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
 gen asiste_ci=(r203==1)
+replace asiste_ci=. if r203==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
@@ -972,16 +975,32 @@ label var repite_ci "Ha repetido al menos un grado"
 ***repiteult_ci***
 ******************
 *DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen repiteult_ci= (r206==1 | r216a ==1)
+gen repiteult_ci= (r205==1 | r216a ==1)
+replace repiteult_ci=. if  r205==. & r216a ==.
+
 label var repiteult "Ha repetido el último grado"
 
 ***************
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-replace edupub_ci=1 if r210a==1 
-replace edupub_ci=0 if r210a==2 | r210a==3
+replace edupub_ci=1 if r210a==1 & r203==1
+replace edupub_ci=0 if (r210a==2 | r210a==3) & r203==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
+
+*************
+***tecnica_ci** // la traje de otro lado
+*************
+*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
+gen tecnica_ci=r214==5
+label var tecnica_ci "=1 formacion terciaria tecnica"
+
+*************
+***universidad_ci**
+*************
+*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
+gen universidad_ci=r214==4
+label var universidad_ci "=1 formacion terciaria universitaria"
 
 
 		**********************************
@@ -1567,6 +1586,20 @@ lab val atencion_ci atencion_ci
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ******************************
 * Variables SPH - PMTC y PNC *

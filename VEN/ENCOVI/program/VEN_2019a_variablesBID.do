@@ -48,7 +48,7 @@ gen str pais_c="VEN"
 **********
 ***anio***
 **********
-gen anio_c=2019
+gen anio_c=2020
 
 *********
 ***mes***
@@ -365,12 +365,12 @@ label values ocupa_ci ocupa_ci
 *****************
 ***horastot_ci***
 *****************
-tab s9q16, mi
+//tab s9q16, mi
 
-recode s9q16 (98=.) (99=.)
+recode s9q18 (98=.) (99=.)
 
 gen byte horastot_ci=.
-replace horastot_ci=s9q16 if s9q16>=0 & s9q16 <168
+replace horastot_ci=s9q18 if s9q18>=0 & s9q18 <168 //fixed, it was mistakenly using s9q16, which is horaspri_ci
 label var horastot_ci "Horas totales trabajadas la semana pasada en todas las Actividades"
 
 *27 obs que debieron responder 
@@ -662,7 +662,7 @@ label var spublico "Personas que trabajan en el sector publico"
 ****************
 *ESTA INCLUIDO EL INGRESO POR TODOS LOS TRABAJOS REALIZADOS. 
 recode ing1 (99=.) (98=.)
-gen ylmpri_ci=ylabor_asa
+egen ylmpri_ci= rowtotal(ylabor_asa ylabor_patron ylabor_ctapro), m
 label var ylmpri_ci "Ingreso Laboral Monetario de la Actividad Principal"
 
 *******************
@@ -912,22 +912,21 @@ label variable aedu_ci "Años de Educacion"
 
 							
 **************
-***eduno_ci***
+***eduno_ci*** // ningún nivel de instrucción
 **************
 gen eduno_ci=.
-replace eduno=1 if s7q4==1
-replace eduno=0 if s7q4>1 & s7q4<=7
+replace eduno=1 if s7q11==1 // ningún nivel, asiste y no asiste
+replace eduno=0 if s7q11>1 // preescolar para arriba, asiste y no asiste
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if s7q4==2
-replace edupre=0 if s7q4d>2 | s7q4d==1
+replace edupre=1 if s7q11==2 // preescolar asiste y no asiste
+replace edupre=0 if s7q11==1 | s7q11>2 // ningún nivel y básica o más, asiste o no asiste
 label var edupre_ci "Educacion preescolar"
 
-	
 **************
 ***edupi_ci***
 **************
@@ -1401,6 +1400,22 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	gen migrantelac_ci=(migrante_ci==1 & (inlist(s6q6,2,3,4,5,6,7,8) | inlist(s6q6_os,"Haití","Nicaragua","República Dominicana"))) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & (inlist(s6q6,2,3,4,5,6,7,8) | inlist(s6q6_os,"Haití","Nicaragua","República Dominicana"))) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 	
 /*_____________________________________________________________________________________________________*/
@@ -1438,7 +1453,10 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 
 compress
 
-
+**********
+***anio***
+**********
+replace anio_c=2019
 
 save "`base_out'", replace
 

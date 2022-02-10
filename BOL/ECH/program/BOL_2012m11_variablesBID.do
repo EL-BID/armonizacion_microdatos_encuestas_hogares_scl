@@ -2203,6 +2203,51 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(s2_04==3) if s2_04!=. 	
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(s2_01a,1,2)) if s2_01a!=4 & migrante_ci!=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci = 1 if inlist(s2_01a,1,2) & migrante_ci==1 
+	replace migrantiguo5_ci = 0 if s2_01a == 3 & migrante_ci==1 
+	replace migrantiguo5_ci = . if s2_01a == 4 | migrante_ci!=1 
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=. 
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 
 ******************************
 * Variables SPH - PMTC y PNC *

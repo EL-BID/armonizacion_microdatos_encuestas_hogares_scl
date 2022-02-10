@@ -1837,6 +1837,61 @@ gen tcylmpri_ci =.
 gen tcylmpri_ch =.
 gen instcot_ci=.
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(inlist(ch15,4,5)) if ch15!=. & ch15!=9		/* Categoria Ns./Nr. no se incluye en la variable*/
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & inlist(ch16,1,2,3)) if !inlist(ch16,6,9) & migrante_ci!=. 		/* Categorias Ns./Nr. y no habia nacido no se incluyen en la variable*/
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	cap: tostring ch15_cod, replace
+	gen migrantelac_ci=((ch15==4 | inlist(ch15_cod,"201","202","203","205","206","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci==1) if migrante_ci!=. 
+	replace migrantelac_ci=. if ch15_cod=="999" & ch15!=4
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	/* Fuente: https://www.indec.gob.ar/ftp/cuadros/menusuperior/eph/codigospaises_09.pdf */
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci = 1 if inlist(ch16,1,2,3) & migrante_ci==1
+	replace migrantiguo5_ci = 0 if inlist(ch16,4,5) & migrante_ci==1
+	replace migrantiguo5_ci = . if inlist(ch16,6,9) | migrante_ci==0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	****** miglac_ci *****
+	**********************
+	gen miglac_ci = 1 if (inlist(ch15_cod,"201","202","203","205","206","207","208","209","210") | ///
+	inlist(ch15_cod,"211","213","214","215","216","217","218","219","220") | ///
+	inlist(ch15_cod,"221","222","224","225","226","232","233","236","237") | ///
+	inlist(ch15_cod,"239","240")) & migrante_ci == 1
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci =. if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC" 
+
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables del SOCIOMETRO y las nuevas de mercado laboral
 * También se incluyen variables que se manejaban en versiones anteriores, estas son:

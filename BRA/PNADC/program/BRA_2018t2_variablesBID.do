@@ -15,7 +15,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS BRA
 local ENCUESTA PNADC
-local ANO "2020"
+local ANO "2018"
 local ronda t1 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'_BID.dta"
@@ -130,7 +130,7 @@ label variable pais_c "País"
 **********
 ***anio***
 **********
-gen anio_c=2020
+gen anio_c=2018
 label variable anio_c "Anio de la encuesta"
 
 *********************
@@ -1524,6 +1524,47 @@ gen repiteult_ci=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 
 /*_____________________________________________________________________________________________________*/

@@ -17,13 +17,13 @@ local ANO "2018"
 local ronda m11 
 
 
-*local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 *local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
                                                     
-*capture log close
-*log using "`log_file'", replace 
+capture log close
+log using "`log_file'", replace 
 
 
 /***************************************************************************
@@ -2202,6 +2202,24 @@ lab val tipocobsalud_ci tipocobsalud_ci
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci = 1 if inlist(s03a_01a,1,2) & migrante_ci==1 
+	replace migrantiguo5_ci = 0 if s03a_01a == 3 & migrante_ci==1 
+	replace migrantiguo5_ci = . if s03a_01a == 4 | migrante_ci!=1 
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=. 
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 ******************************
 * Variables SPH - PMTC y PNC *

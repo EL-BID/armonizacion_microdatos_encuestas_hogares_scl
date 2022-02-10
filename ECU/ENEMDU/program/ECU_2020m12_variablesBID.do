@@ -1058,13 +1058,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***asispre_ci**
 	***************
 	/*Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
+	
 	replace asispre_ci=1 if pe01==1 & pe02a==3
 	recode asispre_ci (.=0)
 	la var asispre_ci "Asiste a educacion prescolar"*/
 	
+	g asispre_ci=.
 	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
-	g asispre_ci=(p07==1 & p10a==3) //todos los valores son cero porque p10a no tiene el valor 3 "Jardín de infantes"
+	*g asispre_ci=(p07==1 & p10a==3) //todos los valores son cero porque p10a no tiene el valor 3 "Jardín de infantes"
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************

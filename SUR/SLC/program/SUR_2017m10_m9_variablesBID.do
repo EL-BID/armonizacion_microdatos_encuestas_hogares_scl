@@ -898,89 +898,105 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 		replace aedu_ci = 4+6+4+2                 if noasis_niv_inst == 5 & finalizo ==1  & q3_02 == 2 & q3_01 == 1
 		
 		replace aedu_ci = noasis_ano_inst+6+4+2+4 if noasis_niv_inst == 6 & finalizo ==2  & q3_02 == 2 & q3_01 == 1/* maestria doctorado, hasta 5 anios */
-		replace aedu_ci = 3+6+4+2+4 if noasis_niv_inst == 6 & finalizo ==2 & q3_02 == 2 & q3_01 == 1/* como no se sabe si es maestría o doctorado asumimos 3 +*/
+		replace aedu_ci = 6+4+2+4 if noasis_niv_inst == 6 & finalizo ==2 & q3_02 == 2 & q3_01 == 1/* como no se sabe si es maestría o doctorado asumimos 3 +*/
 		
 	    replace aedu_ci = 0 if aedu_ci ==-1
 
+	* imputando valores perdidos
+	
+	replace aedu_ci=0 if q3_04==1 & q3_08==. & aedu_ci==.
+	replace aedu_ci=0 if q3_04==2 & q3_08==. & aedu_ci==.
+	replace aedu_ci=6 if q3_04==3 & q3_08==. & aedu_ci==.
+	replace aedu_ci=10 if q3_04==4 & q3_08==. & aedu_ci==.
+	replace aedu_ci=12 if q3_04==5 & q3_08==. & aedu_ci==.
+	replace aedu_ci=16 if q3_04==6 & q3_08==. & aedu_ci==.
+	replace aedu_ci=. if q3_04==7 & q3_08==. & aedu_ci==.
+	
+	replace aedu_ci=0 if q3_20==1 & q3_23==. & aedu_ci==.
+	replace aedu_ci=0 if q3_20==2 & q3_23==. & aedu_ci==.
+	replace aedu_ci=6 if q3_20==3 & q3_23==. & aedu_ci==.
+	replace aedu_ci=10 if q3_20==4 & q3_23==. & aedu_ci==.
+	replace aedu_ci=12 if q3_20==5 & q3_23==. & aedu_ci==.
+	replace aedu_ci=16 if q3_20==6 & q3_23==. & aedu_ci==.
+	replace aedu_ci=. if q3_20==7 & q3_23==. & aedu_ci==.
+	
 	**************
 	***eduno_ci***
 	**************
-	gen eduno_ci=0
-	replace eduno_ci=1 if aedu_ci==0
+	gen eduno_ci=aedu_ci==0
+	replace eduno_ci=. if aedu_ci==. 
 	label variable eduno_ci "Sin educacion"
 
 	**************
 	***edupi_ci***
 	**************
-	gen edupi_ci=0
-	replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+	gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+	replace edupi_ci=. if aedu_ci==.
 	label variable edupi_ci "Primaria incompleta"
 
 	**************
 	***edupc_ci***
 	**************
-	gen edupc_ci=0
-	replace edupc_ci=1 if aedu_ci==6 
+	gen edupc_ci=aedu_ci==6 
+	replace edupc_ci=. if aedu_ci==.
 	label variable edupc_ci "Primaria completa"
 
 	**************
 	***edusi_ci***
 	**************
-	gen edusi_ci=0
-	replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<12) 
+	gen edusi_ci=(aedu_ci>=7 & aedu_ci<12) 
+	replace edusi_ci=. if aedu_ci==.
 	label variable edusi_ci "Secundaria incompleta"
 
 	**************
 	***edusc_ci***
 	**************
-	gen edusc_ci=0
-	replace edusc_ci=1 if aedu_ci==12 
+	gen edusc_ci=aedu_ci==12 
+	replace edusc_ci=. if aedu_ci==.
 	label variable edusc_ci "Secundaria completa"
 
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<16)
+	replace eduui_ci=. if aedu_ci==.
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17)
+	gen byte eduuc_ci= (aedu_ci>=16)
+	replace eduuc_ci=. if aedu_ci==.
 	label variable eduuc_ci "Superior completo"
 
 	***************
 	***edus1i_ci***
 	***************
-	gen edus1i_ci=0
-	replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+	gen edus1i_ci= (aedu_ci>6 & aedu_ci<10)
+	replace edus1i_ci=. if aedu_ci==.
 	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 	***************
 	***edus1c_ci***
 	***************
-	gen edus1c_ci=0
-	replace edus1c_ci=1 if aedu_ci==9
+	gen edus1c_ci=aedu_ci==10
+	replace edus1c_ci=. if aedu_ci==.
 	label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 	***************
 	***edus2i_ci***
 	***************
-	gen edus2i_ci=0
-	replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+	gen edus2i_ci=aedu_ci>10 & aedu_ci<12
+	replace edus2i_ci=. if aedu_ci==.
 	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 	***************
 	***edus2c_ci***
 	***************
-	gen edus2c_ci=0
-	replace edus2c_ci=1 if aedu_ci==12
+	gen edus2c_ci=aedu_ci==12
+	replace edus2c_ci=. if aedu_ci==.
 	label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-	local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-	foreach x of local var {
-	replace `x'_ci=. if aedu_ci==.
-	}
 
 	***************
 	***edupre_ci***
@@ -991,9 +1007,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***asispre_ci**
 	***************
-	g asispre_ci=.
-	replace asispre_ci=1 if q3_04==1
-	recode asispre_ci (.=0)
+	g asispre_ci=q3_04==1
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
@@ -1012,9 +1026,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	gen pqnoasis_ci=.
-	label val pqnoasis_ci pqnoasis_ci
-	/*Variable se refiere a por qué no asistió durante ocasiones no-regulares.
+	gen pqnoasis_ci=q3_24
+	*label val pqnoasis_ci pqnoasis_ci
+	/***desc q3_24 "What is the main reason why you did not continue studying?"
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
 	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar"
 	label def pqnoasis_ci 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar", add
@@ -1026,22 +1040,23 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     **************
 	*/
     g       pqnoasis1_ci =.
-	label value  pqnoasis1_ci pqnoasis1_ci
-	/*Idem al comentario anterior
+	
+	**desc q3_24 "What is the main reason why you did not continue studying?"
 	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
     
-    replace pqnoasis1_ci = 2 if p09==5
-    replace pqnoasis1_ci = 3 if p09==7  | p09==9
-    replace pqnoasis1_ci = 4 if p09==11
-    replace pqnoasis1_ci = 5 if p09==8  | p09==12 | p09==15
-    replace pqnoasis1_ci = 6 if p09==2
-    replace pqnoasis1_ci = 7 if p09==1 
-    replace pqnoasis1_ci = 8 if p09==10
-    replace pqnoasis1_ci = 9 if p09==4  | p09==6 | p09==13 | p09==14 | p09==16
+    replace pqnoasis1_ci = 1 if q3_24==2
+    replace pqnoasis1_ci = 2 if q3_24==3
+    replace pqnoasis1_ci = 3 if q3_24==4
+    replace pqnoasis1_ci = 4 if q3_24==1
+    *replace pqnoasis1_ci = 5 if q3_24==
+    *replace pqnoasis1_ci = 6 if q3_24==
+    *replace pqnoasis1_ci = 7 if q3_24== 
+    *replace pqnoasis1_ci = 8 if q3_24==
+    replace pqnoasis1_ci = 9 if q3_24==4 
 
     label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
     
-	*/
+	label value  pqnoasis1_ci pqnoasis1_ci
 	***************
 	***repite_ci***
 	***************
@@ -1066,7 +1081,11 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen tecnica_ci=.
 	label var tecnica_ci "=1 formacion terciaria tecnica"
 
-	
+	****************
+	***universidad_ci **
+	****************
+	gen universidad_ci=.
+	label var universidad_ci "=1 formacion terciaria universitaria"	
 	
 	
 	**********************************

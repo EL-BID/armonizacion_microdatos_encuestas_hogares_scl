@@ -1170,9 +1170,9 @@ label var vivi2_ch "La vivienda es una casa o un departamento"
 * viviprop_ch * 
 *************** 
 gen viviprop_ch=0     if v13==2
-replace viviprop_ch=1 if v13_propia==1
+replace viviprop_ch=1 if v13_propia==1 | v13_propia==3
 replace viviprop_ch=2 if v13_propia==2 | v13_propia==4
-replace viviprop_ch=3 if v13>=10 & v13<=11
+replace viviprop_ch=3 if v13>=3 & v13<=11
 label var viviprop_ch "Propiedad de la vivienda"
 label def viviprop_ch 0"Alquilada" 1"Propia y totalmente pagada" 2"Propia y en proceso de pago"
 label def viviprop_ch 3"Ocupada (propia de facto)", add

@@ -545,38 +545,33 @@ label var desalent_ci "Trabajadores desalentados"
 *****************
 ***horaspri_ci***
 *****************
-  *s04e_33ab: 23b. cuantas horas en promedio trabaja al dia .. ? (minutos)
-  *s04e_33aa: 23a. cuantas horas en promedio trabaja al dia .. ? (horas)
-  *s04e_32: 22. cuantos dias a la semana trabaja
-destring s04e_33ab s04e_33aa s04e_32, i("NA") replace
-gen aux_min=  s04e_33ab/60
-egen horas_min= rsum(s04e_33aa aux_min), m
+* Modified Feb 22: Eric Torrez, Cesar Lins
 
-gen horaspri_ci = horas_min*s04e_32
-replace horaspri_ci=. if s04e_32==. | s04e_33aa==. |  s04e_33ab==.
-replace horaspri_ci=. if emp_ci!=1
-label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
+  *s04b_16ab: cuantas horas en promedio trabaja al dia .. ? (minutos)
+  *s04b_16aa: cuantas horas en promedio trabaja al dia .. ? (horas)
+  *s04b_15: cuantos dias a la semana trabaja
+
+  * The dataset has a calculated variable for the weekly hours worked:
+  *   phrs - Horas trabajadas a la semana en la Ocupacion Principal
+  
+gen horaspri_ci = phrs
+*label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
+
+*****************
+***horassec_ci***
+*****************
+  * The dataset has a calculated variable for the weekly hours worked:
+  *   phrs - Horas trabajadas a la semana en la Ocupacion Secundaria
+  
+gen horassec_ci = shrs
 
 *****************
 ***horastot_ci***
 *****************
-gen horastot_ci = .
-/*
-s6_39a:  39a. cuantos dias trabajó la semana anterior ?
-s6_39ba: 39b. cuantas horas promedio al dia trabajÓ la semana anterior ?
-s6_39m: 39b. cuantos minutos promedio al dia trabajÓ la semana anterior ?
+* The dataset has a calculated variable for the weekly hours worked:
+  *   tothrs - Horas trabajadas a la semana
+gen horastot_ci = tothrs
 
-
-gen aux_min2=s06f_45b/60
-egen horas_min2=rsum(s06f_45a aux_min2)
-gen horassec_ci= horas_min2*s06f_44
-replace horassec_ci=. if s06f_44==. | s06f_45a==. | s06f_45b==.
-replace horassec_ci=. if emp_ci!=1
-
-egen horastot_ci= rsum(horaspri_ci horassec_ci), missing
-replace horastot_ci = . if horaspri_ci == . & horassec_ci == .
-replace horassec_ci=. if emp_ci~=1
-*/
 ***************
 ***subemp_ci***
 ***************

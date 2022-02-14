@@ -531,20 +531,30 @@ label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
 ***horastot_ci***
 *****************
 /*
-s6_39a:  39a. cuantos dias trabajÓ la semana anterior ?
-s6_39ba: 39b. cuantas horas promedio al dia trabajÓ la semana anterior ?
-s6_39m: 39b. cuantos minutos promedio al dia trabajÓ la semana anterior ?
-*/
+Cesar Lins
 
-gen aux_min2=s06b_23ab/60
-egen horas_min2=rsum(s06b_23aa aux_min2)
-gen horassec_ci= horas_min2*s06b_22
-replace horassec_ci=. if s06b_22==. | s06b_23ab==. | s06b_23aa==.
+s06e_39:   cuantos dias trabajÓ la semana anterior ?
+s06e_40:  cuantas horas promedio al dia trabajÓ la semana anterior ?
+s06e_40b:  cuantos minutos promedio al dia trabajÓ la semana anterior ?
+
+Los datos originales tienen una variable calculada
+que calcula la suma de las actividades primaria y secundaria:
+  
+  tothrs: horas trabajadas a la semana
+
+*/
+gen horastot_ci = tothrs
+
+/*gen aux_min2=s06e_40b/60
+egen horas_min2=rsum(s06e_40 aux_min2)
+gen horassec_ci= horas_min2*s06e_39
+replace horassec_ci=. if s06e_39==. | s06e_40==. | s06e_39==.
 replace horassec_ci=. if emp_ci!=1
 
 egen horastot_ci= rsum(horaspri_ci horassec_ci), missing
 replace horastot_ci = . if horaspri_ci == . & horassec_ci == .
 replace horassec_ci=. if emp_ci~=1
+*/
 
 ***************
 ***subemp_ci***

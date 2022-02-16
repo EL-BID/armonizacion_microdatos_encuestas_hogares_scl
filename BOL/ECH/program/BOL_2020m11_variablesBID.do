@@ -303,28 +303,25 @@ label variable miembros_ci "Miembro del hogar"
 	***************
 	***afroind_ci***
 	***************
-**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s03a_04) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
-**Pregunta: a qué nación o pueblo pertenece? (s03a_04n)(ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
-** La base original difiere de la base armonizada (s03a_04npioc vs s03a_04n). 
+**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s01a_08) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
+**Pregunta: a qué nación o pueblo pertenece? (s01a_08)(ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
 
+* Actualizado Feb 2022 - Cesar Lins
 
 gen afroind_ci=. 
-/*
-replace afroind_ci=1 if s03a_04==1
-replace afroind_ci=2 if s03a_04==0 
-replace afroind_ci=3 if s03a_04==2 
-replace afroind_ci=9 if s03a_04==3 
-*/
+replace afroind_ci=1 if s01a_08==1 
+replace afroind_ci=3 if s01a_08==2
+replace afroind_ci=9 if s01a_08==3
+
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_jefe=.
 gen afroind_ch  = .
-/*
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-*/
+
 drop afroind_jefe
 
 	*******************

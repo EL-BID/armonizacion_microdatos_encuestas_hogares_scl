@@ -1200,9 +1200,7 @@ label val piso_ch piso_ch
 **************
 ***pared_ch***
 **************
-*g pared_ch = (p4010 >= 1 & p4010 <= 7)
-*Y.L. hago comparable a ECH
-g pared_ch = (p4010==1 | p4010==2 | p4010==3 | p4010==5)
+g pared_ch = (p4010==1 | p4010==2 | p4010==3)
 replace pared_ch = . if p4010 == .
 label var pared_ch "Materiales de construcción de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"

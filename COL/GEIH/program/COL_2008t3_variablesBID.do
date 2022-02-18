@@ -1242,8 +1242,7 @@ label val piso_ch piso_ch
 **************
 ***pared_ch***
 **************
-gen pared_ch=0 if p4010==8 | p4010==9
-replace pared_ch=1 if p4010>=1 & p4010<=7
+gen pared_ch= (p4010>=1 & p4010<=3)
 replace pared_ch=. if p4010==.
 label var pared_ch "Materiales de construcción de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
@@ -1354,6 +1353,7 @@ label var internet_ch "El hogar posee conexión a Internet"
 ************
 ***cel_ch***
 ************
+/*
 gen temp1=(p5220==1)
 replace temp1=. if p5220==.
 
@@ -1364,8 +1364,9 @@ gen cel_ch=0
 replace cel_ch=1 if temp2>=1 & temp2!=.
 replace cel_ch=. if p5220==.
 label var cel_ch "El hogar tiene servicio telefonico celular"
-drop temp*
-
+drop temp* 
+*/
+gen cel_ch=.
 **************
 ***vivi1_ch***
 **************

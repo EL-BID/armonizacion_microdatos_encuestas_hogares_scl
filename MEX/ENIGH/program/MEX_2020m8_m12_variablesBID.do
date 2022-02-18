@@ -171,7 +171,7 @@ gen mes_c= .
 
 gen relacion_ci=.
 replace relacion_ci=1 if parentesco=="101" | parentesco=="102"
-replace relacion_ci=2 if parentesco>="201" & parentesco<="204"
+replace relacion_ci=2 if parentesco>="201" & parentesco<="205"
 replace relacion_ci=3 if parentesco>="301" & parentesco<="305"
 replace relacion_ci=4 if parentesco>="601" & parentesco<="623"
 replace relacion_ci=5 if (parentesco>="501" & parentesco <="503") | (parentesco>="701" & parentesco<="715")

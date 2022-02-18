@@ -1182,7 +1182,7 @@ g       pqnoasis1_ci = .
 	la val pared_ch pared_ch
 */
 
-	g pared_ch = (p4010 >= 1 & p4010 <= 6)
+	g pared_ch = (p4010 >= 1 & p4010 <= 3)
 	replace pared_ch = . if p4010 == .
 	la var pared_ch "Materiales de construcción de las paredes"
 	la de pared_ch 0"No permanentes" 1"Permanentes"
@@ -1424,6 +1424,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
+destring idh_ch, replace
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///

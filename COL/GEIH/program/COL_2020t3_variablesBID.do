@@ -941,20 +941,23 @@ la var subemp_ci "Personas en subempleo por horas"
 ***edusi_ci***
 **************
 	g byte edusi_ci = (aedu_ci >= 6 & aedu_ci < 11) 
+	replace edusi_ci=1 if  (aedu_ci >= 11 & aedu_ci <= 13) & p6210==5 & p6220<2
 	la var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-	g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5
+	g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5 &p6220==2
 	la var edusc_ci "Secundaria completa"
 
+	
 **************
 ***eduui_ci***
 **************
 *Para la educación superior no es posible saber cuántos años dura el ciclo
 *por ello se hace una aproximación a través de titulación
-	g byte eduui_ci = (aedu_ci > 11 & aedu_ci!=. & p6210 == 6 & (p6220 == 1 | p6220 == 2))
+	g byte eduui_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==6 &p6220==2
+	replace eduui_ci=1 if aedu>13 & p6210==6 & p6220==2
 	la var eduui_ci "Superior incompleto"
 
 **************
@@ -962,7 +965,7 @@ la var subemp_ci "Personas en subempleo por horas"
 **************
 *Para la educación superior no es posible saber cuántos años dura el ciclo
 *por ello se hace una aproximación a través de titulación
-	g byte eduuc_ci = ((aedu_ci > 11 & aedu_ci!=.) & p6210 == 6 & (p6220 == 3 | p6220 == 4 | p6220 == 5))
+	g byte eduuc_ci = (aedu_ci >= 11  & p6210 == 6 & p6220>2 & p6220<=5)
 	la var eduuc_ci "Superior completo"
 
 ***************
@@ -981,15 +984,24 @@ la var subemp_ci "Personas en subempleo por horas"
 ***edus2i_ci***
 ***************
 	g byte edus2i_ci = aedu_ci == 10 
+	replace edus2i_ci = 1 if (aedu_ci >= 11 & aedu_ci <= 13) & p6210==5 & p6220<2
 	la var edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-	g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6220 == 2
+	g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6210==5 & p6220==2
 	la var edus2c_ci "2do ciclo de la secundaria completo"
 
 
+	//data incosistente
+	
+	replace edusc_ci=1 if aedu_ci==11 & edusi_ci==0 & edusc_ci==0 & eduui_ci==0 & eduuc_ci==0
+	replace edus2c_ci=1 if aedu_ci==11 & edus2i_ci==0 & edus2c_ci==0 & eduui_ci==0 & eduuc_ci==0
+	
+	replace eduui_ci=1 if aedu_ci==12 & edusi_ci==0 & edusc_ci==0 &edus2i_ci==0 & edus2c_ci==0 & eduui_ci==0 & eduuc_ci==0
+	replace eduui_ci=1 if aedu_ci==13 & edusi_ci==0 & edusc_ci==0 &edus2i_ci==0 & edus2c_ci==0 & eduui_ci==0 & eduuc_ci==0
+	
 	foreach i in no pi pc si sc ui uc s1i s1c s2i s2c {
 		replace edu`i'_ci = . if aedu_ci == .
 	}
@@ -997,22 +1009,22 @@ la var subemp_ci "Personas en subempleo por horas"
 ***************
 ***edupre_ci***
 ***************
-	g byte edupre_ci =(p6210s1==1 & p6210==2)
+	g byte edupre_ci =.
 	la var edupre_ci "Educación preescolar"
 
 ***************
 ***asispre_ci**
 ***************
 *Variable creada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if p6210s1==0 & p6210==2 & p6170==1
-	recode asispre_ci (.=0)
+	g asispre_ci=p6210s1==0 & p6210==2 & p6170==1
 	la var asispre_ci "Asiste a educación prescolar"
 	
 **************
 ***eduac_ci***
 **************
 	g byte eduac_ci = .
+	replace eduac_ci = 0 if p6220==3 & p6210==6 //Educacion tecnica o tecnologica
+	replace eduac_ci = 1 if (p6220==4 | p6220==5) & p6210==6 //Educacion universitaria o de postgrado
 	la var eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
@@ -1051,23 +1063,22 @@ g       pqnoasis1_ci = .
 ***************
 ***edupub_ci***
 ***************
-	g edupub_ci = 1 if p6175 == 1
-	replace edupub_ci = 0 if p6175 == 2
+	g edupub_ci =.
+	replace edupub=1 if p6175 == 1 & asiste_ci==1
+	replace edupub_ci = 0 if p6175 == 2 & asiste_ci==1
 	la var edupub_ci "Asiste a un centro de enseñanza público"
 	
 **************
 ***tecnica_ci*
 **************
 
-gen tecnica_ci = (p6220==3)
+gen tecnica_ci = (p6220==3  & p6210==6)
 label var tecnica_ci "1=formacion terciaria tecnica"
 
 ***************
 * Universidad *
 ***************
-
-
-gen universidad_ci = (p6220==4)
+gen universidad_ci = (p6220==4 & p6210==6) | (p6220==5 & p6210==6)
 label var universidad_ci "1=formacion universitaria"
 
 	

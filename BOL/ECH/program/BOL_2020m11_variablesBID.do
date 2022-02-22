@@ -1638,19 +1638,23 @@ replace aedu_ci = s03a_02c + 12 + 5 + 2 if s03a_02c <= 5 & (s03a_02a ==75) // do
 
 * Terminación nivel
 
-replace aedu_ci = 12+4   if s03a_02a ==71 & s03a_02c == 8 //Terminó escuela normal
+replace aedu_ci = 12+5   if s03a_02a ==71 & s03a_02c == 8 //Terminó escuela normal
 replace aedu_ci = 12+5   if s03a_02a ==72 & s03a_02c == 8 //Terminó universidad
 replace aedu_ci = 12+5+1 if s03a_02a ==73 & s03a_02c == 8 //Terminó posgrado
 replace aedu_ci = 12+5+2 if s03a_02a ==74 & s03a_02c == 8 //Terminó maestria
-replace aedu_ci = 12+5+5 if s03a_02a ==75 & s03a_02c == 8 //Terminó doctorado
+replace aedu_ci = 12+5+2+4 if s03a_02a ==75 & s03a_02c == 8 //Terminó doctorado
 
+
+**Imputando los valores perdidos**
+
+replace aedu_ci=12 if s03a_02a==72 &aedu_ci==.
+replace aedu_ci=8 if s03a_02a==32 &aedu_ci==.
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
@@ -1690,7 +1694,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1723,7 +1727,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 * Se incorpora la restricción s5_02b<8 para que sea comparable con los otros años LCM dic 2013
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s03a_02c<8)
+gen byte eduui_ci=(aedu_ci>=13 & s03a_02c<8)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1731,8 +1735,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s03a_02c==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=13 & eduui_ci==0)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
 
@@ -1740,8 +1743,7 @@ label variable eduuc_ci "Universitaria completa"
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s03a_02a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
@@ -1760,8 +1762,9 @@ label variable edupre_ci "Educacion preescolar"
 
 * Se cambia para universidad completa o más 
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s03a_02a>=72 & s03a_02a<=73)
-replace eduac_ci=0 if (s03a_02a>=77 & s03a_02a<=79)
+replace eduac_ci=1 if (s03a_02a>=72 & s03a_02a<=75)
+replace eduac_ci=1 if s03a_02a==71 //educacion normal
+replace eduac_ci=0 if (s03a_02a>=76 & s03a_02a<=79)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 /*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
 YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
@@ -1850,15 +1853,15 @@ s5_09:
 */
 
 gen edupub_ci=.
-replace edupub_ci= 1 if s03b_07==1
-replace edupub_ci= 0 if s03b_07==2
+replace edupub_ci= 1 if s03b_07==1 & asiste_ci==1
+replace edupub_ci= 0 if s03b_07==2 & asiste_ci==1
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
 **************
 ***tecnica_ci*
 **************
 
-gen tecnica_ci = (s03a_02a==77 | s03a_02a==79 | s03a_02a==76 | s03a_02a==78)
+gen tecnica_ci = (s03a_02a>=76 & s03a_02a<=79)
 label var tecnica_ci "1=formacion terciaria tecnica"
 
 ***************
@@ -1866,7 +1869,7 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ***************
 
 
-gen universidad_ci = (s03a_02a==72 )
+gen universidad_ci = (s03a_02a>=71 & s03a_02a<=79 ) // incluye educacion normal
 label var universidad_ci "1=formacion universitaria"
 
 

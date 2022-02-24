@@ -1386,6 +1386,8 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 gen aedu_ci=.
 replace aedu_ci=0 if a15==0 | a15==1 
 
+label var aedu_ci "Años de educación"
+
 *Primaria
 replace aedu_ci=1 if a15==11 
 replace aedu_ci=2 if a15==12
@@ -1415,6 +1417,18 @@ replace aedu_ci=19 if a15==71 | a15==81
 replace aedu_ci=20 if a15==72 | a15==82
 replace aedu_ci=21 if a15==73 | a15==83
 replace aedu_ci=22 if a15==74 | a15==84
+replace aedu_ci=23 if a15==85
+replace aedu_ci=24 if a15==86
+
+// imputando valores perdidos
+
+replace aedu_ci=0 if a15==19
+replace aedu_ci=6 if a15==29
+replace aedu_ci=6 if a15==39
+replace aedu_ci=11 if a15==49
+replace aedu_ci=11 if a15==59
+replace aedu_ci=11+4 if a15==89
+
 
 **************
 ***eduno_ci***
@@ -1423,8 +1437,8 @@ replace aedu_ci=22 if a15==74 | a15==84
 replace eduno_ci=1 if a15==0 | a15==1 
 label variable eduno_ci "Cero anios de educacion"*/
 
-gen eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen eduno_ci=(a15==0 | a15==1 )
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
 
@@ -1435,8 +1449,9 @@ label variable eduno_ci "Cero anios de educacion"
 replace edupi_ci=1 if (a15>=11 & a15<16)
 label variable edupi_ci "Primaria incompleta"*/
 
-gen edupi_ci=0
-replace edupi_ci=1 if aedu_ci>=1 & aedu_ci<6
+gen edupi_ci=(a15>=11 & a15<=15 )
+replace edupi_ci=1 if a15==19  
+replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
 **************
@@ -1446,8 +1461,8 @@ label variable edupi_ci "Primaria incompleta"
 replace edupc_ci=1 if a15==16
 label variable edupc_ci "Primaria completa"*/
 
-gen edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+gen edupc_ci=a15==16
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 **************
@@ -1458,8 +1473,9 @@ replace edusi_ci=1 if (a15>=21 & a15<=26)
 replace edusi_ci=1 if (a15>=31 & a15<=35) 
 label variable edusi_ci "Secundaria incompleta"*/
 
-gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11) | a15==35
+gen edusi_ci=(a15>=21 & a15<=24) | (a15>=31 & a15<=35)
+replace edusi_ci=1 if  (a15==29 | a15==39)
+replace edusi_ci=. if  aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 **************
@@ -1469,24 +1485,23 @@ label variable edusi_ci "Secundaria incompleta"
 replace edusc_ci=1 if  a15==36 | a15==37 
 label variable edusc_ci "Secundaria completa"*/
 
-gen edusc_ci=0
-replace edusc_ci=1 if  (aedu_ci==11 | aedu_ci==12) & a15!=35
+gen edusc_ci=(a15>=25 & a15<=26) | (a15>=36 & a15<=37)
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=0
-replace edus1i_ci=1 if (a15>=21 & a15<=22)
-replace edus1i_ci=1 if (a15>=31 & a15<=32)
+gen edus1i_ci=(a15>=21 & a15<=22) | (a15>=31 & a15<=32)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=0
-replace edus1c_ci=1 if a15==23 | a15==33
+gen edus1c_ci= a15==23 | a15==33
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 
@@ -1494,8 +1509,9 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***edus2i_ci***
 ***************
 gen edus2i_ci=0
-replace edus2i_ci=1 if (a15==24 | a15 == 25 | a15 == 26)
-replace edus2i_ci=1 if (a15>=34 & a15<=35)
+replace edus2i_ci=1 if (a15==24 | a15 == 25 | a15 == 29)
+replace edus2i_ci=1 if (a15==34 | a15 == 35 | a15 == 39)
+replace edus2i_ci=. if aedu_ci==. 
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 
@@ -1503,7 +1519,8 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***edus2c_ci***
 ***************
 gen edus2c_ci=0
-replace edus2c_ci=1 if a15==36 | a15==37
+replace edus2c_ci=1 if a15==36 | a15==37 | a15==26 | a15==27
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 
@@ -1511,8 +1528,11 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 gen eduui_ci=0
-replace eduui_ci=1 if (a15>=41 & a15<=43)
-replace eduui_ci=1 if (a15>=51 & a15<=54)
+replace eduui_ci=1 if (a15>=41 & a15<=42) // hasta dos anios de educacion parauniversitaria
+replace eduui_ci=1 if (a15>=51 & a15<=53) // hasta tres anios de universidad
+replace eduui_ci=1 if (a15==54 & a17b<=3) // cuatro anios pero sin titulo superior
+replace eduui_ci=1 if (a15==59 | a15==49) // anios ignorados
+replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Superior incompleto"
 
 
@@ -1521,50 +1541,45 @@ label variable eduui_ci "Superior incompleto"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if a15>=55
+replace eduuc_ci=1 if a15==43 // tres anios de parauniversitaria
+replace eduuc_ci=1 if (a15==54 & a17b>3) // cuatro anios de universitaria y titulo de licenciatura o superior
+replace eduuc_ci=1 if a15>=55 & a15<59 // cinco anios o mas de universitaria, o postgrados
+replace eduuc_ci=1 if a15>59 & a15<99
+replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Superior completo"
 
 *************
 ***tecnica_ci**
 *************
-gen tecnica_ci=.
-replace tecnica_ci=1 if a15>=41 & a15<=43
-recode tecnica_ci .=0 
+gen tecnica_ci=(a15>=41 & a15<=49)
 label var tecnica_ci "=1 formacion terciaria tecnica"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre_ci=(a15==1)
 label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 *Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if (a14==1 | a14==2) & a5>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=(a14==1 | a14==2)
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if a15>=51 & a15<=59
+replace eduac_ci=0 if a15>=41 & a15<=49
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
-gen asiste_ci=.
-replace asiste_ci=1 if a14>=1 & a14<=8
-replace asiste_ci=0 if a14==0
+gen asiste_ci=(a14>=1 & a14<=8)
+replace asiste_ci=. if a14==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
@@ -1611,11 +1626,16 @@ label var repiteult_ci "Personas que han repetido el último grado"
 ***************
 ***edupub_ci***
 ***************
-gen edupub_ci=0
-replace edupub_ci=1 if a16==1 
-replace edupub_ci=. if a16==.
+gen edupub_ci=.
+replace edupub_ci=1 if (a16==1 | a16==2 ) & asiste_ci==1 // incluye los semi publicos
+replace edupub_ci=0 if (a16==3 ) & asiste_ci==1 // incluye los extranjeros
 label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 
+*************
+***universidad_ci**
+*************
+gen universidad_ci=(a15>=51 & a15<=59)
+label var universidad_ci "=1 formacion terciaria universitaria"
 
 
 						**********************************

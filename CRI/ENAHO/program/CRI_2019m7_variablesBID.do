@@ -1048,6 +1048,8 @@ gen aedu_ci=.
 replace aedu_ci=0 if a14==0 | a14==1 
 label var aedu_ci "Años de educación"
 
+replace aedu_ci=. if a14==2 //Educacion Especial. Solo como check
+
 *Primaria
 replace aedu_ci=1 if a14==11 
 replace aedu_ci=2 if a14==12
@@ -1080,7 +1082,18 @@ replace aedu_ci=21 if a14==73 | a14==103 | a14==113
 replace aedu_ci=22 if a14==74 | a14==104 | a14==114
 
 
-replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
+*replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
+
+// imputando valores perdidos
+
+replace aedu_ci=0 if a14==19
+replace aedu_ci=6 if a14==29
+replace aedu_ci=6 if a14==39
+replace aedu_ci=11 if a14==49
+replace aedu_ci=11 if a14==59
+replace aedu_ci=11+4 if a14==79
+replace aedu_ci=11+4 if a14==109
+replace aedu_ci=11+4+2 if a14==119
 
 ********************************************************************************************************************************
 ***2._EDUNO_CI : Personas sin educacion (se refiere a primaria, secundaria y universitaria(o terciaria); excluye preescolar).
@@ -1089,8 +1102,8 @@ replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimie
 replace eduno_ci=1 if a14==0 | a14==1 
 label variable eduno_ci "Cero anios de educacion"*/
 
-gen eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen eduno_ci=nivinst==0
+replace eduno_ci=. if aedu_ci==. 
 label variable eduno_ci "Cero anios de educacion"
 
 ********************************************************************************************************************************
@@ -1100,8 +1113,8 @@ label variable eduno_ci "Cero anios de educacion"
 replace edupi_ci=1 if (a14>=11 & a14<16) 
 label variable edupi_ci "Primaria incompleta"*/
 
-gen edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=nivinst==1
+replace edupi_ci=. if aedu_ci==.  
 label variable edupi_ci "Primaria incompleta"
 
 ********************************************************************************************************************************
@@ -1111,8 +1124,8 @@ label variable edupi_ci "Primaria incompleta"
 replace edupc_ci=1 if a14==16
 label variable edupc_ci "Primaria completa"*/
 
-gen edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+gen edupc_ci=nivinst==2
+replace edupc_ci=. if aedu_ci==. 
 label variable edupc_ci "Primaria completa"
 
 ********************************************************************************************************************************
@@ -1123,8 +1136,8 @@ replace edusi_ci=1 if (a14>=21 & a14<=26)
 replace edusi_ci=1 if (a14>=31 & a14<=35) 
 label variable edusi_ci "Secundaria incompleta"*/
 
-gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11) & a14==35 
+gen edusi_ci=(nivinst==3 | nivinst==5)
+replace edusi_ci=. if  aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 ********************************************************************************************************************************
@@ -1135,81 +1148,80 @@ label variable edusi_ci "Secundaria incompleta"
 replace edusc_ci=1 if  a14==36 | a14==37 
 label variable edusc_ci "Secundaria completa"*/
 
-gen edusc_ci=0
-replace edusc_ci=1 if  (aedu_ci==11 | aedu_ci==12) & a14!=35
+gen edusc_ci=(nivinst==4 | nivinst==6)
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 ********************************************************************************************************************************
 ***7._EDUS1I_CI : Personas que no han completado el primer ciclo de la educacion secundaria.
 ********************************************************************************************************************************
-gen edus1i_ci=0
-replace edus1i_ci=1 if (a14>=21 & a14<=22)
-replace edus1i_ci=1 if (a14>=31 & a14<=32)
+gen edus1i_ci=(a14>=21 & a14<=22) | (a14>=31 & a14<=32)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ********************************************************************************************************************************
 ***8._EDUS1C_CI : Personas que han completado el primer ciclo de la educacion secundaria.
 ********************************************************************************************************************************
-gen edus1c_ci=0
-replace edus1c_ci=1 if a14==23 | a14==33
+gen edus1c_ci= a14==23 | a14==33
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ********************************************************************************************************************************
 ***9._EDUS2I_CI : Personas que no han completado el segundo ciclo de la educacion secundaria.
 ********************************************************************************************************************************
-gen edus2i_ci=0
-replace edus2i_ci=1 if (a14==24 | a14 == 25 | a14 == 26)
-replace edus2i_ci=1 if (a14>=34 & a14<=35)
+gen edus2i_ci=(a14==24 | a14 == 29 | a14 == 34| a14 == 35)
+replace edus2i_ci=. if aedu_ci==. 
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ********************************************************************************************************************************
 ***10._EDUS2C_CI : Personas que han completado el segundo ciclo de la educacion secundaria.
 ********************************************************************************************************************************
 
-gen edus2c_ci=0
-replace edus2c_ci=1 if a14==36 | a14==37
+gen edus2c_ci=a14==25 | a14==26 | a14==36 | a14==37
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 ********************************************************************************************************************************
 ***11._EDUUI_CI : Peronas que no han completado la educacion universitaria o terciaria.***
 ********************************************************************************************************************************
 gen eduui_ci=0
-replace eduui_ci=1 if (a14>=41 & a14<=43)
-replace eduui_ci=1 if (a14>=51 & a14<=54)
+replace eduui_ci=1 if (a14>=41 & a14<=42) // hasta dos anios de educacion parauniversitaria
+replace eduui_ci=1 if (a14>=51 & a14<=53) // hasta tres anios de universidad
+replace eduui_ci=1 if (a14==54 & a16b<=3) // cuatro anios pero sin titulo superior
+replace eduui_ci=. if aedu_ci==. 
+
 label variable eduui_ci "Superior incompleto"
 
 ********************************************************************************************************************************
 ***12._EDUUC_CI : Personas que han completado la educacion universitaria o terciaria.***
 ********************************************************************************************************************************
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if a14>=55
-label variable eduuc_ci "Superior completo"
+replace eduuc_ci=1 if a14==43 // tres anios de parauniversitaria
+replace eduuc_ci=1 if (a14==54 & a16b>3) // cuatro anios de universitaria y titulo de licenciatura o superior
+replace eduuc_ci=1 if a14>=55 // cinco anios o mas de universitaria, o postgrados
+replace eduuc_ci=. if aedu_ci==.
 
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
+label variable eduuc_ci "Superior completo"
 
 ********************************************************************************************************************************
 ***13._EDUPRE_CI : Educacion preescolar.
 ********************************************************************************************************************************
 gen edupre_ci=.
-replace edupre_ci=(a14==1)
 label variable edupre_ci "Educacion preescolar"
 
 ********************************************************************************************************************************
 ***13.A_ASISPRE_CI : Asistencia a Educacion preescolar.
 ********************************************************************************************************************************
 *Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if (a13==1 | a13==2) & a5>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=(a13==1 | a13==2)
 	la var asispre_ci "Asiste a educacion prescolar"
 
 ********************************************************************************************************************************
 ***14._EDUAC_CI : Educación terciaria académica versus educación terciaria no-académica***
 ********************************************************************************************************************************
 gen eduac_ci=.
+replace eduac_ci=1 if a14>=51 & a14<=59
+replace eduac_ci=0 if a14>=41 & a14<=49
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ********************************************************************************************************************************
@@ -1255,7 +1267,7 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***17._REPITE_CI : Personas que han repetido al menos un año o grado.***
 ********************************************************************************************************************************
 
-gen repite_ci=.
+gen repite_ci=(rez_esc>=1 & rez_esc<=5 )
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
 ********************************************************************************************************************************
@@ -1269,25 +1281,21 @@ label var repiteult_ci "Personas que han repetido el último grado"
 ***19._EDUPUB_CI : Personas que asisten a centros de enseñanza publicos.***
 ********************************************************************************************************************************
 gen edupub_ci=.
-replace edupub_ci=1 if (a15a==1| a15a==2)
-replace edupub_ci=0 if (a15a==3 | a15a==4)
+replace edupub_ci=1 if (a15a==1| a15a==2) & asiste_ci==1 // incluye los semi publicos
+replace edupub_ci=0 if (a15a==3 | a15a==4) & asiste_ci==1 // incluye los extranjeros
 label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 
 *************
 ***tecnica_ci**
 *************
-gen tecnica_ci=.
-replace tecnica_ci=1 if a14>=41 & a14<=43
-recode tecnica_ci .=0 
+gen tecnica_ci=(a14>=41 & a14<=49)
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
 *************
-***tecnica_ci**
+***universidad_ci**
 *************
-gen universidad_ci=.
-replace universidad_ci=1 if a14>=51 & a14<=56
-recode universidad_ci .=0 
-label var tecnica_ci "=1 formacion terciaria tecnica"
+gen universidad_ci=(a14>=51 & a14<=59)
+label var universidad_ci "=1 formacion terciaria universitaria"
 
 *====================================================================================================================================*
 *                                                     VARIABLES DE LA VIVIENDA                                                       *

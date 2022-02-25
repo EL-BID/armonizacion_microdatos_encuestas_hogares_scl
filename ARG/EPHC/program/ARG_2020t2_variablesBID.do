@@ -809,17 +809,13 @@ label val rama_ci rama_ci
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-
+* Mod. 2/2022 Pia Locco y Agustina Thailinger EDU/SLC
 
 	*********
 	*aedu_ci* 
 	*********
-	*NOTA: Como terciario, universitario y posgrado tienen una duración ¶ariable se supone 
-	*que terciario completo implica 3 anios de educacion adicional a la secundaria, 5 adicionales a universitario 
-	*y 2 a postgrado. Esto solo se basa en el criterio de que la modas de finalización ¥stos niveles suelen
-	*ser estas. ESTO SE DEBE DISCUTIR 
-/*
-	gen aedu_ci=0 if (ch10==0 | ch10==3) 
+
+/*  gen aedu_ci=0 if (ch10==0 | ch10==3) 
 	replace aedu=0 if ch12==1 & ch13==2
 	replace aedu=0 if ch12==2 & ch14=="00" & ch13==2
 	replace aedu=0 if ch12==3 & ch14=="00" & ch13==2
@@ -863,13 +859,12 @@ label val rama_ci rama_ci
 	replace aedu=17 if ch12==7 & ch13==1
 	replace aedu=18 if ch12==7 & ch13==1
 	replace aedu=19 if ch12==8 & ch13==1
-	replace aedu=. if ch12==9 | ch12==99
-
-*/
+	replace aedu=. if ch12==9 | ch12==99 */
+	
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
    *Ajustando variables
 	replace ch11=. if ch11==9
-	replace ch12=. if ch12==99 | ch12==9 // El ò¬´©mo condicional es para sacar a la población £on educación ¥special
+	replace ch12=. if ch12==99 | ch12==9 // Missing a educacion especial
 	replace ch13=. if ch13==9
 	destring ch14, replace
 	replace ch14=. if ch14==98 | ch14==99
@@ -877,12 +872,12 @@ label val rama_ci rama_ci
 	label define Ch12 1 "Jardín/preescolar" 2 "Primario" 3 "EGB" 4 "Secundario" 5 "Polimodal" 6 "Terciario" 7 "Universitario" 8 "Posgrado universitario" 9 "Educación 	especial (discapacitado)" 
 	label values ch12 Ch12	
 	
-	*Variable de Añ¯ ¤e Educación	
+	*Variable de Anios de Educacion	
 	
 	gen aedu_ci=.
 	
-	*Para quienes no terminaron el ò¬´©mo nivel educativo al que asistió
-	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero añ¯³ de educación °ara aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 añ¯³n
+	*Para quienes no terminaron el ultimo nivel educativo al que asistieron
+	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero anios de educación para aquellos que no han asistido nunca a ninguna institucion y los menores de 2 anios
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
 	replace aedu_ci=ch14+6 if ch12==4 & ch13==2
@@ -891,16 +886,16 @@ label val rama_ci rama_ci
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
 	replace aedu_ci=ch14+17 if ch12==8 & ch13==2
 		
-	*Para quienes terminaron el ò¬´©mo nivel educativo al que asistió
-	replace aedu_ci=6 if ch12==2 & ch13==1
-	replace aedu_ci=9 if ch12==3 & ch13==1
+	*Para quienes terminaron el ultimo nivel educativo al que asistieron
+	replace aedu_ci=6 if ch12==2  & ch13==1
+	replace aedu_ci=9 if ch12==3  & ch13==1
 	replace aedu_ci=12 if ch12==4 & ch13==1
 	replace aedu_ci=12 if ch12==5 & ch13==1
-	replace aedu_ci=15 if ch12==6 & ch13==1 //terciario son tres años segun UNESCO
+	replace aedu_ci=15 if ch12==6 & ch13==1
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
-	*Imputando para los que tenemos certeza del nivel educativo mâ³ alto alcanzado
+	*Imputando para los que tenemos certeza del nivel educativo mas alto alcanzado
 	replace aedu_ci=6 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
@@ -913,20 +908,19 @@ label val rama_ci rama_ci
 	
 	//imputando valores. Esta es una opcion a la anterior
 	
-	/*replace aedu_ci=0 if ch12==2 & aedu_ci==. & ch13==1
+/*  replace aedu_ci=0 if ch12==2 & aedu_ci==. & ch13==1
 	replace aedu_ci=0 if ch12==3 & aedu_ci==. & ch13==1
 	replace aedu_ci=6 if ch12==4 & aedu_ci==. & ch13==1
 	replace aedu_ci=9 if ch12==5 & aedu_ci==. & ch13==1
 	replace aedu_ci=12 if ch12==6 & aedu_ci==. & ch13==1
 	replace aedu_ci=12 if ch12==7 & aedu_ci==. & ch13==1
-	replace aedu_ci=17 if ch12==8 & aedu_ci==. & ch13==1
-	*/
+	replace aedu_ci=17 if ch12==8 & aedu_ci==. & ch13==1 */
 
 	**********
 	*eduno_ci* 
 	**********
 	
-	gen eduno_ci=(aedu_ci==0) //Esto incluye a primario incompleto que no completaron un año (hay 246 casos de diferencia)
+	gen eduno_ci=(aedu_ci==0)
 	replace eduno_ci=. if aedu_ci==. 
 	
 	**********
@@ -961,8 +955,8 @@ label val rama_ci rama_ci
 	*eduui_ci*
 	**********
 	
-	gen eduui_ci=(aedu_ci>12 & nivel_ed==5) // nivel superior incompleto
-	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6 //
+	gen eduui_ci=(aedu_ci>12 & nivel_ed==5)
+	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6
 	replace eduui_ci=. if aedu_ci==.
 	
 	**********
@@ -984,7 +978,7 @@ label val rama_ci rama_ci
 	***********
 	*edus1c_ci*
 	***********
-	*edus1c_ci: primer ciclo de secundaria completa
+
 	gen byte edus1c_ci=(aedu_ci==9)
 	replace edus1c_ci=. if aedu_ci==.
 	label variable edus1c_ci "1er ciclo de la secundaria completo"
@@ -1008,12 +1002,13 @@ label val rama_ci rama_ci
 	*edupre_ci*
 	***********
 
-	*Cambio realizado 11/7/2016 por Ivân Bornacelly - Creando la dummy que identifica a la población ±ue asiste a Educación rescolar
+	*Cambio realizado 11/7/2016 por Ivân Bornacelly - Creando la dummy que identifica a la población que asiste a educacion preescolar
 	gen byte edupre_ci=.
 
 	************
 	*asispre_ci*
 	************
+	
 	*Nueva variable incoporada 01/11/2017 por Ivân Bornacelly
 	g asispre_ci=(ch10==1 & ch12==1)
 	la var asispre_ci "Asiste a educacion prescolar"
@@ -1021,18 +1016,18 @@ label val rama_ci rama_ci
 	**********
 	*eduac_ci*
 	**********
+	
 	gen byte eduac_ci=.
 	replace eduac_ci=1 if ch12==7
 	replace eduac_ci=0 if ch12==6
 	
-
-
 	***********
 	*asiste_ci*
 	***********
 	
 	gen asiste_ci=(ch10==1)
 	replace asiste_ci=. if ch10==0 | ch10==9
+	
 	*************
 	*pqnoasis_ci*
 	*************
@@ -1040,12 +1035,11 @@ label val rama_ci rama_ci
 	gen pqnoasis_ci=.
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
 	
-	**Daniela Zuluaga- Enero 2019: Se agrega la variable pqnoasis1_ci**
-	
 	**************
 	*pqnoasis1_ci*
 	**************
-	
+
+	**Daniela Zuluaga- Enero 2019: Se agrega la variable pqnoasis1_ci**
 	gen pqnoasis1_ci=. 
 
 	***********
@@ -1060,36 +1054,16 @@ label val rama_ci rama_ci
 
 	gen repiteult_ci=.
 
-
 	***********
 	*edupub_ci*
 	***********
+	
 	gen edupub_ci =.
 	replace edupub_ci = 1 if ch11==1 & asiste_ci==1
 	replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 	
-	*************
-	***tecnica_ci**
-	*************
-	* Cambio Angela López noviembre 2019
-	gen     tecnica_ci= .
-	replace tecnica_ci= 1 if ch12==6
 
-	*************
-	***universidad_ci**
-	*************
-	gen     universidad_ci= .
-	replace universidad_ci= 1 if ch12==7
-	
-	
-*Ch12==1 corresponde a jardín/preescolar, no hay variable técnica.
-/*
-replace tecnica_ci=1 if ch12==1
-recode tecnica_ci .=0 
-label var tecnica_ci "=1 formacion terciaria tecnica"
-*/
-
-		**********************************
+	    **********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 

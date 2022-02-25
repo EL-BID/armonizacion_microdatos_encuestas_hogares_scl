@@ -1436,14 +1436,6 @@ replace salmm_ci=304.2 if rama_ci==6
 replace salmm_ci=276.7 if salmm_ci==. /* promedio de resto de ramas*/
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen tecnica_ci=.
-*gen tecnica_ci=(r204==5 | r215a==5)
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
 *****************
 **categoinac_ci**
 *****************	

@@ -1655,7 +1655,6 @@ gen dis_ci =. // No está la pregunta en la encuesta 2020
 gen antiguedad_ci=. // No está la pregunta en la encuesta 2020
 gen durades_ci=. // No está la pregunta en la encuesta 2020
 gen desalent_ci=. // No está la pregunta en la encuesta 2020
-gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

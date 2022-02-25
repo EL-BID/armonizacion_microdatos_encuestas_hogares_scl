@@ -452,11 +452,6 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 gen ypensub_ci=.
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
-***************
-***tecnica_ci**
-***************
-gen tecnica_ci=.
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 ***************
 ***pension_ci**

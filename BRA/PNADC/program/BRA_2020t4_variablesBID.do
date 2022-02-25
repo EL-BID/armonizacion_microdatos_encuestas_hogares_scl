@@ -1581,10 +1581,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci=.
 gen tcylmpri_ch=.
 
-gen edus1c_ci=1 if aedu_ci==8 | aedu_ci==9
-label var edus1c_ci "secudnaria baja completa"
 
-gen repiteult_ci=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.

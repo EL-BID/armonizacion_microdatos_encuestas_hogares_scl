@@ -620,11 +620,6 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 gen salmm_ci= 930 /*se mantiene para todos los meses de 2020*/
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=(p301a==7 | p301a==8 | p304a==4 | p308a==4)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
 ***emp_ci***

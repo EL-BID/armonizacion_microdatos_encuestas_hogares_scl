@@ -874,6 +874,8 @@ label val rama_ci rama_ci
 	destring ch14, replace
 	replace ch14=. if ch14==98 | ch14==99
 	
+	label define Ch12 1 "Jardín/preescolar" 2 "Primario" 3 "EGB" 4 "Secundario" 5 "Polimodal" 6 "Terciario" 7 "Universitario" 8 "Posgrado universitario" 9 "Educación 	especial (discapacitado)" 
+	label values ch12 Ch12	
 	
 	*Variable de Añ¯ ¤e Educación	
 	
@@ -883,94 +885,124 @@ label val rama_ci rama_ci
 	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero añ¯³ de educación °ara aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 añ¯³n
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
-	replace aedu_ci=ch14+7 if ch12==4 & ch13==2
+	replace aedu_ci=ch14+6 if ch12==4 & ch13==2
 	replace aedu_ci=ch14+9 if ch12==5 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==6 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
 	replace aedu_ci=ch14+17 if ch12==8 & ch13==2
 		
 	*Para quienes terminaron el ò¬´©mo nivel educativo al que asistió
-	replace aedu_ci=7 if ch12==2 & ch13==1
+	replace aedu_ci=6 if ch12==2 & ch13==1
 	replace aedu_ci=9 if ch12==3 & ch13==1
 	replace aedu_ci=12 if ch12==4 & ch13==1
 	replace aedu_ci=12 if ch12==5 & ch13==1
-	replace aedu_ci=17 if ch12==6 & ch13==1
+	replace aedu_ci=15 if ch12==6 & ch13==1 //terciario son tres años segun UNESCO
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
 	*Imputando para los que tenemos certeza del nivel educativo mâ³ alto alcanzado
-	replace aedu_ci=7 if nivel_ed==2 & aedu_ci==.
+	replace aedu_ci=6 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
 	replace aedu_ci=0 if nivel_ed==7 & aedu_ci==.
 	
-	label var aedu_ci "Anios de educacion aprobados" 	
+	label var aedu_ci "Anios de educacion aprobados" 
+	label define nivel 1 "Primario incompleto (incluye educación especial)" 2 "primario completo" 3 "Secundario incompleto" 4 "secundario completo" 5 "Superior universitario incompleto" 6 "Superior universitario completo" 7 "Sin instrucción" 9 "Ns/ Nr"  
+	label values nivel_ed nivel
+	
+	
+	//imputando valores. Esta es una opcion a la anterior
+	
+	/*replace aedu_ci=0 if ch12==2 & aedu_ci==. & ch13==1
+	replace aedu_ci=0 if ch12==3 & aedu_ci==. & ch13==1
+	replace aedu_ci=6 if ch12==4 & aedu_ci==. & ch13==1
+	replace aedu_ci=9 if ch12==5 & aedu_ci==. & ch13==1
+	replace aedu_ci=12 if ch12==6 & aedu_ci==. & ch13==1
+	replace aedu_ci=12 if ch12==7 & aedu_ci==. & ch13==1
+	replace aedu_ci=17 if ch12==8 & aedu_ci==. & ch13==1
+	*/
 
 	**********
 	*eduno_ci* 
 	**********
 	
-	gen eduno_ci=(nivel_ed==7)
+	gen eduno_ci=(aedu_ci==0) //Esto incluye a primario incompleto que no completaron un año (hay 246 casos de diferencia)
+	replace eduno_ci=. if aedu_ci==. 
 	
 	**********
 	*edupi_ci*
 	**********
 	
-	gen edupi_ci=(nivel_ed==1)
+	gen edupi_ci=(aedu>=1 & aedu<=5)
+	replace edupi_ci=. if aedu_ci==. 
 
 	**********
 	*edupc_ci* 
 	**********
 	
-	gen edupc_ci=(nivel_ed==2)
+	gen edupc_ci=(aedu==6)
+	replace edupc_ci=. if aedu_ci==. 
 
 	**********
 	*edusi_ci*
 	**********
 	
-	gen edusi_ci=(nivel_ed==3)
+	gen edusi_ci=(aedu>=7 & aedu<=11)
+	replace edusi_ci=. if aedu_ci==. 
 
 	**********
 	*edusc_ci*
 	**********
 	
-	gen edusc_ci=(nivel_ed==4)
+	gen edusc_ci=(aedu==12)
+	replace edusc_ci=. if aedu_ci==. 
 
 	**********
 	*eduui_ci*
 	**********
 	
-	gen eduui_ci=(nivel_ed==5)
-
+	gen eduui_ci=(aedu_ci>12 & nivel_ed==5) // nivel superior incompleto
+	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6 //
+	replace eduui_ci=. if aedu_ci==.
+	
 	**********
 	*eduuc_ci*
 	**********
 	
-	gen eduuc_ci=(nivel_ed==6)
+	gen eduuc_ci=(aedu_ci>12 & nivel_ed==6)
+	replace eduuc_ci=1 if aedu_ci>=17 & nivel_ed!=5 & nivel_ed!=6
+	replace eduuc_ci=. if aedu_ci==.
 
 	***********
 	*edus1i_ci*
 	***********
 
-	gen byte edus1i_ci=.
+	gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+	replace edus1i_ci=. if aedu_ci==. 
+	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 	***********
 	*edus1c_ci*
 	***********
 	*edus1c_ci: primer ciclo de secundaria completa
 	gen byte edus1c_ci=(aedu_ci==9)
-
+	replace edus1c_ci=. if aedu_ci==.
+	label variable edus1c_ci "1er ciclo de la secundaria completo"
+	
 	***********
 	*edus2i_ci*
 	***********
-
-	gen byte edus2i_ci=.
-
+	gen byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+	replace edus2i_ci=. if aedu_ci==.
+	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
+	
 	***********
 	*edus2c_ci*
 	***********
 
-	gen byte edus2c_ci=.
+	gen byte edus2c_ci=(aedu==12)
+	replace edus2c_ci=.  if aedu_ci==.
+	label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 	***********
 	*edupre_ci*
@@ -978,42 +1010,29 @@ label val rama_ci rama_ci
 
 	*Cambio realizado 11/7/2016 por Ivân Bornacelly - Creando la dummy que identifica a la población ±ue asiste a Educación rescolar
 	gen byte edupre_ci=.
-	replace edupre_ci=1 if ch12==1
-	recode edupre_ci(.=0)
 
 	************
 	*asispre_ci*
 	************
 	*Nueva variable incoporada 01/11/2017 por Ivân Bornacelly
-	g asispre_ci=.
-	replace asispre_ci=1 if ch10==1 & ch12==1 & ch06>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=(ch10==1 & ch12==1)
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**********
 	*eduac_ci*
 	**********
 	gen byte eduac_ci=.
+	replace eduac_ci=1 if ch12==7
+	replace eduac_ci=0 if ch12==6
 	
 
-/** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar añ¯³ de educaciónEsta parte está¡­â³ adelante y por ahora el impacto mâ³ visible es que la población £on educación ¥special se les asigna de manera directa 3 añ¯³ de educación £uando no deberî¢n ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación ¤e los añ¯³ de Educación °ara Argentina se desactive la segunda lî¯¥a del siguiente có¤©§o:*/
-
-
-replace eduno_ci=1	if aedu_ci==0 
-*replace aedu_ci=3 	if aedu_ci==. & edupi_ci==1
-replace aedu_ci=7 	if aedu_ci==. & edupc_ci==1
-replace aedu_ci=9 	if aedu_ci==. & edusi_ci==1
-replace aedu_ci=12 	if aedu_ci==. & edusc_ci==1
-replace aedu_ci=14 	if aedu_ci==. & eduui_ci==1
-replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 
 	***********
 	*asiste_ci*
 	***********
 	
 	gen asiste_ci=(ch10==1)
-
+	replace asiste_ci=. if ch10==0 | ch10==9
 	*************
 	*pqnoasis_ci*
 	*************
@@ -1046,8 +1065,8 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	*edupub_ci*
 	***********
 	gen edupub_ci =.
-	replace edupub_ci = 1 if ch11==1
-	replace edupub_ci = 0 if ch11==2 
+	replace edupub_ci = 1 if ch11==1 & asiste_ci==1
+	replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 	
 	*************
 	***tecnica_ci**
@@ -1056,8 +1075,13 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	gen     tecnica_ci= .
 	replace tecnica_ci= 1 if ch12==6
 
+	*************
+	***universidad_ci**
+	*************
 	gen     universidad_ci= .
-	replace universidad_ci= 1 if ch12==6
+	replace universidad_ci= 1 if ch12==7
+	
+	
 *Ch12==1 corresponde a jardín/preescolar, no hay variable técnica.
 /*
 replace tecnica_ci=1 if ch12==1

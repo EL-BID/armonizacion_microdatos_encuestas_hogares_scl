@@ -1380,7 +1380,7 @@ gen vivialqimp_ch=.
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=(regnaci==8) if regnaci!=.
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************

@@ -911,15 +911,15 @@ label val rama_ci rama_ci
 	label values nivel_ed nivel
 	
 	
-	//imputando valores
+	//imputando valores. Esta es una opcion a la anterior
 	
 	/*replace aedu_ci=0 if ch12==2 & aedu_ci==. & ch13==1
-	replace aedu_ci=0 if ch12==3 & aedu_ci==.
-	replace aedu_ci=6 if ch12==4 & aedu_ci==.
-	replace aedu_ci=9 if ch12==5 & aedu_ci==.
-	replace aedu_ci=12 if ch12==6 & aedu_ci==. 
-	replace aedu_ci=12 if ch12==7 & aedu_ci==.
-	replace aedu_ci=17 if ch12==8 & aedu_ci==.
+	replace aedu_ci=0 if ch12==3 & aedu_ci==. & ch13==1
+	replace aedu_ci=6 if ch12==4 & aedu_ci==. & ch13==1
+	replace aedu_ci=9 if ch12==5 & aedu_ci==. & ch13==1
+	replace aedu_ci=12 if ch12==6 & aedu_ci==. & ch13==1
+	replace aedu_ci=12 if ch12==7 & aedu_ci==. & ch13==1
+	replace aedu_ci=17 if ch12==8 & aedu_ci==. & ch13==1
 	*/
 
 	**********
@@ -1025,9 +1025,6 @@ label val rama_ci rama_ci
 	replace eduac_ci=1 if ch12==7
 	replace eduac_ci=0 if ch12==6
 	
-
-/** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar añ¯³ de educaciónEsta parte está¡­â³ adelante y por ahora el impacto mâ³ visible es que la población £on educación ¥special se les asigna de manera directa 3 añ¯³ de educación £uando no deberî¢n ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación ¤e los añ¯³ de Educación °ara Argentina se desactive la segunda lî¯¥a del siguiente có¤©§o:*/
 
 
 	***********

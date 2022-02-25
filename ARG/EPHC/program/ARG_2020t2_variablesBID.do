@@ -885,7 +885,7 @@ label val rama_ci rama_ci
 	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero añ¯³ de educación °ara aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 añ¯³n
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
-	replace aedu_ci=ch14+7 if ch12==4 & ch13==2
+	replace aedu_ci=ch14+6 if ch12==4 & ch13==2
 	replace aedu_ci=ch14+9 if ch12==5 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==6 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
@@ -900,12 +900,12 @@ label val rama_ci rama_ci
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
-/*	*Imputando para los que tenemos certeza del nivel educativo mâ³ alto alcanzado
-	replace aedu_ci=7 if nivel_ed==2 & aedu_ci==.
+	*Imputando para los que tenemos certeza del nivel educativo mâ³ alto alcanzado
+	replace aedu_ci=6 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
 	replace aedu_ci=0 if nivel_ed==7 & aedu_ci==.
-*/	
+	
 	label var aedu_ci "Anios de educacion aprobados" 
 	label define nivel 1 "Primario incompleto (incluye educación especial)" 2 "primario completo" 3 "Secundario incompleto" 4 "secundario completo" 5 "Superior universitario incompleto" 6 "Superior universitario completo" 7 "Sin instrucción" 9 "Ns/ Nr"  
 	label values nivel_ed nivel
@@ -913,13 +913,14 @@ label val rama_ci rama_ci
 	
 	//imputando valores
 	
-	replace aedu_ci=0 if ch12==2 & aedu_ci==.
+	/*replace aedu_ci=0 if ch12==2 & aedu_ci==. & ch13==1
 	replace aedu_ci=0 if ch12==3 & aedu_ci==.
 	replace aedu_ci=6 if ch12==4 & aedu_ci==.
 	replace aedu_ci=9 if ch12==5 & aedu_ci==.
 	replace aedu_ci=12 if ch12==6 & aedu_ci==. 
 	replace aedu_ci=12 if ch12==7 & aedu_ci==.
 	replace aedu_ci=17 if ch12==8 & aedu_ci==.
+	*/
 
 	**********
 	*eduno_ci* 
@@ -960,8 +961,8 @@ label val rama_ci rama_ci
 	*eduui_ci*
 	**********
 	
-	gen eduui_ci=(aedu_ci>12 & nivel_ed==5)
-	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6
+	gen eduui_ci=(aedu_ci>12 & nivel_ed==5) // nivel superior incompleto
+	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6 //
 	replace eduui_ci=. if aedu_ci==.
 	
 	**********
@@ -1029,20 +1030,12 @@ label val rama_ci rama_ci
 Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar añ¯³ de educaciónEsta parte está¡­â³ adelante y por ahora el impacto mâ³ visible es que la población £on educación ¥special se les asigna de manera directa 3 añ¯³ de educación £uando no deberî¢n ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación ¤e los añ¯³ de Educación °ara Argentina se desactive la segunda lî¯¥a del siguiente có¤©§o:*/
 
 
-replace eduno_ci=1	if aedu_ci==0 
-*replace aedu_ci=3 	if aedu_ci==. & edupi_ci==1
-replace aedu_ci=7 	if aedu_ci==. & edupc_ci==1
-replace aedu_ci=9 	if aedu_ci==. & edusi_ci==1
-replace aedu_ci=12 	if aedu_ci==. & edusc_ci==1
-replace aedu_ci=14 	if aedu_ci==. & eduui_ci==1
-replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
-
 	***********
 	*asiste_ci*
 	***********
 	
 	gen asiste_ci=(ch10==1)
-	replace asiste_ci=. if ch10==0
+	replace asiste_ci=. if ch10==0 | ch10==9
 	*************
 	*pqnoasis_ci*
 	*************

@@ -1249,6 +1249,10 @@ label var remesas_ci "Remesas mensuales reportadas por el individuo"
 
 *55. Antigüedad en la actividad actual
 
+*********************************************************************************************************
+*                                VARIABLES EDUCATIVAS                                                   *
+*********************************************************************************************************
+
 *74. Anios de educación
 gen post=1 if e51_11>=1 & e51_11!=9
 replace post=0 if e51_11==0
@@ -1317,6 +1321,7 @@ replace aedu_ci=0 if e51_2n==0 & e51_4n==0 & e51_5n==0 & e51_6n==0 & e51_8n==0 &
 ** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisión por Iván Bornacelly SCL/EDU **
 ** Ajustado: Jul, 2017 por Iván Bornacelly SCL/EDU
 
+/*
 gen aedu_ci=.
 replace aedu_ci= 0            if preesc==1 
 replace aedu_ci= 0           if (e51_2==9  | e51_3==9)
@@ -1330,8 +1335,13 @@ replace aedu_ci= e51_8 + 12   if mag==1  & e51_8<9
 replace aedu_ci= e51_9 + 12   if univ==1 & e51_9<9
 replace aedu_ci= e51_10 + 12  if terc==1 & (e51_10>e51_9) & e51_10<9
 replace aedu_ci= e51_11 + 17  if post==1 & e51_11<9 
-replace aedu_ci=0             if e49==2 & (edad>=5 & edad!=.)
-replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // Población que declara estar asistiendo o haber asistido, pero no reporta ningún nivel o años de educación aprobado
+*replace aedu_ci=0             if e49==2 & (edad>=5 & edad!=.)
+*replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // Población que declara estar asistiendo o haber asistido, pero no reporta ningún nivel o años de educación aprobado //me parece mucho ponerles cero
+*/
+
+gen aedu_ci=e51_2 + e51_4 + e51_5 + e51_6 + e51_7 + e51_8 + e51_9 + e51_10 + e51_11 //suma de los diferentes anios por nivel
+replace aedu_ci=floor(aedu_ci)
+replace aedu_ci=. if aedu_ci>=99
 
 **************
 ***eduno_ci***
@@ -1410,7 +1420,8 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16)
+gen byte eduui_ci=(aedu_ci>12 & e51_8<4) & (aedu_ci>12 & e51_10<3) & (aedu_ci>12 & e51_9<4) // magisterio, tecnica, universitaria
+replace eduui_ci=1 if (aedu_ci>12 & e51_8==99) | (aedu_ci>12 & e51_10==99) | (aedu_ci>12 & e51_9==99) // perdidos
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1418,7 +1429,8 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=(aedu_ci>=16) 
+gen byte eduuc_ci=(aedu_ci>12 & e51_8>=4 & e51_8<99) | (aedu_ci>12 & e51_10>=3 & e51_10<99) | (aedu_ci>12 & e51_9>=4 & e51_9<99) // magisterio, tecnica, universitaria
+replace eduuc_ci=1 if aedu_ci>12 & post==1 & mag==0 // postgrados
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1426,16 +1438,13 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-gen edupre_ci=(e193==1)
-replace edupre_ci=. if aedu_ci==.
-label variable edupre_ci "Educacion preescolar"
+gen edupre_ci=.
+label variable edupre_ci "Tiene educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
-	g asispre_ci=.
-	replace asispre_ci=1 if e193==1 & e27>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=e193==1
 	la var asispre_ci "Asiste a educacion prescolar"
 
 ***************
@@ -1447,6 +1456,7 @@ label variable edupre_ci "Educacion preescolar"
 
 gen eduac_ci=.
 replace eduac_ci = 1 if e51_9>0
+replace eduac_ci = 1 if e51_8>0 //magisterio
 replace eduac_ci = 0 if e51_10>0
 replace eduac_ci =. if e51_9>=10 | e51_10>=10
 
@@ -1553,8 +1563,14 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 
 gen universidad_ci=.
 replace universidad_ci=1 if e51_9>=1 & e51_9<=9
+replace universidad_ci=1 if e51_8>=1 & e51_8<=9 //magisterio
 replace universidad_ci=0 if e51_10>=1 & e51_10<=9
-label var universidad_ci "1=formacion terciaria tecnica"
+label var universidad_ci "1=formacion terciaria universitaria"
+
+
+********************************************************************************
+*                                                                              *
+********************************************************************************
 
 *93. Acceso a una fuente de agua por red
 

@@ -510,31 +510,35 @@ label var desalent_ci "Trabajadores desalentados"
   *s6b_23a: 23a. cuantas horas en promedio trabaja al dia .. ? (horas)
   *s6b_22: 22. cuantos dias a la semana trabaja
 
-gen aux_min=  s6b_23b/60
-egen horas_min= rsum(s6b_23a aux_min), m
-gen horaspri_ci = horas_min*s6b_22
-replace horaspri_ci=. if s6b_22==. | s6b_23a==. |  s6b_23b==.
-replace horaspri_ci=. if emp_ci!=1
-label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
+* Modificación Cesar Lins - Feb 2022 
+ * The dataset has a calculated variable for the weekly hours worked:
+ *   phrs - Horas trabajadas a la semana en la Ocupacion Principal
+  
+gen horaspri_ci = phrs
+*label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"  
+  
 
+*****************
+***horassec_ci***
+*****************
+  * The dataset has a calculated variable for the weekly hours worked:
+  *   phrs - Horas trabajadas a la semana en la Ocupacion Secundaria
+  
+gen horassec_ci = shrs
+  
 *****************
 ***horastot_ci***
 *****************
 /*
-s6_39a:  39a. cuantos dias trabajÓ la semana anterior ?
-s6_39ba: 39b. cuantas horas promedio al dia trabajÓ la semana anterior ?
-s6_39m: 39b. cuantos minutos promedio al dia trabajÓ la semana anterior ?
+Modificación Feb 22: Cesar Lins
+
+Los datos originales tienen una variable calculada
+que calcula la suma de las actividades primaria y secundaria:
+  
+  tothrs: horas trabajadas a la semana
+
 */
-
-gen aux_min2=s6e_39m/60
-egen horas_min2=rsum(s6e_39ba aux_min2)
-gen horassec_ci= horas_min2*s6e_39a
-replace horassec_ci=. if s6e_39a==. | s6e_39ba==. | s6e_39m==.
-replace horassec_ci=. if emp_ci!=1
-
-egen horastot_ci= rsum(horaspri_ci horassec_ci), missing
-replace horastot_ci = . if horaspri_ci == . & horassec_ci == .
-replace horassec_ci=. if emp_ci~=1
+gen horastot_ci = tothrs
 
 ***************
 ***subemp_ci***

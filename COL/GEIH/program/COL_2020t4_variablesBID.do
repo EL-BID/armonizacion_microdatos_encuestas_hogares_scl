@@ -298,8 +298,6 @@ replace afroind_ci=1  if p6080 == 1
 replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
 replace afroind_ci=3 if p6080 == 2 | p6080 == 6
 replace afroind_ci=. if p6080 ==.
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
 label var afroind_ci "Raza o etnia del individuo"
 
 	***************
@@ -307,8 +305,6 @@ label var afroind_ci "Raza o etnia del individuo"
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
 label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
 drop afroind_jefe
 
@@ -322,16 +318,13 @@ label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 	***dis_ci***
 	*******************
 gen dis_ci=. 
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
+
 label var dis_ci "Personas con discapacidad"
 
 	*******************
 	***dis_ch***
 	*******************
 gen dis_ch=. 
-lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-lab val dis_ch dis_ch 
 lab var dis_ch "Hogares con miembros con discapacidad"
 
 
@@ -1180,7 +1173,7 @@ label var universidad_ci "1=formacion universitaria"
 ***pared_ch***
 **************
 
-	g pared_ch = (p4010 >= 1 & p4010 <= 6)
+	g pared_ch = (p4010 >= 1 & p4010 <= 3)
 	replace pared_ch = . if p4010 == .
 	la var pared_ch "Materiales de construcción de las paredes"
 	la de pared_ch 0"No permanentes" 1"Permanentes"

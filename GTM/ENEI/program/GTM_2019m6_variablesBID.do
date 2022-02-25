@@ -1089,10 +1089,18 @@ replace aedu_ci=14 if (p03a05a==5 & p03a05b==2)
 replace aedu_ci=15 if (p03a05a==5 & p03a05b==3)
 replace aedu_ci=16 if (p03a05a==5 & p03a05b==4)
 replace aedu_ci=17 if (p03a05a==5 & p03a05b==5) 
+replace aedu_ci=18 if (p03a05a==5 & p03a05b==6) //ingenierias duran 6 años.  
+replace aedu_ci=19 if (p03a05a==5 & p03a05b==7) //quizas es medicina
 
 *Postgrado
-replace aedu_ci=18 if (p03a05a==6 | p03a05a==7) & p03a05b==1 
-replace aedu_ci=19 if (p03a05a==6 | p03a05a==7) & p03a05b==2 
+replace aedu_ci=12+6 if (p03a05a==6 & p03a05b==1) 
+replace aedu_ci=12+6+1 if (p03a05a==6 & p03a05b==2)
+
+replace aedu_ci=12+6+2 + p03a05b if (p03a05a==7) // doctorado
+
+//imputando los valores perdidos
+
+replace aedu_ci=0 if p03a05a==0 & p03a05b==. 
 
 *replace aedu_ci=.  if p03a05a==. & p03a05b ==. // Mayra Sáenz- Agosto 2014 Desactivo esta opción porque elimina a los de ninguna educación.
 
@@ -1120,13 +1128,15 @@ la var edupc_ci "Primaria Completa"
 ******************************
 *	edusi_ci 
 ******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=1 if aedu_ci==11 & p03a06<100 // sin diploma de bachiller
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
 ******************************
 *	edusc_ci 
 ******************************
-g byte edusc_ci=(aedu_ci==12)
+g byte edusc_ci=(aedu_ci==12) // son 11 o 12
+replace edusc_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 // con diploma de bachiller
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
 ******************************
@@ -1144,42 +1154,44 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 ******************************
 *	edus2i_ci 
 ******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
+replace edus2i_ci=1 if aedu_ci==11 & p03a06<100
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ******************************
 *	edus2c_ci 
 ******************************
 g byte edus2c_ci=(aedu_ci==12)
+replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 //con 11 anios pero grado de bachiller
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *pongo primaria y secundaria, como equivalente a basica y media
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+g byte eduui_ci=(aedu_ci>12 &  p03a06>=100 & p03a06<999) | (aedu_ci>12 &  p03a06>=100 & p03a06==.) // mas de 12 anios pero grado de bachiller 
 replace eduui_ci=. if aedu_ci==.
 la var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>=17)
+g byte eduuc_ci=(aedu_ci>12 &  p03a06>=1000 & p03a06<9999 ) // mas de 12 anios y grado terciario
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 *	edupre_ci 
 ******************************
-g byte edupre_ci=0 if aedu_ci ~=.
-replace edupre_ci=1 if p03a04a==1 & aedu_ci ~=.
-la var edupre_ci "Asiste a Educacion preescolar"
+g byte edupre_ci=.
+label variable edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
-g byte asispre_ci=.
+g byte asispre_ci=p03a04a==1
+la var asispre_ci "Asiste a Educacion preescolar"
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=.
+gen byte eduac_ci=. // esta disponible solo para los con titulo
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ******************************
@@ -1205,9 +1217,9 @@ g repiteult_ci=. /*NA*/
 ******************************
 *	edupub_ci 
 ******************************
-g edupub_ci=.
-replace edupub_ci=1 if p03a03==1 
-replace edupub_ci=0 if p03a03==2
+g edupub_ci=(p03a02==1 & p03a03==1) // asiste y es publico
+replace edupub_ci=0 if p03a02==1 & p03a03==2 // asiste y es privado
+replace edupub_ci=. if p03a02!=1 // no asiste
 label define edupub_ci 1 "Público" 0 "Privado"
 label value edupub_ci edupub_ci
 la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
@@ -1216,9 +1228,15 @@ la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 **tecnica_ci*
 *************
 
-gen tecnica_ci=.
+gen tecnica_ci=. //disponible solo para los graduados
 label var tecnica_ci "=1 formacion terciaria tecnica"
 
+*************
+**universidad_ci*
+*************
+
+gen universidad_ci=. //disponible solo para los graduados
+label var universidad_ci "=1 formacion terciaria universitaria"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

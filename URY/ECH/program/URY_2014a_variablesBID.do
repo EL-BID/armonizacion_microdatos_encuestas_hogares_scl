@@ -1892,6 +1892,53 @@ lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobr
 lab val grupo_int grupo_int
 
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(e37==4) if e37!=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & (e38_1>4 | inlist(e236,1,2,3))) if migrante_ci!=. & !inrange(edad_ci,0,4)
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=(migrante_ci==1 & inlist(e234_2,32,44,52,76,84,68,152,170,188,218,222,214,320,328,332,340,388,484,558,591,600,604,740,780,862,898,899,902)) if migrante_ci!=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	/* Fuente: https://www.ine.gub.uy/documents/10181/33944/CODIGO+PAISES.pdf/568e72c7-fc36-4e3a-a2c0-eb3d9af1d3b6 */
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & (e38_1>4 | inlist(e236,1,2,3))) if migrante_ci!=. & !inrange(edad_ci,0,4)
+	replace migrantiguo5_ci= 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci= . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & inlist(e234_2,32,44,52,76,84,68,152,170,188,218,222,214,320,328,332,340,388,484,558,591,600,604,740,780,862,898,899,902)) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/

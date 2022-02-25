@@ -1370,7 +1370,7 @@ label val piso_ch piso_ch
 **************
 ***pared_ch***
 **************
-g pared_ch = (P4010 >= 1 & P4010 <= 7)
+g pared_ch = (P4010 >= 1 & P4010 <= 3)
 replace pared_ch = . if P4010 == .
 label var pared_ch "Materiales de construcción de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
@@ -1476,7 +1476,7 @@ label var compu_ch "El hogar posee computador"
 *****************
 ***internet_ch***
 *****************
-gen internet_ch=1 if P5210S3==1
+gen internet_ch=(P5210S3==1)
 replace internet_ch=. if P5210S3==.
 label var internet_ch "El hogar posee conexión a Internet"
 

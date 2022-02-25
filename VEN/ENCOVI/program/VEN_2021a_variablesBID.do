@@ -897,111 +897,115 @@ replace aedu_ci=s7q11b+6         if s7q11==6 //regimen actual
 replace aedu_ci = 12 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
 replace aedu_ci = 17 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & s7q11==9 // postgrado
 
+replace aedu_ci=floor(aedu_ci) //truncando la variable
+
 label variable aedu_ci "Años de Educacion"
 
 							
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=.
-replace eduno=1 if s7q11==1 
-replace eduno=0 if s7q11>1
+gen eduno_ci=(aedu_ci==0)
+replace eduno=. if aedu_ci==.
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if s7q11==2
-replace edupre=0 if s7q11>2 | s7q11==1
 label var edupre_ci "Educacion preescolar"
 
 	
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=.
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=0 if aedu_ci==0 | (aedu_ci>=6 & aedu_ci!=.)
+gen edupi_ci=aedu_ci>0 & aedu_ci<6
+replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "1 = personas que no han completado el nivel primario"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=.
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if (aedu_ci>=0 & aedu_ci<6)  | (aedu_ci>6 & aedu_ci!=.) 
+gen edupc_ci=aedu_ci==6
+replace edupc_ci=. if aedu_ci==.) 
 label var edupc_ci "1 = personas que han completado el nivel primario"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=.
-replace edusi=1 if aedu_ci>6 & aedu_ci<12
-replace edusi=0 if (aedu_ci>=0 & aedu_ci<=6) | (aedu_ci>=11 & aedu_ci!=.)
+gen edusi_ci=aedu_ci>6 & aedu_ci<11 // 11 segun la tabla y empiricamente hay un corte ahi
+replace edusi_ci=1 if aedu_ci==11 & s711e==2 // 11 y sin titulo
+
+replace edusi=. if aedu_ci==.
 label var edusi_ci "1 = personas que no han completado el nivel secundario"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=.
-replace edusc=1 if aedu_ci==12 
-replace edusc=0 if (aedu_ci>=0 & aedu_ci<12) 
+gen edusc_ci=aedu_ci==11 & (s711e==1 | s711e==. ) // 11 anios y con titulo o valor perdido
+replace edusc_ci=0 if aedu_ci==11 & s711e==2 // 11 y sin titulo
+replace edusc_ci=1 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo media
+
+replace edusc=. if aedu_ci==.
 label var edusc_ci "1 = personas que han completado el nivel secundario"
 
 
 **************
 ***eduui_ci***
 **************
+gen eduui_ci=(aedu_ci>=12 & s711e==2) & (s7q11==7|s7q11==8) //12 anios de educacion sin titulo
+replace eduui_ci=0 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo media
 
-
-gen eduui_ci= (aedu_ci>12 & aedu_ci<17)
+replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "1 = personas que no han completado el nivel universitario o superior"
 
 ***************
 ***eduuc_ci***
 ***************
-gen byte eduuc_ci= (aedu_ci>=17)
+gen byte eduuc_ci= (aedu_ci>=12 & s711e==1) & (s7q11==7|s7q11==8) //mas de 11 anios de educacion, nivel terciario y titulo
+replace eduuc_ci=1 if s7q11==9
+replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "1 = personas que han completado el nivel universitario o superior"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=0
-replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen edus1c_ci=aedu_ci==9
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+gen edus2i_ci=aedu_ci>9 & aedu_ci<11
+replace edus2i_ci=1 if aedu_ci==11 & s711e==2 // 11 y sin titulo
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
+gen edus2c_ci=aedu_ci==11 & (s711e==1 | s711e==. ) // 11 anios y con titulo o valor perdido
+replace edus2c_ci=0 if aedu_ci==11 & s711e==2 // 11 y sin titulo
+replace edus2c_ci=1 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo media
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if (s7q11==8)
+replace eduac_ci=0 if (s7q11==7)
+
 label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
 
 
@@ -1012,14 +1016,17 @@ label var eduac_ci "Educacion terciaria académica versus educación terciaria n
 gen tecnica_ci=(s7q11==7)
 label var tecnica_ci "=1 formacion terciaria tecnica"	
 
+*************
+***universidad_ci**
+*************
+
+gen universidad_ci=(s7q11==8)
+label var universidad_ci "=1 formacion terciaria universitaria"	
 
 ***************
 ***asispre_ci**
 ***************
-g asispre_ci=.
-replace asispre_ci=1 if asiste_ci==1 & (s7q4==2)
-replace asispre_ci=1 if asiste_ci==1 & (s7q4==1) & (edad_ci<=5)
-recode asispre_ci (.=0)
+g asispre_ci=(s7q4==1) 
 la var asispre_ci "Asiste a educacion prescolar"
 	
 

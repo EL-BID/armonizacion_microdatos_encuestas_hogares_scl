@@ -1183,8 +1183,11 @@ label var aedu_ci "Años de educacion aprobados"	*/
 
 *Modificación Mayra Sáenz - Octubre 2016: Corrección enviada por Ivan Bornacelly SCL/EDU	
 * Años de educacion aprobados **
+replace cp407=. if cp407==99
 replace cp410=. if cp410>9
 replace cp417=. if cp417>9
+replace cp410=3 if cp407==6 & cp407>3 //truncar valores
+
 
 ** para quienes ya no asisten
 gen aedu_ci=.
@@ -1193,7 +1196,7 @@ replace aedu_ci=cp410 if cp407==4
 replace aedu_ci=cp410+6 if cp407==5
 replace aedu_ci=cp410+9 if cp407==6
 replace aedu_ci=cp410+12 if cp407==7 | cp407==8 | cp407==9
-replace aedu_ci=cp410+17 if cp407==10 
+replace aedu_ci=cp410+12+4 if cp407==10 
 
 ** para quienes asisten actualmente
 *DZ Jul 2017: Cambio de categoria respecto al anio anterior**
@@ -1202,10 +1205,19 @@ replace aedu_ci=cp417-1 if cp412==4
 replace aedu_ci=cp417+6-1 if cp412==5
 replace aedu_ci=cp417+9-1 if cp412==6
 replace aedu_ci=cp417+12-1 if cp412==7 | cp412==8 | cp412==9
-replace aedu_ci=cp417+17-1 if cp412==10
+replace aedu_ci=cp417+12+4-1 if cp412==10
 label var aedu_ci "Años de educacion aprobados"	
 		
-		
+ // imputando los años perdidos
+ 
+ replace aedu_ci=0 if (cp407==1 | cp407==2 | cp407==3) & cp410==. // alfabetizacion 
+ replace aedu_ci=0 if (cp412==2 | cp412==3) & cp417==. // alfabetizacion
+ replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) //educacion basica
+ replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) //ciclo comun
+ replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) //diversificado
+ replace aedu_ci=12 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) //terciaria
+ replace aedu_ci=16 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) //postgrado
+ 
 ******************************
 *	eduno_ci
 ******************************
@@ -1227,13 +1239,16 @@ la var edupc_ci "Primaria Completa"
 ******************************
 *	edusi_ci 
 ******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<=11)
+replace edusi_ci=0 if aedu_ci==11 & cp409==1
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
 ******************************
 *	edusc_ci 
 ******************************
+*dependiendo de la modalidad son 11 o 12 años, entonces incluyo la variable cp409 "Finalizó sus estudios?"
 g byte edusc_ci=(aedu_ci==12)
+replace edusc_ci=1 if aedu_ci==11 & cp409==1 
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
 ******************************
@@ -1252,44 +1267,45 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 *	edus2i_ci 
 ******************************
 g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+replace edus2i_ci=0 if aedu_ci==11 & cp409==1
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ******************************
 *	edus2c_ci 
 ******************************
 g byte edus2c_ci=(aedu_ci==12)
+replace edus2c_ci=1 if aedu_ci==11 & cp409==1
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *pongo primaria y secundaria, como equivalente a basica y media
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
-replace eduui_ci=. if aedu_ci==.
+
+g byte eduui_ci=(aedu>12 & aedu<=16) & cp409==2 //no finalizó estudios
+replace eduui_ci=1 if (aedu>12 & aedu<=16) & cp409==.
+replace eduui_ci=. if aedu_ci==. 
 la var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>=17)
+
+g byte eduuc_ci=(aedu>12 & aedu<=16) & cp409==1
+replace eduuc_ci=1 if aedu_ci>16 
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 *	edupre_ci 
 ******************************
 g byte edupre_ci=.
-replace edupre_ci=1 if ((cp407==3 | cp412==3) & aedu_ci ~=.)
-replace edupre_ci=0 if (edupre_ci~=1 & aedu_ci ~=.)
-la var edupre_ci "Asiste a Educacion preescolar"
+la var edupre_ci "Tiene Educacion preescolar"
 
 ***************
 ***asipre_ci***
 ***************
 
-gen byte asispre_ci=.
-replace asispre_ci=1 if cp405==1 & cp412==3 
-recode asispre_ci (.=0)
+gen byte asispre_ci=(cp405==1 & cp412==3) 
 la var asispre_ci "Asiste a educacion prescolar"
-label variable asispre_ci "Asistencia a Educacion preescolar"
 
 ******************************
 *	pqnoasis 
@@ -1321,26 +1337,22 @@ están estudiando en un centro educativo público.
 replace edupub_ci=1 if (ed109==1|ed109==2|ed109==3|ed109==4|ed109==7|ed109==8|ed109==13)
 replace edupub_ci=0 if (ed109==5|ed109==6|ed109==9|ed109==10|ed109==11|ed109==12)
 */
-replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10)
-replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12)
+replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10) & cp405==1
+replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12) & cp405==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
 *************
 *tecnica_ci**
 *************
 
-gen tecnica_ci=.
-replace tecnica_ci=1 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
-replace tecnica_ci=0 if tecnica_ci ~=1 & ( cp407!=11 & cp412!=11)
+gen tecnica_ci=(cp407==7 | cp407==8) | (cp412==7| cp412==8)
 label var tecnica_ci "1=formacion terciaria tecnica"
 
 *************
 *universidad_ci**
 *************
 
-gen universidad_ci=.
-replace universidad_ci=1 if cp407==9 | cp412==9
-replace universidad_ci=0 if universidad_ci ~=1 & ( cp407!=11 & cp412!=11)
+gen universidad_ci=(cp407==9 | cp407==10 | cp412==9| cp412==10)
 label var universidad_ci "1=formacion terciaria universitaria"
 
 
@@ -1348,8 +1360,8 @@ label var universidad_ci "1=formacion terciaria universitaria"
 ***eduac_ci***
 **************
 gen byte eduac_ci=.
-replace eduac_ci= 0 if tecnica_ci ==1
-replace eduac_ci=1 if eduuc_ci ==1 | eduui_ci ==1
+replace eduac_ci= 1 if (cp407==9 | cp407==10 | cp412==9| cp412==10)
+replace eduac_ci= 0 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 

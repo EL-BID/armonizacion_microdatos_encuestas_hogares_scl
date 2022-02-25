@@ -1083,6 +1083,9 @@ replace nivel = 6 if p6>=61 & p6<=62
 replace nivel = 7 if p6>=71 & p6<=72
 replace nivel = 8 if p6>=81 & p6<=84
 
+label define nivel 1 "Primaria" 2 "Vocacional" 3 "Secundaria" 4 "Superior no universitaria" 5 "Superior universitaria" 6 "Especialidad (Postgrado)" 7 "Maestría" 8 "Doctorado"
+label values nivel nivel
+
 gen aedu_ci = .
 replace aedu_ci = 0 if nivel== 0 
 replace aedu_ci = grado if nivel == 1
@@ -1090,7 +1093,8 @@ replace aedu_ci = grado+6 if nivel == 2
 replace aedu_ci = grado+6 if nivel == 3
 replace aedu_ci = grado+12 if nivel == 4
 replace aedu_ci = grado+12 if nivel == 5
-replace aedu_ci = grado+17 if nivel == 6 | nivel == 7 | nivel == 8
+replace aedu_ci = grado+12+4 if nivel == 6 | nivel == 7 
+replace aedu_ci = grado+12+4+2 if nivel == 8
 
 ******************************
 *	eduno_ci
@@ -1154,19 +1158,20 @@ label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 gen edus2c_ci=(aedu_ci==12)
 replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
 
 ******************************
 *	eduui_ci
 ******************************
-gen eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+gen eduui_ci=(aedu_ci>12 & aedu_ci<16) & nivel==5
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15) & nivel==4
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 ******************************
 *	eduuc_ci
 ******************************
-gen eduuc_ci=(aedu_ci>=17)
+gen eduuc_ci=(aedu_ci>=16) 
+replace eduuc_ci=1 if (aedu_ci>=15) & nivel==4 
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
@@ -1188,8 +1193,8 @@ notes: la encuesta no tiene codigo de educacion preescolar
 *	eduac_ci
 ******************************
 gen eduac_ci=.
-replace eduac_ci=0 if nivel==5
-replace eduac_ci=1 if nivel==4
+replace eduac_ci=1 if nivel==5 | nivel==6 | nivel==7 | nivel==8 
+replace eduac_ci=0 if nivel==4
 label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 
 ******************************
@@ -1200,7 +1205,7 @@ replace asiste_ci=. if p5==.
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
 ******************************
-*	pqnoasis_ci_ci
+*	pqnoasis_ci
 ******************************
 gen pqnoasis_ci=p5a if p5a>0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
@@ -1228,17 +1233,44 @@ replace pqnoasis1_ci = 9 if p5a==12
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-
+******************************
+*	edupub_ci
+******************************
+*definida solo para los que asisten
 gen edupub_ci=.
+replace edupub_ci=1 if p5_tipo==3
+replace edupub_ci=0 if p5_tipo==4
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 ******************************
 *	repiteult_ci  & repite_ci
 ******************************
 gen repiteult_ci=.
-gen repite_ci=.
-*NA
+label var repiteult_ci "Ha repetido el último grado"
+*la pregunta está en el cuestionatio, pero no en el diccionario o en la base
+
+
+gen repite_ci=(p7b==1)
+label var repite_ci "Ha repetido al menos un grado"
+
+*************
+*tecnica_ci**
+*************
+
+gen tecnica_ci=(nivel==4)
+label var tecnica_ci "1=formacion terciaria tecnica"
+
+*************
+*universidad_ci**
+*************
+
+gen universidad_ci=(nivel==5 | nivel==6 | nivel==7 | nivel==8)
+label var universidad_ci "1=formacion terciaria universitaria"
+
+
+
 drop nivel grado
+
 
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
@@ -1413,13 +1445,6 @@ gen ypensub_ci=p72g5 if p72g5>0 & p72g5<=99999
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
 
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=.
-* falta generar
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 	*******************
 	*** benefdes_ci ***

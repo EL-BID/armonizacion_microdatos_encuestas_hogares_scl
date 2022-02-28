@@ -1247,36 +1247,40 @@ label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 ******************************
 *	eduui_ci
 ******************************
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+*copié la clasificación que está en el cuestionario
+gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16) & (nivelaprob==7 | nivelaprob==5)
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15 & nivelaprob==6) 
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 ******************************
 *	eduuc_ci
 ******************************
-gen byte eduuc_ci=(aedu_ci>=17)
+*copié la clasificación que está en el cuestionario
+gen byte eduuc_ci=(aedu_ci>=16) & (nivelaprob==7 | nivelaprob==5)
+replace eduui_ci=1 if (aedu_ci>=15  & nivelaprob==6) 
+replace eduuc_ci=1 if nivelaprob==8 | nivelaprob==9
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
 ******************************
 *	edupre_ci
 ******************************
-gen edupre_ci=(nivel==1 | nivelaprob==1) 
-replace edupre_ci=. if aedu_ci==.
+gen edupre_ci=.
 label var edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
 *Variable agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if asis_esc=="1" & nivel==1 & edad>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=(asis_esc=="1" & nivel==1 & edad>=4)
 	la var asispre_ci "Asiste a educacion prescolar"	
 ******************************
 *	eduac_ci
 ******************************
 gen byte eduac_ci=.
-label var eduac_ci "Educacion terciaria academica versus Educacion terciaria no academica"
+replace eduac_ci=1 if nivelaprob>=7 & nivelaprob<=9
+replace eduac_ci=0 if nivelaprob==6
+label var eduac_ci "Educacion terciaria academica versus Educacion terciaria no academica""
 *no se distingue entre superior universitario y no universitario (terciario)
 ******************************
 *	asiste_ci
@@ -1315,16 +1319,22 @@ gen repiteult_ci=.
 *	edupub_ci
 ******************************
 gen edupub_ci=.
-replace edupub_ci=1 if tipoesc=="1" 
-replace edupub_ci=0 if tipoesc=="2" | tipoesc=="3"
+replace edupub_ci=1 if tipoesc=="1" & asiste_ci==1
+replace edupub_ci=0 if (tipoesc=="2" | tipoesc=="3") & asiste_ci==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 
 ***************
 ***tecnica_ci**
 ***************
-gen tecnica_ci=(nivel==6 | nivelaprob==6)
+gen tecnica_ci=(nivelaprob==6)
 label var tecnica_ci "=1 formacion terciaria tecnica"	
+
+***************
+***universidad_ci**
+***************
+gen universidad_ci=(nivelaprob>=7 & nivelaprob<=9)
+label var universidad_ci "=1 formacion terciaria universitar	
 
 
 ******************************************************************************

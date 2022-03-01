@@ -1515,103 +1515,46 @@ gen remesas_ch=h172_1
 ****************************************************************************************************************************
 *********************************VARIABLES EDUCATIVAS***********************************************************************
 ****************************************************************************************************************************
+*************************************
+*	   AEDU_CI
+*************************************	   
+/*Para la suma de años educativos se generan variables temporales de maximo para niveles que son equivalentes, se imputa el maximo correspondiente a cada nivel de manera de no sobreestimar los años de educacion aprobados*/
 
-*74. Anios de educaciÃÂ³n
+egen cb_añostc= rowmax(e51_4 e51_7) if e51_7_1==3 /*computa el maximo de CB o tecnico con requisito primaria*/
+egen bach_años=rowmax(e51_5 e51_6) /*computa el maximo de bachillerato o bachillerato tecnologico*/
+egen bach_añostc=rowmax(e51_5 e51_6 e51_7) if e51_7_1==2 /*computa el maximo de bachillerato, bachillerato tecnologico o tecnica con requisito CB*/
+egen sup_años=rowmax(e51_8 e51_9 e51_10) /*computa el maximo de superior: magisterio, universitario o terciario no universitario */
+egen sup_añostc=rowmax(e51_8 e51_9 e51_10 e51_7) if e51_7_1==1 /*computa el maximo de superior: magisterio, universitario, terciario no universitario o tecnico con requisito bachillerato completo */
 
+** Se generan años aprobados para los niveles remplazando por missing el codigo de perdido (9) ** 
+gen años_cb=e51_4
+replace años_cb=cb_añostc if e51_7_1==3
+replace años_cb=. if años_cb==9
 
-gen post=1 if e51_11>=1 & e51_11!=9
-replace post=0 if e51_11==0
+gen años_bc=bach_años
+replace años_bc=bach_añostc if e51_7_1==2
+replace años_bc=. if años_bc==9
 
-gen terc=1 if e51_10>=1 & e51_10!=9
-replace terc=0 if e51_10==0
+gen años_sup=sup_años
+replace años_sup=sup_añostc if e51_7_1==1
+replace años_sup=. if años_sup==9
 
-gen univ=1 if e51_9>=1 & e51_9!=9
-replace univ=0 if e51_9==0
+gen años_prim=e51_2
+replace años_prim=. if años_prim==9
 
-gen mag=1 if e51_8>=1 & e51_8!=9
-replace mag=0 if e51_8==0
+gen años_post=e51_11
+replace años_post=. if años_post==9
 
-gen enst=1 if e51_7>=1 & e51_7!=9
-replace enst=0 if e51_7==0
+gen aedu_ci = 0
+qui foreach v of var años_prim años_cb años_bc años_sup años_post {
+	replace aedu_ci = aedu_ci + `v' if !missing(`v')
+}
+replace aedu_ci=. if años_prim==. & años_cb==. & años_bc==. & años_sup==. & años_post==.
+replace aedu_ci=. if e51_2==9
+replace aedu_ci=floor(aedu_ci)
 
-gen bachtec=1 if e51_6>=1 & e51_6!=9
-replace bachtec=0 if e51_6==0
-
-gen bachsec=1 if e51_5>=1 & e51_5!=9
-replace bachsec=0 if e51_5==0
-
-gen cbliceo=1 if e51_4>=1 & e51_4!=9
-replace cbliceo=0 if e51_4==0
-
-gen priesp=1 if e51_3>=1 & e51_3!=9
-replace priesp=0 if e51_3==0
-
-gen pricom=1 if e51_2>=1 & e51_2!=9
-replace pricom=0 if e51_2==0
-
-gen preesc=1 if e193==1 | e193==2
-replace preesc=0 if  e193==3
-
-/*  Criterios para la elaboraciÃÂ³n de aÃÂ±os de educaciÃÂ³n aprobados:
-       > No se toma en cuenta los aÃÂ±os de preescolar
-	   > Los aÃÂ±os de educacion primaria especial tambiÃÂ©n son 6 aÃÂ±os, como la primaria comun
-*/
-/*
-*Ajustando Ã¢â¬Å9Ã¢â¬Â Ã¢â¬â Ã¢â¬ÅNo saben/No respondenÃ¢â¬Â 
-
-gen e51_2n=e51_2 // Primaria ComÃÂºn
-replace e51_2n=0 if e51_2==9
-
-gen e51_4n=e51_4 // Ciclo bÃÂ¡sico Liceo o  UTU
-replace e51_4n=0 if e51_4==9
-
-gen  e51_5n=e51_5 // Bachillerato Secundario
-replace e51_5n=0 if e51_5==9
-
-gen e51_6n=e51_6 // Bachiellrato TecnolÃÂ³gico UTU
-replace e51_6n=0 if e51_6==9
-
-gen e51_8n=e51_8 //Magisterio
-replace e51_8n=0 if e51_8==9
-
-gen e51_9n=e51_9 // Universidad
-replace e51_9n=0 if e51_9==9
-
-gen e51_10n=e51_10 // Terciario No Universitario
-replace e51_10n=0 if e51_10==9
-
-gen e51_11n=e51_11 // Postgrados
-replace e51_11n=0 if e51_11==9
-
-gen aedu_ci=.
-replace aedu_ci=0 if preesc==1
-replace aedu_ci= e51_2n  + e51_4n + e51_5n+  e51_8n + e51_9n + e51_10n + e51_11n if e51_5n>=e51_6n
-replace aedu_ci= e51_2n  + e51_4n + e51_6n + e51_8n + e51_9n + e51_10n + e51_11n if e51_6n> e51_5n 
-
-replace aedu_ci=.  if e51_3>=1 & e51_3<=9 // EducaciÃÂ³n Especial
-replace aedu_ci=.  if e51_7_1>=1 & e51_7_1<=9 // EducaciÃÂ³n para Adultos
-replace aedu_ci=0 if e51_2n==0 & e51_4n==0 & e51_5n==0 & e51_6n==0 & e51_8n==0 & e51_9n==0 & e51_10n==0 & e51_11n==0
-*/
-
-** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisiÃÂ³n por IvÃÂ¡n Bornacelly SCL/EDU **
-** Ajustado Jul, 2017 por IvÃÂ¡n Bornacelly SCL/EDU
-
-gen aedu_ci=.
-replace aedu_ci= 0            if preesc==1 
-replace aedu_ci= 0           if (e51_2==9  | e51_3==9)
-replace aedu_ci= e51_3        if priesp==1  & e51_3<9
-replace aedu_ci= e51_2        if pricom==1  & e51_2<9 
-replace aedu_ci= e51_4 + 6    if cbliceo==1 & e51_4<9
-replace aedu_ci= e51_5 + 9    if bachsec==1 & e51_5<9
-replace aedu_ci= e51_6 + 9    if bachtec==1 & (e51_6>e51_5) & (e51_6<9 )
-replace aedu_ci= e51_7 + 12   if enst==1 & (e51_7_1==1 | aedu_ci>=12 & aedu_ci!=.) & e51_7<9 // Incluyendo educaciÃÂ³n tÃÂ©cnica - No es educaciÃÂ³n exclusiva para adultos
-replace aedu_ci= e51_8 + 12   if mag==1  & e51_8<9
-replace aedu_ci= e51_9 + 12   if univ==1 & e51_9<9
-replace aedu_ci= e51_10 + 12  if terc==1 & (e51_10>e51_9) & e51_10<9
-replace aedu_ci= e51_11 + 17  if post==1 & e51_11<9 
-replace aedu_ci=0             if e49==2 & (edad>=5 & edad!=.)
-replace aedu_ci=0             if e49==1 & (edad>=5 & edad!=.) & aedu_ci==. // PoblaciÃÂ³n que declara estar asistiendo o haber asistido, pero no reporta ningÃÂºn nivel o aÃÂ±os de educaciÃÂ³n aprobado
-
+** eliminamos variables temporales
+drop años_prim años_post cb_añostc bach_años bach_añostc sup_años sup_añostc años_cb años_bc años_sup
 
 **************
 ***eduno_ci***
@@ -1690,7 +1633,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16)
+gen byte eduui_ci=(aedu_ci>12 & e51_8<4) & (aedu_ci>12 & e51_10<3) & (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1698,7 +1641,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=(aedu_ci>=16) 
+gen byte eduuc_ci=(aedu_ci>12 & e51_8>=4 & e51_8!=9) | (aedu_ci>12 & e51_10>=3 & e51_10!=9) | (aedu_ci>12 & e51_9>=4 & e51_9!=9) // magisterio, tecnica, universitaria
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1706,47 +1649,31 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-gen edupre_ci=(e193==1)
-replace edupre_ci=. if aedu_ci==.
+gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
-	g asispre_ci=.
-	replace asispre_ci=1 if e193==1 & e27>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"	
+g asispre_ci=e193==1
+la var asispre_ci "Asiste a educacion prescolar"	
 
 ***************
 ***eduac_ci****
 ***************
 
 gen eduac_ci=.
-replace eduac_ci = 1 if e51_9>0
-replace eduac_ci = 0 if e51_10>0
-replace eduac_ci =. if e51_9>=10 | e51_10>=10
+replace eduac_ci = 0 if aedu_ci>12 & e51_8>0 & e51_8!=9 
+replace eduac_ci = 0 if aedu_ci>12 & e51_10>0 & e51_10!=9
+replace eduac_ci = 1 if aedu_ci>12 & e51_9>0 & e51_9!=9
 
 *88. Personas que actualmente asisten a centros de ensenanza
-
-gen asiste_ci=.
-
-*cambio MLO 01,2014
-*replace asiste_ci=1 if e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
-*cambio MGR 06,2015 (correcciÃÂ³n seÃÂ±alada por IvÃÂ¡n Bornacelly SCL/EDU)
-replace asiste_ci=1 if e193==1 | e197 == 1 | e201 == 1 |  e212 == 1 | e215 == 1 |  e218 == 1 |   e221 == 1 | e224 == 1
-recode asiste_ci .=0
-/* Y.L.. Note: la pregunta en el cuestionario cambia a "asiste o asistiÃÂ³",no se puede 
-continuar con la metodologÃÂ­a del anio anterior para el calculo de esta variable
-replace asiste_ci = 1 if (e49==1)
-replace asiste_ci = 0 if (e49==2)
-*/
+gen byte asiste_ci=(e197==1 | e201==1 | e212==1 | e215==1 | e218==1 | e221==1 | e224==1)
 
 *89. Razones para no asistir a la escuela
 
 gen pqnoasis_ci=.
 
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 	
 **************
 *pqnoasis1_ci*
@@ -1762,49 +1689,8 @@ gen repite_ci=.
 gen repiteult_ci=.
 
 *92. Personas que asisten a centros de ensenanza pÃÂºblicos
-
-gen edupub_ci=.
-*Primaria
-replace edupub_ci=1 if e198 ==1 & e197 == 1
-replace edupub_ci=0 if e198 ==2 & e197 == 1
-*EducaciÃÂ³n media 
-replace edupub_ci=1 if e210_1 ==1 & e201 == 1
-replace edupub_ci=0 if e210_1 ==2 & e201 == 1
-*Tecnica
-replace edupub_ci=1 if e213 ==1 & e212 == 1
-replace edupub_ci=0 if e213 ==2 & e212 == 1
-*Normal (Magisterio o Profesorado)
-replace edupub_ci=1 if e216 ==1 & e215 == 1
-replace edupub_ci=0 if e216 ==2 & e215 == 1
-*Universitaria
-replace edupub_ci=1 if e219 ==1 & e218 == 1
-replace edupub_ci=0 if e219 ==2 & e218 == 1
-*No universitaria
-replace edupub_ci=1 if e222 ==1 & e221 == 1
-replace edupub_ci=0 if e222 ==2 & e221 == 1
-*Postgrado
-replace edupub_ci=1 if e225 ==1 & e224 == 1
-replace edupub_ci=0 if e225 ==2 & e224 == 1
-
-* Nota Marcela G. Rubio - Abril 2013
-/* Variable habÃÂ­a sido generada como missing debido a que estructura de preguntas de educaciÃÂ³n cambiaron a partir de 2011 por lo que he estimado variable ///
- de una manera diferente a los aÃÂ±os previos */
-
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if e51_10>=1 & e51_10<=9
-replace tecnica_ci=0 if e51_9>=1 & e51_9<=9
-label var tecnica_ci "1=formacion terciaria tecnica"
-*Se crea esta variable para ver si se trabaja con esta a partir del anio 2011
-gen tipoest=.
-replace tipoest=1 if e198<2 & e210_1<2 & e210_2<2 & e210_3<2 & e213<2 & e216<2 & e219<2 & e222<2 & e225<2  & e49==1
-replace tipoest=2 if (e198>1 | e198==0) & (e210_1>1 | e210_1==0) & (e210_2>1 | e210_2==0) & (e210_3>1 | e210_3==0) & (e213>1 | e213==0)  & (e216>1 | e216==0) & (e219>1 | e219==0) & (e222>1 | e222==0) & (e225>1 | e225==0)  & e49==1
-replace tipoest=3 if (e198>=0 | e210_1>=0 | e210_2>=0 | e210_3>=0 | e213>=0 | e216>=0 | e219>=0 | e222>=0 | e225>=0)  & (e49==1) & (tipoest==.)
-label define tipoest 1 "publica" 2"privada" 3 "mixta"
-label value tipoest tipoest
+gen edupub_ci= 0 if e197==1 & e198==2 | e201==1 & e210_1==2 | e201==1 & e210_2==2 | e201==1 & e210_3==2 |e212==1 & e213==2 | e215==1 & e216==2| e218==1 & e219==2 | e221==1 & e222==2| e224==1 & e225==2
+replace edupub_ci= 1 if e197==1 & e198==1 | e201==1 & e210_1==1 | e201==1 & e210_2==1 | e201==1 & e210_3==1 |e212==1 & e213==1 | e215==1 & e216==1| e218==1 & e219==1 | e221==1 & e222==1| e224==1 & e225==1
 
 
 *93. Acceso a una fuente de agua por red
@@ -2000,7 +1886,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

@@ -830,9 +830,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+* Mod. 2/2022 Pia Locco y Agustina Thailinger EDU/SLC
 	
-	/*
-	*************
+/*	*************
 	***aedu_ci***
 	*************
 	*Hay una variable anterior, q3_04, pero no pregunta cuál fue el último nivel/anio aprobado, 
@@ -848,9 +848,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aedu_ci = anoinst+12  if nivinst==5
 	replace aedu_ci = anoinst+17 if nivinst==6
 	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
-	label var aedu_ci "Anios de educacion aprobados"*/
+	label var aedu_ci "Anios de educacion aprobados"
 	
-	*** modificado por Angela Lopez 04/11/2019
+	*** modificado por Angela Lopez 04/11/2019 */
 	
 	*************
 	***aedu_ci***
@@ -867,38 +867,27 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 		
 	* PARA LOS QUE ASISTEN (q03_02==1)
 	
-
-	
-		replace aedu_ci = 0                       if asis_niv_inst == 1 & q3_02 == 1  /* prescolar*/
-		replace aedu_ci = asis_ano_inst-1         if asis_niv_inst == 2 & q3_02 == 1  /* primaria hasta 6 anios */		
-		replace aedu_ci = asis_ano_inst-1+6       if asis_niv_inst == 3 & q3_02 == 1  /* secundaria baja, hasta 4 anios */
-		replace aedu_ci = asis_ano_inst-1+6+4     if asis_niv_inst == 4 & q3_02 == 1  /* secundaria alta, hasta 2 anios */
-		replace aedu_ci = asis_ano_inst-1+6+4+3   if asis_niv_inst == 5 & q3_02 == 1  /* grado son 4 anios segun la tabla */
-		replace aedu_ci = asis_ano_inst-1+6+4+3+4 if asis_niv_inst == 6 & q3_02 == 1  /* maestria  son dos anios. */
-	
+	replace aedu_ci = 0                       if asis_niv_inst == 1 & q3_02 == 1 /* prescolar*/
+	replace aedu_ci = asis_ano_inst-1         if asis_niv_inst == 2 & q3_02 == 1  	
+	replace aedu_ci = asis_ano_inst-1+6       if asis_niv_inst == 3 & q3_02 == 1 /* primaria hasta 6 anios */	
+	replace aedu_ci = asis_ano_inst-1+6+4     if asis_niv_inst == 4 & q3_02 == 1 /* secundaria baja 4 anios */
+	replace aedu_ci = asis_ano_inst-1+6+4+3   if asis_niv_inst == 5 & q3_02 == 1 /* secundaria alta 3 anios */
+	replace aedu_ci = asis_ano_inst-1+6+4+3+4 if asis_niv_inst == 6 & q3_02 == 1 /* grado 4 anios; maestria 2 anios */
 	
 	* PARA LOS QUE NO ASISTEN PERO ALGUNA VEZ ASISTIERON
 	
-
-	
-		replace aedu_ci = 0                       if noasis_niv_inst == 1 & q3_02 == 2 & q3_01 == 1 /* prescolar-ninguno*/
-		
-		replace aedu_ci = noasis_ano_inst         if noasis_niv_inst == 2 & finalizo ==2 & q3_02 == 2 & q3_01 == 1 /* primaria si no finalizó pongo el grado que finalizó */
-		replace aedu_ci = 6				          if noasis_niv_inst == 2 & finalizo ==1 & q3_02 == 2 & q3_01 == 1 /* primaria si finalizó asumo 6 anios */
-
-		replace aedu_ci = noasis_ano_inst+6       if noasis_niv_inst == 3 & finalizo ==2 & q3_02 == 2 & q3_01 == 1 /* secundaria baja, hasta 4 anios */
-		replace aedu_ci = 6+4                     if noasis_niv_inst == 3 & finalizo ==1 & q3_02 == 2 & q3_01 == 1 /* secundaria baja, hasta 4 anios */
-		
-		replace aedu_ci = noasis_ano_inst+6+4     if noasis_niv_inst == 4 & finalizo ==2 & q3_02 == 2 & q3_01 == 1 /* secundaria alta, hasta 3 anios */
-		replace aedu_ci = 6+4+3                   if noasis_niv_inst == 4 & finalizo ==1 & q3_02 == 2 & q3_01 == 1 /* secundaria alta, hasta 3 anios */
-
-		replace aedu_ci = noasis_ano_inst+6+4+3   if noasis_niv_inst == 5 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 /* Universitaria, hasta 5 anios con maestria 4 normal */
-		replace aedu_ci = 6+4+3+4                 if noasis_niv_inst == 5 & finalizo ==1  & q3_02 == 2 & q3_01 == 1
-		
-		replace aedu_ci = noasis_ano_inst+6+4+3+4 if noasis_niv_inst == 6 & finalizo ==2  & q3_02 == 2 & q3_01 == 1/* maestria doctorado, hasta 5 anios */
-		replace aedu_ci = 6+4+3+4+2				  if noasis_niv_inst == 6 & finalizo ==1  & q3_02 == 2 & q3_01 == 1/*  maestria o doctorado, no sabemos cuantos anios*/
-		
-	    replace aedu_ci = 0 if aedu_ci ==-1
+	replace aedu_ci = 0                       if noasis_niv_inst == 1 & q3_02 == 2    & q3_01 == 1 /* prescolar-ninguno */
+	replace aedu_ci = noasis_ano_inst         if noasis_niv_inst == 2 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 /* primaria si no finalizó pongo el grado que finalizó */
+	replace aedu_ci = 6				          if noasis_niv_inst == 2 & finalizo ==1  & q3_02 == 2 & q3_01 == 1 /* primaria si finalizó asumo 6 anios */
+	replace aedu_ci = noasis_ano_inst+6       if noasis_niv_inst == 3 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 
+	replace aedu_ci = 6+4                     if noasis_niv_inst == 3 & finalizo ==1  & q3_02 == 2 & q3_01 == 1 /* secundaria baja 4 anios */
+	replace aedu_ci = noasis_ano_inst+6+4     if noasis_niv_inst == 4 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 
+	replace aedu_ci = 6+4+3                   if noasis_niv_inst == 4 & finalizo ==1  & q3_02 == 2 & q3_01 == 1 /* secundaria alta 3 anios */
+	replace aedu_ci = noasis_ano_inst+6+4+3   if noasis_niv_inst == 5 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 
+	replace aedu_ci = 6+4+3+4                 if noasis_niv_inst == 5 & finalizo ==1  & q3_02 == 2 & q3_01 == 1 /* grado 4 anios */
+	replace aedu_ci = noasis_ano_inst+6+4+3+4 if noasis_niv_inst == 6 & finalizo ==2  & q3_02 == 2 & q3_01 == 1
+	replace aedu_ci = 6+4+3+4+2				  if noasis_niv_inst == 6 & finalizo ==1  & q3_02 == 2 & q3_01 == 1 /* maestria 2 anios */
+    replace aedu_ci = 0 if aedu_ci ==-1
 
 	* imputando valores perdidos con el maximo de anios del nivel anterior
 	
@@ -921,6 +910,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduno_ci***
 	**************
+
 	gen eduno_ci=aedu_ci==0
 	replace eduno_ci=. if aedu_ci==. 
 	label variable eduno_ci "Sin educacion"
@@ -928,6 +918,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***edupi_ci***
 	**************
+	
 	gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 	replace edupi_ci=. if aedu_ci==.
 	label variable edupi_ci "Primaria incompleta"
@@ -935,6 +926,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***edupc_ci***
 	**************
+	
 	gen edupc_ci=aedu_ci==6 
 	replace edupc_ci=. if aedu_ci==.
 	label variable edupc_ci "Primaria completa"
@@ -942,6 +934,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***edusi_ci***
 	**************
+	
 	gen edusi_ci=(aedu_ci>=7 & aedu_ci<13) 
 	replace edusi_ci=. if aedu_ci==.
 	label variable edusi_ci "Secundaria incompleta"
@@ -949,6 +942,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***edusc_ci***
 	**************
+	
 	gen edusc_ci=aedu_ci==13 
 	replace edusc_ci=. if aedu_ci==.
 	label variable edusc_ci "Secundaria completa"
@@ -956,6 +950,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduui_ci***
 	**************
+	
 	gen eduui_ci=(aedu_ci>13 & aedu_ci<17)
 	replace eduui_ci=. if aedu_ci==.
 	label variable eduui_ci "Superior incompleto"
@@ -963,6 +958,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***eduuc_ci***
 	***************
+	
 	gen byte eduuc_ci= (aedu_ci>=17)
 	replace eduuc_ci=. if aedu_ci==.
 	label variable eduuc_ci "Superior completo"
@@ -970,6 +966,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***edus1i_ci***
 	***************
+	
 	gen edus1i_ci= (aedu_ci>6 & aedu_ci<10)
 	replace edus1i_ci=. if aedu_ci==.
 	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
@@ -977,6 +974,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***edus1c_ci***
 	***************
+	
 	gen edus1c_ci=aedu_ci==10
 	replace edus1c_ci=. if aedu_ci==.
 	label variable edus1c_ci "1er ciclo de la secundaria completo"
@@ -984,6 +982,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***edus2i_ci***
 	***************
+	
 	gen edus2i_ci=aedu_ci>10 & aedu_ci<13
 	replace edus2i_ci=. if aedu_ci==.
 	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
@@ -991,6 +990,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***edus2c_ci***
 	***************
+	
 	gen edus2c_ci=aedu_ci==13
 	replace edus2c_ci=. if aedu_ci==.
 	label variable edus2c_ci "2do ciclo de la secundaria completo"
@@ -999,40 +999,45 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***edupre_ci***
 	***************
+	
 	gen edupre_ci=.
 	label variable edupre_ci "Educacion preescolar"
 	
 	***************
 	***asispre_ci**
 	***************
+	
 	g asispre_ci=q3_04==1
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
 	***eduac_ci***
 	**************
+	
 	gen eduac_ci=.
 	label variable eduac_ci "Superior universitario vs superior no universitario"
 
 	***************
 	***asiste_ci***
 	***************
+	
 	gen asiste_ci=(q3_02==1)
 	replace asiste_ci=. if q3_01==.
 	label variable asiste_ci "Asiste actualmente a la escuela"
 
-	**************
+	*****************
 	***pqnoasis_ci***
-	**************
+	*****************
+	
 	gen pqnoasis_ci=q3_24
 	label define pqnoasis_ci 1 "Did not like studying/ was not interested" 2 "Could not afford the expenses" 3 "Needed to work" 4 "Was ill/ disabled" 5 "Other"
-	
 	label value pqnoasis1_ci pqnoasis1_ci
-	**************
-    *pqnoasis1_ci*
-    **************
-	*/
-    g       pqnoasis1_ci =.
+	
+	******************
+    ***pqnoasis1_ci***
+    ******************
+	
+	g pqnoasis1_ci =.
 	
 	**desc q3_24 "What is the main reason why you did not continue studying?"
 	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
@@ -1046,30 +1051,30 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     *replace pqnoasis1_ci = 7 if q3_24== 
     *replace pqnoasis1_ci = 8 if q3_24==
     replace pqnoasis1_ci = 9 if q3_24==5 
-
     label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-    
-	label value  pqnoasis1_ci pqnoasis1_ci
+    label value  pqnoasis1_ci pqnoasis1_ci
+	
 	***************
 	***repite_ci***
 	***************
+	
 	gen repite_ci=.
 	label var repite_ci "Ha repetido al menos un grado"
 
 	******************
 	***repiteult_ci***
 	******************
+	
 	gen repiteult_ci=.
 	label var repiteult "Ha repetido el último grado"
 
 	***************
 	***edupub_ci***
 	***************
+	
 	gen edupub_ci=(q3_03==1) if q3_03!=.
 	label var edupub_ci "Asiste a un centro de ensenanza público"
 
-
-	
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************

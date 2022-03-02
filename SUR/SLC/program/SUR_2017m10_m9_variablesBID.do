@@ -892,11 +892,11 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 		replace aedu_ci = noasis_ano_inst+6+4     if noasis_niv_inst == 4 & finalizo ==2 & q3_02 == 2 & q3_01 == 1 /* secundaria alta, hasta 3 anios */
 		replace aedu_ci = 6+4+3                   if noasis_niv_inst == 4 & finalizo ==1 & q3_02 == 2 & q3_01 == 1 /* secundaria alta, hasta 3 anios */
 
-		replace aedu_ci = noasis_ano_inst+6+4+2   if noasis_niv_inst == 5 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 /* Universitaria, hasta 5 anios con maestria 4 normal */
+		replace aedu_ci = noasis_ano_inst+6+4+3   if noasis_niv_inst == 5 & finalizo ==2  & q3_02 == 2 & q3_01 == 1 /* Universitaria, hasta 5 anios con maestria 4 normal */
 		replace aedu_ci = 6+4+3+4                 if noasis_niv_inst == 5 & finalizo ==1  & q3_02 == 2 & q3_01 == 1
 		
 		replace aedu_ci = noasis_ano_inst+6+4+3+4 if noasis_niv_inst == 6 & finalizo ==2  & q3_02 == 2 & q3_01 == 1/* maestria doctorado, hasta 5 anios */
-		replace aedu_ci = 6+4+3+4 				  if noasis_niv_inst == 6 & finalizo ==2  & q3_02 == 1 & q3_01 == 1/*  maestria o doctorado, no sabemos cuantos anios*/
+		replace aedu_ci = 6+4+3+4+2				  if noasis_niv_inst == 6 & finalizo ==1  & q3_02 == 2 & q3_01 == 1/*  maestria o doctorado, no sabemos cuantos anios*/
 		
 	    replace aedu_ci = 0 if aedu_ci ==-1
 
@@ -907,7 +907,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aedu_ci=6 if q3_04==3 & q3_08==. & aedu_ci==.
 	replace aedu_ci=10 if q3_04==4 & q3_08==. & aedu_ci==.
 	replace aedu_ci=13 if q3_04==5 & q3_08==. & aedu_ci==.
-	replace aedu_ci=16 if q3_04==6 & q3_08==. & aedu_ci==.
+	replace aedu_ci=17 if q3_04==6 & q3_08==. & aedu_ci==.
 	replace aedu_ci=. if q3_04==7 & q3_08==. & aedu_ci==.
 	
 	replace aedu_ci=0 if q3_20==1 & q3_23==. & aedu_ci==.
@@ -915,7 +915,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aedu_ci=6 if q3_20==3 & q3_23==. & aedu_ci==.
 	replace aedu_ci=10 if q3_20==4 & q3_23==. & aedu_ci==.
 	replace aedu_ci=13 if q3_20==5 & q3_23==. & aedu_ci==.
-	replace aedu_ci=16 if q3_20==6 & q3_23==. & aedu_ci==.
+	replace aedu_ci=17 if q3_20==6 & q3_23==. & aedu_ci==.
 	replace aedu_ci=. if q3_20==7 & q3_23==. & aedu_ci==.
 	
 	**************
@@ -1025,7 +1025,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***pqnoasis_ci***
 	**************
 	gen pqnoasis_ci=q3_24
+	label define pqnoasis_ci 1 "Did not like studying/ was not interested" 2 "Could not afford the expenses" 3 "Needed to work" 4 "Was ill/ disabled" 5 "Other"
 	
+	label value pqnoasis1_ci pqnoasis1_ci
 	**************
     *pqnoasis1_ci*
     **************

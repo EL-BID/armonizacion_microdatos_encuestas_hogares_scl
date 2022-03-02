@@ -1045,7 +1045,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-* Mod. 3/2022 Pia Locco y Agustina Thailinger EDU/SLC
+* Mod. 3/2022 Pia Iocco y Agustina Thailinger EDU/SLC
 
 /*	*********
 	*aedu_ci* 

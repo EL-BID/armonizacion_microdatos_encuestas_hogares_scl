@@ -848,7 +848,7 @@ label val rama_ci rama_ci
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-* Mod. 3/2022 Pia Locco y Agustina Thailinger EDU/SLC
+* Mod. 3/2022 Pia Iocco y Agustina Thailinger EDU/SLC
 
 /*	*********
 	*aedu_ci* 

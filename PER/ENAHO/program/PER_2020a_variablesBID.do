@@ -1445,7 +1445,6 @@ gen tcylmpri_ch=.
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-
 replace p301a=. if p301a==99
 replace p301b=. if p301b==99
 replace p301c=. if p301c==99
@@ -1589,9 +1588,8 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci= (p307==1 & p308a==1)  // asiste & matriculado en nivel inicial (sin edad)
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci= (p307==1 & p308a==1)  // asiste & matriculado en nivel inicial (sin edad) 
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
@@ -1606,7 +1604,6 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 /*Se considera la variable p303 para aquellos entrevistados el primer trimestre
 ya que al momento de la encuesta es periodo de vacaciones */
-
 destring mes, replace
 g asiste_ci = (p307==1 & mes>3 & mes<=12) // asiste y estamos entre marzo y dic
 replace asiste_ci=0 if (p307==2 & mes>3 & mes<=12) // no asiste y estamos entre marzo y dic
@@ -1633,8 +1630,7 @@ replace pqnoasis1_ci = 5 if p313==10
 replace pqnoasis1_ci = 6 if p313==3
 replace pqnoasis1_ci = 7 if p313==4
 replace pqnoasis1_ci = 8 if p313==7
-replace pqnoasis1_ci = 9 if p313==6 | p313==8 | p313==11
-
+replace pqnoasis1_ci = 9 if p313==11
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
@@ -1643,8 +1639,12 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***************
 
 gen repite_ci=.
-gen repiteult_ci=.
 
+***************
+***repiteult_ci***
+***************
+
+gen repiteult_ci=.
 
 ***************
 ***edupub_ci***
@@ -2239,7 +2239,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

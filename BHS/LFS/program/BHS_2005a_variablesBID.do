@@ -1293,7 +1293,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.		
+	gen migrante_ci=(inrange(i_q4,2,7)) if i_q4!=. & i_q4!=9		/* Categoria Not Stated no se incluye en la variable*/
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************

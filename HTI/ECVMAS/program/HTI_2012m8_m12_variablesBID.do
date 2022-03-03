@@ -1354,7 +1354,7 @@ keep if sexo_ci!=.
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=.
+	gen migrantelac_ci=inlist(i_h03a,2) if i_h03a!=. & i_h03a!=-9
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
 	**********************
@@ -1369,7 +1369,7 @@ keep if sexo_ci!=.
 	*** miglac_ci ***
 	**********************
 	
-	gen miglac_ci=.
+	gen miglac_ci=inlist(i_h03a,2) if i_h03a!=. & i_h03a!=-9
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/

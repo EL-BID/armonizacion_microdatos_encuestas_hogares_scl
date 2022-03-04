@@ -894,7 +894,7 @@ gen antiguedad_ci=(2015-o13)+1
 replace antiguedad_ci=. if  emp_ci!=1 | antiguedad_ci>edad_ci
 label var antiguedad_ci "Antiguedad en la actividad actual"
 
-************************
+		************************
 		* VARIABLES EDUCATIVAS *
 		************************
 
@@ -971,16 +971,15 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 gen byte edusc_ci=aedu_ci==12
-replace edusc_ci=1 if aedu_ci==13 & e6a==11 // education TP con 13 anios
+replace edusc_ci=1  if aedu_ci==13 & e6a==11 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edusc_ci=. if aedu_ci==.
-label variable edusc_ci "Secundaria completa
+label variable edusc_ci "Secundaria completa"
 
 **************
 ***eduui_ci***
 **************
-gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14) 
-replace eduui_ci=0 if aedu_ci==13 & e6a==11 // education TP con 13 anios
-replace eduui_ci=1 if aedu_ci>12 & e6a<12 & e6a>17
+gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14)  // mas de 12 anios y tecnico superior completo o profesional completo 
+replace eduui_ci=. if (aedu_ci>12 & e6a==11) // si es educacion TP y mas de 12 anios (la tabla UNESCO dice 12), los mando a missing aca porque tienen secundaria completa
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1018,12 +1017,11 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=0 // usando los anios de educacion
+gen edus2c_ci=0 
 replace edus2c_ci=1  if aedu_ci==12
-replace edus2c_ci=1  if aedu_ci==13 & e6a==11 // modalidad educacion TP con 13 anios
+replace edus2c_ci=1  if aedu_ci==13 & e6a==11 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-"
 
 ***************
 ***edupre_ci***
@@ -1051,6 +1049,10 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ****************
 gen pqnoasis_ci=e5a
 label var pqnoasis_ci "Razones para no asistir a la escuela"
+
+label define pqnoasis_ci 1 "Ayuda en la casa o queaheceres del hogar" 2 "Embarazo, maternidad o paternidad" 3 "Tiene una discapacidad o requiere un establecimiento de educación especial" 4 "Enfermedad que lo inhabilita" 5 "5. Problemas familiares" 6 "No le interesa" 7 "Terminó de estudiar" 8 "A su edad no le sirve estudiar o no conoce la manera de completar sus estudios" 9 "Está asistiendo a un preuniversitario" 10 "Se encuentra preparando la PSU por su cuenta" 11 "Dificultad económica" 12 "Trabaja o busca trabajo" 13 "Problemas de rendimiento" 14 "Expulsión o cancelación de matrícula" 15 "No existe establecimiento cercano" 16 "Dificultad de acceso o movilización" 17 "Otra razón"
+
+label values pqnoasis1_ci pqnoasis1_ci
 
 **************
 *pqnoasis1_ci*
@@ -1090,17 +1092,6 @@ replace edupub_ci=1 if inlist(e9depen,1) & asiste_ci==1 // municipal
 replace edupub_ci=0 if inlist(e9depen,2,3) & asiste_ci==1 //particular subvencionado o privado.
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 
-*************
-**tecnica_ci*
-*************
-gen tecnica_ci=(e6a==12 | e6a==13)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-**universidad_ci*
-*************
-gen universidad_ci=(e6a>=14 & e6a<=17) 
-label var universidad_ci "1=formacion terciaria universitaria"
 
 		******************************************
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
@@ -1753,7 +1744,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

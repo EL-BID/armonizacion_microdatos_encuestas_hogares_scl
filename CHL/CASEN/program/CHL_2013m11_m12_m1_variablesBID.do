@@ -888,7 +888,7 @@ gen antiguedad_ci=(2013-o13)+1
 replace antiguedad_ci=. if o13==9999 | emp_ci!=1 | antiguedad_ci>edad_ci
 label var antiguedad_ci "Antiguedad en la actividad actual"
 
-				************************
+		************************
 		* VARIABLES EDUCATIVAS *
 		************************
 
@@ -963,25 +963,26 @@ label variable edusi_ci "Secundaria incompleta"
 **************
 ***edusc_ci***
 **************
-gen byte edusc_ci=aedu_ci==12 & e6a<11
+gen byte edusc_ci=aedu_ci==12
 replace edusc_ci=1 if aedu_ci==13 & e6a==10 // education TP con 13 anios
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
+
 **************
 ***eduui_ci***
 **************
-gen byte eduui_ci=((aedu_ci<16 & e6a==12)  | (aedu_ci<15 & e6a==11)) 
+gen byte eduui_ci=(aedu>12 & aedu_ci<17 & e6a==12) //pregrado  
+replace eduui_ci=1 if (aedu>12 & aedu_ci<15 & e6a==11) // superior tecnica
 replace eduui_ci=0 if aedu_ci==13 & e6a==10 // education TP con 13 anios
-replace eduui_ci=1 if aedu_ci>12 & e6a<12 & e6a>13
-replace eduui_ci=1 if aedu_ci==12 & (e6a==11 | e6a==12) & e6b==.
+replace eduui_ci=0 if aedu_ci==12 & (e6a==11 | e6a==12) & e6b==. // terciaria con anios imputados
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
 ***************
 ***eduuc_ci****
 ***************
-gen byte eduuc_ci=((aedu_ci>=16 & e6a==12)  | (aedu_ci>=15 & e6a==11)  | (aedu_ci>=12 & e6a==13))
+gen byte eduuc_ci=((aedu_ci>=17 & e6a==12)  | (aedu_ci>=15 & e6a==11)  | (aedu_ci>=12 & e6a==13))
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1014,7 +1015,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***edus2c_ci***
 ***************
 gen edus2c_ci=0 // usando los anios de educacion
-replace edus2c_ci=1  if aedu_ci==12 &e6a<11
+replace edus2c_ci=1  if aedu_ci==12 
 replace edus2c_ci=1  if aedu_ci==13 & e6a==10 // modalidad educacion TP con 13 anios
 replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
@@ -1082,22 +1083,8 @@ label var repiteult_ci "Personas que han repetido el último grado"
 gen edupub_ci=.
 replace edupub_ci=1 if inlist(e8depen, 1, 2) & asiste_ci==1 //Municipales
 replace edupub_ci=0 if inlist(e8depen, 3, 4) & asiste_ci==1 // Particular pagado, particular subvencionado
-
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 
-*************
-**tecnica_ci*
-*************
-
-
-gen tecnica_ci=e6a==11
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-**universidad_ci*
-*************
-gen universidad_ci=(e6a==12 | e6a==12)
-label var universidad_ci "1=formacion terciaria universitaria"
 
 
 		******************************************
@@ -1674,7 +1661,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

@@ -1076,11 +1076,16 @@ replace aedu_ci=18 if a14==56
 
 *DZ Julio 2019-Cambio código de la variable
 *Postgrado
-replace aedu_ci=19 if a14==71 | a14==101 | a14==111
-replace aedu_ci=20 if a14==72 | a14==102 | a14==112
-replace aedu_ci=21 if a14==73 | a14==103 | a14==113
-replace aedu_ci=22 if a14==74 | a14==104 | a14==114
 
+replace aedu_ci=19 if a14==71 | a14==101 
+replace aedu_ci=20 if a14==72 | a14==102 
+replace aedu_ci=21 if a14==73 | a14==103 
+replace aedu_ci=22 if a14==74 | a14==104 
+
+replace aedu_ci=21 if a14==111
+replace aedu_ci=22 if a14==112
+replace aedu_ci=23 if a14==113
+replace aedu_ci=24 if a14==114
 
 *replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
 

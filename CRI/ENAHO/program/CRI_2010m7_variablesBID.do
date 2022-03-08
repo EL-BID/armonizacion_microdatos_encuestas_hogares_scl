@@ -1523,7 +1523,11 @@ replace eduuc_ci=1 if a15>59 & a15<=89
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Superior completo"
 
-
+***************
+***edupre_ci***
+***************
+gen edupre_ci=.
+label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***

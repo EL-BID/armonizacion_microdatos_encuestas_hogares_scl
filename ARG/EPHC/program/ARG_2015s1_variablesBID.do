@@ -1158,7 +1158,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	*eduac_ci*
 	**********
 	gen byte eduac_ci=.
-	replace eduac_ci=1 if ch12==7
+	replace eduac_ci=1 if ch12==7 | ch12==8
 	replace eduac_ci=0 if ch12==6
 	label variable eduac_ci "Superior universitario vs superior no universitario"
 

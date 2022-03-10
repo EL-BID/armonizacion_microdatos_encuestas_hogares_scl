@@ -1146,7 +1146,7 @@ gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ********************************************************************************************************************************
-***A_ASISPRE_CI: Asistencia a Educacion preescolar
+***ASISPRE_CI: Asistencia a Educacion preescolar
 ********************************************************************************************************************************
 *Variable agregada por Iván Bornacelly - 01/16/2017
 g asispre_ci=(a13==1 | a13==2)

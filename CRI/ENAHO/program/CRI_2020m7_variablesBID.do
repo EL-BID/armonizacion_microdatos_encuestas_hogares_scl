@@ -1185,6 +1185,8 @@ label variable edupre_ci "Educacion preescolar"
 gen eduac_ci=.
 replace eduac_ci=1 if (a14>=51 & a14<=59)  | (a14>=41 & a14<=49 & a16b==2)
 replace eduac_ci=0 if a14>=41 & a14<=49 & a16b!=2
+replace eduac_ci=1 if a14>=71 & a14<=119 // especialidad, maestria y doctorados. 
+
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ********************************************************************************************************************************

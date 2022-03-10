@@ -1157,8 +1157,10 @@ label variable edupre_ci "Educacion preescolar"
 ***14._EDUAC_CI : Educación terciaria académica versus educación terciaria no-académica***
 ********************************************************************************************************************************
 gen eduac_ci=.
-replace eduac_ci=1 if a14>=51 & a14<=59 |( a14>=41 & a14<=49 & a16b==2)
+replace eduac_ci=1 if (a14>=51 & a14<=59) |( a14>=41 & a14<=49 & a16b==2)
 replace eduac_ci=0 if a14>=41 & a14<=49 & a16b!=2
+replace eduac_ci=1 if a14>=71 & a14<=89 // especialidad, maestria y doctorados.
+
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ********************************************************************************************************************************

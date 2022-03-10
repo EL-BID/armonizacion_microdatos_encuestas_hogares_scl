@@ -886,7 +886,7 @@ gen antiguedad_ci=(2015-o13)+1
 replace antiguedad_ci=. if  emp_ci!=1 | antiguedad_ci>edad_ci
 label var antiguedad_ci "Antiguedad en la actividad actual"
 
-************************
+		************************
 		* VARIABLES EDUCATIVAS *
 		************************
 
@@ -1065,9 +1065,9 @@ label define pqnoasis_ci
 #delimit cr
 label values pqnoasis_ci pqnoasis_ci
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = 1 if e5a ==9
@@ -1083,21 +1083,21 @@ replace pqnoasis1_ci = 9 if e5a ==11 | e5a ==12 | e5a ==15
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-**************
-**repite_ci***
-**************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
 replace edupub_ci=1 if inlist(e7depen,1) & asiste_ci==1 // municipal 
 replace edupub_ci=0 if inlist(e7depen,2,3) & asiste_ci==1 //particular subvencionado o privado.

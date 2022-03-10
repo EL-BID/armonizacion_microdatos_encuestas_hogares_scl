@@ -898,17 +898,16 @@ label var antiguedad_ci "Antiguedad en la actividad actual"
 		* VARIABLES EDUCATIVAS *
 		************************
 
-****************
-* asiste_ci    * 
-**************** 
+***************
+***asiste_ci*** 
+*************** 
 gen asiste_ci=(e3==1)
 replace asiste_ci=. if e3==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-****************
-* aedu_ci      * 
-**************** 
-
+*************
+***aedu_ci*** 
+************* 
 gen aedu_ci=.
 replace aedu_ci=.  if e6a==5 // Educación Especial
 replace e6a=. if e6a==99
@@ -967,6 +966,7 @@ label variable edupc_ci "Primaria completa"
 en byte edusi_ci=aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
+
 **************
 ***edusc_ci***
 **************
@@ -1029,12 +1029,12 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
+****************
 ***asispre_ci***
-***************
+****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	g asispre_ci=(e3==1 & (e6a==2 | e6a==3 | e6a==4)) 
-	la var asispre_ci "Asiste a educacion prescolar""
+g asispre_ci=(e3==1 & (e6a==2 | e6a==3 | e6a==4)) 
+la var asispre_ci "Asiste a educacion prescolar""
 
 **************
 ***eduac_ci***
@@ -1054,9 +1054,9 @@ label define pqnoasis_ci 1 "Ayuda en la casa o queaheceres del hogar" 2 "Embaraz
 
 label values pqnoasis1_ci pqnoasis1_ci
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = 1 if e5a ==11
@@ -1072,26 +1072,25 @@ replace pqnoasis1_ci = 9 if e5a ==9 | e5a==10 | e5a==13 | e5a ==14 | e5a==17
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-**************
-**repite_ci***
-**************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
 replace edupub_ci=1 if inlist(e9depen,1) & asiste_ci==1 // municipal 
 replace edupub_ci=0 if inlist(e9depen,2,3) & asiste_ci==1 //particular subvencionado o privado.
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
-
 
 		******************************************
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *

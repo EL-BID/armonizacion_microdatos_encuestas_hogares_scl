@@ -1046,6 +1046,30 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ****************
 gen pqnoasis_ci=e5
 label var pqnoasis_ci "Razones para no asistir a la escuela"
+ 
+#delimit ;
+
+label define pqnoasis_ci 
+           1 "ayuda en la casa o quehaceres del hogar"
+           2 "embarazo, maternidad o paternidad"
+           3 "tiene una discapacidad, requiere establecimiento de educacion especial"
+           4 "enfermedad que lo inhabilita"
+           5 "problemas familiares"
+           6 "no le interesa"
+           7 "termino de estudiar"
+           8 "a su edad no le sirve estudiar o no conoce la manera"
+           9 "dificultad economica"
+          10 "trabaja o busca trabajo"
+          11 "problemas de rendimiento"
+          12 "expulsion o cancelacion de matricula"
+          13 "no existe establecimiento cercano"
+          14 "dificultad de acceso o movilizacion"
+          15 "otra razon. especifique"
+          99 "ns/nr";
+
+#delimit cr
+label values pqnoasis_ci pqnoasis_ci
+
 
 **************
 *pqnoasis1_ci*

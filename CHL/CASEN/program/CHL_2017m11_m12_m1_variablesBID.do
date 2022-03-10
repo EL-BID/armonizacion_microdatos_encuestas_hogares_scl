@@ -901,8 +901,8 @@ label var antiguedad_ci "Antiguedad en la actividad actual"
 ****************
 * asiste_ci    * 
 **************** 
-gen asiste_ci=(e2==1)
-replace asiste_ci=. if e2==.
+gen asiste_ci=(e3==1)
+replace asiste_ci=. if e3==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
 ****************
@@ -978,8 +978,8 @@ label variable edusc_ci "Secundaria completa"
 **************
 ***eduui_ci***
 **************
-gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14)  // mas de 12 anios y tecnico superior completo o profesional completo 
-replace eduui_ci=. if (aedu_ci>12 & e6a==11) // si es educacion TP y mas de 12 anios (la tabla UNESCO dice 12), los mando a missing aca porque tienen secundaria completa
+gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14)  // mas de 12 anios y tecnico superior completo o profesional incompleto 
+replace eduui_ci=0 if (aedu_ci>12 & e6a==11) // si es educacion TP y mas de 12 anios (la tabla UNESCO dice 12), los mando a cero aca porque tienen secundaria completa
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1041,7 +1041,7 @@ label variable edupre_ci "Educacion preescolar"
 **************
 gen eduac_ci=(e6a>=14 & e6a<=17)
 replace eduac_ci=0 if (e6a==12 | e6a==13)
-replace eduac_ci=. if e6a<=11  | e6a>18
+replace eduac_ci=. if e6a<=11  | e6a>=18
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ****************

@@ -890,10 +890,11 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14) 
-replace eduui_ci=0 if aedu_ci==13 & e6a==11 //education TP con 13 anios. no es universitaria, y los dejo aca porque UNESCO considera el cierre con 12 anios 
-replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta" 
+gen byte edusc_ci=aedu_ci==12
+replace edusc_ci=1 if aedu_ci==13 & e6a==11 // education TP con 13 anios. no es universitaria, y los dejo aca porque UNESCO considera el cierre con 12 anios de escolaridad
+replace edusc_ci=. if aedu_ci==.
+label variable edusc_ci "Secundaria completa"
+
 **************
 ***eduui_ci***
 **************
@@ -962,36 +963,18 @@ replace eduac_ci=. if e6a<=11
 
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-/*
 ****************
 **pqnoasis_ci***
 ****************
-gen pqnoasis_ci=e5a
+gen pqnoasis_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
 **************
 *pqnoasis1_ci*
 **************
 
-gen     pqnoasis1_ci = 1 if e5a ==11
-replace pqnoasis1_ci = 2 if e5a ==12
-replace pqnoasis1_ci = 3 if e5a ==3 | e5a ==4 | e5a ==5
-replace pqnoasis1_ci = 4 if e5a ==6
-replace pqnoasis1_ci = 5 if e5a ==1 | e5a ==2
-replace pqnoasis1_ci = 6 if e5a ==7 
-replace pqnoasis1_ci = 7 if e5a ==8 
-replace pqnoasis1_ci = 8 if e5a ==15  | e5a ==16
-replace pqnoasis1_ci = 9 if e5a ==9 | e5a==10 | e5a==13 | e5a ==14 | e5a==17
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
-*/
-
-****************
-**pqnoasis_ci***
-****************
-gen pqnoasis_ci=. // No está la pregunta en la encuesta 2020
-label var pqnoasis_ci "Razones para no asistir a la escuela"
+gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
+label var pqnoasis1_ci "Razones para no asistir a la escuela"
 
 **************
 **repite_ci***
@@ -1635,7 +1618,6 @@ gen dis_ci =. // No está la pregunta en la encuesta 2020
 gen antiguedad_ci=. // No está la pregunta en la encuesta 2020
 gen durades_ci=. // No está la pregunta en la encuesta 2020
 gen desalent_ci=. // No está la pregunta en la encuesta 2020
-gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

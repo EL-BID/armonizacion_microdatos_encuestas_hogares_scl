@@ -1793,6 +1793,52 @@ label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	destring p208a2, replace
+	gen migrante_ci=(p208a2<10000) if p208a2!=. & p208a2!=999999
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=(inlist(p208a2,4002,4003,4004,4005,4006,4007,4009,4010,4011,4014,4015,4018,4019,4021,4022,4023,4024,4025,4026,4027,4030,4034,4035,4036,4037) & migrante_ci==1) if migrante_ci!=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de peru (redatam)
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(inlist(p208a2,4002,4003,4004,4005,4006,4007,4009,4010,4011,4014,4015,4018,4019,4021,4022,4023,4024,4025,4026,4027,4030,4034,4035,4036,4037) & migrante_ci==1) if migrante_ci!=.
+	replace miglac_ci = 0 if migrantelac_ci != 1  & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	** Fuente: Los codigos de paises se obtiene del censo de peru (redatam)
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

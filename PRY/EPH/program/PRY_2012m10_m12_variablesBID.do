@@ -1791,6 +1791,53 @@ gen vivialqimp_ch=v19
 	*******************
 	g ybenefdes_ci=.
 	label var ybenefdes_ci "Monto de seguro de desempleo"
+	
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=(p10a>19) if p10a!=99 & p10a!=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=(migrante_ci==1 & p11a<20) if migrante_ci!=. & p11a!=. & p11a!=99 & !inrange(edad_ci,0,4)
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,23,24,28,31,32)) if migrante_ci!=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=(migrante_ci==1 & p11a<20) if migrante_ci!=. & p11a!=. & p11a!=99 & !inrange(edad_ci,0,4)
+	replace migrantiguo5_ci= 0 if migrantiguo5_ci != 1 & migrante_ci == 1
+	replace migrantiguo5_ci= . if migrante_ci == 0
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=(migrante_ci==1 & inlist(p10a,20,21,22,23,24,28,31,32)) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

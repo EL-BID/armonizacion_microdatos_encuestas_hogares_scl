@@ -1341,19 +1341,6 @@ replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10) 
 replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12) & cp405==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=(cp407==7 | cp407==8) | (cp412==7| cp412==8)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-*universidad_ci**
-*************
-
-gen universidad_ci=(cp407==9 | cp407==10 | cp412==9| cp412==10)
-label var universidad_ci "1=formacion terciaria universitaria"
 
 
 **************
@@ -1702,7 +1689,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 trapri_ci trapri_ch progpub_ci progpub_ch trapub_ci  trapub_ch capital_ci capital_ch otros_ci otros_ch ypen_ch ytotal_ci  ytotal_ch ytotalpc_ch quintil_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

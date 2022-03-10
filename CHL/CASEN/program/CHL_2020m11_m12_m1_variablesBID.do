@@ -814,34 +814,31 @@ label var remesas_ch "Remesas mensuales del hogar"
 * VARIABLES EDUCATIVAS *
 ************************
 
-****************
-* asiste_ci    * 
-**************** 
+***************
+***asiste_ci*** 
+*************** 
 gen asiste_ci=(e2==1)
 replace asiste_ci=. if e2==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-****************
-* aedu_ci      * 
-**************** 
-
+*************
+***aedu_ci*** 
+************* 
 gen aedu_ci=.
 replace aedu_ci=.  if e6a==5 // Educación Especial
 replace e6a=. if e6a==99
 replace e6b=. if e6b==99
 replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
-replace aedu_ci=e6b      	   if e6a==6  	         /*Preparatoria  (Sist. antiguo)*/
+replace aedu_ci=e6b            if e6a==6             /*Preparatoria  (Sist. antiguo)*/
 replace aedu_ci=e6b            if e6a==7             /*Básica (Sist. nuevo) */
-replace aedu_ci=e6b+6          if e6a==8             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=e6b+8          if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
+replace aedu_ci=e6b+6 		   if e6a==8             /*Humanidades (Sist. antiguo)*/
+replace aedu_ci=e6b+8 		   if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
 replace aedu_ci=e6b+6          if e6a==10            /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
 replace aedu_ci=e6b+8          if e6a==11            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
 replace aedu_ci=e6b+12         if e6a>=12 & e6a<=15  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
-replace aedu_ci=e6b+17         if e6a==16 | e6a==17	 /*Posgrado*/
-
+replace aedu_ci=e6b+17         if e6a==16 | e6a==17  /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
-
-**hay gente con 30+ anios de educacion. trunco esto?
+label var aedu_ci "Anios de educacion aprobados" 
 
 **imputando anios perdidos
 
@@ -872,12 +869,14 @@ gen byte edupi_ci=aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
+
 **************
 ***edupc_ci***
 **************
 gen byte edupc_ci=aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
+
 
 **************
 ***edusi_ci***
@@ -890,7 +889,7 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 gen byte edusc_ci=aedu_ci==12
-replace edusc_ci=1 if aedu_ci==13 & e6a==11 // education TP con 13 anios
+replace edusc_ci=1 if aedu_ci==13 & e6a==11 // education TP con 13 anios. no es universitaria, y los dejo aca porque UNESCO considera el cierre con 12 anios de escolaridad
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -899,9 +898,8 @@ label variable edusc_ci "Secundaria completa"
 **************
 gen byte eduui_ci=(aedu_ci>12 & e6a==12)  | (aedu_ci>12 & e6a==14) 
 replace eduui_ci=0 if aedu_ci==13 & e6a==11 // education TP con 13 anios
-replace eduui_ci=1 if aedu_ci>12 & e6a<12 & e6a>17
 replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta"
+label variable eduui_ci "Universitaria incompleta" 
 
 ***************
 ***eduuc_ci****
@@ -939,7 +937,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 gen edus2c_ci=0 // usando los anios de educacion
 replace edus2c_ci=1  if aedu_ci==12
-replace edus2c_ci=1  if aedu_ci==13 & e6a==11 // modalidad educacion TP con 13 anios
+replace edus2c_ci=1  if aedu_ci==13 & e6a==11 // modalidad educacion TP con 13 anios. segun la tabla unesco se titulan a los 12 anios, asi que los pongo como completosa aca
 replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
@@ -961,40 +959,20 @@ la var asispre_ci "Asiste a educacion prescolar"
 gen eduac_ci=(e6a>=14 & e6a<=17)
 replace eduac_ci=0 if (e6a==12 | e6a==13)
 replace eduac_ci=. if e6a<=11 
-
-
 label variable eduac_ci "Superior universitario vs superior no universitario"
-
-/*
-****************
-**pqnoasis_ci***
-****************
-gen pqnoasis_ci=e5a
-label var pqnoasis_ci "Razones para no asistir a la escuela"
-
-**************
-*pqnoasis1_ci*
-**************
-
-gen     pqnoasis1_ci = 1 if e5a ==11
-replace pqnoasis1_ci = 2 if e5a ==12
-replace pqnoasis1_ci = 3 if e5a ==3 | e5a ==4 | e5a ==5
-replace pqnoasis1_ci = 4 if e5a ==6
-replace pqnoasis1_ci = 5 if e5a ==1 | e5a ==2
-replace pqnoasis1_ci = 6 if e5a ==7 
-replace pqnoasis1_ci = 7 if e5a ==8 
-replace pqnoasis1_ci = 8 if e5a ==15  | e5a ==16
-replace pqnoasis1_ci = 9 if e5a ==9 | e5a==10 | e5a==13 | e5a ==14 | e5a==17
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
-*/
 
 ****************
 **pqnoasis_ci***
 ****************
 gen pqnoasis_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis_ci "Razones para no asistir a la escuela"
+
+**************
+*pqnoasis1_ci*
+**************
+
+gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
+label var pqnoasis1_ci "Razones para no asistir a la escuela"
 
 ****************
 **pqnoasis1_ci***
@@ -1019,7 +997,6 @@ label var repiteult_ci "Personas que han repetido el último grado"
 **************
 gen edupub_ci=. // No está la pregunta en la encuesta 2020
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
-
 
 		******************************************
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *

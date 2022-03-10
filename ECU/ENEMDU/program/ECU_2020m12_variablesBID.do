@@ -944,7 +944,12 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	
 	cap clonevar nivinst = p10a
 	cap clonevar anoinst = p10b
-
+	
+	//Sacado del formulario del encuestador
+	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 "Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
+	label values p10a P10a
+	label values nivinst P10a
+	
 	replace anoinst= 0 if (nivinst == 1)
 
 	*09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
@@ -969,82 +974,79 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduno_ci***
 	**************
-	gen eduno_ci=0
-	replace eduno_ci=1 if aedu_ci==0
+	gen eduno_ci=aedu_ci==0
+	replace eduno_ci=. if aedu_ci==. 
 	label variable eduno_ci "Sin educacion"
 
 	**************
 	***edupi_ci***
 	**************
-	gen edupi_ci=0
-	replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+	gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+	replace edupi_ci=. if aedu_ci==. 
 	label variable edupi_ci "Primaria incompleta"
 
 	**************
 	***edupc_ci***
 	**************
-	gen edupc_ci=0
-	replace edupc_ci=1 if aedu_ci==6 
+	gen edupc_ci=aedu_ci==6 
+	replace edupc_ci=. if aedu_ci==.
 	label variable edupc_ci "Primaria completa"
 
 	**************
 	***edusi_ci***
 	**************
-	gen edusi_ci=0
-	replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<12) 
+	gen edusi_ci=(aedu_ci>=7 & aedu_ci<12) 
+	replace edusi_ci=. if aedu==.  
 	label variable edusi_ci "Secundaria incompleta"
 
 	**************
 	***edusc_ci***
 	**************
-	gen edusc_ci=0
-	replace edusc_ci=1 if aedu_ci==12 
+	gen edusc_ci=aedu_ci==12
+	replace edusc_ci=. if aedu_ci==.
 	label variable edusc_ci "Secundaria completa"
 
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<17 & nivinst==9) | (aedu_ci>12 & aedu_ci<16 & nivinst==8)
+	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17)
+	gen byte eduuc_ci= (aedu_ci>=17 & nivinst==9) | (aedu_ci>16 &  nivinst==8) | (nivinst==10)
+	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 
 	***************
 	***edus1i_ci***
 	***************
-	gen edus1i_ci=0
-	replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+	gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+	replace edus1i_ci=. if aedu_ci==.
 	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 	***************
 	***edus1c_ci***
 	***************
-	gen edus1c_ci=0
-	replace edus1c_ci=1 if aedu_ci==9
+	gen edus1c_ci=aedu_ci==9
+	replace edus1c_ci=. if aedu_ci==. 
 	label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 	***************
 	***edus2i_ci***
 	***************
-	gen edus2i_ci=0
-	replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+	gen edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+	replace edus2i_ci=. if aedu_ci==. 
 	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 	***************
 	***edus2c_ci***
 	***************
-	gen edus2c_ci=0
-	replace edus2c_ci=1 if aedu_ci==12
+	gen edus2c_ci=aedu_ci==12
+	replace edus2c_ci=. if aedu_ci==.
 	label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-	local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-	foreach x of local var {
-	replace `x'_ci=. if aedu_ci==.
-	}
 
 	***************
 	***edupre_ci***
@@ -1056,15 +1058,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***asispre_ci**
 	***************
 	/*Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
+	
 	replace asispre_ci=1 if pe01==1 & pe02a==3
 	recode asispre_ci (.=0)
 	la var asispre_ci "Asiste a educacion prescolar"*/
 	
-	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
 	g asispre_ci=.
-	replace asispre_ci=1 if p07==1 & p10a==3
-	recode asispre_ci (.=0)
+	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
+	*g asispre_ci=(p07==1 & p10a==3) //todos los valores son cero porque p10a no tiene el valor 3 "Jardín de infantes"
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
@@ -1072,6 +1073,10 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	gen eduac_ci=.
 	label variable eduac_ci "Superior universitario vs superior no universitario"
+	
+	replace eduac_ci=1 if p10a==9
+	replace eduac_ci=0 if p10a==8
+	
 
 	***************
 	***asiste_ci***
@@ -1130,17 +1135,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen edupub_ci=.
 	label var edupub_ci "Asiste a un centro de ensenanza público"
 
-	****************
-	***tecnica_ci **
-	****************
-	gen tecnica_ci=(nivinst==8)
-	label var tecnica_ci "=1 formacion terciaria tecnica"
-	
-	********************
-	***universidad_ci **
-	****************
-	gen universidad_ci=(nivinst==9)
-	label var universidad_ci "=1 formacion terciaria universitaria"
 
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
@@ -1565,7 +1559,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first

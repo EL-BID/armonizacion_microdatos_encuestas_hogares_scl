@@ -1608,6 +1608,7 @@ replace aguamejorada_ch = 0 if (dv06 >=5 & dv06 <=7) | (dv06 >=9 & dv06 <=10)
 g banomejorado_ch = 1 if ( dh05 ==1 & ((dh06 >=1 & dh06 <=2) | (dh06 >=5 & dh06 <=8)) & dh07 ==1)
 replace banomejorado_ch = 0 if ( dh05 ==1 & ((dh06 >=1 & dh06 <=2) | (dh06 >=5 & dh06 <=8)) & dh07 ==2) | (dh06 >=3 & dh06 <=4) | (dh05==2)
 
+
 ******************************
 *** VARIABLES DE MIGRACION ***
 ******************************
@@ -1618,9 +1619,8 @@ replace banomejorado_ch = 0 if ( dh05 ==1 & ((dh06 >=1 & dh06 <=2) | (dh06 >=5 &
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=!mi(cd202_p) 
 	label var migrante_ci "=1 si es migrante"
-	/* Base con error en la pregunta de migrante, no se puede rescatar */
 	
 	**********************
 	*** migantiguo5_ci ***
@@ -1634,7 +1634,7 @@ replace banomejorado_ch = 0 if ( dh05 ==1 & ((dh06 >=1 & dh06 <=2) | (dh06 >=5 &
 	*** migrantelac_ci ***
 	**********************
 	
-	gen migrantelac_ci=.
+	gen migrantelac_ci=(migrante_ci==1 & inlist(cd202_p,2,3,4,5,6,11,18)) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
 	**********************
@@ -1646,12 +1646,14 @@ replace banomejorado_ch = 0 if ( dh05 ==1 & ((dh06 >=1 & dh06 <=2) | (dh06 >=5 &
 	/* Encuesta pregunta sobre años viviendo en este lugar, no sabemos si pudo vivir en Honduras y mudarse de ciudad */
 		
 	**********************
-	*** migrantelac_ci ***
+	*** miglac_ci ***
 	**********************
 	
-	gen miglac_ci=.
+	gen miglac_ci=(migrante_ci==1 & inlist(cd202_p,102,103,104,105,107,203,305,313,403)) if migrante_ci!=.
+	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
+	replace miglac_ci = . if migrante_ci == 0
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
-
+	
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

@@ -892,18 +892,16 @@ label var antiguedad_ci "Antiguedad en la actividad actual"
 		* VARIABLES EDUCATIVAS *
 		************************
 
-****************
-* asiste_ci    * 
-**************** 
+***************
+***asiste_ci*** 
+*************** 
 gen asiste_ci=(e3==1)
 replace asiste_ci=. if e3==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-****************
-* aedu_ci      * 
-**************** 
-
-
+*************
+***aedu_ci*** 
+************* 
 gen aedu_ci=.
 replace aedu_ci=.  if e6a==4 // Educación Especial
 replace e6a=. if e6a==99
@@ -919,7 +917,6 @@ replace aedu_ci=e6b+12         if e6a>=11 & e6a<=12  /*Tecnico nivel superior co
 replace aedu_ci=e6b+17         if e6a==13            /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
 *Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
-
 
 **imputando anios perdidos
 
@@ -968,7 +965,6 @@ replace edusc_ci=1 if aedu_ci==13 & e6a==10 // education TP con 13 anios
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
-
 **************
 ***eduui_ci***
 **************
@@ -1008,7 +1004,6 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 gen edus2i_ci=0 // usando los anios de educacion
 replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
-
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
@@ -1030,8 +1025,8 @@ label variable edupre_ci "Educacion preescolar"
 ***asispre_ci***
 ***************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	gen asispre_ci=(e3==1 & (e6a==2 | e6a==3)) 
-	la var asispre_ci "Asiste a educacion prescolar"
+gen asispre_ci=(e3==1 & (e6a==2 | e6a==3)) 
+la var asispre_ci "Asiste a educacion prescolar"
 
 **************
 ***eduac_ci***
@@ -1070,7 +1065,6 @@ label define pqnoasis_ci
 #delimit cr
 label values pqnoasis_ci pqnoasis_ci
 
-
 **************
 *pqnoasis1_ci*
 **************
@@ -1108,8 +1102,6 @@ gen edupub_ci=.
 replace edupub_ci=1 if inlist(e8depen, 1, 2) & asiste_ci==1 //Municipales
 replace edupub_ci=0 if inlist(e8depen, 3, 4) & asiste_ci==1 // Particular pagado, particular subvencionado
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
-
-
 
 		******************************************
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *

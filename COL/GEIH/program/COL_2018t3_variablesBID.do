@@ -1171,7 +1171,7 @@ label var universidad_ci "1=formacion universitaria"
 ***pared_ch***
 **************
 
-	g pared_ch = (p4010 >= 1 & p4010 <= 6)
+	g pared_ch = (p4010 >= 1 & p4010 <= 3)
 	replace pared_ch = . if p4010 == .
 	la var pared_ch "Materiales de construcciÃ³n de las paredes"
 	la de pared_ch 0"No permanentes" 1"Permanentes"

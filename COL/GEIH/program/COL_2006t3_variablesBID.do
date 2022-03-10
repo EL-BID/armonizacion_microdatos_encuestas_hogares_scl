@@ -846,7 +846,7 @@ rename ylmpri_ci ylmpri_ci_ant
 gen ylmpri_ci=ymensual 		if categopri_ci==3
 replace ylmpri_ci=ynetoind	if categopri_ci==0 | categopri_ci==1 | categopri_ci==2 
 replace ylmpri_ci=0			if categopri_ci==4
-replace ylmpri_ci=. if ylmpri_ci>=1000000000
+replace ylmpri_ci=. if ylmpri_ci>=100000000
 label var ylmpri_ci "Ingreso laboral monetario actividad principal" 
 
 
@@ -1364,7 +1364,7 @@ label val piso_ch piso_ch
 **************
 ***pared_ch***
 **************
-g pared_ch = (P4010 >= 1 & P4010 <= 7)
+g pared_ch = (P4010 >= 1 & P4010 <= 3)
 replace pared_ch = . if P4010 == .
 label var pared_ch "Materiales de construcción de las paredes"
 label def pared_ch 0"No permanentes" 1"Permanentes"
@@ -1471,7 +1471,7 @@ label var compu_ch "El hogar posee computador"
 *****************
 ***internet_ch***
 *****************
-gen internet_ch=1 if P5210S3==1
+gen internet_ch=(P5210S3==1)
 replace internet_ch=. if P5210S3==.
 label var internet_ch "El hogar posee conexión a Internet"
 

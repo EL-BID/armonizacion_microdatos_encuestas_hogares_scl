@@ -171,7 +171,7 @@ gen mes_c= .
 
 gen relacion_ci=.
 replace relacion_ci=1 if parentesco=="101" | parentesco=="102"
-replace relacion_ci=2 if parentesco>="201" & parentesco<="204"
+replace relacion_ci=2 if parentesco>="201" & parentesco<="205"
 replace relacion_ci=3 if parentesco>="301" & parentesco<="305"
 replace relacion_ci=4 if parentesco>="601" & parentesco<="623"
 replace relacion_ci=5 if (parentesco>="501" & parentesco <="503") | (parentesco>="701" & parentesco<="715")
@@ -1161,8 +1161,8 @@ replace aedu_ci=grado_ed if nivel_ed==2
 replace aedu_ci= grado_ed+6 if nivel_ed==3
 replace aedu_ci= grado_ed+9 if nivel_ed==4
 replace aedu_ci= grado_ed+12 if nivel_ed==5 | nivel_ed==6 |nivel_ed==7
-replace aedu_ci= grado_ed+12 if nivel_ed==8
-replace aedu_ci= grado_ed+17 if nivel_ed==9
+replace aedu_ci= grado_ed+12+5 if nivel_ed==8
+replace aedu_ci= grado_ed+12+5+2 if nivel_ed==9
 
 
 
@@ -1257,35 +1257,39 @@ label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 ******************************
 *	eduui_ci
 ******************************
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+*copié la clasificación que está en el cuestionario
+gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16) & (nivelaprob==7 | nivelaprob==5)
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15 & nivelaprob==6) 
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 ******************************
 *	eduuc_ci
 ******************************
-gen byte eduuc_ci=(aedu_ci>=17)
+gen byte eduuc_ci=(aedu_ci>=16) & (nivelaprob==7 | nivelaprob==5)
+replace eduui_ci=1 if (aedu_ci>=15  & nivelaprob==6) 
+replace eduuc_ci=1 if nivelaprob==8 | nivelaprob==9
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
 ******************************
 *	edupre_ci
 ******************************
-gen edupre_ci=(nivel==1 | nivelaprob==1) 
-replace edupre_ci=. if aedu_ci==.
+gen edupre_ci=.
 label var edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
 *Variable agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if asis_esc=="1" & nivel==1 & edad>=4
-	recode asispre_ci (.=0)
+	g asispre_ci=(asis_esc=="1" & nivel==1 & edad>=4)
 	la var asispre_ci "Asiste a educacion prescolar"	
 ******************************
 *	eduac_ci
 ******************************
 gen byte eduac_ci=.
+replace eduac_ci=1 if nivelaprob>=7 & nivelaprob<=9
+replace eduac_ci=0 if nivelaprob==6
+
 label var eduac_ci "Educacion terciaria academica versus Educacion terciaria no academica"
 *no se distingue entre superior universitario y no universitario (terciario)
 ******************************
@@ -1325,16 +1329,11 @@ gen repiteult_ci=.
 *	edupub_ci
 ******************************
 gen edupub_ci=.
-replace edupub_ci=1 if tipoesc=="1" 
-replace edupub_ci=0 if tipoesc=="2" | tipoesc=="3"
+replace edupub_ci=1 if tipoesc=="1" & asiste_ci==1
+replace edupub_ci=0 if (tipoesc=="2" | tipoesc=="3") & asiste_ci==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 
-***************
-***tecnica_ci**
-***************
-gen tecnica_ci=(nivel==6 | nivelaprob==6)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 
 ******************************************************************************
@@ -1835,7 +1834,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

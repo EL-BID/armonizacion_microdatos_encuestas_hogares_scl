@@ -637,11 +637,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 gen salmm_ci=1045 // 2020
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=. /*No se puede identificar educación técnica superior*/
-label var tecnica_ci "=1 formacion terciaria tecnica"	
+
 
 ************
 ***emp_ci***
@@ -1053,11 +1049,11 @@ replace grado_asist = 6 if (grado_asist == 11|grado_asist == 12) & v3003a == 1 &
 
 replace aedu_ci=grado_asist+12-1 if nivel_asist==8 // Universitario - No incluye Postgrados
 
-replace aedu_ci=12+5 if nivel_asist==9
+replace aedu_ci=12+4 if nivel_asist==9
 *Maestrias
-replace aedu_ci=12+5 if nivel_asist==10
+replace aedu_ci=12+4 if nivel_asist==10
 *Doctorado
-replace aedu_ci=12+5+2 if nivel_asist==11
+replace aedu_ci=12+4+2 if nivel_asist==11
 
 *Quitando a quienes no se cuentan:
 
@@ -1126,77 +1122,86 @@ replace aedu_ci=12 if nivel_no_asist==12 & finalizo_1==2
 
 *Especialización de nivel superior
 *Concluyó, se asume posgrado de un año
-replace aedu_ci=17+1 if nivel_no_asist==13 & finalizo==1
+replace aedu_ci=12+4+1 if nivel_no_asist==13 & finalizo==1
 *No Concluyó
-replace aedu_ci=17 if nivel_no_asist==13 & finalizo==2
+replace aedu_ci=12+4 if nivel_no_asist==13 & finalizo==2
 
 *Maestrado
 *Concluyó
-replace aedu_ci=17+2 if nivel_no_asist==14 & finalizo==1
+replace aedu_ci=12+4+2 if nivel_no_asist==14 & finalizo==1
 *No Concluyó
-replace aedu_ci=17+1 if nivel_no_asist==14 & finalizo==2
+replace aedu_ci=12+4+1 if nivel_no_asist==14 & finalizo==2
 
 *Doutorado
 *Concluyó
-replace aedu_ci=17+2+4 if nivel_no_asist==15 & finalizo==1
+replace aedu_ci=12+4+2+4 if nivel_no_asist==15 & finalizo==1
 *No Concluyó, se asumen 2 años -la mitad- (un doutorado usualmente dura 4 años en Brasil)
-replace aedu_ci=17+1+2 if nivel_no_asist==15 & finalizo==2
+*replace aedu_ci=17+1+2 if nivel_no_asist==15 & finalizo==2
+replace aedu_ci=. if nivel_no_asist==15 & finalizo==2
 replace aedu_ci=0 if aedu_ci == -1
 
+**imputando valores cuando el anio esta perdido, pero esta el nivel*/
+
+replace aedu_ci=0 if nivel_asist==4 & aedu_ci==.
+replace aedu_ci=0 if nivel_asist==5 & aedu_ci==.
+replace aedu_ci=7 if nivel_asist==7 & aedu_ci==.
+replace aedu_ci=7 if nivel_asist==6 & aedu_ci==.
+
+
+replace aedu_ci=4 if nivel_no_asist==6 & aedu_ci==.
+replace aedu_ci=0 if nivel_no_asist==7 & aedu_ci==.
+replace aedu_ci=0 if nivel_no_asist==8 & aedu_ci==.
+replace aedu_ci=8 if nivel_no_asist==9 & aedu_ci==.
+replace aedu_ci=8 if nivel_no_asist==10 & aedu_ci==.
+replace aedu_ci=8 if nivel_no_asist==11 & aedu_ci==.
+replace aedu_ci=17 if nivel_no_asist==15 & aedu_ci==.
 
 **************
 ***eduno_ci***
 **************
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen byte eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
+gen byte edupi_ci=(aedu_ci>0 & aedu_ci<5)
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen byte edupc_ci=0
-replace edupc_ci=1 if  (aedu_ci==8 | aedu_ci==9) 
+gen byte edupc_ci=aedu_ci==5
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
+gen byte edusi_ci=(aedu_ci>5 & aedu_ci<12) 
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==11
+gen byte edusc_ci=(aedu_ci==12) 
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 **************
 ***eduui_ci***
 **************
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<16
+gen byte eduui_ci= (v3003a==8 & aedu_ci>12 & aedu_ci<16) | (v3009a==12 & aedu_ci>12 & aedu_ci<16) 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=16
+gen byte eduuc_ci=(aedu_ci>12 & eduui_ci==0)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1204,19 +1209,30 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edus1i_ci***
 ***************
 *La secundaria sólo dura 3 años. No puede divirse en ciclos
-gen edus1i_ci=.
+gen edus1i_ci=(aedu_ci>5 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
+
+***************
+***edus1c_ci***
+***************
+*La secundaria sólo dura 3 años. No puede divirse en ciclos
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
+label variable edus1c_ci "1er ciclo de la secundaria completo" 
 
 ***************
 ***edus2i_ci***
 ***************
-gen byte edus2i_ci=.
+gen byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+replace edus2i_ci=. if aedu==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto" 
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=.
+gen edus2c_ci=(aedu==12)
+replace edus2c_ci=. if aedu==.
 label variable edus2c_ci "2do ciclo de la secundaria completo" 
 
 ***************
@@ -1229,20 +1245,14 @@ label variable edupre_ci "Educacion preescolar"
 ***asispre_ci**
 ***************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	g asispre_ci=.
-	replace asispre_ci=1 if v3003a==2 & v2009>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"	
+g asispre_ci=v3003a==2
+la var asispre_ci "Asiste a educacion prescolar"	
 
 **************
 ***eduac_ci***
 **************
 gen byte eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
-
-foreach var of varlist edu* {
-replace `var'=. if aedu_ci==.
-}
 
 ******************
 ***pqnoasis_ci***
@@ -1264,13 +1274,22 @@ gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un año o grado"
 
 ***************
+***repiteult_ci***
+***************
+gen repiteult_ci=.
+label var repiteult_ci "Personas que han repetido el último año o grado"
+
+
+***************
 ***edupub_ci***
 ***************
 
 	gen edupub_ci =.
-	replace edupub_ci = 1 if v3002a==2 // pública
-	replace edupub_ci = 0 if v3002a==1 // privada
+	replace edupub_ci = 1 if v3002a==2 & asiste_ci==1 // pública
+	replace edupub_ci = 0 if v3002a==1 & asiste_ci==1 // privada
 	label var repite_ci "Asiste a educación pública"
+	
+
 
 	/* solo anual 
 		**********************************
@@ -1551,10 +1570,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 gen tcylmpri_ci=.
 gen tcylmpri_ch=.
 
-gen edus1c_ci=1 if aedu_ci==8 | aedu_ci==9
-label var edus1c_ci "secudnaria baja completa"
 
-gen repiteult_ci=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
@@ -1621,7 +1637,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 /*aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch*/ , first

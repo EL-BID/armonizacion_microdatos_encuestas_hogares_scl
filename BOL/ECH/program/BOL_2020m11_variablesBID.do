@@ -1,4 +1,4 @@
-	* (Versión Stata 12)
+* (Versión Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -303,28 +303,25 @@ label variable miembros_ci "Miembro del hogar"
 	***************
 	***afroind_ci***
 	***************
-**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s03a_04) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
-**Pregunta: a qué nación o pueblo pertenece? (s03a_04n)(ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
-** La base original difiere de la base armonizada (s03a_04npioc vs s03a_04n). 
+**Pregunta: como boliviano o boliviana, pertenece a una nación o pueblo indígena? (s01a_08) (PERTENCE 1, NO PERTENECE 2, NO SOY BOLIVIANO/BOLIVIANA 3)
+**Pregunta: a qué nación o pueblo pertenece? (s01a_08)(ALL CATEGORIES ARE INDIGENOUS INCLUDING AFROBOLIVIANS)
 
+* Actualizado Feb 2022 - Cesar Lins
 
 gen afroind_ci=. 
-/*
-replace afroind_ci=1 if s03a_04==1
-replace afroind_ci=2 if s03a_04==0 
-replace afroind_ci=3 if s03a_04==2 
-replace afroind_ci=9 if s03a_04==3 
-*/
+replace afroind_ci=1 if s01a_08==1 
+replace afroind_ci=3 if s01a_08==2
+replace afroind_ci=9 if s01a_08==3
+
 
 	***************
 	***afroind_ch***
 	***************
 gen afroind_jefe=.
 gen afroind_ch  = .
-/*
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-*/
+
 drop afroind_jefe
 
 	*******************
@@ -545,38 +542,33 @@ label var desalent_ci "Trabajadores desalentados"
 *****************
 ***horaspri_ci***
 *****************
-  *s04e_33ab: 23b. cuantas horas en promedio trabaja al dia .. ? (minutos)
-  *s04e_33aa: 23a. cuantas horas en promedio trabaja al dia .. ? (horas)
-  *s04e_32: 22. cuantos dias a la semana trabaja
-destring s04e_33ab s04e_33aa s04e_32, i("NA") replace
-gen aux_min=  s04e_33ab/60
-egen horas_min= rsum(s04e_33aa aux_min), m
+* Modified Feb 22: Eric Torrez, Cesar Lins
 
-gen horaspri_ci = horas_min*s04e_32
-replace horaspri_ci=. if s04e_32==. | s04e_33aa==. |  s04e_33ab==.
-replace horaspri_ci=. if emp_ci!=1
-label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
+  *s04b_16ab: cuantas horas en promedio trabaja al dia .. ? (minutos)
+  *s04b_16aa: cuantas horas en promedio trabaja al dia .. ? (horas)
+  *s04b_15: cuantos dias a la semana trabaja
+
+  * The dataset has a calculated variable for the weekly hours worked:
+  *   phrs - Horas trabajadas a la semana en la Ocupacion Principal
+  
+gen horaspri_ci = phrs
+*label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
+
+*****************
+***horassec_ci***
+*****************
+  * The dataset has a calculated variable for the weekly hours worked:
+  *   phrs - Horas trabajadas a la semana en la Ocupacion Secundaria
+  
+gen horassec_ci = shrs
 
 *****************
 ***horastot_ci***
 *****************
-gen horastot_ci = .
-/*
-s6_39a:  39a. cuantos dias trabajó la semana anterior ?
-s6_39ba: 39b. cuantas horas promedio al dia trabajÓ la semana anterior ?
-s6_39m: 39b. cuantos minutos promedio al dia trabajÓ la semana anterior ?
+* The dataset has a calculated variable for the weekly hours worked:
+  *   tothrs - Horas trabajadas a la semana
+gen horastot_ci = tothrs
 
-
-gen aux_min2=s06f_45b/60
-egen horas_min2=rsum(s06f_45a aux_min2)
-gen horassec_ci= horas_min2*s06f_44
-replace horassec_ci=. if s06f_44==. | s06f_45a==. | s06f_45b==.
-replace horassec_ci=. if emp_ci!=1
-
-egen horastot_ci= rsum(horaspri_ci horassec_ci), missing
-replace horastot_ci = . if horaspri_ci == . & horassec_ci == .
-replace horassec_ci=. if emp_ci~=1
-*/
 ***************
 ***subemp_ci***
 ***************
@@ -1646,19 +1638,23 @@ replace aedu_ci = s03a_02c + 12 + 5 + 2 if s03a_02c <= 5 & (s03a_02a ==75) // do
 
 * Terminación nivel
 
-replace aedu_ci = 12+4   if s03a_02a ==71 & s03a_02c == 8 //Terminó escuela normal
+replace aedu_ci = 12+5   if s03a_02a ==71 & s03a_02c == 8 //Terminó escuela normal
 replace aedu_ci = 12+5   if s03a_02a ==72 & s03a_02c == 8 //Terminó universidad
 replace aedu_ci = 12+5+1 if s03a_02a ==73 & s03a_02c == 8 //Terminó posgrado
 replace aedu_ci = 12+5+2 if s03a_02a ==74 & s03a_02c == 8 //Terminó maestria
-replace aedu_ci = 12+5+5 if s03a_02a ==75 & s03a_02c == 8 //Terminó doctorado
+replace aedu_ci = 12+5+2+4 if s03a_02a ==75 & s03a_02c == 8 //Terminó doctorado
 
+
+**Imputando los valores perdidos**
+
+replace aedu_ci=12 if s03a_02a==72 &aedu_ci==.
+replace aedu_ci=8 if s03a_02a==32 &aedu_ci==.
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
@@ -1698,7 +1694,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1731,7 +1727,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 * Se incorpora la restricción s5_02b<8 para que sea comparable con los otros años LCM dic 2013
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s03a_02c<8)
+gen byte eduui_ci=(aedu_ci>=13 & s03a_02c<8)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1739,8 +1735,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s03a_02c==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=13 & eduui_ci==0)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
 
@@ -1748,8 +1743,7 @@ label variable eduuc_ci "Universitaria completa"
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s03a_02a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
@@ -1768,8 +1762,9 @@ label variable edupre_ci "Educacion preescolar"
 
 * Se cambia para universidad completa o más 
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s03a_02a>=72 & s03a_02a<=73)
-replace eduac_ci=0 if (s03a_02a>=77 & s03a_02a<=79)
+replace eduac_ci=1 if (s03a_02a>=72 & s03a_02a<=75)
+replace eduac_ci=0 if s03a_02a==71 //educacion normal
+replace eduac_ci=0 if (s03a_02a>=76 & s03a_02a<=79)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 /*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
 YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
@@ -1858,24 +1853,10 @@ s5_09:
 */
 
 gen edupub_ci=.
-replace edupub_ci= 1 if s03b_07==1
-replace edupub_ci= 0 if s03b_07==2
+replace edupub_ci= 1 if s03b_07==1 & asiste_ci==1
+replace edupub_ci= 0 if s03b_07==2 & asiste_ci==1
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci = (s03a_02a==77 | s03a_02a==79 | s03a_02a==76 | s03a_02a==78)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-* Universidad *
-***************
-
-
-gen universidad_ci = (s03a_02a==72 )
-label var universidad_ci "1=formacion universitaria"
 
 
 **********************************
@@ -2413,7 +2394,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

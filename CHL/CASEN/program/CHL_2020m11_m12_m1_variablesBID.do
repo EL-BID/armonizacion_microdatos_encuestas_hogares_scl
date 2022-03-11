@@ -974,12 +974,6 @@ label var pqnoasis_ci "Razones para no asistir a la escuela"
 gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis1_ci "Razones para no asistir a la escuela"
 
-****************
-**pqnoasis1_ci***
-****************
-gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
-label var pqnoasis1_ci "Razones para no asistir a la escuela"
-
 **************
 **repite_ci***
 **************

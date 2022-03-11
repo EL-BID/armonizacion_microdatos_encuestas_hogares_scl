@@ -1653,6 +1653,10 @@ gen pnc_ci=(a11==6)
 gen ing_pnc = 0
 replace ing_pnc=. if y_hog==.
 
+* Personas que perciben pensiones
+bys idh_ch: egen ing_pension = sum(h9e1)
+replace ing_pension=. if y_hog==.
+
 * Adultos mayores
 gen mayor64_ci=(edad_ci>64 & edad_ci!=.)
 

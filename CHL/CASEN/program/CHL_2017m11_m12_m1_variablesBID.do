@@ -964,7 +964,7 @@ label variable edupc_ci "Primaria completa"
 **************
 ***edusi_ci***
 **************
-en byte edusi_ci=aedu_ci>6 & aedu_ci<12
+gen byte edusi_ci=aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 **************
@@ -1004,7 +1004,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 gen edus1c_ci=0 // usando los anios de educacion
 replace edus1c_ci=1 if aedu_ci==8 
 replace edus1c_ci=. if aedu_ci==.
-label variable edus1c_ci "1er ciclo de la secundaria completo""
+label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
@@ -1034,7 +1034,7 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
 	g asispre_ci=(e3==1 & (e6a==2 | e6a==3 | e6a==4)) 
-	la var asispre_ci "Asiste a educacion prescolar""
+	la var asispre_ci "Asiste a educacion prescolar"
 
 **************
 ***eduac_ci***
@@ -1052,7 +1052,7 @@ label var pqnoasis_ci "Razones para no asistir a la escuela"
 
 label define pqnoasis_ci 1 "Ayuda en la casa o queaheceres del hogar" 2 "Embarazo, maternidad o paternidad" 3 "Tiene una discapacidad o requiere un establecimiento de educación especial" 4 "Enfermedad que lo inhabilita" 5 "5. Problemas familiares" 6 "No le interesa" 7 "Terminó de estudiar" 8 "A su edad no le sirve estudiar o no conoce la manera de completar sus estudios" 9 "Está asistiendo a un preuniversitario" 10 "Se encuentra preparando la PSU por su cuenta" 11 "Dificultad económica" 12 "Trabaja o busca trabajo" 13 "Problemas de rendimiento" 14 "Expulsión o cancelación de matrícula" 15 "No existe establecimiento cercano" 16 "Dificultad de acceso o movilización" 17 "Otra razón"
 
-label values pqnoasis1_ci pqnoasis1_ci
+label values pqnoasis_ci pqnoasis1_ci
 
 **************
 *pqnoasis1_ci*

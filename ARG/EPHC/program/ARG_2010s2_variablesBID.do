@@ -1046,57 +1046,6 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 			***VARIABLES DE EDUCACION***
 			****************************
 * Mod. 3/2022 Pia Iocco y Agustina Thailinger EDU/SLC
-
-/*	*********
-	*aedu_ci* 
-	*********
-	
-	gen aedu_ci=0 if (ch10==0 | ch10==3) 
-	replace aedu=0 if ch12==1 & ch13==2
-	replace aedu=0 if ch12==2 & ch14=="00" & ch13==2
-	replace aedu=0 if ch12==3 & ch14=="00" & ch13==2
-
-	replace aedu=1 if ch12==2 & ch14=="01" & ch13==2
-	replace aedu=1 if ch12==3 & ch14=="01" & ch13==2
-	replace aedu=2 if ch12==2 & ch14=="02" & ch13==2
-	replace aedu=2 if ch12==3 & ch14=="02" & ch13==2
-	replace aedu=3 if ch12==2 & ch14=="03" & ch13==2
-	replace aedu=3 if ch12==3 & ch14=="03" & ch13==2
-	replace aedu=4 if ch12==2 & ch14=="04" & ch13==2
-	replace aedu=4 if ch12==3 & ch14=="04" & ch13==2
-	replace aedu=5 if ch12==2 & ch14=="05" & ch13==2
-	replace aedu=5 if ch12==3 & ch14=="05" & ch13==2
-	replace aedu=6 if ch12==2 & ch14=="06" & ch13==2
-	replace aedu=6 if ch12==3 & ch14=="06" & ch13==2
-	replace aedu=7 if ch12==2 & ch14=="07" & ch13==2
-	replace aedu=7 if ch12==2 & ch13==1
-	replace aedu=7 if ch12==3 & ch14=="07" & ch13==2
-	replace aedu=8 if ch12==3 & ch14=="08" & ch13==2
-	replace aedu=8 if ch12==4 & ch14=="01" & ch13==2
-	replace aedu=9 if ch12==3 & ch14=="09" & ch13==2
-	replace aedu=9 if ch12==3 & ch13==1
-	replace aedu=9 if ch12==4 & ch14=="02" & ch13==2
-	replace aedu=10 if ch12==4 & ch14=="03" & ch13==2 
-	replace aedu=10 if ch12==5 & ch14=="01" & ch13==2
-	replace aedu=11 if ch12==4 & ch14=="04" & ch13==2
-	replace aedu=11 if ch12==5 & ch14=="02" & ch13==2
-	replace aedu=12 if ch12==4 & ch14=="05" & ch13==2
-	replace aedu=12 if ch12==4 & ch13==1
-	replace aedu=12 if ch12==5 & ch14=="03" & ch13==2
-	replace aedu=12 if ch12==5 & ch13==1
-	replace aedu=13 if ch12==4 & ch14=="06" & ch13==2
-	replace aedu=13 if ch12==6 & ch14=="01" & ch13==2
-	replace aedu=13 if ch12==7 & ch14=="01" & ch13==2
-	replace aedu=14 if ch12==6 & ch14=="02" & ch13==2
-	replace aedu=14 if ch12==7 & ch14=="02" & ch13==2
-	replace aedu=15 if ch12==7 & ch14=="03" & ch13==2
-	replace aedu=15 if ch12==6 & ch13==1
-	replace aedu=16 if ch12==7 & ch14=="04" & ch13==2
-	replace aedu=17 if ch12==7 & ch13==1
-	replace aedu=18 if ch12==7 & ch13==1
-	replace aedu=19 if ch12==8 & ch13==1
-	replace aedu=. if ch12==9 | ch12==99 */
-	
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
    *Ajustando variables
 	replace ch10=. if ch10==9

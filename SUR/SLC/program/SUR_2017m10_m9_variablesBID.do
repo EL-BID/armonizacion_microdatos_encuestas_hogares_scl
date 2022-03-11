@@ -1031,7 +1031,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	
 	gen pqnoasis_ci=q3_24
 	label define pqnoasis_ci 1 "Did not like studying/ was not interested" 2 "Could not afford the expenses" 3 "Needed to work" 4 "Was ill/ disabled" 5 "Other"
-	label value pqnoasis1_ci pqnoasis1_ci
+	label value pqnoasis_ci pqnoasis1_ci
 	
 	******************
     ***pqnoasis1_ci***

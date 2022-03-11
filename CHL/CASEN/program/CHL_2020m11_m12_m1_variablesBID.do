@@ -869,14 +869,12 @@ gen byte edupi_ci=aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
-
 **************
 ***edupc_ci***
 **************
 gen byte edupc_ci=aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
-
 
 **************
 ***edusi_ci***
@@ -949,7 +947,7 @@ label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
-***************
+****************
 gen asispre_ci=(e2==1 & (e6a==2 | e6a==3 | e6a==4)) 
 la var asispre_ci "Asiste a educacion prescolar"
 
@@ -961,16 +959,14 @@ replace eduac_ci=0 if (e6a==12 | e6a==13)
 replace eduac_ci=. if e6a<=11 
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-****************
-**pqnoasis_ci***
-****************
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-
-**************
-*pqnoasis1_ci*
-**************
-
+******************
+***pqnoasis1_ci***
+******************
 gen pqnoasis1_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis1_ci "Razones para no asistir a la escuela"
 
@@ -980,15 +976,15 @@ label var pqnoasis1_ci "Razones para no asistir a la escuela"
 gen repite_ci=. // No está la pregunta en la encuesta 2020
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=. // No está la pregunta en la encuesta 2020
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=. // No está la pregunta en la encuesta 2020
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 

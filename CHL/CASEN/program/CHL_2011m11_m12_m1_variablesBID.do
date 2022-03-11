@@ -784,21 +784,18 @@ label var antiguedad_ci "Antiguedad en la actividad actual"
 		* VARIABLES EDUCATIVAS *
 		************************
 
-****************
-* asiste_ci    * 
-**************** 
+***************
+***asiste_ci*** 
+*************** 
 gen asiste_ci=(e3==1)
 replace asiste_ci=. if e3==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-****************
-* aedu_ci      * 
-**************** 
-
+*************
+***aedu_ci*** 
+************* 
 replace e6c=. if e6c==99
 replace e6a=. if e6a==99
-
-
 
 gen aedu_ci=.
 replace aedu_ci=.  if e6a==4 // Educación Especial
@@ -815,7 +812,6 @@ replace aedu_ci=e6c+12         if e6a>=11 & e6a<=12  /*Tecnico nivel superior co
 replace aedu_ci=e6c+17         if e6a==13            /*Posgrado*/
 label var aedu_ci "Anios de educacion aprobados" 
 *Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
-
 
 **imputando anios perdidos
 
@@ -902,7 +898,6 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 gen edus2i_ci=0 // usando los anios de educacion
 replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
- 
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
@@ -920,13 +915,12 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
+****************
 ***asispre_ci***
-***************
+****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	gen asispre_ci=(e3==1 & (e6a==2 | e6a==3))
-	la var asispre_ci "Asiste a educacion prescolar"
-
+gen asispre_ci=(e3==1 & (e6a==2 | e6a==3))
+la var asispre_ci "Asiste a educacion prescolar"
 
 **************
 ***eduac_ci***
@@ -936,9 +930,9 @@ replace eduac_ci=0 if (e6a==11)
 replace eduac_ci=. if e6a<=10 | e6a>13 
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-****************
-**pqnoasis_ci***
-****************
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=e5
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
@@ -965,9 +959,9 @@ label define pqnoasis_ci
 #delimit cr
 label values pqnoasis_ci pqnoasis_ci
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = 1 if e5 ==9
@@ -983,27 +977,25 @@ replace pqnoasis1_ci = 9 if e5 ==11 | e5 ==12 | e5 ==15
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-**************
-**repite_ci***
-**************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
 replace edupub_ci=1 if inlist(e9, 1) & asiste_ci==1 //Municipales
 replace edupub_ci=0 if inlist(e9, 2, 4) & asiste_ci==1 // Particular pagado, particular subvencionado
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
-
-
 
 		******************************************
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *

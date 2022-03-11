@@ -1377,15 +1377,16 @@ gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
 
-
-
 					****************************
 					***VARIABLES DE EDUCACION***
 					****************************
+*Mod. 3/10 Pía Iocco y Agustina Thailinger (SCL/EDU)
 
+*************
+***aedu_ci***
+*************
 gen aedu_ci=.
 replace aedu_ci=0 if a15==0 | a15==1 
-
 label var aedu_ci "Años de educación"
 
 *Primaria
@@ -1429,14 +1430,12 @@ replace aedu_ci=11 if a15==49
 replace aedu_ci=11 if a15==59
 replace aedu_ci=11+4 if a15==89
 
-
 **************
 ***eduno_ci***
 **************
 gen eduno_ci=(a15==0 | a15==1 | a15==19) //ninguno, preparatoria, anios de primaria ignorados
 replace eduno_ci=. if aedu_ci==. 
 label variable eduno_ci "Cero anios de educacion"
-
 
 **************
 ***edupi_ci***
@@ -1451,7 +1450,6 @@ label variable edupi_ci "Primaria incompleta"
 gen edupc_ci=a15==16  | (a15==29 | a15==39) 
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
-
 
 **************
 ***edusi_ci***
@@ -1474,15 +1472,12 @@ gen edus1i_ci=(a15>=21 & a15<=22) | (a15>=31 & a15<=32)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
-
-
 ***************
 ***edus1c_ci***
 ***************
 gen edus1c_ci= a15==23 | a15==33
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
-
 
 ***************
 ***edus2i_ci***
@@ -1498,8 +1493,6 @@ gen edus2c_ci=a15==25 | a15==26 | a15==36 | a15==37 | a15==49 | a15==59 //incluy
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-
-
 **************
 ***eduui_ci***
 **************
@@ -1510,11 +1503,9 @@ replace eduui_ci=1 if (a15==54 & a17b<=3) // cuatro anios pero sin titulo superi
 replace eduui_ci=. if aedu_ci==. 
 label variable eduui_ci "Superior incompleto"
 
-
 ***************
 ***eduuc_ci***
 ***************
-
 gen byte eduuc_ci=0
 replace eduuc_ci=1 if a15==43 // tres anios de parauniversitaria
 replace eduuc_ci=1 if (a15==54 & a17b>3) // cuatro anios de universitaria y titulo de licenciatura o superior
@@ -1533,8 +1524,8 @@ label variable edupre_ci "Educacion preescolar"
 ***asispre_ci***
 ****************
 *Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=(a14==1 | a14==2)
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci=(a14==1 | a14==2)
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
@@ -1564,9 +1555,9 @@ label define pqnoasis_ci 1  "tiene que trabajar" 2  "prefiere trabajar" 3  "tien
 label value pqnoasis_ci pqnoasis_ci
 label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = 1 if a18==5
@@ -1587,12 +1578,12 @@ label value  pqnoasis1_ci pqnoasis1_ci
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
-******************************************************************
-***18._REPITEULT_CI : Personas que han repetido el ultimo grado.
-******************************************************************
-
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
+
 ***************
 ***edupub_ci***
 ***************
@@ -1600,8 +1591,6 @@ gen edupub_ci=.
 replace edupub_ci=1 if (a16==1 | a16==2 ) & asiste_ci==1 // incluye los semi publicos
 replace edupub_ci=0 if (a16==3 ) & asiste_ci==1 // incluye los extranjeros
 label var edupub_ci "Personas asisten a centros de enseñanza públicos"
-
-
 
 						**********************************
 						**** VARIABLES DE LA VIVIENDA ****

@@ -1021,9 +1021,9 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
+****************
 ***asispre_ci***
-***************
+****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
 gen asispre_ci=(e3==1 & (e6a==2 | e6a==3)) 
 la var asispre_ci "Asiste a educacion prescolar"
@@ -1036,9 +1036,9 @@ replace eduac_ci=0 if (e6a==11)
 replace eduac_ci=. if e6a<=10 | e6a>13 
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-****************
-**pqnoasis_ci***
-****************
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=e5
 label var pqnoasis_ci "Razones para no asistir a la escuela"
  
@@ -1065,9 +1065,9 @@ label define pqnoasis_ci
 #delimit cr
 label values pqnoasis_ci pqnoasis_ci
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = 1 if e5 ==9
@@ -1083,21 +1083,21 @@ replace pqnoasis1_ci = 9 if e5 ==11 | e5 ==12 | e5 ==15
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-**************
-**repite_ci***
-**************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
 replace edupub_ci=1 if inlist(e8depen, 1, 2) & asiste_ci==1 //Municipales
 replace edupub_ci=0 if inlist(e8depen, 3, 4) & asiste_ci==1 // Particular pagado, particular subvencionado

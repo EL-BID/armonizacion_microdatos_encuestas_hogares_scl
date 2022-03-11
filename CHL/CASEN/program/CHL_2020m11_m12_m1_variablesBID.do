@@ -964,7 +964,6 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 *****************
 gen pqnoasis_ci=. // No está la pregunta en la encuesta 2020
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-
 ******************
 ***pqnoasis1_ci***
 ******************

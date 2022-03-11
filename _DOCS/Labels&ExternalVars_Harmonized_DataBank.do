@@ -264,7 +264,6 @@ label var edus2c_ci "2do ciclo de la secundaria completo"
 label var edupre_ci "Educacion preescolar"
 label var eduac_ci "Superior universitario vs superior no universitario"	
 label var asiste_ci "=1 si asiste actualmente a la escuela"
-label var tecnica_ci "=1: formacion terciaria tecnica"
 								
 label var pqnoasis_ci "Razones para no asistir a la escuela-variable original de cada pais"
 label var pqnoasis1_ci "Razones para no asistir a la escuela-variable armonizada"

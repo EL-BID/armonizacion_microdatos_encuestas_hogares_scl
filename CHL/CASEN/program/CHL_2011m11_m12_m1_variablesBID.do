@@ -905,7 +905,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 gen edus2c_ci=0 // usando los anios de educacion
 replace edus2c_ci=1  if aedu_ci==12  
-replace edus2c_ci=1  if aedu_ci==13 & e6a==10 //// hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
+replace edus2c_ci=1  if aedu_ci==13 & e6a==10 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edus2c_ci=.  if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 

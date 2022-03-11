@@ -995,7 +995,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***************
 gen edus1c_ci=0 // usando los anios de educacion
 replace edus1c_ci=1 if aedu_ci==8 
-replace edus1c_ci=. if aedu_ci=
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************

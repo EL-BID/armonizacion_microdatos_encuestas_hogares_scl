@@ -1773,7 +1773,7 @@ replace ptmc_ch  = ((ptmc_ci==1)| (ing_ptmc>0 & ing_ptmc!=.))
 replace ing_ptmc=. if yhog==.
 
 * Personas que perciben pensiones
-gen pnc_ci= ((f125==1) | (f125==3 & edad_ci>64))
+gen pnc_ci=.
 bys idh_ch: egen ing_pension  = sum(ypensub_ci)
 
 * Adultos mayores 

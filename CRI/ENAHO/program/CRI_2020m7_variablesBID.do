@@ -1097,7 +1097,7 @@ label variable edupi_ci "Primaria incompleta"
 ********************************************************************************************************************************
 gen edupc_ci=a14==16  | (a14==29 | a14==39) 
 replace edupc_ci=. if aedu_ci==. 
-label variable edupc_ci "Primaria completa""
+label variable edupc_ci "Primaria completa"
 
 ********************************************************************************************************************************
 ***EDUSI_CI: Peronas que no han completado la educacion secundaria
@@ -1611,6 +1611,11 @@ replace ptmc_ch  = 1 if (ing_ptmc>0 & ing_ptmc!=.)
 gen pnc_ci=(a11==6)
 gen ing_pnc = 0
 replace ing_pnc=. if y_hog==.
+
+* Personas que perciben pensiones
+bys idh_ch: egen ing_pension = sum(h9e1)
+replace ing_pension=. if y_hog==.
+
 
 * Adultos mayores
 gen mayor64_ci=(edad_ci>64 & edad_ci!=.)

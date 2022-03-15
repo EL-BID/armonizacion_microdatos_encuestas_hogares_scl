@@ -1310,13 +1310,13 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 *** VARIABLES DE MIGRACION ***
 ******************************
 
-* Variables incluidas por SCL/MIG Jua Camilo Perdomo
+* Variables incluidas por SCL/MIG Fernando Morales
 
 	*******************
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=(inlist(i_q4,2)) if i_q4!=. & i_q4!=9		/* Categoria Not Stated no se incluye en la variable*/
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
@@ -1332,7 +1332,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-
+	
 	**********************
 	*** migrantiguo5_ci ***
 	**********************
@@ -1346,6 +1346,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	gen miglac_ci=.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 	
 	
 /*_____________________________________________________________________________________________________*/

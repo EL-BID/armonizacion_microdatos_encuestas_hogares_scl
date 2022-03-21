@@ -339,7 +339,7 @@ gen dis_ch=.
 *lp_ci***
 *********
 
-gen lp_ci =.
+gen lp_ci =z
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********

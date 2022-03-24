@@ -857,30 +857,35 @@ gen aedu_ci=.
 ***eduno_ci***
 **************
 gen byte eduno_ci=(education==1)
+replace eduno_ci=. if education==9
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 gen byte edupi_ci=(education==2)
+replace eduno_ci=. if education==9
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 gen byte edupc_ci=(education==3)
+replace eduno_ci=. if education==9
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 gen byte edusi_ci=(education==4)
+replace eduno_ci=. if education==9
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
 gen byte edusc_ci=(education==5)
+replace eduno_ci=. if education==9
 label variable edusc_ci "Secundaria completa"
 
 ***************

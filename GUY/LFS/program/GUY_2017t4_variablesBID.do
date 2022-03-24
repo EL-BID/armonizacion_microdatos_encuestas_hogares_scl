@@ -723,59 +723,31 @@ replace antiguedad_ci=. if  emp_ci!=1 | antiguedad_ci>edad_ci
 gen asiste_ci=(q1_12==1)
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-****************
-* aedu_ci      * 
-**************** 
-/*
-*La base solo tiene dos categorías: Primary and secondary
-gen aedu_ci=.
-replace aedu_ci=0   if q1_13==1             /*Pre-primary*/
-replace aedu_ci=1   if q1_13==2 & q1_14==1  /*Primary*/
-replace aedu_ci=2   if q1_13==2 & q1_14==2 
-replace aedu_ci=3   if q1_13==2 & q1_14==3     
-replace aedu_ci=4   if q1_13==2 & q1_14==4     
-replace aedu_ci=5   if q1_13==2 & q1_14==5     
-replace aedu_ci=6   if q1_13==2 & q1_14==6 
-
-replace aedu_ci=6   if q1_13==3 & q1_14==1  /*Secondary*/
-replace aedu_ci=6   if q1_13==3 & q1_14==6  /*Preguntar*/
-replace aedu_ci=7   if q1_13==3 & q1_14==7
-replace aedu_ci=8   if q1_13==3 & q1_14==8     
-replace aedu_ci=9   if q1_13==3 & q1_14==9  
-replace aedu_ci=10  if q1_13==3 & q1_14==10
-replace aedu_ci=11  if q1_13==3 & q1_14==11
-replace aedu_ci=12  if q1_13==3 & q1_14==12
-
-replace aedu_ci=2 if q1_14==2 & q1_13==1	   /*Captura el grado 1 y 2*/
-replace aedu_ci=3 if q1_14==3 & q1_13==1
-replace aedu_ci=4 if q1_14==4 & q1_13==1
-replace aedu_ci=5 if q1_14==5 & q1_13==1
-replace aedu_ci=6 if q1_14==6 & q1_13==1
-
-*Preguntar q1_15 */
-
+*************
+***aedu_ci*** 
+************* 
 *Modificado por Angela Lopez 05142019
+*Modificado por Agustina Thailinger 3/24/2022
 gen aedu_ci=.
-replace aedu_ci=0   if q1_11==2              /*never attended */
-replace aedu_ci=0   if q1_13==1 			 /*Pre-primary*/
-replace aedu_ci=0   if q1_13==2 & q1_14==1   
+replace aedu_ci=0   if q1_11==2                          /*never attended*/
+replace aedu_ci=0   if q1_13==1 			             /*pre-primary*/
+replace aedu_ci=0   if q1_13==2 & q1_14==1               /*primary & none*/
 
-replace aedu_ci=q1_14 if q1_13==2 & q1_14!=1 & q1_14!=. /*primary*/
-replace aedu_ci=6 	  if q1_13==3 & q1_14==1 | q1_14== 6 
+replace aedu_ci=q1_14 if q1_13==2 & q1_14!=1 & q1_14!=.  /*primary*/
+replace aedu_ci=6 	  if q1_13==3 & q1_14==1 | q1_14==6  /*secundaria & none*/
 
-replace aedu_ci=q1_14 if q1_13==3 & q1_14>=7 & q1_14!=. /*secondary*/
-replace aedu_ci=11    if q1_13==4 &  q1_15 == 1
+replace aedu_ci=q1_14 if q1_13==3 & q1_14>=7 & q1_14!=.  /*secondary*/
+replace aedu_ci=12    if q1_13==4 & q1_15==1             /*post-sec & none*/
 
-replace aedu_ci=11+2 if q1_13==4 & q1_15== 2  /*postsecondary */
-replace aedu_ci=11+2 if q1_13==5 & q1_15== 2  // tech
+replace aedu_ci=11+2 if q1_13==4 & q1_15==2              /*postsecondary: technical/vocational*/
+replace aedu_ci=11+2 if q1_13==5 & q1_15==2              /*university/tertiary: technical/vocational*/
 
-replace aedu_ci=11+3 if q1_13==5 & q1_15== 3 // Univ
-replace aedu_ci=11+4 if q1_13==5 & q1_15== 4 // Bachel
+replace aedu_ci=11+4 if q1_13==5 & q1_15== 3             /*university/tertiary*/
+replace aedu_ci=11+4 if q1_13==5 & q1_15== 4             /*bachelor*/
 
-replace aedu_ci=11+5 if q1_13==5 & q1_15== 5 //posgr
-replace aedu_ci=11+6 if q1_13==5 & q1_15== 6 //masters
-replace aedu_ci=11+8 if q1_13==5 & q1_15== 7 //doc
-
+replace aedu_ci=11+6 if q1_13==5 & q1_15== 5             /*posgrado*/
+replace aedu_ci=11+6 if q1_13==5 & q1_15== 6             /*master*/
+replace aedu_ci=11+9 if q1_13==5 & q1_15== 7             /*doctorado*/
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************
@@ -822,40 +794,48 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<16
+replace eduui_ci=1 if aedu_ci>11 & aedu_ci<15
 replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta"
+label variable eduui_ci "Terciaria/Universitaria incompleta"
 
 ***************
 ***eduuc_ci****
 ***************
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=16
+replace eduuc_ci=1 if aedu_ci>=15
 replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria completa o mas"
+label variable eduuc_ci "Terciaria/Universitaria completa o mas"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=.
+gen edus1i_ci=0
+replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<9
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=1 if aedu_ci==9
+gen edus1c_ci=0
+replace edus1c_ci=1 if aedu_ci==9
+replace edus1c_ci=1 if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=. 
+gen edus2i_ci=0
+replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<11
+replace edus2i_ci=1 if aedu_ci=.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=. 
+gen edus2c_ci=0
+replace edus2c_ci=1 if aedu_ci==11
+replace edus2c_ci=1 if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 ***************
@@ -867,13 +847,15 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asispre_ci***
 ***************
-g asispre_ci=1 if asiste_ci == 1 & q1_13 == 1
+g asispre_ci=1 if asiste_ci==1 & q1_13==1
 la var asispre_ci "Asiste a educacion prescolar"
 
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if q1_13==5 & q1_15==3 /*university/tertiary & university certificate or diploma*/
+replace eduac_ci=0 if q1_13==5 & q1_15==2 /*university/tertiary & technical/vocational certificate or diploma*/
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ****************
@@ -882,29 +864,28 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 gen pqnoasis_ci=.
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 g       pqnoasis1_ci = .
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-
-**************
-**repite_ci***
-**************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
 label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 

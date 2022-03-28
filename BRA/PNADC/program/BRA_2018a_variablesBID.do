@@ -898,9 +898,11 @@ label var remesas_ci "Remesas mensuales reportadas por el individuo"
 gen remesas_ch=.
 label var remesas_ch "Remesas mensuales del hogar" 
 
-				****************************
+				    ****************************
 					***	VARIABLES EDUCATIVAS ***
 					****************************
+*Modificado por Agustina Thailinger y Pia Iocco (SCL/EDU) 3-28-2020
+
 **************
 **asiste_ci***
 **************
@@ -917,106 +919,102 @@ label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
 *************
 ***aedu_ci***
 *************
-
 gen nivel_asist=v3003a
 gen grado_asist=v3006
 gen nivel_no_asist=v3009a
 gen grado_no_asist=v3013
 gen finalizo=v3014
-gen Ensino_8_9=.
 gen finalizo_1=v3012
 gen seria_asist=v3005a
 gen seria_no_asist=v3011a
-*gen dur_fund_asist=v3004
-gen dur_fund_no_asist=v3010
 
 gen aedu_ci=.
 label var aedu_ci "Anios de educacion"
 
-
-*PARA LOS QUE ASISTEN:*
+*PARA LOS QUE ASISTEN:
 **********************
+*Creche & prescola
+replace aedu_ci=0 if nivel_asist==1                                      // Creche 
+replace aedu_ci=0 if nivel_asist==2                                      // Prescola
+replace aedu_ci=0 if nivel_asist==3                                      // Alfabetizacion de jovenes y adultos
 
-replace aedu_ci=0 if nivel_asist==1 //Creche 
-replace aedu_ci=0 if nivel_asist==2 // Prescola
-replace aedu_ci=0 if nivel_asist==3 // Alfabetizacion de jovenes y adultos
-replace aedu_ci=grado_asist -1 if nivel_asist==4 // ensino fundamental. se resta uno porque preguntan el grado al que asisten
-replace aedu_ci=grado_asist+9-1 if nivel_asist==6  //ensino medio. tienen que haber completado los 9 anios de ensino fundamental I y II
+*Ensinio fundamental y medio
+replace aedu_ci=grado_asist-1 if nivel_asist==4                          // Ensino fundamental. Se resta uno porque preguntan el grado al que asisten
+replace aedu_ci=grado_asist+9-1 if nivel_asist==6                        // Ensino medio. Tienen que haber completado los 9 anios de ensino fundamental (antes eran 8)
 
-replace aedu_ci=grado_asist-1 if nivel_asist==5 //educacion de adultos y jovenes, ensino fundamental
-replace aedu_ci=grado_asist+9-1 if nivel_asist==7  //educacion de adultos y jovenes, ensino medio
+*Ensinio fundamental y medio de jóvenes y adultos
+replace aedu_ci=grado_asist-1 if nivel_asist==5                          // Educacion de adultos y jovenes, ensino fundamental
+replace aedu_ci=grado_asist+9-1 if nivel_asist==7                        // Educacion de adultos y jovenes, ensino medio
 
 *Superior
-** La pregunta de grado hace alusión a anio serie o semestre - para universitaria la respuesta esta dado en semetres. Se convierten a anios: 
-replace grado_asist=round(grado_asist/2) if v3005a == 1 & nivel_asist==8
+replace grado_asist=round(grado_asist/2) if v3005a == 1 & nivel_asist==8 // Para universitaria la respuesta está dada en semetres. Se convierten a anios
+replace aedu_ci=grado_asist+12-1 if nivel_asist==8                       // Universitario. No incluye postgrados. Tienen que haber completado los 9 anios de ensinio fundamental y los 3 anios de ensinio medio, 12 en total
 
-
-replace aedu_ci=grado_asist+12-1 if nivel_asist==8 // universitario. no incluye Postgrados
-
-* desde el nivel 9 y superior no se les pregunta en que anio o trimestre estan
-replace aedu_ci=12+4 if nivel_asist==9 //especializacion o diplomado
-replace aedu_ci=12+4 if nivel_asist==10 // maestria. se imputa pregrado completo
-replace aedu_ci=12+4+2 if nivel_asist==11 // doctorado. se imputa maestria completa
+replace aedu_ci=12+4 if nivel_asist==9                                   // Especializacion o diplomado. Desde el nivel 9 y superior no se les pregunta en que anio o trimestre están
+replace aedu_ci=12+4 if nivel_asist==10                                  // Maestria. Se imputa pregrado completo. Desde el nivel 9 y superior no se les pregunta en que anio o trimestre están
+replace aedu_ci=12+4+2 if nivel_asist==11                                // Doctorado. se imputa maestria completa Desde el nivel 9 y superior no se les pregunta en que anio o trimestre están
 
 *Quitando a quienes no se cuentan:
+replace aedu_ci=. if grado_asist==13
 
-replace aedu_ci=. if grado_asist == 13
+*PARA LOS QUE NO ASISTEN:
+*************************
+*Creche & prescola
+replace aedu_ci=0 if v3008==2                                            // Nunca asistieron  
+replace aedu_ci=0 if inlist(nivel_no_asist, 1, 2, 3, 4)                  // Creche, prescola, Alfabetizacion de jovenes y adultos, Classe de alfabetização - CA.
 
+*Ensinio fundamental y medio
+replace aedu_ci=grado_no_asist     if nivel_no_asist==5                  // Antigo primário. No se resta 1 porque la variable indica si lo concluyo o no
+replace aedu_ci=grado_no_asist+4   if nivel_no_asist==6                  // Antigo ginásio. Despues de antigo primário (4 anios)
+replace aedu_ci=grado_no_asist+4+4 if nivel_no_asist==9 & finalizo_1==1  // Antigo científico, clássico, etc. Despues de antigo primário y antigo ginásio (8 anios)
+replace aedu_ci=grado_no_asist     if nivel_no_asist==7                  // Regular do ensino fundamental ou do 1º grau. No se resta 1 porque la variable indica si lo concluyo o no
+replace aedu_ci=grado_no_asist+9   if nivel_no_asist==10                 // Regular do ensino médio óu do 2º grau. Despues de ensinio fundamental (9 anios)
 
-*PARA LOS QUE NO ASISTEN:*
-**************************
-
-replace aedu_ci=0 if v3008 == 2 //  Nunca asistieron 
-replace aedu_ci=0 if inlist(nivel_no_asist, 1, 2, 3, 4) // Creche, Pre-escolar, alfabetizacion 
-replace aedu_ci=grado_no_asist     if nivel_no_asist==5  // Primaria antiguo ciclo (solo 4-6 anios, ensino fundamental)
-replace aedu_ci=grado_no_asist+4   if nivel_no_asist==6 // Antigo ginásio (médio 1º ciclo)
-replace aedu_ci=grado_no_asist     if nivel_no_asist==7  //* Primaria nuevo ciclo (8 anios):
-replace aedu_ci=grado_no_asist+4+4   if nivel_no_asist==9  & finalizo_1==1  // Antigo científico, clássico, etc. (médio 2º ciclo)
-replace aedu_ci=grado_no_asist+9     if nivel_no_asist==10  // Regular do ensino médio óu do 2º grau
-
-*Ensino Fundamental Supletivo
-replace aedu_ci=grado_no_asist if nivel_no_asist==8 //nivelacion de primaria para adultos
-replace aedu_ci=grado_no_asist+9 if nivel_no_asist==11  // nivelacion de adultos secundaria
+*Ensinio fundamental y medio de jóvenes y adultos
+replace aedu_ci=grado_no_asist     if nivel_no_asist==8                  // Nivelacion de primaria para adultos
+replace aedu_ci=grado_no_asist+9   if nivel_no_asist==11                 // Nivelacion de adultos secundaria
 
 *Superior
+replace grado_no_asist=round(grado_no_asist/2) if v3011a==1 & nivel_no_asist==12 // Para universitaria la respuesta está dada en semetres. Se convierten a anios
+replace aedu_ci=grado_no_asist+12  if nivel_no_asist==12                 // Universitario pregrado
 
-** La pregunta de grado hace alusión a anio serie o semestre - para universitaria la respuesta esta dado en semetres. Se combiernen a anios: 
-replace grado_no_asist=round(grado_no_asist/2) if v3011a == 1 & nivel_no_asist==12
+replace aedu_ci=12+4 if nivel_no_asist==13 & inlist(finalizo, 2, 3, .)   // Especializacion o diplomado, no terminado
+replace aedu_ci=12+4+2 if nivel_no_asist==13 & finalizo==1               // Especializacion o diplomado, terminado
 
-replace aedu_ci=12+grado_no_asist if nivel_no_asist==12 // universitario pregrado
+replace aedu_ci=12+4 if nivel_no_asist==14 & inlist(finalizo, 2, 3, .)   // Maestria, no terminado
+replace aedu_ci=12+4+2 if nivel_no_asist==14 & finalizo==1               // Maestria, terminado
 
-* A partir del nivel 13 no preguntan los anios que cursaron
+replace aedu_ci=12+4+2 if nivel_no_asist==15 & inlist(finalizo, 2, 3, .) // Doctorado, no terminado 
+replace aedu_ci=12+4+2+4 if nivel_no_asist==15 & finalizo==1             // Doctorado, terminado 
 
-replace aedu_ci=12+4 if nivel_no_asist==13 & inlist(finalizo, 2, 3, .) //especializacion o diplomado, no terminado
-replace aedu_ci=12+4 if nivel_no_asist==13 & finalizo==1 //especializacion o diplomado, terminado
+*Imputando valores cuando el anio esta perdido, pero esta el nivel
+replace aedu_ci=0  if nivel_asist==1  & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==2  & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==3  & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==4  & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==5  & aedu_ci==.
+replace aedu_ci=9  if nivel_asist==6  & aedu_ci==.
+replace aedu_ci=9  if nivel_asist==7  & aedu_ci==.
+replace aedu_ci=12 if nivel_asist==8  & aedu_ci==.
+replace aedu_ci=16 if nivel_asist==9  & aedu_ci==.
+replace aedu_ci=16 if nivel_asist==10 & aedu_ci==.
+replace aedu_ci=18 if nivel_asist==11 & aedu_ci==.
 
-replace aedu_ci=12+4 if nivel_no_asist==14 & inlist(finalizo, 2, 3, .) //maestria, no terminado
-replace aedu_ci=12+4+2 if nivel_no_asist==14 & finalizo==1 //maestria, terminado
-
-replace aedu_ci=12+4+2 if nivel_no_asist==15 & inlist(finalizo, 2, 3, .) //doctorado, no terminado 
-replace aedu_ci=12+4+2+4 if nivel_no_asist==15 & finalizo==1 //doctorado, terminado 
-
-
-
-
-**imputando valores cuando el anio esta perdido, pero esta el nivel*/
-
-
-replace aedu_ci=0 if nivel_asist==4 & aedu_ci==.
-replace aedu_ci=0 if nivel_asist==5 & aedu_ci==.
-replace aedu_ci=9 if nivel_asist==6 & aedu_ci==.
-replace aedu_ci=9 if nivel_asist==7 & aedu_ci==.
-
-
-replace aedu_ci=4 if nivel_no_asist==6 & aedu_ci==.
-replace aedu_ci=0 if nivel_no_asist==7 & aedu_ci==.
-replace aedu_ci=0 if nivel_no_asist==8 & aedu_ci==.
-replace aedu_ci=8 if nivel_no_asist==9 & aedu_ci==.
-replace aedu_ci=12 if nivel_no_asist==10 & aedu_ci==.
-replace aedu_ci=12+4 if nivel_no_asist==11 & aedu_ci==.
-replace aedu_ci=12+4+2 if nivel_no_asist==12 & aedu_ci==.
-
-
+replace aedu_ci=0  if nivel_asist==1     & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==2     & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==3     & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==4     & aedu_ci==.
+replace aedu_ci=0  if nivel_asist==5     & aedu_ci==.
+replace aedu_ci=4  if nivel_no_asist==6  & aedu_ci==.
+replace aedu_ci=0  if nivel_no_asist==7  & aedu_ci==.
+replace aedu_ci=0  if nivel_no_asist==8  & aedu_ci==.
+replace aedu_ci=8  if nivel_no_asist==9  & aedu_ci==.
+replace aedu_ci=9  if nivel_no_asist==10 & aedu_ci==.
+replace aedu_ci=9  if nivel_no_asist==11 & aedu_ci==.
+replace aedu_ci=12 if nivel_no_asist==12 & aedu_ci==.
+replace aedu_ci=16 if nivel_no_asist==13 & aedu_ci==.
+replace aedu_ci=16 if nivel_no_asist==14 & aedu_ci==.
+replace aedu_ci=18 if nivel_no_asist==15 & aedu_ci==.
 
 **************
 ***eduno_ci***
@@ -1031,7 +1029,6 @@ label variable eduno_ci "Cero anios de educacion"
 gen byte edupi_ci=(aedu_ci>0 & aedu_ci<5)
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
-
 
 **************
 ***edupc_ci***
@@ -1054,22 +1051,21 @@ gen byte edusc_ci=(aedu_ci==12)
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
-
 **************
 ***eduui_ci***
 **************
 gen byte eduui_ci= aedu_ci>=13 & aedu_ci<=14 // entre 13 y 14 anios
 replace eduui_ci=1 if (aedu_ci>=15 & aedu_ci<16 & v3007!=1 & v3014!=1) // 15 anios de educacion, sin completar nivel
 replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta"
+label variable eduui_ci "Terciaria/universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=(aedu>=16) //16 anios o mas, que es la duracion del grado
+gen byte eduuc_ci=(aedu>=15) // 15 anios o mas, que es la duracion de tecnica
 replace eduuc_ci=1 if (aedu_ci>=15 & aedu_ci<16 & (v3007==1 | v3014==1)) // entre 15 y 16 anios si completaron el curso
 replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria completa o mas"
+label variable eduuc_ci "Terciaria/universitaria completa o mas"
 
 ***************
 ***edus1i_ci***
@@ -1105,12 +1101,12 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
-***asispre_ci**
-***************
+****************
+***asispre_ci***
+****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	g asispre_ci=v3003a==2 & v2009>=4
-	la var asispre_ci "Asiste a educacion prescolar"	
+g asispre_ci=v3003a==2 & v2009>=4
+la var asispre_ci "Asiste a educacion prescolar"	
 	
 **************
 ***eduac_ci***
@@ -1118,19 +1114,16 @@ label variable edupre_ci "Educacion preescolar"
 gen byte eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-
-
-******************
+*****************
 ***pqnoasis_ci***
-******************
+*****************
 gen pqnoasis_ci=.
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-	
-**************
-*pqnoasis1_ci*
-**************
 gen pqnoasis1_ci = .
 
 ***************
@@ -1139,10 +1132,11 @@ gen pqnoasis1_ci = .
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un año o grado"
 
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
 label var repiteult_ci "Personas que han repetido el último año o grado"
-
-
 
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****

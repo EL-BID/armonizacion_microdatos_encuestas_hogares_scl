@@ -428,6 +428,9 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 *********
 *lp_ci***
 *********
+
+egen llave_lp1=group(region_3 mes )
+
 *https://www.ine.gub.uy/documents/10181/30913/Pobreza0321/c18681f1-7aa9-4d0a-bd6b-265049f3e26e
 
 gen lp_ci =.
@@ -1248,6 +1251,8 @@ label var remesas_ci "Remesas mensuales reportadas por el individuo"
 
 
 *55. Antigüedad en la actividad actual
+
+
 
 *********************************************************************************************************
 *                                VARIABLES EDUCATIVAS                                                   *

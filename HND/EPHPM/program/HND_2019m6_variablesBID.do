@@ -174,7 +174,7 @@ gen factor_ci=factor_ch
 ***upm_ci***
 ***************
 
-gen upm_ci=.
+gen upm_ci=dominio
 label variable upm_ci "Unidad Primaria de Muestreo"
 
 ***************
@@ -985,6 +985,7 @@ by idh_ch, sort: egen ynlnm_ch=sum(ynlnm_ci) if miembros_ci==1, missing
 label var ynlnm_ch "Ingreso no laboral no monetario del hogar"
 
 
+
 ********
 ***NA***
 ********
@@ -1044,6 +1045,15 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 ***************
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
+
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ytothg 
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=yperhg
+label var yoficial_ch "Ingreso per cápita generado por el país"
 
 **************************INGRESOS-TRANSFERENCIAS**************************************
 
@@ -1133,6 +1143,8 @@ label var ytotal_ch "Ingreso total del hogar"
 ***************
 gen ytotalpc_ch=(ytotal_ch/nmiembros_ch) if miembros_ci==1
 label var ytotalpc_ch "Ingreso per capita del hogar"
+
+
 
 
 ***************

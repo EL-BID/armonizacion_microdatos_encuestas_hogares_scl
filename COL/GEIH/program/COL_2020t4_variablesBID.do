@@ -380,7 +380,10 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
-
+***********************
+*llave lp nacionales***
+***********************
+encode dominio, gen(llave_lp)
 
 *********
 *lp_ci***
@@ -883,7 +886,15 @@ la var subemp_ci "Personas en subempleo por horas"
 	g ylmho_ci = ylm_ci / (horastot_ci * 4.3)
 	la var ylmho_ci "Salario monetario de todas las actividades" 
 
-	*/
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotugarr
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpcug
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************

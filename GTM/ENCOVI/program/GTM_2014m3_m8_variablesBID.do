@@ -715,6 +715,15 @@ replace durades_ci= 0.23 if p10e01==0
 replace durades_ci=. if p10e01==.
 label var durades_ci "duracion del desempleo (en meses)"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=.
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=agreg3
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 
 ******************************************************************************************************
 * variables de educacion

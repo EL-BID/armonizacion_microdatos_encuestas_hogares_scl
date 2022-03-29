@@ -59,7 +59,7 @@ label var region_c "División política, departamentos"
 ***factor_ch***
 ***************
 
-gen factor_ch=peso3 
+gen factor_ch=peso2
 
 ***************
 ****idh_ch*****

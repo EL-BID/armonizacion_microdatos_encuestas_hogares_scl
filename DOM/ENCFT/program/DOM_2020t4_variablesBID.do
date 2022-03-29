@@ -47,7 +47,7 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 
-
+include "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\\`PAIS'\\`ENCUESTA'\\program\\Código-de-pobreza-monetaria-2016-2020-en-STATA.do"
  
 		**********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -926,6 +926,16 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotaldeflactado
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpercapitadef
+label var yoficial_ch "Ingreso per cápita generado por el país"
+
+
 	****************************
 	***VARIABLES DE EDUCACION***
 	****************************
@@ -1528,21 +1538,22 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
+***********************
+*llave lp nacionales***
+***********************
+egen llave_lp=group(lpgeneral lpextrema)
+
 *********
 *lp_ci***
 *********
 
-gen lp_ci =.
-replace lp_ci =  5319.5 if zona_c==1
-replace lp_ci =  4736.2 if zona_c==0
+gen lp_ci =lpgeneral
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
-gen lpe_ci =.
-replace lpe_ci =  2395.2 if zona_c==1
-replace lpe_ci =  2295.0 if zona_c==0
+gen lpe_ci =lpextrema
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1867,7 +1878,7 @@ replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
 lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
 lab val grupo_int grupo_int
 
-
+drop ipcbase* usd* eur* chf* ars* gbp* ingasal -alqimputadodef
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/

@@ -1032,6 +1032,15 @@ gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
 
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingrem
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ipcm
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 ****************************
 ***VARIABLES DE EDUCACION***

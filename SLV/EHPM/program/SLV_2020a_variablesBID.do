@@ -788,6 +788,15 @@ drop remesas
 by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 label var remesas_ch "Remesas mensuales del hogar" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingfa
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpe
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 			****************************
 			***VARIABLES DE EDUCACION***
@@ -839,7 +848,7 @@ label var eduno_ci "Sin educacion"
 **************
 ***edupi_ci***
 **************
-gen edupi_ci==(aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6) 
 replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
@@ -1386,10 +1395,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *El promedio anual de la canasta basica alimentaria (Rural y urbana) se divide en 3.73 miembros para zona urbana y en 4.26 miembros para la zona rural*
 gen lp_ci =.
 *zona urbana
-replace lp_ci= 54.32*2 if  zona_c == 1
+replace lp_ci= 54.316354*2 if  zona_c == 1
 
 *zona rural
-replace lp_ci= 34.03*2 if  zona_c == 0
+replace lp_ci= 34.025822*2 if  zona_c == 0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1624,7 +1633,7 @@ lab val pnc_ci pnc_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "\\Sdssrv03\surveys\harmonized\_DOCS\Do-Files\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
 

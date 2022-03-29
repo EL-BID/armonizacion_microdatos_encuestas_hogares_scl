@@ -597,6 +597,12 @@ gen cesante_ci=0 if condocup_ci==2
 replace cesante_ci=1 if p552==1 & condocup_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"
 
+
+***********************
+*llave lp nacionales***
+***********************
+egen llave_lp=group(linea linpe)
+
 *********
 *lp_ci***
 *********
@@ -1436,6 +1442,16 @@ gen tcylmpri_ci=.
 ***************
 gen tcylmpri_ch=.
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=gashog2d /12
+label var yoficial_ch "Gasto del hogar total generado por el país"
+
+gen ypeoficial_ch=yoficial_ch/ mieperho
+label var yoficial_ch "Gasto per cápita generado por el país"
+
+destring yoficial_ch ypeoficial_ch, replace
 
 ****************************
 ***VARIABLES DE EDUCACION***

@@ -826,9 +826,16 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen remesas_ci=p74b
 	label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
-		************************
-		***INGRESOS DEL HOGAR***
-		************************
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=.
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpc
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
+
 
 	*****************
 	***nrylmpri_ch***

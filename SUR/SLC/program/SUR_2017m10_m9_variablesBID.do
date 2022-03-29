@@ -407,6 +407,12 @@ gen dis_ch=.
 	*********
 	
 	gen lp_ci =.
+	replace lp_ci=	733.1	if region_c==	1
+replace lp=	590.23	if region_c==	2
+replace lp=	533.27	if region_c==	3
+			
+
+
 	label var lp_ci "Linea de pobreza oficial del pais"
 
 	***********
@@ -414,6 +420,9 @@ gen dis_ch=.
 	***********
 	
 	gen lpe_ci = .
+	replace lpe_ci=	265.29	if region_c==	1
+replace lpe_ci=	250.48	if region_c==	2
+replace lpe_ci=	206.69	if region_c==	3
 	label var lpe_ci "Linea de indigencia oficial del pais"
 
 	

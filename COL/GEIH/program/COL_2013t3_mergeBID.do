@@ -9,9 +9,9 @@ set more off
 local anio = 2013
 local anioab ="13" 	
 local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
-local m7 ="`ruta'm7\data_orig\" 
-local m8 ="`ruta'm8\data_orig\" 
-local m9 ="`ruta'm9\data_orig\" 
+local m7 ="`ruta'a/data_orig\m7\data_orig\" 
+local m8 ="`ruta'a/data_orig\m8\data_orig\" 
+local m9 ="`ruta'a/data_orig\m9\data_orig\" 
 local t3   ="`ruta't3\data_orig\"
 local out  ="`ruta't3\data_merge\"
 
@@ -30,7 +30,7 @@ sort id
 save "${surveysFolder}\survey\COL\GEIH\2013\a\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa- fex_c nper- fex_dpto_c
+keep  id impa- fex_c nper- fex_dpto_c dominio
 save "${surveysFolder}\survey\COL\GEIH\2013\a\data_merge\pov_t3.dta", replace
 
 *2. Append entre meses

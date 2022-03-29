@@ -38,7 +38,7 @@ saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=10 & mes<=12
 
-keep  impaes- id impa-iof6 nper-fex_c
+keep  impaes- id impa-iof6 nper-fex_c dominio
 save "`ruta'\`ronda1'\data_merge\pov_t4.dta", replace
 
 *2. Append entre meses

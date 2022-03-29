@@ -390,16 +390,14 @@ label value instpen_ci instpen_ci
 *********
 
 gen lp_ci =.
-replace lp_ci= 215216 if clase==1 /*cabecera*/
-replace lp_ci= 128593 if clase==2  /*resto*/
+replace lp_ci= lp
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci= 91650 if clase==1 /*cabecera*/
-replace lpe_ci= 74855 if clase==2  /*resto*/
+replace lpe_ci= lp
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 *************

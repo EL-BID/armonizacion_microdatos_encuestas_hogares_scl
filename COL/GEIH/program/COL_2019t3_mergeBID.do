@@ -36,7 +36,7 @@ saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 
-keep  id impa-iof6 impaes-fex_c nper-id li lp P6080 P6080S1
+keep  id impa-iof6 impaes-fex_c nper-id li lp P6080 P6080S1 dominio
 save "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -175,12 +175,6 @@ sort id
 **Nota** FALTA COMPLETAR ESTE  MODULO CUANDO SALGA LA BASE DE POBREZA EN MAYO
 merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\pov_t3.dta"
 drop _merge
-
-
-
-merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2019\a\data_merge\ETNIA19.dta"
-drop _merge
-
 
 
 foreach v of varlist _all {

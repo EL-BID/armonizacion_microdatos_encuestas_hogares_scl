@@ -1440,7 +1440,6 @@ gen tcylmpri_ch=.
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-
 replace p301a=. if p301a==99
 replace p301b=. if p301b==99
 replace p301c=. if p301c==99
@@ -1454,43 +1453,26 @@ edad del informante, es decir a las personas menores de 35 años considérelos e
 *Los q responden con antiguo sistema de prima(p301b): habian cinco años de primaria.
 gen byte aedu_ci=.
 replace aedu_ci=0  if p301a==1 | p301a==2 // Sin nivel o educación inicial o prescolar
-replace aedu_ci=1  if p301a==3 & p301b==0
-replace aedu_ci=2  if p301a==3 & p301b==1 
-replace aedu_ci=3  if p301a==3 & p301b==2
-replace aedu_ci=4  if p301a==3 & p301b==3
-replace aedu_ci=5  if p301a==3 & p301b==4
+replace aedu_ci=p301b if p301a==3 & p301c==. 
 *Como se responde actual sist prim (p301c): seis años de primaria.
-replace aedu_ci=0  if p301a==3 & p301c==0 & p301b==0
-replace aedu_ci=1  if p301a==3 & p301c==1 & p301b==0
-replace aedu_ci=2  if p301a==3 & p301c==2 & p301b==0
-replace aedu_ci=3  if p301a==3 & p301c==3 & p301b==0
-replace aedu_ci=4  if p301a==3 & p301c==4 & p301b==0
-replace aedu_ci=5  if p301a==3 & p301c==5 & p301b==0
+replace aedu_ci=p301c if p301a==3 & p301b==0
 replace aedu_ci=6  if p301a==4 
-replace aedu_ci=7  if p301a==5 & p301b==1
-replace aedu_ci=8  if p301a==5 & p301b==2
-replace aedu_ci=9  if p301a==5 & p301b==3
-replace aedu_ci=10 if p301a==5 & p301b==4
+replace aedu_ci=6+p301b if p301a==5
 replace aedu_ci=11 if p301a==6 
-replace aedu_ci=12 if (p301a>=7 & p301a<=10) & p301b==1
-replace aedu_ci=13 if (p301a>=7 & p301a<=10) & p301b==2
-replace aedu_ci=14 if (p301a>=7 & p301a<=10) & p301b==3
-replace aedu_ci=15 if (p301a>=7 & p301a<=10) & p301b==4
-replace aedu_ci=16 if (p301a>=7 & p301a<=10) & p301b==5
-replace aedu_ci=17 if (p301a>=7 & p301a<=10) & p301b==6
-replace aedu_ci=18 if (p301a>=7 & p301a<=10) & p301b==7
-replace aedu_ci=19 if p301a==11 & p301b==1
-replace aedu_ci=20 if p301a==11 & p301b==2
-replace aedu_ci=21 if p301a==11 & p301b==3
-replace aedu_ci=22 if p301a==11 & p301b==4
-*replace aedu_ci=. if p212==.
+replace aedu_ci=11+p301b if p301a==7 
+replace aedu_ci=11+p301b if p301a==8 
+replace aedu_ci=11+p301b if p301a==9 
+replace aedu_ci=11+p301b if p301a==10 
+replace aedu_ci=16+p301b if p301a==11
+replace aedu_ci=0 if p301a==12
+
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=(aedu==0) 
-replace eduno_ci=. if aedu==.
+gen byte eduno_ci=(aedu_ci==0) 
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
 **************
@@ -1569,7 +1551,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=(aedu_ci>=12 & (p301a==8 | p301a==10 | p301a==11)
+gen byte eduuc_ci=(aedu_ci>=12) & (p301a==8 | p301a==10 | p301a==11)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1584,9 +1566,9 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci= (p307==1 & p308a==1)  // asiste & matriculado en nivel inicial (sin edad)
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci= p308a==1  // matriculado en nivel inicial (sin edad)
+replace asispre_ci=0 if p307==2 & p313!=6 // matriculado pero no asiste (y no por vacaciones)
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
@@ -1599,21 +1581,17 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-/*Se considera la variable p303 para aquellos entrevistados el primer trimestre
-ya que al momento de la encuesta es periodo de vacaciones */
-
-destring mes, replace
-g asiste_ci = (p307==1 & mes>3 & mes<=12) // asiste y estamos entre marzo y dic
-replace asiste_ci=0 if (p307==2 & mes>3 & mes<=12) // no asiste y estamos entre marzo y dic
-replace asiste_ci=. if mes>=1 & mes<=3 // periodo de vacaciones
+/*Se considera la variable de matricula y de asistencia, codificando como 1 a los que estan matriculados y no asisten por vacaciones*/
+g asiste_ci = p306==1 // matriculados 
+replace asiste_ci=0 if p307==2 & p313!=6
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
 ***pqnoasis_ci***
 **************
 
-gen pqnoasis_ci=p313 if p307==2
-replace pqnoasis_ci=. if p212==.
+gen pqnoasis_ci=p313 if asiste_ci==0
+
 
 **************
 *pqnoasis1_ci*
@@ -1628,8 +1606,8 @@ replace pqnoasis1_ci = 5 if p313==10
 replace pqnoasis1_ci = 6 if p313==3
 replace pqnoasis1_ci = 7 if p313==4
 replace pqnoasis1_ci = 8 if p313==7
-replace pqnoasis1_ci = 9 if p313==6 | p313==8 | p313==11
-
+replace pqnoasis1_ci = 9 if p313==11
+replace pqnoasis1_ci = . if asiste_ci==1
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
@@ -1638,16 +1616,19 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***************
 
 gen repite_ci=.
-gen repiteult_ci=.
 
+***************
+***repiteult_ci***
+***************
+
+gen repiteult_ci=.
 
 ***************
 ***edupub_ci***
 ***************
-
 gen edupub_ci=.
-replace edupub_ci=1 if (p301d==1) & asiste_ci==1
-replace edupub_ci=0 if (p301d==2) & asiste_ci==1
+replace edupub_ci=1 if (p308d==1) & asiste_ci==1
+replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

@@ -355,16 +355,14 @@ label value condocup_ci condocup_ci
 *lp_ci***
 *********
 gen lp_ci =.
-replace lp_ci= 207005 if clase==1 /*cabecera*/
-replace lp_ci= 123502 if clase==2  /*resto*/
+replace lp_ci= lp
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci= 87401 if clase==1 /*cabecera*/
-replace lpe_ci= 71392 if clase==2  /*resto*/
+replace lpe_ci= li
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 *************

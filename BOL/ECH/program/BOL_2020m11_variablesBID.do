@@ -318,8 +318,7 @@ replace afroind_ci=9 if s01a_08==3
 	***afroind_ch***
 	***************
 gen afroind_jefe=.
-gen afroind_ch  = .
-gen afroind_jefe= afroind_ci if relacion_ci==1
+replace afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 
 drop afroind_jefe
@@ -358,6 +357,24 @@ egen dis_ch =.
 /************************************************************************************************************
 * Líneas de pobreza oficiales
 ************************************************************************************************************/
+
+***********************
+*llave lp nacionales***
+***********************
+gen llave_lp=.
+replace llave_lp=1 if area==2
+replace llave_lp=2 if area==1 & (z>780 & z<783)
+replace llave_lp=3 if region_c==5 & area==1 & llave_lp==.
+replace llave_lp=4 if region_c==1 & area==1 & llave_lp==.
+replace llave_lp=5 if region_c==2 & area==1 & llave_lp==.
+replace llave_lp=6 if region_c==3 & area==1  & llave_lp==.
+replace llave_lp=7 if region_c==4 & area==1 & llave_lp==.
+replace llave_lp=8 if region_c==6 & area==1 & llave_lp==.
+replace llave_lp=9 if region_c==7 & area==1 & llave_lp==.
+replace llave_lp=10 if region_c==8 & area==1 & llave_lp==.
+replace llave_lp=11 if region_c==9 & area==1 & llave_lp==.
+replace llave_lp=12 if region_c==2 & area==1 & (z>1060 & z<1062)
+
 
 *********
 *lp_ci***
@@ -1529,7 +1546,16 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=yhog
+label var yoficial_ch "Ingreso del hogar total generado por el país"
 
+gen ypeoficial_ch=yhogpc
+label var yoficial_ch "Ingreso per cápita generado por el país"
+
+destring yoficial_ch ypeoficial_ch, replace
 
 ****************************
 ***VARIABLES DE EDUCACION***

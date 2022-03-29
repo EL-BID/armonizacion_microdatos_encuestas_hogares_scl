@@ -770,6 +770,15 @@ gen rentaimp_ch=yaimhaj
 label var rentaimp_ch "Rentas imputadas del hogar"*/
 g rentaimp_ch=.
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ytotcorh
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=yae
+label var yoficial_ch "Ingreso por persona equivalente generado por el país"
+
 ****************
 * autocons_ci  * 
 **************** 

@@ -1069,6 +1069,11 @@ egen trat_pub = rsum( trac_pub  dona_pu), missing
 egen rtasot = rsum(ing_rent  otros), missing
 label var rtasot "Rentas y otros"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ict
+
 
 ******************************
 *	durades_ci

@@ -820,6 +820,15 @@ label var lp_ci "Línea de pobreza oficial en moneda local"
 gen lpe_ci =.
 label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=hhldinc
+				replace yoficial_ch= .   if hhldinc1==. | hhldinc1==16
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=yoficial_ch/nmiembros_ch
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
 *******************************
 *******************************

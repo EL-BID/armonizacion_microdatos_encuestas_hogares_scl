@@ -827,8 +827,18 @@ label val rama_ci rama_ci
 	**********
 
 	gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
+	
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=itf
+label var yoficial_ch "Ingreso del hogar total generado por el país"
 
+gen ypeoficial_ch=subinstr(ipcf,",",".",.)
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+destring yoficial_ch ypeoficial_ch, replace
+replace ypeoficial_ch=. if yoficial_ch==0
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
@@ -1317,11 +1327,12 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 
 *promedio julio - diciembre 2020:  https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_2082FA92E916.pdf
 
+
 *********
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =15167
+gen lp_ci =50854/4.10
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1329,7 +1340,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =6201
+gen lpe_ci =21572/4.17
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************

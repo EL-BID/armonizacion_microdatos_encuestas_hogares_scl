@@ -1032,6 +1032,14 @@ label var ylmhopri_ci "Salario  monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario  monetario de todas las actividades"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ithn
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ipcn
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
 *====================================================================================================================================*
 *                                                   VARIABLES DE EDUCACIÓN

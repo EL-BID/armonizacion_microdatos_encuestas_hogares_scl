@@ -14,7 +14,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS VEN
 local ENCUESTA ENCOVI
-local ANO "2019"
+local ANO "2020"
 local ronda a 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
@@ -1452,11 +1452,6 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 		}
 
 compress
-
-**********
-***anio***
-**********
-replace anio_c=2019
 
 save "`base_out'", replace
 

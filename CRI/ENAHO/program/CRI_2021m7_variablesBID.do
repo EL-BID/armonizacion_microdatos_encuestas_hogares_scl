@@ -710,6 +710,25 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if ramaempsec==1
+replace ramasec_ci=2 if ramaempsec==2
+replace ramasec_ci=3 if ramaempsec==3
+replace ramasec_ci=4 if ramaempsec==4 | ramaempsec==5
+replace ramasec_ci=5 if ramaempsec==6
+replace ramasec_ci=6 if ramaempsec==7 | ramaempsec==9
+replace ramasec_ci=7 if ramasec_ci==8
+replace ramasec_ci=8 if ramaempsec==11 | ramaempsec==12
+replace ramasec_ci=9 if ramaempsec>=13  & ramaempsec<=21 | ramaempsec==10
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************************************************************
 ***23._DURADES_CI : Duracion del desempleo.                  ***
 ****************************************************************

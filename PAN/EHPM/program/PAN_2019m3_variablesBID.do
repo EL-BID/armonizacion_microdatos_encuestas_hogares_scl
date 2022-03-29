@@ -628,6 +628,24 @@ label var rama_ci "Rama actividad principal"
 label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
+* rama secundaria
+destring p39b_reco, replace
+gen ramasec_ci=. 
+replace ramasec_ci=1 if (p39b_reco==1) & emp_ci==1
+replace ramasec_ci=2 if (p39b_reco==2) & emp_ci==1
+replace ramasec_ci=3 if (p39b_reco==3) & emp_ci==1 
+replace ramasec_ci=4 if (p39b_reco==4 | p39b_reco==5) & emp_ci==1
+replace ramasec_ci=5 if (p39b_reco==6) & emp_ci==1
+replace ramasec_ci=6 if (p39b_reco==7 | p39b_reco==9) & emp_ci==1
+replace ramasec_ci=7 if (p39b_reco==8) & emp_ci==1
+replace ramasec_ci=8 if (p39b_reco==11 | p39b_reco==12) & emp_ci==1
+replace ramasec_ci=9 if (p39b_reco==10 | (p39b_reco>=13 & p39b_reco<=21)) & emp_ci==1
+
+label var ramasec_ci "Rama actividad secundaria"
+label define ramasec_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
+
 ******************************
 *	categopri_ci
 ******************************

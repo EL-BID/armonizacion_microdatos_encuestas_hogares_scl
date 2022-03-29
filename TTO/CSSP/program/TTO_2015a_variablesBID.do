@@ -490,14 +490,38 @@ label define categosec 1"Patrón o empleador" 2"Cuenta propia o independiente" 3
 label values categosec_ci categosec
 
 *********************************
-*  RAMA DE ACTIVIDAD PRINCIPAL  *
+*  RAMA DE ACTIVIDAD  *
 *********************************
-*La variable p30 no se encuentra en la base de datos.
 
-gen rama_ci=.
-label define rama 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
-label values rama_ci rama
-label var rama_ci "Rama de actividad principal"
+* rama principal
+g rama_ci=.
+replace rama_ci=1 if (rindus>=1 & rindus<=2) & condocup_ci==1
+replace rama_ci=2 if rindus==4 & condocup_ci==1
+replace rama_ci=3 if rindus==5 & condocup_ci==1
+replace rama_ci=4 if (rindus==3 | rindus==6)   & condocup_ci==1
+replace rama_ci=5 if rindus==7 & condocup_ci==1
+replace rama_ci=6 if rindus==8 & condocup_ci==1
+replace rama_ci=7 if rindus==9 & condocup_ci==1
+replace rama_ci=8 if rindus==10 & condocup_ci==1
+replace rama_ci=9 if rindus==11 & condocup_ci==1
+label define rama_ci 1"Agriculturacaza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (indsec>=1 & indsec<=2) & condocup_ci==1
+replace ramasec_ci=2 if indsec==4 & condocup_ci==1
+replace ramasec_ci=3 if indsec==5 & condocup_ci==1
+replace ramasec_ci=4 if (indsec==3 | indsec==6)   & condocup_ci==1
+replace ramasec_ci=5 if indsec==7 & condocup_ci==1
+replace ramasec_ci=6 if indsec==8 & condocup_ci==1
+replace ramasec_ci=7 if indsec==9 & condocup_ci==1
+replace ramasec_ci=8 if indsec==10 & condocup_ci==1
+replace ramasec_ci=9 if indsec==11 & condocup_ci==1
+label define ramasec_ci 1"Agriculturacaza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
 
 *********************************
 *  TRABAJA EN EL SECTOR PUBLICO *

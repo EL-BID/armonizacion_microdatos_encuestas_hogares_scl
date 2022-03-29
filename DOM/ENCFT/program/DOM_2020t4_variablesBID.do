@@ -585,6 +585,28 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+rename rama_secundaria_cod ramac2
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (ramac2>=111 & ramac2<=322)  & emp_ci==1
+replace ramasec_ci = 2 if (ramac2>=510 & ramac2<=990)  & emp_ci==1
+replace ramasec_ci = 3 if (ramac2>=1010 & ramac2<=3320)  & emp_ci==1
+replace ramasec_ci = 4 if (ramac2>=3510 & ramac2<=3900)  & emp_ci==1
+replace ramasec_ci = 5 if (ramac2>=4100 & ramac2<=4390)  & emp_ci==1
+replace ramasec_ci = 6 if (ramac2>=4510 & ramac2<=4799)  & emp_ci==1
+replace ramasec_ci = 7 if (ramac2>=4911 & ramac2<=6399)  & emp_ci==1
+replace ramasec_ci = 8 if (ramac2>=6411 & ramac2<=6820)  & emp_ci==1
+replace ramasec_ci = 9 if (ramac2>=6910 & ramac2<=9990)  & emp_ci==1
+
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
+
 ************
 *durades_ci*
 ************

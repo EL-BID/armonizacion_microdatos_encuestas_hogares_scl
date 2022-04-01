@@ -446,11 +446,18 @@ replace rama_ci=6 if (rama4>=5000 & rama4<=5599) & emp_ci==1
 replace rama_ci=7 if (rama4>=6000 & rama4<=6499) & emp_ci==1
 replace rama_ci=8 if (rama4>=6500 & rama4<=7099) & emp_ci==1
 replace rama_ci=9 if (rama4>=7100 & rama4<=9990) & emp_ci==1
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
+
 
 		**************
 		***INGRESOS***

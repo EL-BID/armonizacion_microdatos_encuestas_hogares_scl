@@ -677,6 +677,25 @@ gen dis_ch=.
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
 
+
+	* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (p52>=111 & p52<=322) & emp_ci==1
+replace ramasec_ci = 2 if (p52>=510 & p52<=990) & emp_ci==1
+replace ramasec_ci = 3 if (p52>=1010 & p52<=3320) & emp_ci==1
+replace ramasec_ci = 4 if (p52>=3510 & p52<=3900) & emp_ci==1
+replace ramasec_ci = 5 if (p52>=4100 & p52<=4390) & emp_ci==1
+replace ramasec_ci = 6 if ((p52>=4510 & p52<=4799) | (p52>=5510 & p52<=5630)) & emp_ci==1
+replace ramasec_ci = 7 if ((p52>=4911 & p52<=5320) | (p52>=6110 & p52<=6190)) & emp_ci==1
+replace ramasec_ci = 8 if (p52>=6411 & p52<=8299) & emp_ci==1
+replace ramasec_ci = 9 if ((p52>=5811 & p52<=6020) | (p52>=6201 & p52<=6399) | (p52>=8410 & p52<=9900)) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 	****************
 	***durades_ci***
 	****************

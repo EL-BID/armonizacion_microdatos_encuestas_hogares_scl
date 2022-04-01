@@ -703,9 +703,24 @@ replace rama_ci=7 if (b02rec==6) & emp_ci==1
 replace rama_ci=8 if (b02rec==7) & emp_ci==1
 replace rama_ci=9 if (b02rec==8) & emp_ci==1
 
-label variable rama_ci "Rama de actividad laboral de la ocupacion principal-Grandes Divisiones (ISIC Rev"
+label variable rama_ci "Rama de actividad laboral de la ocupacion principal"
 label define rama_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
 label value rama_ci rama_ci
+
+*rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (c02rec==1) & emp_ci==1
+replace ramasec_ci=3 if (c02rec==2) & emp_ci==1
+replace ramasec_ci=4 if (c02rec==3) & emp_ci==1
+replace ramasec_ci=5 if (c02rec==4) & emp_ci==1
+replace ramasec_ci=6 if (c02rec==5) & emp_ci==1
+replace ramasec_ci=7 if (c02rec==6) & emp_ci==1
+replace ramasec_ci=8 if (c02rec==7) & emp_ci==1
+replace ramasec_ci=9 if (c02rec==8) & emp_ci==1
+label variable ramasec_ci "Rama de actividad laboral de la ocupacion secundaria"
+label define ramasec_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
+label value ramasec_ci ramasec_ci
+
 
 ****************
 ***durades_ci***

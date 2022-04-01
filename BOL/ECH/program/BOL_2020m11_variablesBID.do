@@ -794,11 +794,30 @@ replace rama_ci=6 if (caeb_op>=6 & caeb_op<=8) & emp_ci==1
 replace rama_ci=7 if caeb_op==7 & emp_ci==1
 replace rama_ci=8 if (caeb_op>=10 & caeb_op<=11) & emp_ci==1
 replace rama_ci=9 if (caeb_op==9 | (caeb_op>=12 & caeb_op<=20)) & emp_ci==1
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+destring caeb_os, i("NA") replace
+gen ramasec_ci=.
+replace ramasec_ci=1 if caeb_os==0 & emp_ci==1
+replace ramasec_ci=2 if caeb_os==1 & emp_ci==1
+replace ramasec_ci=3 if caeb_os==2 & emp_ci==1
+replace ramasec_ci=4 if (caeb_os==3 | caeb_os==4) & emp_ci==1
+replace ramasec_ci=5 if caeb_os==5 & emp_ci==1
+replace ramasec_ci=6 if (caeb_os>=6 & caeb_os<=8) & emp_ci==1 
+replace ramasec_ci=7 if caeb_os==7 & emp_ci==1
+replace ramasec_ci=8 if (caeb_os>=10 & caeb_os<=11) & emp_ci==1
+replace ramasec_ci=9 if (caeb_os==9 | (caeb_os>=12 & caeb_os<=20)) & emp_ci==1
+label var ramasec_ci "Rama de actividad  de la ocupación secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
 
 ****************
 ***durades_ci***

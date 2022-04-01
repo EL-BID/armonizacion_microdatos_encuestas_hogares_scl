@@ -697,6 +697,25 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if v4044>1101 & v4044<3002
+replace ramasec_ci=2 if v4044>=5000 & v4044<=9000 
+replace ramasec_ci=3 if v4044>=10010 & v4044<=33002 
+replace ramasec_ci=4 if v4044>=35010 & v4044<=35022
+replace ramasec_ci=5 if v4044>=41000 & v4044<=43000 
+replace ramasec_ci=6 if v4044>=45010 & v4044<=48100
+replace ramasec_ci=7 if v4044>=49010 & v4044<=56020
+replace ramasec_ci=8 if v4044>=64000 & v4044<=68000
+replace ramasec_ci=9 if (v4044>=69000 & v4044<=99000) |  (v4044>=58000 & v4044<=63000)
+replace ramasec_ci=. if emp_ci==0
+label var ramasec_ci "Rama de actividad laboral de la ocupación secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
 ****************
 ***durades_ci***
 ****************

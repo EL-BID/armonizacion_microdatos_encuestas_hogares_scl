@@ -672,10 +672,10 @@ label define ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de trans
 label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 
+
 *************
 **rama_ci****
 *************
-
 gen rama_ci=.
 replace rama_ci=1 if p04c04b_2d >=1 & p04c04b_2d <=3
 replace rama_ci=2 if p04c04b_2d >=5 & p04c04b_2d <=9
@@ -688,6 +688,27 @@ replace rama_ci=8 if p04c04b_2d >=64 & p04c04b_2d <=68
 replace rama_ci=9 if (p04c04b_2d >=69 & p04c04b_2d <=99) | (p04c04b_2d >=58 & p04c04b_2d <=60) | (p04c04b_2d >=62 & p04c04b_2d <=63)
 label var rama_ci "Rama de actividad"
 label val rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if p04d04b_2d >=1 & p04d04b_2d <=3
+replace ramasec_ci=2 if p04d04b_2d >=5 & p04d04b_2d <=9
+replace ramasec_ci=3 if p04d04b_2d >=10 & p04d04b_2d <=33
+replace ramasec_ci=4 if p04d04b_2d >=35 & p04d04b_2d <=39
+replace ramasec_ci=5 if p04d04b_2d >=41 & p04d04b_2d <=43
+replace ramasec_ci=6 if (p04d04b_2d >=45 & p04d04b_2d <=47) | (p04d04b_2d >=55 & p04d04b_2d <=56)
+replace ramasec_ci=7 if (p04d04b_2d >=49 & p04d04b_2d <=53) | p04d04b_2d ==61 
+replace ramasec_ci=8 if p04d04b_2d >=64 & p04d04b_2d <=68
+replace ramasec_ci=9 if (p04d04b_2d >=69 & p04d04b_2d <=99) | (p04d04b_2d >=58 & p04d04b_2d <=60) | (p04d04b_2d >=62 & p04d04b_2d <=63)
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label val ramasec_ci ramasec_ci
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
 
 
 ************

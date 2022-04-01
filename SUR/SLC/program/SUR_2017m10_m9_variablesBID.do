@@ -587,11 +587,17 @@ replace lpe_ci=	206.69	if region_c==	3
 	replace rama_ci = 7 if ((q9_21>=4911 & q9_21<=5320) | (q9_21>=6110 & q9_21<=6190)) & emp_ci==1
 	replace rama_ci = 8 if (q9_21>=6411 & q9_21<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((q9_21>=5811 & q9_21<=6020) | (q9_21>=6201 & q9_21<=6399) | (q9_21>=8410 & q9_21<=9900)) & emp_ci==1
-	label var rama_ci "Rama de actividad"
+	label var rama_ci "Rama de actividad de la ocupación principal"
 	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
+
+
+	* rama secundaria
+    g ramasec_ci=. 
+    label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+    label val ramasec_ci ramasec_ci
 
 	****************
 	***durades_ci***

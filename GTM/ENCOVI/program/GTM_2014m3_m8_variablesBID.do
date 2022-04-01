@@ -698,10 +698,26 @@ replace rama_ci=8 if (p10b03b>=65 & p10b03b<=74) & emp_ci==1
 replace rama_ci=9 if (p10b03b>=75 & p10b03b<=99) & emp_ci==1
 replace rama_ci=. if emp_ci!=1
 tab p10b03b  rama_ci
-label var rama_ci "rama laboral en la ocupacion principal"
+label var rama_ci "rama laboral en la ocupación principal"
 label define rama_ci 1 "agricultura, caza, sivicultura y pesca" 2 "explotacion de minas y canteras" 3 "industrias manufactureras" 4 "electricidad, gas y agua" 5 "construccion" 6 "comercio al por mayor y menor, restaurantes, hoteles" 7 "transporte y almacenamiento" 8 "establecimientos financieros, seguros, bienes inmuebles" 9 "servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
+*rama secundaria
+gen ramasec_ci=.
+* mlo = supongo que se mantiene ciiu rev 3
+replace ramasec_ci=1 if (p10c03b>=1 &  p10c03b<=5) & emp_ci==1
+replace ramasec_ci=2 if (p10c03b>=10 & p10c03b<=14) & emp_ci==1
+replace ramasec_ci=3 if (p10c03b>=15 & p10c03b<=37) & emp_ci==1
+replace ramasec_ci=4 if (p10c03b>=40 & p10c03b<=41) & emp_ci==1
+replace ramasec_ci=5 if p10c03b==45 & emp_ci==1
+replace ramasec_ci=6 if (p10c03b>=50 & p10c03b<=55) & emp_ci==1
+replace ramasec_ci=7 if (p10c03b>=60 & p10c03b<=64) & emp_ci==1
+replace ramasec_ci=8 if (p10c03b>=65 & p10c03b<=74) & emp_ci==1
+replace ramasec_ci=9 if (p10c03b>=75 & p10c03b<=99) & emp_ci==1
+replace ramasec_ci=. if emp_ci!=1
+label var ramasec_ci "rama laboral en la ocupación secundaria"
+label define ramasec_ci 1 "agricultura, caza, sivicultura y pesca" 2 "explotacion de minas y canteras" 3 "industrias manufactureras" 4 "electricidad, gas y agua" 5 "construccion" 6 "comercio al por mayor y menor, restaurantes, hoteles" 7 "transporte y almacenamiento" 8 "establecimientos financieros, seguros, bienes inmuebles" 9 "servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
 
 *** antiguppa03 (años) (en total, cuantos años lleva trabajando (ocup principal)?) 
 

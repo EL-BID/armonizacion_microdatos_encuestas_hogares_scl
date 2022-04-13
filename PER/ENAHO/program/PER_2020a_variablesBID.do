@@ -597,6 +597,12 @@ gen cesante_ci=0 if condocup_ci==2
 replace cesante_ci=1 if p552==1 & condocup_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"
 
+
+***********************
+*llave lp nacionales***
+***********************
+egen llave_lp=group(linea linpe)
+
 *********
 *lp_ci***
 *********
@@ -620,11 +626,6 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 gen salmm_ci= 930 /*se mantiene para todos los meses de 2020*/
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=(p301a==7 | p301a==8 | p304a==4 | p308a==4)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
 
 ************
 ***emp_ci***
@@ -835,11 +836,31 @@ replace rama_ci=7 if (p506>=6010 & p506<=6420) & emp_ci==1
 replace rama_ci=8 if (p506>=6511 & p506<=7020) & emp_ci==1
 replace rama_ci=9 if (p506>=7111 & p506<=9900) & emp_ci==1
 
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if (p516>=111 & p516<=502) & emp_ci==1
+replace ramasec_ci=2 if (p516>=1010 & p516<=1429) & emp_ci==1
+replace ramasec_ci=3 if (p516>=1511 & p516<=3720) & emp_ci==1
+replace ramasec_ci=4 if (p516>=4010 & p516<=4100) & emp_ci==1
+replace ramasec_ci=5 if (p516>=4510 & p516<=4550) & emp_ci==1
+replace ramasec_ci=6 if (p516>=5010 & p516<=5520) & emp_ci==1 
+replace ramasec_ci=7 if (p516>=6010 & p516<=6420) & emp_ci==1
+replace ramasec_ci=8 if (p516>=6511 & p516<=7020) & emp_ci==1
+replace ramasec_ci=9 if (p516>=7111 & p516<=9900) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 
 ****************
 ***durades_ci***
@@ -1441,11 +1462,20 @@ gen tcylmpri_ci=.
 ***************
 gen tcylmpri_ch=.
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=gashog2d /12
+label var yoficial_ch "Gasto del hogar total generado por el país"
+
+gen ypeoficial_ch=yoficial_ch/ mieperho
+label var yoficial_ch "Gasto per cápita generado por el país"
+
+destring yoficial_ch ypeoficial_ch, replace
 
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-
 replace p301a=. if p301a==99
 replace p301b=. if p301b==99
 replace p301c=. if p301c==99
@@ -1459,43 +1489,26 @@ edad del informante, es decir a las personas menores de 35 años considérelos e
 *Los q responden con antiguo sistema de prima(p301b): habian cinco años de primaria.
 gen byte aedu_ci=.
 replace aedu_ci=0  if p301a==1 | p301a==2 // Sin nivel o educación inicial o prescolar
-replace aedu_ci=1  if p301a==3 & p301b==0
-replace aedu_ci=2  if p301a==3 & p301b==1 
-replace aedu_ci=3  if p301a==3 & p301b==2
-replace aedu_ci=4  if p301a==3 & p301b==3
-replace aedu_ci=5  if p301a==3 & p301b==4
+replace aedu_ci=p301b if p301a==3 & p301c==. 
 *Como se responde actual sist prim (p301c): seis años de primaria.
-replace aedu_ci=0  if p301a==3 & p301c==0 & p301b==0
-replace aedu_ci=1  if p301a==3 & p301c==1 & p301b==0
-replace aedu_ci=2  if p301a==3 & p301c==2 & p301b==0
-replace aedu_ci=3  if p301a==3 & p301c==3 & p301b==0
-replace aedu_ci=4  if p301a==3 & p301c==4 & p301b==0
-replace aedu_ci=5  if p301a==3 & p301c==5 & p301b==0
+replace aedu_ci=p301c if p301a==3 & p301b==0
 replace aedu_ci=6  if p301a==4 
-replace aedu_ci=7  if p301a==5 & p301b==1
-replace aedu_ci=8  if p301a==5 & p301b==2
-replace aedu_ci=9  if p301a==5 & p301b==3
-replace aedu_ci=10 if p301a==5 & p301b==4
+replace aedu_ci=6+p301b if p301a==5
 replace aedu_ci=11 if p301a==6 
-replace aedu_ci=12 if (p301a>=7 & p301a<=10) & p301b==1
-replace aedu_ci=13 if (p301a>=7 & p301a<=10) & p301b==2
-replace aedu_ci=14 if (p301a>=7 & p301a<=10) & p301b==3
-replace aedu_ci=15 if (p301a>=7 & p301a<=10) & p301b==4
-replace aedu_ci=16 if (p301a>=7 & p301a<=10) & p301b==5
-replace aedu_ci=17 if (p301a>=7 & p301a<=10) & p301b==6
-replace aedu_ci=18 if (p301a>=7 & p301a<=10) & p301b==7
-replace aedu_ci=19 if p301a==11 & p301b==1
-replace aedu_ci=20 if p301a==11 & p301b==2
-replace aedu_ci=21 if p301a==11 & p301b==3
-replace aedu_ci=22 if p301a==11 & p301b==4
-*replace aedu_ci=. if p212==.
+replace aedu_ci=11+p301b if p301a==7 
+replace aedu_ci=11+p301b if p301a==8 
+replace aedu_ci=11+p301b if p301a==9 
+replace aedu_ci=11+p301b if p301a==10 
+replace aedu_ci=16+p301b if p301a==11
+replace aedu_ci=0 if p301a==12
+
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=(aedu==0) 
-replace eduno_ci=. if aedu==.
+gen byte eduno_ci=(aedu_ci==0) 
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
 **************
@@ -1574,7 +1587,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=(aedu_ci>=12 & (p301a==8 | p301a==10 | p301a==11)
+gen byte eduuc_ci=(aedu_ci>=12) & (p301a==8 | p301a==10 | p301a==11)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1589,9 +1602,9 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci= (p307==1 & p308a==1)  // asiste & matriculado en nivel inicial (sin edad)
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci= p308a==1  // matriculado en nivel inicial (sin edad)
+replace asispre_ci=0 if p307==2 & p313!=6 // matriculado pero no asiste (y no por vacaciones)
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
@@ -1604,21 +1617,17 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-/*Se considera la variable p303 para aquellos entrevistados el primer trimestre
-ya que al momento de la encuesta es periodo de vacaciones */
-
-destring mes, replace
-g asiste_ci = (p307==1 & mes>3 & mes<=12) // asiste y estamos entre marzo y dic
-replace asiste_ci=0 if (p307==2 & mes>3 & mes<=12) // no asiste y estamos entre marzo y dic
-replace asiste_ci=. if mes>=1 & mes<=3 // periodo de vacaciones
+/*Se considera la variable de matricula y de asistencia, codificando como 1 a los que estan matriculados y no asisten por vacaciones*/
+g asiste_ci = p306==1 // matriculados 
+replace asiste_ci=0 if p307==2 & p313!=6
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
 ***pqnoasis_ci***
 **************
 
-gen pqnoasis_ci=p313 if p307==2
-replace pqnoasis_ci=. if p212==.
+gen pqnoasis_ci=p313 if asiste_ci==0
+
 
 **************
 *pqnoasis1_ci*
@@ -1633,8 +1642,8 @@ replace pqnoasis1_ci = 5 if p313==10
 replace pqnoasis1_ci = 6 if p313==3
 replace pqnoasis1_ci = 7 if p313==4
 replace pqnoasis1_ci = 8 if p313==7
-replace pqnoasis1_ci = 9 if p313==6 | p313==8 | p313==11
-
+replace pqnoasis1_ci = 9 if p313==11
+replace pqnoasis1_ci = . if asiste_ci==1
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
@@ -1643,16 +1652,19 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***************
 
 gen repite_ci=.
-gen repiteult_ci=.
 
+***************
+***repiteult_ci***
+***************
+
+gen repiteult_ci=.
 
 ***************
 ***edupub_ci***
 ***************
-
 gen edupub_ci=.
-replace edupub_ci=1 if (p301d==1) & asiste_ci==1
-replace edupub_ci=0 if (p301d==2) & asiste_ci==1
+replace edupub_ci=1 if (p308d==1) & asiste_ci==1
+replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -2239,7 +2251,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

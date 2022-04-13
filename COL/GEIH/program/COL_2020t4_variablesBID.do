@@ -380,7 +380,10 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
-
+***********************
+*llave lp nacionales***
+***********************
+encode dominio, gen(llave_lp)
 
 *********
 *lp_ci***
@@ -640,7 +643,7 @@ la var subemp_ci "Personas en subempleo por horas"
 ***rama_ci*** (revisar)
 *************
 ***La variable cambió de nombre, no es claro si cambió la variable también
-	
+/*
 	destring rama2d_r4, replace
 	g rama_ci = .
 	replace rama_ci = 1 if rama2d_r4 >=  1 & rama2d_r4 <=  5
@@ -665,6 +668,32 @@ la var subemp_ci "Personas en subempleo por horas"
 					8 "Establecimientos financieros, seguros e inmuebles" 	///
 					9 "Servicios sociales y comunales"
 	la val rama_ci rama_ci
+*/
+
+destring rama4d_r4, replace
+g rama_ci = .
+replace rama_ci=1 if (rama4d_r4>=100 & rama4d_r4<=322) & emp_ci==1 
+replace rama_ci=2 if (rama4d_r4>=510 & rama4d_r4<=990) & emp_ci==1 
+replace rama_ci=3 if (rama4d_r4>=1010 & rama4d_r4<=3320) & emp_ci==1 
+replace rama_ci=4 if (rama4d_r4>=3510 & rama4d_r4<=3900) & emp_ci==1 
+replace rama_ci=5 if (rama4d_r4>=4100 & rama4d_r4<=4390) & emp_ci==1 
+replace rama_ci=6 if ((rama4d_r4>=4510 & rama4d_r4<=4799) | (rama4d_r4>=5510 & rama4d_r4<=5630))& emp_ci==1 
+replace rama_ci=7 if ((rama4d_r4>=4911 & rama4d_r4<=5320) | (rama4d_r4>=6110 & rama4d_r4<=6190)) & emp_ci==1 
+replace rama_ci=8 if (rama4d_r4>=6411 & rama4d_r4<=8299) & emp_ci==1 
+replace rama_ci=9 if ((rama4d_r4>=5811 & rama4d_r4<=6022) | (rama4d_r4>=6201 & rama4d_r4<=6399) | (rama4d_r4>=8411 & rama4d_r4<=9900)) & emp_ci==1 
+label var rama_ci "Rama de actividad de la ocupación principal"
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
+
+
 
 ****************
 ***durades_ci***
@@ -883,7 +912,15 @@ la var subemp_ci "Personas en subempleo por horas"
 	g ylmho_ci = ylm_ci / (horastot_ci * 4.3)
 	la var ylmho_ci "Salario monetario de todas las actividades" 
 
-	*/
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotugarr
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpcug
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
@@ -1051,21 +1088,6 @@ g       pqnoasis1_ci = .
 	replace edupub_ci = 0 if p6175 == 2
 	la var edupub_ci "Asiste a un centro de enseñanza público"
 	
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci = (p6220==3)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-* Universidad *
-***************
-
-
-gen universidad_ci = (p6220==4)
-label var universidad_ci "1=formacion universitaria"
-
 	
 
 		**********************************
@@ -1423,7 +1445,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first

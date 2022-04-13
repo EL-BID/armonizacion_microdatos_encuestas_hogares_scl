@@ -628,6 +628,24 @@ label var rama_ci "Rama actividad principal"
 label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
+* rama secundaria
+destring p39b_reco, replace
+gen ramasec_ci=. 
+replace ramasec_ci=1 if (p39b_reco==1) & emp_ci==1
+replace ramasec_ci=2 if (p39b_reco==2) & emp_ci==1
+replace ramasec_ci=3 if (p39b_reco==3) & emp_ci==1 
+replace ramasec_ci=4 if (p39b_reco==4 | p39b_reco==5) & emp_ci==1
+replace ramasec_ci=5 if (p39b_reco==6) & emp_ci==1
+replace ramasec_ci=6 if (p39b_reco==7 | p39b_reco==9) & emp_ci==1
+replace ramasec_ci=7 if (p39b_reco==8) & emp_ci==1
+replace ramasec_ci=8 if (p39b_reco==11 | p39b_reco==12) & emp_ci==1
+replace ramasec_ci=9 if (p39b_reco==10 | (p39b_reco>=13 & p39b_reco<=21)) & emp_ci==1
+
+label var ramasec_ci "Rama actividad secundaria"
+label define ramasec_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
+
 ******************************
 *	categopri_ci
 ******************************
@@ -1024,6 +1042,8 @@ gen vivialq_ch=v1b_pago_m
 
 gen vivialqimp_ch=v1c_pagari
 
+
+
 ******************************************************************************
 *	EDUCATION
 ******************************************************************************
@@ -1252,22 +1272,6 @@ label var repiteult_ci "Ha repetido el último grado"
 
 gen repite_ci=(p7b==1)
 label var repite_ci "Ha repetido al menos un grado"
-
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=(nivel==4)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-*universidad_ci**
-*************
-
-gen universidad_ci=(nivel==5 | nivel==6 | nivel==7 | nivel==8)
-label var universidad_ci "1=formacion terciaria universitaria"
-
-
 
 drop nivel grado
 
@@ -1601,7 +1605,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

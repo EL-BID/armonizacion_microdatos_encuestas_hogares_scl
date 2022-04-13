@@ -36,7 +36,7 @@ saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
 
-keep  id impa-iof6 impaes-fex_c nper-id P6080 P6080S1
+keep  id impa-iof6 impaes-fex_c nper-id P6080 P6080S1 dominio
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 
@@ -181,16 +181,16 @@ saveold "`out'COL_`anio't3`zona'.dta", replace
 
 clear
 
-use "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
-append using "Z:\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
-merge 1:1 id using "Z:\survey\COL\GEIH\2016\t3\COL_2016t3migracion.dta", nogen
+use "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
+append using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3migracion.dta", nogen
 use "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
 append using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
 merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3migracion.dta", nogen
 
 use "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3cabecera.dta", clear
 append using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3resto.dta" 
-merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\COL_2016t3migracion.dta", nogen
+merge 1:1 id using "${surveysFolder}\survey\COL\GEIH\2016\t3\data_merge\COL_2016t3migracion.dta", nogen
 
 replace fex_c_2011=fex_c_2011/3
 sort id

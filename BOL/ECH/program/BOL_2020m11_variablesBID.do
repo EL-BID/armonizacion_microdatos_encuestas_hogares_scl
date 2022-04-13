@@ -318,8 +318,7 @@ replace afroind_ci=9 if s01a_08==3
 	***afroind_ch***
 	***************
 gen afroind_jefe=.
-gen afroind_ch  = .
-gen afroind_jefe= afroind_ci if relacion_ci==1
+replace afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 
 drop afroind_jefe
@@ -358,6 +357,24 @@ egen dis_ch =.
 /************************************************************************************************************
 * Líneas de pobreza oficiales
 ************************************************************************************************************/
+
+***********************
+*llave lp nacionales***
+***********************
+gen llave_lp=.
+replace llave_lp=1 if area==2
+replace llave_lp=2 if area==1 & (z>780 & z<783)
+replace llave_lp=3 if region_c==5 & area==1 & llave_lp==.
+replace llave_lp=4 if region_c==1 & area==1 & llave_lp==.
+replace llave_lp=5 if region_c==2 & area==1 & llave_lp==.
+replace llave_lp=6 if region_c==3 & area==1  & llave_lp==.
+replace llave_lp=7 if region_c==4 & area==1 & llave_lp==.
+replace llave_lp=8 if region_c==6 & area==1 & llave_lp==.
+replace llave_lp=9 if region_c==7 & area==1 & llave_lp==.
+replace llave_lp=10 if region_c==8 & area==1 & llave_lp==.
+replace llave_lp=11 if region_c==9 & area==1 & llave_lp==.
+replace llave_lp=12 if region_c==2 & area==1 & (z>1060 & z<1062)
+
 
 *********
 *lp_ci***
@@ -777,11 +794,30 @@ replace rama_ci=6 if (caeb_op>=6 & caeb_op<=8) & emp_ci==1
 replace rama_ci=7 if caeb_op==7 & emp_ci==1
 replace rama_ci=8 if (caeb_op>=10 & caeb_op<=11) & emp_ci==1
 replace rama_ci=9 if (caeb_op==9 | (caeb_op>=12 & caeb_op<=20)) & emp_ci==1
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+destring caeb_os, i("NA") replace
+gen ramasec_ci=.
+replace ramasec_ci=1 if caeb_os==0 & emp_ci==1
+replace ramasec_ci=2 if caeb_os==1 & emp_ci==1
+replace ramasec_ci=3 if caeb_os==2 & emp_ci==1
+replace ramasec_ci=4 if (caeb_os==3 | caeb_os==4) & emp_ci==1
+replace ramasec_ci=5 if caeb_os==5 & emp_ci==1
+replace ramasec_ci=6 if (caeb_os>=6 & caeb_os<=8) & emp_ci==1 
+replace ramasec_ci=7 if caeb_os==7 & emp_ci==1
+replace ramasec_ci=8 if (caeb_os>=10 & caeb_os<=11) & emp_ci==1
+replace ramasec_ci=9 if (caeb_os==9 | (caeb_os>=12 & caeb_os<=20)) & emp_ci==1
+label var ramasec_ci "Rama de actividad  de la ocupación secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
 
 ****************
 ***durades_ci***
@@ -1529,7 +1565,16 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=yhog
+label var yoficial_ch "Ingreso del hogar total generado por el país"
 
+gen ypeoficial_ch=yhogpc
+label var yoficial_ch "Ingreso per cápita generado por el país"
+
+destring yoficial_ch ypeoficial_ch, replace
 
 ****************************
 ***VARIABLES DE EDUCACION***
@@ -1763,7 +1808,7 @@ label variable edupre_ci "Educacion preescolar"
 * Se cambia para universidad completa o más 
 gen byte eduac_ci=.
 replace eduac_ci=1 if (s03a_02a>=72 & s03a_02a<=75)
-replace eduac_ci=1 if s03a_02a==71 //educacion normal
+replace eduac_ci=0 if s03a_02a==71 //educacion normal
 replace eduac_ci=0 if (s03a_02a>=76 & s03a_02a<=79)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 /*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
@@ -1857,20 +1902,6 @@ replace edupub_ci= 1 if s03b_07==1 & asiste_ci==1
 replace edupub_ci= 0 if s03b_07==2 & asiste_ci==1
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci = (s03a_02a>=76 & s03a_02a<=79)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-* Universidad *
-***************
-
-
-gen universidad_ci = (s03a_02a>=71 & s03a_02a<=79 ) // incluye educacion normal
-label var universidad_ci "1=formacion universitaria"
 
 
 **********************************
@@ -2408,7 +2439,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

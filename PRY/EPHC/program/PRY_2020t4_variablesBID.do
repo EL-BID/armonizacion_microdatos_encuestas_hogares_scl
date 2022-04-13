@@ -703,9 +703,24 @@ replace rama_ci=7 if (b02rec==6) & emp_ci==1
 replace rama_ci=8 if (b02rec==7) & emp_ci==1
 replace rama_ci=9 if (b02rec==8) & emp_ci==1
 
-label variable rama_ci "Rama de actividad laboral de la ocupacion principal-Grandes Divisiones (ISIC Rev"
+label variable rama_ci "Rama de actividad laboral de la ocupacion principal"
 label define rama_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
 label value rama_ci rama_ci
+
+*rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (c02rec==1) & emp_ci==1
+replace ramasec_ci=3 if (c02rec==2) & emp_ci==1
+replace ramasec_ci=4 if (c02rec==3) & emp_ci==1
+replace ramasec_ci=5 if (c02rec==4) & emp_ci==1
+replace ramasec_ci=6 if (c02rec==5) & emp_ci==1
+replace ramasec_ci=7 if (c02rec==6) & emp_ci==1
+replace ramasec_ci=8 if (c02rec==7) & emp_ci==1
+replace ramasec_ci=9 if (c02rec==8) & emp_ci==1
+label variable ramasec_ci "Rama de actividad laboral de la ocupacion secundaria"
+label define ramasec_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
+label value ramasec_ci ramasec_ci
+
 
 ****************
 ***durades_ci***
@@ -1032,6 +1047,15 @@ gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
 
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingrem
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ipcm
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 ****************************
 ***VARIABLES DE EDUCACION***
@@ -1273,7 +1297,7 @@ label variable asispre_ci "Asistencia a Educacion preescolar"
 **************
 gen byte eduac_ci=. 
 replace eduac_ci=1 if ed0504>=2401 & ed0504<=2406 //superior universitario
-replace eduac_ci=1 if ed0504>=2101 & ed0504<=2206 //formacion docente
+replace eduac_ci=0 if ed0504>=2101 & ed0504<=2206 //formacion docente
 replace eduac_ci=0 if ed0504>=2001 & ed0504<=2004 //tecnica superior
 replace eduac_ci=0 if ed0504>=2301 & ed0504<=2304 //formacion militar
 label variable eduac_ci "Superior universitario vs superior no universitario"
@@ -1361,25 +1385,6 @@ gen edupub_ci=1 if ed09==1
 replace edupub_ci=0 if ed09>=2 & ed09<=3
 replace edupub_ci=. if ed09==.
 
-***************
-***tecnica_ci**
-***************
-
-gen tecnica_ci=0
-replace tecnica_ci=1 if ed0504>=2001 & ed0504<=2004 //tecnica superior
-replace tecnica_ci=1 if ed0504>=2301 & ed0504<=2304 //formacion militar
-
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-***universidad_ci**
-***************
-
-gen universidad_ci=0
-replace universidad_ci=1 if ed0504>=2401 & ed0504<=2406 //superior universitario
-replace universidad_ci=1 if ed0504>=2101 & ed0504<=2206 //formacion docente
-
-label var universidad_ci "1=formacion terciaria universitaria"
 
 drop nivgra aedu_temp
 ********************************************
@@ -1876,7 +1881,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

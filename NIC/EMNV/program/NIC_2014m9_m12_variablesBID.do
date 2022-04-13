@@ -59,7 +59,7 @@ label var region_c "División política, departamentos"
 ***factor_ch***
 ***************
 
-gen factor_ch=peso3 
+gen factor_ch=peso2
 
 ***************
 ****idh_ch*****
@@ -452,6 +452,26 @@ label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de m
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if (s5p31>=100& s5p31<=599) & emp_ci==1
+replace ramasec_ci=2 if (s5p31>=1010 & s5p31<=1499) & emp_ci==1
+replace ramasec_ci=3 if (s5p31>=1510 & s5p31<=3729) & emp_ci==1
+replace ramasec_ci=4 if (s5p31>=4010 & s5p31<=4199) & emp_ci==1
+replace ramasec_ci=5 if (s5p31>=4510 & s5p31<=4559) & emp_ci==1
+replace ramasec_ci=6 if (s5p31>=5010 & s5p31<=5529) & emp_ci==1
+replace ramasec_ci=7 if (s5p31>=6010 & s5p31<=6429) & emp_ci==1
+replace ramasec_ci=8 if (s5p31>=6510 & s5p31<=7029) & emp_ci==1
+replace ramasec_ci=9 if (s5p31>=7111 & s5p31<=9800) & emp_ci==1
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
 
 *************
 **salmm_ci***

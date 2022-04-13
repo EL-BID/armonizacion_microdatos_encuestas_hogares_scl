@@ -526,6 +526,26 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria 
+g ramasec_ci=. 
+replace ramasec_ci=1 if (r438>=100 & r438<=322) & emp_ci==1 
+replace ramasec_ci=2 if (r438>=510 & r438<=990) & emp_ci==1 
+replace ramasec_ci=3 if (r438>=1010 & r438<=3320) & emp_ci==1 
+replace ramasec_ci=4 if (r438>=3510 & r438<=3900) & emp_ci==1 
+replace ramasec_ci=5 if (r438>=4100 & r438<=4390) & emp_ci==1 
+replace ramasec_ci=6 if ((r438>=4510 & r438<=4799) | (r438>=5510 & r438<=5630))& emp_ci==1 
+replace ramasec_ci=7 if ((r438>=4911 & r438<=5320) | (r438>=6110 & r438<=6190)) & emp_ci==1 
+replace ramasec_ci=8 if (r438>=6411 & r438<=8299) & emp_ci==1 
+replace ramasec_ci=9 if ((r438>=5811 & r438<=6022) | (r438>=6201 & r438<=6399) | (r438>=8411 & r438<=9900)) & emp_ci==1 
+
+label var ramasec_ci "Rama de actividad secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************
 ***durades_ci***
 ****************
@@ -788,6 +808,15 @@ drop remesas
 by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 label var remesas_ch "Remesas mensuales del hogar" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingfa
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpe
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 			****************************
 			***VARIABLES DE EDUCACION***
@@ -839,7 +868,7 @@ label var eduno_ci "Sin educacion"
 **************
 ***edupi_ci***
 **************
-gen edupi_ci==(aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6) 
 replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
@@ -988,19 +1017,6 @@ replace edupub_ci=1 if r210a==1 & r203==1
 replace edupub_ci=0 if (r210a==2 | r210a==3) & r203==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
-*************
-***tecnica_ci** // la traje de otro lado
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen tecnica_ci=r214==5
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
-*************
-***universidad_ci**
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen universidad_ci=r214==4
-label var universidad_ci "=1 formacion terciaria universitaria"
 
 
 		**********************************
@@ -1399,10 +1415,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *El promedio anual de la canasta basica alimentaria (Rural y urbana) se divide en 3.73 miembros para zona urbana y en 4.26 miembros para la zona rural*
 gen lp_ci =.
 *zona urbana
-replace lp_ci= 54.32*2 if  zona_c == 1
+replace lp_ci= 54.316354*2 if  zona_c == 1
 
 *zona rural
-replace lp_ci= 34.03*2 if  zona_c == 0
+replace lp_ci= 34.025822*2 if  zona_c == 0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1435,14 +1451,6 @@ replace salmm_ci=301.7 if rama_ci==3
 replace salmm_ci=304.2 if rama_ci==6
 replace salmm_ci=276.7 if salmm_ci==. /* promedio de resto de ramas*/
 label var salmm_ci "Salario minimo legal"
-
-*************
-***tecnica_ci**
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen tecnica_ci=.
-*gen tecnica_ci=(r204==5 | r215a==5)
-label var tecnica_ci "=1 formacion terciaria tecnica"
 
 *****************
 **categoinac_ci**
@@ -1645,7 +1653,7 @@ lab val pnc_ci pnc_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "\\Sdssrv03\surveys\harmonized\_DOCS\Do-Files\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
 
@@ -1689,7 +1697,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

@@ -637,10 +637,10 @@ label define ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de trans
 label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 
+
 *************
 **rama_ci****
 *************
-
 gen rama_ci=.
 replace rama_ci=1 if p04c04b_2d >=1 & p04c04b_2d <=3
 replace rama_ci=2 if p04c04b_2d >=5 & p04c04b_2d <=9
@@ -651,14 +651,14 @@ replace rama_ci=6 if (p04c04b_2d >=45 & p04c04b_2d <=47) | (p04c04b_2d >=55 & p0
 replace rama_ci=7 if (p04c04b_2d >=49 & p04c04b_2d <=53) | p04c04b_2d ==61 
 replace rama_ci=8 if p04c04b_2d >=64 & p04c04b_2d <=68
 replace rama_ci=9 if (p04c04b_2d >=69 & p04c04b_2d <=99) | (p04c04b_2d >=58 & p04c04b_2d <=60) | (p04c04b_2d >=62 & p04c04b_2d <=63)
-
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label val rama_ci rama_ci
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotació® ¤e minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcció®¢ " 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
 
 ************
 *durades_ci*
@@ -1224,19 +1224,6 @@ label define edupub_ci 1 "Público" 0 "Privado"
 label value edupub_ci edupub_ci
 la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=. //disponible solo para los graduados
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
-*************
-**universidad_ci*
-*************
-
-gen universidad_ci=. //disponible solo para los graduados
-label var universidad_ci "=1 formacion terciaria universitaria"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1605,7 +1592,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

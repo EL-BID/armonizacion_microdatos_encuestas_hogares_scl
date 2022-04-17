@@ -98,6 +98,36 @@ label value region_c region_c
 label var region_c "Division política, departamentos"
 
 
+************
+** ine01  ** 
+************
+gen ine01= depto
+destring ine01,replace
+
+label define ine01  ///
+           1 "Atlantida" ///
+           2 "Colon" ///
+           3 "Comayagua" ///
+           4 "Copan" ///
+           5 "Cortes" ///
+           6 "Choluteca" ///
+           7 "El Paraiso" ///
+           8 "Francisco Morazan" ///
+           9 "Gracias a Dios" ///
+          10 "Intibuca" ///
+          11 "Islas de la bahia" ///
+          12 "La paz" ///
+          13 "Lempira" ///
+          14 "Ocotepeque" ///
+          15 "Olancho" ///
+          16 "Santa Barbara " ///
+          17 "Valle" ///
+          18 "Yoro"
+ 
+label value ine01 ine01
+label var ine01 "Division administrativa, departamentos"
+
+
 ***********
 *factor_ch*
 ***********

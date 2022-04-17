@@ -285,6 +285,33 @@ label value region_c region_c
 label var region_c "División política, provincias"
 
 ta region_c 
+
+
+************
+** ine01  **
+************
+
+destring provincia, replace
+gen ine01= provincia
+
+label define ine01  ///
+1	"Bocas del Toro"   ///
+2	"Coclé"            ///
+3	"Colón"            ///
+4	"Chiriquí"         ///
+5	"Darién"           ///
+6	"Herrera"          ///
+7	"Los Santos"       ///
+8	"Panamá"           ///
+9	"Veraguas"         ///
+10	"Kuna Yala"        ///
+11	"Emberá"           ///
+12	"Ngäbe-Buglé"      ///
+13	"Panamá Oeste"			  
+label value ine01 ine01
+label var ine01 "División política administrativa, provincias y comarcas"
+
+
 ******************************
 *	factor_ci
 ******************************

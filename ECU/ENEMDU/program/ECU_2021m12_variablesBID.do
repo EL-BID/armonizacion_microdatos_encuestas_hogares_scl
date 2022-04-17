@@ -8,15 +8,14 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
+ ________________________________________________________________________________________________________________*
  
-
-
+ 
 global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ENEMDU
-local ANO "2020"
+local ANO "2021"
 local ronda m12 
 
 
@@ -24,12 +23,13 @@ local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
 
+<<<<<<< Updated upstream
 
-
+=======
    
+>>>>>>> Stashed changes
 capture log close
 log using "`log_file'", replace 
-
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
@@ -37,18 +37,17 @@ País: Ecuador
 Encuesta: ENEMDU
 Round: m12
 Modificado por: Eric Torres (etorresram@gmail.com)
-Fecha última modificación: Marzo 2022
+Fecha última modificación: Abril 2022
 
 ****************************************************************************/
-/***************************************************************************
-Detalle de procesamientos o modificaciones anteriores:
-MLO cambio del limite de edad de condocup_ci a 5+
 
-****************************************************************************/
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 use `$base_in', clear
-
-
 destring *, replace
+
 
 		*************************
 		***VARIABLES DEL HOGAR***
@@ -67,9 +66,8 @@ label value region_BID_c region_BID_c
 	***region_c ***
 	***************
 	gen region_c=.
-	/*No viene la variable ciudad en la versión 2018*/
 	
-	/*replace region_c=int(ciudad/10000)
+	replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
 	replace region_c =23 if canton==1706
@@ -98,7 +96,59 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-   */
+<<<<<<< Updated upstream
+
+
+	***************
+	***  ine01  ***
+	***************
+
+	gen ine01=.
+=======
+   
+   
+   	gen ine01=.
+	
+>>>>>>> Stashed changes
+	replace ine01=int(ciudad/10000)
+	
+	label define ine01 ///
+	1 "Azuay" ///
+	2 "Bolívar" ///
+	3 "Cañar" ///
+	4 "Carchi" /// 
+	5 "Cotopaxi" ///
+	6 "Chimborazo" ///
+	7 "El Oro" ///
+	8 "Esmeraldas" ///
+	9 "Guayas" ///
+	10 "Imbabura" ///
+	11 "Loja" ///
+	12 "Los Ríos" ///
+	13 "Manabí" ///
+	14 "Morona Santiago" ///
+	15 "Napo" ///
+	16 "Pastaza" ///
+	17 "Pichincha" ///
+	18 "Tungurahua" ///
+	19 "Zamora Chinchipe" ///
+	20 "Galápagos" ///
+	21 "Sucumbíos" ///
+	22 "Orellana" ///
+	23 "Santo Domingo de los Tsáchilas" ///
+<<<<<<< Updated upstream
+    24 "Santa Elena" ///
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+
+
+=======
+    24 "Santa Elena"
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+   
+   
+>>>>>>> Stashed changes
 	***************
 	***factor_ch***
 	***************
@@ -189,7 +239,6 @@ label value region_BID_c region_BID_c
 	*************
 	***sexo_ci***
 	*************
-	*la li p02
 	gen sexo_ci=p02
 	label var sexo_ci "Sexo del individuo" 
 	label def sexo_ci 1"Masculino" 2"Femenino" 
@@ -198,17 +247,16 @@ label value region_BID_c region_BID_c
 	**********
 	***edad***
 	**********
-	
 	*tab p03
 	gen edad_ci=p03 if p03<99
 	label variable edad_ci "Edad del individuo"
 
-	
+
 	**************
 	***civil_ci***
 	**************
-	*la li p06
-	gen civil_ci=1 		if p06==6
+	*p06: para personas de 12 años o más
+	gen civil_ci=1 if p06==6
 	replace civil_ci=2	if p06==1 | p06==5
 	replace civil_ci=3	if p06==2 | p06==3
 	replace civil_ci=4	if p06==4
@@ -264,7 +312,7 @@ label value region_BID_c region_BID_c
 	replace clasehog_ch=2 if (nhijos_ch>0| nconyuges_ch>0) & (notropari_ch==0 & notronopari_ch==0)
 	**** ampliado
 	replace clasehog_ch=3 if ((clasehog_ch ==2 & notropari_ch>0) & notronopari_ch==0) |(notropari_ch>0 & notronopari_ch==0) 
-	**** compuesto  (some relatives plus non relative)
+	**** compuesto  (some relatives plus non relatives)
 	replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))
 	**** corresidente
 	replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0
@@ -317,7 +365,6 @@ label value region_BID_c region_BID_c
 
 
 	
-	
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************
@@ -338,7 +385,7 @@ replace afroind_ci=9 if p15==. & edad_ci<5
 	***************
 	***afroind_ch***
 	***************
-gen afroind_jefe= afroind_ci if relacion_ci==1
+gen afroind_jefe = afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe
 
@@ -374,7 +421,7 @@ gen dis_ch=.
 	replace condocup_ci=4 if edad_ci<15
 	label define condocup_ci 1 "ocupados" 2 "desocupados" 3 "inactivos" 4 "menor de PET"
 	label value condocup_ci condocup_ci
-	label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
+	label var condocup_ci "Condicion de ocupacion"
 
 	
 	****************
@@ -558,7 +605,6 @@ gen dis_ch=.
 	*******************
 	***tiempoparc_ci***
 	*******************
-	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como había sido generada antes
 	gen tiempoparc_ci=((horaspri_ci>=1 & horaspri_ci<30) & p27==4 & emp_ci==1)
 	replace tiempoparc_ci=. if emp_ci==0
 	label var tiempoparc_c "Personas que trabajan medio tiempo" 
@@ -644,24 +690,6 @@ gen dis_ch=.
 	*************
 	***rama_ci***
 	*************
-	/*
-	gen rama_ci=.
-	replace rama_ci = 1 if rama1==1
-	replace rama_ci = 2 if rama1==2
-	replace rama_ci = 3 if rama1==3
-	replace rama_ci = 4 if rama1>=4 & rama1<=5
-	replace rama_ci = 5 if rama1==6
-	replace rama_ci = 6 if rama1==7 | rama1==9
-	replace rama_ci = 7 if rama1==8
-	replace rama_ci = 8 if rama1>=11 & rama1<=12
-	replace rama_ci = 9 if rama1>=13 & rama1<=21
-	label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
-	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
-	label val rama_ci rama_ci
-	*/
-	* Clasificacion segun variable desagregada p40
 	
 	gen rama_ci=.
 	replace rama_ci = 1 if (p40>=111 & p40<=322) & emp_ci==1
@@ -673,11 +701,30 @@ gen dis_ch=.
 	replace rama_ci = 7 if ((p40>=4911 & p40<=5320) | (p40>=6110 & p40<=6190)) & emp_ci==1
 	replace rama_ci = 8 if (p40>=6411 & p40<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((p40>=5811 & p40<=6020) | (p40>=6201 & p40<=6399) | (p40>=8410 & p40<=9900)) & emp_ci==1
-	label var rama_ci "Rama de actividad"
+	label var rama_ci "Rama de actividad de la ocupación principal"
 	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
+
+
+	* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (p52>=111 & p52<=322) & emp_ci==1
+replace ramasec_ci = 2 if (p52>=510 & p52<=990) & emp_ci==1
+replace ramasec_ci = 3 if (p52>=1010 & p52<=3320) & emp_ci==1
+replace ramasec_ci = 4 if (p52>=3510 & p52<=3900) & emp_ci==1
+replace ramasec_ci = 5 if (p52>=4100 & p52<=4390) & emp_ci==1
+replace ramasec_ci = 6 if ((p52>=4510 & p52<=4799) | (p52>=5510 & p52<=5630)) & emp_ci==1
+replace ramasec_ci = 7 if ((p52>=4911 & p52<=5320) | (p52>=6110 & p52<=6190)) & emp_ci==1
+replace ramasec_ci = 8 if (p52>=6411 & p52<=8299) & emp_ci==1
+replace ramasec_ci = 9 if ((p52>=5811 & p52<=6020) | (p52>=6201 & p52<=6399) | (p52>=8410 & p52<=9900)) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
 
 	****************
 	***durades_ci***
@@ -911,66 +958,28 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-/*
-	*************
-	***aedu_ci***
-	*************
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
-	
-	replace nivinst=. if (nivinst>=11)
-	replace anoinst=. if (anoinst>=20)
-	replace anoinst= 0 if (nivinst == 1)
-
-	* 26/08/2015: Cambios educación I.B-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst    if nivinst==4
-	replace aedu_ci = anoinst    if nivinst==5
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
-	label var aedu_ci "Anios de educacion aprobados" 
-*/
-
+			
 	*************
 	***aedu_ci***
 	*************
 	
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
+	cap clonevar nivinst = p10a /*nivel de instruccion*/ 
+	cap clonevar anoinst = p10b /*años aprobados*/
 	
-	//Sacado del formulario del encuestador
+	//Categorias nivel (formulario) - se explican los dos sistemas y cuales son sus equivalentes //
 	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 "Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
 	label values p10a P10a
 	label values nivinst P10a
-	
-	replace anoinst= 0 if (nivinst == 1)
 
-	*09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst-1    if nivinst==4
-	replace aedu_ci = anoinst-1    if nivinst==5 // Se le resta 1 dado que el nivel primaria y educación básica tienen incluido el primer año de educación inicial
-		* siguiente linea Mod. Ivan B./EDU 2015, 12
-	replace aedu_ci=0 if aedu_ci==-1
+	gen aedu_ci=.
+	replace aedu_ci=0 if nivinst==1 | nivinst==2 | nivinst==3
+	replace aedu_ci= anoinst if nivinst==4 // Años primaria
+	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
+	replace aedu_ci =0 if nivinst==5 & anoinst==-1 // para que no queden en -1 los de 0 años aprobados 
 	replace aedu_ci = anoinst+6  if nivinst==6
 	replace aedu_ci = anoinst+9  if nivinst==7
 	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
+	replace aedu_ci = anoinst+16 if nivinst==10
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
@@ -1011,14 +1020,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17 & nivinst==9) | (aedu_ci>12 & aedu_ci<16 & nivinst==8)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<16 & nivinst==9) | (aedu_ci>12 & aedu_ci<15 & nivinst==8)
 	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17 & nivinst==9) | (aedu_ci>16 &  nivinst==8) | (nivinst==10)
+	gen byte eduuc_ci= (aedu_ci>=16 & nivinst==9) | (aedu_ci>=15 &  nivinst==8) | (nivinst==10)
 	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 
@@ -1059,32 +1068,23 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***asispre_ci**
 	***************
-	/*Variable agregada por Iván Bornacelly - 01/16/2017
-	
-	replace asispre_ci=1 if pe01==1 & pe02a==3
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"*/
-	
+	* No viene la preguntá pe01 en la base 2018, 2019, 2020
 	g asispre_ci=.
-	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
-	*g asispre_ci=(p07==1 & p10a==3) //todos los valores son cero porque p10a no tiene el valor 3 "Jardín de infantes"
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
 	***eduac_ci***
 	**************
-	gen eduac_ci=.
-	label variable eduac_ci "Superior universitario vs superior no universitario"
-	
-	replace eduac_ci=1 if p10a==9
+	gen eduac_ci=.	
+	replace eduac_ci=1 if p10a==9 | p10a==10 
 	replace eduac_ci=0 if p10a==8
-	
+	label variable eduac_ci "Superior universitario vs superior no universitario"
+
 
 	***************
 	***asiste_ci***
 	***************
 	
-	* MGR Dic, 2015: corrección sintaxis para que niños <5 no aparezcan como no asiste, si no como missing
 	gen asiste_ci=(p07==1)
 	replace asiste_ci=. if p07==.
 	label variable asiste_ci "Asiste actualmente a la escuela"
@@ -1092,20 +1092,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	*Esta variable no tiene opciones predeterminadas por los que se mantienen las opciones del país
-	*Modificación SGR 2017/05/09 se cambia la opción 6 de "Temor a los maestros" a "Asistir a nivelación SENESCYT"
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
-	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar"
-	label def pqnoasis_ci 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar", add
-	label def pqnoasis_ci 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado", add
-	label def pqnoasis_ci 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Otra razón" , add
+	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar" 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar" 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado" 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Falta de recursos tecnologicos" 17"Otra razón" 
 	label val pqnoasis_ci pqnoasis_ci
 	
 	**************
     *pqnoasis1_ci*
     **************
-    **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
     g       pqnoasis1_ci = 1 if p09==3
     replace pqnoasis1_ci = 2 if p09==5
     replace pqnoasis1_ci = 3 if p09==7  | p09==9
@@ -1113,8 +1107,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     replace pqnoasis1_ci = 5 if p09==8  | p09==12 | p09==15
     replace pqnoasis1_ci = 6 if p09==2
     replace pqnoasis1_ci = 7 if p09==1 
-    replace pqnoasis1_ci = 8 if p09==10
-    replace pqnoasis1_ci = 9 if p09==4  | p09==6 | p09==13 | p09==14 | p09==16
+    replace pqnoasis1_ci = 8 if p09==10 | p09==13
+    replace pqnoasis1_ci = 9 if p09==4 | p09==6 | p09==14 | p09==16 | p09==17
 
     label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
     label value  pqnoasis1_ci pqnoasis1_ci
@@ -1136,6 +1130,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	gen edupub_ci=.
 	label var edupub_ci "Asiste a un centro de ensenanza público"
+
+	drop nivinst anoinst
 
 
 	**********************************
@@ -1517,9 +1513,7 @@ lab val ptmc_ch ptmc_ch
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
 /*_____________________________________________________________________________________________________*/
 
-
-*do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
-do Labels&ExternalVars_Harmonized_DataBank.do
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
 
@@ -1574,9 +1568,13 @@ rename p40 codindustria
 
 compress
 
-saveold ECU_2021_final, version(12) replace
-
+saveold "`base_out'", version(12) replace
 
 log close
 
+<<<<<<< Updated upstream
 
+
+
+=======
+>>>>>>> Stashed changes

@@ -1553,9 +1553,3 @@ saveold "`base_out'", version(12) replace
 
 log close
 
-<<<<<<< Updated upstream
-
-
-
-=======
->>>>>>> Stashed changes

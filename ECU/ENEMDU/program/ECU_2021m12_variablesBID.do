@@ -41,10 +41,6 @@ Fecha última modificación: Abril 2022
 
 ****************************************************************************/
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 use `$base_in', clear
 destring *, replace
 
@@ -96,7 +92,6 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-<<<<<<< Updated upstream
 
 
 	***************
@@ -104,12 +99,7 @@ label value region_BID_c region_BID_c
 	***************
 
 	gen ine01=.
-=======
-   
-   
-   	gen ine01=.
-	
->>>>>>> Stashed changes
+
 	replace ine01=int(ciudad/10000)
 	
 	label define ine01 ///
@@ -136,19 +126,10 @@ label value region_BID_c region_BID_c
 	21 "Sucumbíos" ///
 	22 "Orellana" ///
 	23 "Santo Domingo de los Tsáchilas" ///
-<<<<<<< Updated upstream
     24 "Santa Elena" ///
    label value ine01 ine01
    label var ine01 "division politico-administrativa, provincia"
 
-
-=======
-    24 "Santa Elena"
-   label value ine01 ine01
-   label var ine01 "division politico-administrativa, provincia"
-   
-   
->>>>>>> Stashed changes
 	***************
 	***factor_ch***
 	***************

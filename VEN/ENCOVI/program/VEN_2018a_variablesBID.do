@@ -1418,6 +1418,9 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 		format `var' %18.4f
 		}
 
+		clonevar codocupa=tmhp38
+		gen codindustria=.
+		
 compress
 
 

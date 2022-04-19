@@ -44,7 +44,7 @@ Creation Date:    19 Jul 2018 - 11:14:13
 	if "`pais'" == "PAN" & ("`ano'" >  "2010") local encuestas EHPM
 	
 	if "`pais'" == "PRY" & ("`ano'" <  "2018") local encuestas EPH
-	if "`pais'" == "PRY" & ("`ano'" == "2018") local encuestas EPHC
+	if "`pais'" == "PRY" & ("`ano'" >= "2018") local encuestas EPHC
 	
 	
 	if "`pais'" == "PER"                       local encuestas ENAHO
@@ -66,7 +66,10 @@ Creation Date:    19 Jul 2018 - 11:14:13
 	if "`pais'" == "ARG" &("`ano'" == "2015" )   local rondas s1
 	if "`pais'" == "ARG" &("`ano'" >= "2003" & "`ano'" <= "2014") | "`ano'" >= "2016"  local rondas s2
 * Bahamas
-	if "`pais'" == "BHS" | "`pais'" == "BLZ" | "`pais'" == "BRB" | "`pais'" == "SLV" | "`pais'" == "TTO" | "`pais'" == "URY" local rondas a
+	if "`pais'" == "BHS"  | "`pais'" == "SLV" | "`pais'" == "TTO" | "`pais'" == "URY" local rondas a
+	*| "`pais'" == "BLZ"
+	if "`pais'" == "BRB" & "`ano'" <= "2015" local rondas a
+	if "`pais'" == "BRB" & "`ano'" >= "2016" local rondas m1_m6
 * Bolivia
 	if "`pais'" == "BOL" & ("`ano'" >= "2000" & "`ano'" <= "2002")  local rondas m11_m12
 	if "`pais'" == "BOL" & ("`ano'" >= "2003" & "`ano'" <= "2004")  local rondas a2003-a2004

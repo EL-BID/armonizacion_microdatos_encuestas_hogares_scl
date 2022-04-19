@@ -8,7 +8,7 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- ________________________________________________________________________________________________________________*
+* ________________________________________________________________________________________________________________*
  
  
 global ruta = "${surveysFolder}"
@@ -36,7 +36,7 @@ Fecha última modificación: Abril 2022
 
 ****************************************************************************/
 
-use `$base_in', clear
+use `base_in', clear
 destring *, replace
 
 
@@ -121,7 +121,7 @@ label value region_BID_c region_BID_c
 	21 "Sucumbíos" ///
 	22 "Orellana" ///
 	23 "Santo Domingo de los Tsáchilas" ///
-    24 "Santa Elena" ///
+    24 "Santa Elena" 
    label value ine01 ine01
    label var ine01 "division politico-administrativa, provincia"
 

@@ -985,6 +985,15 @@ replace ylmhopri_ci=. if ylmhopri_ci<=0
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 replace ylmho_ci=. if ylmho_ci<=0
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=.
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=consu2pc
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
@@ -1531,7 +1540,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-
+clonevar codindustria=s5p1
+clonevar codocupa=s5p14
 
 compress
 

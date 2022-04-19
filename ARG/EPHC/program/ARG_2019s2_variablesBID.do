@@ -661,7 +661,6 @@ label val rama_ci rama_ci
 	*Agregando
 	gen antiguedad_ci=	antiguedad1 if antiguedad1!=.
 	replace antiguedad_ci= antiguedad2 if antiguedad2!=.
-	replace antiguedad_ci= antiguedad3 if antiguedad3!=.
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 *Note: A los empleados e independientes se les esta dejando un mâ¹©mo de 5 añ¯³ de antiguedad.
 	
@@ -1592,6 +1591,8 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
+rename pp04b_cod codindustria
+
 
 compress
 

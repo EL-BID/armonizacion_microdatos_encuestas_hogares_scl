@@ -1,5 +1,5 @@
 
-* (Versión Stata 12)
+* (VersiÃ³n Stata 12)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -7,7 +7,7 @@ set more off
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
  * utilizar un loop)
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: \\Sdssrv03\surveys
- * Se tiene acceso al servidor únicamente al interior del BID.
+ * Se tiene acceso al servidor Ãºnicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
  
@@ -31,13 +31,13 @@ log using "`log_file'", replace
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
-País: Nicaragua
+PaÃ­s: Nicaragua
 Encuesta: EMNV
 Round: Febrero-Junio
 Autores: Yessenia Loayza
-Versión 2013: Mayra Sáenz
-Última versión: Mayra Sáenz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
-Fecha última modificación: 10 de Septiembre de 2013
+VersiÃ³n 2013: Mayra SÃ¡enz
+Ãšltima versiÃ³n: Mayra SÃ¡enz - Email: mayras@iadb.org, saenzmayra.a@gmail.com
+Fecha Ãºltima modificaciÃ³n: 10 de Septiembre de 2013
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -83,7 +83,7 @@ replace region_BID_c=3 if pais=="ECU" | pais=="COL" | pais=="PER" | pais=="VEN" 
 replace region_BID_c=4 if pais=="ARG" | pais=="BRA" | pais=="CHL" | pais=="PRY" | pais=="URU" 
 replace region_BID_c=5 if pais=="HAI"
 label var region_BID_c "Regiones BID"
-label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
+label define region_BID_c 1 "CentroamÃ©rica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 gen mes_c=mesr1
 gen relacion_ci=s2p2
@@ -193,16 +193,16 @@ Variables Demograficas
 ************
 * Region_c *
 ************
-*Inclusión Mayra Sáenz - Julio 2013	
+*InclusiÃ³n Mayra SÃ¡enz - Julio 2013	
 gen region_c= i01
 
 label define region_c  ///
           5  "Nueva Segovia" ///
           10 "Jinotega" ///
           20 "Madriz" ///
-          25 "Estelí" ///
+          25 "EstelÃ­" ///
           30 "Chinandega" ///
-          35 "León" ///
+          35 "LeÃ³n" ///
           40 "Matagalpa" ///
           50 "Boaco" ///
           55 "Managua" ///
@@ -211,12 +211,12 @@ label define region_c  ///
           70 "Granada" ///
           75 "Carazo" ///
           80 "Rivas" ///
-          85 "Río San Juan" ///
+          85 "RÃ­o San Juan" ///
           91 "Raan" ///
           93 "Raas"
           
 label value region_c region_c
-label var region_c "División política, departamentos"
+label var region_c "DivisiÃ³n polÃ­tica, departamentos"
 gen factor_ci=peso2
 gen sexo_ci=s2p3
 gen edad_ci=s2p4
@@ -245,8 +245,8 @@ by idh_ch:egen byte nmenor21_ch=sum(((relacion_ci>0 & relacion_ci<5)|s2p2==9) & 
 by idh_ch:egen byte nmayor65_ch=sum(((relacion_ci>0 & relacion_ci<5)|s2p2==9) & (edad_ci>=65))
 by idh_ch:egen byte nmenor6_ch=sum(((relacion_ci>0 & relacion_ci<5)|s2p2==9) & (edad_ci<6))
 by idh_ch:egen byte nmenor1_ch=sum(((relacion_ci>0 & relacion_ci<5)|s2p2==9) & (edad_ci<1)) /*Hay que tener en cuenta que en 
-este año, se pregunto si existen pensionistas en la casa, que tecnicamente son "otros no parientes", pero que en la practica
-no deben ser incluídos en las variables de hogar (eg: _ch)*/
+este aÃ±o, se pregunto si existen pensionistas en la casa, que tecnicamente son "otros no parientes", pero que en la practica
+no deben ser incluÃ­dos en las variables de hogar (eg: _ch)*/
 
 ****************
 ***miembros_ci***
@@ -339,14 +339,14 @@ label var tipopen_ci "Tipo de pension - variable original de cada pais"
 *** instcot_ci *****
 ********************
 gen instcot_ci=.
-label var instcot_ci "institución a la cual cotiza"
+label var instcot_ci "instituciÃ³n a la cual cotiza"
 
 *************
 **pension_ci*
 *************
 *gen pension_ci=(pensionj>=1 & pensionj!=.)  
 
-*Modificación Mayra Sáenz - Septiembre 2014
+*ModificaciÃ³n Mayra SÃ¡enz - Septiembre 2014
 g pension_ci=(s5p6==7 | (pensionj>=1 & pensionj!=.))
 label var pension_ci "1=Recibe pension contributiva"
 
@@ -396,7 +396,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+* 3. CreaciÃ³n de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 gen rama_ci=.
@@ -603,11 +603,11 @@ replace bienesextc_d=regexc_d/12 if frecregex_ch==7
 /*
 gen ynlm_ci=. /*EL ingreso no laboral esta calculado a nivel hogar, no a nivel persona*/
 */
-* Se genera como el promedio entre los miembros del hogar  para mantener metodología de 1998.
+* Se genera como el promedio entre los miembros del hogar  para mantener metodologÃ­a de 1998.
 by idh_ch: egen nper = sum(miembros_ci) if miembros_ci==1
 by idh_ch: gen ynlm_ci=ynlm_ch/nper if miembros_ci==1
 
-* Modificacion Marcela Rubio - Octubre 2014: se generan como missing para consistencia con años anteriores
+* Modificacion Marcela Rubio - Octubre 2014: se generan como missing para consistencia con aÃ±os anteriores
 /*
 egen ynlnm_ch=rsum(bienes*)
 gen ynlnm_ci=ynlnm_ch/nmiembros_ch
@@ -721,12 +721,12 @@ gen spublico_ci=(s5p21==1 | s5p21==2 | s5p21==5)
 *************
 *tamemp_ci
 *************
-*Nicaragua Pequeña 1 a 5, Mediana 6 a 50, Grande Más de 50
+*Nicaragua PequeÃ±a 1 a 5, Mediana 6 a 50, Grande MÃ¡s de 50
 /*
 gen tamemp_ci=s5p19 
 replace tamemp_ci=. if s5p19==9
 label define tamemp_ci 1 "1 persona" 2 "2-4 personas" 3 "5 personas" ///
-4 "6-10 personas" 5 "11-30 personas" 6 "31-50 personas" 7"51-100 personas" 8"101 y más"
+4 "6-10 personas" 5 "11-30 personas" 6 "31-50 personas" 7"51-100 personas" 8"101 y mÃ¡s"
 label var tamemp_ci "# empleados en la empresa de la actividad principal"
 
 */
@@ -734,9 +734,9 @@ gen tamemp_ci = 1 if s5p19>=1 & s5p19<=3
 replace tamemp_ci = 2 if (s5p19>=4 & s5p19<=6)
 replace tamemp_ci = 3 if (s5p19>=7 & s5p19<=8)
 
-label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
+label define tamemp_ci 1 "PequeÃ±a" 2 "Mediana" 3 "Grande"
 label value tamemp_ci tamemp_ci
-label var tamemp_ci "Tamaño de empresa"
+label var tamemp_ci "TamaÃ±o de empresa"
 
 *******************
 ***categoinac_ci*** 
@@ -745,8 +745,8 @@ gen categoinac_ci =1 if ((s5p6==7) & condocup_ci==3)
 replace categoinac_ci = 2 if  (s5p6==6 & condocup_ci==3)
 replace categoinac_ci = 3 if  (s5p6==9 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
-label var categoinac_ci "Categoría de inactividad"
-label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
+label var categoinac_ci "CategorÃ­a de inactividad"
+label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domÃ©sticos" 4 "Otros" 
 
 *******************
 ***formal***
@@ -782,7 +782,7 @@ replace aedu_ci=9+s4p17b if s4p17a==6
 replace aedu_ci=11 if s4p17a==6 & s4p17b >2
 
 replace aedu_ci=11+s4p17b if s4p17a>=7 & s4p17a<=9
-replace aedu_ci=16+s4p17b if s4p17a>=10 /*Considerando que la carrera universitaria toma 5 años en promedio*/
+replace aedu_ci=16+s4p17b if s4p17a>=10 /*Considerando que la carrera universitaria toma 5 aÃ±os en promedio*/
 
 /* OLD CODE
 gen eduno_ci=(aedu_ci==0)
@@ -849,13 +849,13 @@ replace pqnoasis1_ci = 9 if s4p31==1 | s4p31==6 | s4p31==8 | s4p31==13 | s4p31==
 replace pqnoasis1_ci = 7 if s4p31==7
 replace pqnoasis1_ci = 9 if s4p31==9
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas econÃ³micos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interÃ©s" 5	"Quehaceres domÃ©sticos/embarazo/cuidado de niÃ±os/as" 6 "TerminÃ³ sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
 ***repite_ci***
 ***************
-*Mayra Sáenz - Septiembre 2013: La pregunta acerca de repite sólo hace referencia al último año.
+*Mayra SÃ¡enz - Septiembre 2013: La pregunta acerca de repite sÃ³lo hace referencia al Ãºltimo aÃ±o.
 *Por lo tanto, se utiliza esta variable para generar repiteul_ci
 gen repite_ci=.
 label variable repite_ci "Esta repitendo el grado o curso"
@@ -863,7 +863,7 @@ label variable repite_ci "Esta repitendo el grado o curso"
 ******************
 ***repiteult_ci***
 ******************
-* es primera vez que se matriculo en este grado o año
+* es primera vez que se matriculo en este grado o aÃ±o
 gen repiteult_ci=(s4p29a==2)
 label variable repiteult_ci "Esta repitendo ultimo grado o curso"
 
@@ -885,12 +885,12 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 /*
 Parentco
 1. Jefe(a) 
-2. Esposa(o)/Compañera(o)  
+2. Esposa(o)/CompaÃ±era(o)  
 3. Hija(o)/hijastro(a)  
 4. Padres/suegros  
 5. Yerno/nuera 
 6. Nieto(a)/bisnieto(a) 
-7. Hermano(a)/Cuñado(a) 
+7. Hermano(a)/CuÃ±ado(a) 
 8. Otros parientes del jefe(a)
 9. Sin parentesco 
 10. Trabajador domestico(a)
@@ -948,56 +948,56 @@ Parentco
 **Years of education
 * 6 years or more of age
 
-SECCIÓN 4. EDUCACIÓN PARTE B. -ESCOLARIDAD - PARA PERSONAS DE 7 AÑOS Y MAS
+SECCIÃ“N 4. EDUCACIÃ“N PARTE B. -ESCOLARIDAD - PARA PERSONAS DE 7 AÃ‘OS Y MAS
 
 ALFABETISMO
 
 16 ..... Sabe:
  1. Leer y escribir
- 2. Sólo sabe leer
+ 2. SÃ³lo sabe leer
  3. No sabe leer ni escribir
  
 NIVEL EDUCATIVO
 
-17. ¿Cuál es el nivel de estudio y el último grado o año que ..... aprobó?
+17. Â¿CuÃ¡l es el nivel de estudio y el Ãºltimo grado o aÃ±o que ..... aprobÃ³?
 
 ultcurso (s4p17a)	ultgrado(s4p17b)
  0. Ninguno ==>19
  1. Preescolar
- 2. Educación de adultos
+ 2. EducaciÃ³n de adultos
  3. Primaria
  4. Secundaria
- 5. Técnico básico
- 6. Técnico medio
- 7. Formación docente
- 8. Técnico superior
+ 5. TÃ©cnico bÃ¡sico
+ 6. TÃ©cnico medio
+ 7. FormaciÃ³n docente
+ 8. TÃ©cnico superior
  9. Universitario
- 10. Maestría
+ 10. MaestrÃ­a
  11. Doctorado
 
-18. ¿Cuál es el diploma, certificado o título más alto que obtuvo ..... ?
+18. Â¿CuÃ¡l es el diploma, certificado o tÃ­tulo mÃ¡s alto que obtuvo ..... ?
 
  0. Ninguno
  1. Preescolar
- 2. Educación de adultos
+ 2. EducaciÃ³n de adultos
  3. Primaria
  4. Secundaria
- 5. Técnico básico
- 6. Técnico medio
- 7. Formación docente
- 8. Técnico superior
+ 5. TÃ©cnico bÃ¡sico
+ 6. TÃ©cnico medio
+ 7. FormaciÃ³n docente
+ 8. TÃ©cnico superior
  9. Universitario
  10. Postgrado
- 11. Maestría
+ 11. MaestrÃ­a
  12. Doctorado
 
-MATRÍCULA ACTUAL
+MATRÃCULA ACTUAL
 
-19. ¿Se matriculó ..... en el presente año escolar, en el sistema de educación formal?
+19. Â¿Se matriculÃ³ ..... en el presente aÃ±o escolar, en el sistema de educaciÃ³n formal?
  1.Si => 21
- 2.No => Mayores de 40 años pasar a 47
+ 2.No => Mayores de 40 aÃ±os pasar a 47
  
-20. ¿Por que razón no se matriculó .... en el presente año escolar?
+20. Â¿Por que razÃ³n no se matriculÃ³ .... en el presente aÃ±o escolar?
 
 
 
@@ -1045,34 +1045,34 @@ MATRÍCULA ACTUAL
 ** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
 
 /*
-MATRÍCULA ACTUAL
+MATRÃCULA ACTUAL
 
 s4p19
-19. ¿Se matriculó ..... en el presente año escolar, en el sistema de educación formal?
+19. Â¿Se matriculÃ³ ..... en el presente aÃ±o escolar, en el sistema de educaciÃ³n formal?
  1.Si => 21
- 2.No => Mayores de 40 años pasar a 47
+ 2.No => Mayores de 40 aÃ±os pasar a 47
 
 s4p20 
-20. ¿Por que razón no se matriculó .... en el presente año escolar?
-	MAYOR O IGUAL A 14 AÑOS => 47
-	MENOR DE 14 AÑOS 	=> SECCIÓN 5
+20. Â¿Por que razÃ³n no se matriculÃ³ .... en el presente aÃ±o escolar?
+	MAYOR O IGUAL A 14 AÃ‘OS => 47
+	MENOR DE 14 AÃ‘OS 	=> SECCIÃ“N 5
 
 matricurso		s4p21b (grado)
-21. ¿Cuál es el nivel educativo y grado o año en que se matriculó 
-	..... en el presente año escolar?
+21. Â¿CuÃ¡l es el nivel educativo y grado o aÃ±o en que se matriculÃ³ 
+	..... en el presente aÃ±o escolar?
  1. Preescolar 
- 2. Educación de adultos 
+ 2. EducaciÃ³n de adultos 
  3. Primaria 
  4. Secundaria 
- 5. Técnico básico 
- 6. Técnico medio 
- 7. Formación docente 
- 8. Técnico superior 
+ 5. TÃ©cnico bÃ¡sico 
+ 6. TÃ©cnico medio 
+ 7. FormaciÃ³n docente 
+ 8. TÃ©cnico superior 
  9. Universitario 
  10. Postgrado .
- 11. Maestría 
+ 11. MaestrÃ­a 
  12. Doctorado 
- 13. Educación especial 
+ 13. EducaciÃ³n especial 
 */
 
 *** GOAL 2. ACHIEVE UNIVERSAL PRIMARY EDUCATION
@@ -1090,7 +1090,7 @@ matricurso		s4p21b (grado)
  replace NERS=1 if (edad>=13 & edad<=17) & matricurso==4 
 
 ** Upper secondary
-* Educación Secundaria: Ciclo diversificado (4o Magisterio - 5o Bachillerato)
+* EducaciÃ³n Secundaria: Ciclo diversificado (4o Magisterio - 5o Bachillerato)
 
  gen     NERS2=0 if (edad>=16 & edad<=17) & (s4p19==1 | s4p19==2)
  replace NERS2=1 if (edad>=16 & edad<=17) & (matricurso==4) & (s4p21b>=4 & s4p21b<=5)
@@ -1191,7 +1191,7 @@ En la ocupacion trabajo como:
  7. Otro, cual
 
 ocup
-9131 Personal doméstico
+9131 Personal domÃ©stico
 */
 
  gen	 WENAS=0 if (edad>=15 & edad<=64) & (categ==1 | categ==2) & (rama>=1010 & rama<=9800) & peaa==1 & ocup!=9131
@@ -1208,12 +1208,12 @@ ocup
 
 /*
 s7p23
-23. ¿Quién atendió su último parto?
+23. Â¿QuiÃ©n atendiÃ³ su Ãºltimo parto?
 
- 1. Ginecólogo(a)/médico 
+ 1. GinecÃ³logo(a)/mÃ©dico 
  2. Comadrona/partera 
  3. Enfermera/auxiliar 
- 4. Otro, cuál?_______
+ 4. Otro, cuÃ¡l?_______
  9. NS/NR
 */
 
@@ -1228,8 +1228,8 @@ s2p6
 2. Casado
 
 s7p23
-1. Sí, natural
-2. Sí, artificial
+1. SÃ­, natural
+2. SÃ­, artificial
 
 */
 
@@ -1240,9 +1240,9 @@ s7p23
 
 /*
 s1p38
-38. ¿Com qué tipo de alumbrado cuenta principalmente este hogar?
- 1. Energía eléctrica
- 2. Planta generador eléctrico
+38. Â¿Com quÃ© tipo de alumbrado cuenta principalmente este hogar?
+ 1. EnergÃ­a elÃ©ctrica
+ 2. Planta generador elÃ©ctrico
  3. Gas, kerosene, candil
  4. Otro
  5. ninguno
@@ -1257,11 +1257,11 @@ s1p38
 
 /*
 combusti (s1p43)
-43. ¿Qué combustible utilizan usualmente para cocinar?
- 1. Leña
+43. Â¿QuÃ© combustible utilizan usualmente para cocinar?
+ 1. LeÃ±a
  2. Gas butano o propano
  3. Gas o kerosene
- 4. Carbón
+ 4. CarbÃ³n
  5. Electricidad
  6. Otro
 */
@@ -1274,29 +1274,29 @@ combusti (s1p43)
 ** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
 /*
 agua (s1p20)
-20. De dónde obtiene principalmente agua este hogar:
- 1. Tubería dentro de la vivienda				==> 21
- 2. Tubería fuera de la vivienda, pero dentro del terreno	==> 21
- 3. Puesto público						==> 22
- 4. Pozo público o privado					==> 22
- 5. Río, manantial o quebrada					==> 22
- 6. Camión, carreta o pipa					==> 22
+20. De dÃ³nde obtiene principalmente agua este hogar:
+ 1. TuberÃ­a dentro de la vivienda				==> 21
+ 2. TuberÃ­a fuera de la vivienda, pero dentro del terreno	==> 21
+ 3. Puesto pÃºblico						==> 22
+ 4. Pozo pÃºblico o privado					==> 22
+ 5. RÃ­o, manantial o quebrada					==> 22
+ 6. CamiÃ³n, carreta o pipa					==> 22
  7. De otra vivienda/vecino/empresa				==> 22
  8. Otro							==> 22	
 
-21. En promedio, ¿Cuántas horas al día o días por semana
+21. En promedio, Â¿CuÃ¡ntas horas al dÃ­a o dÃ­as por semana
 cuentan con el suministro de agua?
  1. Suministro permanente					==> 26
  2. Suministro parcial
- 		___ Horas por día				==> 25
- 		___ Días por semana				==> 25
+ 		___ Horas por dÃ­a				==> 25
+ 		___ DÃ­as por semana				==> 25
  			
-22. ¿Quiénes son las personas encargadas de traer/acarrear
+22. Â¿QuiÃ©nes son las personas encargadas de traer/acarrear
 el agua a su vivienda?
 
 
-23. ¿A qué distancia de su vivienda se encuentra la fuente
-donde obtiene el agua y cuánto tiempo tarda en ir y venir?
+23. Â¿A quÃ© distancia de su vivienda se encuentra la fuente
+donde obtiene el agua y cuÃ¡nto tiempo tarda en ir y venir?
 
 DISTANCIA: ______________ Kms. ______________Mts _________ Varas
 
@@ -1306,12 +1306,12 @@ DISTANCIA: ______________ Kms. ______________Mts _________ Varas
 
 Tiempo: ________ Hrs ____________Min
 
-24. Cómo transporta principalmente el agua a su vivienda:
+24. CÃ³mo transporta principalmente el agua a su vivienda:
 25. Cuando guardan el agua para beber o cocinar, lo hacen en
 baldes, barriles, pilas, que se tapan:
 26. Paga este hogar por el agua que consumen:
-27. ¿Cuánto pagó el mes pasado o la última vez por el agua que consumió?
-28. Qué tratamiento le aplican principalmente al agua para beber
+27. Â¿CuÃ¡nto pagÃ³ el mes pasado o la Ãºltima vez por el agua que consumiÃ³?
+28. QuÃ© tratamiento le aplican principalmente al agua para beber
  1. Tal como la obtiene
  2. La hierven
  3. La cloran
@@ -1336,29 +1336,29 @@ baldes, barriles, pilas, que se tapan:
 s1p29
 1. Excusado o letrina sin tratar			==> 30
 2. Excusado o letrina con tratamiento			==> 30
-3. Inodoro, conectado a tubería de aguas negras		==> 31
-4. Inodoro, conectado a sumidero o a pozo séptico	==> 31	
-5. Inodoro, que descarga en río o quebrada		==> 31
+3. Inodoro, conectado a tuberÃ­a de aguas negras		==> 31
+4. Inodoro, conectado a sumidero o a pozo sÃ©ptico	==> 31	
+5. Inodoro, que descarga en rÃ­o o quebrada		==> 31
 6. No tiene						==> 31 
 
-30. ¿El cuarto donde está la letrina, es utilizado para
+30. Â¿El cuarto donde estÃ¡ la letrina, es utilizado para
 otros fines?
- 1. Sí, como depósito de granos
- 2. Sí, como depósito de otros
- 3. Sí, otro uso, cuál?
- 4. No, sólo como letrina
+ 1. SÃ­, como depÃ³sito de granos
+ 2. SÃ­, como depÃ³sito de otros
+ 3. SÃ­, otro uso, cuÃ¡l?
+ 4. No, sÃ³lo como letrina
  
 servexc (s1p31)
-31. ¿El servicio higiénico es de uso exclusivo del hogar?
+31. Â¿El servicio higiÃ©nico es de uso exclusivo del hogar?
 
-32. El servicio higiénico está ubicado:
+32. El servicio higiÃ©nico estÃ¡ ubicado:
  1. Dentro de la vivienda
  2. Fuera de la vivienda
 
-33. ¿A qué distancia de la vivienda está ubicado el servicio higiénico?
+33. Â¿A quÃ© distancia de la vivienda estÃ¡ ubicado el servicio higiÃ©nico?
 	Metros________	 Varas __________
 
-34. ¿A qué distancia del servicio higiénico está ubicada la fuente de abastecimiento de agua?
+34. Â¿A quÃ© distancia del servicio higiÃ©nico estÃ¡ ubicada la fuente de abastecimiento de agua?
 	Metros________	 Varas __________
 */
 
@@ -1372,10 +1372,10 @@ servexc (s1p31)
 /*
 
 tipoviv
-3. Tipo de vivienda: (Por Observación)
+3. Tipo de vivienda: (Por ObservaciÃ³n)
  1. Casa o quinta 
  2. Apartamento o pieza 
- 3. Cuarto en cuartería 
+ 3. Cuarto en cuarterÃ­a 
  4. Rancho o choza  
  5. Vivienda improvisada 
  6. Local usado como vivienda(negocio, bodega, etc) 
@@ -1385,47 +1385,47 @@ tenenviv
 16. La vivienda que ocupa este hogar es:
  1. Propia con escritura 
  2. Propia sin escritura 
- 3. Amortizándose/propia pagándose  
+ 3. AmortizÃ¡ndose/propia pagÃ¡ndose  
  4. Alquilada 
  5. Cedida o prestada 
  6. Recibida por servicios 
  7. Posando 
- 8. Otra, cuál?___________________________
+ 8. Otra, cuÃ¡l?___________________________
 
 paredes
-5. ¿Qué material predomina en las paredes exteriores de la vivienda?
+5. Â¿QuÃ© material predomina en las paredes exteriores de la vivienda?
  1. Ladrillo o bloque de barro   
  2. Bloque de cemento o concreto   
  3. Adobe o taquezal   
  4. Piedra cantera   
- 5. Bambú, caña o palma   
+ 5. BambÃº, caÃ±a o palma   
  6. Madera   
  7. Madera y concreto (minifalda)   
- 8. Lámina plycem o nicalit  
+ 8. LÃ¡mina plycem o nicalit  
  9. Ripios o desechos  
- 10. Otro,cuál? 
+ 10. Otro,cuÃ¡l? 
 
-5.A ¿En qué estado se encuentra la pared?
+5.A Â¿En quÃ© estado se encuentra la pared?
  1. Bueno
  2. Malo 
  3. Regular
  
 piso
-6. ¿Qué material predomina en los pisos de la vivienda?
+6. Â¿QuÃ© material predomina en los pisos de la vivienda?
  1. Madera, tambo, etc  
  2. Embaldosado  
  3. Ladrillo de barro   
  4. Ladrillo de cemento mosaico, terrazo  
  5. Tierra  
- 6. Otro, cuál?____________________________
+ 6. Otro, cuÃ¡l?____________________________
 
-6.A ¿En qué estado se encuentra el piso?
+6.A Â¿En quÃ© estado se encuentra el piso?
  1. Bueno
  2. Malo 
  3. Regular
  
-13. ¿De cuántos cuartos dispone este hogar? (No incluya
-cocina, baños, pasillos y garajes)
+13. Â¿De cuÃ¡ntos cuartos dispone este hogar? (No incluya
+cocina, baÃ±os, pasillos y garajes)
 */
 
  gen persroom=numper/numcuar 
@@ -1472,9 +1472,9 @@ cocina, baños, pasillos y garajes)
 ** Target 18, Indicator: "Telephone lines and celullar subscribers per 100 population"
 *Telephone Lines and Cellular Subscribers 
 /*
-51. Tiene servicio telefónico este hogar:
- 1. Si, teléfono domiciliar 
- 2. Si, teléfono celular  
+51. Tiene servicio telefÃ³nico este hogar:
+ 1. Si, telÃ©fono domiciliar 
+ 2. Si, telÃ©fono celular  
  3. Ambos 
  4. No tiene  
 */
@@ -1500,7 +1500,7 @@ cocina, baños, pasillos y garajes)
 	
 ** Target 18, Indicator: "Personal computers in use per 100 population"
 /* 
-SECCIÓN 9 PARTE E - EQUIPAMIENTO DEL HOGAR
+SECCIÃ“N 9 PARTE E - EQUIPAMIENTO DEL HOGAR
 21. Computadora
 */
 
@@ -1534,23 +1534,23 @@ SECCIÓN 9 PARTE E - EQUIPAMIENTO DEL HOGAR
 ** Disconnected Youths
 /*
 s5p6
-6. ¿Cuál fue la razón principal por la que usted no buscó trabajo:
+6. Â¿CuÃ¡l fue la razÃ³n principal por la que usted no buscÃ³ trabajo:
  1. Espera respuesta a solicitud de trabajo .
  2. Espera iniciar un nuevo trabajo 
  3. Espera cosecha o temporada de trabajo 
- 4. Tiene un trabajo esporádico / ocasional 
- 5. No tiene donde dejar a los niños 
- 6. Está estudiando / menor de edad 
+ 4. Tiene un trabajo esporÃ¡dico / ocasional 
+ 5. No tiene donde dejar a los niÃ±os 
+ 6. EstÃ¡ estudiando / menor de edad 
  7. Es pensionado / jubilado 
  8. Es rentista 
  9. Realiza los quehaceres del hogar 
  10. Incapacitado permanente para trabajar 
  11. Anciano 
- 12. Se cansó de buscar 
- 13. Piensa que no hay trabajo o que no le darán 
+ 12. Se cansÃ³ de buscar 
+ 13. Piensa que no hay trabajo o que no le darÃ¡n 
  14. Enfermedad/accidente 
- 15. Está embarazada 
- 16. Otro,cuál? 
+ 15. EstÃ¡ embarazada 
+ 16. Otro,cuÃ¡l? 
 */
 
  gen	 DISCONN=0 if (edad>=15 & edad<=24)
@@ -1629,15 +1629,15 @@ s5p6
 rename comp compxxx
 
 /*_____________________________________________________________________________________________________*/
-* Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
-* Consumidor (2011=100), líneas de pobreza
+* AsignaciÃ³n de etiquetas e inserciÃ³n de variables externas: tipo de cambio, Indice de Precios al 
+* Consumidor (2011=100), lÃ­neas de pobreza
 /*_____________________________________________________________________________________________________*/
 
 
 do "$ruta\harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
-* Verificación de que se encuentren todas las variables armonizadas 
+* VerificaciÃ³n de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
@@ -1654,8 +1654,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-
-
+clonevar codindustria=s5p14
+clonevar codocupa=s5p13
 compress
 
 

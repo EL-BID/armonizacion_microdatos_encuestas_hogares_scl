@@ -59,6 +59,7 @@ label value region_BID_c region_BID_c
 	************
 *destring depto, gen(region_c)
 rename depto region_c
+gen ine01 = region_c
 
 /*label define region_c ///
 1"Chuquisaca"         ///     

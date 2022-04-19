@@ -75,6 +75,7 @@ label values region_BID_c region_BID
 * REGION PAIS *
 ***************
 g region_c=.
+gen ine01= q01
 
 ***************
 *    ZONA     *

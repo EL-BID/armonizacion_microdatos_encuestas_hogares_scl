@@ -43,6 +43,8 @@ use `base_in', clear
 ***region_c ***
 ***************
 gen region_c=real(substr(ubigeo,1,2))
+gen ine01=region_c 
+
 label define region_c ///
 1"Amazonas"	          ///
 2"Ancash"	          ///

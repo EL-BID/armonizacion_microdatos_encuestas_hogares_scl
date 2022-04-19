@@ -1828,24 +1828,24 @@ gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
 
-	******************************
-	*** VARIABLES DE MIGRACION ***
-	******************************
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
 
-	* Variables incluidas por SCL/MIG Fernando Morales
+* Variables incluidas por SCL/MIG Fernando Morales
 
 	*******************
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=(v5030==98) 
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************
 	*** migantiguo5_ci ***
 	**********************
 	
-	gen migantiguo5_ci=.
+	gen migantiguo5_ci=(migrante_ci==1 & (v0507==1 | (v5080!=. & v5080!=98) | (migrante_ci==1 & v5065==6) | (migrante_ci==1 & v5063==4))) if migrante_ci!=. & !inrange(edad_ci,0,4)	
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************
@@ -1855,12 +1855,13 @@ gen tipopen_ci=.
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
-	
 	**********************
 	*** migrantiguo5_ci ***
 	**********************
 	
-	gen migrantiguo5_ci=.
+	gen migrantiguo5_ci=(migrante_ci==1 & (v0507==1 | (v5080!=. & v5080!=98) | (migrante_ci==1 & v5065==6) | (migrante_ci==1 & v5063==4))) if migrante_ci!=. & !inrange(edad_ci,0,4)	
+	replace migrantiguo5_ci = 0 if migantiguo5_ci != 1 & migrante_ci==1
+	replace migrantiguo5_ci = . if migrante_ci==0
 	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
 	**********************

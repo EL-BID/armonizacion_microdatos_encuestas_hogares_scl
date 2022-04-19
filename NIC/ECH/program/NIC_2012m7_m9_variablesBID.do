@@ -1089,53 +1089,60 @@ replace aedu_ci=0 if s07p15a==0 | s07p15a==1
 replace aedu_ci=s07p15b 	if s07p15a==2 & s07p15b!=99
 *Secundaria
 replace aedu_ci=6+s07p15b   if s07p15a==3 & s07p15b!=99
+replace aedu_ci=9+s07p15b   if s07p15a>=4 & s07p15a<=5 & s07p15b!=99 //tecnico basico o medio
+
 *Superior o universitaria
-replace aedu_ci=11+s07p15b   if s07p15a>=4 & s07p15a<=7 & s07p15b!=99
+replace aedu_ci=11+s07p15b   if (s07p15a==6 | s07p15a==7) & s07p15b!=99
 *Post-grado
-replace aedu_ci=16+s07p15b   if (s07p15a==8 | s07p15a==9) & s07p15b!=99
+replace aedu_ci=11+5+s07p15b   if (s07p15a==8) & s07p15b!=99 // postgrado
+replace aedu_ci=11+5+2+s07p15b   if s07p15a==9 & s07p15b!=99 // doctorado
+
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==. 
 label variable eduno_ci "Sin educacion"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.  
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6 
+gen edupc_ci=(aedu_ci==6) 
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<11) 
+gen edusi_ci=(s07p15a==3 & s07p15b<5)  //bachillerato incompleto
+replace edusi=1 if  (s07p15a==4 | s07p15a==5) & s07p15b<3 //tecnico basico o medio
+replace edusi_ci=. if aedu_ci==. 
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=0
-replace edusc_ci=1 if aedu_ci==11 
+gen edusc_ci= (s07p15a==3 & s07p15b>=5)  //bachillerato completo
+replace edusc=1 if (s07p15a==4 | s07p15a==5) & s07p15b>=3 //tecnico basico o medio completo
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 **************
 ***eduui_ci***
 **************
 *Se trabaja con incompleto par universitaria, pues no es posible determinar esto para los programas técnicos
-gen eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<16
+gen eduui_ci=s07p15a==7 & s07p15b<5
+replace eduui_ci=1 if s07p15a==6 & s07p15b<3 
+replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Superior incompleto"
 
 **************
@@ -1143,38 +1150,42 @@ label variable eduui_ci "Superior incompleto"
 **************
 *Para la educación superior no es posible saber cuantos anios dura el ciclo
 *por ello se hace una aproximación a través de titulación
-gen eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=16
+gen eduuc_ci=s07p15a==7 & s07p15b>=5
+replace eduuc_ci=1 if s07p15a==6  & s07p15b>=3
+replace eduuc_ci=1 if  s07p15a==8 | s07p15a==9
+replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Superior completo"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=.
+gen edus1i_ci=aedu_ci>6 & aedu_ci<9
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=.
+gen edus1c_ci=aedu_ci==9
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=.
+gen edus2i_ci=(s07p15a==3 & s07p15b==4)
+replace edus2i_ci=1 if (s07p15a==4 | s07p15a==5) & (s07p15b>=1 & s07p15b<=2)  
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=.
+gen edus2c_ci=(s07p15a==3 & s07p15b>=5)
+replace edus2c_ci=1 if s07p15b>=3 & (s07p15a==4 | s07p15a==5)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
@@ -1186,13 +1197,15 @@ label variable edupre_ci "Educacion preescolar"
 ***asipre_ci***
 ***************
 
-gen byte asispre_ci=.
+gen byte asispre_ci=(s07p16==1 & s07p15a==1 & s07p15b<3)
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if (s07p15a==7 | s07p15a==8 | s07p15a==9)
+replace eduac_ci=0 if (s07p15a==6)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
@@ -1206,7 +1219,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 **************
 ***pqnoasis***
 **************
-gen pqnoasis_ci=.
+gen pqnoasis_ci=s07p17
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
 **************
@@ -1245,11 +1258,7 @@ label var repiteult "Ha repetido el último grado"
 gen edupub_ci=.
 label var edupub_ci "Asiste a un centro de enseñanza público"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=(s07p15a==6)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
+
 
 
 		**********************************
@@ -1510,7 +1519,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

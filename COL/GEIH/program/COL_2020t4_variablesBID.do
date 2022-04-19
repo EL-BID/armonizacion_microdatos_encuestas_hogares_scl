@@ -73,6 +73,47 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento"
 
 
+***************
+***  ine01  ***
+***************
+gen ine01=real(dpto)
+label define ine01          /// 
+	5  "Antioquia"	        ///
+	8  "Atlantico"	        ///
+	11 "Bogota, D.C"	    ///
+	13 "Bolivar" 	        ///
+	15 "Boyacá"	            ///
+	17 "Caldas"	            ///
+	18 "Caquetá"	        ///
+	19 "Cauca"	            ///
+	20 "Cesar"	            ///
+	23 "Córdoba"	        ///
+	25 "Cundinamarca"       ///
+	27 "Chocó"	            ///
+	41 "Huila"	            ///
+	44 "La Guajira"	        ///
+	47 "Magdalena"	        ///
+	50 "Meta"	            ///
+	52 "Narino"	            ///
+	54 "Norte de Santander"	///
+	63 "Quindío"	        ///
+	66 "Risaralda"	        ///
+	68 "Santander"	        ///
+	70 "Sucre"	            ///
+	73 "Tolima"	            ///
+	76 "Valle del Cauca"	///
+	81 "Arauca"	            ///
+	85 "Casanare"	        ///
+	86 "Putumayo"	        ///
+	91 "Amazonas"	        ///
+	94 "Guainía"	        ///	
+	95 "Guaviare"	        ///	
+	97 "Vaupés" 	        ///		
+	99 "Vichada"
+label value ine01 ine01
+label var ine01 "division politico-administrativa, departamento"
+
+
 ************
 * Region_BID *
 ************
@@ -298,8 +339,6 @@ replace afroind_ci=1  if p6080 == 1
 replace afroind_ci=2 if p6080 == 3 | p6080 == 4 | p6080 == 5
 replace afroind_ci=3 if p6080 == 2 | p6080 == 6
 replace afroind_ci=. if p6080 ==.
-label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-label value afroind_ci afroind_ci 
 label var afroind_ci "Raza o etnia del individuo"
 
 	***************
@@ -307,8 +346,6 @@ label var afroind_ci "Raza o etnia del individuo"
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-lab def afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-lab val afroind_ch afroind_ch 
 label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
 drop afroind_jefe
 
@@ -322,16 +359,13 @@ label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 	***dis_ci***
 	*******************
 gen dis_ci=. 
-lab def dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
+
 label var dis_ci "Personas con discapacidad"
 
 	*******************
 	***dis_ch***
 	*******************
 gen dis_ch=. 
-lab def dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-lab val dis_ch dis_ch 
 lab var dis_ch "Hogares con miembros con discapacidad"
 
 
@@ -387,7 +421,10 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
-
+***********************
+*llave lp nacionales***
+***********************
+encode dominio, gen(llave_lp)
 
 *********
 *lp_ci***
@@ -647,7 +684,7 @@ la var subemp_ci "Personas en subempleo por horas"
 ***rama_ci*** (revisar)
 *************
 ***La variable cambió de nombre, no es claro si cambió la variable también
-	
+/*
 	destring rama2d_r4, replace
 	g rama_ci = .
 	replace rama_ci = 1 if rama2d_r4 >=  1 & rama2d_r4 <=  5
@@ -672,6 +709,32 @@ la var subemp_ci "Personas en subempleo por horas"
 					8 "Establecimientos financieros, seguros e inmuebles" 	///
 					9 "Servicios sociales y comunales"
 	la val rama_ci rama_ci
+*/
+
+destring rama4d_r4, replace
+g rama_ci = .
+replace rama_ci=1 if (rama4d_r4>=100 & rama4d_r4<=322) & emp_ci==1 
+replace rama_ci=2 if (rama4d_r4>=510 & rama4d_r4<=990) & emp_ci==1 
+replace rama_ci=3 if (rama4d_r4>=1010 & rama4d_r4<=3320) & emp_ci==1 
+replace rama_ci=4 if (rama4d_r4>=3510 & rama4d_r4<=3900) & emp_ci==1 
+replace rama_ci=5 if (rama4d_r4>=4100 & rama4d_r4<=4390) & emp_ci==1 
+replace rama_ci=6 if ((rama4d_r4>=4510 & rama4d_r4<=4799) | (rama4d_r4>=5510 & rama4d_r4<=5630))& emp_ci==1 
+replace rama_ci=7 if ((rama4d_r4>=4911 & rama4d_r4<=5320) | (rama4d_r4>=6110 & rama4d_r4<=6190)) & emp_ci==1 
+replace rama_ci=8 if (rama4d_r4>=6411 & rama4d_r4<=8299) & emp_ci==1 
+replace rama_ci=9 if ((rama4d_r4>=5811 & rama4d_r4<=6022) | (rama4d_r4>=6201 & rama4d_r4<=6399) | (rama4d_r4>=8411 & rama4d_r4<=9900)) & emp_ci==1 
+label var rama_ci "Rama de actividad de la ocupación principal"
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
+
+
 
 ****************
 ***durades_ci***
@@ -890,7 +953,15 @@ la var subemp_ci "Personas en subempleo por horas"
 	g ylmho_ci = ylm_ci / (horastot_ci * 4.3)
 	la var ylmho_ci "Salario monetario de todas las actividades" 
 
-	*/
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotugarr
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpcug
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
@@ -1058,21 +1129,6 @@ g       pqnoasis1_ci = .
 	replace edupub_ci = 0 if p6175 == 2
 	la var edupub_ci "Asiste a un centro de enseñanza público"
 	
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci = (p6220==3)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-* Universidad *
-***************
-
-
-gen universidad_ci = (p6220==4)
-label var universidad_ci "1=formacion universitaria"
-
 	
 
 		**********************************
@@ -1180,7 +1236,7 @@ label var universidad_ci "1=formacion universitaria"
 ***pared_ch***
 **************
 
-	g pared_ch = (p4010 >= 1 & p4010 <= 6)
+	g pared_ch = (p4010 >= 1 & p4010 <= 3)
 	replace pared_ch = . if p4010 == .
 	la var pared_ch "Materiales de construcción de las paredes"
 	la de pared_ch 0"No permanentes" 1"Permanentes"
@@ -1430,7 +1486,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first

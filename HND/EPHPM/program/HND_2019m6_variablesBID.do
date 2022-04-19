@@ -98,6 +98,36 @@ label value region_c region_c
 label var region_c "Division política, departamentos"
 
 
+************
+** ine01  ** 
+************
+gen ine01= depto
+destring ine01,replace
+
+label define ine01  ///
+           1 "Atlantida" ///
+           2 "Colon" ///
+           3 "Comayagua" ///
+           4 "Copan" ///
+           5 "Cortes" ///
+           6 "Choluteca" ///
+           7 "El Paraiso" ///
+           8 "Francisco Morazan" ///
+           9 "Gracias a Dios" ///
+          10 "Intibuca" ///
+          11 "Islas de la bahia" ///
+          12 "La paz" ///
+          13 "Lempira" ///
+          14 "Ocotepeque" ///
+          15 "Olancho" ///
+          16 "Santa Barbara " ///
+          17 "Valle" ///
+          18 "Yoro"
+ 
+label value ine01 ine01
+label var ine01 "Division administrativa, departamentos"
+
+
 ***********
 *factor_ch*
 ***********
@@ -174,7 +204,7 @@ gen factor_ci=factor_ch
 ***upm_ci***
 ***************
 
-gen upm_ci=.
+gen upm_ci=dominio
 label variable upm_ci "Unidad Primaria de Muestreo"
 
 ***************
@@ -554,6 +584,24 @@ label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de m
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace  ramasec_ci=1 if ramaos==1 & emp_ci==1
+replace  ramasec_ci=2 if ramaos==2 & emp_ci==1
+replace  ramasec_ci=3 if ramaos==3 & emp_ci==1
+replace  ramasec_ci=4 if ramaos==4 | ramaos==5 & emp_ci==1
+replace  ramasec_ci=5 if ramaos==6 & emp_ci==1
+replace  ramasec_ci=6 if ramaos==7 | ramaos==9 & emp_ci==1
+replace  ramasec_ci=7 if ramaos==8 | ramaos==10 & emp_ci==1
+replace  ramasec_ci=8 if ((ramaos>=11 & ramaos<=14) & (emp_ci==1))
+replace  ramasec_ci=9 if ((ramaos>=15 & ramaos<=21) & (emp_ci==1))
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
 
 *************
 **salmm_ci***
@@ -985,6 +1033,7 @@ by idh_ch, sort: egen ynlnm_ch=sum(ynlnm_ci) if miembros_ci==1, missing
 label var ynlnm_ch "Ingreso no laboral no monetario del hogar"
 
 
+
 ********
 ***NA***
 ********
@@ -1044,6 +1093,15 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 ***************
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
+
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ytothg 
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=yperhg
+label var yoficial_ch "Ingreso per cápita generado por el país"
 
 **************************INGRESOS-TRANSFERENCIAS**************************************
 
@@ -1135,6 +1193,8 @@ gen ytotalpc_ch=(ytotal_ch/nmiembros_ch) if miembros_ci==1
 label var ytotalpc_ch "Ingreso per capita del hogar"
 
 
+
+
 ***************
 ***quintil_ci***
 ***************
@@ -1183,8 +1243,11 @@ label var aedu_ci "Años de educacion aprobados"	*/
 
 *Modificación Mayra Sáenz - Octubre 2016: Corrección enviada por Ivan Bornacelly SCL/EDU	
 * Años de educacion aprobados **
+replace cp407=. if cp407==99
 replace cp410=. if cp410>9
 replace cp417=. if cp417>9
+replace cp410=3 if cp407==6 & cp407>3 //truncar valores
+
 
 ** para quienes ya no asisten
 gen aedu_ci=.
@@ -1193,7 +1256,7 @@ replace aedu_ci=cp410 if cp407==4
 replace aedu_ci=cp410+6 if cp407==5
 replace aedu_ci=cp410+9 if cp407==6
 replace aedu_ci=cp410+12 if cp407==7 | cp407==8 | cp407==9
-replace aedu_ci=cp410+17 if cp407==10 
+replace aedu_ci=cp410+12+4 if cp407==10 
 
 ** para quienes asisten actualmente
 *DZ Jul 2017: Cambio de categoria respecto al anio anterior**
@@ -1202,10 +1265,19 @@ replace aedu_ci=cp417-1 if cp412==4
 replace aedu_ci=cp417+6-1 if cp412==5
 replace aedu_ci=cp417+9-1 if cp412==6
 replace aedu_ci=cp417+12-1 if cp412==7 | cp412==8 | cp412==9
-replace aedu_ci=cp417+17-1 if cp412==10
+replace aedu_ci=cp417+12+4-1 if cp412==10
 label var aedu_ci "Años de educacion aprobados"	
 		
-		
+ // imputando los años perdidos
+ 
+ replace aedu_ci=0 if (cp407==1 | cp407==2 | cp407==3) & cp410==. // alfabetizacion 
+ replace aedu_ci=0 if (cp412==2 | cp412==3) & cp417==. // alfabetizacion
+ replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) //educacion basica
+ replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) //ciclo comun
+ replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) //diversificado
+ replace aedu_ci=12 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) //terciaria
+ replace aedu_ci=16 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) //postgrado
+ 
 ******************************
 *	eduno_ci
 ******************************
@@ -1227,13 +1299,16 @@ la var edupc_ci "Primaria Completa"
 ******************************
 *	edusi_ci 
 ******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<=11)
+replace edusi_ci=0 if aedu_ci==11 & cp409==1
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
 ******************************
 *	edusc_ci 
 ******************************
+*dependiendo de la modalidad son 11 o 12 años, entonces incluyo la variable cp409 "Finalizó sus estudios?"
 g byte edusc_ci=(aedu_ci==12)
+replace edusc_ci=1 if aedu_ci==11 & cp409==1 
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
 ******************************
@@ -1252,44 +1327,45 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 *	edus2i_ci 
 ******************************
 g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+replace edus2i_ci=0 if aedu_ci==11 & cp409==1
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ******************************
 *	edus2c_ci 
 ******************************
 g byte edus2c_ci=(aedu_ci==12)
+replace edus2c_ci=1 if aedu_ci==11 & cp409==1
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *pongo primaria y secundaria, como equivalente a basica y media
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
-replace eduui_ci=. if aedu_ci==.
+
+g byte eduui_ci=(aedu>12 & aedu<=16) & cp409==2 //no finalizó estudios
+replace eduui_ci=1 if (aedu>12 & aedu<=16) & cp409==.
+replace eduui_ci=. if aedu_ci==. 
 la var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>=17)
+
+g byte eduuc_ci=(aedu>12 & aedu<=16) & cp409==1
+replace eduuc_ci=1 if aedu_ci>16 
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 *	edupre_ci 
 ******************************
 g byte edupre_ci=.
-replace edupre_ci=1 if ((cp407==3 | cp412==3) & aedu_ci ~=.)
-replace edupre_ci=0 if (edupre_ci~=1 & aedu_ci ~=.)
-la var edupre_ci "Asiste a Educacion preescolar"
+la var edupre_ci "Tiene Educacion preescolar"
 
 ***************
 ***asipre_ci***
 ***************
 
-gen byte asispre_ci=.
-replace asispre_ci=1 if cp405==1 & cp412==3 
-recode asispre_ci (.=0)
+gen byte asispre_ci=(cp405==1 & cp412==3) 
 la var asispre_ci "Asiste a educacion prescolar"
-label variable asispre_ci "Asistencia a Educacion preescolar"
 
 ******************************
 *	pqnoasis 
@@ -1321,35 +1397,18 @@ están estudiando en un centro educativo público.
 replace edupub_ci=1 if (ed109==1|ed109==2|ed109==3|ed109==4|ed109==7|ed109==8|ed109==13)
 replace edupub_ci=0 if (ed109==5|ed109==6|ed109==9|ed109==10|ed109==11|ed109==12)
 */
-replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10)
-replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12)
+replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10) & cp405==1
+replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12) & cp405==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
-replace tecnica_ci=0 if tecnica_ci ~=1 & ( cp407!=11 & cp412!=11)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-*universidad_ci**
-*************
-
-gen universidad_ci=.
-replace universidad_ci=1 if cp407==9 | cp412==9
-replace universidad_ci=0 if universidad_ci ~=1 & ( cp407!=11 & cp412!=11)
-label var universidad_ci "1=formacion terciaria universitaria"
 
 
 **************
 ***eduac_ci***
 **************
 gen byte eduac_ci=.
-replace eduac_ci= 0 if tecnica_ci ==1
-replace eduac_ci=1 if eduuc_ci ==1 | eduui_ci ==1
+replace eduac_ci= 1 if (cp407==9 | cp407==10 | cp412==9| cp412==10)
+replace eduac_ci= 0 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1690,7 +1749,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 trapri_ci trapri_ch progpub_ci progpub_ch trapub_ci  trapub_ch capital_ci capital_ch otros_ci otros_ch ypen_ch ytotal_ci  ytotal_ch ytotalpc_ch quintil_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

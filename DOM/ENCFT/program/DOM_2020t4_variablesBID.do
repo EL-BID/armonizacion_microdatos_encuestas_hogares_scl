@@ -47,7 +47,7 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 
-
+include "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\\`PAIS'\\`ENCUESTA'\\program\\Código-de-pobreza-monetaria-2016-2020-en-STATA.do"
  
 		**********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -585,6 +585,28 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+rename rama_secundaria_cod ramac2
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (ramac2>=111 & ramac2<=322)  & emp_ci==1
+replace ramasec_ci = 2 if (ramac2>=510 & ramac2<=990)  & emp_ci==1
+replace ramasec_ci = 3 if (ramac2>=1010 & ramac2<=3320)  & emp_ci==1
+replace ramasec_ci = 4 if (ramac2>=3510 & ramac2<=3900)  & emp_ci==1
+replace ramasec_ci = 5 if (ramac2>=4100 & ramac2<=4390)  & emp_ci==1
+replace ramasec_ci = 6 if (ramac2>=4510 & ramac2<=4799)  & emp_ci==1
+replace ramasec_ci = 7 if (ramac2>=4911 & ramac2<=6399)  & emp_ci==1
+replace ramasec_ci = 8 if (ramac2>=6411 & ramac2<=6820)  & emp_ci==1
+replace ramasec_ci = 9 if (ramac2>=6910 & ramac2<=9990)  & emp_ci==1
+
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
+
 ************
 *durades_ci*
 ************
@@ -926,6 +948,16 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotaldeflactado
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpercapitadef
+label var yoficial_ch "Ingreso per cápita generado por el país"
+
+
 	****************************
 	***VARIABLES DE EDUCACION***
 	****************************
@@ -936,6 +968,33 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 
 gen	 aedu_ci=.
 
+label define nivel 1 "Pre-escolar" 2 "Primario" 3 "Secundario" 4 "Secundario-técnico" 5 "Universitario" 6 "Post-grado" 7 "Maestria" 8 "Doctorado" 9 "Ninguno" 10 "Quisqueya Aprende" 99 "Otro"
+label values nivel_ultimo_ano_aprobado nivel 
+label values nivel_se_matriculo nivel
+
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==1  
+replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 | nivel_ultimo_ano_aprobado==9
+replace aedu_ci = ultimo_ano_aprobado+8 if nivel_ultimo_ano_aprobado == 3 | nivel_ultimo_ano_aprobado == 4  
+replace aedu_ci = ultimo_ano_aprobado+12 if nivel_ultimo_ano_aprobado == 5  
+replace aedu_ci = ultimo_ano_aprobado+12+4 if inlist(nivel_ultimo_ano_aprobado, 6, 7) 
+replace aedu_ci = ultimo_ano_aprobado+12+4+2 if nivel_ultimo_ano_aprobado==8 
+
+replace aedu_ci = . if nivel_ultimo_ano_aprobado==10 | nivel_ultimo_ano_aprobado==99
+
+//imputando valores perdidos por nivel
+
+replace aedu_ci = 0 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado, 2,9) 
+replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
+replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==4
+replace aedu_ci = 12 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==5
+replace aedu_ci = 12+4 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado,6, 7)
+replace aedu_ci = 12+4+2 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==8
+replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
+
+ 
+replace aedu_ci = . if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==.
+
+/*
 ************************************************************** Actualmente asisten ***********************************************
 *prescolar
 
@@ -990,7 +1049,7 @@ replace aedu_ci = . if ultimo_ano_aprobado > 5 & nivel_ultimo_ano_aprobado == 5 
 *Post-universitario
 replace aedu_ci=ultimo_ano_aprobado+8+4+4  if nivel_ultimo_ano_aprobado==6 & asiste_centro_educativo ==2
 
-
+*/
 replace aedu_ci=.  if nivel_ultimo_ano_aprobado==.
 
 label var aedu_ci "Anios de educacion aprobados" 
@@ -999,8 +1058,8 @@ label var aedu_ci "Anios de educacion aprobados"
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen byte eduno_ci=aedu_ci==0
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Sin educacion"
 
 
@@ -1008,8 +1067,8 @@ label variable eduno_ci "Sin educacion"
 ***edupi_ci***
 **************
 
-gen byte edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen byte edupi_ci=(aedu_ci>=1 & aedu_ci<6) 
+replace edupi_ci=. if aedu_ci==. 
 label variable edupi_ci "Primaria incompleta"
 
 
@@ -1017,9 +1076,8 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=0
-*Mod 2015,05 -rev LC se incorporó nivel_ultimo_ano_aprobado==2
-replace edupc_ci=1 if aedu_ci==6
+gen byte edupc_ci=aedu_ci==6
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 
@@ -1027,8 +1085,8 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<12) 
+gen byte edusi_ci=(aedu_ci>=7 & aedu_ci<12) 
+replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 
@@ -1036,8 +1094,8 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12 & nivel_ultimo_ano_aprobado==3 
+gen byte edusc_ci=aedu_ci==12 
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 
@@ -1045,8 +1103,7 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<16
+gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==1 | mayor_nivel==2 | mayor_nivel==7 | mayor_nivel==8) // 12+ anios, titulo de bachilleres, ninguno o primario 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1054,68 +1111,62 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=0
-*2015,05 rev. LC se incorporó restriccion de ult. nivel alcanzado y aedu_ci!=.
-replace eduuc_ci=1 if aedu_ci>=16 & (nivel_ultimo_ano_aprobado==5 | nivel_ultimo_ano_aprobado==6 | nivel_ultimo_ano_aprobado==7 | nivel_ultimo_ano_aprobado==8) & aedu_ci!=.
-replace eduuc_ci=. if aedu_ci==.
+gen byte eduuc_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==3 | mayor_nivel==4 | mayor_nivel==5 | mayor_nivel==6) //entre 12 y 16 y un titulo superior
+replace eduuc_ci=1 if aedu_ci>=16 // mas de 16 todos
+replace eduuc_ci=. if aedu_ci==. 
 label variable eduuc_ci "Universitaria completa o mas"
 
 ***************
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=.
+gen byte edus1i_ci=aedu_ci>6 & aedu_ci<8 
+replace edus1i_ci=. if aedu_ci==. 
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
-replace edus1c_ci=. if aedu_ci==.
+gen byte edus1c_ci=aedu_ci==8
+replace edus1c_ci=. if aedu_ci==. 
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=.
+gen byte edus2i_ci=aedu_ci>8 & aedu_ci<12 
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=.
+gen byte edus2c_ci=aedu_ci==12 
+replace edus2c_ci=. if aedu_ci==. 
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci= (nivel_ultimo_ano_aprobado==1)
-label variable edupre_ci "Educacion preescolar"
+gen byte edupre_ci=.
+label variable edupre_ci "Educacion preescolar completa"
 
 ****************
 ***asispre_ci***
 ****************
 *Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if nivel_se_matriculo==1 & asiste_centro_educativo ==1
-	recode asispre_ci (.=0)
+	g asispre_ci=(nivel_se_matriculo==1 & asiste_centro_educativo ==1)
 	label variable asispre_ci "Asistencia a Educacion preescolar"
 	
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=1 if nivel_ultimo_ano_aprobado==5 
-replace eduac_ci=0 if nivel_ultimo_ano_aprobado==4
+gen byte eduac_ci=.  //solo disponible la diferenciacion para los con titulo
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1179,27 +1230,10 @@ label var repiteult "Ha repetido el último grado"
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-replace edupub_ci=1 if tipo_centro_estudios==2
-replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==3)
+replace edupub_ci=1 if tipo_centro_estudios==3 & asiste_centro_educativo==1 //publico
+replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==2) & asiste_centro_educativo==1 //privado y semi-privado
 label var edupub_ci "Asiste a un centro de enseñanza público"
 
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if nivel_ultimo_ano_aprobado==4 
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-**universidad_ci*
-*************
-
-gen universidad_ci=.
-replace universidad_ci=1 if nivel_ultimo_ano_aprobado==5
-recode universidad_ci .=0 
-label var tecnica_ci "1=formacion terciaria universitaria"
 
 
 **********************************
@@ -1526,21 +1560,22 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
+***********************
+*llave lp nacionales***
+***********************
+egen llave_lp=group(lpgeneral lpextrema)
+
 *********
 *lp_ci***
 *********
 
-gen lp_ci =.
-replace lp_ci =  5319.5 if zona_c==1
-replace lp_ci =  4736.2 if zona_c==0
+gen lp_ci =lpgeneral
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
-gen lpe_ci =.
-replace lpe_ci =  2395.2 if zona_c==1
-replace lpe_ci =  2295.0 if zona_c==0
+gen lpe_ci =lpextrema
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1865,7 +1900,7 @@ replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
 lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
 lab val grupo_int grupo_int
 
-
+drop ipcbase* usd* eur* chf* ars* gbp* ingasal -alqimputadodef
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
@@ -1879,7 +1914,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

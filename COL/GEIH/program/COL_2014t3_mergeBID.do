@@ -33,7 +33,7 @@ sort id
 saveold "`ruta'\`ronda1'\data_merge\pov_anual.dta", replace
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa- fex_c nper- fex_dpto_c P6080 P6080S1
+keep  id impa- fex_c nper- fex_dpto_c P6080 P6080S1 dominio
 saveold "`ruta'\`ronda1'\data_merge\pov_t3.dta", replace
 
 

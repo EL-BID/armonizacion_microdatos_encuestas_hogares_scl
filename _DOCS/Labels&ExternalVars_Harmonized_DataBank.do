@@ -16,17 +16,6 @@ g lp19_ci  = lp19_2011
 g lp31_ci  = lp31_2011 
 g lp5_ci   = lp5_2011
 
-*----------------------------------------------------------------------------------------------*
-*se debe eliminar una vez se actualice la linea de pobreza en Oct. 2021: lp31_ci2020= lp31_ci2019* (1.42015)
-
-replace lp31_ci = 2800.9949*1.420151 if anio_c==2020 & pais_c=="ARG" 
-
-replace lp19_ci = 1716.7388*1.420151 if anio_c==2020 & pais_c=="ARG" 
-
-replace lp5_ci = 4517.7334*1.420151 if anio_c==2020 & pais_c=="ARG" 
-
-*--------------------------------------------------------------------------------------------*
-
 drop ppp_2011 cpi_2011 lp19_2011 lp31_2011 lp5_2011 tc_wdi _merge
 
 
@@ -73,23 +62,23 @@ label var civil_ci "Estado civil"
 	label define civil_ci 1 "soltero/a" 2 "union_formal/informal" 3 "divorciado/a_o_separado/a" 4 "Viudo/a" , add modify
 	label value civil_ci civil_ci
 	
-label var dis_ci "Personas con discapacidad"
-	label define dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
-	label val dis_ci dis_ci
+cap label var dis_ci "Personas con discapacidad"
+	cap label define dis_ci 1 "Con Discapacidad" 0 "Sin Discapacidad"
+	cap label val dis_ci dis_ci
 	
-label var dis_ch "Hogares con miembros con discapacidad"
-	label define dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
-	label val dis_ch dis_ch 
+cap label var dis_ch "Hogares con miembros con discapacidad"
+	cap label define dis_ch 0 "Hogares sin miembros con discapacidad"1 "Hogares con al menos un miembro con discapacidad" 
+	cap label val dis_ch dis_ch 
 
-label var afroind_ci "Raza o etnia del individuo"
-	label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
-	label val afroind_ci afroind_ci 
+cap label var afroind_ci "Raza o etnia del individuo"
+	cap label define afroind_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 9 "No se le pregunta"
+	cap label val afroind_ci afroind_ci 
 
-label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
-	label define afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
-	label val afroind_ch afroind_ch 
+cap label var afroind_ch "Raza/etnia del hogar en base a raza/etnia del jefe de hogar"
+	cap label define afroind_ch 1 "Hogares con Jefatura Indígena" 2 "Hogares con Jefatura Afro-descendiente" 3 "Hogares con Jefatura Otra" 9 "Hogares sin Información étnico/racial"
+	cap label val afroind_ch afroind_ch 
 
-label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
+cap label var afroind_ano_c "Año Cambio de Metodología Medición Raza/Etnicidad"
 	
 label var jefe_ci "Jefe/a de hogar"
 label var nconyuges_ch "# de conyuges en el hogar"
@@ -264,7 +253,6 @@ label var edus2c_ci "2do ciclo de la secundaria completo"
 label var edupre_ci "Educacion preescolar"
 label var eduac_ci "Superior universitario vs superior no universitario"	
 label var asiste_ci "=1 si asiste actualmente a la escuela"
-label var tecnica_ci "=1: formacion terciaria tecnica"
 								
 label var pqnoasis_ci "Razones para no asistir a la escuela-variable original de cada pais"
 label var pqnoasis1_ci "Razones para no asistir a la escuela-variable armonizada"

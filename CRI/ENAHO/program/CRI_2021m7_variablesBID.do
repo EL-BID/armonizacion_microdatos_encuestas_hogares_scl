@@ -15,7 +15,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS CRI
 local ENCUESTA ENAHO
-local ANO "2019"
+local ANO "2021"
 local ronda m7 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -31,8 +31,9 @@ log using "`log_file'", replace
 País: Costa Rica
 Encuesta: ENAHO
 Round: m7
-Última versión: Angela Lopez E-mail: alop@iadb.org 
-Fecha última modificación: Abril 24 de 2020
+Cración: Febrero de 2022
+Última versión: 
+Fecha última modificación:
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -44,6 +45,7 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 rename *, lower
+
 
 ************
 * Region_BID *
@@ -72,8 +74,9 @@ label var region_c "División política, region de planificacion"
 
 
 *====================================================================================================================================*
-*                                                    VARIABLES DE DISENO                                                             *
+*                                                    VARIABLES DEL HOGAR                                                             *
 *====================================================================================================================================*
+* En total son 8 variables.
 
 ************************************************************
 *** 1.- FACTOR_CH: factor de expansión del hogar         ***
@@ -82,36 +85,8 @@ label var region_c "División política, region de planificacion"
 gen factor_ch=factor
 label var factor_ch "Factor de expansion del hogar"
 
-
-******************************************************************
-***2._FACTOR_CI  :Factor de Expansion a nivel individual. ***
-******************************************************************
-gen factor_ci=factor
-label variable factor_ci "Factor de expansion del individuo"
-
-******************************************************************
-***3. UMP  :Unidad Primaria de Muestreo ***
-******************************************************************
-gen upm_ci=upm
-label variable upm_ci "unidad primaria de muestreo"
-
-******************************************************************
-*** 4.estrato 
-******************************************************************
-
-gen estrato_ci=.
-label variable estrato_ci "estrato"
-
-*====================================================================================================================================*
-*                                                    VARIABLES DEL HOGAR                                                             *
-*====================================================================================================================================*
-* En total son 7 variables.
-
-
-
 ************************************************************
-*** 1._ IDH_CH: Identificador del hogar                  ***
-
+*** 2._ IDH_CH: Identificador del hogar                  ***
 ************************************************************
 
 sort upm cuestionario hogar
@@ -119,13 +94,13 @@ egen idh_ch = group(upm cuestionario hogar)
 label var idh_ch "ID del hogar"
 
 ************************************************************
-*** 2.- IDP_CI: Identificador de personas                ***
+*** 3.- IDP_CI: Identificador de personas                ***
 ************************************************************
 gen idp_ci= linea
 label var idp_ci "ID de la persona en el hogar"
 
 ************************************************************
-***3.- ZONA_C: Zona Urbana vs Rural                      ***
+***4.- ZONA_C: Zona Urbana vs Rural                      ***
 ************************************************************
 gen zona_c=0 if zona==2
 replace zona_c=1 if zona==1
@@ -134,20 +109,20 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 ************************************************************
-****4._ PAIS_C: Nombre del país.                         ***
+****5._ PAIS_C: Nombre del país.                         ***
 ************************************************************
 gen str3 pais_c="CRI"
 label variable pais_c "Pais"
 
 
 ************************************************************
-***5._ANIO_C  :Año de la Encuesta.                       ***
+***6._ANIO_C  :Año de la Encuesta.                       ***
 ************************************************************
-gen anio_c=2019
+gen anio_c=2021
 label variable anio_c "Anio de la encuesta"
 
 ************************************************************
-***6._MES_C  :Mes de la Encuesta.***
+***7._MES_C  :Mes de la Encuesta.***
 ************************************************************
 gen mes_c=7
 label variable mes_c "Mes de la encuesta"
@@ -155,7 +130,7 @@ label define mes_c 7 "Julio"
 label value mes_c mes_c
 
 ******************************************************************
-***7._RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
+***8._RELACION_CI:Relacion o parentesco con el jefe de Hogar.***
 ******************************************************************
 gen relacion_ci=1 		if a3==1
 replace relacion_ci=2 	if a3==2
@@ -176,7 +151,11 @@ label value relacion_ci relacion_ci
 * En el área de demografía son en total 18 variables.
 
 
-
+******************************************************************
+***1._FACTOR_CI  :Factor de Expansion a nivel individual. ***
+******************************************************************
+gen factor_ci=factor
+label variable factor_ci "Factor de expansion del individuo"
 
 ******************************************************************
 ***2._SEXO_CI  :Sexo.                                          ***
@@ -731,6 +710,25 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if ramaempsec==1
+replace ramasec_ci=2 if ramaempsec==2
+replace ramasec_ci=3 if ramaempsec==3
+replace ramasec_ci=4 if ramaempsec==4 | ramaempsec==5
+replace ramasec_ci=5 if ramaempsec==6
+replace ramasec_ci=6 if ramaempsec==7 | ramaempsec==9
+replace ramasec_ci=7 if ramasec_ci==8
+replace ramasec_ci=8 if ramaempsec==11 | ramaempsec==12
+replace ramasec_ci=9 if ramaempsec>=13  & ramaempsec<=21 | ramaempsec==10
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************************************************************
 ***23._DURADES_CI : Duracion del desempleo.                  ***
 ****************************************************************
@@ -1034,6 +1032,14 @@ label var ylmhopri_ci "Salario  monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario  monetario de todas las actividades"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ithn
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ipcn
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
 *====================================================================================================================================*
 *                                                   VARIABLES DE EDUCACIÓN
@@ -1088,16 +1094,16 @@ replace aedu_ci=24 if a14==114
 
 *replace aedu_ci=. if (edad_ci>=0 & edad_ci<=1) & a14==0 // Para hacerle seguimiento a la cantidad de missing
 
-// imputando valores perdidos usando el maximo de anios del nivel anterior
+// imputando valores perdidos
 
-replace aedu_ci=0 if a14==19
-replace aedu_ci=6 if a14==29
-replace aedu_ci=6 if a14==39
-replace aedu_ci=11 if a14==49
-replace aedu_ci=11 if a14==59
-replace aedu_ci=11+4 if a14==79
-replace aedu_ci=11+4 if a14==109
-replace aedu_ci=11+4+2 if a14==119
+replace aedu_ci=0 if a14==19 // sin educacion
+replace aedu_ci=6 if a14==29 // primaria completa si secundaria ignorada
+replace aedu_ci=6 if a14==39 // primaria completa si secundaria ignorada
+replace aedu_ci=11 if a14==49 // secundaria completa si parauniversitaria ignorada
+replace aedu_ci=11 if a14==59 // secundaria completa si universitaria ignorada
+replace aedu_ci=11+4 if a14==79 // universidad completa si especialidad (postgrado) ignorados
+replace aedu_ci=11+4 if a14==109 // universidad completa si maestria ignorados
+replace aedu_ci=11+4+2 if a14==119 // maestria completa si doctorado ignorados
 
 ********************************************************************************************************************************
 ***EDUNO_CI: Personas sin educacion (se refiere a primaria, secundaria y universitaria(o terciaria); excluye preescolar)
@@ -1137,7 +1143,7 @@ label variable edusc_ci "Secundaria completa"
 ********************************************************************************************************************************
 ***EDUS1I_CI: Personas que no han completado el primer ciclo de la educacion secundaria
 ********************************************************************************************************************************
-//a14 permite identificar a los que estudiaron bachilleratos tecnicos de los que no
+*usando a14 (ultimo anio aprobado) porque permite distinguir entre bachilleratos academicos y tecnicos
 gen edus1i_ci=(a14>=21 & a14<=22) | (a14>=31 & a14<=32)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
@@ -1203,7 +1209,7 @@ la var asispre_ci "Asiste a educacion prescolar"
 gen eduac_ci=.
 replace eduac_ci=1 if (a14>=51 & a14<=59)  | (a14>=41 & a14<=49 & a16b==2)
 replace eduac_ci=0 if a14>=41 & a14<=49 & a16b!=2
-replace eduac_ci=1 if a14>=71 & a14<=119 // especialidad, maestrias y doctorados
+replace eduac_ci=1 if a14>=71 & a14<=119 // especialidad, maestria y doctorados. 
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ********************************************************************************************************************************
@@ -1262,6 +1268,7 @@ gen edupub_ci=.
 replace edupub_ci=1 if (a15a==1| a15a==2) & asiste_ci==1 // incluye los semi publicos
 replace edupub_ci=0 if (a15a==3 | a15a==4) & asiste_ci==1 // incluye los extranjeros
 label var edupub_ci "Personas asisten a centros de enseñanza públicos"
+
 
 *====================================================================================================================================*
 *                                                     VARIABLES DE LA VIVIENDA                                                       *
@@ -1587,25 +1594,10 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	gen migrantelac_ci=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* No se puede diferenciar paises LAC de no LAC */
-	
-	**********************
-	*** migrantiguo5_ci **
-	**********************
-	
-	gen migrantiguo5_ci=.
-	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-	/* La encuesta pregunta por la residencia de hace 2 años */
-		
-	**********************
-	*** miglac_ci ***
-	**********************
-	
-	gen miglac_ci=.
-	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
-	/* No se puede diferenciar paises LAC de no LAC */
+
 
 ******************************
-* Variables SPH - PMTC y PNC *
+******    PTMC y PNC     *****
 ******************************
 
 * PTMC: Avancemos (a partir de 2019 se añadió "Crecemos")
@@ -1613,7 +1605,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 
 * Ingreso del hogar
 egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
-bys idh_ch: egen y_hog = sum(ingreso_total)
+bys idh_ch: egen yhog = sum(ingreso_total)
 drop ingreso_total
 
 * Monto de PTMC
@@ -1624,24 +1616,19 @@ bys idh_ch: egen ing_ptmc = sum(tmc)
 gen percibe_ptmc=(a9a==1 | a9a==5)
 bys idh_ch: egen ptmc_ch=max(percibe_ptmc)
 
-replace ing_ptmc=. if y_hog==.
+replace ing_ptmc=. if yhog==.
 replace ptmc_ch  = 1 if (ing_ptmc>0 & ing_ptmc!=.)
 
 * Beneficiarios PNC
 gen pnc_ci=(a11==6)
 gen ing_pnc = 0
-replace ing_pnc=. if y_hog==.
-
-* Personas que perciben pensiones
-bys idh_ch: egen ing_pension = sum(h9e1)
-replace ing_pension=. if y_hog==.
+replace ing_pnc=. if yhog==.
 
 * Adultos mayores
 gen mayor64_ci=(edad_ci>64 & edad_ci!=.)
 
 * Ingreso neto del hogar
-gen y_pc     = y_hog / nmiembros_ch 
-gen y_pc_net = (y_hog - ing_ptmc - ing_pension) / nmiembros_ch
+gen y_pc_net = (yhog - ing_ptmc -ing_pnc) / nmiembros_ch
 
 * Etiquetas
 lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
@@ -1658,41 +1645,12 @@ lab val pnc_ci pnc_ci
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
-*_____________________________________________________________________________________________________*
-
-*  Pobres extremos, pobres moderados, vulnerables y no pobres 
-* con base en ingreso neto (Sin transferencias)
-* y líneas de pobreza internacionales
-gen     grupo_int = 1 if (y_pc_net<lp31_ci)
-replace grupo_int = 2 if (y_pc_net>=lp31_ci & y_pc_net<(lp31_ci*1.6))
-replace grupo_int = 3 if (y_pc_net>=(lp31_ci*1.6) & y_pc_net<(lp31_ci*4))
-replace grupo_int = 4 if (y_pc_net>=(lp31_ci*4) & y_pc_net<.)
-
-tab grupo_int, gen(gpo_ingneto)
-
-* Crear interacción entre recibirla la PTMC y el gpo de ingreso
-gen ptmc_ingneto1 = 0
-replace ptmc_ingneto1 = 1 if ptmc_ch == 1 & gpo_ingneto1 == 1
-
-gen ptmc_ingneto2 = 0
-replace ptmc_ingneto2 = 1 if ptmc_ch == 1 & gpo_ingneto2 == 1
-
-gen ptmc_ingneto3 = 0
-replace ptmc_ingneto3 = 1 if ptmc_ch == 1 & gpo_ingneto3 == 1
-
-gen ptmc_ingneto4 = 0
-replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
-
-lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
-lab val grupo_int grupo_int
-
-
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-upm_ci estrato_ci afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
@@ -1711,7 +1669,7 @@ rename ramaemppr codindustria
 compress
 
 
-save "`base_out'", replace
+saveold "`base_out'", replace
 
 
 log close

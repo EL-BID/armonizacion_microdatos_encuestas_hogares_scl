@@ -637,10 +637,10 @@ label define ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de trans
 label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 
+
 *************
 **rama_ci****
 *************
-
 gen rama_ci=.
 replace rama_ci=1 if p04c04b_2d >=1 & p04c04b_2d <=3
 replace rama_ci=2 if p04c04b_2d >=5 & p04c04b_2d <=9
@@ -651,14 +651,14 @@ replace rama_ci=6 if (p04c04b_2d >=45 & p04c04b_2d <=47) | (p04c04b_2d >=55 & p0
 replace rama_ci=7 if (p04c04b_2d >=49 & p04c04b_2d <=53) | p04c04b_2d ==61 
 replace rama_ci=8 if p04c04b_2d >=64 & p04c04b_2d <=68
 replace rama_ci=9 if (p04c04b_2d >=69 & p04c04b_2d <=99) | (p04c04b_2d >=58 & p04c04b_2d <=60) | (p04c04b_2d >=62 & p04c04b_2d <=63)
-
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label val rama_ci rama_ci
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotació® ¤e minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcció®¢ " 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
 
 ************
 *durades_ci*
@@ -1089,10 +1089,18 @@ replace aedu_ci=14 if (p03a05a==5 & p03a05b==2)
 replace aedu_ci=15 if (p03a05a==5 & p03a05b==3)
 replace aedu_ci=16 if (p03a05a==5 & p03a05b==4)
 replace aedu_ci=17 if (p03a05a==5 & p03a05b==5) 
+replace aedu_ci=18 if (p03a05a==5 & p03a05b==6) //ingenierias duran 6 años.  
+replace aedu_ci=19 if (p03a05a==5 & p03a05b==7) //quizas es medicina
 
 *Postgrado
-replace aedu_ci=18 if (p03a05a==6 | p03a05a==7) & p03a05b==1 
-replace aedu_ci=19 if (p03a05a==6 | p03a05a==7) & p03a05b==2 
+replace aedu_ci=12+6 if (p03a05a==6 & p03a05b==1) 
+replace aedu_ci=12+6+1 if (p03a05a==6 & p03a05b==2)
+
+replace aedu_ci=12+6+2 + p03a05b if (p03a05a==7) // doctorado
+
+//imputando los valores perdidos
+
+replace aedu_ci=0 if p03a05a==0 & p03a05b==. 
 
 *replace aedu_ci=.  if p03a05a==. & p03a05b ==. // Mayra Sáenz- Agosto 2014 Desactivo esta opción porque elimina a los de ninguna educación.
 
@@ -1120,13 +1128,15 @@ la var edupc_ci "Primaria Completa"
 ******************************
 *	edusi_ci 
 ******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=1 if aedu_ci==11 & p03a06<100 // sin diploma de bachiller
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
 ******************************
 *	edusc_ci 
 ******************************
-g byte edusc_ci=(aedu_ci==12)
+g byte edusc_ci=(aedu_ci==12) // son 11 o 12
+replace edusc_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 // con diploma de bachiller
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
 ******************************
@@ -1144,42 +1154,44 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 ******************************
 *	edus2i_ci 
 ******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
+replace edus2i_ci=1 if aedu_ci==11 & p03a06<100
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ******************************
 *	edus2c_ci 
 ******************************
 g byte edus2c_ci=(aedu_ci==12)
+replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 //con 11 anios pero grado de bachiller
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *pongo primaria y secundaria, como equivalente a basica y media
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+g byte eduui_ci=(aedu_ci>12 &  p03a06>=100 & p03a06<999) | (aedu_ci>12 &  p03a06>=100 & p03a06==.) // mas de 12 anios pero grado de bachiller 
 replace eduui_ci=. if aedu_ci==.
 la var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>=17)
+g byte eduuc_ci=(aedu_ci>12 &  p03a06>=1000 & p03a06<9999 ) // mas de 12 anios y grado terciario
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 *	edupre_ci 
 ******************************
-g byte edupre_ci=0 if aedu_ci ~=.
-replace edupre_ci=1 if p03a04a==1 & aedu_ci ~=.
-la var edupre_ci "Asiste a Educacion preescolar"
+g byte edupre_ci=.
+label variable edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
-g byte asispre_ci=.
+g byte asispre_ci=p03a04a==1
+la var asispre_ci "Asiste a Educacion preescolar"
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=.
+gen byte eduac_ci=. // esta disponible solo para los con titulo
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ******************************
@@ -1205,19 +1217,12 @@ g repiteult_ci=. /*NA*/
 ******************************
 *	edupub_ci 
 ******************************
-g edupub_ci=.
-replace edupub_ci=1 if p03a03==1 
-replace edupub_ci=0 if p03a03==2
+g edupub_ci=(p03a02==1 & p03a03==1) // asiste y es publico
+replace edupub_ci=0 if p03a02==1 & p03a03==2 // asiste y es privado
+replace edupub_ci=. if p03a02!=1 // no asiste
 label define edupub_ci 1 "Público" 0 "Privado"
 label value edupub_ci edupub_ci
 la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
-
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=.
-label var tecnica_ci "=1 formacion terciaria tecnica"
 
 
 **********************************
@@ -1587,12 +1592,13 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-
+rename p04c04b_2d codindustria
+rename p04c02b_2d codocupa
 
 
 compress

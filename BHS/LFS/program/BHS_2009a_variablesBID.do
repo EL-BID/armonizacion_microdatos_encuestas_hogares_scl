@@ -1300,13 +1300,13 @@ rename education education_1
 *** VARIABLES DE MIGRACION ***
 ******************************
 
-* Variables incluidas por SCL/MIG Jua Camilo Perdomo
+* Variables incluidas por SCL/MIG Fernando Morales
 
 	*******************
 	*** migrante_ci ***
 	*******************
 	
-	gen migrante_ci=.
+	gen migrante_ci=(inlist(where_born,2)) if where_born!=. & where_born!=9		/* Categoria Not Stated no se incluye en la variable*/
 	label var migrante_ci "=1 si es migrante"
 	
 	**********************

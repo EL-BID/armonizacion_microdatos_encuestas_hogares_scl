@@ -478,8 +478,24 @@ replace rama_ci=6 if (cq131misi>=5000 & cq131misi<=5599) & emp_ci==1
 replace rama_ci=7 if (cq131misi>=6000 & cq131misi<=6420) & emp_ci==1
 replace rama_ci=8 if (cq131misi>=6500 & cq131misi<=7499) & emp_ci==1
 replace rama_ci=9 if (cq131misi>=7500 & cq131misi<=9900) & emp_ci==1
-label define rama 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
-label values rama_ci rama
+label define rama_ci 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
+label values rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if (cq131oisi>=0 & cq131oisi<=502) & emp_ci==1 /* indmisic for 2004 */
+replace ramasec_ci=2 if (cq131oisi>=1000 & cq131oisi<=1421) & emp_ci==1
+replace ramasec_ci=3 if (cq131oisi>=1500 & cq131oisi<=3799) & emp_ci==1
+replace ramasec_ci=4 if (cq131oisi>=4010 & cq131oisi<=4100) & emp_ci==1
+replace ramasec_ci=5 if (cq131oisi>=4500 & cq131oisi<=4599) & emp_ci==1
+replace ramasec_ci=6 if (cq131oisi>=5000 & cq131oisi<=5599) & emp_ci==1
+replace ramasec_ci=7 if (cq131oisi>=6000 & cq131oisi<=6420) & emp_ci==1
+replace ramasec_ci=8 if (cq131oisi>=6500 & cq131oisi<=7499) & emp_ci==1
+replace ramasec_ci=9 if (cq131oisi>=7500 & cq131oisi<=9900) & emp_ci==1
+label define ramasec_ci 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
+label values ramasec_ci ramasec_ci
+
 
 *********************************
 *  TRABAJA EN EL SECTOR PUBLICO *
@@ -1335,7 +1351,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-
+rename cq131misi codindustria
+rename cq130m codocupa
 
 compress
 

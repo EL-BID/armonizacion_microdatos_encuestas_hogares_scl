@@ -1163,6 +1163,8 @@ replace vivialq_ch=. if rentimput==999999
 gen vivialqimp_ch=rentimput if viviprop_ch==1 
 replace vivialqimp_ch=. if rentimp==999999
 
+rename occupation codocupa
+gen codindustria=.
 compress
 saveold "`base_out'", replace
 log off

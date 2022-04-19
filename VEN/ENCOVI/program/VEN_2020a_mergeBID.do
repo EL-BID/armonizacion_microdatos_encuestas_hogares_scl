@@ -13,7 +13,7 @@ set more off
 global ruta = "${surveysFolder}"
 local PAIS VEN
 local ENCUESTA ENCOVI
-local ANO "2019"
+local ANO "2020"
 local ronda a 
 
 local base_out = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"                  
@@ -33,10 +33,10 @@ Fecha última modificación: Junio 2020
 ****************************************************************************/
 *Nota: Hay 76 personas que no tienen hogar. Estas personas se borran de la muestra*
 
-use "$ruta\survey\VEN\ENCOVI\2019\a\data_orig\personas_VI-IX_XIV_XV.dta", clear
+use "$ruta\survey\VEN\ENCOVI\2020\a\data_orig\personas_VI-IX_XIV_XV.dta", clear
 
 *hago el merge con viviendas
-mmerge interview__key interview__id  using "\$ruta\survey\VEN\ENCOVI\2019\a\data_orig\hogares_II-V_XIII.dta", t(n:1)
+merge m:1 interview__key interview__id  using "\$ruta\survey\VEN\ENCOVI\2020\a\data_orig\hogares_II-V_XIII.dta"
 
 drop if _merge==1
 compress

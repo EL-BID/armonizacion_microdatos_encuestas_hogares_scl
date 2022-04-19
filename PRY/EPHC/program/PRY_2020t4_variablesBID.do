@@ -703,9 +703,24 @@ replace rama_ci=7 if (b02rec==6) & emp_ci==1
 replace rama_ci=8 if (b02rec==7) & emp_ci==1
 replace rama_ci=9 if (b02rec==8) & emp_ci==1
 
-label variable rama_ci "Rama de actividad laboral de la ocupacion principal-Grandes Divisiones (ISIC Rev"
+label variable rama_ci "Rama de actividad laboral de la ocupacion principal"
 label define rama_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
 label value rama_ci rama_ci
+
+*rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (c02rec==1) & emp_ci==1
+replace ramasec_ci=3 if (c02rec==2) & emp_ci==1
+replace ramasec_ci=4 if (c02rec==3) & emp_ci==1
+replace ramasec_ci=5 if (c02rec==4) & emp_ci==1
+replace ramasec_ci=6 if (c02rec==5) & emp_ci==1
+replace ramasec_ci=7 if (c02rec==6) & emp_ci==1
+replace ramasec_ci=8 if (c02rec==7) & emp_ci==1
+replace ramasec_ci=9 if (c02rec==8) & emp_ci==1
+label variable ramasec_ci "Rama de actividad laboral de la ocupacion secundaria"
+label define ramasec_ci 1 "Agricultura,_caza,_silvicultura_y_pesca" 2 "Explotación_de_minas_y_canteras" 3 "Industrias_manufactureras" 4 "Electricidad,_gas_y_agua" 5 "Construcción" 6 "Comercio,_restaurantes_y_hoteles" 7 "Transporte_y_almacenamiento" 8 "Establecimientos_financieros,_seguros_e" 9 "Servicios_sociales_y_comunales"
+label value ramasec_ci ramasec_ci
+
 
 ****************
 ***durades_ci***
@@ -1032,6 +1047,15 @@ gen ylmhopri_ci=ylmpri_ci/(horaspri_ci*4.3)
 
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingrem
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ipcm
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 ****************************
 ***VARIABLES DE EDUCACION***
@@ -1149,9 +1173,9 @@ replace aedu_ci=aedu_temp+6 if nivgra>=604 & nivgra<=706 // Educación Secundari
 *replace aedu_ci=aedu_temp+9 if nivgra>=900 & nivgra<=1003 // Educación Media 
 replace aedu_ci=aedu_temp+9 if nivgra>=801 & nivgra<=1103 // Educación Media (se incorporó la Educación Media Abierta)
 replace aedu_ci=aedu_temp+12 if nivgra>=2000 & nivgra<=2406 // Educación superior (técnica, tecnológica, universitaria)
-replace aedu_ci=aedu_temp+12+5 if ed06c==8 // Doctorado
-replace aedu_ci=aedu_temp+12+2 if ed06c==9 // Maestria
-replace aedu_ci=aedu_temp+12+1 if ed06c==10 // Especialización
+replace aedu_ci=aedu_temp+12+5+1 if ed06c==8 // Doctorado
+replace aedu_ci=aedu_temp+12+5 if ed06c==9 // Maestria
+replace aedu_ci=aedu_temp+12+5 if ed06c==10 // Especialización
 
 *Añadir programa de formación profesional (no bachillerato de la media)
 replace aedu_ci=aedu_temp+6 if nivgra>=1701 & nivgra<=1703
@@ -1169,8 +1193,7 @@ replace aedu_ci=0 if ed03==6
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen byte eduno_ci=aedu_ci==0
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
@@ -1178,8 +1201,7 @@ label variable eduno_ci "Cero anios de educacion"
 ***edupi_ci***
 **************
 
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
+gen byte edupi_ci=aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -1187,8 +1209,7 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+gen byte edupc_ci=aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -1196,8 +1217,7 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
+gen byte edusi_ci=aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -1205,8 +1225,7 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12
+gen byte edusc_ci=aedu_ci==12
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -1214,8 +1233,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<9
+gen byte edus1i_ci=aedu_ci>6 & aedu_ci<9
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1223,8 +1241,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -1232,16 +1249,14 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+gen byte edus2i_ci=aedu_ci>9 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
+gen byte edus2c_ci=aedu_ci==12
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
@@ -1249,8 +1264,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
+gen byte eduui_ci= (aedu_ci>12 & aedu_ci<17) & (ed06c==14 | ed06c==15 | ed06c==99) // no obtuvo titulo
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1258,8 +1272,8 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
+gen byte eduuc_ci=aedu_ci>=17 //17 o mas, todos
+replace eduuc_ci=1 if (aedu_ci>12 & aedu_ci<17 & ed06c!=14 & ed06c!=15 & ed06c!=99) // menos de 17 pero tiene titulo
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria incompleta o mas"
 
@@ -1270,20 +1284,22 @@ label variable eduuc_ci "Universitaria incompleta o mas"
 
 gen byte edupre_ci=. 
 label variable edupre_ci "Educacion preescolar"
-replace edupre_ci=1 if nivgra>=100 & nivgra!=.
-replace edupre_ci=0 if nivgra==0
 
 ***************
 ***asis_pre***
 ***************
 
-gen byte asispre_ci=.
-label variable edupre_ci "Asistencia a Educacion preescolar" 
+gen byte asispre_ci=(ed08==1)
+label variable asispre_ci "Asistencia a Educacion preescolar" 
 
 **************
 ***eduac_ci***
 **************
 gen byte eduac_ci=. 
+replace eduac_ci=1 if ed0504>=2401 & ed0504<=2406 //superior universitario
+replace eduac_ci=0 if ed0504>=2101 & ed0504<=2206 //formacion docente
+replace eduac_ci=0 if ed0504>=2001 & ed0504<=2004 //tecnica superior
+replace eduac_ci=0 if ed0504>=2301 & ed0504<=2304 //formacion militar
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1367,16 +1383,10 @@ label variable repiteult_ci "Esta repitendo ultimo grado o curso"
 
 gen edupub_ci=1 if ed09==1 
 replace edupub_ci=0 if ed09>=2 & ed09<=3
+replace edupub_ci=. if ed09==.
 
-***************
-***tecnica_ci**
-***************
 
-gen tecnica_ci=.
-replace tecnica_ci=1 if ed0504>=1801 & ed0504<=1804
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
-
+drop nivgra aedu_temp
 ********************************************
 ***Variables de Infraestructura del hogar***
 ********************************************
@@ -1871,7 +1881,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

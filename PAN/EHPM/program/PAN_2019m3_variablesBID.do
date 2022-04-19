@@ -285,6 +285,33 @@ label value region_c region_c
 label var region_c "División política, provincias"
 
 ta region_c 
+
+
+************
+** ine01  **
+************
+
+destring provincia, replace
+gen ine01= provincia
+
+label define ine01  ///
+1	"Bocas del Toro"   ///
+2	"Coclé"            ///
+3	"Colón"            ///
+4	"Chiriquí"         ///
+5	"Darién"           ///
+6	"Herrera"          ///
+7	"Los Santos"       ///
+8	"Panamá"           ///
+9	"Veraguas"         ///
+10	"Kuna Yala"        ///
+11	"Emberá"           ///
+12	"Ngäbe-Buglé"      ///
+13	"Panamá Oeste"			  
+label value ine01 ine01
+label var ine01 "División política administrativa, provincias y comarcas"
+
+
 ******************************
 *	factor_ci
 ******************************
@@ -627,6 +654,24 @@ replace rama_ci=9 if (p28reco==10 | (p28reco>=13 & p28reco<=21)) & emp_ci==1
 label var rama_ci "Rama actividad principal"
 label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
+
+* rama secundaria
+destring p39b_reco, replace
+gen ramasec_ci=. 
+replace ramasec_ci=1 if (p39b_reco==1) & emp_ci==1
+replace ramasec_ci=2 if (p39b_reco==2) & emp_ci==1
+replace ramasec_ci=3 if (p39b_reco==3) & emp_ci==1 
+replace ramasec_ci=4 if (p39b_reco==4 | p39b_reco==5) & emp_ci==1
+replace ramasec_ci=5 if (p39b_reco==6) & emp_ci==1
+replace ramasec_ci=6 if (p39b_reco==7 | p39b_reco==9) & emp_ci==1
+replace ramasec_ci=7 if (p39b_reco==8) & emp_ci==1
+replace ramasec_ci=8 if (p39b_reco==11 | p39b_reco==12) & emp_ci==1
+replace ramasec_ci=9 if (p39b_reco==10 | (p39b_reco>=13 & p39b_reco<=21)) & emp_ci==1
+
+label var ramasec_ci "Rama actividad secundaria"
+label define ramasec_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
 
 ******************************
 *	categopri_ci
@@ -1024,6 +1069,8 @@ gen vivialq_ch=v1b_pago_m
 
 gen vivialqimp_ch=v1c_pagari
 
+
+
 ******************************************************************************
 *	EDUCATION
 ******************************************************************************
@@ -1083,6 +1130,9 @@ replace nivel = 6 if p6>=61 & p6<=62
 replace nivel = 7 if p6>=71 & p6<=72
 replace nivel = 8 if p6>=81 & p6<=84
 
+label define nivel 1 "Primaria" 2 "Vocacional" 3 "Secundaria" 4 "Superior no universitaria" 5 "Superior universitaria" 6 "Especialidad (Postgrado)" 7 "Maestría" 8 "Doctorado"
+label values nivel nivel
+
 gen aedu_ci = .
 replace aedu_ci = 0 if nivel== 0 
 replace aedu_ci = grado if nivel == 1
@@ -1090,7 +1140,8 @@ replace aedu_ci = grado+6 if nivel == 2
 replace aedu_ci = grado+6 if nivel == 3
 replace aedu_ci = grado+12 if nivel == 4
 replace aedu_ci = grado+12 if nivel == 5
-replace aedu_ci = grado+17 if nivel == 6 | nivel == 7 | nivel == 8
+replace aedu_ci = grado+12+4 if nivel == 6 | nivel == 7 
+replace aedu_ci = grado+12+4+2 if nivel == 8
 
 ******************************
 *	eduno_ci
@@ -1154,19 +1205,20 @@ label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 gen edus2c_ci=(aedu_ci==12)
 replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
 
 ******************************
 *	eduui_ci
 ******************************
-gen eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+gen eduui_ci=(aedu_ci>12 & aedu_ci<16) & nivel==5
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15) & nivel==4
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 ******************************
 *	eduuc_ci
 ******************************
-gen eduuc_ci=(aedu_ci>=17)
+gen eduuc_ci=(aedu_ci>=16) 
+replace eduuc_ci=1 if (aedu_ci>=15) & nivel==4 
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
@@ -1188,8 +1240,8 @@ notes: la encuesta no tiene codigo de educacion preescolar
 *	eduac_ci
 ******************************
 gen eduac_ci=.
-replace eduac_ci=0 if nivel==5
-replace eduac_ci=1 if nivel==4
+replace eduac_ci=1 if nivel==5 | nivel==6 | nivel==7 | nivel==8 
+replace eduac_ci=0 if nivel==4
 label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 
 ******************************
@@ -1200,7 +1252,7 @@ replace asiste_ci=. if p5==.
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
 ******************************
-*	pqnoasis_ci_ci
+*	pqnoasis_ci
 ******************************
 gen pqnoasis_ci=p5a if p5a>0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
@@ -1228,17 +1280,28 @@ replace pqnoasis1_ci = 9 if p5a==12
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-
+******************************
+*	edupub_ci
+******************************
+*definida solo para los que asisten
 gen edupub_ci=.
+replace edupub_ci=1 if p5_tipo==3
+replace edupub_ci=0 if p5_tipo==4
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 ******************************
 *	repiteult_ci  & repite_ci
 ******************************
 gen repiteult_ci=.
-gen repite_ci=.
-*NA
+label var repiteult_ci "Ha repetido el último grado"
+*la pregunta está en el cuestionatio, pero no en el diccionario o en la base
+
+
+gen repite_ci=(p7b==1)
+label var repite_ci "Ha repetido al menos un grado"
+
 drop nivel grado
+
 
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
@@ -1413,13 +1476,6 @@ gen ypensub_ci=p72g5 if p72g5>0 & p72g5<=99999
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
 
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=.
-* falta generar
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 	*******************
 	*** benefdes_ci ***
@@ -1576,14 +1632,14 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
-
-
+clonevar codocupa=p26reco
+clonevar codindustria=p28reco
 compress
 
 

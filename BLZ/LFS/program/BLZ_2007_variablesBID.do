@@ -76,7 +76,7 @@ label values region_BID_c region_BID
 ***************
 * REGION PAIS *
 ***************
-
+gen ine01= district
 g region_c=.
 
 ***************

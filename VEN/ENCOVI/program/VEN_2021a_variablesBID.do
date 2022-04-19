@@ -933,7 +933,7 @@ label var edupi_ci "1 = personas que no han completado el nivel primario"
 ***edupc_ci***
 **************
 gen edupc_ci=aedu_ci==6
-replace edupc_ci=. if aedu_ci==.) 
+replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "1 = personas que han completado el nivel primario"
 
 **************

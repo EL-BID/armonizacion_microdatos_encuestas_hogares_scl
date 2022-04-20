@@ -78,6 +78,19 @@ label var region_c "División política, region de planificacion"
 *====================================================================================================================================*
 * En total son 8 variables.
 
+******************************************************************
+*** UMP  :Unidad Primaria de Muestreo ***
+******************************************************************
+gen upm_ci=upm
+label variable upm_ci "unidad primaria de muestreo"
+
+******************************************************************
+*** estrato 
+******************************************************************
+
+gen estrato_ci=.
+label variable estrato_ci "estrato"
+
 ************************************************************
 *** 1.- FACTOR_CH: factor de expansión del hogar         ***
 ************************************************************
@@ -1634,6 +1647,36 @@ lab val ptmc_ch ptmc_ch
 
 lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
 lab val pnc_ci pnc_ci
+
+
+	**************************
+	** REGIONES **************
+	**************************
+
+	gen ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	gen geolev1=.
+	replace geolev1=18801 if  region==1		/*Central*/
+	replace geolev1=18802 if  region==2		/*Chorotega*/
+	replace geolev1=18803 if  region==3		/*Pacífico central*/
+	replace geolev1=18804 if  region==4		/*Brunca*/
+	replace geolev1=18805 if  region==5		/*Huetar Atlántica*/
+	replace geolev1=18806 if  region==6		/*Huetar Norte*/
+	
+	label define geolev1 18801"Central" 18802"Chorotega" 18803"Pacífico central" 18804"Brunca" 18805"Huetar Atlántica" 18806"Huetar Norte" 
+	label value geolev1 geolev1
+	label var geolev1 " Primera division politico-administrativa, Región"
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

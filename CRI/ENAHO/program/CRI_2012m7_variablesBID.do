@@ -125,6 +125,18 @@ label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
+
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************************************************************
 ****5._ PAIS_C: Nombre del país.                         ***
 ************************************************************
@@ -1980,6 +1992,35 @@ lab val pnc_ci pnc_ci
 	gen miglac_ci=.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* No se puede diferenciar paises LAC de no LAC */
+	
+	
+	**************************
+	** REGIONES **************
+	************************** 
+
+	gen ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	gen geolev1=.
+	replace geolev1=18801 if  region==1		/*Central*/
+	replace geolev1=18802 if  region==2		/*Chorotega*/
+	replace geolev1=18803 if  region==3		/*Pacífico central*/
+	replace geolev1=18804 if  region==4		/*Brunca*/
+	replace geolev1=18805 if  region==5		/*Huetar Atlántica*/
+	replace geolev1=18806 if  region==6		/*Huetar Norte*/
+	
+	label define geolev1 18801"Central" 18802"Chorotega" 18803"Pacífico central" 18804"Brunca" 18805"Huetar Atlántica" 18806"Huetar Norte" 
+	label value geolev1 geolev1
+	label var geolev1 " Primera division politico-administrativa, Región"
 
 
 /*_____________________________________________________________________________________________________*/

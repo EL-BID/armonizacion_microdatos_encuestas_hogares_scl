@@ -8,51 +8,45 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
+* ________________________________________________________________________________________________________________*
  
-
-
+ 
 global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ENEMDU
-local ANO "2020"
+local ANO "2021"
 local ronda m12 
 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
+
 capture log close
 log using "`log_file'", replace 
-
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Ecuador
 Encuesta: ENEMDU
 Round: m12
-Modificado por: Nathalia Maya (snathaliamaya@gmail.com)
-Fecha última modificación: Mayo 2021
-
-****************************************************************************/
-/***************************************************************************
-Detalle de procesamientos o modificaciones anteriores:
-MLO cambio del limite de edad de condocup_ci a 5+
+Modificado por: Eric Torres (etorresram@gmail.com)
+Fecha última modificación: Abril 2022
 
 ****************************************************************************/
 
 use `base_in', clear
 destring *, replace
 
+
 		*************************
 		***VARIABLES DEL HOGAR***
 		*************************
 		
-************
+**************
 * Region_BID *
-************
+**************
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
@@ -63,9 +57,8 @@ label value region_BID_c region_BID_c
 	***region_c ***
 	***************
 	gen region_c=.
-	/*No viene la variable ciudad en la versión 2018*/
 	
-	/*replace region_c=int(ciudad/10000)
+	replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
 	replace region_c =23 if canton==1706
@@ -94,7 +87,44 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-   */
+
+
+	***************
+	***  ine01  ***
+	***************
+
+	gen ine01=.
+
+	replace ine01=int(ciudad/10000)
+	
+	label define ine01 ///
+	1 "Azuay" ///
+	2 "Bolívar" ///
+	3 "Cañar" ///
+	4 "Carchi" /// 
+	5 "Cotopaxi" ///
+	6 "Chimborazo" ///
+	7 "El Oro" ///
+	8 "Esmeraldas" ///
+	9 "Guayas" ///
+	10 "Imbabura" ///
+	11 "Loja" ///
+	12 "Los Ríos" ///
+	13 "Manabí" ///
+	14 "Morona Santiago" ///
+	15 "Napo" ///
+	16 "Pastaza" ///
+	17 "Pichincha" ///
+	18 "Tungurahua" ///
+	19 "Zamora Chinchipe" ///
+	20 "Galápagos" ///
+	21 "Sucumbíos" ///
+	22 "Orellana" ///
+	23 "Santo Domingo de los Tsáchilas" ///
+    24 "Santa Elena" 
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+
 	***************
 	***factor_ch***
 	***************
@@ -119,7 +149,7 @@ label value region_BID_c region_BID_c
 	****idh_ch***
 	*************
 	sort  area estrato upm vivienda hogar p01
-	egen idh_ch = group( area estrato upm vivienda hogar)
+	egen idh_ch = group(area estrato upm vivienda hogar)
 	label variable idh_ch "ID del hogar"
 	
 	*************
@@ -147,7 +177,7 @@ label value region_BID_c region_BID_c
 	***anio_c***
 	************
 
-	gen anio_c=2020
+	gen anio_c=2021
 	label variable anio_c "Anio de la encuesta" 
 		
 	***********
@@ -159,7 +189,6 @@ label value region_BID_c region_BID_c
 	*****************
 	***relacion_ci***
 	*****************
-	*la li p04
 	gen relacion_ci=1     if p04==1
 	replace relacion_ci=2 if p04==2
 	replace relacion_ci=3 if p04==3
@@ -186,7 +215,6 @@ label value region_BID_c region_BID_c
 	*************
 	***sexo_ci***
 	*************
-	*la li p02
 	gen sexo_ci=p02
 	label var sexo_ci "Sexo del individuo" 
 	label def sexo_ci 1"Masculino" 2"Femenino" 
@@ -195,17 +223,16 @@ label value region_BID_c region_BID_c
 	**********
 	***edad***
 	**********
-	
 	*tab p03
 	gen edad_ci=p03 if p03<99
 	label variable edad_ci "Edad del individuo"
 
-	
+
 	**************
 	***civil_ci***
 	**************
-	*la li p06
-	gen civil_ci=1 		if p06==6
+	*p06: para personas de 12 años o más
+	gen civil_ci=1 if p06==6
 	replace civil_ci=2	if p06==1 | p06==5
 	replace civil_ci=3	if p06==2 | p06==3
 	replace civil_ci=4	if p06==4
@@ -261,7 +288,7 @@ label value region_BID_c region_BID_c
 	replace clasehog_ch=2 if (nhijos_ch>0| nconyuges_ch>0) & (notropari_ch==0 & notronopari_ch==0)
 	**** ampliado
 	replace clasehog_ch=3 if ((clasehog_ch ==2 & notropari_ch>0) & notronopari_ch==0) |(notropari_ch>0 & notronopari_ch==0) 
-	**** compuesto  (some relatives plus non relative)
+	**** compuesto  (some relatives plus non relatives)
 	replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))
 	**** corresidente
 	replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0
@@ -314,7 +341,6 @@ label value region_BID_c region_BID_c
 
 
 	
-	
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************
@@ -324,7 +350,7 @@ label value region_BID_c region_BID_c
 	***************
 	***afroind_ci***
 	***************
-**Pregunta: p15 (1 indígena, 2 afroecuatoriano, 3 negro, 4 mulato, 5 montubio, 6 mestizo, 7 blanco, 8 otro) (adiciona categorías afroecuatoriano y montubio)
+**Pregunta: p15 (1 indígena, 2 afroecuatoriano, 3 negro, 4 mulato, 5 montuvio, 6 mestizo, 7 blanco, 8 otro) 
 gen afroind_ci=. 
 replace afroind_ci=1  if p15 == 1
 replace afroind_ci=2 if p15 == 2 | p15 == 3 | p15 == 4
@@ -335,7 +361,7 @@ replace afroind_ci=9 if p15==. & edad_ci<5
 	***************
 	***afroind_ch***
 	***************
-gen afroind_jefe= afroind_ci if relacion_ci==1
+gen afroind_jefe = afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe
 
@@ -368,10 +394,10 @@ gen dis_ch=.
 	replace condocup_ci=1 if p20==1 | p21<12 | p22==1 
 	replace condocup_ci=2 if (p20==2 | p21==12 | p22==2) & p32<11
 	replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-	replace condocup_ci=4 if edad_ci<5
-	label define condocup_ci 1 "ocupados" 2 "desocupados" 3 "inactivos" 4 "menor <5"
+	replace condocup_ci=4 if edad_ci<15
+	label define condocup_ci 1 "ocupados" 2 "desocupados" 3 "inactivos" 4 "menor de PET"
 	label value condocup_ci condocup_ci
-	label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
+	label var condocup_ci "Condicion de ocupacion"
 
 	
 	****************
@@ -389,7 +415,7 @@ gen dis_ch=.
 	*Modficación SGR 15 de julio de 2018. Desde la encuesta 2017 existe una pregunta a los de 15 años y más. 
 	/*gen cotizando_ci=0     if condocup_ci==1 | condocup_ci==2 
 	replace cotizando_ci=1 if (p44f==1)  & cotizando_ci==0 /*solo a emplead@s y asalariad@s, difiere con los otros paises*/
-    *replace cotizando_ci=1 if (p44f==1)  & p61b1<=4  & cotizando_ci==0
+    replace cotizando_ci=1 if (p44f==1)  & p61b1<=4  & cotizando_ci==0
 	label var cotizando_ci "Cotizante a la Seguridad Social"
 	*/
 	
@@ -416,7 +442,7 @@ gen dis_ch=.
 	*** instcot_ci *****
 	********************
 	gen instcot_ci=iess /* a todas las personas*/
-	label var instcot_ci "institución a la cual cotiza"
+	label var instcot_ci "Institución a la cual cotiza"
 
 	*************
 	*tamemp_ci
@@ -424,7 +450,6 @@ gen dis_ch=.
 	*Ecuador Pequeña 1 a 5 Mediana 6 a 50 Grande Más de 50
 	*1 = menos de 100
 	*2 = más de 100
-
 	gen tamemp_ci=.
 	replace tamemp_ci=1 if p47a==1 & (p47b>=1 & p47b<=5)
 	replace tamemp_ci=2 if p47a==1 & p47b>=6 & p47b<=50
@@ -474,14 +499,14 @@ gen dis_ch=.
 	*lp_ci***
 	*********
     *https://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2020/Diciembre-2020/Boletin%20tecnico%20pobreza%20diciembre%202020.pdf	
-	gen lp_ci = 84.05
+	gen lp_ci = 85.6
 	label var lp_ci "Linea de pobreza oficial del pais"
 
 	***********
 	*lpe_ci ***
 	***********
 	*https://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2020/Diciembre-2020/Boletin%20tecnico%20pobreza%20diciembre%202020.pdf
-	gen lpe_ci = 47.37
+	gen lpe_ci = 48.24
 	label var lpe_ci "Linea de indigencia oficial del pais"
 
 /************************************************************************************************************
@@ -556,7 +581,6 @@ gen dis_ch=.
 	*******************
 	***tiempoparc_ci***
 	*******************
-	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como había sido generada antes
 	gen tiempoparc_ci=((horaspri_ci>=1 & horaspri_ci<30) & p27==4 & emp_ci==1)
 	replace tiempoparc_ci=. if emp_ci==0
 	label var tiempoparc_c "Personas que trabajan medio tiempo" 
@@ -642,24 +666,6 @@ gen dis_ch=.
 	*************
 	***rama_ci***
 	*************
-	/*
-	gen rama_ci=.
-	replace rama_ci = 1 if rama1==1
-	replace rama_ci = 2 if rama1==2
-	replace rama_ci = 3 if rama1==3
-	replace rama_ci = 4 if rama1>=4 & rama1<=5
-	replace rama_ci = 5 if rama1==6
-	replace rama_ci = 6 if rama1==7 | rama1==9
-	replace rama_ci = 7 if rama1==8
-	replace rama_ci = 8 if rama1>=11 & rama1<=12
-	replace rama_ci = 9 if rama1>=13 & rama1<=21
-	label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
-	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
-	label val rama_ci rama_ci
-	*/
-	* Clasificacion segun variable desagregada p40
 	
 	gen rama_ci=.
 	replace rama_ci = 1 if (p40>=111 & p40<=322) & emp_ci==1
@@ -671,7 +677,7 @@ gen dis_ch=.
 	replace rama_ci = 7 if ((p40>=4911 & p40<=5320) | (p40>=6110 & p40<=6190)) & emp_ci==1
 	replace rama_ci = 8 if (p40>=6411 & p40<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((p40>=5811 & p40<=6020) | (p40>=6201 & p40<=6399) | (p40>=8410 & p40<=9900)) & emp_ci==1
-	label var rama_ci "Rama de actividad"
+	label var rama_ci "Rama de actividad de la ocupación principal"
 	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
@@ -845,16 +851,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen remesas_ci=p74b
 	label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
-******************
-*Ingreso Nacional*
-******************
-gen yoficial_ch=.
-label var yoficial_ch "Ingreso del hogar total generado por el país"
-
-gen ypeoficial_ch=ingpc
-label var ypeoficial_ch "Ingreso per cápita generado por el país"
-
-
+		************************
+		***INGRESOS DEL HOGAR***
+		************************
 
 	*****************
 	***nrylmpri_ch***
@@ -935,7 +934,7 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-
+			
 	*************
 	***aedu_ci***
 	*************
@@ -1109,7 +1108,8 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	label var edupub_ci "Asiste a un centro de ensenanza público"
 
 	drop nivinst anoinst
-	
+
+
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
@@ -1489,7 +1489,6 @@ lab val ptmc_ch ptmc_ch
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
 /*_____________________________________________________________________________________________________*/
 
-
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
@@ -1547,7 +1546,5 @@ compress
 
 saveold "`base_out'", version(12) replace
 
-
 log close
-
 

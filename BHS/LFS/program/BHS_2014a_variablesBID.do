@@ -587,6 +587,26 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if (i75_activity>=113 & i75_activity<=399) & emp_ci==1
+replace ramasec_ci=2 if i75_activity>=510 & i75_activity<=999 & emp_ci==1
+replace ramasec_ci=3 if i75_activity>=1000 & i75_activity<=3399 & emp_ci==1
+replace ramasec_ci=4 if i75_activity>=3500 & i75_activity<=3999 & emp_ci==1
+replace ramasec_ci=5 if i75_activity>=4100 & i75_activity<=4399 & emp_ci==1
+replace ramasec_ci=6 if ((i75_activity>=4500 & i75_activity<=4799) | (i75_activity>=5500 & i75_activity<=5699)) & emp_ci==1
+replace ramasec_ci=7 if i75_activity>=4900 & i75_activity<=5399 & emp_ci==1
+replace ramasec_ci=8 if (i75_activity>=6400 & i75_activity<=6899) & emp_ci==1
+replace ramasec_ci=9 if ((i75_activity>=5800 & i75_activity<=6399) | (i75_activity>=6900 & i75_activity<=9999)) & emp_ci==1
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************
 ***durades_ci***
 ****************
@@ -1393,7 +1413,9 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-
+**cambiar el nombre de código de industria y ocupación
+rename i62_business_act codindustria
+rename i56_occupation codocupa
 
 compress
 

@@ -1233,7 +1233,8 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
-
+clonevar codocupa=p29
+clonevar codindustria=p30
 
 compress
 

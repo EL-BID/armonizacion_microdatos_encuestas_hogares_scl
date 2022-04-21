@@ -847,6 +847,25 @@ empresa de acuerdo al Sistema de clasificación Industrial de América
 del Norte. México, 2008 */
 
 
+* rama secundaria
+tostring scian2, replace
+gen ramat2=real(substr(scian2,1,3))
+gen ramasec_ci=1 if ramat2>=111 & ramat2<=115
+replace ramasec_ci=2 if ramat2>=211 & ramat2<=213
+replace ramasec_ci=3 if ramat2>=311 & ramat2<=339
+replace ramasec_ci=4 if ramat2>=221 & ramat2<=222
+replace ramasec_ci=5 if ramat2>=236 & ramat2<=238
+replace ramasec_ci=6 if ramat2>=400 & ramat2<=469
+replace ramasec_ci=7 if ramat2>=481 & ramat2<=493
+replace ramasec_ci=9 if ramat2>=511 & ramat2<=932
+replace ramasec_ci=8 if ramat2>=520 & ramat2<=530
+
+label var ramasec_ci "Rama actividad secundaria"
+label define ramasec_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio al por mayor y menor, restaurantes, hoteles" 7 "Transporte y almacenamiento" 8 "Establecimientos financieros, seguros, bienes inmuebles" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
+
+
 *************************************************************************************
 *******************************INGRESOS**********************************************
 *************************************************************************************
@@ -1049,6 +1068,11 @@ egen trat_pub = rsum( trac_pub  dona_pu), missing
 ****************
 egen rtasot = rsum(ing_rent  otros), missing
 label var rtasot "Rentas y otros"
+
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ict
 
 
 ******************************

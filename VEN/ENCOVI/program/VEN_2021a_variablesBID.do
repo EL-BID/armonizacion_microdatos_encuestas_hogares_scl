@@ -627,6 +627,12 @@ label var rama_ci "RAMA"
 label define rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras" 4 "Electricidad, gas y agua" 5 "Construcción" 6"Comercio al por mayor y menor, restaurantes, hoteles" 7"Transporte y almacenamiento" 8"Establecimientos financieros, seguros, bienes inmuebles" 9"Servicios sociales, comunales y personales"
 label values rama_ci rama_ci
 
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
+
+
 ******************
 ***categosec_ci***
 ******************
@@ -927,7 +933,7 @@ label var edupi_ci "1 = personas que no han completado el nivel primario"
 ***edupc_ci***
 **************
 gen edupc_ci=aedu_ci==6
-replace edupc_ci=. if aedu_ci==.) 
+replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "1 = personas que han completado el nivel primario"
 
 **************

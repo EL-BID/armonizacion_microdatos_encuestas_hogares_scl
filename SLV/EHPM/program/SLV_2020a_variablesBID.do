@@ -526,6 +526,26 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria 
+g ramasec_ci=. 
+replace ramasec_ci=1 if (r438>=100 & r438<=322) & emp_ci==1 
+replace ramasec_ci=2 if (r438>=510 & r438<=990) & emp_ci==1 
+replace ramasec_ci=3 if (r438>=1010 & r438<=3320) & emp_ci==1 
+replace ramasec_ci=4 if (r438>=3510 & r438<=3900) & emp_ci==1 
+replace ramasec_ci=5 if (r438>=4100 & r438<=4390) & emp_ci==1 
+replace ramasec_ci=6 if ((r438>=4510 & r438<=4799) | (r438>=5510 & r438<=5630))& emp_ci==1 
+replace ramasec_ci=7 if ((r438>=4911 & r438<=5320) | (r438>=6110 & r438<=6190)) & emp_ci==1 
+replace ramasec_ci=8 if (r438>=6411 & r438<=8299) & emp_ci==1 
+replace ramasec_ci=9 if ((r438>=5811 & r438<=6022) | (r438>=6201 & r438<=6399) | (r438>=8411 & r438<=9900)) & emp_ci==1 
+
+label var ramasec_ci "Rama de actividad secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************
 ***durades_ci***
 ****************
@@ -788,6 +808,15 @@ drop remesas
 by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 label var remesas_ch "Remesas mensuales del hogar" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingfa
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpe
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 			****************************
 			***VARIABLES DE EDUCACION***
@@ -839,7 +868,7 @@ label var eduno_ci "Sin educacion"
 **************
 ***edupi_ci***
 **************
-gen edupi_ci==(aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6) 
 replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
@@ -1386,10 +1415,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *El promedio anual de la canasta basica alimentaria (Rural y urbana) se divide en 3.73 miembros para zona urbana y en 4.26 miembros para la zona rural*
 gen lp_ci =.
 *zona urbana
-replace lp_ci= 54.32*2 if  zona_c == 1
+replace lp_ci= 54.316354*2 if  zona_c == 1
 
 *zona rural
-replace lp_ci= 34.03*2 if  zona_c == 0
+replace lp_ci= 34.025822*2 if  zona_c == 0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1624,7 +1653,7 @@ lab val pnc_ci pnc_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "\\Sdssrv03\surveys\harmonized\_DOCS\Do-Files\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
 

@@ -573,12 +573,17 @@ replace rama_ci = 6 if ((pp04b_cod>=4500 & pp04b_cod<4900) | pp04b_cod==48 | (pp
 replace rama_ci = 7 if ((pp04b_cod>=4900 & pp04b_cod<=5300) | pp04b_cod==49) & emp_ci==1
 replace rama_ci = 8 if ((pp04b_cod>=6400 & pp04b_cod<=8200) ) & emp_ci==1
 replace rama_ci = 9 if ((pp04b_cod>=5800 & pp04b_cod<=6300) |(pp04b_cod>=8300 &  pp04b_cod<=9900) | pp04b_cod==85 | pp04b_cod==63 | pp04b_cod==61  | pp04b_cod==58) & emp_ci==1
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
 
 	
 	
@@ -827,8 +832,18 @@ label val rama_ci rama_ci
 	**********
 
 	gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
+	
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=itf
+label var yoficial_ch "Ingreso del hogar total generado por el país"
 
+gen ypeoficial_ch=subinstr(ipcf,",",".",.)
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+destring yoficial_ch ypeoficial_ch, replace
+replace ypeoficial_ch=. if yoficial_ch==0
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
@@ -1317,11 +1332,12 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 
 *promedio julio - diciembre 2020:  https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_2082FA92E916.pdf
 
+
 *********
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =15167
+gen lp_ci =50854/4.10
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1329,7 +1345,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =6201
+gen lpe_ci =21572/4.17
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************

@@ -486,24 +486,25 @@ label values categosec_ci categosec
 *  RAMA DE ACTIVIDAD PRINCIPAL  *
 *********************************
 * Nota MGD 01/2015: no es posible categorizar la varibale en las desagregaciones armonizadas, por eso se genera una alternativa.
+* Eric Torres LMK: no todos los paises usan la misma la misma clasificación, de tal manera que no tiene mucho sentido ponerle otro nombre a la variable. La dejare como rama_ci
+/*
 gen rama_ci=.
 label var rama_ci "Rama de actividad principal"
 label define rama 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
 label values rama_ci rama
-
-g rama_ci1=.
-replace rama_ci1=1 if (indus>=1 & indus<=3) & condocup_ci==1
-replace rama_ci1=2 if ((indus>=6 & indus<=9)) & condocup_ci==1
-replace rama_ci1=3 if (indus>=10 & indus<=32)  & condocup_ci==1
-replace rama_ci1=4 if (indus>=35 & indus<=39)   & condocup_ci==1
-replace rama_ci1=5 if (indus>=41 & indus<=43)  & condocup_ci==1
-replace rama_ci1=6 if ((indus>=45 & indus<=47)  | (indus>=55 & indus<=56))  & condocup_ci==1
-replace rama_ci1=7 if ((indus>=49 & indus<=53) | (indus>=58 & indus<=63)) & condocup_ci==1
-replace rama_ci1=8 if (indus>=64 & indus<=68)  & condocup_ci==1
-replace rama_ci1=9 if (indus>=69 & indus<99) & condocup_ci==1
-
-label define rama_ci1 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
-label values rama_ci1 rama_ci1
+*/
+g rama_ci=.
+replace rama_ci=1 if (indus>=1 & indus<=3) & condocup_ci==1
+replace rama_ci=2 if ((indus>=6 & indus<=9)) & condocup_ci==1
+replace rama_ci=3 if (indus>=10 & indus<=32)  & condocup_ci==1
+replace rama_ci=4 if (indus>=35 & indus<=39)   & condocup_ci==1
+replace rama_ci=5 if (indus>=41 & indus<=43)  & condocup_ci==1
+replace rama_ci=6 if ((indus>=45 & indus<=47)  | (indus>=55 & indus<=56))  & condocup_ci==1
+replace rama_ci=7 if ((indus>=49 & indus<=53) | (indus>=58 & indus<=63)) & condocup_ci==1
+replace rama_ci=8 if (indus>=64 & indus<=68)  & condocup_ci==1
+replace rama_ci=9 if (indus>=69 & indus<99) & condocup_ci==1
+label define rama_ci 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values rama_ci rama_ci
 /*
 1	Agricultura, caza, silvicultura y pesca. (indus>=1 & indus<=3)
 2	Explotación de minas y canteras. (indus>=6 & indus<=9)
@@ -514,8 +515,24 @@ label values rama_ci1 rama_ci1
 7	Transporte y comunicaciones. (indus>=49 & indus<=53) (indus>=58 & indus<=63)
 8	Establecimientos financieros, seguros, bienes inmuebles. (indus>=64 & indus<=68)
 9	Servicios sociales, comunales y personales. (indus>=69 & indus<=98)
-
 */
+
+* rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (sindus>=1 & sindus<=3) & condocup_ci==1
+replace ramasec_ci=2 if ((sindus>=6 & sindus<=9)) & condocup_ci==1
+replace ramasec_ci=3 if (sindus>=10 & sindus<=32)  & condocup_ci==1
+replace ramasec_ci=4 if (sindus>=35 & sindus<=39)   & condocup_ci==1
+replace ramasec_ci=5 if (sindus>=41 & sindus<=43)  & condocup_ci==1
+replace ramasec_ci=6 if ((sindus>=45 & sindus<=47)  | (sindus>=55 & sindus<=56))  & condocup_ci==1
+replace ramasec_ci=7 if ((sindus>=49 & sindus<=53) | (sindus>=58 & sindus<=63)) & condocup_ci==1
+replace ramasec_ci=8 if (sindus>=64 & sindus<=68)  & condocup_ci==1
+replace ramasec_ci=9 if (sindus>=69 & sindus<99) & condocup_ci==1
+label define ramasec_ci 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
+
+
 *********************************
 *  TRABAJA EN EL SECTOR PUBLICO *
 *********************************
@@ -1144,6 +1161,9 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
+*armonizar las variables originales de códigos de industria y ocupacion
+rename indus codindustria
+rename occup codocupa
 
 
 compress

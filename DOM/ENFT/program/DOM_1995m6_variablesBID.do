@@ -105,15 +105,6 @@ label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
-***************
-***upm_ci***
-***************
-gen upm_ci=. 
-
-***************
-***estrato_ci***
-***************
-gen estrato_ci=.
 
 **********
 ***raza***
@@ -1653,11 +1644,6 @@ label var vivialqimp_ch "Alquiler mensual imputado"
 
 ren ocup ocup_old
 
-**************************
-** PROVINCIAS ************
-**************************
-gen ine01=.   
-label var ine01 " Primera division politico-administrativa, Provincia"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1685,6 +1671,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
+rename ramac codindustria
+rename ocupac codocupa
 
 
 compress

@@ -110,16 +110,6 @@ gen idp_ci=linea_b
 label variable idp_ci "ID de la persona en el hogar"
 
 
-***************
-***upm_ci***
-***************
-gen upm_ci=. 
-
-***************
-***estrato_ci***
-***************
-gen estrato_ci=.
-
 
 **********
 ***zona***
@@ -1402,52 +1392,6 @@ replace vivialq_ch=. if v02a==999999
 
 gen vivialqimp_ch=.
 /*NA*/
-
-
-	**************************
-	** REGIONES **************
-	**************************
-
-	gen ine01=.   
-	replace ine01=1 if  region==1	/*Central*/
-	replace ine01=2 if  region==2	/*Chorotega*/
-	replace ine01=3 if  region==3	/*Pacífico central*/
-	replace ine01=4 if  region==4	/*Brunca*/
-	replace ine01=5 if  region==5	/*Huetar Atlántica*/
-	replace ine01=6 if  region==6	/*Huetar Norte*/
-	
-	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
-	label value ine01 ine01
-	label var ine01 " Primera division politico-administrativa, Región"	
-	
-	gen geolev1=.
-	replace geolev1=18801 if  region==1		/*Central*/
-	replace geolev1=18802 if  region==2		/*Chorotega*/
-	replace geolev1=18803 if  region==3		/*Pacífico central*/
-	replace geolev1=18804 if  region==4		/*Brunca*/
-	replace geolev1=18805 if  region==5		/*Huetar Atlántica*/
-	replace geolev1=18806 if  region==6		/*Huetar Norte*/
-	
-	label define geolev1 18801"Central" 18802"Chorotega" 18803"Pacífico central" 18804"Brunca" 18805"Huetar Atlántica" 18806"Huetar Norte" 
-	label value geolev1 geolev1
-	label var geolev1 " Primera division politico-administrativa, Región"
-	
-	**************************
-	** PROVINCIAS ************
-	**************************
-
-	gen ine02=.   
-	replace ine02=1 if  provincia==1	/*San José*/
-	replace ine02=2 if  provincia==2	/*Alajuela*/
-	replace ine02=3 if  provincia==3	/*Cartago*/
-	replace ine02=4 if  provincia==4	/*Heredia*/
-	replace ine02=5 if  provincia==5	/*Guanacaste*/
-	replace ine02=6 if  provincia==6	/*Puntarenas*/
-	replace ine02=7 if  provincia==7	/*Limón*/
-	
-	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
-	label value ine02 ine02
-	label var ine02 "Segunda division politico-administrativa, Provincia"	
 
 
 /*_____________________________________________________________________________________________________*/

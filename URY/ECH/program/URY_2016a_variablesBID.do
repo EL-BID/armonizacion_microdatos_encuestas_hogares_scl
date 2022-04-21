@@ -51,7 +51,7 @@ use `base_in', clear
 /*				VARIABLES DEL HOGAR			*/
 /************************************************************************/
 
-
+gen ine01 = dpto
 gen region_c = dpto
 label define region_c  1 "Montevideo" ///
            2 "Artigas" /// 

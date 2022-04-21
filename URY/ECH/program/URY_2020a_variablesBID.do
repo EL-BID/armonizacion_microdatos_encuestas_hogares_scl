@@ -49,7 +49,7 @@ use `base_in', clear
 /*				VARIABLES DEL HOGAR			*/
 /************************************************************************/
 
-
+gen ine01 = dpto
 gen region_c = dpto
 label define region_c  1 "Montevideo" ///
            2 "Artigas" /// 
@@ -428,6 +428,9 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 *********
 *lp_ci***
 *********
+
+egen llave_lp1=group(region_3 mes )
+
 *https://www.ine.gub.uy/documents/10181/30913/Pobreza0321/c18681f1-7aa9-4d0a-bd6b-265049f3e26e
 
 gen lp_ci =.
@@ -844,6 +847,27 @@ replace rama_ci=7 if ((f72_2>=4900 & f72_2<=5400) | (f72_2>=6100 & f72_2<=6199))
 replace rama_ci=8 if (f72_2>=6400 & f72_2<=8300) & emp_ci==1
 replace rama_ci=9 if ((f72_2>=5800 & f72_2<=6090) | (f72_2>=6200 & f72_2<=6399) | (f72_2>=8400 & f72_2<=9900))& emp_ci==1
 
+
+* rama secundaria
+destring f91_2, replace force
+gen ramasec_ci=.
+replace ramasec_ci=1 if (f91_2>0 & f91_2<=400) & emp_ci==1
+replace ramasec_ci=2 if (f91_2>=500 & f91_2<=1000) & emp_ci==1
+replace ramasec_ci=3 if (f91_2>=1010 & f91_2<=3400) & emp_ci==1
+replace ramasec_ci=4 if (f91_2>=3500 & f91_2<=4000) & emp_ci==1
+replace ramasec_ci=5 if (f91_2>=4100 & f91_2<=4400) & emp_ci==1
+replace ramasec_ci=6 if ((f91_2>=4500 & f91_2<=4800) | (f91_2>=5500 & f91_2<=5700))& emp_ci==1
+replace ramasec_ci=7 if ((f91_2>=4900 & f91_2<=5400) | (f91_2>=6100 & f91_2<=6199)) & emp_ci==1
+replace ramasec_ci=8 if (f91_2>=6400 & f91_2<=8300) & emp_ci==1
+replace ramasec_ci=9 if ((f91_2>=5800 & f91_2<=6090) | (f91_2>=6200 & f91_2<=6399) | (f91_2>=8400 & f91_2<=9900)) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
+
 *55a. Duración del desempleo
 
 gen durades_ci=f113/4.3 if f113>0
@@ -1248,6 +1272,8 @@ label var remesas_ci "Remesas mensuales reportadas por el individuo"
 
 
 *55. Antigüedad en la actividad actual
+
+
 
 *********************************************************************************************************
 *                                VARIABLES EDUCATIVAS                                                   *

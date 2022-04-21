@@ -786,11 +786,12 @@ replace rama_ci=7 if v4013>=49010 & v4013<=56020
 replace rama_ci=8 if v4013>=64000 & v4013<=68000
 replace rama_ci=9 if (v4013>=69000 & v4013<=99000) |  (v4013>=58000 & v4013<=63000)
 replace rama_ci=. if emp_ci==0
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
 
 ****************
 ***durades_ci***

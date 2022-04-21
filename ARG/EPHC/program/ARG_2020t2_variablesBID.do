@@ -99,6 +99,64 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+    ************
+	*ine01_2020*
+	************
+   
+   gen ine01=.
+replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
+replace ine01=10  if aglomerado==22                          /*Catamarca*/
+replace ine01=22  if aglomerado==8                           /*Chaco*/
+replace ine01=26  if aglomerado==9 | aglomerado==91          /*Chubut*/
+replace ine01=2  if aglomerado==32                          /*Ciudad de Buenos Aires*/
+replace ine01=14  if aglomerado==13 | aglomerado==36         /*Córdoba*/
+replace ine01=18  if aglomerado==12                          /*Corrientes*/
+replace ine01=30  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
+replace ine01=34  if aglomerado==15                          /*Formosa*/
+replace ine01=38 if aglomerado==19                          /*Jujuy*/
+replace ine01=42 if aglomerado==30                          /*La pampa*/
+replace ine01=46 if aglomerado==25                          /*La Rioja*/
+replace ine01=50 if aglomerado==10                          /*Mendoza*/
+replace ine01=54 if aglomerado==7                           /*Misiones*/
+replace ine01=58 if aglomerado==17                          /*Neuquen*/
+replace ine01=62 if aglomerado==93                          /*Río Negro*/ 
+replace ine01=66 if aglomerado==23                          /*Salta*/
+replace ine01=70 if aglomerado==27                          /*San Juan*/ 
+replace ine01=74 if aglomerado==26                          /*San Luis*/
+replace ine01=78 if aglomerado==20                          /*Santa Cruz*/
+replace ine01=82 if aglomerado>=4 & aglomerado<=5           /*Santa Fe*/
+replace ine01=86 if aglomerado==18                          /*Santiago de Estero*/
+replace ine01=94 if aglomerado==31                          /*Tierra del Fuego*/
+replace ine01=90 if aglomerado==29                          /*Tucuman*/
+   
+   label define ine01     ///
+	6"Buenos Aires"           ///	
+	10"Catamarca"              ///
+	22"Chaco"                  /// 
+	26"Chubut"                 ///
+	2"Ciudad de Buenos Aires" ///
+	14"Córdoba"                ///
+	18"Corrientes"             ///
+	30"Entre Ríos"             ///
+	34"Formosa"                ///
+	38"Jujuy"                 ///
+	42"La Pampa"              ///
+	46"La Rioja"              ///
+	50"Mendoza"               ///
+	54"Misiones"              ///
+	58"Neuquon"               ///
+	62"Río Negro"             ///
+	66"Salta"                 ///
+	70"San Juan"              ///
+	74"San Luis"              ///
+	78"Santa Cruz"            ///
+	82"Santa Fe"              ///
+	86"Santiago del Estero"   ///
+	94"Tierra del Fuego"      ///
+	90"Tucumán"                    
+  
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, ine01"
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
@@ -390,8 +448,8 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 	*horaspri_ci*
 	*************
 
-	gen horaspri_ci=pp3e_tot
-	replace horaspri_ci=. if pp3e_tot==999
+	gen horaspri_ci=real(pp3e_tot)
+	replace horaspri_ci=. if horaspri_ci==999
 	
 	************* 
 	*horastot_ci*
@@ -1521,13 +1579,13 @@ gen instcot_ci=.
 /*_____________________________________________________________________________________________________*/
 
 
-do "$ruta\Harmonized\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"*/
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación ¤e que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch idh_ch	idp_ci factor_ci sexo_ci edad_ci ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
@@ -1536,7 +1594,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

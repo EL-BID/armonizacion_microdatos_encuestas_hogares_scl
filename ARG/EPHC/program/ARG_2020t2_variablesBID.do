@@ -99,64 +99,7 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
-    ************
-	*ine01_2020*
-	************
    
-   gen ine01=.
-replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
-replace ine01=10  if aglomerado==22                          /*Catamarca*/
-replace ine01=22  if aglomerado==8                           /*Chaco*/
-replace ine01=26  if aglomerado==9 | aglomerado==91          /*Chubut*/
-replace ine01=2  if aglomerado==32                          /*Ciudad de Buenos Aires*/
-replace ine01=14  if aglomerado==13 | aglomerado==36         /*Córdoba*/
-replace ine01=18  if aglomerado==12                          /*Corrientes*/
-replace ine01=30  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
-replace ine01=34  if aglomerado==15                          /*Formosa*/
-replace ine01=38 if aglomerado==19                          /*Jujuy*/
-replace ine01=42 if aglomerado==30                          /*La pampa*/
-replace ine01=46 if aglomerado==25                          /*La Rioja*/
-replace ine01=50 if aglomerado==10                          /*Mendoza*/
-replace ine01=54 if aglomerado==7                           /*Misiones*/
-replace ine01=58 if aglomerado==17                          /*Neuquen*/
-replace ine01=62 if aglomerado==93                          /*Río Negro*/ 
-replace ine01=66 if aglomerado==23                          /*Salta*/
-replace ine01=70 if aglomerado==27                          /*San Juan*/ 
-replace ine01=74 if aglomerado==26                          /*San Luis*/
-replace ine01=78 if aglomerado==20                          /*Santa Cruz*/
-replace ine01=82 if aglomerado>=4 & aglomerado<=5           /*Santa Fe*/
-replace ine01=86 if aglomerado==18                          /*Santiago de Estero*/
-replace ine01=94 if aglomerado==31                          /*Tierra del Fuego*/
-replace ine01=90 if aglomerado==29                          /*Tucuman*/
-   
-   label define ine01     ///
-	6"Buenos Aires"           ///	
-	10"Catamarca"              ///
-	22"Chaco"                  /// 
-	26"Chubut"                 ///
-	2"Ciudad de Buenos Aires" ///
-	14"Córdoba"                ///
-	18"Corrientes"             ///
-	30"Entre Ríos"             ///
-	34"Formosa"                ///
-	38"Jujuy"                 ///
-	42"La Pampa"              ///
-	46"La Rioja"              ///
-	50"Mendoza"               ///
-	54"Misiones"              ///
-	58"Neuquon"               ///
-	62"Río Negro"             ///
-	66"Salta"                 ///
-	70"San Juan"              ///
-	74"San Luis"              ///
-	78"Santa Cruz"            ///
-	82"Santa Fe"              ///
-	86"Santiago del Estero"   ///
-	94"Tierra del Fuego"      ///
-	90"Tucumán"                    
-  
-   label value ine01 ine01
-   label var ine01 "division politico-administrativa, ine01"
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************

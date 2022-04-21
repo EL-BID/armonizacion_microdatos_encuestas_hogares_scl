@@ -487,6 +487,8 @@ label def ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de transpor
 label def ocupa_ci  8 "FFAA" 9 "Otras ", add
 label val ocupa_ci ocupa_ci
 
+
+
 *************
 ***rama_ci***
 *************
@@ -1667,7 +1669,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-
+clonevar codocupa=r414
+clonevar codindustria=r416
 
 compress
 

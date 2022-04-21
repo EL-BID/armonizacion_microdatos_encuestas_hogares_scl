@@ -1549,6 +1549,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 *Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.)
 rename p20 codocupa
+rename p18 codindustria
 
 compress
 

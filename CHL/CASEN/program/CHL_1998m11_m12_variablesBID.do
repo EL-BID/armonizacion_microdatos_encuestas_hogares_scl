@@ -867,6 +867,55 @@ gen dis_ci==.
 lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
 label var dis_ci "Personas con discapacidad"
+
+	**************************
+	** REGIONES **************
+	**************************
+
+
+   gen ine01=.   
+   replace ine01=1 if  r==1				/*Arica y Parinacota*/
+   replace ine01=2 if  r==2				/*Antofagasta*/
+   replace ine01=3 if  r==3				/*Atacama*/
+   replace ine01=4 if  r==4				/*Coquimbo*/
+   replace ine01=5 if  r==5		    	/*Valparaíso*/
+   replace ine01=6 if  r==6				/*O'Higgins*/
+   replace ine01=7 if  r==7				/*Maule*/
+   replace ine01=8 if  r==8				/*Bío Bío*/
+   replace ine01=9 if  r==9				/*La Araucanía*/
+   replace ine01=10 if r==10			/*Los Lagos*/
+   replace ine01=11 if r==11			/*Aysén*/
+   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if r==13			/*Metropolitana Santiago*/
+
+	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
+	
+   gen geolev1=.   
+   replace geolev1=15201 if  r==1		/*Arica, Parinacota y Tarapacá*/
+   replace geolev1=15202 if  r==2		/*Antofagasta*/
+   replace geolev1=15203 if  r==3		/*Atacama*/
+   replace geolev1=15204 if  r==4		/*Coquimbo*/
+   replace geolev1=15205 if  r==5		/*Valparaíso*/
+   replace geolev1=15206 if  r==6		/*O'Higgins*/
+   replace geolev1=15207 if  r==7		/*Maule*/
+   replace geolev1=15208 if  r==8		/*Ñuble y Bío Bío*/
+   replace geolev1=15209 if  r==9		/*La Araucanía y Los Ríos*/
+   replace geolev1=15210 if r==10		/*Los Lagos*/
+   replace geolev1=15211 if r==11		/*Aysén*/
+   replace geolev1=15212 if r==12		/*Magallanes y Antártica Chilena*/
+   replace geolev1=15213 if r==13		/*Metropolitana Santiago*/
+
+	label define geolev1 15201"Arica, Parinacota y Tarapacá" 15202"Antofagasta" 15203"Atacama" 15204"Coquimbo" 15205"Valparaíso" 15206"O'Higgins" 15207"Maule" 15208"Ñuble y Bío Bío" 15209"La Araucanía" 15210"Los Lagos y Los Ríos" 15211"Aysén" 15212"Magallanes y Antártica Chilena" 15213"Metropolitana Santiago"
+	label value geolev1 geolev1
+	label var geolev1 " Primera division politico-administrativa, región"
+	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
 		
 
 

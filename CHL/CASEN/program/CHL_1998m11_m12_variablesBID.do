@@ -884,7 +884,8 @@ label var dis_ci "Personas con discapacidad"
 	**************************
 	** REGIONES **************
 	**************************
-	
+
+
    gen ine01=.   
    replace ine01=1 if  r==1				/*Arica y Parinacota*/
    replace ine01=2 if  r==2				/*Antofagasta*/

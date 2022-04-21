@@ -76,6 +76,12 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    label var region_c "division politico-administrativa, region"
    
+   ***************
+	***INE01 ***
+	***************
+	destring region, replace
+	gen ine01=region
+   
    
 *************
 * factor_ch *

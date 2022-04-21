@@ -1797,7 +1797,7 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 	replace miglac_ci = . if migrante_ci==0 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
-	**************************
+	************************** 
 	** PROVINCIAS ************
 	**************************
 

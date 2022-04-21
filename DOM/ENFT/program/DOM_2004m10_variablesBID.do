@@ -1859,7 +1859,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
 	
-	**************************
+	************************** 
 	** PROVINCIAS ************
 	**************************
 

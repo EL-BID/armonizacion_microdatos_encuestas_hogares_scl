@@ -1645,7 +1645,7 @@ lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
 lab val pnc_ci pnc_ci
 
 
-	**************************
+	************************** 
 	** REGIONES **************
 	**************************
 

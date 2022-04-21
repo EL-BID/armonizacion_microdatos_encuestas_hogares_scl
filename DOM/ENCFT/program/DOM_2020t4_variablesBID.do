@@ -1788,7 +1788,7 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 	
 	**************************
 	** PROVINCIAS ************
-	**************************
+	************************** 
 
    gen ine01=.   
    replace ine01=1  if  id_provincia==1			    /*Distrito Nacional*/

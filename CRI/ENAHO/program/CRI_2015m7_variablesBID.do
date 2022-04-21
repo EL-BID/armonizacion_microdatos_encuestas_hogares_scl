@@ -1594,7 +1594,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	**************************
 	** REGIONES **************
-	**************************
+	************************** 
 
 	gen ine01=.   
 	replace ine01=1 if  region==1	/*Central*/

@@ -1603,7 +1603,7 @@ lab val atencion_ci atencion_ci
 	
 	**************************
 	** REGIONES **************
-	**************************
+	************************** 
 	
    gen ine01=.   
    replace ine01=1 if  region==1		/*Tarapacá*/

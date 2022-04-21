@@ -1774,7 +1774,7 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
 
 	
-	**************************
+	************************** 
 	** PROVINCIAS ************
 	**************************
 

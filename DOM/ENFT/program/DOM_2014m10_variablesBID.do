@@ -1769,7 +1769,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
 
 	
-	**************************
+	************************** 
 	** PROVINCIAS ************
 	**************************
 

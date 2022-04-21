@@ -1655,7 +1655,7 @@ ren ocup ocup_old
 
 **************************
 ** PROVINCIAS ************
-**************************
+************************** 
 gen ine01=.   
 label var ine01 " Primera division politico-administrativa, Provincia"
 

@@ -1871,7 +1871,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	
 
 	**************************
-	** PROVINCIAS ************
+	** PROVINCIAS ************ 
 	**************************
 
    gen ine01=.   

@@ -1766,7 +1766,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	
 	**************************
-	** PROVINCIAS ************
+	** PROVINCIAS ************ 
 	**************************
 
    gen ine01=.   

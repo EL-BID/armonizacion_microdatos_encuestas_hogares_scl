@@ -1842,7 +1842,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	
 	**************************
 	** PROVINCIAS ************
-	**************************
+	************************** 
 
    gen ine01=.   
    replace ine01=1  if  provincia==1			/*Distrito Nacional*/

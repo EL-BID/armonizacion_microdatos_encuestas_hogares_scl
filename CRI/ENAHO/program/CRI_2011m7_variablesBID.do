@@ -2038,7 +2038,7 @@ label var vivialqimp_ch " Alquiler mensual imputado"
 	
 	**************************
 	** REGIONES **************
-	**************************
+	************************** 
 
 	gen ine01=.   
 	replace ine01=1 if  region==1	/*Central*/

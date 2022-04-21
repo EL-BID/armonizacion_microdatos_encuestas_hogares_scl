@@ -1807,7 +1807,7 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 	
 	
 	**************************
-	** PROVINCIAS ************
+	** PROVINCIAS ************ 
 	**************************
 
    gen ine01=.   

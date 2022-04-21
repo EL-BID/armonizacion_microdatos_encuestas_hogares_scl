@@ -1905,7 +1905,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	
 	**************************
 	** PROVINCIAS ************
-	**************************
+	************************** 
 
    gen ine01=.   
    replace ine01=1  if  provincia==1			/*Distrito Nacional*/

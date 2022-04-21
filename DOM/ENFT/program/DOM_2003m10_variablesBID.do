@@ -1823,7 +1823,7 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 	
 	**************************
 	** PROVINCIAS ************
-	**************************
+	************************** 
 
    gen ine01=.   
    replace ine01=1  if  provincia==1			/*Distrito Nacional*/

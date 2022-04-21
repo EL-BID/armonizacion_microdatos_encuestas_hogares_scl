@@ -1615,7 +1615,7 @@ gen desalent_ci=. // No está la pregunta en la encuesta 2020
 
 
 	**************************
-	** REGIONES **************
+	** REGIONES ************** 
 	**************************
 	
    gen ine01=.   

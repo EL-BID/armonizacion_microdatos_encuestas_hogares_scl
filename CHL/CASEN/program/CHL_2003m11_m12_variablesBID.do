@@ -255,19 +255,6 @@ gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
 
-	***************
-	***upm_ci***
-	***************
-gen upm_ci=. 
-
-	***************
-	***estrato_ci**
-	***************
-
-clonevar estrato_ci=estrato
-label variable estrato_ci "Estrato"
-
-
           ******************************
           *** VARIABLES DE DIVERSIDAD **
           ******************************
@@ -1116,108 +1103,6 @@ lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
 label var dis_ci "Personas con discapacidad"
 		
-		
-	**************************
-	** REGIONES **************
-	**************************
-	
-   gen ine01=.   
-   replace ine01=1 if  r==1				/*Arica y Parinacota*/
-   replace ine01=2 if  r==2				/*Antofagasta*/
-   replace ine01=3 if  r==3				/*Atacama*/
-   replace ine01=4 if  r==4				/*Coquimbo*/
-   replace ine01=5 if  r==5		    	/*Valparaíso*/
-   replace ine01=6 if  r==6				/*O'Higgins*/
-   replace ine01=7 if  r==7				/*Maule*/
-   replace ine01=8 if  r==8				/*Bío Bío*/
-   replace ine01=9 if  r==9				/*La Araucanía*/
-   replace ine01=10 if r==10			/*Los Lagos*/
-   replace ine01=11 if r==11			/*Aysén*/
-   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
-   replace ine01=13 if r==13			/*Metropolitana Santiago*/
-
-	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
-	label value ine01 ine01
-	label var ine01 " Primera division politico-administrativa, región"
-	
-   gen geolev1=.   
-   replace geolev1=15201 if  r==1		/*Arica, Parinacota y Tarapacá*/
-   replace geolev1=15202 if  r==2		/*Antofagasta*/
-   replace geolev1=15203 if  r==3		/*Atacama*/
-   replace geolev1=15204 if  r==4		/*Coquimbo*/
-   replace geolev1=15205 if  r==5		/*Valparaíso*/
-   replace geolev1=15206 if  r==6		/*O'Higgins*/
-   replace geolev1=15207 if  r==7		/*Maule*/
-   replace geolev1=15208 if  r==8		/*Ñuble y Bío Bío*/
-   replace geolev1=15209 if  r==9		/*La Araucanía*/
-   replace geolev1=15210 if r==10		/*Los Lagos y Los Ríos*/
-   replace geolev1=15211 if r==11		/*Aysén*/
-   replace geolev1=15212 if r==12		/*Magallanes y Antártica Chilena*/
-   replace geolev1=15213 if r==13		/*Metropolitana Santiago*/
-
-	label define geolev1 15201"Arica, Parinacota y Tarapacá" 15202"Antofagasta" 15203"Atacama" 15204"Coquimbo" 15205"Valparaíso" 15206"O'Higgins" 15207"Maule" 15208"Ñuble y Bío Bío" 15209"La Araucanía" 15210"Los Lagos y Los Ríos" 15211"Aysén" 15212"Magallanes y Antártica Chilena" 15213"Metropolitana Santiago"
-	label value geolev1 geolev1
-	label var geolev1 " Primera division politico-administrativa, región"
-	
-	
-	**************************
-	** PROVINCIAS ************
-	**************************
-		
-   gen ine02=.   
-   replace ine02=11 if p==11			/*Arica*/
-   replace ine02=12 if p==12			/*Parinacota*/
-   replace ine02=13 if p==13			/*Iquique*/
-   replace ine02=21 if p==21			/*Tocopilla*/
-   replace ine02=22 if p==22		    /*El Loa*/
-   replace ine02=23 if p==23			/*Antofagasta*/
-   replace ine02=31 if p==31			/*Chañaral*/
-   replace ine02=32 if p==32			/*Copiapó*/
-   replace ine02=33 if p==33			/*Huasco*/
-   replace ine02=41 if p==41			/*Elqui*/
-   replace ine02=42 if p==42			/*Limarí*/
-   replace ine02=43 if p==43			/*Choapa*/
-   replace ine02=51 if p==51			/*Petorca*/
-   replace ine02=52 if p==52			/*Los Andes*/
-   replace ine02=53 if p==53	    	/*San Felipe de Aconcagua*/
-   replace ine02=54 if p==54			/*Quillota*/
-   replace ine02=55 if p==55			/*Valparaíso*/
-   replace ine02=56 if p==56			/*San Antonio*/
-   replace ine02=61 if p==61			/*Cachapoal*/
-   replace ine02=62 if p==62			/*Colchagua*/
-   replace ine02=63 if p==63			/*Cardenal Caro*/
-   replace ine02=71 if p==71			/*Curico*/
-   replace ine02=72 if p==72			/*Talca*/
-   replace ine02=73 if p==73			/*Linares*/
-   replace ine02=74 if p==74	    	/*Cauquenes*/
-   replace ine02=81 if p==81			/*Ñuble*/
-   replace ine02=82 if p==82			/*Bio Bío*/
-   replace ine02=83 if p==83			/*Concepción*/
-   replace ine02=84 if p==84			/*Arauco*/
-   replace ine02=91 if p==91			/*Malleco*/
-   replace ine02=92 if p==92			/*Cautín*/
-   replace ine02=101 if p==101			/*Valdivia*/
-   replace ine02=102 if p==102			/*Osorno*/
-   replace ine02=103 if p==103			/*Llanquihue*/
-   replace ine02=104 if p==104			/*Chiloé*/
-   replace ine02=105 if p==105			/*Palena*/
-   replace ine02=111 if p==111			/*Cohaique*/
-   replace ine02=112 if p==112	    	/*Aisén*/
-   replace ine02=113 if p==113			/*General Carrera*/
-   replace ine02=114 if p==114			/*Capitán Prat*/
-   replace ine02=121 if p==121			/*Última Esperanza*/
-   replace ine02=122 if p==122			/*Magallanes*/
-   replace ine02=123 if p==123			/*Tierra del Fuego*/
-   replace ine02=131 if p==131			/*Santiago*/
-   replace ine02=132 if p==132			/*Chacabuco*/
-   replace ine02=133 if p==133			/*Cordillera*/
-   replace ine02=134 if p==134			/*Maipo*/
-   replace ine02=135 if p==135			/*Melipilla*/
-   replace ine02=136 if p==136			/*Talagante*/
-
-	label define ine02 11"Arica" 12"Parinacota" 13"Iquique" 21"Tocopilla" 22"El Loa" 23"Antofagasta" 31"Chañaral" 32"Copiapó" 33"Huasco" 41"Elqui" 42"Limarí" 43"Choapa" 51"Petorca" 52"Los Andes" 53"San Felipe de Aconcagua" 54"Quillota" 55"Valparaíso" 56"San Antonio" 61"Cachapoal" 62"Colchagua" 63"Cardenal Caro" 71"Curico" 72"Talca" 73"Linares" 74"Cauquenes" 81"Ñuble" 82"Bio Bío" 83"Concepción" 84"Arauco" 91"Malleco" 92"Cautín" 101"Valdivia" 102"Osorno" 103"Llanquihue" 104"Chiloé" 105"Palena" 111"Cohaique" 112"Aisén" 113"General Carrera" 114"Capitán Prat" 121"Última Esperanza" 122"Magallanes" 123"Tierra del Fuego" 131"Santiago" 132"Chacabuco" 133"Cordillera" 134"Maipo" 135"Melipilla" 136"Talagante"
-	label value ine02 ine02
-	label var ine02 " Segunda division politico-administrativa, Provincia"
 
 
 /*_____________________________________________________________________________________________________*/

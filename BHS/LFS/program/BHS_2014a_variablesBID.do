@@ -939,7 +939,7 @@ label variable asispre_ci "Asistencia a educacion preescolar"
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=1 if (education==5 | education==6 | education==7)
+gen byte eduac_ci=1 if (education==6 | education==7)
 replace eduac_ci=0 if education==8
 label variable eduac_ci "Superior universitario vs superior no universitario"
 	
@@ -953,11 +953,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***pqnoasis_ci***
 *****************
 gen pqnoasis_ci=.
-label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"vacación/receso" 2"falta de dinero" 3"por trabajo" 4"por enfermedad/accidente/discapacidad"
-label def pqnoasis_ci 5"los establecimientos son distantes" 6"culminó sus estudios" 7"edad temprana/ edad avanzada", add
-label def pqnoasis_ci 8"falta de interés" 9"labores de casa/ embarazo/cuidado de niños/as" 10"otra", add
-label val pqnoasis_ci pqnoasis 
+
 
 ******************
 ***pqnoasis1_ci***

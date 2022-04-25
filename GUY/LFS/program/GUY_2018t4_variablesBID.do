@@ -735,8 +735,9 @@ replace aedu_ci=0   if q1_11==2                          /*never attended*/
 replace aedu_ci=0   if q1_13==1 			             /*pre-primary*/
 replace aedu_ci=0   if q1_13==2 & q1_14==1               /*primary & none*/
 
-replace aedu_ci=q1_14 if q1_13==2 & q1_14!=1 & q1_14!=.  /*primary*/
-replace aedu_ci=6 	  if q1_13==3 & q1_14==1 | q1_14==6  /*secundaria & none*/
+replace aedu_ci=1 if q1_13==2 & q1_14==2 /*primary & level 1-2*/
+replace aedu_ci=q1_14 if q1_13==2 & q1_14>=3 & q1_14<=6 & q1_14!=.  /*primary*/
+replace aedu_ci=6 	  if q1_13==3 & q1_14==1  /*secundaria & none*/
 
 replace aedu_ci=q1_14 if q1_13==3 & q1_14>=7 & q1_14!=.  /*secondary*/
 replace aedu_ci=12    if q1_13==4 & q1_15==1             /*post-sec & none*/
@@ -750,7 +751,7 @@ replace aedu_ci=11+4 if q1_13==5 & q1_15== 4             /*bachelor*/
 replace aedu_ci=11+6 if q1_13==5 & q1_15== 5             /*posgrado*/
 replace aedu_ci=11+6 if q1_13==5 & q1_15== 6             /*master*/
 replace aedu_ci=11+9 if q1_13==5 & q1_15== 7             /*doctorado*/
-label var aedu_ci "Anios de educacion aprobados" 
+label var aedu_ci "Anios de educacion aprobados"
 
 **************
 ***eduno_ci***
@@ -856,7 +857,7 @@ la var asispre_ci "Asiste a educacion prescolar"
 ***eduac_ci***
 **************
 gen eduac_ci=.
-replace eduac_ci=1 if q1_13==5 & q1_15==3 /*university/tertiary & university certificate or diploma*/
+replace eduac_ci=1 if q1_13==5 & (q1_15==3 | q1_15==4 | q1_15==5 | q1_15==6 | q1_15==7)
 replace eduac_ci=0 if q1_13==5 & q1_15==2 /*university/tertiary & technical/vocational certificate or diploma*/
 label variable eduac_ci "Superior universitario vs superior no universitario"
 

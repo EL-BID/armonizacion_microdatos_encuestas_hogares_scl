@@ -73,6 +73,13 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, departamentos"
 
+************
+* ine01 *
+************
+gen ine01=s01p01
+label define ine01 5 "Nueva Segovia"10 "Jinotega" 20 "Madriz" 25 "Estelí" 30 "Chinandega" 35 "León" 40 "Matagalpa" 50 "Boaco" 55 "Managua" 60 "Masaya" 65 "Chontales" 70 "Granada" 75 "Carazo" 80 "Rivas" 85 "Río San Juan" 91 "Atlántico Norte"  93 "Atlántico Sur"		  
+label value ine01 ine01 
+
 ***************
 ***factor_ch***
 ***************

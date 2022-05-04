@@ -135,6 +135,13 @@ label value region_c region_c
 label var region_c " Primera División política - Entidades Federativas"
 
 ************************
+*** ine01 ***
+************************
+gen ine01=entidad
+label define ine01 1 "Distrito Capital" 2 "Amazonas" 3 "Anzoategui" 4 "Apure" 5 "Aragua" 6 "Barinas" 7 "Bolivar" 8 "Carabobo" 9 "Cojedes" 10 "Delta Amacuro" 11 "Falcon" 12 "Guarico" 13 "Lara" 14 "Merida" 15 "Miranda" 16 "Monagas" 17 "Nueva Esparta" 18 "Portuguesa" 19 "Sucre" 20 "Tachira" 21 "Trujillo" 22 "Yaracuy" 23 "Zulia" 24 "Vargas"
+label value ine01 ine01
+
+************************
 *** region según BID ***
 ************************
 gen region_BID_c=3 

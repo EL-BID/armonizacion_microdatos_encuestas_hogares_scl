@@ -1148,30 +1148,7 @@ replace formal_1=1 if afiliado_ci1==1 & (cotizando_ci!=1 | cotizando_ci!=0) & pa
 ******************************
 *	aedu_ci
 ******************************
-/*
-Nivel
-Valor Etiqueta
-1 Preescolar
-2 Primaria
-3 Secundaria
-4 Carrera técnica con secundaria terminada
-5 Preparatoria o bachillerato
-6 Carrera técnica con preparatoria terminada
-7 Normal
-8 Profesional
-9 Maestría o doctorado
-#33 grado: Grado escolar al que
-
-Grado
-Valor Etiqueta
-1 Primer año
-2 Segundo año
-3 Tercer año
-4 Cuarto año
-5 Quinto año
-6 Sexto año
-*/
-
+*Para generar años de educacion aprobados utilizamos nivelaprob y gradoaprob 
 
 destring nivel nivelaprob gradoaprob antec_esc, replace
 
@@ -1263,7 +1240,7 @@ label var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci
 ******************************
-gen byte eduuc_ci=(aedu_ci>=16 & (nivelaprob==7 | nivelaprob==5)
+gen byte eduuc_ci=(aedu_ci>=16) & (nivelaprob==7 | nivelaprob==5)
 replace eduui_ci=1 if (aedu_ci>=15  & nivelaprob==6 & antec_esc==3) 
 replace eduuc_ci=1 if nivelaprob==8 | nivelaprob==9
 replace eduuc_ci=. if aedu_ci==.
@@ -1325,6 +1302,8 @@ gen edupub_ci=.
 replace edupub_ci=1 if tipoesc=="1" & asis_esc=="1"
 replace edupub_ci=0 if (tipoesc=="2" | tipoesc=="3") & asis_esc=="1"
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
+
+drop nivel_ed grado_ed
 
 ******************************************************************************
 *	INFRAESTRUCTURE VARIABLES 

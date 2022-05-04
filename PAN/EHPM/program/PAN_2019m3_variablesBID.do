@@ -1109,7 +1109,7 @@ replace añosaprobados = p6-80 if p6>=81 & p6<=84
 gen aedu_ci = .
 replace aedu_ci = 0 if añosaprobados== 0 
 replace aedu_ci = añosaprobados if nivel == 1
-replace aedu_ci = añosaprobados+6 if nivel == 2 // tengo dudas si la vocacional es dsp de primaria o despues del primer ciclo de secundaria - validar
+replace aedu_ci = añosaprobados+6 if nivel == 2 
 replace aedu_ci = añosaprobados+6 if nivel == 3
 replace aedu_ci = añosaprobados+12 if nivel == 4
 replace aedu_ci = añosaprobados+12 if nivel == 5

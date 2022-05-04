@@ -86,6 +86,14 @@ label values region_BID_c region_BID
 ***************
 g region_ci=.
 
+
+***************
+* ine01 *
+***************
+gen ine01=parno
+label define ine01 201 "st michael" 202 "christ church" 203 "st george" 204 "st philip" 205 "st john" 206 "st james" 207 "st thomas" 208 "st joseph" 210 "st peter" 211 "st lucy"
+label values ine01 ine01
+
 ***************
 *    ZONA     *
 ***************

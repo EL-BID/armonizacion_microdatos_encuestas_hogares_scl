@@ -2335,7 +2335,7 @@ BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
 *Modificación Cesar Lins - Feb 2021, s06b_110 -> s06b_11a_cod
 rename s06b_11a_cod codocupa
 rename caeb_op codindustria
-
+destring codocupa codindustria, replace
 compress
 
 

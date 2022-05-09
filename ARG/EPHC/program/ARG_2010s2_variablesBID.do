@@ -1821,6 +1821,7 @@ para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
 rename pp04b_cod codindustria
 
+destring codocupa codindustria, replace
 
 compress
 

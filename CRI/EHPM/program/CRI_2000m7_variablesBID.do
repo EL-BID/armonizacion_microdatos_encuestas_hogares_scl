@@ -1377,6 +1377,8 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 rename ramap codindustria
 rename ocupp codocupa
+replace codindustria=. if codindustria==0
+replace codocupa=. if codocupa==0
 compress
 saveold "`base_out'", replace
 

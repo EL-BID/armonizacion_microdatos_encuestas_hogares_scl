@@ -1224,11 +1224,8 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 *Modificación Mayra Sáenz - Octubre 2016: Corrección enviada por Ivan Bornacelly SCL/EDU	
 replace cp407=. if cp407==99
 replace cp412=. if cp412==99
-<<<<<<< Updated upstream
 replace cp410=. if cp410>9
 replace cp417=. if cp417>9
-=======
->>>>>>> Stashed changes
 
 **Para quienes ya no asisten:
 gen aedu_ci=.
@@ -1252,19 +1249,11 @@ label var aedu_ci "Años de educacion aprobados"
 // imputando los años perdidos
 replace aedu_ci=0 if (cp407==1 | cp407==2 | cp407==3) & cp410==. // alfabetizacion 
 replace aedu_ci=0 if (cp412==2 | cp412==3) & cp417==. // alfabetizacion
-<<<<<<< Updated upstream
 replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) // educacion basica
 replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) // ciclo comun
 replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) // diversificado
 replace aedu_ci=11 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) // terciaria
 replace aedu_ci=15 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) // postgrado
-=======
-replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) //educacion basica
-replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) //ciclo comun
-replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) //diversificado
-replace aedu_ci=11 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) //terciaria
-replace aedu_ci=15 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) //postgrado
->>>>>>> Stashed changes
  
 **************
 ***eduno_ci***
@@ -1318,11 +1307,7 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 ***************
 ***edus2i_ci*** 
 ***************
-<<<<<<< Updated upstream
 g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
-=======
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<=11)
->>>>>>> Stashed changes
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 

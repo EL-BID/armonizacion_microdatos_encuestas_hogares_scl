@@ -1078,7 +1078,7 @@ gen vivialqimp_ch=v1c_pagari
 ******************************
 *	aedu_ci
 ******************************
-
+*Javier
 // la pregunta P6 de grado educativo alcanzado se aplica unmicamente a mayores de 3 años. La clasificacion corresponde al nivel educativo alcanzado (primer digito) y años aprobados (segundo digito)
 
 gen nivel = .

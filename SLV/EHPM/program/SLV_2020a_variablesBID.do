@@ -900,8 +900,8 @@ label var edusc_ci "Secundaria Completa"
 **************
 ***eduui_ci***
 **************
-gen eduui_ci=(aedu_ci>=12 & r217==2) // mayor o igual a 12 anios y titulo de bachiller general
-replace eduui_ci=1 if aedu_ci>=13 & (r217==3| r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
+gen eduui_ci=(aedu_ci>=12 & r217==2) // mayor o igual a 12 anios de estudio y titulo de bachiller general
+replace eduui_ci=1 if aedu_ci>=13 & (r217==3 | r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 

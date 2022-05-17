@@ -891,6 +891,7 @@ la var subemp_ci "Personas en subempleo por horas"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+			
 
 **************
 ***aedu_ci***

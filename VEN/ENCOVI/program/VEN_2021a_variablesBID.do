@@ -870,51 +870,56 @@ replace ynlm_ch =. if miembros_ci==0
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+* Mod. 5/2022 Agustina Thailinger
 
 ***************
 ***asiste_ci***
 ***************
 gen byte asiste_ci=.
-replace asiste_ci=1 if s7q3 ==1 
-replace asiste_ci=0 if s7q3 ==2 
+replace asiste_ci=1 if s7q3==1 
+replace asiste_ci=0 if s7q3==2 
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
+*************
+***aedu_ci***
+*************
+recode s7q11* s7q4* (99=.) (98=.)
 
-***************
-***/aedu_ci****
-***************
-
-recode s7q11* s7q4*  (99=.) (98=.)
-recode s7q11b (7/2014=7)
-
-/**** cambió s7q11a a s7q11b *****/
 gen byte aedu_ci=.
-replace aedu_ci=0                 if s7q11==1 | s7q11==2
-replace aedu_ci=s7q11b           if s7q11==3 /* 1-9 años */ | s7q11==5 /* 1-6 años */
+replace aedu_ci=0        if s7q11==1 | s7q11==2
+replace aedu_ci=s7q11b   if s7q11==3 /*basica: 1-9 años*/ | s7q11==5 /*primaria: 1-6 años*/
+replace aedu_ci=s7q11b+9 if s7q11==4 // regimen anterior
+replace aedu_ci=s7q11b+6 if s7q11==6 // regimen actual
 
-replace aedu_ci=s7q11b+9           if s7q11==4 //regimen anterior
-replace aedu_ci=s7q11b+6         if s7q11==6 //regimen actual
-
-
-/* Explanation:
- For TSU, universitario, and postgrado, the s7q11b variable 
- may be defined in years, semesters or trimesters.
- This information is stored in s7q11a (1=year, 2=sem., 3=tri.).
- Thus, to calculate it in years, we need to multiply s7q11b
- for the correct factor:
-   s7q11b*1.0 if it is reported in years
-   s7q11b*0.5 if it is reported in semesters
-   s7q11b*0.25 if it is reported in trimesters.
-  The formula below does exactly that.
+/*
+Explanation:
+For TSU, universitario, and postgrado, the s7q11b variable 
+may be defined in years, semesters or trimesters.
+This information is stored in s7q11a (1=year, 2=sem., 3=tri.).
+Thus, to calculate it in years, we need to multiply s7q11b
+for the correct factor:
+s7q11b*1.0 if it is reported in years
+s7q11b*0.5 if it is reported in semesters
+s7q11b*0.25 if it is reported in trimesters.
 */
-replace aedu_ci = 12 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11b*(1/(2^(s7q11a-1))) if s7q11a!=. & s7q11==9 // postgrado
 
-replace aedu_ci=floor(aedu_ci) //truncando la variable
+replace aedu_ci=11+s7q11b      if s7q11a==1 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11b*0.5  if s7q11a==2 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11b*0.25 if s7q11a==3 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
+
+replace aedu_ci=16+s7q11b      if s7q11a==1 & s7q11==9 // postgrado
+replace aedu_ci=16+s7q11b*0.5  if s7q11a==2 & s7q11==9 // posgrado
+replace aedu_ci=16+s7q11b*0.25 if s7q11a==3 & s7q11==9 // posgrado
+
+**para los que tienen missing en el regimen de estudio
+replace s7q11b=. if s7q11b==.a
+replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11b==. & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci=16 if s7q11==9 & s7q11b==. & aedu_ci==. // postgrado
 
 label variable aedu_ci "Años de Educacion"
 
-							
+replace aedu_ci=floor(aedu_ci) // redondear la variable
+
 **************
 ***eduno_ci***
 **************
@@ -928,55 +933,51 @@ label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 gen edupre_ci=.
 label var edupre_ci "Educacion preescolar"
 
-	
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=aedu_ci>0 & aedu_ci<6
+gen edupi_ci=(aedu_ci>0 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "1 = personas que no han completado el nivel primario"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=aedu_ci==6
+gen edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "1 = personas que han completado el nivel primario"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=aedu_ci>6 & aedu_ci<11 // 11 segun la tabla y empiricamente hay un corte ahi
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11)
 replace edusi_ci=1 if aedu_ci==11 & s711e==2 // 11 y sin titulo
-
 replace edusi=. if aedu_ci==.
 label var edusi_ci "1 = personas que no han completado el nivel secundario"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=aedu_ci==11 & (s711e==1 | s711e==. ) // 11 anios y con titulo o valor perdido
+gen edusc_ci=(aedu_ci==11 & (s711e==1 | s711e==.)) // 11 anios y con titulo o valor perdido
 replace edusc_ci=0 if aedu_ci==11 & s711e==2 // 11 y sin titulo
-replace edusc_ci=1 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo media
-
+replace edusc_ci=1 if aedu_ci==12 & (s7q11==4 | s7q11==6) // 12 anios y solo media
 replace edusc=. if aedu_ci==.
 label var edusc_ci "1 = personas que han completado el nivel secundario"
-
 
 **************
 ***eduui_ci***
 **************
-gen eduui_ci=(aedu_ci>=12 & s711e==2) & (s7q11==7|s7q11==8) //12 anios de educacion sin titulo
-replace eduui_ci=0 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo media
-
+gen eduui_ci=(aedu_ci>=12 & s711e==2) & (s7q11==7 | s7q11==8) // 12 anios de educacion sin titulo
+replace eduui_ci=1 if aedu_ci==12 & s711e==1 & (s7q11==7 | s7q11==8)
+replace eduui_ci=0 if aedu_ci==12 & (s7q11==4 | s7q11==6) // 12 anios y solo media
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "1 = personas que no han completado el nivel universitario o superior"
 
 ***************
 ***eduuc_ci***
 ***************
-gen byte eduuc_ci= (aedu_ci>=12 & s711e==1) & (s7q11==7|s7q11==8) //mas de 11 anios de educacion, nivel terciario y titulo
-replace eduuc_ci=1 if s7q11==9
+gen byte eduuc_ci=(aedu_ci>=13 & s711e==1) & (s7q11==7 | s7q11==8) // mas de 11 anios de educacion, nivel terciario y titulo
+replace eduuc_ci=1 if (aedu_ci>=13 & s7q11==9)
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "1 = personas que han completado el nivel universitario o superior"
 
@@ -1011,16 +1012,13 @@ replace edus2c_ci=1 if aedu_ci==12 & (s7q11==4 |s7q11==6) // 12 anios y solo med
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
 replace eduac_ci=1 if (s7q11==8)
 replace eduac_ci=0 if (s7q11==7)
-
 label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
-
 
 ***************
 ***asispre_ci**
@@ -1028,8 +1026,6 @@ label var eduac_ci "Educacion terciaria académica versus educación terciaria n
 g asispre_ci=(s7q4==1) 
 la var asispre_ci "Asiste a educacion prescolar"
 	
-
-
 ***************
 ***repite_ci***
 ***************
@@ -1040,44 +1036,38 @@ label var repite_ci "Personas que han repetido al menos un año o grado"
 ***repiteult_ci***
 ******************
 gen repiteult_ci=.
+replace repiteult_ci=1 if s7q2b==1 & s7q2c==2
 label var repiteult_ci "Personas que han repetido el ultimo grado"
 
 ***************
 ***edupub_ci***
 ***************
-gen edupub_ci=.
+gen edupub_ci=(s7q5==2)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
-
 
 **************
 ***pqnoasis***
 **************
 gen byte pqnoasis_ci=.
-replace pqnoasis=s7q2 if s7q2>1 & s7q2<9
-replace pqnoasis=10 if s7q2==9
-replace pqnoasis=11 if s7q2==10 |  s7q2==11
-replace pqnoasis=13 if s7q2==14
-replace pqnoasis=14 if s7q2==15
-replace pqnoasis=15 if s7q2==16 | s7q2==1
+replace pqnoasis=s7q2
 label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-label define pqnoasis_ci 1 "Culmino sus estudios" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Tiene que trabajar " 9 "No quiso seguir estudiando "  10 " Inseguridad al asistir al centro educat " 11 "Discriminación o violencia" 12 "Por embarazo/cuidar los hijos" 13 "Tiene que ayudar en tareas del hogar " 14 "No lo considera importante " 15 "otros"
+label define pqnoasis_ci 1 "Muy joven" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Debía trabajar " 9 " Inseguridad al asistir al centro educativo"10 "Discriminación" 11 "Violencia" 14 "Obligaciones en el hogar" 15 "No lo considera importante " 16 "Otros"
 label values pqnoasis_ci pqnoasis_ci
 
-**************
-*pqnoasis1_ci*
-**************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+******************
+***pqnoasis1_ci***
+******************
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+g       pqnoasis1_ci=1 if pqnoasis_ci==5 & pqnoasis_ci==6
+replace pqnoasis1_ci=2 if pqnoasis_ci==8
+replace pqnoasis1_ci=3 if pqnoasis_ci==7  
+replace pqnoasis1_ci=4 if pqnoasis_ci==15
+replace pqnoasis1_ci=5 if pqnoasis_ci==14
+replace pqnoasis1_ci=7 if pqnoasis_ci==1
+replace pqnoasis1_ci=8 if pqnoasis_ci==2  | pqnoasis_ci==3 | pqnoasis_ci==4 | pqnoasis_ci==9
+replace pqnoasis1_ci=9 if pqnoasis_ci==10 | pqnoasis_ci==11 | pqnoasis_ci==16
 
-g       pqnoasis1_ci = 1 if pqnoasis_ci ==5 & pqnoasis_ci==6
-replace pqnoasis1_ci = 2 if pqnoasis_ci ==8
-replace pqnoasis1_ci = 3 if pqnoasis_ci ==7  
-replace pqnoasis1_ci = 4 if pqnoasis_ci ==14 | pqnoasis_ci==9
-replace pqnoasis1_ci = 5 if pqnoasis_ci ==13 | pqnoasis_ci==12
-replace pqnoasis1_ci = 6 if pqnoasis_ci ==1
-replace pqnoasis1_ci = 8 if pqnoasis_ci ==2  | pqnoasis_ci ==3
-replace pqnoasis1_ci = 9 if pqnoasis_ci ==15 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==4 | pqnoasis_ci==3
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5 "Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7 "Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ********************************************

@@ -1023,7 +1023,7 @@ label var eduac_ci "Educacion terciaria académica versus educación terciaria n
 ***************
 ***asispre_ci**
 ***************
-g asispre_ci=(s7q4==2) 
+g asispre_ci=(s7q4==1) 
 la var asispre_ci "Asiste a educacion prescolar"
 	
 ***************

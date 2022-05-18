@@ -397,6 +397,9 @@ gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe
 
+**Remplazar la variable afroind_ci por missing ya que no se le pregunta a todos los miembros del hogar
+replace afroind_ci=.
+
 	*******************
 	***afroind_ano_c***
 	*******************

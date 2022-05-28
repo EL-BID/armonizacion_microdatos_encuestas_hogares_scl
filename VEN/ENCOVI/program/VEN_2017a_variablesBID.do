@@ -861,13 +861,19 @@ replace ynlm_ch =. if miembros_ci==0
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+*Javier Valverde
+capture rename (EMHP*) (emhp*)
+capture rename (emhp28N emhp28A emhp28S) (emhp28n emhp28a emhp28s)
+	//JV: All variables on this dataset are in uppercase, I'm addressing this by renaming them,
+	//but in case this is done previously on the script, I've put the 'capture' on.
 
 ***************
 ***asiste_ci***
 ***************
 gen byte asiste_ci=.
 replace asiste_ci=1 if emhp29 ==1 
-replace asiste_ci=0 if emhp29 ==2
+replace asiste_ci=0 if emhp29 ==2 | emhp29 ==3
+replace asiste_ci=. if emhp29 ==99 | emhp29 ==98
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
 
@@ -878,12 +884,16 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 recode emhp28a emhp28n  emhp28s  (99=.) (98=.)
 
 gen byte aedu_ci=.
-replace aedu_ci=0               if emhp28n==1 | emhp28n==2
+replace aedu_ci=0                 if emhp28n==1 | emhp28n==2
 replace aedu_ci=emhp28a           if emhp28n==3
 replace aedu_ci=emhp28a+6         if emhp28n==4
 replace aedu_ci=(11+(0.5*emhp28s))  if (emhp28n==5 | emhp28n==6)  // técnico (TSU) | Universitario
 replace aedu_ci=(17+(0.5*emhp28s))  if emhp28n==7 //posgrado
 label variable aedu_ci "Años de Educacion"
+
+//JV: emhp28a contains grades approved in years, this applies for primaria and media,
+//emhp28s contaings grades approved in semesters, this applies for TSU and universitario, that's the reason
+//why they're multiplied by 0.5
 
 
 
@@ -891,19 +901,17 @@ label variable aedu_ci "Años de Educacion"
 ***eduno_ci***
 **************
 gen eduno_ci=.
-replace eduno=1 if emhp28n==1
-replace eduno=0 if emhp28n>1 & emhp28n<=7
+replace eduno=1 if emhp29==3	//JV: People that never went to school
+replace eduno=0 if emhp29!=3 & emhp29!=99
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if emhp28n==2
-replace edupre=0 if emhp28n>2 | emhp28n==1
+*replace edupre=1 if emhp28n==2
 label var edupre_ci "Educacion preescolar"
 
-	q
 **************
 ***edupi_ci***
 **************
@@ -1043,11 +1051,12 @@ replace pqnoasis1_ci = 3 if pqnoasis_ci ==7
 replace pqnoasis1_ci = 4 if pqnoasis_ci ==14 | pqnoasis_ci==9
 replace pqnoasis1_ci = 5 if pqnoasis_ci ==13 | pqnoasis_ci==12
 replace pqnoasis1_ci = 6 if pqnoasis_ci ==1
-replace pqnoasis1_ci = 8 if pqnoasis_ci ==2  
+replace pqnoasis1_ci = 8 if pqnoasis_ci ==2  | pqnoasis_ci ==3
 replace pqnoasis1_ci = 9 if pqnoasis_ci ==15 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==4 | pqnoasis_ci==3
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
+
 
 ********************************************
 ***Variables de Infraestructura del hogar***

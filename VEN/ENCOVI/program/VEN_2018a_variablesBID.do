@@ -861,6 +861,7 @@ replace ynlm_ch =. if miembros_ci==0
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+*Javier Valverde
 
 ***************
 ***asiste_ci***
@@ -886,24 +887,31 @@ replace aedu_ci=(11+(0.5*emhp27s))  if (emhp27n==5 | emhp27n==6)  // técnico (T
 replace aedu_ci=(17+(0.5*emhp27s))  if emhp27n==7 //posgrado
 label variable aedu_ci "Años de Educacion"
 
+//JV: emhp27a contains grades approved in years, this applies for primaria and media,
+//emhp27s contaings grades approved in semesters, this applies for TSU and universitario, that's the reason
+//why they're multiplied by 0.5
+
+
 
 **************
 ***eduno_ci***
 **************
 gen eduno_ci=.
-replace eduno=1 if emhp27n==1
-replace eduno=0 if emhp27n>1 & emhp27n<=7
+replace eduno=1 if emhp28==3	//JV: People that never went to school
+replace eduno=0 if emhp28!=3 & emhp28!=99
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if emhp27n==2
-replace edupre=0 if emhp27n>2 | emhp27n==1
-label var edupre_ci "Educacion preescolar"
+*replace edupre=1 if emhp27n==2
+label var edupre_ci "Educacion preescolar"	/*JV: Con la información actual, sólo se puede identificar que asistieron a preescolar
+											 a aquellos que sólo tienen escolaridad de preescolar, pero para todos los que tienen algún tipo de escolaridad (casi todos)
+											deja la variable nula (es decir, no se puede identificar a los que NO fueron a preescolar ¿Es util codificarla de esta manera,
+											o debería dejarla totalmente nula? De momento, la dejo nula, pero dejo comentadas las líneas para codificar a los que solo
+											tienen preescolar en caso de que decidan codificarla así*/
 
-	q
 **************
 ***edupi_ci***
 **************
@@ -997,7 +1005,6 @@ label var eduac_ci "Educacion terciaria académica versus educación terciaria n
 ***************
 g asispre_ci=.
 replace asispre_ci=1 if asiste_ci==1 & (emhp27n==2)
-replace asispre_ci=1 if asiste_ci==1 & (emhp27n==1) & (edad_ci<=5)
 recode asispre_ci (.=0)
 la var asispre_ci "Asiste a educacion prescolar"
 	

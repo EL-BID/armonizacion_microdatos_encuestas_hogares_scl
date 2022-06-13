@@ -935,7 +935,8 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-
+*Javier
+			
 	*************
 	***aedu_ci***
 	*************
@@ -943,7 +944,7 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	cap clonevar nivinst = p10a /*nivel de instruccion*/ 
 	cap clonevar anoinst = p10b /*años aprobados*/
 	
-	//Categorias nivel (formulario) - se explican los dos sistemas y cuales son sus equivalentes (la pregunta releva con terminología de ambos sistemas el viejo y el nuevo) //
+	//Categorias nivel (formulario) - se explican los dos sistemas y cuales son sus equivalentes //
 	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 "Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
 	label values p10a P10a
 	label values nivinst P10a
@@ -953,10 +954,10 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	replace aedu_ci= anoinst if nivinst==4 // Años primaria
 	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
 	replace aedu_ci =0 if nivinst==5 & aedu_ci==-1 // para que no queden en -1 los de 0 años aprobados 
-	replace aedu_ci = anoinst+6  if nivinst==6 // Secundaria
-	replace aedu_ci = anoinst+9  if nivinst==7 // Bachillerato  
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9 // Superior
-	replace aedu_ci = anoinst+16 if nivinst==10 //Posgrado
+	replace aedu_ci = anoinst+6  if nivinst==6 // secundaria
+	replace aedu_ci = anoinst+9  if nivinst==7 // bachillerato
+	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9 //superior
+	replace aedu_ci = anoinst+16 if nivinst==10 // posgrado
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
@@ -1004,7 +1005,7 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (p12a==1 & nivinst==9) | (p12a==1 & nivinst==8) | (nivinst==10)
+	gen byte eduuc_ci= (p12a==1 & nivinst==9) | (p12a==1 & nivinst==8) | (nivinst==10)	
 	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 

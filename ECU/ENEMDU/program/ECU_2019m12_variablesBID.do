@@ -915,10 +915,10 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			***VARIABLES DE EDUCACION***
 			****************************
 *Javier
+			
 	*************
 	***aedu_ci***
 	*************
-	destring p10a p10b p07 p09, replace
 	
 	cap clonevar nivinst = p10a /*nivel de instruccion*/ 
 	cap clonevar anoinst = p10b /*años aprobados*/
@@ -932,11 +932,11 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace aedu_ci=0 if nivinst==1 | nivinst==2 | nivinst==3
 	replace aedu_ci= anoinst if nivinst==4 // Años primaria
 	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
-	replace aedu_ci =0 if nivinst==5 & anoinst==-1 // para que no queden en -1 los de 0 años aprobados 
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+16 if nivinst==10
+	replace aedu_ci =0 if nivinst==5 & aedu_ci==-1 // para que no queden en -1 los de 0 años aprobados 
+	replace aedu_ci = anoinst+6  if nivinst==6 // secundaria
+	replace aedu_ci = anoinst+9  if nivinst==7 // bachillerato
+	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9 //superior
+	replace aedu_ci = anoinst+16 if nivinst==10 // posgrado
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
@@ -977,14 +977,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<16 & nivinst==9) | (aedu_ci>12 & aedu_ci<15 & nivinst==8)
+	gen eduui_ci=(p12a==2 & nivinst==9) | (p12a==2 & nivinst==8)
 	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=16 & nivinst==9) | (aedu_ci>=15 &  nivinst==8) | (nivinst==10)
+	gen byte eduuc_ci= (p12a==1 & nivinst==9) | (p12a==1 & nivinst==8) | (nivinst==10)	
 	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 
@@ -1049,9 +1049,11 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	replace p09 = 17 if p09 == 16	//JV: Aquí asumo que el número más alto es "otra" y por eso la cambio; pero bien puede ser que no venga la opción "otra", pero el codebook no dice.
+	recode p09 (16=17)	// JV: No tiene opción "Falta de recursos tecnológicos". Recoded accordingly
+	
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
+	
 	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar" 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar" 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado" 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Falta de recursos tecnologicos" 17"Otra razón" 
 	label val pqnoasis_ci pqnoasis_ci
 	

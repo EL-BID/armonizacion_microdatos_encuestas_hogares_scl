@@ -17,7 +17,7 @@ global ruta = "${surveysFolder}\\survey\PER\ENAHO\2021\a\data_orig"
 global out ="${surveysFolder}\survey\PER\ENAHO\2021\a\data_merge"
 
 *Equipamiento del hogar
-use "$ruta\687-Modulo18\enaho01-2021-612.dta" , clear
+use "$ruta\759-Modulo18\enaho01-2021-612.dta" , clear
 keep conglome vivienda hogar p612 p612n
 reshape wide p612, i(conglome vivienda hogar) j(p612n)
 
@@ -77,80 +77,80 @@ label var p61224 "Su hogar tiene: otro"
 label var p61225 "Su hogar tiene: otro"
 label var p61226 "Su hogar tiene: otro"
 
-saveold "$ruta\687-Modulo18\enaho01-2021-612_1.dta", replace
+saveold "$ruta\759-Modulo18\enaho01-2021-612_1.dta", replace
 
 * Sort de bases
-use "$ruta\687-Modulo02\enaho01-2021-200.dta", clear
+use "$ruta\759-Modulo02\enaho01-2021-200.dta", clear
 duplicates report conglome vivienda hogar codperso
 sort conglome vivienda hogar codperso
-saveold "$ruta\687-Modulo02\enaho01-2021-200.dta", replace
+saveold "$ruta\759-Modulo02\enaho01-2021-200.dta", replace
 
 
-use "$ruta\687-Modulo03\enaho01a-2021-300.dta", clear
+use "$ruta\759-Modulo03\enaho01a-2021-300.dta", clear
 duplicates report conglome vivienda hogar codperso
 sort conglome vivienda hogar codperso
-saveold "$ruta\687-Modulo03\enaho01a-2021-300.dta", replace
+saveold "$ruta\759-Modulo03\enaho01a-2021-300.dta", replace
 
 
-use "$ruta\687-Modulo04\enaho01a-2021-400.dta", clear
+use "$ruta\759-Modulo04\enaho01a-2021-400.dta", clear
 duplicates report conglome vivienda hogar codperso
 sort conglome vivienda hogar codperso
-saveold "$ruta\687-Modulo04\enaho01a-2021-400.dta", replace
+saveold "$ruta\759-Modulo04\enaho01a-2021-400.dta", replace
 
 
-use "$ruta\687-Modulo05\enaho01a-2021-500.dta", clear
+use "$ruta\759-Modulo05\enaho01a-2021-500.dta", clear
 duplicates report conglome vivienda hogar codperso
 sort conglome vivienda hogar codperso
-saveold "$ruta\687-Modulo05\enaho01a-2021-500.dta", replace
+saveold "$ruta\759-Modulo05\enaho01a-2021-500.dta", replace
 
 
-use "$ruta\687-Modulo85\enaho01b-2021-2.dta", clear
+use "$ruta\759-Modulo85\enaho01b-2021-2.dta", clear
 duplicates report conglome vivienda hogar codperso
 sort conglome vivienda hogar codperso
-saveold "$ruta\687-Modulo85\enaho01b-2021-2.dta", replace
+saveold "$ruta\759-Modulo85\enaho01b-2021-2.dta", replace
 
 
-use "$ruta\687-Modulo34\sumaria-2021.dta", clear
+use "$ruta\759-Modulo34\sumaria-2021.dta", clear
 duplicates report conglome vivienda hogar
 sort conglome vivienda hogar 
-saveold "$ruta\687-Modulo34\sumaria-2021.dta", replace
+saveold "$ruta\759-Modulo34\sumaria-2021.dta", replace
 
 
-use "$ruta\687-Modulo18\enaho01-2021-612_1.dta", clear
+use "$ruta\759-Modulo18\enaho01-2021-612_1.dta", clear
 duplicates report conglome vivienda hogar
 sort conglome vivienda hogar
-saveold "$ruta\687-Modulo18\enaho01-2021-612_1.dta", replace
+saveold "$ruta\759-Modulo18\enaho01-2021-612_1.dta", replace
 
 * Merge de bases de datos
 clear
-use "$ruta\687-Modulo01\enaho01-2021-100.dta", clear
+use "$ruta\759-Modulo01\enaho01-2021-100.dta", clear
 keep if result==1 | result==2
 sort conglome vivienda hogar
-merge 1:m conglome vivienda hogar using "$ruta\687-Modulo04\enaho01a-2021-400.dta", force
+merge 1:m conglome vivienda hogar using "$ruta\759-Modulo04\enaho01a-2021-400.dta", force
 drop _merge
 
 sort conglome vivienda hogar codperso
-merge 1:1 conglome vivienda hogar codperso using "$ruta\687-Modulo02\enaho01-2021-200.dta"
+merge 1:1 conglome vivienda hogar codperso using "$ruta\759-Modulo02\enaho01-2021-200.dta"
 drop _merge
 
 sort conglome vivienda hogar codperso
-merge 1:1 conglome vivienda hogar codperso using "$ruta\687-Modulo03\enaho01a-2021-300.dta", force
+merge 1:1 conglome vivienda hogar codperso using "$ruta\759-Modulo03\enaho01a-2021-300.dta", force
 drop _merge
 
 sort conglome vivienda hogar codperso
-merge 1:1 conglome vivienda hogar codperso using "$ruta\687-Modulo05\enaho01a-2021-500.dta", force
+merge 1:1 conglome vivienda hogar codperso using "$ruta\759-Modulo05\enaho01a-2021-500.dta", force
 drop _merge
 
 sort conglome vivienda hogar codperso
-merge 1:1 conglome vivienda hogar codperso using "$ruta\687-Modulo85\enaho01b-2021-2.dta", force
+merge 1:1 conglome vivienda hogar codperso using "$ruta\759-Modulo85\enaho01b-2021-2.dta", force
 drop _merge
 
 sort conglome vivienda hogar
-merge m:1 conglome vivienda hogar  using "$ruta\687-Modulo34\sumaria-2021.dta", force
+merge m:1 conglome vivienda hogar  using "$ruta\759-Modulo34\sumaria-2021.dta", force
 drop _merge
 
 sort conglome vivienda hogar
-merge m:1 conglome vivienda hogar using "$ruta\687-Modulo18\enaho01-2021-612_1.dta"
+merge m:1 conglome vivienda hogar using "$ruta\759-Modulo18\enaho01-2021-612_1.dta"
 drop _merge
 
 capture drop if p203 ==0

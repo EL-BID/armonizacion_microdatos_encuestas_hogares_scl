@@ -775,12 +775,7 @@ label var remesas_ch "Remesas mensuales del hogar"
 			***VARIABLES DE EDUCACION***
 			****************************
 		
-*Javier
-
-*JV: Recodes para tener igual que en 2019-2020
-recode r204 (0=1) (1=2) (2=3) (3=4) (4=5) (5=7) (6=8)
-replace r215a = r215a + 1
-
+*Mod. 6/2022 Agustina Thailinger y Javier Valverde SCL/EDU
 
 *************
 ***aedu_ci***
@@ -792,7 +787,7 @@ g aedu_ci=aproba1
 *MGR Dic 2015: variable aproba1 no está disponible este año
 *Para los que SI asisten
 gen nivel_a = r204
-gen grado_a = r206a 
+gen grado_a = r205
 
 gen aedu_ci=.
 
@@ -1408,13 +1403,6 @@ replace salmm_ci=300.0 if rama_ci==6
 replace salmm_ci=272.9 if salmm_ci==. /* promedio de resto de ramas*/
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen tecnica_ci=(r204==5 | r215a==5)
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
 *****************
 **categoinac_ci**
 *****************	
@@ -1675,7 +1663,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

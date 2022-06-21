@@ -775,17 +775,19 @@ label var remesas_ch "Remesas mensuales del hogar"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+*Mod. 6/2022 Agustina Thailinger y Javier Valverde SCL/EDU
 
 *************
 ***aedu_ci***
 *************
-
-* MGD 12/9/2016: si está disponible aproba1
+*MGD 12/9/2016: si está disponible aproba1
 g aedu_ci=aproba1
-* MGR Dic 2015: variable aproba1 no está disponible este año
-* Para los que SI asisten
-/*gen nivel_a = r204
-gen grado_a = r205 
+
+/*
+*MGR Dic 2015: variable aproba1 no está disponible este año
+*Para los que SI asisten
+gen nivel_a = r204
+gen grado_a = r205
 
 gen aedu_ci=.
 
@@ -807,141 +809,143 @@ replace aedu_ci = grado_n+12 if nivel_n==4 | nivel_n==5 // Superior
 replace aedu_ci = . if nivel_n==6 // Solo para estar seguros que no incluimos Ed. Especial
 
 *Para los que NO asisten y NUNCA han asistido
-replace aedu_ci = 0 if r215==2 */
-
+replace aedu_ci = 0 if r215==2
+*/
 
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==.
 label var eduno_ci "Sin educacion"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6 
+gen edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<12) 
+gen edusi_ci=(aedu_ci>6 & aedu_ci<=10)
+replace edusi_ci=1 if aedu_ci==11 & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
+replace edusi_ci=. if aedu_ci==.  
 label var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=(aedu_ci==12)
+gen edusc_ci=(aedu_ci==11 & r217==2) // 11 anios y titulo de bachiller general
+replace edusc_ci=1 if aedu_ci==12 & (r217==1 | r217==3 | r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
 replace edusc_ci=. if aedu_ci==.
 label var edusc_ci "Secundaria Completa"
 
 **************
 ***eduui_ci***
 **************
-gen eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+gen eduui_ci=(aedu_ci>=12 & r217==2) // mayor o igual a 12 anios de estudio y titulo de bachiller general
+replace eduui_ci=1 if aedu_ci>=13 & (r217==3 | r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
+replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen eduuc_ci=(aedu_ci>=17)
+gen eduuc_ci=(aedu_ci>12 & r217>=4 & r217<=9) // mas de 12 anios de estudio pero con titulo terciario; incluye profesorado
+replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
 ***************
 ***edus1i_ci***
 ***************
-gen  edus1i_ci=0
-replace edus1i_ci=1 if (aedu_ci>=6 & aedu_ci<9)
+gen  edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label var edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen byte edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label var edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+gen edus2i_ci=(aedu_ci>9 & aedu_ci<=10)
+replace edus2i_ci=1 if (aedu_ci==11) & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
+replace edus2i_ci=. if aedu_ci==.
 label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=(aedu_ci==12)
+gen edus2c_ci=(aedu_ci==11 & r217==2) //11  anios y titulo de bachiller general
+replace edus2c_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
+replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
 ***************
-gen edupre_ci=(r204==0 |r204==1) 
+gen edupre_ci=(r209==1)
 label var edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 *Agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if r203==1 & r204==1
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci=(r203==1 & r204==1) // no consideramos menores de 3 años (r201a)
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if r215a==4
+replace eduac_ci=0 if r215a==5
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
 gen asiste_ci=(r203==1)
+replace asiste_ci=. if r203==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
-**************
+*****************
 ***pqnoasis_ci***
-**************
-
+*****************
 *DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
 gen pqnoasis_ci=r219 
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-	
-**************
-*pqnoasis1_ci*
-**************
-g       pqnoasis1_ci = 1 if r219 ==3
-replace pqnoasis1_ci = 2 if r219 ==1
-replace pqnoasis1_ci = 3 if r219 ==4 | r219 ==5 | r219 ==6
-replace pqnoasis1_ci = 4 if r219 ==10
-replace pqnoasis1_ci = 5 if r219 ==2 | r219 ==12 | r219 ==15 | r219 ==16
-replace pqnoasis1_ci = 6 if r219 ==8
-replace pqnoasis1_ci = 7 if r219 ==7 
-replace pqnoasis1_ci = 8 if r219 ==9  | r219 ==13 | r219 ==14 | r219 ==18
-replace pqnoasis1_ci = 9 if r219 ==11 | r219 ==17 
+******************
+***pqnoasis1_ci***
+******************
+*Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+g       pqnoasis1_ci=1 if r219==3
+replace pqnoasis1_ci=2 if r219==1
+replace pqnoasis1_ci=3 if r219==4  | r219==5  | r219==6
+replace pqnoasis1_ci=4 if r219==10
+replace pqnoasis1_ci=5 if r219==2  | r219==12 | r219==15 | r219==16
+replace pqnoasis1_ci=6 if r219==8
+replace pqnoasis1_ci=7 if r219==7 
+replace pqnoasis1_ci=8 if r219==9  | r219==13 | r219==14 | r219==18
+replace pqnoasis1_ci=9 if r219==11 | r219==17 
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5 "Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7 "Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -954,15 +958,17 @@ label var repite_ci "Ha repetido al menos un grado"
 ***repiteult_ci***
 ******************
 *DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen repiteult_ci= (r206a==1 | r216a ==1)
+gen repiteult_ci=(r206a==1 | r216a==1)
+replace repiteult_ci=. if  r206a==. & r216a ==.
+
 label var repiteult "Ha repetido el último grado"
 
 ***************
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-replace edupub_ci=1 if r210a==1 
-replace edupub_ci=0 if r210a==2 | r210a==3
+replace edupub_ci=1 if r214==1 & r203==1
+replace edupub_ci=0 if (r214==2 | r214==3) & r203==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 
@@ -1397,13 +1403,6 @@ replace salmm_ci=304.2 if rama_ci==6
 replace salmm_ci=276.7 if salmm_ci==. /* promedio de resto de ramas*/
 label var salmm_ci "Salario minimo legal"
 
-*************
-***tecnica_ci**
-*************
-*DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen tecnica_ci=(r204==5 | r215a==5)
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
 *****************
 **categoinac_ci**
 *****************	
@@ -1664,7 +1663,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

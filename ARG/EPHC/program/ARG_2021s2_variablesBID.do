@@ -112,9 +112,9 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 label value region_c region_c
 label var region_c "division politico-administrativa, provincia"
    
-************
-*ine01_2020*
-************
+***********
+***ine01***
+***********
 gen ine01=.
 replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
 replace ine01=10  if aglomerado==22                          /*Catamarca*/

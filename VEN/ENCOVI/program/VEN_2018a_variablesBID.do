@@ -861,137 +861,124 @@ replace ynlm_ch =. if miembros_ci==0
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-*Javier Valverde
+* Mod. 6/2022 Agustina Thailinger y Javier Valverde (SCL/EDU)
 
 ***************
 ***asiste_ci***
 ***************
 gen byte asiste_ci=.
-replace asiste_ci=1 if emhp28 ==1 
-replace asiste_ci=0 if emhp28 ==2 | emhp28 ==3
-replace asiste_ci=. if emhp28 ==99 | emhp28 ==98
+replace asiste_ci=1 if emhp28==1 
+replace asiste_ci=0 if emhp28==2 | emhp28==3
+replace asiste_ci=. if emhp28==99 | emhp28==98
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
-
-***************
-***/aedu_ci****
-***************
-
+*************
+***aedu_ci***
+*************
 recode emhp27a emhp27n  emhp27s  (99=.) (98=.)
 
 gen byte aedu_ci=.
-replace aedu_ci=0                 if emhp27n==1 | emhp27n==2
-replace aedu_ci=emhp27a           if emhp27n==3
-replace aedu_ci=emhp27a+6         if emhp27n==4
-replace aedu_ci=(11+(0.5*emhp27s))  if (emhp27n==5 | emhp27n==6)  // técnico (TSU) | Universitario
-replace aedu_ci=(17+(0.5*emhp27s))  if emhp27n==7 //posgrado
+replace aedu_ci=0                  if emhp27n==1 | emhp27n==2      // Ninguno | Preescolar
+replace aedu_ci=emhp27a            if emhp27n==3                   // Primaria
+replace aedu_ci=emhp27a+6          if emhp27n==4                   // Media
+replace aedu_ci=(11+(0.5*emhp27s)) if (emhp27n==5 | emhp27n==6)    // Técnico (TSU) | Universitario
+replace aedu_ci=(16+(0.5*emhp27s)) if emhp27n==7                   // Posgrado
 label variable aedu_ci "Años de Educacion"
 
-//JV: emhp27a contains grades approved in years, this applies for primaria and media,
+//Note: emhp27a contains grades approved in years, this applies for primaria and media.
 //emhp27s contaings grades approved in semesters, this applies for TSU and universitario, that's the reason
 //why they're multiplied by 0.5
 
+**para los que tienen missing en el regimen de estudio
+replace aedu_ci=0  if emhp27n==3 & aedu_ci==.              // Primaria
+replace aedu_ci=6  if emhp27n==4 & aedu_ci==.              // Media
+replace aedu_ci=11 if (emhp27n==5 | emhp27n==6) & aedu_ci==. // Técnico (TSU) | Universitario
+replace aedu_ci=11 if emhp27n==7 & aedu_ci==. // Posgrado
 
-
+replace aedu_ci=floor(aedu_ci) // redondear la variable
+				
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=.
-replace eduno=1 if emhp28==3	//JV: People that never went to school
-replace eduno=0 if emhp28!=3 & emhp28!=99
+gen eduno_ci=(aedu_ci==0)
+replace eduno=. if aedu_ci==.
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-*replace edupre=1 if emhp27n==2
-label var edupre_ci "Educacion preescolar"	/*JV: Con la información actual, sólo se puede identificar que asistieron a preescolar
-											 a aquellos que sólo tienen escolaridad de preescolar, pero para todos los que tienen algún tipo de escolaridad (casi todos)
-											deja la variable nula (es decir, no se puede identificar a los que NO fueron a preescolar ¿Es util codificarla de esta manera,
-											o debería dejarla totalmente nula? De momento, la dejo nula, pero dejo comentadas las líneas para codificar a los que solo
-											tienen preescolar en caso de que decidan codificarla así*/
+label var edupre_ci "Educacion preescolar"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=.
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=0 if aedu_ci==0 | (aedu_ci>=6 & aedu_ci!=.)
+gen edupi_ci=(aedu_ci>0 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "1 = personas que no han completado el nivel primario"
-
+				
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=.
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if (aedu_ci>=0 & aedu_ci<6)  | (aedu_ci>6 & aedu_ci!=.) 
+gen edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "1 = personas que han completado el nivel primario"
-
+				
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=.
-replace edusi=1 if aedu_ci>6 & aedu_ci<12
-replace edusi=0 if (aedu_ci>=0 & aedu_ci<=6) | (aedu_ci>=11 & aedu_ci!=.)
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11) // No se puede identificar técnica. De 2021 en adelante si. En 2021 el codigo cambia
+replace edusi=. if aedu_ci==.
 label var edusi_ci "1 = personas que no han completado el nivel secundario"
-
+				
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=.
-replace edusc=1 if aedu_ci==12 
-replace edusc=0 if (aedu_ci>=0 & aedu_ci<12) 
+gen edusc_ci=(aedu_ci==11)
+replace edusc=. if aedu_ci==.
 label var edusc_ci "1 = personas que han completado el nivel secundario"
-
-
+				
 **************
 ***eduui_ci***
 **************
-
-
-gen eduui_ci= (aedu_ci>12 & aedu_ci<17)
+gen eduui_ci=(aedu_ci>11 & aedu_ci<14)
+replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "1 = personas que no han completado el nivel universitario o superior"
 
 ***************
 ***eduuc_ci***
 ***************
-gen byte eduuc_ci= (aedu_ci>=17)
+gen byte eduuc_ci=(aedu_ci>=14)
+replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "1 = personas que han completado el nivel universitario o superior"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=0
-replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+gen edus2i_ci=(aedu_ci>9 & aedu_ci<11)
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
+gen edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
-
 
 **************
 ***eduac_ci***
@@ -999,17 +986,12 @@ replace `x'_ci=. if aedu_ci==.
 gen eduac_ci=.
 label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
 
-
 ***************
 ***asispre_ci**
 ***************
-g asispre_ci=.
-replace asispre_ci=1 if asiste_ci==1 & (emhp27n==2)
-recode asispre_ci (.=0)
+gen asispre_ci=(asiste_ci==1 & emhp27n==2)
 la var asispre_ci "Asiste a educacion prescolar"
-	
-
-
+					
 ***************
 ***repite_ci***
 ***************
@@ -1026,37 +1008,36 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-replace edupub_ci = 1 if emhp31 == 2
-replace edupub_ci = 0 if emhp31 == 1
+replace edupub_ci=1 if emhp31==2
+replace edupub_ci=0 if emhp31==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
-
 
 **************
 ***pqnoasis***
 **************
 gen byte pqnoasis_ci=.
-replace pqnoasis=emhp30 if emhp30>0 & emhp30<98
+replace pqnoasis=emhp30
 label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-label define pqnoasis_ci 1 "Culmino sus estudios" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Tiene que trabajar " 9 "No quiso seguir estudiando "  10 " Inseguridad al asistir al centro educat " 11 "Discriminación o violencia" 12 "Por embarazo/cuidar los hijos" 13 "Tiene que ayudar en tareas del hogar " 14 "No lo considera importante " 15 "otros"
+label define pqnoasis_ci 1 "Termino los estudios" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los utiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Tiene que trabajar " 9 "No quiso seguir estudiando" 10 "Inseguridad al asistir al centro educativo" 11 "Discriminacion o violencia" 12 "Por embarazo/cuidar los hijos" 13 "Tiene que ayudar en tareas del hogar " 14 "No lo considera importante" 15 "Otros"
 label values pqnoasis_ci pqnoasis_ci
 
-**************
-*pqnoasis1_ci*
-**************
+******************
+***pqnoasis1_ci***
+******************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = 1 if pqnoasis_ci ==5 & pqnoasis_ci==6
-replace pqnoasis1_ci = 2 if pqnoasis_ci ==8
-replace pqnoasis1_ci = 3 if pqnoasis_ci ==7  
-replace pqnoasis1_ci = 4 if pqnoasis_ci ==14 | pqnoasis_ci==9
-replace pqnoasis1_ci = 5 if pqnoasis_ci ==13 | pqnoasis_ci==12
-replace pqnoasis1_ci = 6 if pqnoasis_ci ==1
-replace pqnoasis1_ci = 8 if pqnoasis_ci ==2  | pqnoasis_ci ==3
-replace pqnoasis1_ci = 9 if pqnoasis_ci ==15 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==4 | pqnoasis_ci==3
+g       pqnoasis1_ci=1 if pqnoasis_ci==5 & pqnoasis_ci==6
+replace pqnoasis1_ci=2 if pqnoasis_ci==8
+replace pqnoasis1_ci=3 if pqnoasis_ci==7  
+replace pqnoasis1_ci=4 if pqnoasis_ci==14 | pqnoasis_ci==9
+replace pqnoasis1_ci=5 if pqnoasis_ci==13 | pqnoasis_ci==12
+replace pqnoasis1_ci=6 if pqnoasis_ci==1
+replace pqnoasis1_ci=8 if pqnoasis_ci==2  | pqnoasis_ci==3
+replace pqnoasis1_ci=9 if pqnoasis_ci==15 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==4 | pqnoasis_ci==3
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
-
+				
 ********************************************
 ***Variables de Infraestructura del hogar***
 ********************************************

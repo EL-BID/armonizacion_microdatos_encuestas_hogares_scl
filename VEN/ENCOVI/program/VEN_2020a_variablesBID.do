@@ -916,25 +916,17 @@ replace aedu_ci=s7q11b+6 if s7q11==6 & s7q11b!=. & s7q11a==. & aedu_ci==. // reg
 replace aedu_ci=11+s7q11b      if (s7q11==7 | s7q11==8) & s7q11b!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
 replace aedu_ci=11+s7q11c*0.5  if (s7q11==7 | s7q11==8) & s7q11c!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
 replace aedu_ci=11+s7q11d*0.25 if (s7q11==7 | s7q11==8) & s7q11d!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-<<<<<<< Updated upstream
 
-replace aedu_ci=16+s7q11b      if s7q11==9 & s7q11b!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-replace aedu_ci=16+s7q11c*0.5  if s7q11==9 & s7q11c!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-replace aedu_ci=16+s7q11d*0.25 if s7q11==9 & s7q11d!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
+replace aedu_ci=16+s7q11b      if s7q11==9 & s7q11b!=. & s7q11ba==. & aedu_ci==. // Posgrado
+replace aedu_ci=16+s7q11c*0.5  if s7q11==9 & s7q11c!=. & s7q11ba==. & aedu_ci==. // Posgrado
+replace aedu_ci=16+s7q11d*0.25 if s7q11==9 & s7q11d!=. & s7q11ba==. & aedu_ci==. // Posgrado
 
-=======
-
-replace aedu_ci=16+s7q11b      if s7q11==9 & s7q11b!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-replace aedu_ci=16+s7q11c*0.5  if s7q11==9 & s7q11c!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-replace aedu_ci=16+s7q11d*0.25 if s7q11==9 & s7q11d!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
-
->>>>>>> Stashed changes
 **para los que tienen missing en s7q11b/s7q11c/s7q11d pero no en s7q11ba
-replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba!=. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba!=. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // Técnico (TSU) | Universitario
 
 **para los que solo tienen valor en s7q11
-replace aedu_ci=6  if s7q11==4 & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // técnico (TSU) | Universitario
+replace aedu_ci=6  if s7q11==4 & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // regimen anterior: media diversificado y profesional (1-3 años)
+replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // Técnico (TSU) | Universitario
 				
 label variable aedu_ci "Años de Educacion"
 
@@ -1055,7 +1047,6 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 gen edupub_ci=(s7q5==2)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-<<<<<<< Updated upstream
 **************
 ***pqnoasis***
 **************
@@ -1067,32 +1058,6 @@ gen pqnoasis_ci=.
 ******************
 *Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
 gen pqnoasis1_ci=.
-=======
-							**************
-							***pqnoasis*** // no se si ponerla o no; la segunda parte revisar
-							**************
-							gen byte pqnoasis_ci=.
-							replace pqnoasis=s7q2
-							label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-							label define pqnoasis_ci 1 "Muy joven" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Debía trabajar " 9 " Inseguridad al asistir al centro educativo"10 "Discriminación" 11 "Violencia" 14 "Obligaciones en el hogar" 15 "No lo considera importante " 16 "Otros"
-							label values pqnoasis_ci pqnoasis_ci
-
-							******************
-							***pqnoasis1_ci***
-							******************
-							*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
-							g       pqnoasis1_ci=1 if pqnoasis_ci==5 & pqnoasis_ci==6
-							replace pqnoasis1_ci=2 if pqnoasis_ci==8
-							replace pqnoasis1_ci=3 if pqnoasis_ci==7  
-							replace pqnoasis1_ci=4 if pqnoasis_ci==15
-							replace pqnoasis1_ci=5 if pqnoasis_ci==14
-							replace pqnoasis1_ci=7 if pqnoasis_ci==1
-							replace pqnoasis1_ci=8 if pqnoasis_ci==2  | pqnoasis_ci==3 | pqnoasis_ci==4 | pqnoasis_ci==9
-							replace pqnoasis1_ci=9 if pqnoasis_ci==10 | pqnoasis_ci==11 | pqnoasis_ci==16
-
-							label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5 "Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7 "Edad" 8 "Problemas de acceso"  9 "Otros"
-							label value  pqnoasis1_ci pqnoasis1_ci
->>>>>>> Stashed changes
 
 ********************************************
 ***Variables de Infraestructura del hogar***

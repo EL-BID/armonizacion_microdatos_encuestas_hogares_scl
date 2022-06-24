@@ -1045,44 +1045,17 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 gen edupub_ci=(s7q5==2)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-<<<<<<< Updated upstream
 **************
 ***pqnoasis***
 **************
-*La variable disponible es solo para personas que nunca asistieron
+*La variable disponible es solo para personas que nunca asistieron.
 gen pqnoasis_ci=.
 
 ******************
 ***pqnoasis1_ci***
 ******************
 *Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
-gen pqnoasis1_ci=1 if pqnoasis_ci==5 & pqnoasis_ci==6
-=======
-					**************
-					***pqnoasis***
-					**************
-					gen byte pqnoasis_ci=.
-					replace pqnoasis=s7q2
-					label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-					label define pqnoasis_ci 1 "Muy joven" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Debía trabajar " 9 " Inseguridad al asistir al centro educativo"10 "Discriminación" 11 "Violencia" 14 "Obligaciones en el hogar" 15 "No lo considera importante " 16 "Otros"
-					label values pqnoasis_ci pqnoasis_ci
-
-					******************
-					***pqnoasis1_ci***
-					******************
-					*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
-					g       pqnoasis1_ci=1 if pqnoasis_ci==5 & pqnoasis_ci==6
-					replace pqnoasis1_ci=2 if pqnoasis_ci==8
-					replace pqnoasis1_ci=3 if pqnoasis_ci==7  
-					replace pqnoasis1_ci=4 if pqnoasis_ci==15
-					replace pqnoasis1_ci=5 if pqnoasis_ci==14
-					replace pqnoasis1_ci=7 if pqnoasis_ci==1
-					replace pqnoasis1_ci=8 if pqnoasis_ci==2  | pqnoasis_ci==3 | pqnoasis_ci==4 | pqnoasis_ci==9
-					replace pqnoasis1_ci=9 if pqnoasis_ci==10 | pqnoasis_ci==11 | pqnoasis_ci==16
-
-					label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5 "Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7 "Edad" 8 "Problemas de acceso"  9 "Otros"
-					label value  pqnoasis1_ci pqnoasis1_ci
->>>>>>> Stashed changes
+gen pqnoasis1_ci=.
 
 ********************************************
 ***Variables de Infraestructura del hogar***

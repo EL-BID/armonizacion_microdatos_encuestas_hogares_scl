@@ -84,6 +84,25 @@ la var idh_ch "Household ID"
 egen idp_ci= concat(idh_ch ind_no)
 la var idp_ci "Individual ID"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+
+*************
+****Islas****
+*************
+gen ine01=island
+label define ine01 1"New Providence" 2"Grand Bahama" 
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
+
 **********
 ***zona***
 **********

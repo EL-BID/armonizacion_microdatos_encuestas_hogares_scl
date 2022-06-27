@@ -1749,25 +1749,6 @@ lab val atencion_ci atencion_ci
 	label value ine01 ine01
 	label var ine01 " Primera division politico-administrativa, región"
 	
-   gen geolev1=.   
-   replace geolev1=15201 if  region==1 | region==15		/*Arica, Parinacota y Tarapacá*/
-   replace geolev1=15202 if  region==2					/*Antofagasta*/
-   replace geolev1=15203 if  region==3					/*Atacama*/
-   replace geolev1=15204 if  region==4					/*Coquimbo*/
-   replace geolev1=15205 if  region==5					/*Valparaíso*/
-   replace geolev1=15206 if  region==6					/*O'Higgins*/
-   replace geolev1=15207 if  region==7					/*Maule*/
-   replace geolev1=15208 if  region==8 | region==16		/*Ñuble y Bío Bío*/
-   replace geolev1=15209 if  region==9					/*La Araucanía*/
-   replace geolev1=15210 if  region==10 | region==14	/*Los Lagos y Los Ríos*/
-   replace geolev1=15211 if  region==11					/*Aysén*/
-   replace geolev1=15212 if  region==12					/*Magallanes y Antártica Chilena*/
-   replace geolev1=15213 if  region==13					/*Metropolitana Santiago*/
-
-	label define geolev1 15201"Arica, Parinacota y Tarapacá" 15202"Antofagasta" 15203"Atacama" 15204"Coquimbo" 15205"Valparaíso" 15206"O'Higgins" 15207"Maule" 15208"Ñuble y Bío Bío" 15209"La Araucanía" 15210"Los Lagos y Los Ríos" 15211"Aysén" 15212"Magallanes y Antártica Chilena" 15213"Metropolitana Santiago"
-	label value geolev1 geolev1
-	label var geolev1 " Primera division politico-administrativa, región"
-	
 	
 	**************************
 	** PROVINCIAS ************

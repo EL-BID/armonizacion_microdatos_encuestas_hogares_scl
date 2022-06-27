@@ -91,6 +91,23 @@ la var idp_ci "Individual ID"
 g zona_c=1
 label variable zona_c "Zona del pais"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+*************
+****Islas****
+*************
+gen ine01=island
+label define ine01 1"New Providence" 2"Grand Bahama" 3"Other Famiy Island"
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
 
 ************
 ****pais****

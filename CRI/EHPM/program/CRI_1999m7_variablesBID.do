@@ -1121,19 +1121,6 @@ ren ocup ocup_old
 	label value ine01 ine01
 	label var ine01 " Primera division politico-administrativa, Región"
 
-	gen geolev1=.
-	replace geolev1=18801 if  region==1 | region==2	/*Central*/
-	replace geolev1=18802 if  region==3				/*Chorotega*/
-	replace geolev1=18803 if  region==4				/*Pacífico central*/
-	replace geolev1=18804 if  region==5				/*Brunca*/
-	replace geolev1=18805 if  region==6		    	/*Huetar Atlántica*/
-	replace geolev1=18806 if  region==7				/*Huetar Norte*/
-	
-	label define geolev1 18801"Central" 18802"Chorotega" 18803"Pacífico central" 18804"Brunca" 18805"Huetar Atlántica" 18806"Huetar Norte" 
-	label value geolev1 geolev1
-	label var geolev1 " Primera division politico-administrativa, Región"
-
-
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

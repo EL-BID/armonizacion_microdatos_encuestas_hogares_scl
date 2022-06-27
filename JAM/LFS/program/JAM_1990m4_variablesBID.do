@@ -80,6 +80,11 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, parroquias"
 
+***********
+* INE01 *
+************
+gen ine01=  par
+
 
 **************
 * Región BID *
@@ -1343,7 +1348,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-
+clonevar codocupa=q38
+clonevar codindutria=q39
 compress
 
 

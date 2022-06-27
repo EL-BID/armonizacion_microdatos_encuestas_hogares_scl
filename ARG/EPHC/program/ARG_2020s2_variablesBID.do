@@ -117,6 +117,65 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+    ************
+	*ine01_2020*
+	************
+   
+   gen ine01=.
+replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
+replace ine01=10  if aglomerado==22                          /*Catamarca*/
+replace ine01=22  if aglomerado==8                           /*Chaco*/
+replace ine01=26  if aglomerado==9 | aglomerado==91          /*Chubut*/
+replace ine01=2  if aglomerado==32                          /*Ciudad de Buenos Aires*/
+replace ine01=14  if aglomerado==13 | aglomerado==36         /*Córdoba*/
+replace ine01=18  if aglomerado==12                          /*Corrientes*/
+replace ine01=30  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
+replace ine01=34  if aglomerado==15                          /*Formosa*/
+replace ine01=38 if aglomerado==19                          /*Jujuy*/
+replace ine01=42 if aglomerado==30                          /*La pampa*/
+replace ine01=46 if aglomerado==25                          /*La Rioja*/
+replace ine01=50 if aglomerado==10                          /*Mendoza*/
+replace ine01=54 if aglomerado==7                           /*Misiones*/
+replace ine01=58 if aglomerado==17                          /*Neuquen*/
+replace ine01=62 if aglomerado==93                          /*Río Negro*/ 
+replace ine01=66 if aglomerado==23                          /*Salta*/
+replace ine01=70 if aglomerado==27                          /*San Juan*/ 
+replace ine01=74 if aglomerado==26                          /*San Luis*/
+replace ine01=78 if aglomerado==20                          /*Santa Cruz*/
+replace ine01=82 if aglomerado>=4 & aglomerado<=5           /*Santa Fe*/
+replace ine01=86 if aglomerado==18                          /*Santiago de Estero*/
+replace ine01=94 if aglomerado==31                          /*Tierra del Fuego*/
+replace ine01=90 if aglomerado==29                          /*Tucuman*/
+   
+   label define ine01     ///
+	6"Buenos Aires"           ///	
+	10"Catamarca"              ///
+	22"Chaco"                  /// 
+	26"Chubut"                 ///
+	2"Ciudad de Buenos Aires" ///
+	14"Córdoba"                ///
+	18"Corrientes"             ///
+	30"Entre Ríos"             ///
+	34"Formosa"                ///
+	38"Jujuy"                 ///
+	42"La Pampa"              ///
+	46"La Rioja"              ///
+	50"Mendoza"               ///
+	54"Misiones"              ///
+	58"Neuquon"               ///
+	62"Río Negro"             ///
+	66"Salta"                 ///
+	70"San Juan"              ///
+	74"San Luis"              ///
+	78"Santa Cruz"            ///
+	82"Santa Fe"              ///
+	86"Santiago del Estero"   ///
+	94"Tierra del Fuego"      ///
+	90"Tucumán"                    
+  
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, ine01"
+   
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
@@ -573,12 +632,17 @@ replace rama_ci = 6 if ((pp04b_cod>=4500 & pp04b_cod<4900) | pp04b_cod==48 | (pp
 replace rama_ci = 7 if ((pp04b_cod>=4900 & pp04b_cod<=5300) | pp04b_cod==49) & emp_ci==1
 replace rama_ci = 8 if ((pp04b_cod>=6400 & pp04b_cod<=8200) ) & emp_ci==1
 replace rama_ci = 9 if ((pp04b_cod>=5800 & pp04b_cod<=6300) |(pp04b_cod>=8300 &  pp04b_cod<=9900) | pp04b_cod==85 | pp04b_cod==63 | pp04b_cod==61  | pp04b_cod==58) & emp_ci==1
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
 
 	
 	
@@ -827,8 +891,18 @@ label val rama_ci rama_ci
 	**********
 
 	gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
+	
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=itf
+label var yoficial_ch "Ingreso del hogar total generado por el país"
 
+gen ypeoficial_ch=subinstr(ipcf,",",".",.)
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+destring yoficial_ch ypeoficial_ch, replace
+replace ypeoficial_ch=. if yoficial_ch==0
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
@@ -1317,11 +1391,12 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 
 *promedio julio - diciembre 2020:  https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_2082FA92E916.pdf
 
+
 *********
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =15167
+gen lp_ci =50854/4.10
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1329,7 +1404,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =6201
+gen lpe_ci =21572/4.17
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************

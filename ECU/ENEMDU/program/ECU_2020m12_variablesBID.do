@@ -677,6 +677,25 @@ gen dis_ch=.
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
 
+
+	* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (p52>=111 & p52<=322) & emp_ci==1
+replace ramasec_ci = 2 if (p52>=510 & p52<=990) & emp_ci==1
+replace ramasec_ci = 3 if (p52>=1010 & p52<=3320) & emp_ci==1
+replace ramasec_ci = 4 if (p52>=3510 & p52<=3900) & emp_ci==1
+replace ramasec_ci = 5 if (p52>=4100 & p52<=4390) & emp_ci==1
+replace ramasec_ci = 6 if ((p52>=4510 & p52<=4799) | (p52>=5510 & p52<=5630)) & emp_ci==1
+replace ramasec_ci = 7 if ((p52>=4911 & p52<=5320) | (p52>=6110 & p52<=6190)) & emp_ci==1
+replace ramasec_ci = 8 if (p52>=6411 & p52<=8299) & emp_ci==1
+replace ramasec_ci = 9 if ((p52>=5811 & p52<=6020) | (p52>=6201 & p52<=6399) | (p52>=8410 & p52<=9900)) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 	****************
 	***durades_ci***
 	****************
@@ -826,9 +845,16 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen remesas_ci=p74b
 	label var remesas_ci "Remesas mensuales reportadas por el individuo" 
 
-		************************
-		***INGRESOS DEL HOGAR***
-		************************
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=.
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpc
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
+
 
 	*****************
 	***nrylmpri_ch***
@@ -909,66 +935,28 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-/*
-	*************
-	***aedu_ci***
-	*************
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
-	
-	replace nivinst=. if (nivinst>=11)
-	replace anoinst=. if (anoinst>=20)
-	replace anoinst= 0 if (nivinst == 1)
-
-	* 26/08/2015: Cambios educación I.B-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst    if nivinst==4
-	replace aedu_ci = anoinst    if nivinst==5
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
-	label var aedu_ci "Anios de educacion aprobados" 
-*/
 
 	*************
 	***aedu_ci***
 	*************
 	
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
+	cap clonevar nivinst = p10a /*nivel de instruccion*/ 
+	cap clonevar anoinst = p10b /*años aprobados*/
 	
-	//Sacado del formulario del encuestador
+	//Categorias nivel (formulario) - se explican los dos sistemas y cuales son sus equivalentes //
 	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 "Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
 	label values p10a P10a
 	label values nivinst P10a
-	
-	replace anoinst= 0 if (nivinst == 1)
 
-	*09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst-1    if nivinst==4
-	replace aedu_ci = anoinst-1    if nivinst==5 // Se le resta 1 dado que el nivel primaria y educación básica tienen incluido el primer año de educación inicial
-		* siguiente linea Mod. Ivan B./EDU 2015, 12
-	replace aedu_ci=0 if aedu_ci==-1
+	gen aedu_ci=.
+	replace aedu_ci=0 if nivinst==1 | nivinst==2 | nivinst==3
+	replace aedu_ci= anoinst if nivinst==4 // Años primaria
+	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
+	replace aedu_ci =0 if nivinst==5 & anoinst==-1 // para que no queden en -1 los de 0 años aprobados 
 	replace aedu_ci = anoinst+6  if nivinst==6
 	replace aedu_ci = anoinst+9  if nivinst==7
 	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
+	replace aedu_ci = anoinst+16 if nivinst==10
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
@@ -1009,14 +997,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17 & nivinst==9) | (aedu_ci>12 & aedu_ci<16 & nivinst==8)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<16 & nivinst==9) | (aedu_ci>12 & aedu_ci<15 & nivinst==8)
 	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17 & nivinst==9) | (aedu_ci>16 &  nivinst==8) | (nivinst==10)
+	gen byte eduuc_ci= (aedu_ci>=16 & nivinst==9) | (aedu_ci>=15 &  nivinst==8) | (nivinst==10)
 	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 
@@ -1057,32 +1045,23 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***asispre_ci**
 	***************
-	/*Variable agregada por Iván Bornacelly - 01/16/2017
-	
-	replace asispre_ci=1 if pe01==1 & pe02a==3
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"*/
-	
+	* No viene la preguntá pe01 en la base 2018, 2019, 2020
 	g asispre_ci=.
-	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
-	*g asispre_ci=(p07==1 & p10a==3) //todos los valores son cero porque p10a no tiene el valor 3 "Jardín de infantes"
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
 	***eduac_ci***
 	**************
-	gen eduac_ci=.
-	label variable eduac_ci "Superior universitario vs superior no universitario"
-	
-	replace eduac_ci=1 if p10a==9
+	gen eduac_ci=.	
+	replace eduac_ci=1 if p10a==9 | p10a==10 
 	replace eduac_ci=0 if p10a==8
-	
+	label variable eduac_ci "Superior universitario vs superior no universitario"
+
 
 	***************
 	***asiste_ci***
 	***************
 	
-	* MGR Dic, 2015: corrección sintaxis para que niños <5 no aparezcan como no asiste, si no como missing
 	gen asiste_ci=(p07==1)
 	replace asiste_ci=. if p07==.
 	label variable asiste_ci "Asiste actualmente a la escuela"
@@ -1090,20 +1069,14 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	*Esta variable no tiene opciones predeterminadas por los que se mantienen las opciones del país
-	*Modificación SGR 2017/05/09 se cambia la opción 6 de "Temor a los maestros" a "Asistir a nivelación SENESCYT"
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
-	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar"
-	label def pqnoasis_ci 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar", add
-	label def pqnoasis_ci 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado", add
-	label def pqnoasis_ci 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Otra razón" , add
+	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar" 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar" 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado" 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Falta de recursos tecnologicos" 17"Otra razón" 
 	label val pqnoasis_ci pqnoasis_ci
 	
 	**************
     *pqnoasis1_ci*
     **************
-    **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
     g       pqnoasis1_ci = 1 if p09==3
     replace pqnoasis1_ci = 2 if p09==5
     replace pqnoasis1_ci = 3 if p09==7  | p09==9
@@ -1111,8 +1084,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     replace pqnoasis1_ci = 5 if p09==8  | p09==12 | p09==15
     replace pqnoasis1_ci = 6 if p09==2
     replace pqnoasis1_ci = 7 if p09==1 
-    replace pqnoasis1_ci = 8 if p09==10
-    replace pqnoasis1_ci = 9 if p09==4  | p09==6 | p09==13 | p09==14 | p09==16
+    replace pqnoasis1_ci = 8 if p09==10 | p09==13
+    replace pqnoasis1_ci = 9 if p09==4 | p09==6 | p09==14 | p09==16 | p09==17
 
     label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
     label value  pqnoasis1_ci pqnoasis1_ci
@@ -1135,7 +1108,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen edupub_ci=.
 	label var edupub_ci "Asiste a un centro de ensenanza público"
 
-
+	drop nivinst anoinst
+	
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************

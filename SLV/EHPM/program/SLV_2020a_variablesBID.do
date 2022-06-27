@@ -526,6 +526,26 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
+
+* rama secundaria 
+g ramasec_ci=. 
+replace ramasec_ci=1 if (r438>=100 & r438<=322) & emp_ci==1 
+replace ramasec_ci=2 if (r438>=510 & r438<=990) & emp_ci==1 
+replace ramasec_ci=3 if (r438>=1010 & r438<=3320) & emp_ci==1 
+replace ramasec_ci=4 if (r438>=3510 & r438<=3900) & emp_ci==1 
+replace ramasec_ci=5 if (r438>=4100 & r438<=4390) & emp_ci==1 
+replace ramasec_ci=6 if ((r438>=4510 & r438<=4799) | (r438>=5510 & r438<=5630))& emp_ci==1 
+replace ramasec_ci=7 if ((r438>=4911 & r438<=5320) | (r438>=6110 & r438<=6190)) & emp_ci==1 
+replace ramasec_ci=8 if (r438>=6411 & r438<=8299) & emp_ci==1 
+replace ramasec_ci=9 if ((r438>=5811 & r438<=6022) | (r438>=6201 & r438<=6399) | (r438>=8411 & r438<=9900)) & emp_ci==1 
+
+label var ramasec_ci "Rama de actividad secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 ****************
 ***durades_ci***
 ****************
@@ -788,20 +808,31 @@ drop remesas
 by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 label var remesas_ch "Remesas mensuales del hogar" 
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingfa
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpe
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+ 
 
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+*Mod. 5/2022 Agustina Thailinger SCL/EDU
 
 *************
 ***aedu_ci***
 *************
-
-* MGD 12/9/2016: si está disponible aproba1
+*MGD 12/9/2016: si está disponible aproba1
 g aedu_ci=aproba1
-* MGR Dic 2015: variable aproba1 no está disponible este año
-* Para los que SI asisten
-/*gen nivel_a = r204
+
+/*
+*MGR Dic 2015: variable aproba1 no está disponible este año
+*Para los que SI asisten
+gen nivel_a = r204
 gen grado_a = r205 
 
 gen aedu_ci=.
@@ -824,29 +855,29 @@ replace aedu_ci = grado_n+12 if nivel_n==4 | nivel_n==5 // Superior
 replace aedu_ci = . if nivel_n==6 // Solo para estar seguros que no incluimos Ed. Especial
 
 *Para los que NO asisten y NUNCA han asistido
-replace aedu_ci = 0 if r215==2 */
-
+replace aedu_ci = 0 if r215==2
+*/
 
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=aedu_ci==0
+gen eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
 label var eduno_ci "Sin educacion"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci==(aedu_ci>=1 & aedu_ci<6) 
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==. 
 label var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=aedu_ci==6
+gen edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "Primaria completa"
 
@@ -854,30 +885,30 @@ label var edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 gen edusi_ci=(aedu_ci>6 & aedu_ci<=10)
-replace edusi_ci=1 if (aedu_ci==11) & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
+replace edusi_ci=1 if aedu_ci==11 & (r217==1 | r217==.) // 11 anios pero sin titulo o perdido
 replace edusi_ci=. if aedu_ci==.  
 label var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=(aedu_ci==11) & (r217==2) //11 anios y titulo de bachiller general
-replace edusc_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
+gen edusc_ci=(aedu_ci==11 & r217==2) // 11 anios y titulo de bachiller general
+replace edusc_ci=1 if aedu_ci==12 & (r217==1 | r217==3 | r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
 replace edusc_ci=. if aedu_ci==.
 label var edusc_ci "Secundaria Completa"
 
 **************
 ***eduui_ci***
 **************
-gen eduui_ci=(aedu_ci>=12) &  (r217==2)  // mayor o igual a 12 anios de estudio, bachiller general
-replace eduui_ci=1 if (aedu_ci>=13) & (r217==3| r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
+gen eduui_ci=(aedu_ci>=12 & r217==2) // mayor o igual a 12 anios de estudio y titulo de bachiller general
+replace eduui_ci=1 if aedu_ci>=13 & (r217==3 | r217==.) // mas de 12 anios de estudio, bachiller tecnico o perdido
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen eduuc_ci=(aedu_ci>12) & (r217>=4 & r217<=9) // mas de 12 anios de estudio pero con titulo terciario. incluye profesorado
+gen eduuc_ci=(aedu_ci>12 & r217>=4 & r217<=9) // mas de 12 anios de estudio pero con titulo terciario; incluye profesorado
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
@@ -891,7 +922,7 @@ label var edus1i_ci "1er ciclo de la secundaria incompleto"
 ***************
 ***edus1c_ci***
 ***************
-gen byte edus1c_ci=aedu_ci==9
+gen byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 label var edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -906,7 +937,7 @@ label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=(aedu_ci==11) & (r217==2) //11  anios y titulo de bachiller general
+gen edus2c_ci=(aedu_ci==11 & r217==2) //11  anios y titulo de bachiller general
 replace edus2c_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
 replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
@@ -914,15 +945,15 @@ label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 ***************
 ***edupre_ci***
 ***************
-gen edupre_ci=(r209==1) 
+gen edupre_ci=(r209==1)
 label var edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 *Agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=r203==1 & r204==1
-	la var asispre_ci "Asiste a educacion prescolar"
+g asispre_ci=(r203==1 & r204==1) // no consideramos menores de 3 años (r201a)
+la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
@@ -939,30 +970,28 @@ gen asiste_ci=(r203==1)
 replace asiste_ci=. if r203==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
-**************
+*****************
 ***pqnoasis_ci***
-**************
-
+*****************
 *DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
 gen pqnoasis_ci=r219 
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-	
-**************
-*pqnoasis1_ci*
-**************
-g       pqnoasis1_ci = 1 if r219 ==3
-replace pqnoasis1_ci = 2 if r219 ==1
-replace pqnoasis1_ci = 3 if r219 ==4 | r219 ==5 | r219 ==6
-replace pqnoasis1_ci = 4 if r219 ==10
-replace pqnoasis1_ci = 5 if r219 ==2 | r219 ==12 | r219 ==15 | r219 ==16
-replace pqnoasis1_ci = 6 if r219 ==8
-replace pqnoasis1_ci = 7 if r219 ==7 
-replace pqnoasis1_ci = 8 if r219 ==9  | r219 ==13 | r219 ==14 | r219 ==18
-replace pqnoasis1_ci = 9 if r219 ==11 | r219 ==17 
+******************
+***pqnoasis1_ci***
+******************
+*Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+g       pqnoasis1_ci=1 if r219==3
+replace pqnoasis1_ci=2 if r219==1
+replace pqnoasis1_ci=3 if r219==4  | r219==5  | r219==6
+replace pqnoasis1_ci=4 if r219==10
+replace pqnoasis1_ci=5 if r219==2  | r219==12 | r219==15 | r219==16
+replace pqnoasis1_ci=6 if r219==8
+replace pqnoasis1_ci=7 if r219==7 
+replace pqnoasis1_ci=8 if r219==9  | r219==13 | r219==14 | r219==18
+replace pqnoasis1_ci=9 if r219==11 | r219==17 
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5 "Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7 "Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 ***************
@@ -975,7 +1004,7 @@ label var repite_ci "Ha repetido al menos un grado"
 ***repiteult_ci***
 ******************
 *DZ Jul 2017: cambio de nombre de la variable respecto a anio anterior*
-gen repiteult_ci= (r205==1 | r216a ==1)
+gen repiteult_ci=(r205==1 | r216a==1)
 replace repiteult_ci=. if  r205==. & r216a ==.
 
 label var repiteult "Ha repetido el último grado"
@@ -987,8 +1016,6 @@ gen edupub_ci=.
 replace edupub_ci=1 if r210a==1 & r203==1
 replace edupub_ci=0 if (r210a==2 | r210a==3) & r203==1
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
-
-
 
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
@@ -1386,10 +1413,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *El promedio anual de la canasta basica alimentaria (Rural y urbana) se divide en 3.73 miembros para zona urbana y en 4.26 miembros para la zona rural*
 gen lp_ci =.
 *zona urbana
-replace lp_ci= 54.32*2 if  zona_c == 1
+replace lp_ci= 54.316354*2 if  zona_c == 1
 
 *zona rural
-replace lp_ci= 34.03*2 if  zona_c == 0
+replace lp_ci= 34.025822*2 if  zona_c == 0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1624,7 +1651,7 @@ lab val pnc_ci pnc_ci
 /*_____________________________________________________________________________________________________*/
 
 
-do "\\Sdssrv03\surveys\harmonized\_DOCS\Do-Files\Labels&ExternalVars_Harmonized_DataBank.do"
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 *_____________________________________________________________________________________________________*
 

@@ -43,6 +43,8 @@ use `base_in', clear
 ***region_c ***
 ***************
 gen region_c=real(substr(ubigeo,1,2))
+gen ine01=region_c 
+
 label define region_c ///
 1"Amazonas"	          ///
 2"Ancash"	          ///
@@ -597,6 +599,12 @@ gen cesante_ci=0 if condocup_ci==2
 replace cesante_ci=1 if p552==1 & condocup_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"
 
+
+***********************
+*llave lp nacionales***
+***********************
+egen llave_lp=group(linea linpe)
+
 *********
 *lp_ci***
 *********
@@ -830,11 +838,31 @@ replace rama_ci=7 if (p506>=6010 & p506<=6420) & emp_ci==1
 replace rama_ci=8 if (p506>=6511 & p506<=7020) & emp_ci==1
 replace rama_ci=9 if (p506>=7111 & p506<=9900) & emp_ci==1
 
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if (p516>=111 & p516<=502) & emp_ci==1
+replace ramasec_ci=2 if (p516>=1010 & p516<=1429) & emp_ci==1
+replace ramasec_ci=3 if (p516>=1511 & p516<=3720) & emp_ci==1
+replace ramasec_ci=4 if (p516>=4010 & p516<=4100) & emp_ci==1
+replace ramasec_ci=5 if (p516>=4510 & p516<=4550) & emp_ci==1
+replace ramasec_ci=6 if (p516>=5010 & p516<=5520) & emp_ci==1 
+replace ramasec_ci=7 if (p516>=6010 & p516<=6420) & emp_ci==1
+replace ramasec_ci=8 if (p516>=6511 & p516<=7020) & emp_ci==1
+replace ramasec_ci=9 if (p516>=7111 & p516<=9900) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 
 ****************
 ***durades_ci***
@@ -1436,6 +1464,16 @@ gen tcylmpri_ci=.
 ***************
 gen tcylmpri_ch=.
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=gashog2d /12
+label var yoficial_ch "Gasto del hogar total generado por el país"
+
+gen ypeoficial_ch=yoficial_ch/ mieperho
+label var yoficial_ch "Gasto per cápita generado por el país"
+
+destring yoficial_ch ypeoficial_ch, replace
 
 ****************************
 ***VARIABLES DE EDUCACION***

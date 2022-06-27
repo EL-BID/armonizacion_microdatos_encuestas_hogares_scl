@@ -62,6 +62,12 @@ label value region_BID_c region_BID_c
 	***************
 	clonevar region_c=domain
 	label var region_c "division politico-administrativa, provincia"
+
+	***************
+	***  ine01  ***
+	***************
+	clonevar ine01=.
+	label var ine01 "division politico-administrativa, distritos"
    
 	***************
 	***factor_ch***
@@ -407,6 +413,12 @@ gen dis_ch=.
 	*********
 	
 	gen lp_ci =.
+	replace lp_ci=	733.1	if region_c==	1
+replace lp=	590.23	if region_c==	2
+replace lp=	533.27	if region_c==	3
+			
+
+
 	label var lp_ci "Linea de pobreza oficial del pais"
 
 	***********
@@ -414,6 +426,9 @@ gen dis_ch=.
 	***********
 	
 	gen lpe_ci = .
+	replace lpe_ci=	265.29	if region_c==	1
+replace lpe_ci=	250.48	if region_c==	2
+replace lpe_ci=	206.69	if region_c==	3
 	label var lpe_ci "Linea de indigencia oficial del pais"
 
 	
@@ -578,11 +593,17 @@ gen dis_ch=.
 	replace rama_ci = 7 if ((q9_21>=4911 & q9_21<=5320) | (q9_21>=6110 & q9_21<=6190)) & emp_ci==1
 	replace rama_ci = 8 if (q9_21>=6411 & q9_21<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((q9_21>=5811 & q9_21<=6020) | (q9_21>=6201 & q9_21<=6399) | (q9_21>=8410 & q9_21<=9900)) & emp_ci==1
-	label var rama_ci "Rama de actividad"
+	label var rama_ci "Rama de actividad de la ocupación principal"
 	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
+
+
+	* rama secundaria
+    g ramasec_ci=. 
+    label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+    label val ramasec_ci ramasec_ci
 
 	****************
 	***durades_ci***

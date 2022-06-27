@@ -78,6 +78,7 @@ label values region_BID_c region_BID
 * REGION PAIS *
 ***************
 g region_c=.
+gen ine01= district
 
 ***************
 *    ZONA     *
@@ -1387,7 +1388,8 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
-
+rename p40iscom codocupa
+rename p41isicm codindustria
 
 compress
 

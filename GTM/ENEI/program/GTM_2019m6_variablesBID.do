@@ -637,10 +637,10 @@ label define ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de trans
 label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 
+
 *************
 **rama_ci****
 *************
-
 gen rama_ci=.
 replace rama_ci=1 if p04c04b_2d >=1 & p04c04b_2d <=3
 replace rama_ci=2 if p04c04b_2d >=5 & p04c04b_2d <=9
@@ -651,14 +651,14 @@ replace rama_ci=6 if (p04c04b_2d >=45 & p04c04b_2d <=47) | (p04c04b_2d >=55 & p0
 replace rama_ci=7 if (p04c04b_2d >=49 & p04c04b_2d <=53) | p04c04b_2d ==61 
 replace rama_ci=8 if p04c04b_2d >=64 & p04c04b_2d <=68
 replace rama_ci=9 if (p04c04b_2d >=69 & p04c04b_2d <=99) | (p04c04b_2d >=58 & p04c04b_2d <=60) | (p04c04b_2d >=62 & p04c04b_2d <=63)
-
-label var rama_ci "Rama de actividad"
+label var rama_ci "Rama de actividad de la ocupación principal"
 label val rama_ci rama_ci
 label var rama_ci "Rama de actividad"
-label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotació® ¤e minas y canteras" 3"Industrias manufactureras"
-label def rama_ci 4"Electricidad, gas y agua" 5"Construcció®¢ " 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
 
 ************
 *durades_ci*
@@ -1597,7 +1597,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-
+rename p04c04b_2d codindustria
+rename p04c02b_2d codocupa
 
 
 compress

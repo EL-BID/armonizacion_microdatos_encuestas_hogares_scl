@@ -60,6 +60,7 @@ label value region_BID_c region_BID_c
 	************
 
 gen region_c=real(substr(folio,1,1))
+gen ine01 = region_c
 
 label define region_c ///
 1"Chuquisaca"         ///     

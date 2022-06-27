@@ -1511,6 +1511,9 @@ para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename ocuprin codocupa
 rename rama codindustria
 
+replace codindustria=. if codindustria==0
+replace codocupa=. if codocupa==0
+
 compress
 
 

@@ -896,7 +896,9 @@ la var subemp_ci "Personas en subempleo por horas"
 **************
 ***aedu_ci***
 **************
-			
+
+/*duda*/		
+		
 * Para las variables de maximo nivel educativo alcanzado y año aprobado, se reemplaza missing  
 	replace p6210s1=. if p6210s1==99
 	replace p6210=.   if p6210==9

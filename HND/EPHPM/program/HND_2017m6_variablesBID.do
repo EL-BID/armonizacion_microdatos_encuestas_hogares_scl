@@ -1139,205 +1139,185 @@ label values quintil_ci quintil_ci
 ******************************************************************************
 *	Educación
 *****************************************************************************
+*Javier
 
-************
-* asiste_ci*
-************
-
+***************
+***asiste_ci***
+***************
+**DZ Mar 2019:Se agrega centro de educación temprana**
 generat asiste_ci=.
 replace asiste_ci=1 if ed103==1
 replace asiste_ci=0 if ed103==2
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
-
-	*************
-	***aedu_ci***
-	*************
-		
-* Años de educacion aprobados **
-/*replace ed108 =. if ed108 >9
-replace ed115=. if ed115>9
-
-** para quienes ya no asisten
-gen aedu_ci=.
-replace aedu_ci=0 if ed105>=1 & ed105<=3
-replace aedu_ci=ed108  if ed105==4 
-replace aedu_ci=ed108 +6 if ed105==5 | ed105==6
-replace aedu_ci=ed108 +12 if ed105==7 | ed105==8 | ed105==9
-replace aedu_ci=ed108 +17 if ed105==10
-** para quienes asisten actualmente
-replace aedu_ci=0 if ed110==1 | ed110==2 | ed110==3 
-replace aedu_ci=ed115-1 if ed110==4
-replace aedu_ci=ed115+6-1 if ed110==5 | ed110==6
-replace aedu_ci=ed115+12-1 if ed110==7 | ed110==8 | ed110==9
-replace aedu_ci=ed115+17-1 if ed110==10
-label var aedu_ci "Años de educacion aprobados"	*/
-
+*************
+***aedu_ci***
+*************
 *Modificación Mayra Sáenz - Octubre 2016: Corrección enviada por Ivan Bornacelly SCL/EDU	
-* Años de educacion aprobados **
+replace ed105=. if ed105==99
+replace ed110=. if ed110==99
 replace ed108=. if ed108>9
 replace ed115=. if ed115>9
 
-** para quienes ya no asisten
+**Para quienes ya no asisten:
 gen aedu_ci=.
 replace aedu_ci=0 if ed105>=1 & ed105<=3
 replace aedu_ci=ed108 if ed105==4 
 replace aedu_ci=ed108+6 if ed105==5
 replace aedu_ci=ed108+9 if ed105==6
-replace aedu_ci=ed108+12 if ed105==7 | ed105==8 | ed105==9
-replace aedu_ci=ed108+17 if ed105==10 
+replace aedu_ci=ed108+11 if ed105==7 | ed105==8 | ed105==9
+replace aedu_ci=ed108+11+4 if ed105==10
 
-** para quienes asisten actualmente
-*DZ Jul 2017: Cambio de categoria respecto al anio anterior**
-replace aedu_ci=0 if ed110==1 | ed110==2 | ed110==3 
+*Para quienes asisten actualmente:
+*DZ Jul 2017: Cambio de categoria respecto al anio anterior
+replace aedu_ci=0 if ed110==1 | ed110==2 | ed110==3
 replace aedu_ci=ed115-1 if ed110==4
 replace aedu_ci=ed115+6-1 if ed110==5
 replace aedu_ci=ed115+9-1 if ed110==6
-replace aedu_ci=ed115+12-1 if ed110==7 | ed110==8 | ed110==9
-replace aedu_ci=ed115+17-1 if ed110==10
+replace aedu_ci=ed115+11-1 if ed110==7 | ed110==8 | ed110==9
+replace aedu_ci=ed115+11+4-1 if ed110==10
 label var aedu_ci "Años de educacion aprobados"	
 		
-		
-******************************
-*	eduno_ci
-******************************
+// imputando los años perdidos
+replace aedu_ci=0 if (ed105==1 | ed105==2 | ed105==3) & ed108==. // alfabetizacion 
+replace aedu_ci=0 if (ed110==2 | ed110==3) & ed115==. // alfabetizacion
+replace aedu_ci=0 if (ed105==4 & ed108==.) | (ed110==4 & ed115==.) // educacion basica
+replace aedu_ci=6 if (ed105==5 & ed108==.) | (ed110==5 & ed115==.) // ciclo comun
+replace aedu_ci=9 if (ed105==6 & ed108==.) | (ed110==6 & ed115==.) // diversificado
+replace aedu_ci=11 if (inlist(ed105,7, 8,9) & ed108==.) | (inlist(ed110,7,8,9) & ed115==.) // terciaria
+replace aedu_ci=15 if (ed105==10 & ed108==.) | (ed110==10 & ed115==.) // postgrado
+ 
+**************
+***eduno_ci***
+**************
 g byte eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
 la var eduno_ci "Personas sin educacion. Excluye preescolar"
-******************************
-*	edupi_ci 
-******************************
+
+**************
+***edupi_ci*** 
+**************
 g byte edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
 la var edupi_ci "Personas que no han completado Primaria"
-******************************
-*	edupc_ci 
-******************************
+
+**************
+***edupc_ci*** 
+**************
 g byte edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 la var edupc_ci "Primaria Completa"
-******************************
-*	edusi_ci 
-******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
+
+**************
+***edusi_ci*** 
+**************
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<=10)
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
-******************************
-*	edusc_ci 
-******************************
-g byte edusc_ci=(aedu_ci==12)
+
+**************
+***edusc_ci***
+**************
+g byte edusc_ci=(aedu_ci==11)
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
-******************************
-*	edus1i_ci 
-******************************
+
+***************
+***edus1i_ci*** 
+***************
 g byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
 replace edus1i_ci=. if aedu_ci==.
 la var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus1c_ci 
-******************************
+
+***************
+***edus1c_ci*** 
+***************
 g byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
-******************************
-*	edus2i_ci 
-******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+
+***************
+***edus2i_ci*** 
+***************
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus2c_ci 
-******************************
-g byte edus2c_ci=(aedu_ci==12)
+
+***************
+***edus2c_ci*** 
+***************
+g byte edus2c_ci=(aedu_ci==11)
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
-******************************
-*	eduui_ci 
-******************************
-g byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
-replace eduui_ci=. if aedu_ci==.
+
+**************
+***eduui_ci*** 
+**************
+g byte eduui_ci=(aedu>=12 & aedu<=15) & ed107==2 // no finalizó estudios
+replace eduui_ci=1 if (aedu>=12 & aedu<=15) & ed107==.
+replace eduui_ci=. if aedu_ci==. 
 la var eduui_ci "Universitaria o Terciaria Incompleta"
-******************************
-*	eduuc_ci 
-******************************
-g byte eduuc_ci=(aedu_ci>=17)
+
+**************
+***eduuc_ci*** 
+**************
+g byte eduuc_ci=(aedu>=12 & aedu<=15) & ed107==1
+replace eduuc_ci=1 if aedu_ci>15
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
-******************************
-*	edupre_ci 
-******************************
+
+***************
+***edupre_ci***
+***************
 g byte edupre_ci=.
-replace edupre_ci=1 if ((ed105==3 | ed110==3) & aedu_ci ~=.)
-replace edupre_ci=0 if (edupre_ci~=1 & aedu_ci ~=.)
-la var edupre_ci "Asiste a Educacion preescolar"
+la var edupre_ci "Tiene Educacion preescolar"
 
 ***************
 ***asipre_ci***
 ***************
-
-g asispre_ci=.
-replace asispre_ci=1 if ed103==1 & ed110==3 
-recode asispre_ci (.=0)
+gen byte asispre_ci=.
 la var asispre_ci "Asiste a educacion prescolar"
 
-******************************
-*	pqnoasis 
-******************************
-ren ed104 pqnoasis_ci
+**************
+***pqnoasis*** 
+**************
+gen pqnoasis_ci=ed104 
 label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
 
-******************************
-*	repite_ci 
-******************************
+***************
+***repite_ci*** 
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un año o grado"
 
-******************************
-*	repiteult_ci 
-******************************
+******************
+***repiteult_ci*** 
+******************
 gen repiteult_ci=.
 replace repiteult_ci=1 if ed113==1
 replace repiteult_ci=0 if ed113==2
 label var repiteult_ci "Personas que están repetiendo el ultimo grado"
 
-******************************
-*	edupub_ci 
-******************************
+***************
+***edupub_ci*** 
+***************
 gen edupub_ci=.
-/*
-Esta pregunta no se incluye porque el concepto de esta variable es para aquellas personas que actualmente
-están estudiando en un centro educativo público.
-replace edupub_ci=1 if (ed109==1|ed109==2|ed109==3|ed109==4|ed109==7|ed109==8|ed109==13)
-replace edupub_ci=0 if (ed109==5|ed109==6|ed109==9|ed109==10|ed109==11|ed109==12)
-*/
-replace edupub_ci=1 if (ed116==1|ed116==2|ed116==3|ed116==4|ed116==8)
-replace edupub_ci=0 if (ed116==5|ed116==6 |ed116==7 | ed116==9|ed116==10|ed116==11|ed116==12)
+replace edupub_ci=1 if (ed116==1|ed116==2|ed116==3|ed116==4|ed116==8) & ed103==1				//JV: La variable de este año lista 10 como "En el extranjero". Incluido en no-pública
+replace edupub_ci=0 if (ed116==5|ed116==6|ed116==7|ed116==9|ed116==10|ed116==11|ed116==12) & ed103==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
-
-*************
-*tecnica_ci**
-*************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if ed105==7 | ed110==7
-replace tecnica_ci=0 if tecnica_ci ~=1 & ( ed105!=11 & ed110!=11)
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 **************
 ***eduac_ci***
 **************
 gen byte eduac_ci=.
-replace eduac_ci= 0 if tecnica_ci ==1
-replace eduac_ci=1 if eduuc_ci ==1 | eduui_ci ==1
+replace eduac_ci= 1 if (ed105==9 | ed105==10 | ed110==9| ed110==10)
+replace eduac_ci= 0 if (ed105==7 | ed105==8 ) | (ed110==7| ed110==8)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-
-**DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-*****************
+******************
 ***pqnoasis1_ci***
-*****************
+******************
+**DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 g       pqnoasis1_ci = 1 if pqnoasis_ci==7
 replace pqnoasis1_ci = 2 if pqnoasis_ci==11
 replace pqnoasis1_ci = 3 if pqnoasis_ci==6
@@ -1350,6 +1330,8 @@ replace pqnoasis1_ci = 9 if pqnoasis_ci==1 | pqnoasis_ci==12
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
+
+
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

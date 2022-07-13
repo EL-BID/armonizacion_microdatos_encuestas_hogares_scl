@@ -960,56 +960,59 @@ gen spublico_ci=.
 replace spublico_ci=1 if q323==1 | q323==2
 replace spublico_ci=0 if spublico_ci==.
 
+*****************
+*   Educacion   *
+*****************
+* Mod. 7/2022 Agustina Thailinger EDU/SLC
+
+rename *, lower
+
 *********
 *aedu_ci*
 *********
+gen aedu_ci=.
 
 *ocupados
-gen aedu_ci=.
-replace aedu_ci=q320a if q320a<99
-replace aedu_ci=q321a if q321a>0 & q321a<99
+replace aedu_ci=q320a if q320a<99           // primary
+replace aedu_ci=q321a if q321a>0 & q321a<99 // secondary
 
 *desocupados
-replace aedu_ci=q421a if q421a<99
-replace aedu_ci=q422a if q422a>0 & q422a<99
+replace aedu_ci=q421a if q421a<99           // primary
+replace aedu_ci=q422a if q422a>0 & q422a<99 // secondary
 
 *inactivos
-replace aedu_ci=q514a if q514a<99
-replace aedu_ci=q515a if q515a>0 & q515a<99
+replace aedu_ci=q514a if q514a<99           // primary
+replace aedu_ci=q515a if q515a>0 & q515a<99 // secondary
 
-
-// imputando valores perdidos.
-
+// imputando valores perdidos
 replace aedu_ci=6 if q320a==99 & q321a!=99 & aedu_ci==.
 replace aedu_ci=6 if q421a==99 & q422a!=99 & aedu_ci==.
 replace aedu_ci=6 if q514a==99 & q515a!=99 & aedu_ci==.
-
 
 **********
 *eduno_ci*
 **********
 gen eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
+label variable eduno_ci "Cero anios de educacion"
 
 **********
 *edupi_ci*
 **********
-
-gen edupi_ci=(aedu_ci >=1 & aedu_ci<6)
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
-
+label variable edupi_ci "Primaria incompleta"
 
 **********
 *edupc_ci*
 **********
-
 gen edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
+label variable edupc_ci "Primaria completa"
 
 **********
 *edusi_ci*
 **********
-
 gen edusi_ci=(aedu_ci>6 & aedu_ci<11)
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
@@ -1017,27 +1020,28 @@ label variable edusi_ci "Secundaria incompleta"
 **********
 *edusc_ci*
 **********
-
-gen edusc_ci=(aedu_ci>=11)
+gen edusc_ci=(aedu_ci==11)
 replace edusc_ci=. if aedu_ci==.
+label variable edusc_ci "Secundaria completa"
 
 **********
 *eduui_ci*
 **********
-
-gen eduui_ci=.
+gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 | q423!=8 | q322!=8))
+replace eduui_ci=. if aedu_ci==.
+label variable eduui_ci "Universitaria incompleta"
 
 **********
 *eduuc_ci*
 **********
-gen eduuc_ci=.
-*gen eduuc_ci=1 if q516==9 | q423==9 | q322==9
-*replace eduuc_ci=0 if eduno_ci==1 | edupi_ci==1 | edupc_ci==1 | eduui_ci==1
+gen eduuc_ci=(q516==8 | q423==8 | q322==8)
+replace eduuc_ci=1 if aedu_ci>=14
+replace eduuc_ci=. if aedu_ci==.
+label variable eduuc_ci "Universitaria completa o mas"
 
 ***********
 *edus1i_ci*
 ***********
-
 gen edus1i_ci=(aedu_ci>=7 & aedu_ci<9)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
@@ -1045,8 +1049,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***********
 *edus1c_ci*
 ***********
-
-gen edus1c_ci=aedu_ci==9
+gen edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -1056,76 +1059,65 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 gen edus2i_ci=(aedu_ci==10) 
 replace edus2i_ci=. if aedu_ci==.  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
+
 ***********
 *edus2c_ci*
 ***********
-
-gen edus2c_ci=(aedu_ci>=11)
+gen edus2c_ci=(aedu_ci==11)
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-************************
-***Educacion preescolar.
-************************
+
+***********
+*edupre_ci*
+***********
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
-***asipre_ci***
-***************
-
+************
+*asispre_ci*
+************
 gen byte asispre_ci=.
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
-
-***************************************************************************
-***Educación terciaria académica versus educación terciaria no-académica***
-***************************************************************************
+**********
+*eduac_ci*
+**********
 gen eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
-
 
 ***********
 *asiste_ci*
 ***********
-// la pregunta dice "most of the time"
-gen asiste_ci=1 if q21a==5
-replace asiste_ci=0 if q21a!=5
-replace asiste_ci=. if  q21a==. 
+gen asiste_ci=. 
 
-***************************************************************************
-***Razones para no asistir a la escuela.***
-***************************************************************************
+*************
+*pqnoasis_ci*
+*************
 gen pqnoasis_ci=.
-label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
+label variable pqnoasis_ci "Razón por que no asiste a la escuela"
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+gen pqnoasis1_ci=.
 
-g       pqnoasis1_ci = .
-
-******************************************************
-*Personas que han repetido al menos un año o grado.***
-******************************************************
-
+***********
+*repite_ci*
+***********
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
-******************************************************
-***Personas que han repetido el ultimo grado.
-******************************************************
-
+**************
+*repiteult_ci*
+**************
 gen repiteult_ci=.
 label var repite_ci "Personas que han repetido el último grado"
-
 
 ***********
 *edupub_ci*
 ***********
-
 gen edupub_ci=.
-
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

@@ -1145,17 +1145,15 @@ label define quintil_ci 1 "Quintil 1" 2 "Quintil 2" 3 "Quintil 3" 4 "Quintil 4" 
 label values quintil_ci quintil_ci
 
 
-******************************************************************************
-*	Educación
-*****************************************************************************
-*Javier
-
-capture rename CP*, lower	//JV: La base que yo utilicé tenía las variables en mayúsculas. Incluyo rename a minúsculas solo por si acaso.
+*****************
+*	Educación   *
+*****************
+*Modificado por Agustina Thailinger y Javier Valverde EDU/SCL Julio 2022
 
 ***************
 ***asiste_ci***
 ***************
-**DZ Mar 2019:Se agrega centro de educación temprana**
+*DZ Mar 2019:Se agrega centro de educación temprana**
 generat asiste_ci=.
 replace asiste_ci=1 if cp405==1 | cp401==1
 replace asiste_ci=0 if cp405==2 | cp401==2
@@ -1170,7 +1168,7 @@ replace cp412=. if cp412==99
 replace cp410=. if cp410>9
 replace cp417=. if cp417>9
 
-**Para quienes ya no asisten:
+*Para quienes ya no asisten:
 gen aedu_ci=.
 replace aedu_ci=0 if cp407>=1 & cp407<=3
 replace aedu_ci=cp410 if cp407==4 
@@ -1313,8 +1311,8 @@ label var repiteult_ci "Personas que están repetiendo el ultimo grado"
 ***edupub_ci*** 
 ***************
 gen edupub_ci=.
-replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10) & cp405==1
-replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7|cp418==9|cp418==11|cp418==12) & cp405==1
+replace edupub_ci=1 if (cp418==1 | cp418==2 | cp418==3 | cp418==4 | cp418==8  | cp418==10) & cp405==1
+replace edupub_ci=0 if (cp418==5 | cp418==6 | cp418==7 | cp418==9 | cp418==11 | cp418==12) & cp405==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
 **************
@@ -1328,7 +1326,7 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ******************
 ***pqnoasis1_ci***
 ******************
-**DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+*DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
 g       pqnoasis1_ci = 1 if pqnoasis_ci==7
 replace pqnoasis1_ci = 2 if pqnoasis_ci==11
 replace pqnoasis1_ci = 3 if pqnoasis_ci==6
@@ -1341,8 +1339,6 @@ replace pqnoasis1_ci = 9 if pqnoasis_ci==1 | pqnoasis_ci==12
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
-
-
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1727,7 +1723,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 trapri_ci trapri_ch progpub_ci progpub_ch trapub_ci  trapub_ch capital_ci capital_ch otros_ci otros_ch ypen_ch ytotal_ci  ytotal_ch ytotalpc_ch quintil_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

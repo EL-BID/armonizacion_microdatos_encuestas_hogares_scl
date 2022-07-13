@@ -1032,9 +1032,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-*Javier
-
-*Mod. 5/2022 Agustina Thailinger SCL/EDU
+*Mod. 7/2022 Agustina Thailinger y Javier Valverde SCL/EDU
 
 /*
 Ninguno                                                  0
@@ -1063,8 +1061,6 @@ Profesionalización Docente                               22
 Form. Militar/Policial                                   23
 Superior Universitario                                   24
 */
-
-capture destring ed*, replace
 
 capture drop nivgra
 gen nivgra=ed0504
@@ -1250,8 +1246,6 @@ replace edupub_ci=0 if (ed09>=2 & ed09<=3)
 replace edupub_ci=. if ed09==.
 
 drop nivgra aedu_temp
-
-
 
 ********************************************
 ***Variables de Infraestructura del hogar***

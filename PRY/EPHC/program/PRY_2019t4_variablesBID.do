@@ -1033,9 +1033,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
-*Javier
-
-*Mod. 5/2022 Agustina Thailinger SCL/EDU
+*Mod. 7/2022 Agustina Thailinger y Javier Valverde SCL/EDU
 
 /*
 Ninguno                                                  0
@@ -1064,8 +1062,6 @@ Profesionalización Docente                               22
 Form. Militar/Policial                                   23
 Superior Universitario                                   24
 */
-
-capture destring ed*, replace
 
 capture drop nivgra
 gen nivgra=ed0504
@@ -1201,7 +1197,6 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-
 gen asiste_ci=.
 replace asiste_ci=1 if ed08>=1 & ed08<=18
 replace asiste_ci=0 if ed08==19

@@ -917,8 +917,6 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 	****************************
 	***VARIABLES DE EDUCACION***
 	****************************
-*Javier
-
 *************
 ***aedu_ci*** 
 *************

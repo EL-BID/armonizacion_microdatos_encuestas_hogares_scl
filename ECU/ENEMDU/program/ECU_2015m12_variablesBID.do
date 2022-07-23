@@ -887,7 +887,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-*Javier
 			
 	*************
 	***aedu_ci***

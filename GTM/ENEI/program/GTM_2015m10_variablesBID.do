@@ -1011,64 +1011,21 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 ******************************************************************************
 *Javier
 
-capture rename p03*, lower		//JV: La base que utilicé tenía las variables en mayúsculas, pero para mayor consistencia, y en caso de que la base de origen sea una distinta, o el cambio se haga en otra parte del script, las cambio a minúsculas aquí
+capture rename P03*, lower		//JV: La base que utilicé tenía las variables en mayúsculas, pero para mayor consistencia, y en caso de que la base de origen sea una distinta, o el cambio se haga en otra parte del script, las cambio a minúsculas aquí
 
-******************************
-*	asiste_ci: Definida aqui como inscritos en plantel educativo en el presente anio escolar  OK
-******************************
-g asiste_ci=(p03a02==1)
-replace asiste_ci=. if p03a02==.
-notes: asiste is defined as enrolled in the current school year
 *******************************************
-*	aedu_ci: Anios de educacion COMPLETADOS
+*	aedu_ci
 *******************************************
 
 gen aedu_ci=.
+replace	 aedu_ci=0  if p03a05a==0
 replace	 aedu_ci=0  if p03a05a==1
-
-*Modificación Mayra Sáenz Agosto 2015: Aunque en el cuestionario consta la categoría 0 = ninguno
-*En la base de datos no se incluye la categoría. Por lo tanto, se considera ningun tipo de educación
-*a los que no saben leer ni escribir y no responden ls preguntas de educación.
-replace aedu_ci=0  if p03a01 ==2 & (p03a05a==. & p03a05b==.)
-
-*Primaria 
-replace aedu_ci=1  if (p03a05a==2 & p03a05b==1)
-replace aedu_ci=2  if (p03a05a==2 & p03a05b==2)
-replace aedu_ci=3  if (p03a05a==2 & p03a05b==3)
-replace aedu_ci=4  if (p03a05a==2 & p03a05b==4)
-replace aedu_ci=5  if (p03a05a==2 & p03a05b==5)
-replace aedu_ci=6  if (p03a05a==2 & p03a05b==6) 
-
-
-*Secundaria
-replace aedu_ci=7  if (p03a05a==3 & p03a05b==1) 
-replace aedu_ci=8 if (p03a05a==3 & p03a05b==2) 
-replace aedu_ci=9 if (p03a05a==3 & p03a05b==3) 
-replace aedu_ci=10 if (p03a05a==4 & (p03a05b==2 | p03a05b==4)) 
-replace aedu_ci=11 if (p03a05a==4 & p03a05b==5) 
-replace aedu_ci=12 if (p03a05a==4 & p03a05b==6) 
-
-*Superior
-replace aedu_ci=13 if (p03a05a==5 & p03a05b==1)
-replace aedu_ci=14 if (p03a05a==5 & p03a05b==2)
-replace aedu_ci=15 if (p03a05a==5 & p03a05b==3)
-replace aedu_ci=16 if (p03a05a==5 & p03a05b==4)
-replace aedu_ci=17 if (p03a05a==5 & p03a05b==5) 
-replace aedu_ci=18 if (p03a05a==5 & p03a05b==6) //ingenierias duran 6 años.  
-replace aedu_ci=19 if (p03a05a==5 & p03a05b==7) //quizas es medicina
-
-*Postgrado
-replace aedu_ci=12+6 if (p03a05a==6 & p03a05b==1) 
-replace aedu_ci=12+6+1 if (p03a05a==6 & p03a05b==2)
-
-replace aedu_ci=12+6+2 + p03a05b if (p03a05a==7) // doctorado
-
-//imputando los valores perdidos
-
-replace aedu_ci=0 if p03a05a==0 & p03a05b==. 
-
-*replace aedu_ci=.  if p03a05a==. & p03a05b ==. // Mayra Sáenz- Agosto 2014 Desactivo esta opción porque elimina a los de ninguna educación.
-
+replace aedu_ci=p03a05b if p03a05a==2
+replace aedu_ci=6+p03a05b if p03a05a==3
+replace aedu_ci=6+p03a05b if p03a05a==4
+replace aedu_ci=11+p03a05b if p03a05a==5
+replace aedu_ci=16+p03a05b if p03a05a==6  
+replace aedu_ci=18+p03a05b if p03a05a==7  
 label var aedu_ci "Anios de educacion aprobados"
 
 
@@ -1077,70 +1034,65 @@ label var aedu_ci "Anios de educacion aprobados"
 ******************************
 g byte eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
-la var eduno_ci "Personas sin educacion. Excluye preescolar"
+
 ******************************
 *	edupi_ci 
 ******************************
 g byte edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
-la var edupi_ci "Personas que no han completado Primaria"
+
 ******************************
 *	edupc_ci 
 ******************************
 g byte edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
-la var edupc_ci "Primaria Completa"
+
 ******************************
 *	edusi_ci 
 ******************************
 g byte edusi_ci=(aedu_ci>6 & aedu_ci<11)
-replace edusi_ci=1 if aedu_ci==11 & p03a06<100 // sin diploma de bachiller
 replace edusi_ci=. if aedu_ci==.
-la var edusi_ci "Secundaria Incompleta"
+
 ******************************
 *	edusc_ci 
 ******************************
-g byte edusc_ci=(aedu_ci==12) // son 11 o 12
-replace edusc_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 // con diploma de bachiller
+g byte edusc_ci=(aedu_ci==11) 
 replace edusc_ci=. if aedu_ci==.
-la var edusc_ci "Secundaria Completa"
+
 ******************************
 *	edus1i_ci 
 ******************************
 g byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
 replace edus1i_ci=. if aedu_ci==.
-la var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
+
 ******************************
 *	edus1c_ci 
 ******************************
 g byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
-la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
+
 ******************************
 *	edus2i_ci 
 ******************************
 g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
-replace edus2i_ci=1 if aedu_ci==11 & p03a06<100
 replace edus2i_ci=. if aedu_ci==.
-la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
+
 ******************************
 *	edus2c_ci 
 ******************************
-g byte edus2c_ci=(aedu_ci==12)
-replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 //con 11 anios pero grado de bachiller
+g byte edus2c_ci=(aedu_ci==11)
 replace edus2c_ci=. if aedu_ci==.
-la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
+
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>12 &  p03a06>=100 & p03a06<999) | (aedu_ci>12 &  p03a06>=100 & p03a06==.) // mas de 12 anios pero grado de bachiller 
+g byte eduui_ci=(aedu_ci>11 & aedu_ci<15) 
 replace eduui_ci=. if aedu_ci==.
 la var eduui_ci "Universitaria o Terciaria Incompleta"
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>12 &  p03a06>=1000 & p03a06<9999 ) // mas de 12 anios y grado terciario
+g byte eduuc_ci=aedu_ci>14
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
@@ -1149,15 +1101,21 @@ la var eduuc_ci "Universitaria o Terciaria Completa"
 g byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 ******************************
-*	asispre_ci
+*	asispre_ci:Pregunta sobre matriculacion no asistencia 
 ******************************
-g byte asispre_ci=p03a04a==1
+g byte asispre_ci=.
 la var asispre_ci "Asiste a Educacion preescolar"
 **************
 ***eduac_ci***
 **************
 gen byte eduac_ci=. // esta disponible solo para los con titulo
 label variable eduac_ci "Superior universitario vs superior no universitario"
+
+******************************
+*	asiste_ci: Pregunta sobre matriculacion no asistencia 
+******************************
+g asiste_ci=.
+replace asiste_ci=. if p03a02==.
 
 ******************************
 *	pqnoasis_ci 
@@ -1167,7 +1125,6 @@ g pqnoasis_ci=. /*NA*/
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 g       pqnoasis1_ci = .
 
@@ -1182,12 +1139,10 @@ g repiteult_ci=. /*NA*/
 ******************************
 *	edupub_ci 
 ******************************
-g edupub_ci=(p03a02==1 & p03a03==1) // asiste y es publico
-replace edupub_ci=0 if p03a02==1 & p03a03==2 // asiste y es privado
-replace edupub_ci=. if p03a02!=1 // no asiste
-label define edupub_ci 1 "Público" 0 "Privado"
-label value edupub_ci edupub_ci
-la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
+g edupub_ci=.
+replace edupub_ci=1 if p03a03==1 // asiste y es publico
+replace edupub_ci=0 if p03a03==2 // asiste y es privado
+
 
 
 **********************************

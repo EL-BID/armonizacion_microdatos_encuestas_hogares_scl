@@ -941,83 +941,14 @@ label values nivel_ultimo_ano_aprobado nivel
 label values nivel_se_matriculo nivel
 
 replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==1  
-replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 | nivel_ultimo_ano_aprobado==9
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==9
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==10
+replace aedu_ci= . if nivel_ultimo_ano_aprobado==99
+replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 
 replace aedu_ci = ultimo_ano_aprobado+8 if nivel_ultimo_ano_aprobado == 3 | nivel_ultimo_ano_aprobado == 4  
 replace aedu_ci = ultimo_ano_aprobado+12 if nivel_ultimo_ano_aprobado == 5  
-replace aedu_ci = ultimo_ano_aprobado+12+4 if inlist(nivel_ultimo_ano_aprobado, 6, 7) 
+replace aedu_ci = ultimo_ano_aprobado+12+4 if nivel_ultimo_ano_aprobado==6 | nivel_ultimo_ano_aprobado==7 
 replace aedu_ci = ultimo_ano_aprobado+12+4+2 if nivel_ultimo_ano_aprobado==8 
-
-replace aedu_ci = . if nivel_ultimo_ano_aprobado==10 | nivel_ultimo_ano_aprobado==99
-
-//imputando valores perdidos por nivel
-
-replace aedu_ci = 0 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado, 2,9) 
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==4
-replace aedu_ci = 12 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==5
-replace aedu_ci = 12+4 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado,6, 7)
-replace aedu_ci = 12+4+2 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==8
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
-
- 
-replace aedu_ci = . if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==.
-
-/*
-************************************************************** Actualmente asisten ***********************************************
-*prescolar
-
-replace aedu_ci = 0 if nivel_se_matriculo == 1 & asiste_centro_educativo ==1 
-
-* Primaria 
-
-replace aedu_ci = curso_matriculado-1 if nivel_se_matriculo == 2 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 8 & nivel_se_matriculo == 2 & asiste_centro_educativo ==1
-
-* Secundaria 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==3 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 3 & asiste_centro_educativo ==1
-
-* secundaria tecnica 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==4 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 4 & asiste_centro_educativo ==1
-
-* universitario
-
-replace aedu_ci = curso_matriculado-1+12 if nivel_se_matriculo ==5 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & nivel_se_matriculo == 5 & asiste_centro_educativo ==1
-
-* postrgrado, maestria doctorado
-
-replace aedu_ci = curso_matriculado-1+12+4 if (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1
-
-
-********************************************************** Actualmete no asisten **************************************************
-
-replace aedu_ci=0  if (nivel_ultimo_ano_aprobado==1) | (nivel_ultimo_ano_aprobado==9) & asiste_centro_educativo ==2
-
-* primaria
-replace aedu_ci=ultimo_ano_aprobado  if nivel_ultimo_ano_aprobado==2 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 8 & nivel_ultimo_ano_aprobado == 2 & asiste_centro_educativo ==2
-
-* secundaria
-replace aedu_ci=ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==3 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 3 & asiste_centro_educativo ==2
-
-* secundaria tecnica 
-replace aedu_ci = ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==4 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 4 & asiste_centro_educativo ==2
-
-*Universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4 if nivel_ultimo_ano_aprobado==5 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 5 & nivel_ultimo_ano_aprobado == 5 & asiste_centro_educativo ==2
-
-*Post-universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4+4  if nivel_ultimo_ano_aprobado==6 & asiste_centro_educativo ==2
-
-*/
 replace aedu_ci=.  if nivel_ultimo_ano_aprobado==.
 
 label var aedu_ci "Anios de educacion aprobados" 
@@ -1071,7 +1002,7 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==1 | mayor_nivel==2 | mayor_nivel==7 | mayor_nivel==8) // 12+ anios, titulo de bachilleres, ninguno o primario 
+gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1079,8 +1010,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==3 | mayor_nivel==4 | mayor_nivel==5 | mayor_nivel==6) //entre 12 y 16 y un titulo superior
-replace eduuc_ci=1 if aedu_ci>=16 // mas de 16 todos
+gen byte eduuc_ci=aedu_ci>=16 // mas de 16 todos
 replace eduuc_ci=. if aedu_ci==. 
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1127,14 +1057,14 @@ label variable edupre_ci "Educacion preescolar completa"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci=(nivel_se_matriculo==1 & asiste_centro_educativo ==1)
-	label variable asispre_ci "Asistencia a Educacion preescolar"
+g asispre_ci= 1 if nivel_se_matriculo==1 & asiste_centro_educativo ==1
+replace asispre_ci=0 if nivel_se_matriculo!=1 & asiste_centro_educativo ==1
+label variable asispre_ci "Asistencia a Educacion preescolar"
 	
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=.  //solo disponible la diferenciacion para los con titulo
+gen byte eduac_ci=.  
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1152,19 +1082,13 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 **************
 *ver que labels cambiaron en esta nueva encuesta
 gen pqnoasis_ci=porque_no_estudia
-replace pqnoasis_ci=. if porque_no_estudia==99
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal"
-label def pqnoasis_ci 5"Nunca lo inscribieron" 6"No tiene documentos", add
-label def pqnoasis_ci 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad", add
-label def pqnoasis_ci 11"Razones familiares" 12"No quiere / No le gusta", add
-label val pqnoasis_ci pqnoasis_ci
+label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal" 5"Nunca lo inscribieron" 6"No tiene documentos" 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad" 11"Razones familiares" 12"No quiere / No le gusta" 99 "Otra"
+label value  pqnoasis_ci pqnoasis_ci
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
 g		pqnoasis1_ci = .						
 replace pqnoasis1_ci = 1 if porque_no_estudia==8
 replace pqnoasis1_ci = 2 if porque_no_estudia==7
@@ -1199,10 +1123,9 @@ label var repiteult "Ha repetido el último grado"
 ***************
 gen edupub_ci=.
 replace edupub_ci=1 if tipo_centro_estudios==3 & asiste_centro_educativo==1 //publico
-replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==2) & asiste_centro_educativo==1 //privado y semi-privado
+replace edupub_ci=0 if tipo_centro_estudios==1 & asiste_centro_educativo==1 // privado
+replace edupub_ci=0 if tipo_centro_estudios==2 & asiste_centro_educativo==1 // semiprivado
 label var edupub_ci "Asiste a un centro de enseñanza público"
-
-
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****

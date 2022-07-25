@@ -2270,7 +2270,7 @@ para análisis de trends (en el marco de estudios sobre el futuro del trabajo)
 BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
 rename s5_16cod codocupa
 rename s5_17cod codindustria
-
+rename cviv calidad_vivienda
 compress
 
 

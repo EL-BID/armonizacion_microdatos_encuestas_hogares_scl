@@ -1150,7 +1150,7 @@ label variable edupi_ci "Primaria incompleta"
 ********************************************************************************************************************************
 ***EDUPC_CI: Personas que han completado la educacion primaria
 ********************************************************************************************************************************
-gen edupc_ci=a14==16  | (a14==29 | a14==39) 
+gen edupc_ci=a14>=16 
 replace edupc_ci=. if aedu_ci==. 
 label variable edupc_ci "Primaria completa"
 
@@ -1669,7 +1669,7 @@ lab val pnc_ci pnc_ci
 	** REGIONES **************
 	**************************
 
-	gen ine01=.   
+	replace ine01=.   
 	replace ine01=1 if  region==1	/*Central*/
 	replace ine01=2 if  region==2	/*Chorotega*/
 	replace ine01=3 if  region==3	/*Pacífico central*/
@@ -1677,9 +1677,9 @@ lab val pnc_ci pnc_ci
 	replace ine01=5 if  region==5	/*Huetar Atlántica*/
 	replace ine01=6 if  region==6	/*Huetar Norte*/
 	
-	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
-	label value ine01 ine01
-	label var ine01 " Primera division politico-administrativa, Región"	
+	*label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	*label value ine01 ine01
+	*label var ine01 " Primera division politico-administrativa, Región"	
 
 
 /*_____________________________________________________________________________________________________*/

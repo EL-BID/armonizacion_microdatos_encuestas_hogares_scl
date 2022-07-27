@@ -1069,6 +1069,14 @@ label var yoficial_ch "Ingreso del hogar total generado por el país"
 gen ypeoficial_ch=ipcn
 label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+*************************************
+*** Trabaja desde casa *******
+*************************************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if c11 == 1 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (c11>1 & c11<=12) & (condocup_ci==1 | condocup_ci==2)
+
 *====================================================================================================================================*
 *                                                   VARIABLES DE EDUCACIÓN
 *====================================================================================================================================*			

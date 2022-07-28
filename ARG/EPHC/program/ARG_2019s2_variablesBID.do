@@ -1,5 +1,4 @@
 
-
 * (Versión stata 12)
 clear
 set more off
@@ -664,6 +663,13 @@ label val rama_ci rama_ci
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 *Note: A los empleados e independientes se les esta dejando un mâ¹©mo de 5 añ¯³ de antiguedad.
 	
+	***************
+	*trabaja_casa_ci*
+	***************
+	gen trabaja_casa_ci = .
+    replace trabaja_casa_ci = 1 if pp04g == 6 & (condocup_ci==1 | condocup_ci==2)
+    replace trabaja_casa_ci = 0 if  (pp04g !=6) & (condocup_ci==1 | condocup_ci==2)
+	replace trabaja_casa_ci = 0 if  (pp04g ==99)
 
 			**************************
 			***VARIABLES DE INGRESO***

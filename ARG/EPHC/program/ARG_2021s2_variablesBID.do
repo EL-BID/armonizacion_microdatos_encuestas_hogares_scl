@@ -1212,7 +1212,7 @@ gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 |
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_01_18.pdf pÃ¡gina 10. 
+/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_03_22F5E124A94B.pdf pÃ¡gina 5-6. 
 calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
 Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio del hogar indigente en adulto equivalente */ 
 
@@ -1224,13 +1224,13 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 /*
 capture drop lp_ci
 */
-gen lp_ci=.
+gen lp_ci= 74059/3.29
 label var lp_ci "Linea de pobreza oficial del pais"
 
 ********
 *lpe_ci*
 ********
-gen lpe_ci=.
+gen lpe_ci= 31834/3.29
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 **************
@@ -1248,7 +1248,7 @@ label value cotizando_ci cotizando_ci
 
 *************
 *afiliado_ci*
-*************
+************* 
 gen afiliado_ci=.
 recode afiliado_ci .=0 if pea_ci==1 & desemp_ci==0
 label var afiliado_ci "Afiliado a la Seguridad Social"

@@ -1224,13 +1224,13 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 /*
 capture drop lp_ci
 */
-gen lp_ci= 74059/3.29
+gen lp_ci=.
 label var lp_ci "Linea de pobreza oficial del pais"
 
 ********
 *lpe_ci*
 ********
-gen lpe_ci= 31834/3.29
+gen lpe_ci=.
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 **************

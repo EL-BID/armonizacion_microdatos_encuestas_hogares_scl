@@ -965,7 +965,6 @@ replace spublico_ci=0 if spublico_ci==.
 *****************
 * Mod. 7/2022 Agustina Thailinger EDU/SLC
 
-rename *, lower
 
 *********
 *aedu_ci*

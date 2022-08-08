@@ -1612,9 +1612,9 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 ****************
 ***aguared_ch***
 ****************
-label var aguared_ch "Acceso a fuente de agua por red"
-gen aguared_ch=(p110==1 | p110==2)
 
+gen aguared_ch=(p110==1 | p110==2)
+label var aguared_ch "Acceso a fuente de agua por red"
 *****************
 ***aguadist_ch***
 *****************

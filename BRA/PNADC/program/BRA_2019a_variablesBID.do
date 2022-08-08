@@ -728,6 +728,15 @@ replace antiguedad_ci=. if v40403==. & v40401==. & v40402==.
 drop aux*
 label var antiguedad_ci "Antiguedad en la actividad actual en anios"
 
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if (v4022 == 4 | v4022 == 5) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (v4022>1 & v4022<=3) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (v4022>5 & v4022<=8) & (condocup_ci==1 | condocup_ci==2)
+
 **************
 ***INGRESOS***
 **************

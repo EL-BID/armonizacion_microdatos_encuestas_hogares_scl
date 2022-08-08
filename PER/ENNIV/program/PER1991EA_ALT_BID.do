@@ -1074,6 +1074,8 @@ gen vivialqimp_ch=.
 clonevar codindustria=A1102
 clonevar codocupa=A1101
 
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
 save "`out'\\PER_1991EA_ALT_BID.dta",  replace
 
 

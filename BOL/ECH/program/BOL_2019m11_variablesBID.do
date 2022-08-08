@@ -791,6 +791,14 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=afiliado_ci
 
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if s06b_20 == 1 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (s06b_20>1 & s06b_20<=12) & (condocup_ci==1 | condocup_ci==2)
+
 **************
 ***INGRESOS***
 **************

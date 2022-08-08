@@ -905,7 +905,7 @@ label var edupre_ci "Educacion preescolar"
 **************
 ***edupi_ci***
 **************
-ggen edupi_ci=(aedu_ci>0 & aedu_ci<6)
+gen edupi_ci=(aedu_ci>0 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "1 = personas que no han completado el nivel primario"
 

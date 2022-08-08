@@ -850,6 +850,15 @@ replace durades_ci=. if f116==2
 gen antigenanio=(f88_1/12)
 egen antiguedad_ci=rowtotal(antigenanio  f88_2)
 recode antiguedad_ci 0=. if condocup_ci !=1
+
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if f78 == 2 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (f78>3 & f78<=8) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (f78==1) & (condocup_ci==1 | condocup_ci==2)
 	
 *********************************************************************************************************
 *                                       INGRESOS                                                        *

@@ -84,7 +84,7 @@ label values region_BID_c region_BID
 ***************
 * REGION PAIS *
 ***************
-g region_ci=.
+g region_c=.
 
 ***************
 *    ZONA     *

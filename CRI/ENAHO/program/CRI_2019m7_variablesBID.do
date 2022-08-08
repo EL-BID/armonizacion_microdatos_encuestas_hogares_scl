@@ -1035,6 +1035,15 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario  monetario de todas las actividades"
 
 
+*************************************
+*** 51. Trabaja desde casa *******
+*************************************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if c11 == 1 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (c11>1 & c11<=12) & (condocup_ci==1 | condocup_ci==2)
+ 
+
 *====================================================================================================================================*
 *                                                   VARIABLES DE EDUCACIÓN
 *====================================================================================================================================*			

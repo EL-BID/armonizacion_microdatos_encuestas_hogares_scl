@@ -718,6 +718,14 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=cotizando_ci1
 
+***************
+***trabaja_casa_ci***
+***************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if p46 == 9 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (p46 != 9) & (condocup_ci==1 | condocup_ci==2)
+
 
 /* MGD 04/2016; se cambia por afiliado ya que usa la pregunta que abarca a todos los ocupados.
 g formal_ci=(afiliado_ci==1)

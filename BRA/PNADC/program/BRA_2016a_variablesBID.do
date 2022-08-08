@@ -1442,7 +1442,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 *variables que faltan generar
 gen tcylmpri_ci=.
 gen tcylmpri_ch=.
-gen repiteult_ci=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.

@@ -1209,7 +1209,7 @@ label values quintil_ci quintil_ci
 *****************
 *Modificado por Agustina Thailinger EDU/SCL Mayo 2022
 
-rename *, lower
+*rename *, lower
 
 ***************
 ***asiste_ci***

@@ -153,18 +153,6 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 	gen estrato_ci=.
 	label var estrato_ci "estrato"
 
-		
-	*******************************************
-	*unidad primaria de muestreo*
-	*******************************************	
-	gen upm_ci=aglomerado
-
-	*******************************************
-	*estrato*
-	*******************************************	
-	
-	gen estrato_ci=.
-	
 	
 		*************************
 		***VARIABLES DEL HOGAR***

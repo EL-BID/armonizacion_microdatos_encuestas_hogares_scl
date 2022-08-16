@@ -58,7 +58,7 @@ clear
 
 use "`base_in'\Miembros.dta", clear
 
-merge m:m vivienda using "`base_in'\Viviendas.dta", force
+merge m:m vivienda using "`base_in'\Vivienda.dta", force
 tab _merge
 drop _merge
 sort vivienda hogar

@@ -772,9 +772,9 @@ replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoin
 label var categoinac_ci "Categoría de inactividad"
 label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 
 */
-gen categoinac_ci =1 if ((a09==15) & condocup_ci==3)
-replace categoinac_ci = 2 if  (a09==7 & condocup_ci==3)
-replace categoinac_ci = 3 if  (a09==4 & condocup_ci==3)
+gen categoinac_ci =1 if ((ra06ya09==7) & condocup_ci==3)
+replace categoinac_ci = 2 if  (ra06ya09==1 & condocup_ci==3)
+replace categoinac_ci = 3 if  (ra06ya09==2 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
 label var categoinac_ci "Categoría de inactividad"
 label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehaceres domésticos" 4 "Otros" 

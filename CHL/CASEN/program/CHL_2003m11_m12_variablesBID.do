@@ -38,8 +38,8 @@ Round: Noviembre- Diciembre
 Autores: 
 Modificación 2014: Mayra Sáenz - Email: mayras@iadb.org - saenzmayra.a@gmail.com
 Versión 2007: Victoria
-Última versión: María Laura Oliveri (MLO) - Email: mloliveri@iadb.org, lauraoliveri@yahoo.com
-Fecha última modificación: 26 de Agosto de 2013
+Última versión: María Reyes Retana - Email: mariarey@iadb.org, 
+Fecha última modificación: 22 de Agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -108,11 +108,11 @@ replace floor=. if piso_ch==.;
 
 Also, the orginal data was replaced with the new Mecovi versions
 *****/
-
-
+	
 /******************
-VARIABLES DEL HOGAR
+VARIABLES IDENTIFICACION
 *******************/
+gen factor_ci=expr
 gen factor_ch=expr /*Esta es la expansion que se usa en todos los años anteriores. La provincial recien aparece en el 2000*/
 egen idh_ch=group( r z seg f)
 gen idp_ci=o
@@ -121,45 +121,123 @@ replace zona_c=0 if z==2
 gen pais_c="CHL"
 gen anio_c=2003
 gen mes_c=11
-gen relacion_ci=pco1
-replace relacion_ci=4 if pco1>=4 & pco1<=10
-replace relacion_ci=5 if pco1==11
-replace relacion_ci=6 if pco1==12
 
-/*************************************
-VARIABLES DE INFRAESTRUCTURA DEL HOGAR
-**************************************/
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+	***************
+	***estrato_ci**
+	***************
+
+clonevar estrato_ci=estrato
+label variable estrato_ci "Estrato"
+
+  /*************************************
+   VARIABLES DE INFRAESTRUCTURA DEL HOGAR
+   **************************************/
+   
+ *****************
+ ***aguared_ch****
+ *****************  
 gen aguared_ch=(v4==1 | v4==2 | v4==3)
-replace aguared_ch=. if v4==.
-gen aguadist_ch=v5
+replace aguared_ch=. if v4==. | v4==9
+
+ *****************
+ ***aguadist_ch***
+ *****************  
+
+gen aguadist_ch=v5 /* uno para adentro de la casa */
+replace aguadist_ch=2 if v5==2 /*adentro sitio pero fuera vivienda*/
+replace aguadist_ch=3 if v5==3 /*la acarrea*/
 replace aguadist_ch=. if v5==9
+
+ *****************
+ ***aguamala_ch***
+ ***************** 
+
 gen aguamala_ch=(v4>=5 & v4<=6)
 replace aguamala_ch=. if v4==9
+
+ *****************
+ ***aguamide_ch***
+ ***************** 
 gen aguamide_ch=(v4==1 |v4==2)
 replace aguamide_ch=. if aguared_ch==.
+
+ ************
+ ***luz_ch***
+ ************ 
 gen luz_ch=(v7<=6)
+replace luz_ch=. if v7 ==9
+
+ *****************
+ ***luzmide_ch***
+ ***************** 
 gen luzmide_ch=(v7==1 | v7==2)
 replace luzmide_ch=. if luz_ch==0
+
+ *****************
+ ***combust_ch***
+ ***************** 
 gen combust_ch=.
+
+ *************
+ ***bano_ch***
+ *************
 gen bano_ch=((v3g!=0 & v16g==.) | v16g>0 & v16g<=3)
+replace bano_ch =. if (v3g==. & v16g ==.)
+
+ ***************
+ ***banoex_ch***
+ *************** 
 gen banoex_ch=(v16g==. | v16g<v3g)
 replace banoex_ch=. if bano_ch==0 
+
+ ***************
+ ***des1_ch***
+ *************** 
 gen des1_ch=0 if bano_ch==0 | v6==7
 replace des1_ch=. if v6==9
 replace des1_ch=1 if v6==1 | v6==2
 replace des1_ch=2 if v6==3 | v6==4
 replace des1_ch=3 if v6==5 | v6==6
+
+ ***************
+ ***des2_ch***
+ *************** 
 gen des2_ch=des1_ch
-replace des2_ch=. if des1_ch==3
+replace des2_ch=1 if des1_ch==2
+replace des2_ch=2 if des1_ch==3
+
+ ***************
+ ***piso_ch***
+ *************** 
 gen piso_ch=0 if v9a==5
 replace piso_ch=1 if v9a<5
+replace piso_ch=. if v9a==9
+
+ ***************
+ ***pared_ch***
+ *************** 
 gen pared_ch=0 if v8a>=4 & v8a<=7
 replace pared_ch=1 if v8a<4
 replace pared_ch=2 if v8a==8
-replace pared_ch=. if v8a==9
+replace pared_ch=. if v8a==9 |v8a==.
+
+ ***************
+ ***techo_ch***
+ *************** 
 gen techo_ch=0 if v10a>=4 & v10a<=6
 replace techo_ch=1 if v10a<4
-replace techo_ch=. if v10a==9
+replace techo_ch=. if v10a==9 | v10a==.
+
+ ***************
+ ***resid_ch***
+ *************** 
+
 gen resid_ch=.
 
  **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
@@ -167,45 +245,106 @@ gen resid_ch=.
  *********************
  ***aguamejorada_ch***
  *********************
-g       aguamejorada_ch = 1 if (v4 >=1 & v4 <=4)
+gen       aguamejorada_ch = 1 if (v4 >=1 & v4 <=4)
 replace aguamejorada_ch = 0 if (v4 >=5 & v4 <=6) | v5==3
+replace aguamejorada_ch=. if v4 ==9 | v4==.
 
  *********************
  ***banomejorado_ch***
  *********************
-g       banomejorado_ch = 1 if  (v6 >=1 & v6 <=4) 
+gen       banomejorado_ch = 1 if  (v6 >=1 & v6 <=4) 
 replace banomejorado_ch = 0 if  (v6 >=5 & v6 <=7)
+replace banomejorado_ch=. if v6 ==9 | v6==.
 
-
+ ***************
+ ***dorm_ch***
+ *************** 
 gen dorm_ch=v3a 
+
+ ***************
+ ***cuartos_ch***
+ *************** 
 egen piezaviv=rsum(v3a v3b v3c v3d v3e v3f v3g), missing
 replace piezaviv=. if v3a==. & v3b==. & v3c==. & v3d==. & v3e==. & v3f==. & v3g==. 
 egen piezahog=rsum(v16a v16b v16c v16d v16e v16f v16g), missing
 replace piezahog=. if v16a==. & v16b==. & v16c==. & v16d==. & v16e==. & v16f==. & v16g==. 
 gen cuartos_ch=piezaviv 
+
+ ***************
+ ***cocina_ch***
+ *************** 
 gen cocina_ch=(v3f!=0)
+
+ ***************
+ ***telef_ch***
+ *************** 
 sort idh_ch
 by idh_ch: egen telef_ch=sum(r10c==1)
 replace telef_ch=1 if telef_ch>=1
+replace telef_ch=. if r10c==9 | r10c==.
+
+ ***************
+ ***refrig_ch***
+ *************** 
 by idh_ch: egen refrig_ch=sum(r10b==1)
 replace refrig_ch=1 if refrig_ch>=1
+replace refrig_ch=. if r10b==9 | r10b==.
+
+ ***************
+ ***freez_ch***
+ *************** 
 gen freez_ch=.
+
+ ***************
+ ***auto_ch***
+ *************** 
 gen auto_ch=.
+
+ ***************
+ ***compu_ch***
+ *************** 
 bys idh_ch: egen compu_ch=sum(r10f==1)
 replace compu_ch=1 if compu_ch>=1
+replace compu_ch=. if r10f==9 | r10f==.
+
+ ***************
+ ***internet_ch***
+ *************** 
 by idh_ch: egen internet_ch=sum(r10g==1 | r10h==1)
 replace internet_ch=1 if internet_ch>=1
+replace internet_ch=. if (r10g==9 & r10h==9) | (r10g==. & r10h==.) 
+
+ *************
+ ***cel_ch***
+ ************* 
 by idh_ch: egen cel_ch=sum(r11==1 | r11==2)
 replace cel_ch=1 if cel_ch>=1
+replace cel_ch=. if r11==9 | r11==.
+
+ ***************
+ ***vivi1_ch***
+ *************** 
 gen vivi1_ch=1 if v11==1 | v11==2
 replace vivi1_ch=2 if v11==3
 replace vivi1_ch=3 if v11>3
+replace vivi1_ch=. if v11==9 | v11==.
+
+ ***************
+ ***vivi2_ch***
+ *************** 
 gen vivi2_ch=(vivi1_ch==1 | vivi1_ch==2)
 gen viviprop_ch=0 if v12==5 | v12==6
+
+ ***************
+ ***viviprop_ch***
+ *************** 
 replace viviprop_ch=1 if v12==1 | v12==3
 replace viviprop_ch=2 if v12==2 | v12==4
 replace viviprop_ch=3 if v12==10
 replace viviprop_ch=4 if v12>6 & v12<=9
+replace viviprop_ch=. if v12==99
+
+* resto en missing 
 gen vivitit_ch=.
 gen vivialq_ch=.
 gen vivialqimp_ch=yaimhaj
@@ -217,20 +356,44 @@ replace howner=. if viviprop_ch==.
 gen floor=(piso_ch==1)
 replace floor=. if piso_ch==.
 
+   /*********************
+    VARIABLES DEMOGRAFICAS
+    *********************/
+ ***************
+ ***relacion_ci***
+ ***************
+gen relacion_ci=pco1
+replace relacion_ci=4 if pco1>=4 & pco1<=10
+replace relacion_ci=5 if pco1==11
+replace relacion_ci=6 if pco1==12
 
-
-/*********************
-VARIABLES DEMOGRAFICAS
-*********************/
-gen factor_ci=expr
+ ***************
+ ***sexo_ci***
+ ***************
 gen sexo_ci=sexo
+
+ ***************
+ ***edad_ci***
+ ***************
 gen edad_ci=edad
+
+ ***************
+ ***civil_ci***
+ ***************
 gen civil_ci=1 if ecivil==7
 replace civil_ci=2 if ecivil==1 | ecivil==2
 replace civil_ci=3 if ecivil==3 | ecivil==4 | ecivil==5
 replace civil_ci=4 if ecivil==6
 replace civil_ci=. if ecivil==9
+
+ ***************
+ ***jefe_ci***
+ ***************
 gen jefe_ci=(relacion_ci==1)
+
+ ***************
+ ***variables de miembros***
+ ***************
 sort idh_ch
 by idh_ch: egen byte nconyuges_ch=sum(relacion_ci==2) 
 by idh_ch: egen byte nhijos_ch=sum(relacion_ci==3)
@@ -253,20 +416,6 @@ by idh_ch:egen byte nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6)
 by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1))
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
-
-
-	***************
-	***upm_ci***
-	***************
-gen upm_ci=. 
-
-	***************
-	***estrato_ci**
-	***************
-
-clonevar estrato_ci=estrato
-label variable estrato_ci "Estrato"
-
 
           ******************************
           *** VARIABLES DE DIVERSIDAD **
@@ -418,7 +567,6 @@ Por lo tanto, para crear las horas en el trabajo principal, dividimos las horas 
 gen horaspri_ci=o19_hrs/4 /*Da mas bajo que en los otros años, porque la creación de esta variable es muy mala...*/
 
 gen horastot_ci=horaspri_ci
-
 
 gen ylmpri_ci=yopraj 
 replace ylmpri_ci=. if  emp_ci==0
@@ -685,12 +833,20 @@ replace firmapeq_ci=. if o14=="X" | emp_ci==0*/
 gen spublico_ci=(o9==3 | o9==4 | o9==9)
 replace spublico_ci=. if emp_ci!=1
 label var spublico_ci "Personas que trabajan en el sector público"
+
+
 /*******************
 VARIABLES EDUCATIVAS
 *******************/
+
+*************
+***aedu_ci*** 
+************* 
+
 gen byte aedu_ci=.
 replace aedu_ci=0 if e7t==0 | e7t==1 | e7t==16 
-replace aedu_ci=e7c if e7t==2 | e7t==3 /*El máximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
+replace aedu_ci=e7c if e7t==2 /*preparatoria (sistema antiguo)*/
+replace aedu_ci=e7c if  e7t==3 /*básica (sistema nuevo)*/
 replace aedu_ci=. if e7t==4
 *We assume that 'e7t==4', Diferential Education, will be equivalent to missing
 
@@ -716,19 +872,24 @@ replace aedu_ci=8 if (e7c>=8 & e7t==3)
 Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 años de primaria) y que las otras dos son 
 parte del sistema nuevo (8 años de primaria)
 */
-replace aedu_ci=e7c+6 if e7t==5 | e7t==7
-replace aedu_ci=e7c+8 if e7t==6 |e7t==8
-replace aedu_ci=e7c+12 if e7t>=9 & e7t<=14
-replace aedu_ci=e7c+17 if e7t==15
+replace aedu_ci=e7c+6 if e7t==5 | e7t==7 /* humanidades o técnica, comercial 
+industrial o normalista (sistema antiguo) */
+replace aedu_ci=e7c+8 if e7t==6 |e7t==8 /* media-científico humanista, media técnica profesional (sistema nuevo) */
+replace aedu_ci=e7c+12 if e7t>=9 & e7t<=14 /* técnica superior completo o incompleto, profesional completo o incompleto */
+replace aedu_ci=e7c+17 if e7t==15 /*posgrado*/
 replace aedu_ci=. if e7t==99
 
+
+*****************
+***asiste_ci***
+*****************
 ** Generating attend. Dummy variable for school attendance
 gen byte asiste_ci=(e2==1) 
-label variable asiste_ci "Dummy variable for school attendance"
+replace asiste_ci=. if e2==. 
 
 * We substract one year of education for those who are attending school at the moment that the survey took place
-gen ban_aedu=aedu_ci
-replace ban_aedu=aedu_ci-1 if aedu_ci!=0 & asiste_ci==1
+
+replace aedu_ci=aedu_ci-1 if aedu_ci!=0 & asiste_ci==1
 
 /*
 OLD CODE:
@@ -787,7 +948,7 @@ label variable eduno_ci "Cero anios de educacion"
 **************
 
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -796,7 +957,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==8
+replace edupc_ci=1 if aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -805,7 +966,7 @@ label variable edupc_ci "Primaria completa"
 **************
 
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
+replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -815,6 +976,7 @@ label variable edusi_ci "Secundaria incompleta"
 
 gen byte edusc_ci=0
 replace edusc_ci=1 if aedu_ci==12
+replace edusc_ci=1  if aedu_ci==13 & e7t==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -823,7 +985,7 @@ label variable edusc_ci "Secundaria completa"
 ***************
 
 gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci==9
+replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<8 
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -832,7 +994,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***************
 
 gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
+replace edus1c_ci=1 if aedu_ci==8
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -841,7 +1003,7 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***************
 
 gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci==11
+replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
@@ -851,6 +1013,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 gen byte edus2c_ci=0
 replace edus2c_ci=1 if aedu_ci==12
+replace edus2c_ci=1 if aedu_ci==13 & e7t==8
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
@@ -858,8 +1021,8 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
+gen byte eduui_ci=(aedu_ci>12 & e7t==9)  | (aedu_ci>12 & e7t==11)  // mas de 12 anios y tecnico superior completo o profesional incompleto 
+replace eduui_ci=0 if aedu_ci==13 & e7t==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que aquí ponemos 0.
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -868,9 +1031,9 @@ label variable eduui_ci "Universitaria incompleta"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
+replace eduuc_ci=1 if aedu_ci>12 & (e7t==10 | e7t==12 | e7t==14 | e7t==15)
 replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria incompleta o mas"
+label variable eduuc_ci "Universitaria completa o mas"
 
 
 ***************
@@ -878,6 +1041,7 @@ label variable eduuc_ci "Universitaria incompleta o mas"
 ***************
 
 gen edupre_ci=(e7t==1)
+replace edupre_ci=. if e7t == . | e7t == 99
 label variable edupre_ci "Educacion preescolar"
 
 
@@ -896,7 +1060,6 @@ replace `var'=. if  aedu_ci==.
 
 gen repite_ci=.
 gen repiteult_ci=.
-
 gen edupub_ci=.
 
 
@@ -1102,35 +1265,114 @@ gen autocons_ci=.
 gen autocons_ch=.
 gen region_c=.
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=1 if ((s1>=0 & s1<=7) | s1==8) 
+replace cobsalud_ci=0 if s1==7
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if s1>=0 & s1<=5
+replace tipocobsalud_ci=2 if s1==6
+replace tipocobsalud_ci=3 if s1==8
+replace tipocobsalud_ci=0 if cobsalud==0
+replace tipocobsalud_ci=. if s1==9
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"Publico" 2"Privado" 3"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimos 30 días.
+ 
+gen probsalud_ci=1 if  s16==1 
+replace probsalud_ci=0 if s16==2
+replace probsalud_ci=. if s16==.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+* reporta que no tuvo consulta por costo
+gen costo_ci=.
+replace costo_ci=0 if s22!=3 
+replace costo_ci=1 if s22==3 
+replace costo_ci=. if s22==9
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+replace atencion_ci=0 if s22!=6
+replace atencion_ci=1 if s22==6
+replace atencion_ci=. if s22==9
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
 
 	**************************
 	** REGIONES **************
 	************************** 
 	
    gen ine01=.   
-   replace ine01=1 if  r==1				/*Arica y Parinacota*/
-   replace ine01=2 if  r==2				/*Antofagasta*/
-   replace ine01=3 if  r==3				/*Atacama*/
-   replace ine01=4 if  r==4				/*Coquimbo*/
-   replace ine01=5 if  r==5		    	/*Valparaíso*/
-   replace ine01=6 if  r==6				/*O'Higgins*/
-   replace ine01=7 if  r==7				/*Maule*/
-   replace ine01=8 if  r==8				/*Bío Bío*/
-   replace ine01=9 if  r==9				/*La Araucanía*/
-   replace ine01=10 if r==10			/*Los Lagos*/
-   replace ine01=11 if r==11			/*Aysén*/
-   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
-   replace ine01=13 if r==13			/*Metropolitana Santiago*/
-
-	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
+   replace ine01=1 if  r==1		/*Tarapacá*/
+   replace ine01=2 if  r==2 	/*Antofagasta*/
+   replace ine01=3 if  r==3		/*Atacama*/
+   replace ine01=4 if  r==4 	/*Coquimbo*/
+   replace ine01=5 if  r==5   	/*Valparaíso*/
+   replace ine01=6 if  r==6	/*O'Higgins*/
+   replace ine01=7 if  r==7		/*Maule*/
+   replace ine01=8 if  r==8		/*Bío Bío*/
+   replace ine01=9 if  r==9		/*La Araucanía*/
+   replace ine01=10 if r==10		/*Los Lagos*/
+   replace ine01=11 if r==11		/*Aysén*/ 
+   replace ine01=12 if r==12 		/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if r==13     /*Metropolitana Santiago*/
+		/*Los Ríos (creada 2007)*/
+ 	/*Arica y Parinacota (creada en 2007)*/
+ 	/*Ñuble (creada en 2007)*/
+   
+	label define ine01 1"Tarapacá" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago" 
 	label value ine01 ine01
-	label var ine01 " Primera division politico-administrativa, región"
-	
+	label var ine01 " Primera division politico-administrativa, región"	
 	
 	**************************
 	** PROVINCIAS ************
-	**************************
-		
+	*************************
    gen ine02=.   
    replace ine02=11 if p==11			/*Arica*/
    replace ine02=12 if p==12			/*Parinacota*/
@@ -1194,6 +1436,7 @@ gen region_c=.
 
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

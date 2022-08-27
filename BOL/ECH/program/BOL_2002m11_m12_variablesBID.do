@@ -32,10 +32,10 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Bolivia
 Encuesta: ECH
-Round: m11_m12
+Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Última versión: Nathalia Maya  E-mail: sandramay@iadb.org 
+Fecha última modificación: 25 de agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -56,13 +56,41 @@ gen region_BID_c=3
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
+
+	************
+	* region_c *
+	************
+*destring depto, gen(region_c)
+gen region_c= depto
+label define region_c ///
+1"Chuquisaca"         ///     
+2"La Paz"             ///
+3"Cochabamba"         ///
+4"Oruro"              ///
+5"Potosí"             ///
+6"Tarija"             ///
+7"Santa Cruz"         ///
+8"Beni"               ///
+9"Pando"
+label values region_c region_c              
+clonevar ine01 = region_c
+
+
 ***************
 ***factor_ch***
 ***************
-
-gen factor_ch=factor
+gen factor_ch= factor
 label variable factor_ch "Factor de expansion del hogar"
 
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci**
+	***************
+gen estrato_ci=. //No es claro si la variable "estrato" corresponde a un estrato muestral
 
 ***************
 ****idh_ch*****
@@ -88,15 +116,6 @@ replace zona_c=1 if urbrur==1
 label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
-
-
-**************
-***region_c***
-**************
-
-gen region_c=.
-label var region_c "Region" 
-
 
 ************
 ****pais****
@@ -299,33 +318,37 @@ label variable miembros_ci "Miembro del hogar"
 *******************************************************
 ***           VARIABLES DE DIVERSIDAD               ***
 *******************************************************				
-* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-			
 	***************
 	***afroind_ci***
 	***************
+**Pregunta: ¿Se considera perteneciente a alguno de los siguientes pueblos originarios / indígenas...
+
 gen afroind_ci=. 
+replace afroind_ci=1 if s111a!=7
+replace afroind_ci=3 if s111a==7
+replace afroind_ci=9 if edad_ci<12 
+
 
 	***************
 	***afroind_ch***
 	***************
-gen afroind_ch=. 
+gen afroind_jefe=.
+replace afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
 
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=.		
+gen afroind_ano_c=2001 //De 1999 a 2000 se indluía la categoría "Raza negra", a partir de 2001 no se incluye esta categoría
 
-	*******************
+	*************
 	***dis_ci***
-	*******************
-gen dis_ci=. 
-
-	*******************
-	***dis_ch***
-	*******************
-gen dis_ch=. 
+	**************
+gen dis_ci = .
+gen dis_ch =.
 
 
 ************************************
@@ -353,9 +376,6 @@ replace lp_ci= 343.870440308143 if ciudad==9 & urb_rur==1
 
 
 replace lp_ci=   233.39    if  urb_rur==2
-
-
-
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1447,649 +1467,6 @@ replace vivialq_ch=vivialq_ch*7.45 if s803b==2
 
 gen vivialqimp_ch=s804a
 replace vivialqimp_ch=vivialqimp_ch*7.45 if s804b==2
-
-
-
-
-
-********************
-*** BOLIVIA 2002 ***
-********************
-set more off
-
-/*
-per1 condicion de miembro 
-
-s106
-Parentesco			per1
- 1. jefe o jefa del hogar 	 1
- 2. esposa(o) o convivien 	 1
- 3. hijo(a) o entenado(a) 	 1
- 4. yerno o nuera 		 1	
- 5. nieto o nieta 		 1	
- 6. hermano(a) o cuñado(a)	 1
- 7. padres o suegros 		 1
- 8. otro pariente 		 1
- 9. empleada(o) del hogar 	 .	
-10. pariente de la emplea 	 .
-11. otro no pariente 		 1
-*/
-
- gen     incl=1 if (s106>=1 &  s106<=11)
- replace incl=0 if (s106>=9 &  s106<=10)
-
-
-* Variables
-
- gen area		= urbrur 		
- gen sexo		= s102 		
- gen edad		= s103 		
- gen parentco	 	= s106 		
- gen nivelmat	 	= s405a 		
- gen gradmat		= s405b 		
- gen condact		= condact2 	
- gen anoest		= a_oesc 		
- gen alfabet		= s401 		
- gen categp		= s517 		
- gen ramap		= caeb_p 		
- gen qaten		= s321a 		
- gen qaten_otro	 	= s321b 		
- * gen combusti 	 	= s820 		
- * gen agua		= s809a 		
- * gen lugabast	 	= s812 		
- gen servsani	 	= s814 		
- gen usoserv		= s815 		
- gen conexserv	 	= s816 		
- * gen telcel		= s826 		
- gen tipoviv		= s801 		
- gen tenencia	 	= s802a		
- gen paredes		= s805a 		
- gen piso_eco	 	= piso
- 
- gen pisop		= s808a 		
- * gen nrocuart	 	= s822 		
- gen estcivil	 	= s110 		
-
-* Gender classification of the population refering to the head of the household.
-
- sort folio nro1 
-
-** ID Hogar
-
- gen var1=1 if parentco==1
- gen id_hogar=sum(var1)
-
- sort folio nro1 
-
- gen	 sexo_d_=1 if parentco==1 & sexo==1
- replace sexo_d_=2 if parentco==1 & sexo==2
-
- egen sexo_d=max(sexo_d_), by(id_hogar)
-
- sort folio nro1  
-
-** Years of education. 
-* Included in the database
-/*
-s402a
-¿Cuál fue el NIVEL Y CURSO más alto de instrucción que aprobó? 
-
-NIVEL O CICLO
- 11. NINGUNO
- 12. CURSO DE ALFABETIZACIÓN
- 13. EDUCACIÓN PRE-ESCOLAR
-SISTEMA ANTERIOR
- 14. BÁSICO (1 A 5 AÑOS)
- 15. INTERMEDIO (1 A 3 AÑOS)
- 16. MEDIO (1 A 4 AÑOS)
-SISTEMA ACTUAL
- 17. PRIMARIA (1 A 8 AÑOS)
- 18. SECUNDARIA (1 A 4 AÑOS)
-EDUCACIÓN DE ADULTOS
- 19. EDUCACIÓN BÁSICA DE ADULTOS (EBA)
- 20. CENTRO DE EDUCACIÓN MEDIA DE ADULTOS(CEMA)
-EDUCACIÓN SUPERIOR
- 21. NORMAL
- 22. UNIVERSIDAD PÚBLICA (Licenciatura)
- 23. UNIVERSIDAD PRIVADA (Licenciatura)
- 24. POSTGRADO, MAESTRÍA
- 25. TÉCNICO DE UNIVERSIDAD
- 26. TÉCNICO DE INSTITUTO
- 27. INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL
- 28. OTROS CURSOS
-
-s402b (grado)
-*/
-
-** Economic Active Population 
-* Included in the database 
-* For the population aged 10 years or more
-
-/* 
-pea 
- 1 PEA 
- 2 PEI 
- 
-ces 
- 1 cesantes 
- 2 aspirantes
-*/
-
- gen	 peaa=1 if  pea==1
- replace peaa=2 if  pea==1 & (ces==1 | ces==2)
- replace peaa=3 if  pea==2
-
- gen	 TASADESO=0 if peaa==1
- replace TASADESO=1 if peaa==2 
-
-************
-** ETHNIC **
-************
-
-/*
-s108a (All observations)
-8. ¿Cuál es el idioma o lengua en el que
-aprendió a hablar en su niñez?
-
- 1. Quechua
- 2. Aymara
- 3. Castellano
- 4. Guaraní
- 5. Otro nativo (s108b)
- 6. Extranjero
- 7. Aún no habla
- 8. No Puede hablar
-
-s111a (12 years or more)
-9. ¿Se considera perteneciente a
-alguno de los siguientes pueblos
-indigenas / originarios, o
-perteneciente a algún grupo
-minoritario?
-
- 1. Quechua?
- 2. Aymara?
- 3. Guaraní?
- 4. Chiquitano?
- 5. Mojeño?
- 6. Otro(s111b)
- 7. NINGUNO?
-*/
-
- gen 	 indigena=.
- replace indigena=1 if (s111a==1 | s111a==2 | s111a==3 | s111a==4 | s111a==5 | s111a==6)
- replace indigena=0 if (s111a==7)
-
-** Missings. Persons with 11 years of age, or less
-* Filling missings using the mother information.
-
- gen  pertn_m=indigena if (parentco==2 & sexo==2) | (parentco==1 & sexo==2)
- egen pertn_mh=max(pertn_m), by(id_hogar)
-
- replace indigena=pertn_mh if  (edad<=11)
-
-***************
-*** REGIONS ***
-***************
-
-/*
-Estrato							 	Estrato1
-1. Ciudades capitales y área metropolitana			    1 
-2. Ciudades con más de 10.000 hbts (excepto estrato=1)              2
-3. Ciudades con más de 2000 y menos de 10.000 hbts                  2
-4. Ciudades con más de 250 y menos de 2000 hbts                     3
-5. Area rural dispersa (menos de 250)                               3
-
-1 - 4. => Area amanzanada
-5. => Area dispersa
-*/
-
-/*
-Región
-Área geográfica utilizada para agrupar los Departamentos de acuerdo a su tipo ecológico
-predominante.
-La región clasifica los Departamentos en:
- a) Altiplano comprende los departamentos de La Paz, Oruro, y Potosí.
- b) Valle comprende los departamentos Cochabamba, Chuquisaca y Tarija.
- c) Llano comprende los departamentos de Santa Cruz, Beni y Pando.
-*/
-
-/*
-depto
- 1. Chuquisaca 
- 2. La Paz 
- 3. Cochabamba
- 4. Oruro
- 5. Potosi
- 6. Tarija
- 7. Sta cruz
- 8. Beni
- 9. Pando
-*/
-
- gen	 region=1 if depto==2 | depto==4 | depto==5
- replace region=2 if depto==1 | depto==3 | depto==6
- replace region=3 if depto==7 | depto==8 | depto==9
-
-************************
-*** MDGs CALCULATION ***
-************************
-
-** For further information on this do file contact Pavel Luengas (pavell@iadb.org)
-
-*** GOAL 2. ACHIEVE UNIVERSAL PRIMARY EDUCATION
-/*
-s404
-Durante este año, ¿Se inscribió o matriculó en algún curso 
-o grado de educación escolar o superior?
-1.Si / 2.No
-
-s405a s405b
-5. ¿A qué NIVEL Y CURSO de educación escolar o superior se inscribió/matriculó este año?
-Sistema escolar
- 13.  Educación  pre escolar (pre-kinder / kinder)
- 17.  Primaria 
- 18.  Secundaria                                                                                          
-Educación de adultos                                                                                 
- 19.  Educación básica de adultos (eba)
- 20.  Centro de educación media de adultos (cema)                                                         
-Educación superior
- 21. Normal
- 22. Universidad pública (licenciatura)
- 23. Universidad privada (licenciatura)
- 24. Postgrado, maestría
- 25. Técnico  de universidad
- 26. Técnico de instituto
- 27. Institutos de formación militar y policial
- 28. Otros cursos
-
-s407
-7. Actualmente, ¿Asiste al curso o grado de educación escolar o superior al que se matriculó este 2002?
- 1. Si ==> Sig. seccion
- 2. No ==> 8
-
-s408a
-8. ¿Por qué razón no se inscribió/matriculó o no asiste actualmente?
- 1.  vacación
- 2.  falta de dinero
- 3.  por trabajo
- 4.  por enfermedad o discapacidad 
- 5.  los establecimientos son distantes
- 6.  culminó sus estudios
- 7.  edad avanzada
- 8.  falta de interés
- 9.  embarazo
- 10. cuidado de niños/as
- 11. edad temprana
- 12. problemas familiares
- 13. Otra (s408b)
-*/
-
- tab s407 s408a
-
-* Attending for enrolled students 
-
- gen	 attend=0 if (s404>=1 & s404<=2) 
- replace attend=1 if (s404>=1 & s404<=2) & (s407==1 | s408a==1)  /* Not attending for vacations */
-
-* asiste: Variable included in the database
-
- tab attend asiste if (edad>=6 & edad<=19) ,missing  /* attend = asiste */
-
-** Target 3, Indicator: Net Attendance Ratio in Primary
-* ISCED 1
-
- gen 	 NERP=0 if  (edad>=6 & edad<=11) & (attend==1 | attend==0)
- replace NERP=1 if  (edad>=6 & edad<=11) & (attend==1) & (nivelmat==17 & (gradmat>=1 & gradmat<=6)) 
-
-** Target 3, Additional Indicator: Net Attendance Ratio in Secondary
-* ISCED 2 & 3
-
- gen	 NERS=0 if  (edad>=12 & edad<=17) & (attend==1 | attend==0)
- replace NERS=1 if  (edad>=12 & edad<=17) & (attend==1) & ((nivelmat==17 & (gradmat>=7 & gradmat<=8)) | (nivelmat==18 & (gradmat>=1 & gradmat<=4)))
-
-* Upper secondary
-* Secundaria (1 a 4 grado)
-
- gen	 NERS2=0 if  (edad>=14 & edad<=17) & (attend==1 | attend==0)
- replace NERS2=1 if  (edad>=14 & edad<=17) & (attend==1) & (nivelmat==18 & (gradmat>=1 & gradmat<=4))
-
-** Target 3, Indicator: Literacy Rate of 15-24 Years Old
-* At least 5 years of formal education
-
- gen	 ALFABET=0 if  (edad>=15 & edad<=24) & (anoest>=0 & anoest<99) 
- replace ALFABET=1 if  (edad>=15 & edad<=24) & (anoest>=5 & anoest<99) 
-
-** Target 3, Indicator: Literacy Rate of 15-24 Years Old
-* Read & write
-
- gen ALFABET2=0 if      (edad>=15 & edad<=24) & (alfabet==1 | alfabet==2)
- replace ALFABET2=1 if  (edad>=15 & edad<=24) & (alfabet==1)
-	
-*** GOAL 3 PROMOTE GENDER EQUALITY AND EMPOWER WOMEN
-
- gen prim=1 if  ((attend==1) & ((nivelmat==17 & (gradmat>=1 & gradmat<=6))))
- gen sec=1 if   ((attend==1) & ((nivelmat==17 & (gradmat>=7 & gradmat<=8)) | (nivelmat==18 & (gradmat>=1 & gradmat<=4))))
- gen ter=1 if   ((attend==1) & (nivelmat>=21 & nivelmat<=23) | (nivelmat==25 | nivelmat==26 | nivelmat==28))
-
-** Target 4, Indicator: Ratio Girls to boys in primary, secondary and tertiary (%)
-
-** Target 4, Ratio of Girls to Boys in Primary*
-
- gen RPRIMM=1 if (prim==1) & sexo==2 
- replace RPRIMM=0 if RPRIMM==. 
- gen RPRIMH=1 if (prim==1) & sexo==1 
- replace RPRIMH=0 if RPRIMH==.
-
- gen RATIOPRIM=0 if     (prim==1) & sexo==2  
- replace RATIOPRIM=1 if (prim==1)  & sexo==1   
-	
-** Target 4, Ratio of Girls to Boys in Secondary*
-
- gen RSECM=1 if (sec==1) & sexo==2 
- replace RSECM=0 if RSECM==.
- gen RSECH=1 if (sec==1) & sexo==1 
- replace RSECH=0 if RSECH==.
-
- gen RATIOSEC=0     if (sec==1) & sexo==2 
- replace RATIOSEC=1 if (sec==1) & sexo==1  
-	
-** Target 4, Indicator: Ratio of Girls to Boys in Tertiary*
-
- gen RTERM=1 if (ter==1) & sexo==2 
- replace RTERM=0 if RTERM==.
- gen RTERH=1 if (ter==1) & sexo==1 
- replace RTERH=0 if RTERH==.
-
- gen RATIOTER=0     if (ter==1) & sexo==2 
- replace RATIOTER=1 if (ter==1) & sexo==1  
-
-** Target 4, Indicator: Ratio of Girls to Boys in Primary, Secondary and Tertiary*
-
- gen RALLM=1 if (prim==1 | sec==1 | ter==1) & sexo==2 
- replace RALLM=0 if RALLM==.
- gen RALLH=1 if (prim==1 | sec==1 | ter==1) & sexo==1 
- replace RALLH=0 if RALLH==.
-
- gen RATIOALL=0 if     (prim==1 | sec==1 | ter==1) & sexo==2  
- replace RATIOALL=1 if (prim==1 | sec==1 | ter==1) & sexo==1    
-
-** Target 4, Indicator: Ratio of literate women to men 15-24 year olds*
-* Knows how to read & write
-
- gen MA2=1 if ((alfabet==1) & (edad>=15 & edad<=24) & (sexo==2)) 
- replace MA2=0 if MA2==.
- gen HA2=1 if ((alfabet==1) & (edad>=15 & edad<=24) & (sexo==1)) 
- replace HA2=0 if HA2==.
-
- gen RATIOLIT2=0     if ((alfabet==1) & (edad>=15 & edad<=24) & (sexo==2)) 
- replace RATIOLIT2=1 if ((alfabet==1) & (edad>=15 & edad<=24) & (sexo==1)) 
-
-** Target 4, Indicator: Ratio of literate women to men 15-24 year olds*
-* At least 5 years of formal education
-
- gen MA=1 if ((anoest>=5 & anoest<99) & (edad>=15 & edad<=24) & (sexo==2)) 
- replace MA=0 if MA==.
- gen HA=1 if ((anoest>=5 & anoest<99) & (edad>=15 & edad<=24) & (sexo==1)) 
- replace HA=0 if HA==.
-
- gen RATIOLIT=0 if     ((anoest>=5 & anoest<99) & (edad>=15 & edad<=24) & (sexo==2)) 
- replace RATIOLIT=1 if ((anoest>=5 & anoest<99) & (edad>=15 & edad<=24) & (sexo==1)) 
-
-** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
-* Without Domestic Service (7 years old or more)
-/*
-s517. En esta ocupación usted trabaja como:		caeb_p. (ramap)
-							actividad económica ocupación principal
- 1. Obrero/a
- 2. Empleado/a
- 3. Trabajador/a por cuenta propia
- 4. Patrón, socio o empleador que sí recibe salario
- 5. Patrón, socio o empleador que no recibe salario
- 6. Cooperativista de producción 
- 7. Trabajador/a familiar o aprendiz sin remuneración
- 8.  Empleada/o del hogar
-*/
-
- gen	 WENAS=0 if  (edad>=15 & edad<=64) & (categp==1 | categp==2 | categp==4) & (ramap>=3 & ramap<=17) 
- replace WENAS=1 if  (edad>=15 & edad<=64) & (categp==1 | categp==2 | categp==4) & (ramap>=3 & ramap<=17) & (sexo==2)
-
-** Target 4, Indicator: Share of women in wage employment in the non-agricultural sector (%)
-* With domestic servants
-
- gen	 WENASD=0 if  (edad>=15 & edad<=64) & (categp==1 | categp==2 | categp==4 | categp==8) & (ramap>=3 & ramap<=17) 
- replace WENASD=1 if  (edad>=15 & edad<=64) & (categp==1 | categp==2 | categp==4 | categp==8) & (ramap>=3 & ramap<=17) & (sexo==2)
-
-*Proportion of Births Attended by Skilled Health Personnel*
-/*
- s321a SOLO PARA MUJERES ENTRE 13 Y 50 AÑOS
-qaten 
- s321a quien atendió el parto			
- 1. médico						
- 2. enfermera / aux. de enfermeria		
- 3. responsable o promotor de salud		
- 4. partera o comadrona				
- 5. un familiar
- 6. otra persona ==> s321b
-*/
-
- gen	 SKILLED=0 if  (qaten>=1 & qaten<=6) & (edad>=15 & edad<=49) & sexo==2
- replace SKILLED=1 if  (qaten>=1 & qaten<=4) & (edad>=15 & edad<=49) & sexo==2
-	
-*** GOAL 7 ENSURE ENVIROMENTAL SUSTAINABILITY
-
-* Access to Electricity ** Additional Indicator
-/*
-
-s817         
-17. usa energia electrica para alumbrar esta vivienda
- 1: Si ==> P19
- 2: No ==> P20
- 
-s818
-18. ¿Cuánto gastan normalmente en el servicio de energía eléctrica al mes?
- Monto
-*/
-
-* Gender classification of the population refers to the head of the household.
-
- gen	 ELEC=0 if  (s817==1 | s817==2) /* Total population excluding missing information */
- replace ELEC=1 if  (s817==1)
-
-** Target 9, Indicator: Proportion of the population using solidfuels (%)
-
-* s819 ¿Tiene un cuarto sólo para cocinar?
-
-/*
-s820 (combusti)
-¿Principalmente ¿qué tipo de combustible o energía utiliza para cocinar?
- 1. Leña
- 2. Guano/ Bosta o taquia
- 3. Kerosén
- 4. Gas licuado (garrafa)
- 5. Gas natural por red (cañería)
- 6. Otro
- 7. Electricidad
- 8. No cocina
-*/
-
-* Gender classification of the population refers to the head of the household.
-
- gen	 SFUELS=.
-
-** Target 10, Indicator: Proportion of the population with sustainable access to an improved water source (%)
-/*
-9. Principalmente 					12. ¿El agua para beber y cocinar se distribuye...
-¿de dónde obtiene el agua  para beber y cocinar?			
-s809a (agua)						s812 
- 1. Cañería de red		==>10 ==>11 ==>12	 1. por cañería dentro de la vivienda?			
- 2. Pileta pública		==>10 ==>11 ==>12	 2. por cañería fuera de la vivienda,		
- 3. Carro repartidor (aguatero) ==>12			     pero dentro del lote o terreno?							
- 4. Pozo o noria con bomba	==>12			 3. no se distribuye por cañería?
- 5. Pozo o noria sin bomba	==>12
- 6. Río/ Vertiente/ Acequia	==>12
- 7. Lago/ Laguna/ Curiche	==>12
- 8. Otro (Especifique)		==>12
-*/
-
-* Gender classification of the population refers to the head of the household.
-
- gen	 WATER=.
-** Target 10, Indicator: Proportion of Population with Access to Improved Sanitation, Urban and Rural (%)
-/*
-s814					s815					s816 (conexserv)
-14. ¿Tiene baño, water o letrina? 	15. ¿El baño, water o letrina es...	16. ¿El baño, water o letrina tiene desague...
-1. Si					1. usado  sólo por su hogar?		1. al alcantarillado?
-2. No ==>17				2. compartido con otros hogares?	2. a una cámara séptica?
-										3. a un pozo ciego?
-										4. a la superficie (calle/quebrada/río)?
-*/
-
-* Gender classification of the population refers to the head of the household.
-
- gen	 SANITATION=0 if  (conexserv>=1 & conexser<=4) & (servsani>=1 & servsani<=2) /* Total population excluding missing information */
- replace SANITATION=1 if  (conexserv<=2)
-
-
-
-** GOAL 8. DEVELOP A GLOBAL PARTNERSHIP FOR DEVELOPMENT
-
-** Target 16, Indicator: Unemployment Rate of 15 year-olds (%)
-
- gen	 UNMPLYMENT15=0 if  (edad>=15 & edad<=24) & (TASADESO==0 | TASADESO==1) 
- replace UNMPLYMENT15=1 if  (edad>=15 & edad<=24) & (TASADESO==1 )
-
-
-************************************************************************
-**** ADDITIONAL SOCIO - ECONOMIC COMMON COUNTRY ASESSMENT INDICATORS ****
-************************************************************************
-
-** CCA 19. Proportion of children under 15 who are working
-* 12 to 14
-
- gen	 CHILDREN=0 if  (edad>=12 & edad<15) 
- replace CHILDREN=1 if  (edad>=12 & edad<15) & (peaa==1)
-
-
-
-** Disconnected Youths
-/*
-s508a
-8. Es usted:
-
- 1. ¿Estudiante?
- 2. ¿Ama de  casa o responsable
-     de los quehaceres del hogar?
- 3. ¿Jubilado o benemérito?
- 4. ¿Otro?(Especifique) (s508b)
-
-s509a
-9.¿Por qué no buscó trabajo?
- 1.   Tiene trabajo asegurado que comenzará 
-       en menos de cuatro semanas
- 2.   Buscó antes y espera respuesta
- 3.   No cree poder encontrar trabajo
- 4.   Se cansó de buscar trabajo
- 5.   Espera periodo de mayor actividad
- 6.   Por estudios
- 7.   No necesita trabajar
- 8.   Por enfermedad
- 9.   Por vejez
- 10. Embarazo
- 11. Cuidado de niños/as
- 12. Por responsabilidades 
-      familiares  (especifique)     
- 13. Por otras causas (especifique) (s509b)
-
-*/
-
- gen rznobus=s509a if edad>=10 & (s508a==3 |  s508a==4)
-
- gen	 DISCONN=0 if  (edad>=15 & edad<=24) 
- replace DISCONN=1 if  (edad>=15 & edad<=24) & (rznobus==7  | (rznobus>=3 & rznobus<=5) | rznobus==13)
-
-*** Rezago escolar
-
-gen rezago_ine = rezago
-
-drop rezago
-
- gen rezago=0		if (anoest>=0 & anoest<99)  & edad==6 /* This year of age is not included in the calculations */
-	 
- replace rezago=1 	if (anoest>=0 & anoest<1 )  & edad==7
- replace rezago=0 	if (anoest>=1 & anoest<99)  & edad==7
-
- replace rezago=1 	if (anoest>=0 & anoest<2 )  & edad==8
- replace rezago=0	if (anoest>=2 & anoest<99)  & edad==8
-
- replace rezago=1 	if (anoest>=0 & anoest<3 )  & edad==9
- replace rezago=0	if (anoest>=3 & anoest<99)  & edad==9
- 
- replace rezago=1 	if (anoest>=0 & anoest<4 )  & edad==10
- replace rezago=0	if (anoest>=4 & anoest<99)  & edad==10
-
- replace rezago=1 	if (anoest>=0 & anoest<5 )  & edad==11
- replace rezago=0	if (anoest>=5 & anoest<99)  & edad==11
-
- replace rezago=1	if (anoest>=0 & anoest<6)   & edad==12
- replace rezago=0	if (anoest>=6 & anoest<99)  & edad==12
-
- replace rezago=1 	if (anoest>=0 & anoest<7)   & edad==13
- replace rezago=0	if (anoest>=7 & anoest<99)  & edad==13
-
- replace rezago=1 	if (anoest>=0 & anoest<8)   & edad==14
- replace rezago=0	if (anoest>=8 & anoest<99)  & edad==14
-
- replace rezago=1 	if (anoest>=0 & anoest<9 )  & edad==15
- replace rezago=0	if (anoest>=9 & anoest<99)  & edad==15
-
- replace rezago=1 	if (anoest>=0  & anoest<10) & edad==16
- replace rezago=0	if (anoest>=10 & anoest<99) & edad==16
-
- replace rezago=1 	if (anoest>=0  & anoest<11) & edad==17
- replace rezago=0	if (anoest>=11 & anoest<99) & edad==17
-
-* Primary and Secondary [ISCED 1, 2 & 3]
-
- gen     REZ=0 if (edad>=7 & edad<=17) & (rezago==1 | rezago==0)
- replace REZ=1 if (edad>=7 & edad<=17) & (rezago==1)
-		
-* Primary completion rate [15 - 24 years of age]
-
- gen     PRIMCOMP=0 if (edad>=15 & edad<=24) & (anoest>=0  & anoest<99)
- replace PRIMCOMP=1 if (edad>=15 & edad<=24) & (anoest>=6  & anoest<99)
-
-* Average years of education of the population 15+
-
- gen     AEDUC_15=anoest if ((edad>=15 & edad<.) & (anoest>=0 & anoest<99))
- gen     AEDUC_15_24=anoest if ((edad>=15 & edad<=24) & (anoest>=0 & anoest<99))
- gen     AEDUC_25=anoest if ((edad>=25 & edad<.) & (anoest>=0 & anoest<99))
-
-* Grade for age
-
- gen GFA=(anoest/(edad-6)) if (edad>=7 & edad<=17) & (anoest>=0 & anoest<99)
-
-* Grade for age primary
-
- gen GFAP=(anoest/(edad-6)) if (edad>=7 & edad<=11) & (anoest>=0 & anoest<99)
-
-* Grade for age Secondary
-
- gen GFAS=(anoest/(edad-6)) if (edad>=12 & edad<=17) & (anoest>=0 & anoest<99)
-
-ren ocup ocup_old
-
-*****************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
 
 ******************************
 *** VARIABLES DE MIGRACION ***

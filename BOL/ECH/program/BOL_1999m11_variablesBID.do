@@ -10,7 +10,8 @@ set more off
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
-* global ruta = "${surveysFolder}"
+
+ * global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -33,8 +34,8 @@ País: Bolivia
 Encuesta: ECH
 Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Última versión: Nathalia Maya  E-mail: sandramay@iadb.org 
+Fecha última modificación: 25 de agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -55,19 +56,51 @@ gen region_BID_c=3
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
+
+	************
+	* region_c *
+	************
+*destring depto, gen(region_c)
+gen region_c= depto
+label define region_c ///
+1"Chuquisaca"         ///     
+2"La Paz"             ///
+3"Cochabamba"         ///
+4"Oruro"              ///
+5"Potosí"             ///
+6"Tarija"             ///
+7"Santa Cruz"         ///
+8"Beni"               ///
+9"Pando"
+label values region_c region_c              
+clonevar ine01 = region_c
+
+
 ***************
 ***factor_ch***
 ***************
-
-gen factor_ch=factorh
+gen factor_ch= factorh
 label variable factor_ch "Factor de expansion del hogar"
 
 
-**************
-****idh_ch****
-**************
-gen idh_ch=id_hogar
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=nroupm
+	***************
+	***estrato_ci**
+	***************
+gen estrato_ci=.
+
+
+***************
+****idh_ch*****
+***************
+sort folio
+egen idh_ch = group(folio)
+destring idh_ch, replace
 label variable idh_ch "ID del hogar"
+
 
 *************
 ****idp_ci***
@@ -86,13 +119,6 @@ label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
-
-**************
-***region_c***
-**************
-
-gen region_c=.
-label var region_c "Region" 
 
 ************
 ****pais****
@@ -292,71 +318,43 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar"
 
-*************************
-*** VARIABLES DE RAZA ***
-*************************
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-* MGR Oct. 2015: modificaciones realizadas en base a metodología enviada por SCL/GDI Maria Olga Peña
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: ¿Se considera perteneciente a alguno de los siguientes pueblos indígenas/ originarios, o
+** perteneciente a algún grupo minoritario?
 
-/*
-gen raza_ci=.
-replace raza_ci= 1 if  (grupo ==1 | grupo ==2 | grupo ==4 | grupo ==5 | grupo ==6)
-replace raza_ci= 1 if (idiapren==1 | idiapren==2 | idiapren== 4 | idiapren== 5) & raza_ci==.
-replace raza_ci= 2 if  grupo ==7 
-replace raza_ci= 3 if (grupo ==3 | grupo ==8) 
-replace raza_ci= 3 if (idiapren==3 | idiapren==6 | idiapren== 7)& raza_ci==.
-bys idh_ch: gen aux=raza_ci if relacion_ci==1
-bys idh_ch: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & relacion_ci ==3)  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
-*/
+gen afroind_ci=. 
+replace afroind_ci=1 if grupo!=8
+replace afroind_ci=3 if grupo==8
+replace afroind_ci=9 if grupo==0 
 
-*Raza usando idioma
 
-gen raza_idioma_ci = .
-replace raza_idioma_ci= 1 if (idiapren==1 | idiapren==2 | idiapren== 4 | idiapren== 5) & raza_idioma_ci==.
-replace raza_idioma_ci= 3 if (idiapren==3 | idiapren==6)& raza_idioma_ci==.
-bys idh_ch, sort: gen aux=raza_idioma_ci if parentco==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_idioma_ci=aux1 if (raza_idioma_ci ==. & (parentco ==3|parentco==5))  
-replace raza_idioma_ci=3 if raza_idioma_ci==. 
-drop aux aux1
-label define raza_idioma_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros" 
-label value raza_idioma_ci raza_idioma_ci 
-label value raza_idioma_ci raza_idioma_ci
-label var raza_idioma_ci "Raza o etnia del individuo" 
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe=.
+replace afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 
-*Raza usando la definicion mas apropiada
-gen raza_ci=.
-replace raza_ci= 1 if (grupo ==1 | grupo ==2 | grupo ==4 | grupo ==5 | grupo ==6)
-replace raza_ci= 2 if grupo ==7 
-replace raza_ci= 3 if grupo ==8 
-bys idh_ch, sort: gen aux=raza_ci if parentco==1
-bys idh_ch, sort: egen aux1 = max(aux)
-replace raza_ci=aux1 if (raza_ci ==. & (parentco ==3|parentco==5))  
-replace raza_ci=3 if raza_ci==. 
-drop aux aux1
-label define raza_ci 1 "Indígena" 2 "Afro-descendiente" 3 "Otros"
-label value raza_ci raza_ci 
-label value raza_ci raza_ci
-label var raza_ci "Raza o etnia del individuo" 
+drop afroind_jefe
 
-gen id_ind_ci = 0
-replace id_ind_ci=1 if raza_ci==1
-label define id_ind_ci 1 "Indígena" 0 "Otros" 
-label value id_ind_ci id_ind_ci 
-label var id_ind_ci "Indigena" 
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=1999
 
-gen id_afro_ci = 0
-replace id_afro_ci=1 if raza_ci==2
-label define id_afro_ci 1 "Afro-descendiente" 0 "Otros" 
-label value id_afro_ci id_afro_ci 
-label var id_afro_ci "Afro-descendiente" 
+
+	*************
+	***dis_ci***
+	**************
+gen dis_ci = .
+gen dis_ch =.
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***
@@ -464,7 +462,6 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 *BOL 1999
 gen salmm_ci= 	330.00 
-* revisado por Lourdes Montesdeoca dic/2013
 label var salmm_ci "Salario minimo legal"
 
 
@@ -1570,18 +1567,6 @@ replace vivialqimp_ch=. if alimp==0
 
 ren ocup ocup_old
 
-*****************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
-
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1596,14 +1581,14 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
 formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension_ci tipopen_ci instpen_ci	ylmpri_ci nrylmpri_ci ///
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
-salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
+salmm_ci lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///

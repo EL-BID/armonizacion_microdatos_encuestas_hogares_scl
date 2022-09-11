@@ -117,6 +117,17 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************
 ****pais****
 ************
@@ -1291,6 +1302,40 @@ gen vivialqimp_ch=.
 ren ocup ocup_old
 
 
+	**************************
+	** REGIONES **************
+	************************** 
+
+	gen ine01=.   
+	replace ine01=1 if  region==2	/*Central*/
+	replace ine01=2 if  region==3	/*Chorotega*/
+	replace ine01=3 if  region==4	/*Pacífico central*/
+	replace ine01=4 if  region==5	/*Brunca*/
+	replace ine01=5 if  region==6	/*Huetar Atlántica*/
+	replace ine01=6 if  region==7	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
+	gen ine02=.   
+	replace ine02=1 if  provinci==1		/*San José*/
+	replace ine02=2 if  provinci==2		/*Alajuela*/
+	replace ine02=3 if  provinci==3		/*Cartago*/
+	replace ine02=4 if  provinci==4		/*Heredia*/
+	replace ine02=5 if  provinci==5		/*Guanacaste*/
+	replace ine02=6 if  provinci==6		/*Puntarenas*/
+	replace ine02=7 if  provinci==7		/*Limón*/
+	
+	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
+	label value ine02 ine02
+	label var ine02 "Segunda division politico-administrativa, Provincia"	
+
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
@@ -1320,6 +1365,8 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 rename ramap codindustria
 rename ocupp codocupa
+replace codindustria=. if codindustria==0
+replace codocupa=. if codocupa==0
 compress
 saveold "`base_out'", replace
 

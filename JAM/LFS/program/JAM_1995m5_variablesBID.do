@@ -83,6 +83,12 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, parroquias"
 
+***********
+* INE01 *
+************
+gen ine01=  par
+
+
 **************
 * Región BID *
 **************
@@ -315,6 +321,36 @@ label variable nmenor1_ch "numero de familiares menores a 1 anio"
 gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "miembro del hogar"
 
+         ******************************
+         *** VARIABLES DE DIVERSIDAD **
+         ******************************
+*Nathalia Maya & Antonella Pereira
+*Feb 2021	
+
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
 
 
 ***************************************

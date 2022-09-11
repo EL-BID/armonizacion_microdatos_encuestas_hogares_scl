@@ -59,6 +59,7 @@ label value region_BID_c region_BID_c
 	************
 *destring depto, gen(region_c)
 rename depto region_c
+gen ine01 = region_c
 
 /*label define region_c ///
 1"Chuquisaca"         ///     
@@ -789,6 +790,14 @@ replace formal_ci=0 if formal_ci==. & (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=afiliado_ci
+
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if s06b_20 == 1 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (s06b_20>1 & s06b_20<=12) & (condocup_ci==1 | condocup_ci==2)
 
 **************
 ***INGRESOS***
@@ -2290,7 +2299,7 @@ BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 */
 *Modificación Cesar Lins - Feb 2021, s06b_110 -> s06b_11a_cod
 rename s06b_11a_cod codocupa
 rename caeb_op codindustria
-
+destring codocupa codindustria, replace
 compress
 
 

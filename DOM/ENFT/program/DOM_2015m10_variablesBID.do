@@ -1763,6 +1763,49 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 	replace miglac_ci = 0 if !inlist(pais_reside,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850) & migrante_ci==1
 	replace miglac_ci = . if migrante_ci==0 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
+	
+	
+	**************************
+	** PROVINCIAS ************ 
+	**************************
+
+   gen ine01=.   
+   replace ine01=1  if  provincia==1			/*Distrito Nacional*/
+   replace ine01=2  if  provincia==2			/*Azua*/
+   replace ine01=3  if  provincia==3			/*Bahoruco*/
+   replace ine01=4  if  provincia==4			/*Barahona*/
+   replace ine01=5  if  provincia==5		    /*Dajabon*/
+   replace ine01=6  if  provincia==6			/*Duarte*/
+   replace ine01=7  if  provincia==7			/*Elias Piña*/
+   replace ine01=8  if  provincia==8			/*El Seibo*/
+   replace ine01=9  if  provincia==9			/*Espaillat*/
+   replace ine01=10 if  provincia==10			/*Independencia*/
+   replace ine01=11 if  provincia==11			/*La Altagracia*/
+   replace ine01=12 if  provincia==12			/*La Romana*/
+   replace ine01=13 if  provincia==13			/*La Vega*/
+   replace ine01=14 if  provincia==14			/*Maria Trinidad Sanchez*/
+   replace ine01=15 if  provincia==15			/*Monte Cristi*/
+   replace ine01=16 if  provincia==16			/*Pedernales*/
+   replace ine01=17 if  provincia==17			/*Peravia*/
+   replace ine01=18 if  provincia==18			/*Puerto Plata*/
+   replace ine01=19 if  provincia==19			/*Salcedo*/
+   replace ine01=20 if  provincia==20		    /*Samana*/
+   replace ine01=21 if  provincia==21			/*San Cristobal*/
+   replace ine01=22 if  provincia==22			/*San Juan*/
+   replace ine01=23 if  provincia==23			/*San Pedro De Macoris*/
+   replace ine01=24 if  provincia==24			/*Sanchez Ramirez*/
+   replace ine01=25 if  provincia==25			/*Santiago*/
+   replace ine01=26 if  provincia==26			/*Santiago Rodriguez*/
+   replace ine01=27 if  provincia==27			/*Valverde*/
+   replace ine01=28 if  provincia==28			/*Monseñor Nouel*/
+   replace ine01=29 if  provincia==29			/*Monte Plata*/
+   replace ine01=30 if  provincia==30			/*Hato Mayor*/
+   replace ine01=31 if  provincia==31			/*San Jose De Ocoa*/
+   replace ine01=32 if  provincia==32			/*Santo Domingo*/
+
+	label define ine01 1"Distrito Nacional" 2"Azua" 3"Bahoruco" 4"Barahona" 5"Dajabon" 6"Duarte" 7"Elias Piña" 8"El Seibo" 9"Espaillat" 10"Independencia" 11"La Altagracia" 12"La Romana" 13"La Vega" 14"Maria Trinidad Sanchez" 15"Monte Cristi" 16"Pedernales" 17"Peravia" 18"Puerto Plata" 19"Salcedo" 20"Samana" 21"San Cristobal" 22"San Juan" 23"San Pedro De Macoris" 24"Sanchez Ramirez" 25"Santiago" 26"Santiago Rodriguez" 27"Valverde" 28"Monseñor Nouel" 29"Monte Plata" 30"Hato Mayor" 31"San Jose De Ocoa" 32"Santo Domingo"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Provincia"
 
 	
 /*_____________________________________________________________________________________________________*/

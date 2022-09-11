@@ -456,13 +456,30 @@ replace rama_ci=6 if (i_j03a==7 | i_j03a==9) & emp_ci==1
 replace rama_ci=7 if (i_j03a==8 | i_j03a==10) & emp_ci==1
 replace rama_ci=8 if (i_j03a==11 | i_j03a==12) & emp_ci==1
 replace rama_ci=9 if (i_j03a==13 | i_j03a==14 | i_j03a==15 | i_j03a==16 | i_j03a==17 | i_j03a==18 | i_j03a==19 | i_j03a==20) & emp_ci==1
-
-
 label var rama_ci "Rama de actividad"
 label def rama_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras"
 label def rama_ci 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
 label def rama_ci 8 "Establecimientos financieros, seguros e inmuebles" 9 "Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+
+* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci=1 if i_k03==1 & emp_ci==1
+replace ramasec_ci=2 if i_k03==2 & emp_ci==1
+replace ramasec_ci=3 if i_k03==3 & emp_ci==1
+replace ramasec_ci=4 if (i_k03==4 | i_k03==5) & emp_ci==1
+replace ramasec_ci=5 if i_k03==6 & emp_ci==1
+replace ramasec_ci=6 if (i_k03==7 | i_k03==9) & emp_ci==1
+replace ramasec_ci=7 if (i_k03==8 | i_k03==10) & emp_ci==1
+replace ramasec_ci=8 if (i_j03a==11 | i_k03==12) & emp_ci==1
+replace ramasec_ci=9 if (i_k03==13 | i_k03==14 | i_k03==15 | i_k03==16 | i_k03==17 | i_k03==18 | i_k03==19 | i_k03==20) & emp_ci==1
+label var ramasec_ci "Rama de actividad"
+label def ramasec_ci 1 "Agricultura, caza, silvicultura y pesca" 2 "Explotación de minas y canteras" 3 "Industrias manufactureras"
+label def ramasec_ci 4 "Electricidad, gas y agua" 5 "Construcción" 6 "Comercio, restaurantes y hoteles" 7 "Transporte y almacenamiento", add
+label def ramasec_ci 8 "Establecimientos financieros, seguros e inmuebles" 9 "Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
 
 *************
 **salmm_ci***

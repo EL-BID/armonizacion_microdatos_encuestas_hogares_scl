@@ -355,16 +355,14 @@ label value condocup_ci condocup_ci
 *lp_ci***
 *********
 gen lp_ci =.
-replace lp_ci= 207005 if clase==1 /*cabecera*/
-replace lp_ci= 123502 if clase==2  /*resto*/
+replace lp_ci= lp
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci= 87401 if clase==1 /*cabecera*/
-replace lpe_ci= 71392 if clase==2  /*resto*/
+replace lpe_ci= li
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 *************
@@ -1443,8 +1441,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-
-
+rename rama2d codindustria
+rename oficio codocupa
 compress
 
 

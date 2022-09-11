@@ -86,6 +86,14 @@ label values region_BID_c region_BID
 ***************
 g region_ci=.
 
+
+***************
+* ine01 *
+***************
+gen ine01=parno
+label define ine01 201 "st michael" 202 "christ church" 203 "st george" 204 "st philip" 205 "st john" 206 "st james" 207 "st thomas" 208 "st joseph" 210 "st peter" 211 "st lucy"
+label values ine01 ine01
+
 ***************
 *    ZONA     *
 ***************
@@ -486,24 +494,25 @@ label values categosec_ci categosec
 *  RAMA DE ACTIVIDAD PRINCIPAL  *
 *********************************
 * Nota MGD 01/2015: no es posible categorizar la varibale en las desagregaciones armonizadas, por eso se genera una alternativa.
+* Eric Torres LMK: no todos los paises usan la misma la misma clasificación, de tal manera que no tiene mucho sentido ponerle otro nombre a la variable. La dejare como rama_ci
+/*
 gen rama_ci=.
 label var rama_ci "Rama de actividad principal"
 label define rama 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
 label values rama_ci rama
-
-g rama_ci1=.
-replace rama_ci1=1 if (indus>=1 & indus<=3) & condocup_ci==1
-replace rama_ci1=2 if ((indus>=6 & indus<=9)) & condocup_ci==1
-replace rama_ci1=3 if (indus>=10 & indus<=32)  & condocup_ci==1
-replace rama_ci1=4 if (indus>=35 & indus<=39)   & condocup_ci==1
-replace rama_ci1=5 if (indus>=41 & indus<=43)  & condocup_ci==1
-replace rama_ci1=6 if ((indus>=45 & indus<=47)  | (indus>=55 & indus<=56))  & condocup_ci==1
-replace rama_ci1=7 if ((indus>=49 & indus<=53) | (indus>=58 & indus<=63)) & condocup_ci==1
-replace rama_ci1=8 if (indus>=64 & indus<=68)  & condocup_ci==1
-replace rama_ci1=9 if (indus>=69 & indus<99) & condocup_ci==1
-
-label define rama_ci1 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
-label values rama_ci1 rama_ci1
+*/
+g rama_ci=.
+replace rama_ci=1 if (indus>=1 & indus<=3) & condocup_ci==1
+replace rama_ci=2 if ((indus>=6 & indus<=9)) & condocup_ci==1
+replace rama_ci=3 if (indus>=10 & indus<=32)  & condocup_ci==1
+replace rama_ci=4 if (indus>=35 & indus<=39)   & condocup_ci==1
+replace rama_ci=5 if (indus>=41 & indus<=43)  & condocup_ci==1
+replace rama_ci=6 if ((indus>=45 & indus<=47)  | (indus>=55 & indus<=56))  & condocup_ci==1
+replace rama_ci=7 if ((indus>=49 & indus<=53) | (indus>=58 & indus<=63)) & condocup_ci==1
+replace rama_ci=8 if (indus>=64 & indus<=68)  & condocup_ci==1
+replace rama_ci=9 if (indus>=69 & indus<99) & condocup_ci==1
+label define rama_ci 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values rama_ci rama_ci
 /*
 1	Agricultura, caza, silvicultura y pesca. (indus>=1 & indus<=3)
 2	Explotación de minas y canteras. (indus>=6 & indus<=9)
@@ -514,8 +523,24 @@ label values rama_ci1 rama_ci1
 7	Transporte y comunicaciones. (indus>=49 & indus<=53) (indus>=58 & indus<=63)
 8	Establecimientos financieros, seguros, bienes inmuebles. (indus>=64 & indus<=68)
 9	Servicios sociales, comunales y personales. (indus>=69 & indus<=98)
-
 */
+
+* rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (sindus>=1 & sindus<=3) & condocup_ci==1
+replace ramasec_ci=2 if ((sindus>=6 & sindus<=9)) & condocup_ci==1
+replace ramasec_ci=3 if (sindus>=10 & sindus<=32)  & condocup_ci==1
+replace ramasec_ci=4 if (sindus>=35 & sindus<=39)   & condocup_ci==1
+replace ramasec_ci=5 if (sindus>=41 & sindus<=43)  & condocup_ci==1
+replace ramasec_ci=6 if ((sindus>=45 & sindus<=47)  | (sindus>=55 & sindus<=56))  & condocup_ci==1
+replace ramasec_ci=7 if ((sindus>=49 & sindus<=53) | (sindus>=58 & sindus<=63)) & condocup_ci==1
+replace ramasec_ci=8 if (sindus>=64 & sindus<=68)  & condocup_ci==1
+replace ramasec_ci=9 if (sindus>=69 & sindus<99) & condocup_ci==1
+label define ramasec_ci 1"Agricultura" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
+
+
 *********************************
 *  TRABAJA EN EL SECTOR PUBLICO *
 *********************************
@@ -832,9 +857,6 @@ label var lp_ci "Línea de pobreza oficial en moneda local"
 gen lpe_ci =.
 label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 
-
-
-
 *******************************
 *******************************
 *******************************
@@ -842,147 +864,119 @@ label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 *******************************
 *******************************
 *******************************
+*Modificado por Agustina Thailinger SCL/EDU 3/24/2020
+/*NO es posible saber cuantos años de educación tienen los individuos pero si definir cual es el nivel mas alto alcanzado*/
+	
+*************
+***aedu_ci*** 
+*************
+gen aedu_ci=.
+label var aedu_ci "Numero de años de educación culminados"
 
-
-
-******************************************
-* NUMERO DE AÑOS DE EDUCACION CULMINADOS *
-******************************************
-*Nota: numero de años-->  http://www.classbase.com/countries/Barbados/Education-System
-gen aedu_ci =.
-replace aedu_ci=0 if educlev==0
-replace aedu_ci=6 if educlev==1
-replace aedu_ci=11 if educlev==2
-replace aedu_ci=16 if educlev==4
-replace aedu_ci=13 if educlev==3
-label var aedu_ci "número de años de educación culminados"
-
-******************************************
-*  NO TIENE NINGUN NIVEL DE INSTRUCCION  *
-******************************************
-gen eduno_ci=.
-replace eduno_ci=1 if educlev==0 
-replace eduno_ci=0 if educlev>=1 & educlev<5
+**************
+***eduno_ci***
+**************
+gen eduno_ci=(educlev==0)
+replace eduno_ci=. if educlev==9
 label var eduno_ci "No tiene ningún nivel de instrucción"
 
-******************************************
-* NO HA COMPLETADO LA EDUCACION PRIMARIA *
-******************************************
+**************
+***edupi_ci***
+**************
 gen edupi_ci=.
-/*replace edupi_ci=1 if educlev==0
-replace edupi_ci=0 if educlev>=1 & educlev<9*/
 label var edupi_ci "No ha completado la educación primaria"
 
-******************************************
-*  HA COMPLETADO LA EDUCACION PRIMARIA   *
-******************************************
-g edupc_ci=((educlev>=1 & educlev<=4) & educlev!=. & educlev!=9)
+**************
+***edupc_ci***
+**************
+gen edupc_ci=(educlev==1)
+replace edupc_ci=. if educlev==9
 label var edupc_ci "Ha completado la educación primaria"
 
-
-******************************************
-*NO HA COMPLETADO LA EDUCACION SECUNDARIA*
-******************************************
+**************
+***edusi_ci***
+**************
 gen edusi_ci=.
-/*replace edusi_ci=1 if aedu_ci<14 & aedu_ci!=.
-replace edusi_ci=0 if aedu_ci>=14 & aedu_ci!=.*/
 label var edusi_ci "No ha completado la educación secundaria"
 
-******************************************
-* HA COMPLETADO LA EDUCACION SECUNDARIA  *
-******************************************
-g edusc_ci=((educlev>=2 & educlev<=4) & educlev!=. & educlev!=9)
+**************
+***edusc_ci***
+**************
+gen edusc_ci=(educlev==2)
+replace edusc_ci=. if educlev==9
 label var edusc_ci "Ha completado la educación secundaria"
 
-*******************************************
-* NO HA COMPLETADO LA EDUCACION TERCIARIA *
-*******************************************
+**************
+***eduui_ci***
+**************
 gen eduui_ci=. 
-/*replace eduui_ci=1 if aedu_ci<18 & aedu_ci!=.
-replace eduui_ci=0 if aedu_ci>=18 & aedu_ci!=.*/
-label var eduui_ci "No ha completado la educación terciaria"
+label var eduui_ci "No ha completado la educación terciaria/universitaria"
 
-*******************************************
-*  HA COMPLETADO LA EDUCACION TERCIARIA   *
-*******************************************
-g eduuc_ci=((educlev>=3 & educlev<=4) & educlev!=. & educlev!=9)
-label var eduuc_ci "Ha completado la educación terciaria"
+**************
+***eduuc_ci***
+**************
+gen eduuc_ci=(educlev==3 | educlev==4)
+replace eduuc_ci=. if educlev==9
+label var eduuc_ci "Ha completado la educación terciaria/universitaria"
 
-
-****************************************
-*  HA COMPLETADO EDUCACION PREESCOLAR  *
-****************************************
+***************
+***edupre_ci***
+***************
 gen edupre_ci=. 
-*replace edupre_ci=0 if
 label var edupre_ci "Ha completado educación preescolar"
 
 ***************
 ***asipre_ci***
 ***************
-
 gen byte asispre_ci=.
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
-************************************************
-*  HA COMPLETADO EDUCACION TERCIARIA ACADEMICA *
-************************************************
+**************
+***eduac_ci***
+**************
 gen eduac_ci=.
-/*replace eduac_ci=1 if educlev==3 | educlev==5
-replace eduac_ci=0 if educlev==4*/
+replace eduac_ci=1 if educlev==4
+replace eduac_ci=0 if educlev==3
 label var eduac_ci "Ha completado educación terciaria académica"
 
-************************************
-*  ASISTE A UN CENTRO DE ENSEÑANZA *
-************************************
+***************
+***asiste_ci***
+***************
 gen asiste_ci=.
-*replace asiste_ci=1 if educlev==3 | educlev==5
 label var asiste_ci "Asiste a algún centro de enseñanza"
 
-*********************************************
-* PORQUE NO ASISTE A UN CENTRO DE ENSEÑANZA *
-*********************************************
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=.
-*replace pqnoasis_ci=1 if wnattsch
 label var pqnoasis_ci "Porque no asiste a algún centro de enseñanza"
 label define pqnoasis 1"Muy joven" 2"Razones financieras" 3"Trabaja en casa o negocio familiar" 4"Distancia a la escuela/transporte" 5"Enfermedad/inhabilidad" 6"falta de especio en la escuela" 7"Otra" 9"NS/NR"  
 label values pqnoasis_ci pqnoasis
 
+******************
+***pqnoasis1_ci***
+******************
+gen pqnoasis1_ci=.
 
-**************
-*pqnoasis1_ci*
-**************
-gen pqnoasis1_ci = .
-
-
-************************************
-*  HA REPETIDO ALGUN AÑO O GRADO   *
-************************************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
-*replace repite_ci=1 if
 label var repite_ci "Ha repetido algún año o grado"
 
-******************************
-*  HA REPETIDO EL ULTIMO AÑO *
-******************************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
-*replace repiteult_ci=1 if
 label var repiteult_ci "Ha repetido el último grado"
 
-***************************************
-*ASISTE A CENTRO DE ENSEÑANZA PUBLICA *
-***************************************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
-*replace edupub_ci=1 if 
 label var edupub_ci "Asiste a centro de enseñanza pública"
 label define edupub 1"Pública" 0"Privada"  
 label values edupub_ci edupub
-
-**************************
-*  TIENE CARRERA TECNICA *
-**************************
-gen tecnica_ci=.
-label var tecnica_ci "Tiene carrera técnica"
-
 
 **************************
 *       TRAINING         *
@@ -1139,11 +1133,14 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
+*armonizar las variables originales de códigos de industria y ocupacion
+rename indus codindustria
+rename occup codocupa
 
 
 compress

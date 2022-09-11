@@ -105,6 +105,17 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************
 ****pais****
 ************
@@ -1091,6 +1102,24 @@ gen vivitit_ch=.
 gen vivialq_ch=.
 gen vivialqimp_ch=.
 ren ocup ocup_old
+
+
+	**************************
+	** REGIONES ************** 
+	**************************
+
+	gen ine01=.   
+	replace ine01=1 if  region==1				/*Área Met*/
+	replace ine01=2 if  region==2				/*Resto re*/
+	replace ine01=3 if  region==3				/*Chorotega*/
+	replace ine01=4 if  region==4				/*Pacífico central*/
+	replace ine01=5 if  region==5				/*Brunca*/
+	replace ine01=6 if  region==6		    	/*Huetar Atlántica*/
+	replace ine01=7 if  region==7				/*Huetar Norte*/
+	
+	label define ine01 1"Área Met" 2"Resto re" 3"Chorotega" 4"Pacífico central" 5"Brunca" 6"Huetar Atlántica" 7"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

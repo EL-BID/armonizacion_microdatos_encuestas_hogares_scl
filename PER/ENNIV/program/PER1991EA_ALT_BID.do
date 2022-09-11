@@ -15,8 +15,9 @@ capture log close
 set memory 300m
 set more off
 
-local in="${surveysFolder}\ARM\PER\ENNIV\"
-use "`in'1991\Orig_data\per91.dta"
+local in="${surveysFolder}\\survey\PER\ENNIV\1991\m9_m11"
+local out="${surveysFolder}\\harmonized\PER\ENNIV\data_arm"
+use "`in'\data_orig\per91.dta"
 
 
 ***************
@@ -1070,6 +1071,11 @@ gen vivialq_ch=.
 gen vivialqimp_ch=.
 
 
-save "`in'1991\Arm_data\PER1991EA_ALT_BID.dta", intercooled replace
+clonevar codindustria=A1102
+clonevar codocupa=A1101
+
+do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
+
+save "`out'\\PER_1991EA_ALT_BID.dta",  replace
 
 

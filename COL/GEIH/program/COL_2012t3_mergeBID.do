@@ -9,27 +9,27 @@ set more off
 local anio = 2012
 local anioab ="12" 	
 local ruta "${surveysFolder}\survey\COL\GEIH\\`anio'\"
-local m7 ="`ruta'm7\data_orig\" 
-local m8 ="`ruta'm8\data_orig\" 
-local m9 ="`ruta'm9\data_orig\" 
+local m7 ="`ruta'a\data_orig\m7\data_orig\" 
+local m8 ="`ruta'a\data_orig\m8\data_orig\" 
+local m9 ="`ruta'a\data_orig\m9\data_orig\" 
 local t3   ="`ruta't3\data_orig\"
 local out  ="`ruta't3\data_merge\"
 
 
 *1. Bases anuales con homologacion de ingresos
-/*----------------------------------------------
+*----------------------------------------------
 clear
-use "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\personas 2012.dta", clear
+use "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\anual_homologado DANE/personas 2012.dta", clear
 egen idh=concat(directorio secuencia_p)
 sort idh
-merge idh using "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\hogares 2012.dta"
+merge m:1 directorio secuencia_p using "${surveysFolder}\survey\COL\GEIH\2012\a\data_orig\anual_homologado DANE/hogares2012.dta", force
 tab _merge
 drop _merge
 egen id =concat (directorio secuencia_p orden)
 sort id
 destring mes, replace
 keep if mes>=7 & mes<=9
-keep  id impa- fex_c nper- fex_dpto_c
+keep  id impa- fex_c nper- fex_dpto_c dominio
 save "${surveysFolder}\survey\COL\GEIH\2012\a\data_merge\pov.dta", replace
 
 *2. Append entre meses
@@ -144,7 +144,7 @@ drop _merge
 sort id
 saveold "`out'COL_`anio't3`zona'.dta", replace
 }
-*/
+
 *4. Append zonas
 *---------------
 *En la base de resto hay dos preguntas adicionales que implican hacer los siguientes ajustes para unificar los nombres de las variables

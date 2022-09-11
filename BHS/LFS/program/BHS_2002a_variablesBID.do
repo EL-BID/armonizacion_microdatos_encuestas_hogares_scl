@@ -87,6 +87,25 @@ la var idh_ch "Household ID"
 egen idp_ci= concat(idh_ch Ind)
 la var idp_ci "Individual ID"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+*************
+****Islas****
+*************
+gen ine01=island
+replace ine01 = 3 if inlist(island,3,5)
+label define ine01 1"New Providence" 2"Grand Bahama" 3"Other Famiy Island"
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
+
 **********
 ***zona***
 **********
@@ -1329,7 +1348,9 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-
+**cambiar el nombre de código de industria y ocupación
+rename i_q30 codindustria
+rename i_q31 codocupacion
 
 compress
 

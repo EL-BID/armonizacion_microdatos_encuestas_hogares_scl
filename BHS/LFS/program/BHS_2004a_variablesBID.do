@@ -79,6 +79,25 @@ la var idh_ch "Household ID"
 egen idp_ci= concat(idh_ch Ind)
 la var idp_ci "Individual ID"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+*************
+****Islas****
+*************
+gen ine01=island
+replace ine01 = 3 if inlist(island,3,18)
+label define ine01 1"New Providence" 2"Grand Bahama" 3"Other Famiy Island"
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
+
 **********
 ***zona***
 **********

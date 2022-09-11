@@ -117,6 +117,39 @@ label variable zona_c "Zona geográfica"
 label define zona_c 0"Rural" 1"Urbana"
 label value zona_c zona_c
 
+***************
+***upm_ci***
+***************
+clonevar upm_ci=ed
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+label variable estrato_ci "Estrato"
+
+***************
+* county/ward *
+***************
+clonevar ine01=c_w
+label variable ine01 "Primera division politico-administrativa, county/ward"
+label define ine01 1"Port of Spain"	///
+ 2"San Fernando"					///
+ 3"Borough of Arima"				///
+ 4"Borough of Chaguanas"			///
+ 5"Borough of Point Fortin"			///
+ 6"Diego Martin"					///
+ 7"St. Anns"						///
+ 8"tacarigua"						///
+ 9"Rest of St. George"				///
+ 10"Caroni"							///
+ 11"Nariva/Mayaro"					///
+ 12"St. Andrews/St. David"			///
+ 13"Victoria"						///
+ 14"st. patrick"
+ label value ine01 ine01
+
 ***********
 *  PAIS   *
 ***********
@@ -1233,7 +1266,8 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
-
+clonevar codocupa=p29
+clonevar codindustria=p30
 
 compress
 

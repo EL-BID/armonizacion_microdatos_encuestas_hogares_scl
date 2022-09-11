@@ -863,10 +863,40 @@ gen region_c=.
      * DISCAPACIDAD
     ***************************/
 	
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+gen dis_ci=. 
+lab def dis_ci  1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
 label var dis_ci "Personas con discapacidad"
+
+	**************************
+	** REGIONES **************
+	**************************
+
+
+
+   gen ine01=.   
+   replace ine01=1 if  r==1				/*Arica y Parinacota*/
+   replace ine01=2 if  r==2				/*Antofagasta*/
+   replace ine01=3 if  r==3				/*Atacama*/
+   replace ine01=4 if  r==4				/*Coquimbo*/
+   replace ine01=5 if  r==5		    	/*Valparaíso*/
+   replace ine01=6 if  r==6				/*O'Higgins*/
+   replace ine01=7 if  r==7				/*Maule*/
+   replace ine01=8 if  r==8				/*Bío Bío*/
+   replace ine01=9 if  r==9				/*La Araucanía*/
+   replace ine01=10 if r==10			/*Los Lagos*/
+   replace ine01=11 if r==11			/*Aysén*/
+   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if r==13			/*Metropolitana Santiago*/
+
+	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
 		
 
 

@@ -133,6 +133,28 @@ label variable zona_c "Zona geográfica"
 label define zona_c 0"Rural" 1"Urbana"
 label value zona_c zona_c
 
+***************
+* county/ward *
+***************
+clonevar ine01=c_w
+label variable ine01 "Primera division politico-administrativa, county/ward"
+label define ine01 1"Port of Spain"	///
+ 2"San Fernando"					///
+ 3"Borough of Arima"				///
+ 4"Borough of Chaguanas"			///
+ 5"Borough of Point Fortin"			///
+ 6"Diego Martin"					///
+ 7"St. Anns"						///
+ 8"tacarigua"						///
+ 9"Rest of St. George"				///
+ 10"Caroni"							///
+ 11"Nariva/Mayaro"					///
+ 12"St. Andrews/St. David"			///
+ 13"Victoria"						///
+ 14"st. patrick"                    ///
+ 15"Tobago"
+ label value ine01 ine01
+
 ***********
 *  PAIS   *
 ***********
@@ -490,14 +512,38 @@ label define categosec 1"Patrón o empleador" 2"Cuenta propia o independiente" 3
 label values categosec_ci categosec
 
 *********************************
-*  RAMA DE ACTIVIDAD PRINCIPAL  *
+*  RAMA DE ACTIVIDAD  *
 *********************************
-*La variable p30 no se encuentra en la base de datos.
 
-gen rama_ci=.
-label define rama 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
-label values rama_ci rama
-label var rama_ci "Rama de actividad principal"
+* rama principal
+g rama_ci=.
+replace rama_ci=1 if (rindus>=1 & rindus<=2) & condocup_ci==1
+replace rama_ci=2 if rindus==4 & condocup_ci==1
+replace rama_ci=3 if rindus==5 & condocup_ci==1
+replace rama_ci=4 if (rindus==3 | rindus==6)   & condocup_ci==1
+replace rama_ci=5 if rindus==7 & condocup_ci==1
+replace rama_ci=6 if rindus==8 & condocup_ci==1
+replace rama_ci=7 if rindus==9 & condocup_ci==1
+replace rama_ci=8 if rindus==10 & condocup_ci==1
+replace rama_ci=9 if rindus==11 & condocup_ci==1
+label define rama_ci 1"Agriculturacaza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=.
+replace ramasec_ci=1 if (indsec>=1 & indsec<=2) & condocup_ci==1
+replace ramasec_ci=2 if indsec==4 & condocup_ci==1
+replace ramasec_ci=3 if indsec==5 & condocup_ci==1
+replace ramasec_ci=4 if (indsec==3 | indsec==6)   & condocup_ci==1
+replace ramasec_ci=5 if indsec==7 & condocup_ci==1
+replace ramasec_ci=6 if indsec==8 & condocup_ci==1
+replace ramasec_ci=7 if indsec==9 & condocup_ci==1
+replace ramasec_ci=8 if indsec==10 & condocup_ci==1
+replace ramasec_ci=9 if indsec==11 & condocup_ci==1
+label define ramasec_ci 1"Agriculturacaza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras" 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, rest. y hoteles" 7"Transporte y comunicaciones" 8"Establecimientos financieros" 9 "Servicios sociales, comunales y personales"
+label values ramasec_ci ramasec_ci
+
 
 *********************************
 *  TRABAJA EN EL SECTOR PUBLICO *
@@ -796,6 +842,15 @@ label var lp_ci "Línea de pobreza oficial en moneda local"
 gen lpe_ci =.
 label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=hhldinc
+				replace yoficial_ch= .   if hhldinc1==. | hhldinc1==16
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=yoficial_ch/nmiembros_ch
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
 *******************************
 *******************************
@@ -1271,6 +1326,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
+gen codocupa=.
+clonevar codindustria=rindus
 
 compress
 

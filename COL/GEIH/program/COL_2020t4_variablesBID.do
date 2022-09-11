@@ -73,6 +73,47 @@ label value region_c region_c
 label var region_c "division politico-administrativa, departamento"
 
 
+***************
+***  ine01  ***
+***************
+gen ine01=real(dpto)
+label define ine01          /// 
+	5  "Antioquia"	        ///
+	8  "Atlantico"	        ///
+	11 "Bogota, D.C"	    ///
+	13 "Bolivar" 	        ///
+	15 "Boyacá"	            ///
+	17 "Caldas"	            ///
+	18 "Caquetá"	        ///
+	19 "Cauca"	            ///
+	20 "Cesar"	            ///
+	23 "Córdoba"	        ///
+	25 "Cundinamarca"       ///
+	27 "Chocó"	            ///
+	41 "Huila"	            ///
+	44 "La Guajira"	        ///
+	47 "Magdalena"	        ///
+	50 "Meta"	            ///
+	52 "Narino"	            ///
+	54 "Norte de Santander"	///
+	63 "Quindío"	        ///
+	66 "Risaralda"	        ///
+	68 "Santander"	        ///
+	70 "Sucre"	            ///
+	73 "Tolima"	            ///
+	76 "Valle del Cauca"	///
+	81 "Arauca"	            ///
+	85 "Casanare"	        ///
+	86 "Putumayo"	        ///
+	91 "Amazonas"	        ///
+	94 "Guainía"	        ///	
+	95 "Guaviare"	        ///	
+	97 "Vaupés" 	        ///		
+	99 "Vichada"
+label value ine01 ine01
+label var ine01 "division politico-administrativa, departamento"
+
+
 ************
 * Region_BID *
 ************
@@ -380,7 +421,10 @@ label var instpen_ci "Institucion proveedora de la pension - variable original d
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
-
+***********************
+*llave lp nacionales***
+***********************
+encode dominio, gen(llave_lp)
 
 *********
 *lp_ci***
@@ -640,7 +684,7 @@ la var subemp_ci "Personas en subempleo por horas"
 ***rama_ci*** (revisar)
 *************
 ***La variable cambió de nombre, no es claro si cambió la variable también
-	
+/*
 	destring rama2d_r4, replace
 	g rama_ci = .
 	replace rama_ci = 1 if rama2d_r4 >=  1 & rama2d_r4 <=  5
@@ -665,6 +709,32 @@ la var subemp_ci "Personas en subempleo por horas"
 					8 "Establecimientos financieros, seguros e inmuebles" 	///
 					9 "Servicios sociales y comunales"
 	la val rama_ci rama_ci
+*/
+
+destring rama4d_r4, replace
+g rama_ci = .
+replace rama_ci=1 if (rama4d_r4>=100 & rama4d_r4<=322) & emp_ci==1 
+replace rama_ci=2 if (rama4d_r4>=510 & rama4d_r4<=990) & emp_ci==1 
+replace rama_ci=3 if (rama4d_r4>=1010 & rama4d_r4<=3320) & emp_ci==1 
+replace rama_ci=4 if (rama4d_r4>=3510 & rama4d_r4<=3900) & emp_ci==1 
+replace rama_ci=5 if (rama4d_r4>=4100 & rama4d_r4<=4390) & emp_ci==1 
+replace rama_ci=6 if ((rama4d_r4>=4510 & rama4d_r4<=4799) | (rama4d_r4>=5510 & rama4d_r4<=5630))& emp_ci==1 
+replace rama_ci=7 if ((rama4d_r4>=4911 & rama4d_r4<=5320) | (rama4d_r4>=6110 & rama4d_r4<=6190)) & emp_ci==1 
+replace rama_ci=8 if (rama4d_r4>=6411 & rama4d_r4<=8299) & emp_ci==1 
+replace rama_ci=9 if ((rama4d_r4>=5811 & rama4d_r4<=6022) | (rama4d_r4>=6201 & rama4d_r4<=6399) | (rama4d_r4>=8411 & rama4d_r4<=9900)) & emp_ci==1 
+label var rama_ci "Rama de actividad de la ocupación principal"
+label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val rama_ci rama_ci
+
+
+* rama secundaria
+g ramasec_ci=. 
+label var ramasec_ci "Rama de actividad de la ocupación secundaria"
+label val ramasec_ci ramasec_ci
+
+
 
 ****************
 ***durades_ci***
@@ -883,154 +953,161 @@ la var subemp_ci "Personas en subempleo por horas"
 	g ylmho_ci = ylm_ci / (horastot_ci * 4.3)
 	la var ylmho_ci "Salario monetario de todas las actividades" 
 
-	*/
+******************
+*Ingreso Nacional*
+******************
+gen yoficial_ch=ingtotugarr
+label var yoficial_ch "Ingreso del hogar total generado por el país"
+
+gen ypeoficial_ch=ingpcug
+label var ypeoficial_ch "Ingreso per cápita generado por el país"
+
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-    replace p6210s1=. if p6210s1==99
-	replace p6210=.   if p6210==9
-	
-	g aedu_ci = . 
-	replace aedu_ci = 0 if p6210 == 1 | p6210 == 2 
-	replace aedu_ci = 0 if p6210 == 3 & p6210s1 == 0 
+*Javier
 
-*Primaria
-	replace aedu_ci = 1 if p6210 == 3 & p6210s1 == 1
-	replace aedu_ci = 2 if p6210 == 3 & p6210s1 == 2
-	replace aedu_ci = 3 if p6210 == 3 & p6210s1 == 3
-	replace aedu_ci = 4 if p6210 == 3 & p6210s1 == 4
-	replace aedu_ci = 5 if p6210 == 3 & p6210s1 == 5
-	replace aedu_ci = 5 if p6210 == 4 & p6210s1 == 0
+***************
+***asiste_ci***
+***************
 
-*Secundaria
-	replace aedu_ci = 6  if p6210 == 4 & p6210s1 == 6
-	replace aedu_ci = 7  if p6210 == 4 & p6210s1 == 7
-	replace aedu_ci = 8  if p6210 == 4 & p6210s1 == 8
-	replace aedu_ci = 9  if p6210 == 4 & p6210s1 == 9
-	replace aedu_ci = 10 if p6210 == 5 & p6210s1 == 10
-	replace aedu_ci = 11 if p6210 == 5 & p6210s1 == 11
-	replace aedu_ci = 11 if p6210 == 6 & p6210s1 == 0
-	replace aedu_ci = 12 if p6210 == 5 & p6210s1 == 12
-	replace aedu_ci = 13 if p6210 == 5 & p6210s1 == 13
-*Superior
-	replace aedu_ci = 11+p6210s1 if p6210==6 
+gen asiste_ci = .
+replace asiste_ci = 1 if p6170 == 1
+replace asiste_ci = 1 if p6170 == 2
+
+label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
+
+***************
+***aedu_ci*****
+***************
+
+gen aedu_ci = esc
+
+replace aedu_ci = p6210s1 if esc > 21 & p6220 != 5		// JV: Existen observaciones donde en el grado responden la escolaridad completa. Debido a cómo está computada la escolaridad, esto da escolaridades mayores al máximo
+replace aedu_ci = 21 if esc > 21 & p6220 == 5
+
+label variable aedu_ci "Años de Educacion"
 
 **************
 ***eduno_ci***
 **************
-	g byte eduno_ci = aedu_ci == 0
-	la var eduno_ci "Sin educación"
+
+gen byte eduno_ci = aedu_ci == 0
+
+label variable eduno_ci "Sin educación"
+
+***************
+***edupre_ci***
+***************
+
+gen edupre_ci=.
+label var edupre_ci "Educacion preescolar"
 
 **************
 ***edupi_ci***
 **************
-	g byte edupi_ci = (aedu_ci >= 1 & aedu_ci < 5) 
-	la var edupi_ci "Primaria incompleta"
+g byte edupi_ci = (aedu_ci >= 1 & aedu_ci < 5) 
+la var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-	g byte edupc_ci = aedu_ci == 5 
-	la var edupc_ci "Primaria completa"
+g byte edupc_ci = aedu_ci == 5 
+la var edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-	g byte edusi_ci = (aedu_ci >= 6 & aedu_ci < 11) 
-	la var edusi_ci "Secundaria incompleta"
+g byte edusi_ci = (aedu_ci >= 6 & aedu_ci < 11) 
+la var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-	g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5
-	la var edusc_ci "Secundaria completa"
+g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5
+la var edusc_ci "Secundaria completa"
+
+***************
+***edus1i_ci***
+***************
+g byte edus1i_ci = (aedu_ci >= 6 & aedu_ci < 9)
+la var edus1i_ci "1er ciclo de la secundaria incompleto"
+
+***************
+***edus1c_ci***
+***************
+g byte edus1c_ci = aedu_ci == 9
+la var edus1c_ci "1er ciclo de la secundaria completo"
+
+***************
+***edus2i_ci***
+***************
+g byte edus2i_ci = aedu_ci == 10 
+la var edus2i_ci "2do ciclo de la secundaria incompleto"
+
+***************
+***edus2c_ci***
+***************
+g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6220 == 2
+la var edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
 *Para la educación superior no es posible saber cuÃ¡ntos años dura el ciclo
-*por ello se hace una aproximación a través de titulación
-	g byte eduui_ci = (aedu_ci > 11 & aedu_ci!=. & p6210 == 6 & (p6220 == 1 | p6220 == 2))
-	la var eduui_ci "Superior incompleto"
+*por ello se hace una aproximación a través del tipo de diploma obtenido
+g byte eduui_ci = .
+
+replace eduui_ci = 1 if (esc > 13 & esc < 16 & p6220 == 3)
+replace eduui_ci = 1 if (esc > 13 & esc < 17 & (p6220 == 2 | p6220 == 4 | p6220 == 5))
+replace eduui_ci = 0 if eduui_ci == .
+
+la var eduui_ci "Superior incompleto"
 
 **************
 ***eduuc_ci***
 **************
 *Para la educación superior no es posible saber cuÃ¡ntos años dura el ciclo
 *por ello se hace una aproximación a través de titulación
-	g byte eduuc_ci = ((aedu_ci > 11 & aedu_ci!=.) & p6210 == 6 & (p6220 == 3 | p6220 == 4 | p6220 == 5))
-	la var eduuc_ci "Superior completo"
+g byte eduuc_ci = .
 
-***************
-***edus1i_ci***
-***************
-	g byte edus1i_ci = (aedu_ci >= 6 & aedu_ci < 9)
-	la var edus1i_ci "1er ciclo de la secundaria incompleto"
+replace eduuc_ci = 1 if (esc > 16 & p6220 == 3)
+replace eduuc_ci = 1 if (esc > 17 & esc != . & (p6220 == 2 | p6220 == 4 | p6220 == 5))
 
-***************
-***edus1c_ci***
-***************
-	g byte edus1c_ci = aedu_ci == 9
-	la var edus1c_ci "1er ciclo de la secundaria completo"
-
-***************
-***edus2i_ci***
-***************
-	g byte edus2i_ci = aedu_ci == 10 
-	la var edus2i_ci "2do ciclo de la secundaria incompleto"
-
-***************
-***edus2c_ci***
-***************
-	g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6220 == 2
-	la var edus2c_ci "2do ciclo de la secundaria completo"
+la var eduuc_ci "Superior completo"
 
 
-	foreach i in no pi pc si sc ui uc s1i s1c s2i s2c {
-		replace edu`i'_ci = . if aedu_ci == .
-	}
+**************
+***eduac_ci***
+**************
+gen eduac_ci=.
+label variable eduac_ci "Superior universitario vs superior no universitario"
 
+	
 ***************
-***edupre_ci***
+***edupub_ci***
 ***************
-	g byte edupre_ci =(p6210s1==1 & p6210==2)
-	la var edupre_ci "Educación preescolar"
+gen edupub_ci=.
+label var edupub_ci "Personas que asisten a centros de ensenanza publicos"	
+
 
 ***************
 ***asispre_ci**
 ***************
-*Variable creada por IvÃ¡n Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if p6210s1==0 & p6210==2 & p6170==1
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educación prescolar"
+gen asispre_ci = (asiste_ci == 1 & esc == 0 & p6040 < 6) 	// JV: Se aproxima asistencia a preescolar si asiste a la escuela y es menor de 6 años
+la var asispre_ci "Asiste a educación prescolar"
 	
-**************
-***eduac_ci***
-**************
-	g byte eduac_ci = .
-	la var eduac_ci "Superior universitario vs superior no universitario"
 
-***************
-***asiste_ci***
-***************
-	g asiste_ci = 1 if p6170 == 1
-	replace asiste_ci = 0 if p6170 == 2
-	la var asiste_ci "Asiste actualmente a la escuela"
-
-**************
-***pqnoasis***
-**************
-	g pqnoasis_ci = .
-	la var pqnoasis_ci "Razones para no asistir a la escuela"
+*****************
+***pqnoasis_ci***
+*****************
+gen pqnoasis_ci = .
+label variable pqnoasis_ci "Razones para no asistir a la escuela"
 	
-		
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
-g       pqnoasis1_ci = .
+gen pqnoasis1_ci = .
 
 ***************
 ***repite_ci***
@@ -1044,30 +1121,11 @@ g       pqnoasis1_ci = .
 	g repiteult_ci = .
 	la var repiteult "Ha repetido el último grado"
 
-***************
-***edupub_ci***
-***************
-	g edupub_ci = 1 if p6175 == 1
-	replace edupub_ci = 0 if p6175 == 2
-	la var edupub_ci "Asiste a un centro de enseñanza público"
+
+foreach i in no pi pc si sc ui uc s1i s1c s2i s2c {
+	replace edu`i'_ci = . if aedu_ci == .
+}
 	
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci = (p6220==3)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-***************
-* Universidad *
-***************
-
-
-gen universidad_ci = (p6220==4)
-label var universidad_ci "1=formacion universitaria"
-
-	
-
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
@@ -1423,7 +1481,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first

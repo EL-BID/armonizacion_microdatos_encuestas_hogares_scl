@@ -61,6 +61,19 @@ use `base_in', clear
 	
 gen region_BID_c=4
 
+***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+***************
+	***estrato_ci**
+	***************
+
+clonevar estrato_ci=estrato
+label variable estrato_ci "Estrato"
+
+
 
 /***** revision July 29,2005  Suzanne
 

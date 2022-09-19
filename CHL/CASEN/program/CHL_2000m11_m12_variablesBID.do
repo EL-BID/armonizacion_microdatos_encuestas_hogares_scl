@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -23,9 +23,6 @@ local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
    
-
-
-
 capture log close
 log using "`log_file'", replace 
 
@@ -194,11 +191,10 @@ replace compu_ch=1 if compu_ch==1
 /*****
 cel_ch
 *****/
-gen aux1=p8
-replace aux1=0 if p8==2 | p8==.
-by idh_ch:egen aux2=sum(aux1)
-gen cel_ch=(aux2>0)
-drop aux1 aux2
+sort idh_ch
+by idh_ch: egen cel_ch=sum(p8==1)
+replace cel_ch=1 if cel_ch>=1
+replace cel_ch=. if p8==9 | p8==.
 
 gen vivi1_ch=1 if v22==1 | v22==2
 replace vivi1_ch=2 if v22==3
@@ -376,7 +372,7 @@ replace rama_ci=. if emp_ci==0 | rama_ci<=0
 */
 
 gen rama_ci=.
-replace rama_ci=1 if (o9>=1110 & o9<=1400)   & emp_ci==1
+replace rama_ci=1 if (o9>=1110 & o9<=1499)   & emp_ci==1
 replace rama_ci=2 if (o9>=2000 & o9<=2990) & emp_ci==1
 replace rama_ci=3 if (o9>=3000 & o9<=3990) & emp_ci==1
 replace rama_ci=4 if (o9>=4000 & o9<=4990) & emp_ci==1
@@ -643,6 +639,10 @@ label var spublico_ci "Personas que trabajan en el sector público"
 /*******************
 VARIABLES EDUCATIVAS
 *******************/
+*************
+***aedu_ci*** 
+************* 
+
 gen byte aedu_ci=.
 replace aedu_ci=0 if e9==0 | e9==1 | e9==16 
 replace aedu_ci=e8 if e9==2 | e9==3 
@@ -656,17 +656,20 @@ replace aedu_ci=8 if (e8>=8 & e9==3)
 
 replace aedu_ci=e8+6 if e9==5 | e9==7
 replace aedu_ci=e8+8 if e9==6 | e9==8
-replace aedu_ci=e8+12 if e9>=9 & e9<15 
+replace aedu_ci=e8+12 if e9>=9 & e9<14
 replace aedu_ci=e8+17 if e9==15 /*See the original variable wich is not correct for this category*/
 replace aedu_ci=. if e9==99
 
-** Generating attend. Dummy variable for school attendance
-gen byte attend=(e3==1) /*There are no missing values in the original dataset*/
-replace attend=0 if e8==. | e9==16
-label variable attend "Dummy variable for school attendance"
+*****************
+***asiste_ci***
+*****************
+
+gen asiste_ci=(e3==1)
+replace asiste_ci=0 if e8==. | e9==16
+label variable asiste_ci "Asiste actualmente a la escuela"
 
 * We substract one year of education for those who are attending school at the moment that the survey took place
-gen ban_aedu=aedu_ci-1 if aedu_ci!=0 & attend==1
+replace aedu_ci=aedu_ci-1 if aedu_ci!=0 & asiste_ci==1
 
 /*
 OLD CODE:
@@ -722,7 +725,7 @@ label variable eduno_ci "Cero anios de educacion"
 **************
 
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -731,7 +734,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==8
+replace edupc_ci=1 if aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -740,7 +743,7 @@ label variable edupc_ci "Primaria completa"
 **************
 
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
+replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -750,6 +753,7 @@ label variable edusi_ci "Secundaria incompleta"
 
 gen byte edusc_ci=0
 replace edusc_ci=1 if aedu_ci==12
+replace edusc_ci=1  if aedu_ci==13 & e9==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -758,7 +762,7 @@ label variable edusc_ci "Secundaria completa"
 ***************
 
 gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci==9
+replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<8 
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -767,7 +771,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***************
 
 gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
+replace edus1c_ci=1 if aedu_ci==8
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -776,7 +780,7 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***************
 
 gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci==11
+replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
@@ -786,6 +790,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 gen byte edus2c_ci=0
 replace edus2c_ci=1 if aedu_ci==12
+replace edusc_ci=1  if aedu_ci==13 & e9==8
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
@@ -794,7 +799,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 
 gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
+replace eduui_ci=1 if (aedu_ci>12 & e9==9) | (aedu_ci>12 & e9==11) | (aedu_ci>12 & e9==13)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -803,7 +808,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
+replace eduuc_ci=1 if aedu_ci>12 &  (e9==10 | e9==12 | e9==14 | e9==15)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria incompleta o mas"
 
@@ -813,6 +818,7 @@ label variable eduuc_ci "Universitaria incompleta o mas"
 ***************
 
 gen edupre_ci=(e9==1)
+replace edupre_ci=. if e9 == . | e9 == 99
 label variable edupre_ci "Educacion preescolar"
 
 
@@ -821,17 +827,8 @@ label variable edupre_ci "Educacion preescolar"
 **************
 gen eduac_ci=.
 replace eduac_ci=0 if e9>=9 & e9<=12
-replace eduac_ci=1 if e9==13 | e9==14
+replace eduac_ci=1 if e9==13 & e9<=15
 label variable eduac_ci "Superior universitario vs superior no universitario"
-
-***************
-***asiste_ci***
-***************
-
-gen asiste_ci=(e3==1)
-label variable asiste_ci "Asiste actualmente a la escuela"
-
-
 
 foreach var of varlist edu* {
 replace `var'=. if  aedu_ci==.
@@ -1508,6 +1505,124 @@ gen region_c=.
 
 *YL -> elimino var comp para que no genere problemas al SOCIOMETERO (esta var no es necesaria)
 drop comp
+
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=1 if ((s1>=0 & s1<7) | s1==8) 
+replace cobsalud_ci=0 if s1==7
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if s1>=0 & s1<=5
+replace tipocobsalud_ci=2 if s1==6
+replace tipocobsalud_ci=3 if s1==8
+replace tipocobsalud_ci=0 if cobsalud==0
+replace tipocobsalud_ci=. if s1==9
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"Publico" 2"Privado" 3"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimos 30 días.
+ 
+gen probsalud_ci=1 if  s15==1 
+replace probsalud_ci=0 if s15==2
+replace probsalud_ci=. if s15==.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+* reporta que no tuvo consulta por costo
+gen costo_ci=.
+replace costo_ci=0 if s22!=3 
+replace costo_ci=1 if s22==3 
+replace costo_ci=. if s22==9
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+replace atencion_ci=0 if s22!=6
+replace atencion_ci=1 if s22==6
+replace atencion_ci=. if s22==9
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 		
 
 	**************************

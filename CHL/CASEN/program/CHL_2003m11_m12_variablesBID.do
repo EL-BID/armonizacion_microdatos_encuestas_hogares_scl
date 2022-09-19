@@ -222,7 +222,7 @@ replace piso_ch=. if v9a==9
  ***************
  ***pared_ch***
  *************** 
-gen pared_ch=0 if v8a>=4 & v8a<=7
+gen pared_ch=0 if v8a>=4 & v8a<=6
 replace pared_ch=1 if v8a<4
 replace pared_ch=2 if v8a==8
 replace pared_ch=. if v8a==9 |v8a==.
@@ -568,6 +568,10 @@ gen horaspri_ci=o19_hrs/4 /*Da mas bajo que en los otros años, porque la creaci
 
 gen horastot_ci=horaspri_ci
 
+************************
+******* Ingreso ********
+************************
+
 gen ylmpri_ci=yopraj 
 replace ylmpri_ci=. if  emp_ci==0
 
@@ -651,12 +655,29 @@ replace ylnmpri_ci=. if (aux1==. & autoc==. & aux3==.) | emp_ci==0
 drop aux1 aux3
 */
 
+****************
+* ylnmpri_ci   * 
+**************** 
 gen ylnmpri_ci=.
 
-
+****************
+* ylmsec_ci    * 
+****************
 gen ylmsec_ci=.
+
+****************
+* ylnmsec_ci   * 
+**************** 
 gen ylnmsec_ci=.
+
+****************
+* ylnmotros_ci * 
+**************** 
 gen ylnmotros_ci=.
+
+****************
+* nrylmpri_ci * 
+****************
 gen nrylmpri_ci=(emp_ci==1 & ylmpri_ci==.)
 replace nrylmpri_ci=. if emp_ci==0
 /*
@@ -680,6 +701,9 @@ replace ylm_ci=. if (ylmpri_ci==. & ytrsaj==. & ytroaj==.) | emp_ci==0
 
 ***NEW***
 
+****************
+* ylm_ci       * 
+**************** 
 gen ylm_ci= yopraj 
 replace ylmpri_ci=. if  emp_ci==0
 
@@ -691,6 +715,9 @@ egen ylm2_ci=rsum(ylmpri2_ci ytrsaj ytroaj)
 replace ylm2_ci=. if (ylmpri2_ci==. & ytrsaj==. & ytroaj==.) | emp_ci==0
 */
 
+****************
+* ylnm_ci       * 
+**************** 
 *gen ylnm_ci=ylnmpri_ci
 gen ylnm_ci=.
 
@@ -719,23 +746,43 @@ replace ynlm_ci=. if yautaj==. & ylm_ci==. & ysubaj==.
 gen ynlm_ci = yautaj1 - ylm_ci + ysubaj1
 replace ynlm_ci=. if yautaj==. & ylm_ci==. & ysubaj==. */
 ****
-
+****************
+* ynlnm_ci     * 
+**************** 
 gen ynlnm_ci=.
 
+****************
+* nrylmpri_ch  * 
+**************** 
 sort idh_ch 
 by idh_ch: egen nrylmpri_ch=max(nrylmpri_ci) if miembros_ci==1
 *by idh_ch: egen nrylmpri1_ch=max(nrylmpri1_ci) if miembros_ci==1, missing
 *by idh_ch: egen nrylmpri2_ch=max(nrylmpri2_ci) if miembros_ci==1, missing
+
+****************
+* ylm_ch       * 
+**************** 
 by idh_ch: egen ylm_ch=sum(ylm_ci)if miembros_ci==1, missing
 *
 by idh_ch: egen ylmpri_ch=sum(ylmpri_ci)if miembros_ci==1, missing
 *
+
 *by idh_ch: egen ylm1_ch=sum(ylm1_ci) if miembros_ci==1, missing
 *by idh_ch: egen ylm2_ch=sum(ylm2_ci) if miembros_ci==1, missing
+****************
+* ylnm_ch       * 
+**************** 
 by idh_ch: egen ylnm_ch=sum(ylnm_ci)if miembros_ci==1, missing
+
+****************
+* ylmnr_ch       * 
+****************
 gen ylmnr_ch=ylm_ch
 replace ylmnr_ch=. if nrylmpri_ch==1
 *
+****************
+* ylmprinr_ch       * 
+****************
 gen ylmprinr_ch=ylmpri_ch
 replace ylmprinr_ch=. if nrylmpri_ch==1
 *
@@ -766,7 +813,13 @@ gen rentaimp_ch=yaimhaj
 *replace autocons_ci=. if autoc==. & yac2aj==.
 *sort idh_ch
 *by idh_ch: egen autocons_ch=sum(autocons_ci)
+****************
+* remesas_ci   * 
+****************
 gen remesas_ci=.
+****************
+* remesas_ch   * 
+**************** 
 gen remesas_ch=.
 
 gen durades_ci=o4/4.3
@@ -813,6 +866,7 @@ replace categopri_ci=2 if o9==2
 replace categopri_ci=3 if o9>=3 & o9<=7
 replace categopri_ci=4 if o9==8
 replace categopri_ci=. if emp_ci==0
+replace categopri_ci=0 if o9==9
 gen categosec_ci=.
 
 /*
@@ -1274,7 +1328,7 @@ gen region_c=.
 *******************
 
 gen cobsalud_ci=.
-replace cobsalud_ci=1 if ((s1>=0 & s1<=7) | s1==8) 
+replace cobsalud_ci=1 if ((s1>=0 & s1<7) | s1==8) 
 replace cobsalud_ci=0 if s1==7
 
 label var cobsalud_ci "Tiene cobertura de salud"
@@ -1342,6 +1396,45 @@ replace atencion_ci=. if s22==9
 label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
 lab def atencion_ci 0 "No" 1 "Si"
 lab val atencion_ci atencion_ci
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 
 	**************************

@@ -791,7 +791,7 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 gen yoficial_ch=itf
 label var yoficial_ch "Ingreso del hogar total generado por el país"
 
-gen ypeoficial_ch=subinstr(ipcf,",",".",.)
+gen ypeoficial_ch=ipcf
 label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
 destring yoficial_ch ypeoficial_ch, replace

@@ -77,4 +77,4 @@ drop id uno miembros
 compress
 save "$ruta\survey\ARG\EPHC\20`ano'\s2\data_merge\ARG_20`ano's2.dta", replace
 
-log close
+

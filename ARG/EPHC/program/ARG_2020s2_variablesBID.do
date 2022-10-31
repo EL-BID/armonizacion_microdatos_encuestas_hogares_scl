@@ -1657,6 +1657,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
+rename pp04b_cod codindustria
 
 compress
 

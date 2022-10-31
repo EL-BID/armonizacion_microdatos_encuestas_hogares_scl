@@ -1835,6 +1835,9 @@ lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobr
 lab val grupo_int grupo_int
 
 
+
+gen codocupa=ocupacion_principal_cod
+gen codindustria=ramac
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/

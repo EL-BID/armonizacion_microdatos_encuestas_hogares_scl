@@ -558,6 +558,8 @@ label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 label variable ocupa_ci "Ocupacion laboral" 
 
+gen codocupa=ocupacion_principal_cod
+
 *************
 ***rama_ci***
 *************
@@ -583,6 +585,8 @@ label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de m
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+gen codindustria=ramac
 
 ************
 *durades_ci*

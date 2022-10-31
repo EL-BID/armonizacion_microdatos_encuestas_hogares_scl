@@ -1428,6 +1428,8 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 		format `var' %18.4f
 		}
 
+gen codindustria=s9q14
+gen codocupa=s9q13
 compress
 
 

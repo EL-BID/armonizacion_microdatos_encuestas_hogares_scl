@@ -100,6 +100,21 @@ label var region_c "División política, parroquias"
 * INE01 *
 ************
 gen ine01=  PAR
+label define ine01  ///
+           1 "Kingston" ///
+           2 "St Andrew" ///
+           3 "St Thomas" ///
+           4 "Portland" ///
+           5 "St Mary" ///
+           6 "St Ann" ///
+           7 "Trelawny" ///
+           8 "St James" ///
+           9 "Hanover" ///
+          10 "Westmoreland" ///
+          11 "St Elizabeth" ///
+          12 "Manchester" ///
+          13 "Clarendon" ///
+          14 "St Catherine"
 
 **************
 * Región BID *
@@ -130,6 +145,17 @@ ren IND idp_ci
 gen zona_c=.
 replace zona_c=1 if URCODE==1 |  URCODE==2
 replace zona_c=0 if URCODE==3
+
+*************** 
+******upm_ci*****
+***************
+* JAM 2005 no tiene UPM
+gen upm_ci=. 
+
+*************
+* estrato_ci*
+**************
+gen estrato_ci=.
 
 **********************************
 * País***************************
@@ -323,8 +349,7 @@ label variable miembros_ci "Miembro del hogar"
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************
-*Nathalia Maya & Antonella Pereira
-*Feb 2021	
+*copiado de 2006 por Nathalia Maya & Antonella Pereira - octubre 2022	
 
 	***************
 	***afroind_ci***
@@ -1133,22 +1158,31 @@ gen spublico_ci=.
 replace spublico_ci=1 if Q323==1 | Q323==2
 replace spublico_ci=0 if spublico_ci==.
 
+**********************************
+**** VARIABLES DE EDUCACIÓN ****
+**********************************
+
 *********
 *aedu_ci*
 *********
 
 *ocupados
 gen aedu_ci=.
-replace aedu_ci=Q320A if Q320A<99
-replace aedu_ci=Q321A if Q321A>0 & Q321A<99
+replace aedu_ci=Q320A if Q320A<99 // primary
+replace aedu_ci=Q321A if Q321A>0 & Q321A<99 // secondary
 
 *desocupados
-replace aedu_ci=Q421A if Q421A<99
-replace aedu_ci=Q422A if Q422A>0 & Q422A<99
+replace aedu_ci=Q421A if Q421A<99 // primary
+replace aedu_ci=Q422A if Q422A>0 & Q422A<99 // secondary
 
 *inactivos
-replace aedu_ci=Q514A if Q514A<99
-replace aedu_ci=Q515A if Q515A>0 & Q515A<99
+replace aedu_ci=Q514A if Q514A<99 // primary
+replace aedu_ci=Q515A if Q515A>0 & Q515A<99 // secondary
+
+// imputando valores perdidos
+replace aedu_ci=6 if Q320A==99 & Q321A!=99 & aedu_ci==.
+replace aedu_ci=6 if Q421A==99 & Q422A!=99 & aedu_ci==.
+replace aedu_ci=6 if Q514A==99 & Q515A!=99 & aedu_ci==.
 
 
 **********
@@ -1181,56 +1215,59 @@ gen edusi_ci=0 if aedu_ci!=.
 replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<11)
 label variable edusi_ci "Secundaria incompleta"
 
-gen edusc_ci=1 if aedu_ci>=11 & aedu_ci!=.
-replace edusc_ci=0 if aedu_ci<11
+**********
+*edusc_ci*
+**********
+gen edusc_ci=(aedu_ci==11)
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
+
+**********
+*eduui_ci*
+**********
+gen eduui_ci=((aedu_ci>11) & (Q516!=8 & Q423!=8 & Q322!=8))
+replace eduui_ci=. if aedu_ci==.
+label variable eduui_ci "Universitaria incompleta"
+
+**********
+*eduuc_ci*
+**********
+gen eduuc_ci=((aedu_ci>11) & (Q516==8 | Q423==8 | Q322==8))
+replace eduuc_ci=. if aedu_ci==.
+label variable eduuc_ci "Universitaria completa o mas"
 
 **********
 *edus1i_ci*
 ***********
-gen edus1i_ci=0 if aedu_ci!=.
-replace edus1i_ci=1 if (aedu_ci>=7 & aedu_ci<9)& aedu_ci!=.
+gen edus1i_ci=(aedu_ci>=7 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
 ***********
 *edus1c_ci*
 ***********
-gen edus1c_ci=0 if aedu_ci!=.
-replace edus1c_ci=1 if aedu_ci==9 & aedu_ci!=.
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***********
 *edus2i_ci*
 ***********
-gen edus2i_ci=0 if aedu_ci!=.
-replace edus2i_ci=1 if aedu_ci==10 
+gen edus2i_ci=(aedu_ci==10) 
+replace edus2i_ci=. if aedu_ci==.  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***********
 *edus2c_ci*
 ***********
-gen edus2c_ci=0 if aedu_ci!=.
-replace edus2c_ci=1 if aedu_ci>=11 & aedu_ci!=.
+gen edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-**********
-*eduui_ci*
-**********
 
-gen eduui_ci=.
-label variable eduui_ci "Superior incompleto"
-
-
-**********
-*eduuc_ci*
-**********
-
-gen eduuc_ci=.
-
-
-************************
-***Educacion preescolar.
-************************
+*************
+***edupre_ci.
+**************
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
@@ -1241,53 +1278,48 @@ label variable edupre_ci "Educacion preescolar"
 gen byte asispre_ci=.
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
-
-***************************************************************************
-***Educación terciaria académica versus educación terciaria no-académica***
-***************************************************************************
+**********
+*eduac_ci*
+**********
 gen eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-***************************************************************************
-***Personas que actualmente asisten a centros de enseñanza.
-***************************************************************************
+***********
+*asiste_ci*
+***********
+
 gen asiste_ci=1 if Q21A==5
 replace asiste_ci=0 if asiste_ci==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
-
-***************************************************************************
-***Razones para no asistir a la escuela.***
-***************************************************************************
+*************
+*pqnoasis_ci*
+*************
 gen pqnoasis_ci=.
-label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
+label variable pqnoasis_ci "Razón por que no asiste a la escuela"
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+gen pqnoasis1_ci=.
 
-g       pqnoasis1_ci = .
-
-******************************************************
-*Personas que han repetido al menos un año o grado.***
-******************************************************
-
+***********
+*repite_ci*
+***********
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
-******************************************************
-***Personas que han repetido el ultimo grado.
-******************************************************
-
+**************
+*repiteult_ci*
+**************
 gen repiteult_ci=.
 label var repite_ci "Personas que han repetido el último grado"
 
-********************************************************
-***Personas que asisten a centros de enseñanza publicos.
-********************************************************
+***********
+*edupub_ci*
+***********
 gen edupub_ci=.
-label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 
 
 **********************************
@@ -1530,7 +1562,39 @@ label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 	*******************
 	gen vivialqimp_ch=.
 	label var vivialqimp_ch "Alquiler mensual imputado"
+	
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	
+	* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	**********************
+	****** miglac_ci *****
+	**********************
+    gen miglac_ci=.
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza

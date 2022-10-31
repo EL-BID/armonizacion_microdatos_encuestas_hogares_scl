@@ -1026,7 +1026,7 @@ label variable edusc_ci "Secundaria completa"
 **********
 *eduui_ci*
 **********
-gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 | q423!=8 | q322!=8))
+gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 & q423!=8 & q322!=8))
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 

@@ -1371,7 +1371,7 @@ gen vivialqimp_ch=.
 	***** miglac_ci ****
 	********************
 	gen miglac_ci  = .
-	label var miglac_ci "=1 si es migrante proveniente de un pais LAC, calculado sobre población migrante"
+	label var miglac_ci "=1 si es migrante de un pais LAC, calculado sobre población migrante"
 
 
 /*_____________________________________________________________________________________________________*/

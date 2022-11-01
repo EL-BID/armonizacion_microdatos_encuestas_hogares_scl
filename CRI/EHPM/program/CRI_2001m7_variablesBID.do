@@ -70,7 +70,7 @@ label value region_BID_c region_BID_c
 * Region_c *
 ************
 *Inclusión Mayra Sáenz - Abril 2014
-gen region_c=provinci
+gen region_c=provincia
 
 label define region_c  ///
 1	"San José" ///
@@ -1050,6 +1050,8 @@ gen byte aedu_ci=.
 
 replace aedu_ci=0 if b10==0 | b10==1 
 
+replace aedu_ci=. if b10==2 //Educacion Especial. Solo como check
+
 *Primaria
 replace aedu_ci=1 if b10==11 
 replace aedu_ci=2 if b10==12
@@ -1076,13 +1078,20 @@ replace aedu_ci=18 if b10==56
 replace aedu_ci=19 if b10==57
 replace aedu_ci=20 if b10==58
 
+// imputando valores perdidos con el valor maximo del anio anterior
+replace aedu_ci=0 if b10==19
+replace aedu_ci=6 if b10==29
+replace aedu_ci=6 if b10==39
+replace aedu_ci=11 if b10==49
+replace aedu_ci=11 if b10==59
+
 
 **************
 ***eduno_ci***
 **************
 
 gen byte eduno_ci=0
-replace eduno_ci=1 if b10==0 | b10==1 
+replace eduno_ci=1 if inlist(b10,0, 1, 19)
 label variable eduno_ci "Cero anios de educacion"
 
 **************
@@ -1090,7 +1099,7 @@ label variable eduno_ci "Cero anios de educacion"
 **************
 
 gen byte edupi_ci=0
-replace edupi_ci=1 if (b10>=11 & b10<16) 
+replace edupi_ci=1 if (b10>=11 & b10<16)
 label variable edupi_ci "Primaria incompleta"
 
 **************
@@ -1098,7 +1107,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 
 gen byte edupc_ci=0
-replace edupc_ci=1 if b10==16
+replace edupc_ci=1 if inlist(b10,16, 29, 39)
 label variable edupc_ci "Primaria completa"
 
 **************
@@ -1106,8 +1115,7 @@ label variable edupc_ci "Primaria completa"
 **************
 
 gen byte edusi_ci=0
-replace edusi_ci=1 if (b10>=21 & b10<=25) 
-replace edusi_ci=1 if (b10>=31 & b10<=35) 
+replace edusi_ci=1 if (b10>=21 & b10<=24) | (b10>=31 & b10<=35)
 label variable edusi_ci "Secundaria incompleta"
 
 **************
@@ -1115,7 +1123,7 @@ label variable edusi_ci "Secundaria incompleta"
 **************
 
 gen byte edusc_ci=0
-replace edusc_ci=1 if b10==36
+replace edusc_ci=1 if inlist(b10,25, 26, 36, 37, 49, 59)
 label variable edusc_ci "Secundaria completa"
 
 ***************
@@ -1123,8 +1131,7 @@ label variable edusc_ci "Secundaria completa"
 ***************
 
 gen byte edus1i_ci=0
-replace edus1i_ci=1 if (b10>=21 & b10<=22)
-replace edus1i_ci=1 if (b10>=31 & b10<=32)
+replace edus1i_ci=1 if inlist(b10,21, 22, 31, 32)
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
@@ -1140,8 +1147,7 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***************
 
 gen byte edus2i_ci=0
-replace edus2i_ci=1 if (b10>=24 & b10<=25)
-replace edus2i_ci=1 if (b10>=34 & b10<=35)
+replace edus2i_ci=1 if inlist(b10,24,34,35)
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
@@ -1149,7 +1155,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 
 gen byte edus2c_ci=0
-replace edus2c_ci=1 if b10==36
+replace edus2c_ci=1 if inlist(b10,25,26,36,37,49,59)
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
@@ -1157,7 +1163,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 
 gen byte eduui_ci=0
-replace eduui_ci=1 if (b10>=41 & b10<=44)
+replace eduui_ci=1 if (b10>=41 & b10<=42)
 replace eduui_ci=1 if (b10>=51 & b10<=54)
 label variable eduui_ci "Superior incompleto"
 
@@ -1166,7 +1172,7 @@ label variable eduui_ci "Superior incompleto"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if (b10>=55 & b10<=58)
+replace eduuc_ci=1 if b10==43 | (b10>=55 & b10<=58)
 label variable eduuc_ci "Superior completo"
 
 
@@ -1436,6 +1442,42 @@ gen vivialqimp_ch=.
 	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
 	label value ine02 ine02
 	label var ine02 "Segunda division politico-administrativa, Provincia"	
+	
+	
+	***************************
+	** VARIABLES ADICIONALES **
+	***************************
+	* Incluidas como missing por Juan Camilo Perdomo (jcamilop@iadb.org), dado que no se halló una forma para crecalas - 10/18/2022
+
+	*****************
+	** migrante_ci **
+	*****************
+	gen migrante_ci = .
+	label var migrante_ci "=1 si es migrante"
+
+	********************
+	** migantiguo5_ci **
+	********************
+	gen migantiguo5_ci = .
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+
+	********************
+	** migrantelac_ci **
+	********************
+	gen migrantelac_ci  = .
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	*********************
+	** migrantiguo5_ci **
+	*********************
+	gen migrantiguo5_ci = .
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas), calculado sobre población migrante"
+
+	********************
+	***** miglac_ci ****
+	********************
+	gen miglac_ci  = .
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC, calculado sobre población migrante"
 
 
 /*_____________________________________________________________________________________________________*/

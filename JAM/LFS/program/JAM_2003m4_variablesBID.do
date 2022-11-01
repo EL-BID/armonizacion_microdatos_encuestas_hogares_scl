@@ -102,6 +102,22 @@ label var region_c "División política, parroquias"
 ************
 gen ine01=  par
 
+label define ine01  ///
+           1 "Kingston" ///
+           2 "St Andrew" ///
+           3 "St Thomas" ///
+           4 "Portland" ///
+           5 "St Mary" ///
+           6 "St Ann" ///
+           7 "Trelawny" ///
+           8 "St James" ///
+           9 "Hanover" ///
+          10 "Westmoreland" ///
+          11 "St Elizabeth" ///
+          12 "Manchester" ///
+          13 "Clarendon" ///
+          14 "St Catherine"
+
 **************
 * Región BID *
 **************
@@ -125,6 +141,17 @@ label var idh_ch "ID del hogar"
 
 ren indiv idp_ci
 label var idp_ci "ID de la persona en el hogar"
+
+*************** 
+******upm_ci*****
+***************
+* JAM 2003 no tiene UPM
+gen upm_ci=. 
+
+*************
+* estrato_ci*
+**************
+gen estrato_ci=.
 
 
 ***************************
@@ -404,6 +431,7 @@ gen condocup_ci =.
 replace condocup_ci=1 if q21==1 | q21==2 |  q22==1  | q23==1
 replace condocup_ci=2 if condocup_ci!=1 & (((q22==2  | q23==2) & q21==3) | (q24==1 & (q25==1 | q25==2)))  
 replace condocup_ci=3 if (condocup_ci ~=1 & condocup_ci ~=2) & edad_ci>=14
+replace condocup_ci =. if q21==. & q22==. & q23==. & q24==. & q25==.
 replace condocup_ci=4 if edad_ci<14 
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
@@ -1136,31 +1164,31 @@ label var exam "Highest (academic) examination"
 **********
 *eduno_ci*
 **********
-
-gen eduno_ci=1 if aedu_ci==0
-replace eduno_ci=0 if aedu_ci>0 & aedu_ci!=.
+gen eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
+
 
 **********
 *edupi_ci*
 **********
-gen edupi_ci=0 if aedu_ci!=.
-replace edupi_ci=1 if (aedu_ci >=1 & aedu_ci<6)
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
 
 **********
 *edupc_ci*
 **********
-gen edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if edupc_ci==. & aedu_ci != .
+gen edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 **********
 *edusi_ci*
 **********
-gen edusi_ci=0 if aedu_ci!=.
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<11)
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 **********
@@ -1180,113 +1208,108 @@ replace edusc_ci=1 if (exam >=2 & exam<=7) & ((aedu_ci>=11)& aedu_ci!=.) & edusc
 replace edusc_ci=0 if (aedu_ci<11) & (edusc_ci == .)
 label variable edusc_ci "Secundaria completa"
 */
-gen edusc_ci=1 if aedu_ci>=11 & aedu_ci!=.
-replace edusc_ci=0 if aedu_ci<11
+gen edusc_ci=(aedu_ci==11)
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 
 **********
 *edus1i_ci*
 ***********
-gen edus1i_ci=0 if aedu_ci!=.
-replace edus1i_ci=1 if (aedu_ci>=7 & aedu_ci<9)& aedu_ci!=.
+gen edus1i_ci=(aedu_ci>=7 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
 ***********
 *edus1c_ci*
 ***********
-gen edus1c_ci=0 if aedu_ci!=.
-replace edus1c_ci=1 if aedu_ci==9 & aedu_ci!=.
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***********
 *edus2i_ci*
 ***********
-gen edus2i_ci=0 if aedu_ci!=.
-replace edus2i_ci=1 if aedu_ci==10 
+gen edus2i_ci=(aedu_ci==10) 
+replace edus2i_ci=. if aedu_ci==.  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***********
 *edus2c_ci*
 ***********
-gen edus2c_ci=0 if aedu_ci!=.
-replace edus2c_ci=1 if aedu_ci>=11 & aedu_ci!=.
+gen edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
+
 
 **********
 *eduui_ci*
 **********
+gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 & q423!=8 & q322!=8))
+replace eduui_ci=. if aedu_ci==.
+label variable eduui_ci "Universitaria incompleta"
 
-gen eduui_ci=.
-label variable eduui_ci "Superior incompleto"
 **********
 *eduuc_ci*
 **********
-/* Se podría considerar a los que respondieron degree, sin embargo, al evaluar esta variable con ese criterio se 
-evidencian individuos que no acaban ni la secundaria y responden degree.
+gen eduuc_ci=(q516==8 | q423==8 | q322==8)
+replace eduuc_ci=1 if aedu_ci>=14
+replace eduuc_ci=. if aedu_ci==.
+label variable eduuc_ci "Universitaria completa o mas"
 
-gen eduuc_ci=0 if aedu_ci!=.
-replace eduuc_ci=1 if exam == 8
-label variable eduuc_ci "Superior completo"
-*/
-
-gen eduuc_ci=.
-label variable eduuc_ci "Superior completo"
-
-
-************************
-***Educacion preescolar.
-************************
+***********
+*edupre_ci*
+***********
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************************************************************************
-***Educación terciaria académica versus educación terciaria no-académica***
-***************************************************************************
+************
+*asispre_ci*
+************
+gen byte asispre_ci=.
+label variable asispre_ci "Asistencia a Educacion preescolar"
+
+**********
+*eduac_ci*
+**********
 gen eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-***************************************************************************
-***Personas que actualmente asisten a centros de enseñanza.
-***************************************************************************
+*****************
+***asiste_ci.
+*****************
 gen asiste_ci=1 if q21==5
 replace asiste_ci=0 if asiste_ci==.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
-***************************************************************************
-***Razones para no asistir a la escuela.***
-***************************************************************************
+*************
+*pqnoasis_ci*
+*************
 gen pqnoasis_ci=.
-label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
+label variable pqnoasis_ci "Razón por que no asiste a la escuela"
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+gen pqnoasis1_ci=.
 
-g       pqnoasis1_ci = .
-
-******************************************************
-*Personas que han repetido al menos un año o grado.***
-******************************************************
-
+***********
+*repite_ci*
+***********
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
-******************************************************
-***Personas que han repetido el ultimo grado.
-******************************************************
-
+**************
+*repiteult_ci*
+**************
 gen repiteult_ci=.
 label var repite_ci "Personas que han repetido el último grado"
 
-********************************************************
-***Personas que asisten a centros de enseñanza publicos.
-********************************************************
+***********
+*edupub_ci*
+***********
 gen edupub_ci=.
-label var edupub_ci "Personas asisten a centros de enseñanza públicos"
-
-
 
 
 
@@ -1538,6 +1561,106 @@ fin encuesta lfs
 	*******************
 	gen vivialqimp_ch=.
 	label var vivialqimp_ch "Alquiler mensual imputado"
+	
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"essalud" 2"Privado" 3"entidad prestadora" 4"policiales" 5"sis" 6"universitario" 7"escolar privado" 8"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimas 4 semanas. 
+** En 2001 se preguntó por los últimos 3 meses, entonces no se consideró
+
+gen probsalud_ci=.
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+	
+	
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	
+	* Variables incluidas por SCL/MIG Juan Camilo Perdomo
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	**********************
+	****** miglac_ci *****
+	**********************
+    gen miglac_ci=.
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

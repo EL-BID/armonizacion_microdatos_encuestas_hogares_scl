@@ -962,6 +962,8 @@ gen byte aedu_ci=.
 
 replace aedu_ci=0 if b08==0 | b08==1 
 
+replace aedu_ci=. if b08==2 //Educacion Especial. Solo como check
+
 *Primaria
 replace aedu_ci=1 if b08==11 
 replace aedu_ci=2 if b08==12
@@ -987,6 +989,15 @@ replace aedu_ci=17 if b08==55
 replace aedu_ci=18 if b08==56
 replace aedu_ci=19 if b08==57
 replace aedu_ci=20 if b08==58
+
+
+// imputando valores perdidos con el valor maximo del anio anterior
+replace aedu_ci=0 if b08==19
+replace aedu_ci=6 if b08==29
+replace aedu_ci=6 if b08==39
+replace aedu_ci=11 if b08==49
+replace aedu_ci=11 if b08==59
+
 
 **************
 ***eduno_ci***
@@ -1430,7 +1441,8 @@ gen vivialqimp_ch=.
 	
 	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
 	label value ine02 ine02
-	label var ine02 "Segunda division politico-administrativa, Provincia"		
+	label var ine02 "Segunda division politico-administrativa, Provincia"	
+	
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

@@ -643,6 +643,7 @@ gen condocup_ci =.
 replace condocup_ci=1 if Q21==1 | Q21A==1 | Q21A==2 | Q21B==1 |  Q22==1  | Q23==1
 replace condocup_ci=2 if condocup_ci!=1 & (((Q21==2 | Q21B==2 |  Q22==2  | Q23==2) & Q21A==3) | (Q24==1 & (Q25==1 | Q25==2)))  
 replace condocup_ci=3 if (condocup_ci ~=1 & condocup_ci ~=2) & edad_ci>=14
+replace condocup_ci =. if Q21==. & Q22==. & Q23==. & Q24==. & Q25==.
 replace condocup_ci=4 if edad_ci<14 
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
@@ -1562,6 +1563,73 @@ gen edupub_ci=.
 	*******************
 	gen vivialqimp_ch=.
 	label var vivialqimp_ch "Alquiler mensual imputado"
+	
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"essalud" 2"Privado" 3"entidad prestadora" 4"policiales" 5"sis" 6"universitario" 7"escolar privado" 8"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimas 4 semanas. 
+** En 2001 se preguntó por los últimos 3 meses, entonces no se consideró
+
+gen probsalud_ci=.
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
 	
 
 ******************************

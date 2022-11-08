@@ -688,7 +688,6 @@ label variable ocupa_ci "Ocupacion laboral"
 *************
 destring c17, replace
 
-
 gen rama_ci=.
 replace rama_ci=1 if (c17>=1110 & c17<=5002) & emp_ci==1
 replace rama_ci=2 if (c17>=10101 & c17<=14292) &  emp_ci==1
@@ -697,8 +696,8 @@ replace rama_ci=4 if (c17>=40100 & c17<=41000) & emp_ci==1
 replace rama_ci=5 if (c17>=45100 & c17<=45500) & emp_ci==1
 replace rama_ci=6 if (c17>=50101 & c17<=55300) & emp_ci==1
 replace rama_ci=7 if (c17>=60100 & c17<=64203) & emp_ci==1
-replace rama_ci=8 if (c17>=65110 & c17<=70200) & emp_ci==1
-replace rama_ci=9 if (c17>=71111 & c17<=99999) & emp_ci==1
+replace rama_ci=8 if (c17>=65110 & c17<=74110) & emp_ci==1
+replace rama_ci=9 if (c17>=74120 & c17<=99000) & emp_ci==1
 
 
 

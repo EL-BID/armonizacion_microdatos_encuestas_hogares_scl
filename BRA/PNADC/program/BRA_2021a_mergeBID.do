@@ -46,7 +46,7 @@ Creation Date:    25 Jun 2019 - 10:57:54
 
 local pais BRA	
 local ano 2021
-local ronda t5
+local ronda a
 
 
 global input  "${surveysFolder}\survey\BRA\PNADC\\`ano'\\`ronda'\data_orig"
@@ -75,7 +75,7 @@ label var `i' `"`shortlabel'"'
 ==================================================*/
 
 compress
-save   "${output}\\`pais'_`ano'`ronda'_BID.dta", replace
+save   "${output}\\`pais'_`ano'`ronda'.dta", replace
 exit
 
 

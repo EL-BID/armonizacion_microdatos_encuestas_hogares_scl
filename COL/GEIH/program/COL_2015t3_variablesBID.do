@@ -882,20 +882,29 @@ la var subemp_ci "Personas en subempleo por horas"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+			
+***************
+***aedu_ci*****
+***************			
+
+/* Missing values para no sabe no responde en maximo nivel educativo y  
+   último anio aprobado. */			
     replace p6210s1=. if p6210s1==99
 	replace p6210=.   if p6210==9
+	replace p6220 = . if p6220 == 9
 	
 	g aedu_ci = . 
-	replace aedu_ci = 0 if p6210 == 1 | p6210 == 2 
-	replace aedu_ci = 0 if p6210 == 3 & p6210s1 == 0 
-
+* 0 anios de educacion 
+	replace aedu_ci = 0 if p6210 == 1 | p6210 == 2 // Ninguno o Prescolar.
+	replace aedu_ci = 0 if p6210 == 3 & p6210s1 == 0 // Primaria cero anios.
+	
 *Primaria
 	replace aedu_ci = 1 if p6210 == 3 & p6210s1 == 1
 	replace aedu_ci = 2 if p6210 == 3 & p6210s1 == 2
 	replace aedu_ci = 3 if p6210 == 3 & p6210s1 == 3
 	replace aedu_ci = 4 if p6210 == 3 & p6210s1 == 4
 	replace aedu_ci = 5 if p6210 == 3 & p6210s1 == 5
-	replace aedu_ci = 5 if p6210 == 4 & p6210s1 == 0
+	replace aedu_ci = 5 if p6210 == 4 & p6210s1 == 0 // 0 anios de secundaria
 
 *Secundaria
 	replace aedu_ci = 6  if p6210 == 4 & p6210s1 == 6
@@ -907,108 +916,129 @@ la var subemp_ci "Personas en subempleo por horas"
 	replace aedu_ci = 11 if p6210 == 6 & p6210s1 == 0
 	replace aedu_ci = 12 if p6210 == 5 & p6210s1 == 12
 	replace aedu_ci = 13 if p6210 == 5 & p6210s1 == 13
+
 *Superior
-	replace aedu_ci = 11+p6210s1 if p6210==6 
+	replace aedu_ci = 11 + p6210s1 if p6210 == 6 
+
+* Missing 
+	replace aedu_ci = . if p6210 ==. 
 
 **************
 ***eduno_ci***
 **************
-	g byte eduno_ci = aedu_ci == 0
+
+	g byte eduno_ci = (aedu_ci == 0)
+	replace eduno_ci = . if aedu_ci == .
 	la var eduno_ci "Sin educación"
 
 **************
 ***edupi_ci***
 **************
+
 	g byte edupi_ci = (aedu_ci >= 1 & aedu_ci < 5) 
+	replace edupi_ci = . if aedu_ci == .
 	la var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-	g byte edupc_ci = aedu_ci == 5 
+
+	g byte edupc_ci = (aedu_ci == 5) 
+	replace edupc_ci = . if aedu_ci == .
 	la var edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
+
 	g byte edusi_ci = (aedu_ci >= 6 & aedu_ci < 11) 
+	replace edusi_ci = . if aedu_ci == . 
 	la var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-	g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5
+
+	g byte edusc_ci = (aedu_ci == 11)
+	replace edusc_ci = . if aedu_ci == .
 	la var edusc_ci "Secundaria completa"
 
 **************
 ***eduui_ci***
 **************
-*Para la educación superior no es posible saber cuántos años dura el ciclo
-*por ello se hace una aproximación a través de titulación
-	g byte eduui_ci = (aedu_ci > 11 & aedu_ci!=. & p6210 == 6 & (p6220 == 1 | p6220 == 2))
+
+/* Se restringe por maximo nivel de titulacion alcanzado */
+	g byte eduui_ci = (aedu_ci > 11 & p6220 < 3)
+	replace eduui_ci = . if aedu_ci == .
 	la var eduui_ci "Superior incompleto"
 
 **************
 ***eduuc_ci***
 **************
-*Para la educación superior no es posible saber cuántos años dura el ciclo
-*por ello se hace una aproximación a través de titulación
-	g byte eduuc_ci = ((aedu_ci > 11 & aedu_ci!=.) & p6210 == 6 & (p6220 == 3 | p6220 == 4 | p6220 == 5))
+
+	g byte eduuc_ci = (aedu_ci > 11 & p6220 > 2)
+	replace eduuc_ci = . if aedu_ci == .
 	la var eduuc_ci "Superior completo"
 
 ***************
 ***edus1i_ci***
 ***************
+
 	g byte edus1i_ci = (aedu_ci >= 6 & aedu_ci < 9)
+	replace edus1i_ci = . if aedu_ci == .
 	la var edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-	g byte edus1c_ci = aedu_ci == 9
+
+	g byte edus1c_ci = (aedu_ci == 9)
+	replace edus1c_ci = . if aedu_ci == .
 	la var edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-	g byte edus2i_ci = aedu_ci == 10 
+
+	g byte edus2i_ci = (aedu_ci == 10) 
+	replace edus2i_ci = . if aedu_ci == .
 	la var edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-	g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6220 == 2
+
+	g byte edus2c_ci = (aedu_ci == 11)
+	replace edus2c_ci = . if aedu_ci == .
 	la var edus2c_ci "2do ciclo de la secundaria completo"
-
-
-	foreach i in no pi pc si sc ui uc s1i s1c s2i s2c {
-		replace edu`i'_ci = . if aedu_ci == .
-	}
 
 ***************
 ***edupre_ci***
 ***************
-	g byte edupre_ci =(p6210s1==1 & p6210==2)
-	la var edupre_ci "Educación preescolar"
+
+	g byte edupre_ci = .
+	la var edupre_ci "Educación preescolar" 
 
 ***************
 ***asispre_ci**
 ***************
-*Variable creada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if p6210s1==0 & p6210==2 & p6170==1
-	recode asispre_ci (.=0)
+
+	gen asispre_ci = (p6170 == 1 & p6210 == 2 & p6210s1 < 2)
 	la var asispre_ci "Asiste a educación prescolar"
 	
 **************
 ***eduac_ci***
 **************
+
+/* No se puede calcular ya que solo tenemos la diferenciacion para los 
+   que finalizaron cada nivel. */
 	g byte eduac_ci = .
 	la var eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
+
 	g asiste_ci = 1 if p6170 == 1
 	replace asiste_ci = 0 if p6170 == 2
 	la var asiste_ci "Asiste actualmente a la escuela"
@@ -1016,6 +1046,7 @@ la var subemp_ci "Personas en subempleo por horas"
 **************
 ***pqnoasis***
 **************
+
 	g pqnoasis_ci = .
 	la var pqnoasis_ci "Razones para no asistir a la escuela"
 	
@@ -1023,27 +1054,30 @@ la var subemp_ci "Personas en subempleo por horas"
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = .
+	g pqnoasis1_ci = .
 
 ***************
 ***repite_ci***
 ***************
+
 	g repite_ci = .
 	la var repite_ci "Ha repetido al menos un grado"
 
 ******************
 ***repiteult_ci***
 ******************
+
 	g repiteult_ci = .
 	la var repiteult "Ha repetido el último grado"
 
 ***************
 ***edupub_ci***
 ***************
-	g edupub_ci = 1 if p6175 == 1
-	replace edupub_ci = 0 if p6175 == 2
+
+	g edupub_ci = .
+	replace edupub_ci = 1 if (p6175 == 1 & p6170 == 1)
+	replace edupub_ci = 0 if (p6175 == 2 & p6170 == 1)
 	la var edupub_ci "Asiste a un centro de enseñanza público"
 
 		**********************************
@@ -1399,7 +1433,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

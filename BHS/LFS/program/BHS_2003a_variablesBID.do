@@ -548,7 +548,7 @@ label var spublico_ci "Personas que trabajan en el sector público"
 ***ocupa_ci***
 **************
 gen ocupa_ci=.
-replace ocupa_ci=1 if ((i_q31>=2111 & i_q31<=3522))& emp_ci==1
+replace ocupa_ci=1 if ((i_q31>=1329 & i_q31<=4113))& emp_ci==1
 replace ocupa_ci=2 if ((i_q31>=1110 & i_q31<=1439)) & emp_ci==1
 replace ocupa_ci=3 if ((i_q31>=4110 & i_q31<=4419))& emp_ci==1
 replace ocupa_ci=4 if ((i_q31>=5200 & i_q31<=5249) | (i_q31>=9110 & i_q31<=9113)) & emp_ci==1
@@ -829,35 +829,40 @@ gen aedu_ci = .
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= .
+gen byte eduno_ci=(i_q6==1)
+replace eduno_ci=. if i_q6==9
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 
-gen byte edupi_ci= .
+gen byte edupi_ci=(i_q6==2)
+replace eduno_ci=. if i_q6==9
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=.
+gen byte edupc_ci=(i_q6==3)
+replace eduno_ci=. if i_q6==9
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=.
+gen byte edusi_ci=(i_q6==4)
+replace eduno_ci=. if i_q6==9
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=.
+gen byte edusc_ci=(i_q6==5)
+replace eduno_ci=. if i_q6==9
 label variable edusc_ci "Secundaria completa"
 
 ***************

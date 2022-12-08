@@ -14,7 +14,7 @@ global ruta = "${surveysFolder}"
 local PAIS URY
 local ENCUESTA ECH
 local ANO "2021"
-local ronda s1 
+local ronda s2 
 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -31,10 +31,8 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Uruguay
 Encuesta: ECH
-Round: a
-Autores: Marcela G. Rubio
-Daniela Zuluaga E-mail: danielazu@iadb.org - Mayo de 2020
-Versión 2022: Nathalia Maya (SCL/GDI) - Junio 2022
+Round: s2
+Autores: Natalia Tosi - Diciembre de 2022
 
 
 							SCL/SCL - IADB
@@ -77,16 +75,20 @@ label value region_c region_c
 * region_BID_c *
 ****************
 gen region_BID_c=.
-replace region_BID_c=4 
+replace region_BID_c = 4 
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
 *1. Factor de expansión del hogar: 
-gen factor_ch=pesomen /* REVISAR, EN OTRAS VERSIONES ERA PESOANO*/
+
+gen fac_exp = w_sem/6 // w_sem es el ponderador semestral
+gen factor_ch = fac_exp 
+label var factor_ch "Factor de Expansion del Hogar"
+
 
 *2. Identificador del hogar
-gen idh_ch=numero
+gen idh_ch=id
 destring idh_ch, replace
 format idh_ch %13.0g
 
@@ -104,15 +106,15 @@ A partir de 2006 se incluye una muestra rural, sin embargo en 2006-2009 sólo se
  menos de 5000 habitantes como rural. Es decir, zona rural=interior con menos de 5000 habitantes y rural.*/
  
 gen zona_c=.
-replace zona_c=1 if region_4 == 1 | region_4 == 2
-replace zona_c=0 if region_4 == 3 | region_4 == 4
+replace zona_c=1 if (region_4 == 1 | region_4 == 2)
+replace zona_c=0 if (region_4 == 3 | region_4 == 4)
 
 label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 *5. País
-gen str3 pais_c="URY"
+gen str3 pais_c = "URY"
 
 *6. Anio de la encuesta
 gen anio_c=2021
@@ -124,9 +126,8 @@ gen mes_c=mes
 
 *8. Relación o parentesco con el jefe de hogar
 /*
-
 e30:
-           1 Jefe/a 
+           1 Referente del hogar
            2 Esposo/a o compañero/a 
            3 Hijo/a de ambos 
            4 Hijo/a solo del jefe/a 
@@ -140,32 +141,36 @@ e30:
           12 Otro pariente 
           13 Otro no pariente 
           14 Servicio doméstico o familiar del mismo
-
+		  
 */
 
-gen relacion_ci=.
-replace relacion_ci=1 if e30==1
-replace relacion_ci=2 if e30==2
-replace relacion_ci=3 if e30==4 | e30==5 | e30==3
-replace relacion_ci=4 if e30>=6 & e30<=12
-replace relacion_ci=5 if e30==13
-replace relacion_ci=6 if e30==14
+replace e30 ="" if (e30 == "NA")
+destring e30, replace
+
+gen relacion_ci =.
+replace relacion_ci = 1 if (e30 == 1)
+replace relacion_ci = 2 if (e30 == 2)
+replace relacion_ci = 3 if (e30 >= 3 & e30 <= 5)
+replace relacion_ci = 4 if (e30 >= 6 & e30 <= 12)
+replace relacion_ci = 5 if (e30 == 13)
+replace relacion_ci = 6 if (e30 == 14)
 label define relacion_ci 1 "Jefe" 2 "Conyuge" 3 "Hijo" 4 "Otros Parientes" 5 "Otros no Parientes" 6 "Servicio Domestico"
 label values relacion_ci relacion_ci
 
 *9. Factor de expansión a nivel individual
 
-gen factor_ci=pesomen /* REVISAR, EN OTRAS VERSIONES ERA PESOANO*/
+gen factor_ci = fac_exp
+label var factor_ci "Factor de Expansion del Individuo"
 
 	***************
 	***upm_ci***
 	***************
-gen upm_ci=loc_agr_13
+gen upm_ci =.
+
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=estred13
-
+gen estrato_ci = estred13
 
 
 *10. Sexo
@@ -175,10 +180,11 @@ e26	1	Hombre
 	2	Mujer
 */
 
-gen sexo_ci=e26
+gen sexo_ci = e26
 label var sexo_ci "Sexo del Individuo"
 label define sexo_ci 1 "Hombre" 2 "Mujer"
 label value sexo_ci sexo_ci
+
 
 *11. Edad
 
@@ -186,30 +192,30 @@ label value sexo_ci sexo_ci
 e27	Años	Años cumplidos
 */
 
-gen edad_ci= e27
+gen edad_ci = e27
 label var edad_ci "Edad del Individuo"
 
 
-*12. Estado civil --> PARA ESTE AÑO NO SE ENCUENTRA LA VARIABLE
-
+*12. Estado civil
 
 *Modificado por SCGR - Abril 2017
-/*Unión formal o informal*
-gen civil_ci=2 		if e33==1
-replace civil_ci=1  if e36==5 & e33==2
-replace civil_ci=3  if (e36==1 | e36==2 | e36==3) & e33==2
-replace civil_ci=4 	if (e36==4 | e36==6) & e33==2
+/*Unión formal o informal* */
+
+gen civil_ci = 2 	if (e33 == 1)
+replace civil_ci = 1  if (e36 == 5 & e33 == 2)
+replace civil_ci = 3  if ((e36 == 1 | e36 == 2 | e36 == 3) & e33 == 2)
+replace civil_ci = 4  if ((e36 == 4 | e36 == 6) & e33 == 2)
 
 label var civil_ci "Estado Civil"
 label define civil_ci 1 "Soltero" 2 "Union Formal o Informal" 3 "Divorciado o Separado" 4 "Viudo"
 label value civil_ci civil_ci
 
-*/
+
 **************
 ***jefe_ci***
 *************
 
-gen jefe_ci=(relacion_ci==1)
+gen jefe_ci = (relacion_ci == 1)
 label variable jefe_ci "Jefe de hogar"
 
 
@@ -217,7 +223,7 @@ label variable jefe_ci "Jefe de hogar"
 ***nconyuges_ch***
 ******************
 
-by idh_ch, sort: egen nconyuges_ch=sum(relacion_ci==2)
+by idh_ch, sort: egen nconyuges_ch = sum(relacion_ci==2)
 label variable nconyuges_ch "Numero de conyuges"
 
 ***************
@@ -321,6 +327,7 @@ gen miembros_ci=(relacion_ci<5)
 label variable miembros_ci "Miembro del hogar" 
 									
 
+									
 *******************************************************
 ***           VARIABLES DE DIVERSIDAD               ***
 *******************************************************				
@@ -331,14 +338,19 @@ label variable miembros_ci "Miembro del hogar"
 	***************
 **Pregunta: ¿Cree tener ascendencia...? ¿Cuál considera principal de las declaradas?:(e29_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
 **En Uruguay puedes reportar más de una identidad pero la pregunta e29_6 pregunta cuál es la identidad principal. 
-gen afroind_ci=. 
-replace afroind_ci=1 if e29_6 == 4
-replace afroind_ci=2 if e29_6 == 1 
-replace afroind_ci=3 if e29_6 == 2 | e29_6 == 3 | e29_6 == 5
-replace afroind_ci=. if e29_6 ==.
+
+gen afroind_ci =. 
+replace afroind_ci = 1 if (e29_6 == 4)
+replace afroind_ci = 2 if (e29_6 == 1)
+replace afroind_ci = 3 if (e29_6 == 2 | e29_6 == 3 | e29_6 == 5)
+replace afroind_ci =. if (e29_6 ==.)
+label variable afroind_ci "Identificación étnica o racial"
+label define afroind_ci 1"Indígena" 2"Afrodesendiente" 3"Otros"
+label value afroind_ci afroind_ci
 
 	***************
 	*** afroind_ch ***
+	
 	***************
 gen afroind_jefe= afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
@@ -379,9 +391,6 @@ label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor que 14"
 label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 
-tab f106 f107
-
-tab condocup_ci [iw=factor_ci]
 
 ************
 ***emp_ci***
@@ -402,9 +411,9 @@ gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 
 *********
-*lp_ci*** /*REVISAR POR QUÉ SE ASIGNA LA LP DEL MES ANTERIOR*/
+*lp_ci***
 *********
-*http://www.ine.gub.uy/documents/10181/30913/Estimaci%C3%B3n+de+la+pobreza+por+el+m%C3%A9todo+de+ingreso+2019/c0c832b4-7e5c-4c2a-92e9-7ea69a75e92a
+*https://www3.ine.gub.uy/boletin/informe_pobreza_2021.html
 
 gen lp_ci =.
 replace lp_ci =  11719 if mes==1 & region_3==1
@@ -413,7 +422,7 @@ replace lp_ci =  12216 if mes==3 & region_3==1
 replace lp_ci =  12285 if mes==4 & region_3==1
 replace lp_ci =  12337 if mes==5 & region_3==1
 replace lp_ci =  12391 if mes==6 & region_3==1
-replace lp_ci =  12480 if mes==7 & region_3==1
+replace lp_ci =  12480	 if mes==7 & region_3==1
 replace lp_ci =  12551 if mes==8 & region_3==1
 replace lp_ci =  12655 if mes==9 & region_3==1
 replace lp_ci =  12685 if mes==10 & region_3==1
@@ -432,23 +441,24 @@ replace lp_ci =   6972 if mes==8 & region_3==2
 replace lp_ci =   7029 if mes==9 & region_3==2
 replace lp_ci =   7050 if mes==10 & region_3==2
 replace lp_ci =   7083 if mes==11 & region_3==2
-replace lp_ci =   7116 if mes==12 & region_3==2
+replace lp_ci =   7116	 if mes==12 & region_3==2
 
 
 replace lp_ci =   3572 if mes==1 & region_3==3
 replace lp_ci =   3679 if mes==2 & region_3==3
-replace lp_ci =   3707 if mes==3 & region_3==3
-replace lp_ci =   3727 if mes==4 & region_3==3
+replace lp_ci =   3707	 if mes==3 & region_3==3
+replace lp_ci =   3727	 if mes==4 & region_3==3
 replace lp_ci =   3739 if mes==5 & region_3==3
 replace lp_ci =   3750 if mes==6 & region_3==3
 replace lp_ci =   3784 if mes==7 & region_3==3
-replace lp_ci =   3812 if mes==8 & region_3==3
+replace lp_ci =   3812	 if mes==8 & region_3==3
 replace lp_ci =   3851 if mes==9 & region_3==3
-replace lp_ci =   3862 if mes==10 & region_3==3
+replace lp_ci =   3862	 if mes==10 & region_3==3
 replace lp_ci =   3889 if mes==11 & region_3==3
 replace lp_ci =   3912 if mes==12 & region_3==3
 
 label var lp_ci "Linea de pobreza oficial del pais"
+
 
 *********
 *lpe_ci***

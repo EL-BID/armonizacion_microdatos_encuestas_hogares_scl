@@ -416,46 +416,46 @@ replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 *https://www3.ine.gub.uy/boletin/informe_pobreza_2021.html
 
 gen lp_ci =.
-replace lp_ci =  11719 if mes==1 & region_3==1
-replace lp_ci =  12114 if mes==2 & region_3==1
-replace lp_ci =  12216 if mes==3 & region_3==1
-replace lp_ci =  12285 if mes==4 & region_3==1
-replace lp_ci =  12337 if mes==5 & region_3==1
-replace lp_ci =  12391 if mes==6 & region_3==1
-replace lp_ci =  12480	 if mes==7 & region_3==1
-replace lp_ci =  12551 if mes==8 & region_3==1
-replace lp_ci =  12655 if mes==9 & region_3==1
-replace lp_ci =  12685 if mes==10 & region_3==1
-replace lp_ci =  12761 if mes==11 & region_3==1
-replace lp_ci =  12831 if mes==12 & region_3==1
+replace lp_ci =  11719 if mes==1 & region==1
+replace lp_ci =  12114 if mes==2 & region==1
+replace lp_ci =  12216 if mes==3 & region==1
+replace lp_ci =  12285 if mes==4 & region==1
+replace lp_ci =  12337 if mes==5 & region==1
+replace lp_ci =  12391 if mes==6 & region==1
+replace lp_ci =  12480	 if mes==7 & region==1
+replace lp_ci =  12551 if mes==8 & region==1
+replace lp_ci =  12655 if mes==9 & region==1
+replace lp_ci =  12685 if mes==10 & region==1
+replace lp_ci =  12761 if mes==11 & region==1
+replace lp_ci =  12831 if mes==12 & region==1
 
 
-replace lp_ci =   6458 if mes==1 & region_3==2
-replace lp_ci =   6762 if mes==2 & region_3==2
-replace lp_ci =   6806 if mes==3 & region_3==2
-replace lp_ci =   6835 if mes==4 & region_3==2
-replace lp_ci =   6852 if mes==5 & region_3==2
-replace lp_ci =   6870 if mes==6 & region_3==2
-replace lp_ci =   6932 if mes==7 & region_3==2
-replace lp_ci =   6972 if mes==8 & region_3==2
-replace lp_ci =   7029 if mes==9 & region_3==2
-replace lp_ci =   7050 if mes==10 & region_3==2
-replace lp_ci =   7083 if mes==11 & region_3==2
-replace lp_ci =   7116	 if mes==12 & region_3==2
+replace lp_ci =   6458 if mes==1 & region==2
+replace lp_ci =   6762 if mes==2 & region==2
+replace lp_ci =   6806 if mes==3 & region==2
+replace lp_ci =   6835 if mes==4 & region==2
+replace lp_ci =   6852 if mes==5 & region==2
+replace lp_ci =   6870 if mes==6 & region==2
+replace lp_ci =   6932 if mes==7 & region==2
+replace lp_ci =   6972 if mes==8 & region==2
+replace lp_ci =   7029 if mes==9 & region==2
+replace lp_ci =   7050 if mes==10 & region==2
+replace lp_ci =   7083 if mes==11 & region==2
+replace lp_ci =   7116	 if mes==12 & region==2
 
 
-replace lp_ci =   3572 if mes==1 & region_3==3
-replace lp_ci =   3679 if mes==2 & region_3==3
-replace lp_ci =   3707	 if mes==3 & region_3==3
-replace lp_ci =   3727	 if mes==4 & region_3==3
-replace lp_ci =   3739 if mes==5 & region_3==3
-replace lp_ci =   3750 if mes==6 & region_3==3
-replace lp_ci =   3784 if mes==7 & region_3==3
-replace lp_ci =   3812	 if mes==8 & region_3==3
-replace lp_ci =   3851 if mes==9 & region_3==3
-replace lp_ci =   3862	 if mes==10 & region_3==3
-replace lp_ci =   3889 if mes==11 & region_3==3
-replace lp_ci =   3912 if mes==12 & region_3==3
+replace lp_ci =   3572 if mes==1 & region==3
+replace lp_ci =   3679 if mes==2 & region==3
+replace lp_ci =   3707	 if mes==3 & region==3
+replace lp_ci =   3727	 if mes==4 & region==3
+replace lp_ci =   3739 if mes==5 & region==3
+replace lp_ci =   3750 if mes==6 & region==3
+replace lp_ci =   3784 if mes==7 & region==3
+replace lp_ci =   3812	 if mes==8 & region==3
+replace lp_ci =   3851 if mes==9 & region==3
+replace lp_ci =   3862	 if mes==10 & region==3
+replace lp_ci =   3889 if mes==11 & region==3
+replace lp_ci =   3912 if mes==12 & region==3
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -464,44 +464,44 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 gen lpe_ci =.
-replace lpe_ci =   4186 if mes==1 & region_3==1
-replace lpe_ci =   4210 if mes==2 & region_3==1
-replace lpe_ci =   4235 if mes==3 & region_3==1
-replace lpe_ci =   4255 if mes==4 & region_3==1
-replace lpe_ci =   4292 if mes==5 & region_3==1
-replace lpe_ci =   4332 if mes==6 & region_3==1
-replace lpe_ci =   4351 if mes==7 & region_3==1
-replace lpe_ci =   4370 if mes==8 & region_3==1
-replace lpe_ci =   4401 if mes==9 & region_3==1
-replace lpe_ci =   4426 if mes==10 & region_3==1
-replace lpe_ci =   4500 if mes==11 & region_3==1
-replace lpe_ci =   4471 if mes==12 & region_3==1
+replace lpe_ci =   4186 if mes==1 & region==1
+replace lpe_ci =   4210 if mes==2 & region==1
+replace lpe_ci =   4235 if mes==3 & region==1
+replace lpe_ci =   4255 if mes==4 & region==1
+replace lpe_ci =   4292 if mes==5 & region==1
+replace lpe_ci =   4332 if mes==6 & region==1
+replace lpe_ci =   4351 if mes==7 & region==1
+replace lpe_ci =   4370 if mes==8 & region==1
+replace lpe_ci =   4401 if mes==9 & region==1
+replace lpe_ci =   4426 if mes==10 & region==1
+replace lpe_ci =   4500 if mes==11 & region==1
+replace lpe_ci =   4471 if mes==12 & region==1
 
-replace lpe_ci =   3876 if mes==1 & region_3==2
-replace lpe_ci =   3900 if mes==2 & region_3==2
-replace lpe_ci =   3902 if mes==3 & region_3==2
-replace lpe_ci =   3935 if mes==4 & region_3==2
-replace lpe_ci =   3964 if mes==5 & region_3==2
-replace lpe_ci =   3992 if mes==6 & region_3==2
-replace lpe_ci =   4012 if mes==7 & region_3==2
-replace lpe_ci =   4021 if mes==8 & region_3==2
-replace lpe_ci =   4054 if mes==9 & region_3==2
-replace lpe_ci =   4083 if mes==10 & region_3==2
-replace lpe_ci =   4162 if mes==11 & region_3==2
-replace lpe_ci =   4125 if mes==12 & region_3==2
+replace lpe_ci =   3876 if mes==1 & region==2
+replace lpe_ci =   3900 if mes==2 & region==2
+replace lpe_ci =   3902 if mes==3 & region==2
+replace lpe_ci =   3935 if mes==4 & region==2
+replace lpe_ci =   3964 if mes==5 & region==2
+replace lpe_ci =   3992 if mes==6 & region==2
+replace lpe_ci =   4012 if mes==7 & region==2
+replace lpe_ci =   4021 if mes==8 & region==2
+replace lpe_ci =   4054 if mes==9 & region==2
+replace lpe_ci =   4083 if mes==10 & region==2
+replace lpe_ci =   4162 if mes==11 & region==2
+replace lpe_ci =   4125 if mes==12 & region==2
 
-replace lpe_ci =  3484 if mes==1 & region_3==3
-replace lpe_ci =  3504 if mes==2 & region_3==3
-replace lpe_ci =  3506 if mes==3 & region_3==3
-replace lpe_ci =  3535 if mes==4 & region_3==3
-replace lpe_ci =  3559 if mes==5 & region_3==3
-replace lpe_ci =  3584 if mes==6 & region_3==3
-replace lpe_ci =  3601 if mes==7 & region_3==3
-replace lpe_ci =  3606 if mes==8 & region_3==3
-replace lpe_ci =  3630 if mes==9 & region_3==3
-replace lpe_ci =  3654 if mes==10 & region_3==3
-replace lpe_ci =  3728 if mes==11 & region_3==3
-replace lpe_ci =  3690 if mes==12 & region_3==3
+replace lpe_ci =  3484 if mes==1 & region==3
+replace lpe_ci =  3504 if mes==2 & region==3
+replace lpe_ci =  3506 if mes==3 & region==3
+replace lpe_ci =  3535 if mes==4 & region==3
+replace lpe_ci =  3559 if mes==5 & region==3
+replace lpe_ci =  3584 if mes==6 & region==3
+replace lpe_ci =  3601 if mes==7 & region==3
+replace lpe_ci =  3606 if mes==8 & region==3
+replace lpe_ci =  3630 if mes==9 & region==3
+replace lpe_ci =  3654 if mes==10 & region==3
+replace lpe_ci =  3728 if mes==11 & region==3
+replace lpe_ci =  3690 if mes==12 & region==3
 
 label var lpe_ci "Linea de indigencia oficial del pais"
 
@@ -563,8 +563,12 @@ drop msp iamc spm hpm bps
 ****************
 *tipopen_ci*****
 ****************
-gen tipopen_ci=.
+gen tipopen_ci = f125
+replace tipopen_ci =. if f125 == 0
+label define tipopen_ci 1"vejez" 2"fallecimiento" 3"invalidez" 4"extranjero" 5"victima" 6"hijos de fallecidos por violencia doméstica" 7"pensión especial reparatoria" 8"pensión reparatoria personas trans"
 label var tipopen_ci "Tipo de pension - variable original de cada pais" 
+label value tipopen_ci tipopen_ci
+
 
 ****************
 *instpen_ci*****
@@ -604,8 +608,13 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 **pension_ci*
 *************
 *Alvaro, mayo 2019, incluí ingresos por jubilación AFAP (g148_#_12). 
-egen aux1=rowtotal(g148_1_1 g148_1_2 g148_1_3 g148_1_4 g148_1_5 g148_1_6 g148_1_7 g148_1_8 g148_1_9 g148_1_12), mis /*Se excluyen pensiones recibidas del exterior*/
-egen aux2=rowtotal(g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12), mis /*Se excluyen pensiones recibidas del exterior*/
+* Missing g148_1_4 *
+egen aux1 = rowtotal(g148_1_1 g148_1_2 g148_1_3 g148_1_5 g148_1_6 g148_1_7 g148_1_8 g148_1_9 g148_1_12 g148_1_10), mis /*Se excluyen pensiones recibidas del exterior (g148_1_11)*/
+
+
+* Missing g148_2_4 *
+egen aux2 = rowtotal(g148_2_1 g148_2_2 g148_2_3 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12 g148_2_10), mis /*Se excluyen pensiones recibidas del exterior (g148_2_11)*/
+
 
 * MGR, Aug 2015: correción en sintáxis, se generaba como el 100%
 egen ypension = rowtotal(aux1 aux2), missing
@@ -616,7 +625,6 @@ label var pension_ci "1=Recibe pension contributiva"
 *************
 *ypen_ci*
 *************
-
 
 * Cambio MGD 07/2015:mal generada, hay que sumar
 recode aux1 aux2 (0=.)
@@ -660,7 +668,11 @@ replace horaspri_ci=. if f85==99 | emp_ci==0
 
 *28. Horas totales trabajadas en todas las actividades
 
-gen horastot_ci=f85+f98
+replace f98 = "" if (f98 == "NA")
+destring f98, replace
+
+gen horastot_ci = (f85 + f98)
+
 
 *64. Trabajadores sub-empleados: personas dispuestas a trabajar más pero trabajan 30 horas a la semana o menos
 
@@ -679,24 +691,25 @@ replace tiempoparc_ci=. if emp_ci==0
 /*
 f73	1	Asalariado/a privado/a
 	2	Asalariado/a público/a
-	3	Miembro de cooperativa de producción
+	3	Miembro de cooperativa de producción o trabajo
 	4	Patrón/a
-	5	Cuenta propia sin local ni inversión
-	6	Cuenta propia con local o inversión
+	9	Cuenta propia
 	7	Miembro del hogar no remunerado
 	8	Trabajador/a de un programa social de empleo
 
 */
 
-gen categopri_ci=1 	if f73==4
-replace categopri_ci=2 	if f73==5 | f73==6 | f73==3
-replace categopri_ci=3 	if f73==1 | f73==2 | f73==8
-replace categopri_ci=4 	if f73==7 
-replace categopri_ci=. 	if emp_ci!=1
+gen categopri_ci = 1 	if (f73 == 4)
+replace categopri_ci = 2 	if (f73 == 3 | f73 == 9)
+replace categopri_ci = 3 	if (f73 == 1 | f73 == 2 | f73 == 8)
+replace categopri_ci = 4 	if (f73 == 7) 
+replace categopri_ci =. 	if (emp_ci != 1 | f73 == 0)
+
 /*
 *Modificación MLO
 replace categopri_ci=0 if f73==8 & condocup_ci==1
 */
+
 label define categopri_ci 1"Patron" 2"Cuenta propia" 
 label define categopri_ci 3"Empleado" 4"No remunerado", add
 label value categopri_ci categopri_ci
@@ -707,18 +720,21 @@ label variable categopri_ci "Categoria ocupacional trabajo principal"
 /*
 f92	1	Asalariado/a privado/a
 	2	Asalariado/a público/a
-	3	Miembro de cooperativa de producción
+	3	Miembro de cooperativa de producción o trabajo
 	4	Patrón/a
-	5	Cuenta propia sin local ni inversión
-	6	Cuenta propia con local o inversión
+	9	Cuenta propia
 	7	Miembro del hogar no remunerado
+	8	Trabajador/a de un programa social de empleo
+
 
 */
 
-gen categosec_ci=1 if f92==4
-replace categosec_ci=2 if f92==5 | f92==6 | f92==3
-replace categosec_ci=3 if f92==1 | f92==2 | f92==8
-replace categosec_ci=4 if f92==7 
+gen categosec_ci = 1 if (f92 == 4)
+replace categosec_ci = 2 if (f92 == 9 | f92 == 3)
+replace categosec_ci = 3 if (f92 == 1 | f92 == 2 | f92 == 8)
+replace categosec_ci = 4 if (f92 == 7) 
+replace categopri_ci =. if (f92 == 0)
+
 label define categosec_ci 1"Patron" 2"Cuenta propia" 
 label define categosec_ci 3"Empleado" 4" No remunerado", add
 label value categosec_ci categosec_ci
@@ -727,8 +743,12 @@ label variable categosec_ci "Categoria ocupacional trabajo principal"
 
 *70. Número de empleos
 
-gen nempleos_ci=1 if f70==1
-replace nempleos_ci=2 if f70>1 & f70!=.
+replace f70 = "" if (f70 == "NA")
+destring f70, replace
+
+gen nempleos_ci = 1 if f70 == 1
+replace nempleos_ci = 2 if f70 > 1 & f70 !=.
+
 
 *71. Trabajadores formales
 
@@ -743,12 +763,13 @@ TAMAÑO  DE LA EMPRESA 	f77
 
 *72. Personas que trabajan en el sector público
 
-gen spublico_ci=(emp_ci==1 & f73==2)
-replace spublico =. if emp_ci==.
+gen spublico_ci = (emp_ci == 1 & f73 == 2)
+replace spublico =. if emp_ci ==.
 
 * Modificacion MGD 07/15/2014: mal generada la variable, se dejaban de  lado categorias.
 *Genera la variable para empresas pequeñas
-gen tamemp_ci=1 if f77==1 | f77==2 
+
+gen tamemp_ci = 1 if (f77 == 1 | f77 == 2) 
 label var  tamemp_ci "Tamaño de Empresa" 
 *Empresas medianas
 replace tamemp_ci=2 if f77==3 | f77==6 | f77==7
@@ -1148,7 +1169,9 @@ g148_2_11 = g148_2_c pensiones recibido de otro pais
 g148_2_12 = g148_2_a pensiones recibido de AFAP
 */
 
-egen ynlm_ci=rsum(inghog transf g148_1_1 g148_1_2  g148_1_3 g148_1_4  g148_1_5  g148_1_6  g148_1_7  g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1 g148_2_2 g148_2_3 g148_2_4 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12 g148_2_10 g148_2_11 g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2 g154_1 )
+egen ynlm_ci = rsum(inghog transf g148_1_1 g148_1_2  g148_1_3 g148_1_4  g148_1_5  g148_1_6  g148_1_7  g148_1_8  g148_1_9  g148_1_12 g148_1_10 g148_1_11 g148_2_1 g148_2_2 g148_2_3 g148_2_5 g148_2_6 g148_2_7 g148_2_8 g148_2_9 g148_2_12 g148_2_10 g148_2_11 g148_3 g148_4 g148_5_1 g148_5_2 g153_1 g153_2 g154_1 )
+* Missing g148_2_4 
+
 
 *40. Ingreso no laboral no monetario
 

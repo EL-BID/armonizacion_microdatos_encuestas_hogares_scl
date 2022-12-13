@@ -864,11 +864,9 @@ replace durades_ci=. if f116==2
 *****************
 **antiguedad_ci**
 *****************
-/* VARIABLE F88_1 Y F88_2 CON N/A
-gen antigenanio = f88_1/12
-egen antiguedad_ci=rowtotal(antigenanio  f88_2)
-recode antiguedad_ci 0=. if condocup_ci !=1
-	*/
+
+gen antiguedad_ci =.
+
 *********************************************************************************************************
 *                                       INGRESOS                                                        *
 *********************************************************************************************************
@@ -1639,6 +1637,8 @@ gen cel_ch = 1 if (cel >= 1 & cel !=.)
 replace cel_ch = 0 if (cel == 0)
 */
 
+gen cel_ch =.
+
 *118. Tipo de vivienda en la que reside el hogar
 
 gen vivi1_ch = 1 if (c1 == 1)
@@ -1881,7 +1881,7 @@ lab val grupo_int grupo_int
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
-categoinac_ci nempleos_ci emp_ci desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
+categoinac_ci nempleos_ci emp_ci antiguedad_ci desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///
 formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension_ci tipopen_ci instpen_ci	ylmpri_ci nrylmpri_ci ///
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///

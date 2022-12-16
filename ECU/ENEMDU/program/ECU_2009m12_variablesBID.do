@@ -942,14 +942,8 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	*************
 	
 	drop aedu_ci  
-	
 	/* 
-	Chequear: Debe haber un error en la base m12 ya que figura aedu_ci 
-	como variable este anio. 
-	
-	A su vez en 2008 y 2006 no figuran nombres originales de algunas variables
-	como p10a p10b p07 entre otras. 
-	*/
+	Chequear: En la base m12 ya figura aedu_ci como variable este anio. */
 	
  	gen aedu_ci = . 
 	replace aedu_ci = 0 if nivinst == 1 | nivinst == 2 | nivinst == 3 // Ninguno, jardin o centro alf.

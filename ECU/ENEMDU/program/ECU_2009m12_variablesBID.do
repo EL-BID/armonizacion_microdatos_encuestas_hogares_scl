@@ -940,11 +940,7 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	*************
 	***aedu_ci***
 	*************
-	
-	drop aedu_ci  
-	/* 
-	Chequear: En la base m12 ya figura aedu_ci como variable este anio. */
-	
+		
  	gen aedu_ci = . 
 	replace aedu_ci = 0 if nivinst == 1 | nivinst == 2 | nivinst == 3 // Ninguno, jardin o centro alf.
 	replace aedu_ci = anoinst if nivinst == 4 // Anios primaria. 

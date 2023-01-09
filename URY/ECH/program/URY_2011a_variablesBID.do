@@ -1633,7 +1633,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & e51_8<4) & (aedu_ci>12 & e51_10<3) & (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
+gen byte eduui_ci=(aedu_ci>12 & e51_8<4) | (aedu_ci>12 & e51_10<3) | (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 

@@ -557,11 +557,11 @@ label var spublico_ci "Personas que trabajan en el sector público"
 gen ocupa_ci=.
 replace ocupa_ci=1 if ((i_q31>=2111 & i_q31<=3522))& emp_ci==1
 replace ocupa_ci=2 if ((i_q31>=1110 & i_q31<=1439)) & emp_ci==1
-replace ocupa_ci=3 if ((i_q31>=4110 & i_q31<=4419))& emp_ci==1
+replace ocupa_ci=3 if ((i_q31>=4110 & i_q31<=4211))& emp_ci==1
 replace ocupa_ci=4 if ((i_q31>=5200 & i_q31<=5249) | (i_q31>=9110 & i_q31<=9113)) & emp_ci==1
-replace ocupa_ci=5 if ((i_q31>=5110 & i_q31<=5169) | (i_q31>=5310 & i_q31<=5419) | (i_q31>=9120 & i_q31<=9162) | (i_q31>=9500 & i_q31<=9711)) & emp_ci==1
+replace ocupa_ci=5 if ((i_q31>=5110 & i_q31<=5169) | (i_q31>=5310 & i_q31<=5419) | (i_q31>=9120 & i_q31<=9131)) & emp_ci==1
 replace ocupa_ci=6 if ((i_q31>=6110 & i_q31<=6349) | (i_q31>=9211 & i_q31<=9214)) & emp_ci==1
-replace ocupa_ci=7 if ((i_q31>=7111 & i_q31<=8350) | (i_q31>=9310 & i_q31<=9414))& emp_ci==1
+replace ocupa_ci=7 if ((i_q31>=7111 & i_q31<=8322))& emp_ci==1
 
 label define ocupa_ci  1 "profesional y tecnico" 2"director o funcionario sup" 3"administrativo y nivel intermedio"
 label define ocupa_ci  4 "comerciantes y vendedores" 5 "en servicios" 6 "trabajadores agricolas", add

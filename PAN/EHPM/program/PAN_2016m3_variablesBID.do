@@ -1026,221 +1026,230 @@ gen vivialq_ch=v1b_pago_m
 
 gen vivialqimp_ch=v1c_pagari
 
-******************************************************************************
-*	EDUCATION
-******************************************************************************
-
 ******************************
-*	aedu_ci
+********* EDUCATION **********
 ******************************
 
-/*
-generat grado=p6-10 if p6>=11 & p6<=16
-replace grado=p6-20 if p6>=21 & p6<=26
-replace grado=p6-30 if p6>=31 & p6<=33
-replace grado=p6-40 if p6>=41 & p6<=49
-replace grado=p6-50 if p6>=51 & p6<=53
+* Labels
 
-replace grado=p6-60 if p6>=61 & p6<=63
-replace grado=p6-70 if p6>=71 & p6<=73
-replace grado=p6-80 if p6>=81 & p6<=84
-replace grado=0 if p6==60
+lab var p5 "Asiste a la Escuela ?"
+lab def p5 1 "Sí" 2 "No"
+lab val p5 p5
+lab var p5_tipo "Que tipo de Escuela"
+lab def p5_tipo 3 "Pública" 4 "Privada"
+lab val p5_tipo p5_tipo
+lab var p6 "Qué grado aprobó?"
+lab var p7 "Sabe leer y escribir?"
+lab def p7 1 "Sí" 2 "No"
+lab val p7 p7
+lab var p7b "Ha repetido algún grado?"
+lab def p7b 1 "Sí" 2 "No" 3 "Nunca ha asistido"
+lab val p7b p7b
 
-gen nivel=0 if p6==60
-replace nivel=1 if p6>=11 & p6<=16
-replace nivel=2 if p6>=21 & p6<=26
-replace nivel=3 if p6>=31 & p6<=33
-replace nivel=4 if p6>=41 & p6<=49
-replace nivel=5 if p6>=51 & p6<=53
+*************
+***aedu_ci***
+*************
 
-replace nivel=6 if p6>=61 & p6<=84
-gen aedu_ci=0            if nivel==0 
-replace aedu_ci=grado    if nivel==1
-replace aedu_ci=grado+6  if nivel==2 | nivel==3
-replace aedu_ci=grado+12 if nivel==4 | nivel==5
-replace aedu_ci=grado+18 if nivel==6
-
-*replace aedu_ci=0 if edad_ci<5
+/* 
+Para su construcción se utiliza la variable P6: Nivel y grado más alto aprobado.
+Se aplica únicamente a mayores de 3 anios. Compuesta por dos digitos, la clasificacion 
+corresponde al nivel educativo alcanzado (primer digito) y anios aprobados (segundo digito)
 */
 
-gen grado = .
-replace grado = p6 if p6>=0 & p6<=4
-replace grado = p6-10 if p6>=11 & p6<=16
-replace grado = p6-20 if p6>=21 & p6<=23
-replace grado = p6-30 if p6>=31 & p6<=36
-replace grado = p6-40 if p6>=41 & p6<=43
-replace grado = p6-50 if p6>=51 & p6<=56
-replace grado = p6-60 if p6>=61 & p6<=62
-replace grado = p6-70 if p6>=71 & p6<=72
-replace grado = p6-80 if p6>=81 & p6<=84
+* Se construyen los niveles educativos:
+gen nivel = . 
+replace nivel = 0 if p6 >= 0 & p6 <= 4 // ningun grado, pre-kinder, kinder, especial 
+replace nivel = 1 if p6 >= 11 & p6 <= 16 // Primaria
+replace nivel = 2 if p6 >= 21 & p6 <= 23 // Vocacional
+replace nivel = 3 if p6 >= 31 & p6 <= 36 // Secundaria
+replace nivel = 4 if p6 >= 41 & p6 <= 44 // Superior no universitaria
+replace nivel = 5 if p6 >= 51 & p6 <= 57 // Superior universitaria
+replace nivel = 6 if p6 >= 61 & p6 <= 64 // Post-grado
+replace nivel = 7 if p6 >= 71 & p6 <= 72 // Maestria
+replace nivel = 8 if p6 >= 81 & p6 <= 84 // Doctorado
 
-gen nivel = .
-replace nivel = 0 if p6>=0 & p6<=4
-replace nivel = 1 if p6>=11 & p6<=16
-replace nivel = 2 if p6>=21 & p6<=23
-replace nivel = 3 if p6>=31 & p6<=36
-replace nivel = 4 if p6>=41 & p6<=43
-replace nivel = 5 if p6>=51 & p6<=56
-replace nivel = 6 if p6>=61 & p6<=62
-replace nivel = 7 if p6>=71 & p6<=72
-replace nivel = 8 if p6>=81 & p6<=84
+label define nivel 1 "Primaria" 2 "Vocacional" 3 "Secundaria" 4 "Superior no universitaria" 5 "Superior universitaria" 6 "Especialidad (Postgrado)" 7 "Maestría" 8 "Doctorado"
+label values nivel nivel
+
+* Anios asociados a cada uno de los niveles arriba mencionados:
+gen aniosaprobados = . 
+replace aniosaprobados = 0 if p6 >= 0 & p6 <= 4 
+replace aniosaprobados = p6 - 10 if p6 >= 11 & p6 <= 16 
+replace aniosaprobados = p6 - 20 if p6 >= 21 & p6 <= 23 
+replace aniosaprobados = p6 - 30 if p6 >= 31 & p6 <= 36 
+replace aniosaprobados = p6 - 40 if p6 >= 41 & p6 <= 44 
+replace aniosaprobados = p6 - 50 if p6 >= 51 & p6 <= 57 
+replace aniosaprobados = p6 - 60 if p6 >= 61 & p6 <= 64 
+replace aniosaprobados = p6 - 70 if p6 >= 71 & p6 <= 72 
+replace aniosaprobados = p6 - 80 if p6 >= 81 & p6 <= 84 
 
 gen aedu_ci = .
-replace aedu_ci = 0 if nivel== 0 
-replace aedu_ci = grado if nivel == 1
-replace aedu_ci = grado+6 if nivel == 2
-replace aedu_ci = grado+6 if nivel == 3
-replace aedu_ci = grado+12 if nivel == 4
-replace aedu_ci = grado+12 if nivel == 5
-replace aedu_ci = grado+17 if nivel == 6 | nivel == 7 | nivel == 8
+replace aedu_ci = 0 if aniosaprobados == 0  // ningun grado, pre-kinder, kinder, especial 
+replace aedu_ci = aniosaprobados if nivel == 1 // Primaria
+replace aedu_ci = aniosaprobados + 6 if nivel == 2 // Vocacional
+replace aedu_ci = aniosaprobados + 6 if nivel == 3 // Secundaria
+replace aedu_ci = aniosaprobados + 12 if nivel == 4 // Superior no universitaria
+replace aedu_ci = aniosaprobados + 12 if nivel == 5 // Superior Universitaria
+replace aedu_ci = aniosaprobados + 12 + 4 if (nivel == 6 | nivel == 7) // Especialidad o Maestria
+replace aedu_ci = aniosaprobados + 12 + 4 + 2 if nivel == 8 // Doctorado
 
-******************************
-*	eduno_ci
-******************************
+
+*************
+**eduno_ci***
+*************
 gen eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
 label var eduno_ci "Personas sin educacion"
 
-******************************
-*	edupi_ci
-******************************
+*************
+**edupi_ci***
+*************
 gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "Personas que no han completado Primaria"
 
-******************************
-*	edupc_ci
-******************************
+*************
+**edupc_ci***
+*************
 gen edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "Primaria Completa"
 
-******************************
-*	edusi_ci
-******************************
+*************
+**edusi_ci***
+*************
 gen edusi_ci=(aedu_ci>6 & aedu_ci<12)
-replace edupc_ci=. if aedu_ci==.
+replace edusi_ci=. if aedu_ci==.
 label var edusi_ci "Secundaria Incompleta"
 
-******************************
-*	edusc_ci
-******************************
+*************
+**edusc_ci***
+*************
 gen edusc_ci=(aedu_ci==12)
 replace edusc_ci=. if aedu_ci==.
 label var edusc_ci "Secundaria Completa"
 
-******************************
-*	edus1i_ci
-******************************
+*************
+**edus1i_ci**
+*************
 gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
 replace edus1i_ci=. if aedu_ci==.
 label var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
 
-******************************
-*	edus1c_ci
-******************************
+*************
+**edus1c_ci**
+*************
 gen edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 label var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 
-******************************
-*	edus2i_ci
-******************************
+*************
+**edus2i_ci**
+*************
 gen edus2i_ci=(aedu_ci>9 & aedu_ci<12)
 replace edus2i_ci=. if aedu_ci==.
 label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 
-******************************
-*	edus2c_ci
-******************************
+*************
+**edus2c_ci**
+*************
 gen edus2c_ci=(aedu_ci==12)
 replace edus2c_ci=. if aedu_ci==.
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *pongo primaria y secundaria, como equivalente a basica y media
 
-******************************
-*	eduui_ci
-******************************
-gen eduui_ci=(aedu_ci>12 & aedu_ci<17) 
+*************
+***eduui_ci**
+*************
+gen eduui_ci = ((aedu_ci > 12 & aedu_ci < 16) & nivel == 5) | ((aedu_ci > 12 & aedu_ci < 14) & nivel == 4)
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
-******************************
-*	eduuc_ci
-******************************
-gen eduuc_ci=(aedu_ci>=17)
+*************
+**eduuc_ci***
+*************
+gen eduuc_ci = (aedu_ci >= 16) | (aedu_ci >= 14 & nivel == 4)
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
-******************************
-*	edupre_ci
-******************************
+*************
+**edupre_ci**
+*************
 gen edupre_ci=.
 label var edupre_ci "Educacion preescolar"
-notes: la encuesta no tiene codigo de educacion preescolar 
 
-******************************
-*	asispre_ci
-******************************
+
+**************
+**asispre_ci**
+**************
 gen asispre_ci=.
 label var asispre_ci "Asistencia a Educacion preescolar"
-notes: la encuesta no tiene codigo de educacion preescolar 
+* notes: la encuesta no tiene codigo de educacion preescolar 
 
-******************************
-*	eduac_ci
-******************************
-gen eduac_ci=.
-replace eduac_ci=0 if nivel==5
-replace eduac_ci=1 if nivel==4
+*************
+**eduac_ci***
+*************
+gen eduac_ci = .
+replace eduac_ci = 1 if (nivel==5 | nivel == 6 | nivel == 7 | nivel == 8)
+replace eduac_ci = 0 if nivel == 4
 label var eduac_ci "Educ terciaria academica vs Educ terciaria no academica"
 
-******************************
-*	asiste_ci
-******************************
-gen asiste_ci=(p5==1)
-replace asiste_ci=. if p5==.
+*************
+**asiste_ci**
+*************
+gen asiste_ci = (p5 == 1)
+replace asiste_ci =. if p5 == .
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
-******************************
-*	pqnoasis_ci_ci
-******************************
-gen pqnoasis_ci=p5a if p5a>0
+*************
+*pqnoasis_ci*
+*************
+gen pqnoasis_ci = p5a if p5a > 0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label define pqnoasis_ci 1 "No se ofrece el nivel o grado escolar en la comunidad" 2 "Necesita trabajar",add
-label define pqnoasis_ci 3 "Falta de recursos económicos" 4 "Quehaceres domesticos", add 
-label define pqnoasis_ci 5 "Falta de interes" 6 "Embarazo" 7 "Enfermedad" , add
-label define pqnoasis_ci 8 "No tiene la edad requerida" 9 "Está muy distante" 10 "Ya se graduó" 11 "Se casó" 12 "Otros", add
-label value pqnoasis_ci pqnoasis_ci
+label define pqnoasis 1 "No se ofrece el nivel o grado escolar en la comunidad" 2 "Tiene que Trabajar" 3 "Falta de recurso económico" 4 "Tiene que ayudar en quehaceres doméstico." 5 "Falta de interés" 6 "Embarazo" 7 "Enfermedad" 8 "No tiene la edad para ingresar" 9 "Esta muy distante de su vivienda" 10 "Ya se graduó" 11 "Se casó o unió" 12 "Otros"
+label value pqnoasis_ci pqnoasis
 
 **************
 *pqnoasis1_ci*
 **************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = 1 if p5a==3
-replace pqnoasis1_ci = 2 if p5a==2
-replace pqnoasis1_ci = 3 if p5a==7
-replace pqnoasis1_ci = 4 if p5a==5
-replace pqnoasis1_ci = 5 if p5a==4 | p5a==6 | p5a==11
-replace pqnoasis1_ci = 6 if p5a==10
-replace pqnoasis1_ci = 7 if p5a==8
-replace pqnoasis1_ci = 8 if p5a==1 | p5a==9
-replace pqnoasis1_ci = 9 if p5a==12
+g       pqnoasis1_ci = 1 if p5a == 3
+replace pqnoasis1_ci = 2 if p5a == 2
+replace pqnoasis1_ci = 3 if p5a == 7
+replace pqnoasis1_ci = 4 if p5a == 5
+replace pqnoasis1_ci = 5 if p5a == 4 | p5a == 6 | p5a == 11
+replace pqnoasis1_ci = 6 if p5a == 10
+replace pqnoasis1_ci = 7 if p5a == 8
+replace pqnoasis1_ci = 8 if p5a == 1 | p5a == 9
+replace pqnoasis1_ci = 9 if p5a == 12
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
 
-gen edupub_ci=.
+*************
+**edupub_ci**
+*************
+gen edupub_ci = .
+replace edupub_ci = 1 if p5_tipo == 3
+replace edupub_ci = 0 if p5_tipo == 4
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
-******************************
-*	repiteult_ci  & repite_ci
-******************************
+**************
+*repiteult_ci* 
+**************
 gen repiteult_ci=.
-gen repite_ci=.
-*NA
-drop nivel grado
+label var repiteult_ci "Ha repetido el último grado"
+
+*************
+**repite_ci**
+*************
+gen repite_ci = (p7b == 1)
+label var repite_ci "Ha repetido al menos un grado"
+*solo para personas de 5 a 17 años 
+
+drop nivel aniosaprobados
 
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
@@ -1504,7 +1513,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci , first

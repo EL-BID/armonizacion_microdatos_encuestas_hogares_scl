@@ -1615,7 +1615,7 @@ replace aedu_ci=8 if (s4_03a==14) & s4_03b==8 | (s4_03a==17) & s4_03b==2
 replace aedu_ci=9 if (s4_03a==15) & s4_03b==1 | (s4_03a==17) & s4_03b==3
 replace aedu_ci=10 if (s4_03a==15) & s4_03b==2 | (s4_03a==17) & s4_03b==4
 replace aedu_ci=11 if (s4_03a==15) & s4_03b==3 | (s4_03a==17) & s4_03b==5
-replace aedu_ci=12 if (s4_03a==15) & s4_03b==4 | (s4_03a==17) & s4_03b==6
+replace aedu_ci=12 if (s4_03a==15) & s4_03b==4 | (s4_03a==17) & s4_03b==6  | (s4_03a==34) 
 
 replace aedu_ci=. if s4_03a>=18 & s4_03a<=24
 
@@ -1625,21 +1625,28 @@ replace aedu_ci=15 if ((s4_03a>=25 & s4_03a<=27)| (s4_03a>=31 & s4_03a<=33)) & s
 replace aedu_ci=16 if ((s4_03a>=25 & s4_03a<=27)| (s4_03a>=31 & s4_03a<=33)) & s4_03b==4
 replace aedu_ci=17 if (s4_03a==25 | s4_03a==26 | s4_03a==27 | s4_03a==31 | s4_03a==32 | s4_03a==33) & (s4_03b>=5 & s4_03b<=8) 
 
-replace aedu_ci=18 if (s4_03a==28 | s4_03a==29 | s4_03a==30) & s4_03b==1
-replace aedu_ci=19 if (s4_03a==28 | s4_03a==29 | s4_03a==30) & s4_03b==2
-replace aedu_ci=20 if (s4_03a==28 | s4_03a==29 | s4_03a==30) & s4_03b==3
-replace aedu_ci=19 if (s4_03a==28 | s4_03a==29) & s4_03b>=4 & s4_03b<=5
-replace aedu_ci=21 if (s4_03a==30) & s4_03b==4
-replace aedu_ci=22 if (s4_03a==30) & s4_03b==5
-replace aedu_ci=22 if (s4_03a==30) & s4_03b==8
+*postgrado (1 anio)
+replace aedu_ci=17 if s4_03a==28 & s4_03b==1 //cursando
+replace aedu_ci=18 if s4_03a==28  & s4_03b==8 //terminado
+
+*maestria (2 anios)
+replace aedu_ci=18 if s4_03a==29 & s4_03b==1 //2do o 3er semestre aprobado
+replace aedu_ci=19 if s4_03a==29  & s4_03b==2 //4to semestre aprobado
+replace aedu_ci=19 if s4_03a==29  & s4_03b>=5 & s4_03b<=8 //egresado o titulado
+
+*doctorado (4 anios)
+replace aedu_ci=20 if s4_03a==30 & s4_03b==1 //2do o 3er semestre aprobado
+replace aedu_ci=21 if s4_03a==30 & s4_03b==2 //4to o 5to semestre aprobado
+replace aedu_ci=22 if s4_03a==30 & s4_03b==3 //6to o 7mo semestre aprobado
+replace aedu_ci=23 if s4_03a==30 & s4_03b==4 //8vo semestre aprobado
+replace aedu_ci=23 if s4_03a==30 & s4_03b>=5 & s4_03b<=8 //egresado o titulado
 
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
@@ -1654,6 +1661,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 ***edupc_ci***
 **************
+
 
 gen byte edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
@@ -1679,9 +1687,10 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
+
 
 ***************
 ***edus1c_ci***
@@ -1710,23 +1719,22 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-* LCM: Se incorpora la restricción s4_03b<8 para que sea comparable con los otros años LCM dic 2013
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s4_03b<8)
+gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<17 ) & (s4_03a==26 | s4_03a==27) // universitaria
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<17 ) & s4_03a==25   // normal
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<15 ) & s4_03a>=31 & s4_03a<=33   // tecnicaturas y formacion militar y policial
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
+
 
 ***************
 ***eduuc_ci***
 ***************
-/*
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==17)
-replace eduuc_ci=. if aedu_ci==.
-*/
-* LMC: Se cambia para universidad completa o más LCM DIC 2013
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s4_03b==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=17 ) & (s4_03a==26 | s4_03a==27) // universitaria
+replace eduuc_ci=1 if aedu_ci>=17  & s4_03a==25 // normal
+replace eduuc_ci=1 if (aedu_ci>=13 & aedu_ci>=15 ) & s4_03a>=31 & s4_03a<=33 // tecnicaturas
+replace eduuc_ci=1 if  s4_03a>=28 & s4_03a<=30 // postgrados
+
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
 
@@ -1734,37 +1742,26 @@ label variable eduuc_ci "Universitaria completa"
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s4_03a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
+
 
 ***************
 ***asispre_ci***
 ***************
 *Variable añadida por Iván Bornacelly - 01/12/2017
 
-	g asispre_ci=.	
-	replace asispre_ci=1 if s4_05==1 & s4_06a==13
-	recode asispre_ci (.=0)
+	g asispre_ci=s4_05==1 & s4_06a==13
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
 **************
-/*gen byte eduac_ci=.
-replace eduac_ci=1 if (s4_03a>=26 & s4_03a<=31)
-replace eduac_ci=0 if (s4_03a==25 | s4_03a==32 | s4_03a==33)
-*/
-
-* LCM: Se cambia para universidad completa o más LCM DIC 2013
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s4_03a>=27 & s4_03a<=32 | s4_03a==34)
-replace eduac_ci=0 if (s4_03a==26 | s4_03a>=33 )
+replace eduac_ci=1 if (s4_03a>=26 & s4_03a<=30 ) // grados
+replace eduac_ci=0 if (s4_03a>=31 & s4_03a<=33 ) //tecnicaturas
+replace eduac_ci=0 if (s4_03a==25 ) // normal
 label variable eduac_ci "Superior universitario vs superior no universitario"
-/*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
-YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
-los otros años*/
-
 ***************
 ***asiste_ci***
 ***************
@@ -1842,17 +1839,11 @@ s4_10:
 
 
 gen edupub_ci=(s4_10==1 | s4_10==2)
+replace edupub_ci=0 if s4_10==3
 replace edupub_ci=. if s4_10==.
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
 
-gen tecnica_ci=.
-replace tecnica_ci=1 if s4_03a==31 | s4_03a==32 
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 
 **********************************
@@ -2284,7 +2275,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

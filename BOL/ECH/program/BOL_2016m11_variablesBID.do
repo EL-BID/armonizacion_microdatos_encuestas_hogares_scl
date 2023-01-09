@@ -1441,47 +1441,35 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 
 /*En esta sección es sólo para personas de 4 años o más de edad*/
 
-/*
- s5_02a
-11. NINGUNO
-12. CURSO DE ALFABETIZACIÓN
-13. EDUCACIÓN INICIAL O PRE-ESCOLAR (PRE KINDER/KINDER)
-81.OTROS CURSOS (Duración menor a 1 año)
-
-PRIMARIA
-21.BÁSICO (1 A 5 AÑOS)
-22.INTERMEDIO (1 A 3 AÑOS)
-23.MEDIO (1 A 4 AÑOS)
-31. PRIMARIA (1 A 8 AÑOS)
-41. PRIMARIA (1 A 6 AÑOS)
-
-
-SECUNDARIA
-32. SECUNDARIA (1 A 4 AÑOS)
-42. SECUNDARIA (1 A 6 AÑOS)
-
-EDUCACIÓN SUPERIOR
-71. NORMAL (ESCUELA SUP. DE FORMACIÒN DE MAESTROS)
-72. UNIVERSIDAD PÚBLICA (Licenciatura)
-73. UNIVERSIDAD PRIVADA (Licenciatura)
-74.POSTGRADO DIPLOMADO
-75. POSTGRADO MAESTRÍA,
-76. POSTGRADO DOCTORADO
-77. TÉCNICO DE UNIVERSIDAD
-78 TÉCNICO DE INSTITUTO (Duración mayor o igual a 1 año)
-79. INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL
-
-		  
-*No se consideran por no ser educación formal sino "Alternativa" o "No formal"
-EDUCACIÓN DE ADULTOS(Sistema Antiguo)
-51. EDUCACIÓN BÁSICA DE ADULTOS (EBA)
-52. CENTRO DE EDUCACIÓN MEDIA DE ADULTOS (CEMA)
-61.EDUCACIÓN JUVENIL ALTERNATIVA (EJA)
-62.EDUCACIÓN PRIMARIA DE ADULTOS (EPA)
-63.EDUCACIÓN SECUNDARIA DE ADULTOS (ESA)
-64.PROGRAMA NACIONAL DE POST ALFABETIZACIÓN
-65.EDUCACIÓN ESPECIAL
-80. EDUCACIÓN TÉCNICA DE ADULTOS (ETA)	  
+/*			s05a_02a 
+		  11 11.NINGUNO
+          12 12.CURSO DE ALFABETIZACIÓN
+          13 13.EDUCACIÓN INICIAL O PRE-ESCOLAR (PRE KINDER/KINDER)
+          21 21.BÁSICO (1 A 5 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          22 22.INTERMEDIO (1 A 3 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          23 23.MEDIO (1 A 4 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          31 31.PRIMARIA (1 A 8 AÑOS) - SISTEMA ESCOLAR ANTERIOR
+          32 32.SECUNDARIA (1 A 4 AÑOS) - SISTEMA ESCOLAR ANTERIOR
+          41 41.PRIMARIA (1 A 6 AÑOS) - SISTEMA ESCOLAR ACTUAL
+          42 42.SECUNDARIA (1 A 6 AÑOS) - SISTEMA ESCOLAR ACTUAL
+          51 51.EDUCACIÓN BÁSICA  DE   ADULTOS (EBA) - EDUCACIÓN DE ADULTOS (SISTEMA ANTIGUO)
+          52 52.CENTRO DE EDUCACIÓN MEDIA  DE ADULTOS (CEMA) - EDUCACIÓN DE ADULTOS (SISTEMA ANTIGUO)
+          61 61.EDUCACIÓN JUVENIL ALTERNATIVA (EJA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          62 62.EDUCACIÓN PRIMARIA DE ADULTOS (EPA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          63 63.EDUCACIÓN SECUNDARIA DE ADULTOS (ESA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          64 64.PROGRAMA NACIONAL DE POST ALFABETIZACIÓN - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          65 65.EDUCACIÓN  ESPECIAL - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          71 71.NORMAL (ESCUELA SUP. DE FORMACIÒN DE  MAESTROS) - EDUCACIÓN SUPERIOR
+          72 72.UNIVERSIDAD - EDUCACIÓN SUPERIOR
+          73 73.POSTGRADO DIPLOMADO - EDUCACIÓN SUPERIOR
+          74 74.POSTGRADO MAESTRÍA - EDUCACIÓN SUPERIOR
+          75 75.POSTGRADO DOCTORADO - EDUCACIÓN SUPERIOR
+          76 76.TÉCNICO DE UNIVERSIDAD - EDUCACIÓN SUPERIOR
+          77 77.TÉCNICO DE INSTITUTO (Duración mayor o igual a 2 años) - EDUCACIÓN SUPERIOR
+          78 78.INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL - EDUCACIÓN SUPERIOR
+          79 79.EDUCACIÓN TÉCNICA DE ADULTOS (ETA) - EDUCACIÓN SUPERIOR
+          80 80.OTROS CURSOS  (Duración menor a 2 años) - EDUCACIÓN SUPERIOR
+ 
 */
 
 
@@ -1526,33 +1514,50 @@ replace aedu_ci = 8 if (s05a_02b==8 & s05a_02a==31) |  (s05a_02b==3 & s05a_02a==
 replace aedu_ci = 9 if (s05a_02b==1 & s05a_02a==23) |  (s05a_02b==1 & s05a_02a==32) | (s05a_02b==3 & s05a_02a==42)
 replace aedu_ci = 10 if (s05a_02b==2 & s05a_02a==23) |  (s05a_02b==2 & s05a_02a==32) | (s05a_02b==4 & s05a_02a==42)
 replace aedu_ci = 11 if (s05a_02b==3 & s05a_02a==23) |  (s05a_02b==3 & s05a_02a==32) | (s05a_02b==5 & s05a_02a==42)
-replace aedu_ci = 12 if (s05a_02b==4 & s05a_02a==23) |  (s05a_02b==4 & s05a_02a==32) | (s05a_02b==6 & s05a_02a==42)
+replace aedu_ci = 12 if (s05a_02b==4 & s05a_02a==23) |  (s05a_02b==4 & s05a_02a==32) | (s05a_02b==6 & s05a_02a==42) | (s05a_02a==80)
 
-* Superior
+* Superior, licenciaturas
 
-replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=71 & s05a_02a<=79)
+replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=71 & s05a_02a<=72)
 
-replace aedu_ci = 18 if s05a_02b==1 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 19 if s05a_02b==2 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 20 if s05a_02b==3 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 21 if (s05a_02b>=4 & s05a_02b<=8) & (s05a_02a>=74 & s05a_02a<=75)
-replace aedu_ci = 21 if (s05a_02b==4) & (s05a_02a==76)
-replace aedu_ci = 22 if (s05a_02b==5) & (s05a_02a==76)
-replace aedu_ci = 22 if (s05a_02b==8) & (s05a_02a==76)
+
+*superior, tecnicaturas
+
+replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=76 & s05a_02a<=78)
+
+*postgrado (1 anio)
+replace aedu_ci=17 if s05a_02a==73 & s05a_02b==1 //cursando
+replace aedu_ci=18 if s05a_02a==73 & s05a_02b==8 //terminado
+
+*maestria (2 anios)
+replace aedu_ci=18 if s05a_02a==74 & s05a_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=19 if s05a_02a==74  & s05a_02b==2 //4to semestre aprobado
+replace aedu_ci=19 if s05a_02a==74  & s05a_02b>=5 & s05a_02b<=8 //egresado o titulado
+
+*doctorado (4 anios)
+replace aedu_ci=20 if s05a_02a==75 & s05a_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=21 if s05a_02a==75 & s05a_02b==2 //4to o 5to semestre aprobado
+replace aedu_ci=22 if s05a_02a==75 & s05a_02b==3 //6to o 7mo semestre aprobado
+replace aedu_ci=23 if s05a_02a==75 & s05a_02b==4 //8vo semestre aprobado
+replace aedu_ci=23 if s05a_02a==75 & s05a_02b>=5 & s05a_02b<=8 //egresado o titulado
 
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
+
 
 **************
 ***edupi_ci***
@@ -1590,7 +1595,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1621,50 +1626,52 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-* Se incorpora la restricción s5_02b<8 para que sea comparable con los otros años LCM dic 2013
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s05a_02b<8)
+gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<17 ) & s05a_02a==71 //educacion normal. 
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<17 ) & s05a_02a==72 // universitaria
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<15 ) & s05a_02a>=76 & s05a_02a<=78  // tecnico superior 
+
+
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
+
 
 ***************
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s05a_02b==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=17 & s05a_02a==72 ) // duracion del grado universitario
+replace eduuc_ci=1 if (aedu_ci>=17 & s05a_02a==71) // educacion normal
+replace eduuc_ci=1 if (aedu_ci>=13 & s05a_02a>=73 & s05a_02a<=75) // postgrados
+replace eduuc_ci=1 if (aedu_ci>=15 & s05a_02a>=76 & s05a_02a<=78) // tecnico superior
+
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
+
 
 ***************
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s05a_02a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
 ***asispre_ci***
 ***************
 *Variable añadida por Iván Bornacelly - 01/12/2017
-	g asispre_ci=.	
-	replace asispre_ci=1 if s05a_05==1 & s05a_06a==13
-	recode asispre_ci (.=0)
+	g asispre_ci=s05a_05==1 & s05a_06a==13
 	la var asispre_ci "Asiste a educacion prescolar"
-	
 **************
 ***eduac_ci***
 **************
 
 * Se cambia para universidad completa o más 
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s05a_02a>=72 & s05a_02a<=73)
-replace eduac_ci=0 if (s05a_02a>=77 & s05a_02a<=79)
+replace eduac_ci=1 if (s05a_02a>=72 & s05a_02a<=75)
+replace eduac_ci=0 if s05a_02a==71 //educacion normal
+replace eduac_ci=0 if (s05a_02a>=76 & s05a_02a<=78)
 label variable eduac_ci "Superior universitario vs superior no universitario"
-/*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
-YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
-los otros años*/
 
 ***************
 ***asiste_ci***
@@ -1732,21 +1739,17 @@ label var repiteult "Ha repetido el último grado"
 
 /*
 s5_09:	   
- 1 fiscal - pÚblico
- 2 pÚblico de convenio
- 3 particular - privado
+ 1 fiscal/ publico/convenio
+ 2 particular / privado
 */
 
-gen edupub_ci=(s05a_09==1)
+gen edupub_ci=(s05a_09==1  & asiste_ci==1)
+replace edupub_ci= 0 if s05a_09==2 & asiste_ci==1
+replace edupub_ci=. if  asiste_ci==0
 replace edupub_ci=. if s05a_09==.
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
 
-gen tecnica_ci = (s05a_02a==77 | s05a_02a==78)
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -2217,7 +2220,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

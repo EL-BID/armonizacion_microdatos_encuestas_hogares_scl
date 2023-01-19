@@ -1207,7 +1207,98 @@ gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv
 replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 	
 gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 | aglomera==19 | aglomera==23 | aglomera==26 | aglomera==30 | aglomera==26 | aglomera==30 | aglomera==13 | aglomera==10 | aglomera==4| aglomera==29)
-	
+
+
+
+* Variables incluidas por Ivan Jimenez linea 1213 a 1300
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+*se toma perforacion con bomba a motor o manual como pozo, mantial o otra sin clasificación clara
+gen aguafconsumo_ch = 1 if iv7==1 & iv6<3
+replace aguafconsumo_ch = 2 if iv7==1 & iv6==3
+replace aguafconsumo_ch = 10 if iv7>1
+*label var aguafconsumo_ch "=1 si es red de distribucion y llave privada"
+
+*****************
+*aguafuente_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+*se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
+gen aguafuente_ch = 1 if iv7==1 & iv6<3
+replace aguafuente_ch = 2 if iv7==1 & iv6==3
+replace aguafuente_ch = 10 if iv7>1
+*label var aguafuente_ch "=1 si es red de distribucion y llave privada"
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 0 if iv8==1
+replace sinbano_ch = 1 if iv9==3
+replace sinbano_ch = 2 if iv8==2
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*Variables modificadas por Ivan Jimenez
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
+gen aguamala_ch= 0 if iv7==1
+replace aguamala_ch= 1 if iv7>1
+replace aguamala_ch= 2 if iv7==4
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
+gen aguamejorada_ch= 1 if iv7==1
+replace aguamejorada_ch= 0 if iv7>1
+replace aguamejorada_ch= 2 if iv7==4
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+
+gen bano_ch=0
+replace bano_ch=6 if iv8==1
+replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
+*Se asocia fosa septica a camara septica o pozo ciego 
+replace bano_ch=2 if iv10<3 & iv10>=1   & iv11>=2 & iv11<=3
+replace bano_ch=3 if iv10==3
+*se asocia agua superficial o suelo a hoyo o excavacion en la tierra
+replace bano_ch=4 if iv10<3 & iv10>=1 & iv11==4
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
+replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
+
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
@@ -1481,3 +1572,6 @@ local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ro
 saveold "`base_out'", version(12) replace
 
 cap log close
+
+
+	

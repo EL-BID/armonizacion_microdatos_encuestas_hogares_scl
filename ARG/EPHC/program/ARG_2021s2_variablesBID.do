@@ -993,7 +993,6 @@ replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 ************
 *aguared_ch*
 ************
-		* JL: do we need to code 0 values?
 gen aguared_ch=.
 replace aguared_ch=(iv7==1)
 replace aguared_ch=. if iv7==9

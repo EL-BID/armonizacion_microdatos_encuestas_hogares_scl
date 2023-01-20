@@ -993,6 +993,7 @@ replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 ************
 *aguared_ch*
 ************
+		* JL: do we need to code 0 values?
 gen aguared_ch=.
 replace aguared_ch=(iv7==1)
 replace aguared_ch=. if iv7==9
@@ -1000,6 +1001,11 @@ replace aguared_ch=. if iv7==9
 *************
 *aguadist_ch*
 *************
+		* JL: El codigo aqui me parece mal. 1= dentro de la casa, 2 = Afuera de la casa pero adentro del terreno (o a menos de 100mts de distancia, 3 = fuera de la casa. Deberia de decir: 
+		*gen aguadist_ch =.
+		*replace aguadist_ch = iv6
+		*replace aguadist_ch=. if iv6==9 | iv6==.
+		
 gen aguadist_ch=.
 replace aguadist_ch=(iv6==1 | iv6==2)
 replace aguadist_ch=. if iv6==9 | iv6==.
@@ -1216,7 +1222,8 @@ gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 |
 *****************
 *aguafconsumo_ch*
 *****************
-*no se pregunta si es potable o para el consumo humano
+*no se pregunta si es potable o para el consumo humano 
+		*JL: en esto caso este variable deberia ser igual a 0 para todos los valores: gen aguafconsumo_ch = 0 
 *se toma perforacion con bomba a motor o manual como pozo, mantial o otra sin clasificación clara
 gen aguafconsumo_ch = 1 if iv7==1 & iv6<3
 replace aguafconsumo_ch = 2 if iv7==1 & iv6==3
@@ -1226,7 +1233,7 @@ replace aguafconsumo_ch = 10 if iv7>1
 *****************
 *aguafuente_ch*
 *****************
-*no se pregunta si es potable o para el consumo humano
+*no se pregunta si es potable o para el consumo humano 
 *se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
 gen aguafuente_ch = 1 if iv7==1 & iv6<3
 replace aguafuente_ch = 2 if iv7==1 & iv6==3
@@ -1265,7 +1272,8 @@ gen aguatrat_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
+*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual 
+        * JL: performacion com bomba o manual se deberia clasificar como desconocido tambien porque los pozos y performaciones pueden ser mejoradas o no mejoradas dependiendo de su construccion: replace aguamala_ch = 2 if iv7 >1
 gen aguamala_ch= 0 if iv7==1
 replace aguamala_ch= 1 if iv7>1
 replace aguamala_ch= 2 if iv7==4
@@ -1275,6 +1283,8 @@ replace aguamala_ch= 2 if iv7==4
 *aguamejorada_ch*  Altered
 *****************
 *Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
+		* JL: mismo comentario que arriba: replace agualmejorada_ch = 2 if iv7 >1 
+
 gen aguamejorada_ch= 1 if iv7==1
 replace aguamejorada_ch= 0 if iv7>1
 replace aguamejorada_ch= 2 if iv7==4
@@ -1283,7 +1293,8 @@ replace aguamejorada_ch= 2 if iv7==4
 *****************
 *bano_ch         *  Altered
 *****************
-
+     * JL: No incuye pozo ciego en la misma categoria que pozo septica o fosa septica: replace bano_ch=2 if iv10<3 & iv10>=1   & iv11=2
+	 * JL: replace bano_ch=3 if iv10==3 no es correcto porque no sabemos si es una letrina mejorada o no. Clasifica estos como 6
 gen bano_ch=0
 replace bano_ch=6 if iv8==1
 replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
@@ -1296,6 +1307,8 @@ replace bano_ch=4 if iv10<3 & iv10>=1 & iv11==4
 *****************
 *banomejorado_ch*  Altered
 *****************
+
+		* JL: Este variable solo se determina si las instalaciones de saneamiento son mejorada, no si tienen acceso manejada de manera segura. NTP sobre exclusividad, etc.
 gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
 replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 

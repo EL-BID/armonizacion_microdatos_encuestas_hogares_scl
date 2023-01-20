@@ -1202,12 +1202,18 @@ gen vivialqimp_ch=.
 *****************
 *aguamejorada_ch*
 *****************
+
+		*JL: iv7 = 2 & 3 are unclear if they are improved or unimproved. 
+		    *gen aguamejorada_ch =. 
+		    *gen aguamejorada_ch = 1 if iv7 == 1 
+		    *gen aguamejorada_ch = 2 if  iv7 >=2 
 gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
 replace aguamejorada_ch = 0 if iv7 == 4
 		
 *****************
 *banomejorado_ch*
 *****************
+		*JL: Este variable describe si el hogar tiene instalaciones de saneamiento mejoradas - no si el hogar tiene acceso a saneamiento manejado de manera segura.
 gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
 replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 	

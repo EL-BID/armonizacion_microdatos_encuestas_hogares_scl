@@ -1213,8 +1213,15 @@ gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 |
 
 
 **#
-* Variables incluidas por Ivan Jimenez linea 1213 a 1318
+* Variables incluidas por Ivan Jimenez linea
 
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if iv6==1
+replace aguadist_ch= 2 if iv6==2
+replace aguadist_ch= 3 if iv6==3
 
 *****************
 *aguafconsumo_ch*

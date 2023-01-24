@@ -32,10 +32,10 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Bolivia
 Encuesta: ECH
-Round: a2003_a2004 
+Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Última versión: Nathalia Maya  E-mail: sandramay@iadb.org 
+Fecha última modificación: 25 de agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -46,6 +46,7 @@ Detalle de procesamientos o modificaciones anteriores:
 
 
 use `base_in', clear
+
 	****************
 	* region_BID_c *
 	****************
@@ -56,6 +57,24 @@ label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
+	************
+	* region_c *
+	************
+*destring depto, gen(region_c)
+gen region_c= depto
+label define region_c ///
+1"Chuquisaca"         ///     
+2"La Paz"             ///
+3"Cochabamba"         ///
+4"Oruro"              ///
+5"Potosí"             ///
+6"Tarija"             ///
+7"Santa Cruz"         ///
+8"Beni"               ///
+9"Pando"
+label values region_c region_c              
+clonevar ine01 = region_c
+
 ***************
 ***factor_ch***
 ***************
@@ -64,6 +83,14 @@ gen factor_ch=.
 replace factor_ch = fe4_red
 label variable factor_ch "Factor de expansion del hogar"
 
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci**
+	***************
+gen estrato_ci=. //No es claro si la variable "estr_est" corresponde a un estrato muestral
 
 ***************
 ****idh_ch*****
@@ -90,14 +117,6 @@ replace zona_c=1 	if urb_rur==1
 label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
-
-
-**************
-***region_c***
-**************
-
-gen region_c=.
-label var region_c "Region" 
 
 
 ************
@@ -323,33 +342,37 @@ label variable miembros_ci "Miembro del hogar"
 *******************************************************
 ***           VARIABLES DE DIVERSIDAD               ***
 *******************************************************				
-* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-			
 	***************
-	***afroind_ci***
+	***afroind_ci**
 	***************
+**Pregunta: ¿Se considera perteneciente a alguno de los siguientes pueblos originarios / indígenas...
+
 gen afroind_ci=. 
+replace afroind_ci=1 if a1_11!=7
+replace afroind_ci=3 if a1_11==7
+replace afroind_ci=9 if edad_ci<12 
+
 
 	***************
-	***afroind_ch***
+	***afroind_ch**
 	***************
-gen afroind_ch=. 
+gen afroind_jefe=.
+replace afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
 
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=.		
+gen afroind_ano_c=2001 //De 1999 a 2000 se indluía la categoría "Raza negra", a partir de 2001 no se incluye esta categoría
 
-	*******************
+	*************
 	***dis_ci***
-	*******************
-gen dis_ci=. 
-
-	*******************
-	***dis_ch***
-	*******************
-gen dis_ch=. 
+	**************
+gen dis_ci = .
+gen dis_ch =.
 
 
 ************************************
@@ -2159,19 +2182,44 @@ a6_06b - moneda
 gen vivialqimp_ch=a6_06a
 replace vivialqimp_ch=vivialqimp_ch*7.45 if a6_06b==2
 
-
-*****************************
-*** VARIABLES DE GDI *********
 ******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
+*** VARIABLES DE MIGRACION ***
+******************************
 
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=. 	
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+		
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci =.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=. 
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

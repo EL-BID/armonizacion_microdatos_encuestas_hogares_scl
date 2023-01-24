@@ -31,8 +31,10 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Bolivia
 Encuesta: ECH
-Round: m11_m12
-Autores: Marcela G. Rubio  E-mail: mrubio@iadb.org / marcelarubio28@gmail.com
+Round: m11
+Autores: 
+Última versión: Nathalia Maya  E-mail: sandramay@iadb.org 
+Fecha última modificación: 25 de agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -54,13 +56,40 @@ gen region_BID_c=3
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
+	************
+	* region_c *
+	************
+*destring depto, gen(region_c)
+gen region_c= depto
+label define region_c ///
+1"Chuquisaca"         ///     
+2"La Paz"             ///
+3"Cochabamba"         ///
+4"Oruro"              ///
+5"Potosí"             ///
+6"Tarija"             ///
+7"Santa Cruz"         ///
+8"Beni"               ///
+9"Pando"
+label values region_c region_c              
+clonevar ine01 = region_c
+
+
 ***************
 ***factor_ch***
 ***************
-
-gen factor_ch=factor
+gen factor_ch= factor
 label variable factor_ch "Factor de expansion del hogar"
 
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci**
+	***************
+gen estrato_ci=. //No es claro si la variable "estrato" corresponde a un estrato muestral
 
 **************
 ****idh_ch****
@@ -88,13 +117,6 @@ label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
-
-**************
-***region_c***
-**************
-
-gen region_c=.
-label var region_c "Region" 
 
 ************
 ****pais****
@@ -298,33 +320,38 @@ label variable miembros_ci "Miembro del hogar"
 *******************************************************
 ***           VARIABLES DE DIVERSIDAD               ***
 *******************************************************				
-* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
-			
 	***************
 	***afroind_ci***
 	***************
+**Pregunta: ¿Se considera perteneciente a alguno de los siguientes pueblos originarios / indígenas...
+
 gen afroind_ci=. 
+replace afroind_ci=1 if s111a!=7
+replace afroind_ci=3 if s111a==7
+replace afroind_ci=9 if edad_ci<12 
+
 
 	***************
 	***afroind_ch***
 	***************
-gen afroind_ch=. 
+gen afroind_jefe=.
+replace afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
 
 	*******************
 	***afroind_ano_c***
 	*******************
-gen afroind_ano_c=.		
+gen afroind_ano_c=2001 //De 1999 a 2000 se indluía la categoría "Raza negra", a partir de 2001 no se incluye esta categoría
 
-	*******************
+	*************
 	***dis_ci***
-	*******************
-gen dis_ci=. 
+	**************
+gen dis_ci = .
+gen dis_ch =.
 
-	*******************
-	***dis_ch***
-	*******************
-gen dis_ch=. 
 
 
 ************************************
@@ -1665,18 +1692,6 @@ gen vivialqimp_ch=s1004a
 label var vivialqimp_ch "Alquiler mensual imputado"
 
 ren ocup ocup_old
-
-*****************************
-*** VARIABLES DE GDI *********
-******************************
-	
-	/***************************
-     * DISCAPACIDAD
-    ***************************/
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
-lab val dis_ci dis_ci
-label var dis_ci "Personas con discapacidad"
 
 ******************************
 *** VARIABLES DE MIGRACION ***

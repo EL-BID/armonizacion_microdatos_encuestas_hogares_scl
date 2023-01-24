@@ -558,6 +558,8 @@ label define ocupa_ci  8 "FFAA" 9 "Otras ", add
 label value ocupa_ci ocupa_ci
 label variable ocupa_ci "Ocupacion laboral" 
 
+gen codocupa=ocupacion_principal_cod
+
 *************
 ***rama_ci***
 *************
@@ -583,6 +585,8 @@ label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de m
 label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
+
+gen codindustria=ramac
 
 ************
 *durades_ci*
@@ -917,68 +921,25 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 	****************************
 	***VARIABLES DE EDUCACION***
 	****************************
-
 *************
 ***aedu_ci*** 
 *************
 
 gen	 aedu_ci=.
 
-************************************************************** Actualmente asisten ***********************************************
-*prescolar
+label define nivel 1 "Pre-escolar" 2 "Primario" 3 "Secundario" 4 "Secundario-técnico" 5 "Universitario" 6 "Post-grado" 7 "Maestria" 8 "Doctorado" 9 "Ninguno" 10 "Quisqueya Aprende" 99 "Otro"
+label values nivel_ultimo_ano_aprobado nivel 
+label values nivel_se_matriculo nivel
 
-replace aedu_ci = 0 if nivel_se_matriculo == 1 & asiste_centro_educativo ==1 
-
-* Primaria 
-
-replace aedu_ci = curso_matriculado-1 if nivel_se_matriculo == 2 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 8 & nivel_se_matriculo == 2 & asiste_centro_educativo ==1
-
-* Secundaria 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==3 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 3 & asiste_centro_educativo ==1
-
-* secundaria tecnica 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==4 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 4 & asiste_centro_educativo ==1
-
-* universitario
-
-replace aedu_ci = curso_matriculado-1+12 if nivel_se_matriculo ==5 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & nivel_se_matriculo == 5 & asiste_centro_educativo ==1
-
-* postrgrado, maestria doctorado
-
-replace aedu_ci = curso_matriculado-1+12+4 if (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1
-
-
-********************************************************** Actualmete no asisten **************************************************
-
-replace aedu_ci=0  if (nivel_ultimo_ano_aprobado==1) | (nivel_ultimo_ano_aprobado==9) & asiste_centro_educativo ==2
-
-* primaria
-replace aedu_ci=ultimo_ano_aprobado  if nivel_ultimo_ano_aprobado==2 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 8 & nivel_ultimo_ano_aprobado == 2 & asiste_centro_educativo ==2
-
-* secundaria
-replace aedu_ci=ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==3 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 3 & asiste_centro_educativo ==2
-
-* secundaria tecnica 
-replace aedu_ci = ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==4 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 4 & asiste_centro_educativo ==2
-
-*Universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4 if nivel_ultimo_ano_aprobado==5 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 5 & nivel_ultimo_ano_aprobado == 5 & asiste_centro_educativo ==2
-
-*Post-universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4+4  if nivel_ultimo_ano_aprobado==6 & asiste_centro_educativo ==2
-
-
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==1  
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==9
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==10
+replace aedu_ci= . if nivel_ultimo_ano_aprobado==99
+replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 
+replace aedu_ci = ultimo_ano_aprobado+8 if nivel_ultimo_ano_aprobado == 3 | nivel_ultimo_ano_aprobado == 4  
+replace aedu_ci = ultimo_ano_aprobado+12 if nivel_ultimo_ano_aprobado == 5  
+replace aedu_ci = ultimo_ano_aprobado+12+4 if nivel_ultimo_ano_aprobado==6 | nivel_ultimo_ano_aprobado==7 
+replace aedu_ci = ultimo_ano_aprobado+12+4+2 if nivel_ultimo_ano_aprobado==8 
 replace aedu_ci=.  if nivel_ultimo_ano_aprobado==.
 
 label var aedu_ci "Anios de educacion aprobados" 
@@ -987,8 +948,8 @@ label var aedu_ci "Anios de educacion aprobados"
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
+gen byte eduno_ci=aedu_ci==0
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Sin educacion"
 
 
@@ -996,8 +957,8 @@ label variable eduno_ci "Sin educacion"
 ***edupi_ci***
 **************
 
-gen byte edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen byte edupi_ci=(aedu_ci>=1 & aedu_ci<6) 
+replace edupi_ci=. if aedu_ci==. 
 label variable edupi_ci "Primaria incompleta"
 
 
@@ -1005,9 +966,8 @@ label variable edupi_ci "Primaria incompleta"
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=0
-*Mod 2015,05 -rev LC se incorporó nivel_ultimo_ano_aprobado==2
-replace edupc_ci=1 if aedu_ci==6
+gen byte edupc_ci=aedu_ci==6
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 
@@ -1015,8 +975,8 @@ label variable edupc_ci "Primaria completa"
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<12) 
+gen byte edusi_ci=(aedu_ci>=7 & aedu_ci<12) 
+replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 
@@ -1024,8 +984,8 @@ label variable edusi_ci "Secundaria incompleta"
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12 & nivel_ultimo_ano_aprobado==3 
+gen byte edusc_ci=aedu_ci==12 
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
 
@@ -1033,8 +993,7 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<16
+gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1042,68 +1001,61 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=0
-*2015,05 rev. LC se incorporó restriccion de ult. nivel alcanzado y aedu_ci!=.
-replace eduuc_ci=1 if aedu_ci>=16 & (nivel_ultimo_ano_aprobado==5 | nivel_ultimo_ano_aprobado==6 | nivel_ultimo_ano_aprobado==7 | nivel_ultimo_ano_aprobado==8) & aedu_ci!=.
-replace eduuc_ci=. if aedu_ci==.
+gen byte eduuc_ci=aedu_ci>=16 // mas de 16 todos
+replace eduuc_ci=. if aedu_ci==. 
 label variable eduuc_ci "Universitaria completa o mas"
 
 ***************
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=.
+gen byte edus1i_ci=aedu_ci>6 & aedu_ci<8 
+replace edus1i_ci=. if aedu_ci==. 
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
-replace edus1c_ci=. if aedu_ci==.
+gen byte edus1c_ci=aedu_ci==8
+replace edus1c_ci=. if aedu_ci==. 
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=.
+gen byte edus2i_ci=aedu_ci>8 & aedu_ci<12 
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=.
+gen byte edus2c_ci=aedu_ci==12 
+replace edus2c_ci=. if aedu_ci==. 
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
 
 ***************
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci= (nivel_ultimo_ano_aprobado==1)
-label variable edupre_ci "Educacion preescolar"
+gen byte edupre_ci=.
+label variable edupre_ci "Educacion preescolar completa"
 
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if nivel_se_matriculo==1 & asiste_centro_educativo ==1
-	recode asispre_ci (.=0)
-	label variable asispre_ci "Asistencia a Educacion preescolar"
+g asispre_ci= 1 if nivel_se_matriculo==1 & asiste_centro_educativo ==1
+replace asispre_ci=0 if nivel_se_matriculo!=1 & asiste_centro_educativo ==1
+label variable asispre_ci "Asistencia a Educacion preescolar"
 	
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=1 if nivel_ultimo_ano_aprobado==5 
-replace eduac_ci=0 if nivel_ultimo_ano_aprobado==4
+gen byte eduac_ci=.  
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1121,19 +1073,13 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 **************
 *ver que labels cambiaron en esta nueva encuesta
 gen pqnoasis_ci=porque_no_estudia
-replace pqnoasis_ci=. if porque_no_estudia==99
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal"
-label def pqnoasis_ci 5"Nunca lo inscribieron" 6"No tiene documentos", add
-label def pqnoasis_ci 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad", add
-label def pqnoasis_ci 11"Razones familiares" 12"No quiere / No le gusta", add
-label val pqnoasis_ci pqnoasis_ci
+label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal" 5"Nunca lo inscribieron" 6"No tiene documentos" 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad" 11"Razones familiares" 12"No quiere / No le gusta" 99 "Otra"
+label value  pqnoasis_ci pqnoasis_ci
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
 g		pqnoasis1_ci = .						
 replace pqnoasis1_ci = 1 if porque_no_estudia==8
 replace pqnoasis1_ci = 2 if porque_no_estudia==7
@@ -1167,27 +1113,10 @@ label var repiteult "Ha repetido el último grado"
 ***edupub_ci***
 ***************
 gen edupub_ci=.
-replace edupub_ci=1 if tipo_centro_estudios==2
-replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==3)
+replace edupub_ci=1 if tipo_centro_estudios==3 & asiste_centro_educativo==1 //publico
+replace edupub_ci=0 if tipo_centro_estudios==1 & asiste_centro_educativo==1 // privado
+replace edupub_ci=0 if tipo_centro_estudios==2 & asiste_centro_educativo==1 // semiprivado
 label var edupub_ci "Asiste a un centro de enseñanza público"
-
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if nivel_ultimo_ano_aprobado==4 
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-*************
-**universidad_ci*
-*************
-
-gen universidad_ci=.
-replace universidad_ci=1 if nivel_ultimo_ano_aprobado==5
-recode universidad_ci .=0 
-label var tecnica_ci "1=formacion terciaria universitaria"
 
 
 **********************************
@@ -1770,6 +1699,50 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 	replace miglac_ci = 0 if !inlist(pais_nacimiento,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850) & migrante_ci==1
 	replace miglac_ci = . if migrante_ci==0 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
+	
+	
+	**************************
+	** PROVINCIAS ************
+	************************** 
+
+   gen ine01=.   
+   replace ine01=1  if  id_provincia==1			    /*Distrito Nacional*/
+   replace ine01=2  if  id_provincia==2				/*Azua*/
+   replace ine01=3  if  id_provincia==3				/*Bahoruco*/
+   replace ine01=4  if  id_provincia==4				/*Barahona*/
+   replace ine01=5  if  id_provincia==5		    	/*Dajabon*/
+   replace ine01=6  if  id_provincia==6				/*Duarte*/
+   replace ine01=7  if  id_provincia==7				/*Elias Piña*/
+   replace ine01=8  if  id_provincia==8				/*El Seibo*/
+   replace ine01=9  if  id_provincia==9				/*Espaillat*/
+   replace ine01=10 if  id_provincia==10			/*Independencia*/
+   replace ine01=11 if  id_provincia==11			/*La Altagracia*/
+   replace ine01=12 if  id_provincia==12			/*La Romana*/
+   replace ine01=13 if  id_provincia==13			/*La Vega*/
+   replace ine01=14 if  id_provincia==14			/*Maria Trinidad Sanchez*/
+   replace ine01=15 if  id_provincia==15			/*Monte Cristi*/
+   replace ine01=16 if  id_provincia==16			/*Pedernales*/
+   replace ine01=17 if  id_provincia==17			/*Peravia*/
+   replace ine01=18 if  id_provincia==18			/*Puerto Plata*/
+   replace ine01=19 if  id_provincia==19			/*Salcedo*/
+   replace ine01=20 if  id_provincia==20		    /*Samana*/
+   replace ine01=21 if  id_provincia==21			/*San Cristobal*/
+   replace ine01=22 if  id_provincia==22			/*San Juan*/
+   replace ine01=23 if  id_provincia==23			/*San Pedro De Macoris*/
+   replace ine01=24 if  id_provincia==24			/*Sanchez Ramirez*/
+   replace ine01=25 if  id_provincia==25			/*Santiago*/
+   replace ine01=26 if  id_provincia==26			/*Santiago Rodriguez*/
+   replace ine01=27 if  id_provincia==27			/*Valverde*/
+   replace ine01=28 if  id_provincia==28			/*Monseñor Nouel*/
+   replace ine01=29 if  id_provincia==29			/*Monte Plata*/
+   replace ine01=30 if  id_provincia==30			/*Hato Mayor*/
+   replace ine01=31 if  id_provincia==31			/*San Jose De Ocoa*/
+   replace ine01=32 if  id_provincia==32			/*Santo Domingo*/
+
+	label define ine01 1"Distrito Nacional" 2"Azua" 3"Bahoruco" 4"Barahona" 5"Dajabon" 6"Duarte" 7"Elias Piña" 8"El Seibo" 9"Espaillat" 10"Independencia" 11"La Altagracia" 12"La Romana" 13"La Vega" 14"Maria Trinidad Sanchez" 15"Monte Cristi" 16"Pedernales" 17"Peravia" 18"Puerto Plata" 19"Salcedo" 20"Samana" 21"San Cristobal" 22"San Juan" 23"San Pedro De Macoris" 24"Sanchez Ramirez" 25"Santiago" 26"Santiago Rodriguez" 27"Valverde" 28"Monseñor Nouel" 29"Monte Plata" 30"Hato Mayor" 31"San Jose De Ocoa" 32"Santo Domingo"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Provincia"
+	
 
 ******************************
 * Variables SPH - PMTC y PNC *
@@ -1866,13 +1839,12 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
-rename ocupacion_principal_cod codocupa
-rename ramac codindustria
+
 compress
 
 

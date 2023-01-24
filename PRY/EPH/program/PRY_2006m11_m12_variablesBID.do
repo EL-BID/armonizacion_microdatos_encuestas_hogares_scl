@@ -1094,248 +1094,186 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+
+
+**************
+***aedu_ci****
+**************
+
 /*
-*** people who have missings
-gen byte yedc=.
-
-replace yedc=. if ed54==9999 /* ed54 for 2006 */
-
-**<5 and no education
-replace yedc=0 if ed54==0 | ed54==100 /* ed54 for 2006 */
-
-*** preescolar o jardin o pre-primaria
-replace yedc=0 if ed54>=200 & ed54<=300 /* ed54 for 2006 */
-
-*** primaria 
-replace yedc=1 if ed54==301 /* ed54 for 2006 */
-replace yedc=2 if ed54==302 /* ed54 for 2006 */
-replace yedc=3 if ed54==303 /* ed54 for 2006 */
-
-replace yedc=4 if ed54==304 /* ed54 for 2006 */
-replace yedc=5 if ed54==305 /* ed54 for 2006 */
-replace yedc=6 if ed54==306 /* ed54 for 2006 */
-
-*** secundaria 
-replace yedc=7 if ed54==407 | ed54==501 /* ed54 for 2006 */
-replace yedc=8 if ed54==408 | ed54==502 /* ed54 for 2006 */
-replace yedc=9 if ed54==409 | ed54==503 /* ed54 for 2006 */
-replace yedc=10 if ed54==604 | ed54==704 | ed54==801 | ed54==901 /* ed54 for 2006 */
-replace yedc=11 if ed54==605 | ed54==705 | ed54==802 | ed54==902 /* ed54 for 2006 */
-replace yedc=12 if ed54==606 | ed54==706 /* ed54 for 2006 */
-
-*** superior no universitario  *** 
-replace yedc=13 if ed54==1101 | ed54==1201 | ed54==1301 /* ed54 for 2006 */
-replace yedc=14 if ed54==1102 | ed54==1202 | ed54==1302 /* ed54 for 2006 */
-replace yedc=15 if ed54==1103 | ed54==1203 | ed54==1303 /* ed54 for 2006 */
-replace yedc=16 if ed54==1204 | ed54==1304 /* ed54 for 2006 */
-
-*** universitario
-replace yedc=13 if ed54==1401 /* ed54 for 2006 */
-replace yedc=14 if ed54==1402 /* ed54 for 2006 */
-replace yedc=15 if ed54==1403 /* ed54 for 2006 */
-replace yedc=16 if ed54==1404 /* ed54 for 2006 */ 
-replace yedc=17 if ed54==1405 /* ed54 for 2006 */
-replace yedc=18 if ed54==1406 /* ed54 for 2006 */
-gen byte aedu_ci=yedc
-
+Ninguno                                                  0
+Educ. Especial                                           1
+Educ. Inicial                                            2
+Educ. Escolar Básica 1º al 6º (Primaria)                 3
+Educ. Escolar Básica 7º al 9º                            4
+Secundaria - Ciclo Básico                                5
+Bachillerato Humanístico /Científico                     6
+Bachillerato Técnico /Comercial                          7
+Educ. Media Científica                                   8
+Educ. Media Técnica                                      9
+Educ. Básica para Adultas    							 10
+Superior no Universitario          						 11
+Formación Docente                                        12
+Form. Militar/Policial                                   13
+Superior Universitario                                   14
 */
-/*
-*Modificación Mayra Sáenz -02/01/2016: Se incorpora la nueva sintaxis para la generación de las variables
-asiste_ci y aedu_ci elaborada por Iván Bornacelly SCL/EDU.
-*/
-capture drop aedu_ci
-capture drop nivgra
-gen nivgra=ed54
-tostring nivgra, gen(nivgra_str)
-gen aedu_temp=substr(nivgra_str,-1,1)
-destring aedu_temp, replace
-replace aedu_temp=. if nivgra==9999 // No sabe no responde
-	*replace aedu_temp=. if nivgra>=1001 & nivgra<=1004 // Educación para adultos
-	replace aedu_temp=. if nivgra==188 // Educación Especial- Solo en el 2006, dado que no se tienen los años que está cursando
 
-	gen aedu_ci=aedu_temp
-	replace aedu_ci=0 if nivgra>=210 & nivgra<=211 // Educación Inicial o Prescolar
-	replace aedu_ci=aedu_temp+6 if nivgra>=501 & nivgra<=503 // Ciclo básico de sencudaria antiguo
+capture drop nivgra // si la variable existe previamente se dropea
+gen nivgra = ed54 
+tostring nivgra, gen(nivgra_str) // convertimos nivgra en string para hacerla mutable
+gen aedu_temp = substr(nivgra_str, -1, 1) // Tomamos el último char para usar de anio de c/nivel
+destring aedu_temp, replace 
 
-	*replace aedu_ci=aedu_temp+6 if nivgra>=604 & nivgra<=803 // Educación Secundaria y Bachillerato
-	replace aedu_ci=aedu_temp+6 if nivgra>=604 & nivgra<=706 // Bachillerato
-	*replace aedu_ci=aedu_temp+9 if nivgra>=900 & nivgra<=903 // Educación Media 
-	replace aedu_ci=aedu_temp+9 if nivgra>=801 & nivgra<=903 // Educación Media 
+gen aedu_ci = .
+replace aedu_ci = 0 if (nivgra == 0 | (nivgra >= 200 & nivgra <= 299)) /// 
+					| (nivgra>=1000 & nivgra<=1099) // sin instruccion, Educ. Inicial, educacion adultos. 
+replace aedu_ci = aedu_temp if (nivgra >= 300 & nivgra <= 399) // Escolar Básica 1º al 6º (Primaria)
+replace aedu_ci = aedu_temp if (nivgra >= 400 & nivgra <= 499) // Escolar Básica 7º al 9º  
+replace aedu_ci = aedu_temp + 9 if (nivgra >= 800 & nivgra <= 899) // Media científica
+replace aedu_ci = aedu_temp + 9 if (nivgra >= 900 & nivgra <= 999) // Media técnica
+replace aedu_ci = aedu_temp + 9 if (nivgra >= 500 & nivgra <= 599) // Secundaria - Ciclo Básico (Antiguo)
+replace aedu_ci = aedu_temp + 6 if (nivgra >= 600 & nivgra <= 699) // Bachillerato Humanístico /Científico  
+replace aedu_ci = aedu_temp + 6 if (nivgra >= 700 & nivgra <= 799) // Bachillerato Técnico /Comercial 
+replace aedu_ci = aedu_temp + 12 if (nivgra >= 1100 & nivgra <= 1199) // Superior no Universitario
+replace aedu_ci = aedu_temp + 12 if (nivgra >= 1200 & nivgra <= 1299) // Formación Docente
+replace aedu_ci = aedu_temp + 12 if (nivgra >= 1300 & nivgra <= 1399) // Form. Militar Policial
+replace aedu_ci = aedu_temp + 12 if (nivgra >= 1400 & nivgra <= 1499) // Superior Universitario
 
-	*Añadir educación para adultos
-	replace aedu_ci=3 if nivgra==1001 //Educación básica ciclo 1
-	replace aedu_ci=5 if nivgra==1002 //Educación básica ciclo 2
-	replace aedu_ci=7 if nivgra==1003 //Educación básica ciclo 3
-	replace aedu_ci=9 if nivgra==1004 //Educación básica ciclo 4
-	
-	replace aedu_ci=aedu_temp+12 if nivgra>=1101 & nivgra<=1406 // Educación superior (técnica, tecnológica, universitaria)
-	
-	replace aedu_ci=aedu_temp+12+5 if ed06==2 // Doctorado
-	replace aedu_ci=aedu_temp+12+2 if ed06==3 // Maestria
-	replace aedu_ci=aedu_temp+12+1 if ed06==4 // Especialización
+* Post-grado
+replace aedu_ci = aedu_temp + 12 + 5 + 2 if ed06 == 2 // Doctorado
+replace aedu_ci = aedu_temp + 12 + 5 if ed06 == 3 // Maestría 
+replace aedu_ci = aedu_temp + 12 + 5 if ed06 == 4 // Especialización
 
-	*Añadir los que nunca asistieron a una institución educativa formal
-	replace aedu_ci=0 if ed03==6
-
+lab var aedu_ci "Anios de educación aprobados"
 
 **************
 ***eduno_ci***
 **************
-
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
-replace eduno_ci=. if aedu_ci==.
+gen byte eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
-
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=. if aedu_ci==.
+gen byte edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == .
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=. if aedu_ci==.
+gen byte edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
-replace edusi_ci=. if aedu_ci==.
+gen byte edusi_ci = (aedu_ci > 6 & aedu_ci < 12)
+replace edusi_ci = . if aedu_ci == .
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12
-replace edusc_ci=. if aedu_ci==.
+gen byte edusc_ci = (aedu_ci == 12)
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
-
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<9
-replace edus1i_ci=. if aedu_ci==.
+gen byte edus1i_ci = (aedu_ci > 6 & aedu_ci < 9)
+replace edus1i_ci = . if aedu_ci == .
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
-replace edus1c_ci=. if aedu_ci==.
+gen byte edus1c_ci = (aedu_ci == 9)
+replace edus1c_ci = . if aedu_ci == .
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
-replace edus2i_ci=. if aedu_ci==.
+gen byte edus2i_ci = (aedu_ci > 9 & aedu_ci < 12)
+replace edus2i_ci = . if aedu_ci == .
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
+
 ***************
 ***edus2c_ci***
 ***************
-
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
-replace edus2c_ci=. if aedu_ci==.
+gen byte edus2c_ci = (aedu_ci == 12)
+replace edus2c_ci = . if aedu_ci == .
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
-
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
-replace eduui_ci=. if aedu_ci==.
+gen byte eduui_ci = (aedu_ci > 12 & aedu_ci < 16)
+replace eduui_ci = . if aedu_ci == .
 label variable eduui_ci "Universitaria incompleta"
 
 ***************
 ***eduuc_ci****
-***************
-
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
-replace eduuc_ci=. if aedu_ci==.
+*************** 
+gen byte eduuc_ci = (aedu_ci >= 16)
+replace eduuc_ci = . if aedu_ci == .
 label variable eduuc_ci "Universitaria completa o mas"
-
 
 ***************
 ***edupre_ci***
 ***************
-
-gen byte edupre_ci=. /* Por que no se construyo esta variable si tenemos la informacion??? */
+gen byte edupre_ci=. 
 label variable edupre_ci "Educacion preescolar"
 
 ***************
 ***asis_pre***
 ***************
-
-gen byte asispre_ci=. /* Por que no se construyo esta variable si tenemos la informacion??? */
-label variable edupre_ci "Asistencia a Educacion preescolar"
+gen byte asispre_ci = (ed08 == 2)
+label variable asispre_ci "Asistencia a Educacion preescolar" 
 
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=. /* Como funciona esta variable? */
+gen byte eduac_ci=. 
+replace eduac_ci = 1 if (nivgra >= 1400 & nivgra <= 1499) // Universitario
+replace eduac_ci = 0 if (nivgra >= 1100 & nivgra <= 1399) // Superior no universitario, formación docente formación militar
 label variable eduac_ci "Superior universitario vs superior no universitario"
-
+		
 ***************
 ***asiste_ci***
 ***************
-/*
-gen asiste_ci=.
-
-replace asiste_ci=1 if ed08>=1 & ed08<=9 /*ed08 for 2006*/
-replace asiste_ci=0 if ed08==10
-label variable asiste_ci "Asiste actualmente a la escuela"
-*/
-
-/*Modificación Mayra Sáenz -01/23/2017: Se incluye a los que no asisten o no asistieron a una institución de enseñanza educativa ed03==6 porque la ed08 sólo responden los que 
-                                        responden que sí asisten o asistieron a una institución */
-
-gen asiste_ci=.
-replace asiste_ci=1 if ed08>=1 & ed08<=9 
-replace asiste_ci=0 if ed08==10 | ed03==6
+gen asiste_ci = .
+replace asiste_ci = 1 if ed08 >= 1 & ed08 <= 9
+replace asiste_ci = 0 if ed08 == 10
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 *****************
 ***pqnoasis_ci***
 *****************
 
-gen pqnoasis_ci=ed10 /*ed10 for 2006*/
+gen pqnoasis_ci = ed10
+replace pqnoasis_ci = . if ed10 == 99
+label define pqnoasis_ci 1 "Sin recursos en el hogar" 2 "Necesidad de trabajar" 3 "Debe hacer labores en el hogar" 4 "Muy costosos los materiales y las matriculas" 5 "No tiene edad adecuada" 6 "Considera que terminó los estudios" 7 "No existe institución cercana" 8 "Institución cercana muy mala"  9 "El centro educativo cerró" 10 "El docente no asiste con regularidad" 11 "Institución no ofrece escolaridad completa" 12 "Requiere educación especial" 13 "Por enfermedad" 14 "Motivos familiares" 15 "No quiere estudiar" 16 "Asiste a una enseñanza no formal" 17 "Servicio militar" 18 "Otra razón" 
+label value pqnoasis_ci pqnoasis_ci
 
 **************
 *pqnoasis1_ci*
 **************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = 1 if ed10==1 | ed10==4
-replace pqnoasis1_ci = 2 if ed10==2
-replace pqnoasis1_ci = 3 if ed10==12 | ed10==13 | ed10==14
-replace pqnoasis1_ci = 4 if ed10==15
-replace pqnoasis1_ci = 5 if ed10==3 
-replace pqnoasis1_ci = 6 if ed10==6
-replace pqnoasis1_ci = 7 if ed10==5
-replace pqnoasis1_ci = 8 if ed10==7  | ed10==8  | ed10==9 | ed10==10 | ed10==11
-replace pqnoasis1_ci = 9 if ed10==16 | ed10==17 | ed10==18
+g       pqnoasis1_ci = 1 if ed10 == 1 | ed10 == 4
+replace pqnoasis1_ci = 2 if ed10 == 2
+replace pqnoasis1_ci = 3 if ed10 == 12 | ed10 == 13 | ed10 == 14
+replace pqnoasis1_ci = 4 if ed10 == 15
+replace pqnoasis1_ci = 5 if ed10 == 3 
+replace pqnoasis1_ci = 6 if ed10 == 6
+replace pqnoasis1_ci = 7 if ed10 == 5
+replace pqnoasis1_ci = 8 if ed10 == 7  | ed10 == 8  | ed10 == 9 | ed10 == 10 | ed10 == 11
+replace pqnoasis1_ci = 9 if ed10 == 16 | ed10 == 17 | ed10 == 18
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
@@ -1343,34 +1281,24 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***************
 ***repite_ci***
 ***************
-
-
-gen repite_ci=. 
+gen repite_ci = . 
 label variable repite_ci "Esta repitendo el grado o curso"
 
 ******************
 ***repiteult_ci***
 ******************
-
-gen repiteult_ci=.
+gen repiteult_ci = .
 label variable repiteult_ci "Esta repitendo ultimo grado o curso"
 
 ***************
 ***edupub_ci***
 ***************
+gen edupub_ci = 1 if ed09 == 1 
+replace edupub_ci = 0 if (ed09 == 2 | ed09 == 3 | ed09 == 4)
+replace edupub_ci = . if ed09 == .
 
-gen edupub_ci=1 if ed09==1 /*ed09 for 2006*/
-replace edupub_ci=0 if ed09>=2
+drop nivgra aedu_temp
 
-
-***************
-***tecnica_ci**
-***************
-
-gen tecnica_ci=.
-replace tecnica_ci=1 if ed05==11
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 ********************************************
 ***Variables de Infraestructura del hogar***

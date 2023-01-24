@@ -732,6 +732,14 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=cotizando_ci1
 
+***************
+***trabaja_casa_ci***
+***************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if p46 == 9 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (p46 != 9) & (condocup_ci==1 | condocup_ci==2)
+
 
 /* MGD 04/2016; se cambia por afiliado ya que usa la pregunta que abarca a todos los ocupados.
 g formal_ci=(afiliado_ci==1)
@@ -935,7 +943,8 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-
+*Javier
+			
 	*************
 	***aedu_ci***
 	*************
@@ -952,11 +961,11 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	replace aedu_ci=0 if nivinst==1 | nivinst==2 | nivinst==3
 	replace aedu_ci= anoinst if nivinst==4 // Años primaria
 	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
-	replace aedu_ci =0 if nivinst==5 & anoinst==-1 // para que no queden en -1 los de 0 años aprobados 
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+16 if nivinst==10
+	replace aedu_ci =0 if nivinst==5 & aedu_ci==-1 // para que no queden en -1 los de 0 años aprobados 
+	replace aedu_ci = anoinst+6  if nivinst==6 // secundaria
+	replace aedu_ci = anoinst+9  if nivinst==7 // bachillerato
+	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9 //superior
+	replace aedu_ci = anoinst+16 if nivinst==10 // posgrado
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
@@ -997,14 +1006,14 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<16 & nivinst==9) | (aedu_ci>12 & aedu_ci<15 & nivinst==8)
+	gen eduui_ci=(p12a==2 & nivinst==9) | (p12a==2 & nivinst==8)
 	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=16 & nivinst==9) | (aedu_ci>=15 &  nivinst==8) | (nivinst==10)
+	gen byte eduuc_ci= (p12a==1 & nivinst==9) | (p12a==1 & nivinst==8) | (nivinst==10)	
 	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 

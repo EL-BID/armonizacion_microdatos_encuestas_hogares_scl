@@ -70,6 +70,10 @@ label define region_c  ///
 	    
 label value region_c region_c
 label var region_c "División política, parroquias"
+***********
+* INE01 *
+************
+gen ine01=  par
 
 **************
 * Región BID *

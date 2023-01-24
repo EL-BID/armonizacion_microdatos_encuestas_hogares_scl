@@ -72,6 +72,34 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, region de planificacion"
 
+************************** 
+	** REGIONES **************
+	**************************
+
+	gen ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	gen geolev1=.
+	replace geolev1=18801 if  region==1		/*Central*/
+	replace geolev1=18802 if  region==2		/*Chorotega*/
+	replace geolev1=18803 if  region==3		/*Pacífico central*/
+	replace geolev1=18804 if  region==4		/*Brunca*/
+	replace geolev1=18805 if  region==5		/*Huetar Atlántica*/
+	replace geolev1=18806 if  region==6		/*Huetar Norte*/
+	
+	label define geolev1 18801"Central" 18802"Chorotega" 18803"Pacífico central" 18804"Brunca" 18805"Huetar Atlántica" 18806"Huetar Norte" 
+	label value geolev1 geolev1
+	label var geolev1 " Primera division politico-administrativa, Región"
+
 
 *====================================================================================================================================*
 *                                                    VARIABLES DEL HOGAR                                                             *
@@ -1041,6 +1069,14 @@ label var yoficial_ch "Ingreso del hogar total generado por el país"
 gen ypeoficial_ch=ipcn
 label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+*************************************
+*** Trabaja desde casa *******
+*************************************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if c11 == 1 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (c11>1 & c11<=12) & (condocup_ci==1 | condocup_ci==2)
+
 *====================================================================================================================================*
 *                                                   VARIABLES DE EDUCACIÓN
 *====================================================================================================================================*			
@@ -1122,7 +1158,7 @@ label variable edupi_ci "Primaria incompleta"
 ********************************************************************************************************************************
 ***EDUPC_CI: Personas que han completado la educacion primaria
 ********************************************************************************************************************************
-gen edupc_ci=a14==16  | (a14==29 | a14==39) 
+gen edupc_ci=a14>=16 
 replace edupc_ci=. if aedu_ci==. 
 label variable edupc_ci "Primaria completa"
 
@@ -1636,6 +1672,23 @@ lab val ptmc_ch ptmc_ch
 
 lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
 lab val pnc_ci pnc_ci
+
+	************************** 
+	** REGIONES **************
+	**************************
+
+	replace ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	*label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	*label value ine01 ine01
+	*label var ine01 " Primera division politico-administrativa, Región"	
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

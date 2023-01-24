@@ -50,7 +50,7 @@ use `base_in', clear
 /*				VARIABLES DEL HOGAR			*/
 /************************************************************************/
 
-
+gen ine01 = dpto
 gen region_c = dpto
 label define region_c  1 "Montevideo" ///
            2 "Artigas" /// 
@@ -850,6 +850,15 @@ replace durades_ci=. if f116==2
 gen antigenanio=(f88_1/12)
 egen antiguedad_ci=rowtotal(antigenanio  f88_2)
 recode antiguedad_ci 0=. if condocup_ci !=1
+
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if f78 == 2 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (f78>3 & f78<=8) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (f78==1) & (condocup_ci==1 | condocup_ci==2)
 	
 *********************************************************************************************************
 *                                       INGRESOS                                                        *
@@ -1393,7 +1402,7 @@ la var asispre_ci "Asiste a educacion prescolar"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & e51_8<4) & (aedu_ci>12 & e51_10<3) & (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
+gen byte eduui_ci=(aedu_ci>12 & e51_8<4) | (aedu_ci>12 & e51_10<3) | (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Superior incompleta"
 

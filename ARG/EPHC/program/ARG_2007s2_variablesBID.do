@@ -1121,7 +1121,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
    *Ajustando variables
 	replace ch10=. if ch10==9
-	replace ch12=. if ch12==99 | ch12==9 // El último condicional es para sacar a la población con educación especial
+	replace ch12=. if ch12==99 | ch12==9 // Missing educación especial
 	replace ch13=. if ch13==9
 	destring ch14, replace
 	replace ch14=. if ch14==98 | ch14==99
@@ -1135,7 +1135,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	replace aedu_ci=0 if (ch10==0 | ch10==3) // Cero años de educación para aquellos que no ha asistido nunca a ninguna instituciones y los menores de 2 años.
 	replace aedu_ci=0 if ch12==1 // Prescolar
 	replace aedu_ci=ch14 if ch12==2 | ch12==3 & ch13==2
-	replace aedu_ci=ch14+7 if ch12==4 & ch13==2
+	replace aedu_ci=ch14+6 if ch12==4 & ch13==2
 	replace aedu_ci=ch14+9 if ch12==5 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==6 & ch13==2
 	replace aedu_ci=ch14+12 if ch12==7 & ch13==2
@@ -1143,16 +1143,16 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 		
 	*Para quienes terminaron el último nivel educativo al que asistió
 	
-	replace aedu_ci=7 if ch12==2 & ch13==1
+	replace aedu_ci=6 if ch12==2 & ch13==1
 	replace aedu_ci=9 if ch12==3 & ch13==1
 	replace aedu_ci=12 if ch12==4 & ch13==1
 	replace aedu_ci=12 if ch12==5 & ch13==1
-	replace aedu_ci=17 if ch12==6 & ch13==1
+	replace aedu_ci=15 if ch12==6 & ch13==1
 	replace aedu_ci=17 if ch12==7 & ch13==1
 	replace aedu_ci=19 if ch12==8 & ch13==1
 	
 	*Imputando para los que tenemos certeza del nivel educativo más alto alcanzado
-	replace aedu_ci=7 if nivel_ed==2 & aedu_ci==.
+	replace aedu_ci=6 if nivel_ed==2 & aedu_ci==.
 	replace aedu_ci=12 if nivel_ed==4 & aedu_ci==.
 	replace aedu_ci=17 if nivel_ed==6 & aedu_ci==.
 	replace aedu_ci=0 if nivel_ed==7 & aedu_ci==.
@@ -1166,62 +1166,65 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	*eduno_ci* 
 	**********
 	
-	gen eduno_ci=(nivel_ed==7)
-	label variable eduno_ci "Sin educacion"
+	gen eduno_ci=(aedu_ci==0)
+    replace eduno_ci=. if aedu_ci==. 
 
 	
 	**********
 	*edupi_ci*
 	**********
 	
-	gen edupi_ci=(nivel_ed==1)
-	label variable edupi_ci "Primaria incompleta"
+	gen edupi_ci=(aedu_ci>=1 & aedu_ci<=5)
+	replace edupi_ci=. if aedu_ci==.
 
 	**********
 	*edupc_ci* 
 	**********
 	
-	gen edupc_ci=(nivel_ed==2)
-	label variable edupc_ci "Primaria completa"	
+	gen edupc_ci=(aedu_ci==6)
+	replace edupc_ci=. if aedu_ci==.
 
 
 	**********
 	*edusi_ci*
 	**********
 	
-	gen edusi_ci=(nivel_ed==3)
-	label var edusi_ci "Secundaria incompleta"	
+	gen edusi_ci=(aedu_ci>=7 & aedu_ci<=11)
+	replace edusi_ci=. if aedu_ci==.
 
 
 	**********
 	*edusc_ci*
 	**********
 	
-	gen edusc_ci=(nivel_ed==4)
-	label variable edusc_ci "Secundaria completa"	
+	gen edusc_ci=(aedu_ci==12)
+	replace edusc_ci=. if aedu_ci==.
 
 	**********
 	*eduui_ci*
 	**********
 	
-	gen eduui_ci=(nivel_ed==5)
-	label variable eduui_ci "Superior incompleto"	
+	gen eduui_ci=(aedu_ci>12 & nivel_ed==5) // Nivel superior incompleto
+	replace eduui_ci=1 if aedu_ci>12 & aedu_ci<=16 & nivel_ed!=5 & nivel_ed!=6 // Terciario incompleto (*)
+	replace eduui_ci=. if aedu_ci==.
 
 
 	**********
 	*eduuc_ci*
 	**********
 	
-	gen eduuc_ci=(nivel_ed==6)
-	label variable eduuc_ci "Superior completo"
+	gen eduuc_ci=(aedu_ci>12 & nivel_ed==6)
+	replace eduuc_ci=1 if aedu_ci>=17 & nivel_ed!= 5 & nivel_ed!=6 
+	replace eduuc_ci=. if aedu_ci==.
 
 
 	***********
 	*edus1i_ci*
 	***********
 
-	gen byte edus1i_ci=.
-	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
+	gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+ 	replace edus1i_ci=. if aedu_ci==. 
+ 	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 
 	***********
@@ -1229,65 +1232,56 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 	***********
 
 	gen byte edus1c_ci=(aedu_ci==9)
-	label variable edus1c_ci "1er ciclo de la secundaria completo"
+	replace edus1c_ci=. if aedu_ci==.
+ 	label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 	***********
 	*edus2i_ci*
 	***********
 
-	gen byte edus2i_ci=.
-	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
+	gen byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+ 	replace edus2i_ci=. if aedu_ci==.
+ 	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 	***********
 	*edus2c_ci*
 	***********
 
-	gen byte edus2c_ci=.
-	label variable edus2c_ci "2do ciclo de la secundaria completo"
+	gen byte edus2c_ci=(aedu_ci==12)
+ 	replace edus2c_ci=.  if aedu_ci==.
+ 	label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 	***********
 	*edupre_ci*
 	***********
-	*Cambio realizado 11/7/2016 por Iván Bornacelly - Creando la dummy que identifica a la población reporta haber alcanzado Educación Prescolar
+
 	gen byte edupre_ci=.
-	replace edupre_ci=1 if ch12==1
-	recode edupre_ci(.=0)
-	label variable edupre_ci "Educacion preescolar"
+
 
 	************
 	*asispre_ci*
 	************
-	*Nueva variable incoporada 01/11/2017 por Iván Bornacelly
-	g asispre_ci=.
-	replace asispre_ci=1 if ch10==1 & ch12==1 & ch06>=4
-	recode asispre_ci (.=0)
+
+	gen asispre_ci=(ch10==1 & ch12==1)
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**********
 	*eduac_ci*
 	**********
+
 	gen byte eduac_ci=.
-	label variable eduac_ci "Superior universitario vs superior no universitario"
+ 	replace eduac_ci=1 if ch12==7
+ 	replace eduac_ci=0 if ch12==6
+ 	label variable eduac_ci "Superior universitario vs superior no universitario"
 
-
-/** Mod. 8/2015 Ivan Bonacelli EDU/SLC
-Nota: Queda alrededor de 8% de la muestra que tiene asignado un nivel educativo incompleto a la que no se le puede asignar años de educación
-Esta parte está más adelante y por ahora el impacto más visible es que la población con educación especial se les asigna de manera directa 3 años de educación cuando no deberían ser contabilizados. Se sugiere que mientras evaluamos el tema de la imputación de los años de Educación para Argentina se desactive la segunda línea del siguiente código:*/
-
-replace eduno_ci=1	if aedu_ci==0 
-*replace aedu_ci=3 	if aedu_ci==. & edupi_ci==1
-replace aedu_ci=7 	if aedu_ci==. & edupc_ci==1
-replace aedu_ci=9 	if aedu_ci==. & edusi_ci==1
-replace aedu_ci=12 	if aedu_ci==. & edusc_ci==1
-replace aedu_ci=14 	if aedu_ci==. & eduui_ci==1
-replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
-
+	
 
 	***********
 	*asiste_ci*
 	***********
 	
 	gen asiste_ci=(ch10==1)
+	replace asiste_ci=. if ch10==0 | ch10==9
 	label variable asiste_ci "Asiste actualmente a la escuela"
 
 	*************
@@ -1297,12 +1291,12 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	gen pqnoasis_ci=.
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
 	
-	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 	
 	**************
 	*pqnoasis1_ci*
 	**************
 	
+	**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 	gen pqnoasis1_ci=. 
 
 	***********
@@ -1310,22 +1304,21 @@ replace aedu_ci=18 	if aedu_ci==. & eduuc_ci==1
 	***********
 
 	gen repite_ci=.
-	label var repite_ci "Ha repetido al menos un grado"
-
+	
 	**************
 	*repiteult_ci*
 	**************
 
 	gen repiteult_ci=.
-	label var repiteult "Ha repetido el último grado"
 
 
 	***********
 	*edupub_ci*
 	***********
 	
-	gen edupub_ci=(ch11==1)
-	label var edupub_ci "Asiste a un centro de ensenanza público"
+	gen edupub_ci=.
+ 	replace edupub_ci = 1 if ch11==1 & asiste_ci==1
+ 	replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 
 
 

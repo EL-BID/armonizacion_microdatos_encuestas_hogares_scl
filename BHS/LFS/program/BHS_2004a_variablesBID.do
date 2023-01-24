@@ -79,6 +79,25 @@ la var idh_ch "Household ID"
 egen idp_ci= concat(idh_ch Ind)
 la var idp_ci "Individual ID"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+*************
+****Islas****
+*************
+gen ine01=island
+replace ine01 = 3 if inlist(island,3,18)
+label define ine01 1"New Providence" 2"Grand Bahama" 3"Other Famiy Island"
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
+
 **********
 ***zona***
 **********
@@ -810,35 +829,40 @@ gen aedu_ci = .
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= .
+gen byte eduno_ci=(i_q6==1)
+replace eduno_ci=. if i_q6==9
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 
-gen byte edupi_ci= .
+gen byte edupi_ci=(i_q6==2)
+replace eduno_ci=. if i_q6==9
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=.
+gen byte edupc_ci=(i_q6==3)
+replace eduno_ci=. if i_q6==9
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=.
+gen byte edusi_ci=(i_q6==4)
+replace eduno_ci=. if i_q6==9
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=.
+gen byte edusc_ci=(i_q6==5)
+replace eduno_ci=. if i_q6==9
 label variable edusc_ci "Secundaria completa"
 
 ***************

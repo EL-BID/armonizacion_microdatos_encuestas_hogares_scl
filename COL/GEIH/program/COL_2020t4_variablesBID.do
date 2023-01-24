@@ -965,13 +965,19 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-    replace p6210s1=. if p6210s1==99
+**************
+***aedu_ci***
+**************
+			
+* Para las variables de maximo nivel educativo alcanzado y año aprobado, se reemplaza missing  
+	replace p6210s1=. if p6210s1==99
 	replace p6210=.   if p6210==9
+	replace p6220=. if p6220==9
 	
 	g aedu_ci = . 
+* 0 años de educacion 
 	replace aedu_ci = 0 if p6210 == 1 | p6210 == 2 
 	replace aedu_ci = 0 if p6210 == 3 & p6210s1 == 0 
-
 *Primaria
 	replace aedu_ci = 1 if p6210 == 3 & p6210s1 == 1
 	replace aedu_ci = 2 if p6210 == 3 & p6210s1 == 2
@@ -979,7 +985,6 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	replace aedu_ci = 4 if p6210 == 3 & p6210s1 == 4
 	replace aedu_ci = 5 if p6210 == 3 & p6210s1 == 5
 	replace aedu_ci = 5 if p6210 == 4 & p6210s1 == 0
-
 *Secundaria
 	replace aedu_ci = 6  if p6210 == 4 & p6210s1 == 6
 	replace aedu_ci = 7  if p6210 == 4 & p6210s1 == 7
@@ -991,101 +996,106 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	replace aedu_ci = 12 if p6210 == 5 & p6210s1 == 12
 	replace aedu_ci = 13 if p6210 == 5 & p6210s1 == 13
 *Superior
-	replace aedu_ci = 11+p6210s1 if p6210==6 
+	replace aedu_ci = 11+p6210s1 if p6210==6
+*Missing
+	replace aedu_ci =. if p6210==.
+
 
 **************
 ***eduno_ci***
 **************
 	g byte eduno_ci = aedu_ci == 0
+	replace eduno_ci=. if aedu_ci==.
 	la var eduno_ci "Sin educación"
 
 **************
 ***edupi_ci***
 **************
 	g byte edupi_ci = (aedu_ci >= 1 & aedu_ci < 5) 
+	replace edupi_ci=. if aedu_ci==.
 	la var edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 	g byte edupc_ci = aedu_ci == 5 
+	replace edupc_ci=. if aedu_ci==.
 	la var edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 	g byte edusi_ci = (aedu_ci >= 6 & aedu_ci < 11) 
+	replace edusi_ci=. if aedu_ci==.
 	la var edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-	g byte edusc_ci = (aedu_ci>=11 & aedu_ci<=13) & p6210==5
+	g byte edusc_ci = (aedu_ci==11) 
+	replace edusc_ci=. if aedu_ci==.
 	la var edusc_ci "Secundaria completa"
 
+	
 **************
 ***eduui_ci***
 **************
-*Para la educación superior no es posible saber cuÃ¡ntos años dura el ciclo
-*por ello se hace una aproximación a través de titulación
-	g byte eduui_ci = (aedu_ci > 11 & aedu_ci!=. & p6210 == 6 & (p6220 == 1 | p6220 == 2))
+	g byte eduui_ci = (aedu_ci>11 & p6220<3)
+	replace eduui_ci=. if aedu_ci==.
 	la var eduui_ci "Superior incompleto"
 
 **************
 ***eduuc_ci***
 **************
-*Para la educación superior no es posible saber cuÃ¡ntos años dura el ciclo
-*por ello se hace una aproximación a través de titulación
-	g byte eduuc_ci = ((aedu_ci > 11 & aedu_ci!=.) & p6210 == 6 & (p6220 == 3 | p6220 == 4 | p6220 == 5))
+	g byte eduuc_ci = (aedu_ci > 11 & p6220>2)
+	replace eduuc_ci=. if aedu_ci==.
 	la var eduuc_ci "Superior completo"
 
 ***************
 ***edus1i_ci***
 ***************
 	g byte edus1i_ci = (aedu_ci >= 6 & aedu_ci < 9)
+	replace edus1i_ci=. if aedu_ci==.
 	la var edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
 	g byte edus1c_ci = aedu_ci == 9
+	replace edus1c_ci=. if aedu_ci==.
 	la var edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
 	g byte edus2i_ci = aedu_ci == 10 
+	replace edus2i_ci=. if aedu_ci==.
 	la var edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-	g byte edus2c_ci = (aedu_ci >= 11 & aedu_ci <= 13) & p6220 == 2
+	g byte edus2c_ci = (aedu_ci == 11)
+	replace edus2c_ci=. if aedu_ci==.
 	la var edus2c_ci "2do ciclo de la secundaria completo"
 
-
-	foreach i in no pi pc si sc ui uc s1i s1c s2i s2c {
-		replace edu`i'_ci = . if aedu_ci == .
-	}
 
 ***************
 ***edupre_ci***
 ***************
-	g byte edupre_ci =(p6210s1==1 & p6210==2)
+	g byte edupre_ci =.
 	la var edupre_ci "Educación preescolar"
 
 ***************
 ***asispre_ci**
 ***************
-*Variable creada por IvÃ¡n Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if p6210s1==0 & p6210==2 & p6170==1
-	recode asispre_ci (.=0)
+	g asispre_ci= (p6170==1 & p6210==2 & p6210s1 <2)
 	la var asispre_ci "Asiste a educación prescolar"
 	
 **************
 ***eduac_ci***
 **************
+** No se puede calcular ya que solo tenemos la diferenciacion para los que han culminado el nivel
 	g byte eduac_ci = .
 	la var eduac_ci "Superior universitario vs superior no universitario"
 
@@ -1106,9 +1116,7 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
-g       pqnoasis1_ci = .
+g pqnoasis1_ci = .
 
 ***************
 ***repite_ci***
@@ -1125,12 +1133,12 @@ g       pqnoasis1_ci = .
 ***************
 ***edupub_ci***
 ***************
-	g edupub_ci = 1 if p6175 == 1
-	replace edupub_ci = 0 if p6175 == 2
+	g edupub_ci =.
+	replace edupub=1 if p6175 == 1 & p6170==1
+	replace edupub_ci = 0 if p6175 == 2 & p6170==1
 	la var edupub_ci "Asiste a un centro de enseñanza público"
-	
-	
 
+	
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************

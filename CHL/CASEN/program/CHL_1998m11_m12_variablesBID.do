@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS CHL
 local ENCUESTA CASEN
@@ -60,6 +60,19 @@ use `base_in', clear
 	****************
 	
 gen region_BID_c=4
+
+***************
+	***upm_ci***
+	***************
+gen upm_ci=. 
+
+***************
+	***estrato_ci**
+	***************
+
+clonevar estrato_ci=estrato
+label variable estrato_ci "Estrato"
+
 
 
 /***** revision July 29,2005  Suzanne
@@ -441,9 +454,14 @@ gen spublico_ci=.
 /*******************
 VARIABLES EDUCATIVAS
 *******************/
+*************
+***aedu_ci*** 
+************* 
+
 gen aedu_ci=.
 replace aedu_ci=0 if e6==0 | e6==1 | e6==16
 replace aedu_ci=. if e6==4
+*We assume that 'e6==4', Diferential Education, will be equivalent to missing
 replace aedu_ci=e5 if e6==2 | e6==3
 replace aedu_ci=0 if (e5>=8 & e6==2) | (e5==9 & e6==3)
 replace aedu_ci=. if e5==10 & e6==2
@@ -453,18 +471,18 @@ replace aedu_ci=6 if (e5>=6 & e6==2)
 replace aedu_ci=8 if (e5>=8 & e6==3) 
 *
 
-replace aedu_ci=8+e5 if e6==6 | e6==8
-replace aedu_ci=6+e5 if e6==5 | e6==7 
+replace aedu_ci=8+e5 if e6==6 | e6==8 /*nuevo"científica, humanista, media técnica prof*/
+replace aedu_ci=6+e5 if e6==5 | e6==7  /*antiguo: humanidades o técnica*/ 
 /*En Chile hubo un cambio en el sistema educativo, por el cual se paso de una primaria
 (preparatoria) de 6 años, a una de 8. Por lo tanto, para todos los que contesten haber participado del sistema antiguo, se 
 les imputan 6 años de educacion primaria en vez de 8 ==> Con la secundaria no hay problema, porque en el sistema antiguo se
 compenzaba y duraba 6 años.*/
 replace aedu_ci=12 if (e5>=5 & (e6>=5 & e6<=8))|(e5>=4 & (e6==5 | e6==7))
 replace aedu_ci=8 if (e6>=5 & e6<=8) & (e5==9 | e5==10)
-replace aedu_ci=12+e5 if e6>=9 & e6<=14
+replace aedu_ci=12+e5 if e6>=9 & e6<=14 /* técnica superior completo o incompleto, profesional completo o incompleto */
 replace aedu_ci=12 if (e6>=9 & e6<=14) & (e5==9 | e5==10)
-replace aedu_ci=17+e5 if e6==15
-
+replace aedu_ci=17+e5 if e6==15 /*posgrado*/
+replace aedu_ci=. if e6==99 | e6==.
 /*
 OLD CODE:
 gen eduno_ci=(aedu_ci==0)
@@ -482,6 +500,13 @@ gen edusc_ci=edus2c_ci
 gen eduui_ci=(e6==9 | e6==11 | e6==13)
 gen eduuc_ci=(e6==10 | e6==12 | e6==14 | e6==15)
 */
+
+***************
+***asiste_ci***
+***************
+
+gen asiste_ci=(e2==1)
+label variable asiste_ci "Asiste actualmente a la escuela"
 
 *****************
 ***pqnoasis_ci***
@@ -520,7 +545,7 @@ label variable eduno_ci "Cero anios de educacion"
 **************
 
 gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
+replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
 
@@ -529,7 +554,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 
 gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==8
+replace edupc_ci=1 if aedu_ci==6
 replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
@@ -538,7 +563,7 @@ label variable edupc_ci "Primaria completa"
 **************
 
 gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>8 & aedu_ci<12
+replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
 replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
@@ -548,6 +573,7 @@ label variable edusi_ci "Secundaria incompleta"
 
 gen byte edusc_ci=0
 replace edusc_ci=1 if aedu_ci==12
+replace edusc_ci=1  if aedu_ci==13 & e6==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
 
@@ -556,7 +582,7 @@ label variable edusc_ci "Secundaria completa"
 ***************
 
 gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci==9
+replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<8 
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -565,7 +591,7 @@ label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 ***************
 
 gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
+replace edus1c_ci=1 if aedu_ci==8
 replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
@@ -574,7 +600,7 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***************
 
 gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci==11
+replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<12
 replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
@@ -584,6 +610,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 gen byte edus2c_ci=0
 replace edus2c_ci=1 if aedu_ci==12
+replace edusc_ci=1  if aedu_ci==13 & e6==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que los dejo aca.
 replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
@@ -591,8 +618,8 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
+gen byte eduui_ci=(aedu_ci>12 & e6==9)  | (aedu_ci>12 & e6==11)  // mas de 12 anios y tecnico superior completo o profesional incompleto 
+replace eduui_ci=0 if aedu_ci==13 & e6==8 // hay casos de estudiantes tecnicos secundarios con 13 anios de educacion. no corresponde a terciario, asi que aquí ponemos 0.
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -601,7 +628,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
+replace eduuc_ci=1 if aedu_ci>12 & (e6==10 | e6==12 | e6==14 | e6==15)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria incompleta o mas"
 
@@ -611,6 +638,7 @@ label variable eduuc_ci "Universitaria incompleta o mas"
 ***************
 
 gen edupre_ci=(e6==1)
+replace edupre_ci=. if e6 == . | e6 == 99
 label variable edupre_ci "Educacion preescolar"
 
 
@@ -619,15 +647,10 @@ label variable edupre_ci "Educacion preescolar"
 **************
 gen eduac_ci=.
 replace eduac_ci=0 if e6>=9 & e6<=12
-replace eduac_ci=1 if e6==13 | e6==14
+replace eduac_ci=1 if e6==13 & e6<=15
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-***************
-***asiste_ci***
-***************
 
-gen asiste_ci=(e2==1)
-label variable asiste_ci "Asiste actualmente a la escuela"
 
 
 foreach var of varlist edu* {
@@ -857,19 +880,176 @@ gen region_c=.
 ******************************
 *** VARIABLES DE GDI *********
 ******************************
+	***************
+	***afroind_ci***
+	***************
+* no hay variable 
+gen afroind_ci=. 
 	
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=2000
+
 	
 	/***************************
      * DISCAPACIDAD
     ***************************/
 	
-gen dis_ci==. 
-lab def dis_ci 1 1 "Con Discapacidad" 0 "Sin Discapacidad"
+gen dis_ci=. 
+lab def dis_ci  1 "Con Discapacidad" 0 "Sin Discapacidad"
 lab val dis_ci dis_ci
 label var dis_ci "Personas con discapacidad"
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
+	**************************
+	** REGIONES **************
+	**************************
+
+   gen ine01=.   
+   replace ine01=1 if  r==1				/*Arica y Parinacota*/
+   replace ine01=2 if  r==2				/*Antofagasta*/
+   replace ine01=3 if  r==3				/*Atacama*/
+   replace ine01=4 if  r==4				/*Coquimbo*/
+   replace ine01=5 if  r==5		    	/*Valparaíso*/
+   replace ine01=6 if  r==6				/*O'Higgins*/
+   replace ine01=7 if  r==7				/*Maule*/
+   replace ine01=8 if  r==8				/*Bío Bío*/
+   replace ine01=9 if  r==9				/*La Araucanía*/
+   replace ine01=10 if r==10			/*Los Lagos*/
+   replace ine01=11 if r==11			/*Aysén*/
+   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if r==13			/*Metropolitana Santiago*/
+
+	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+gen ine02 = . 
+
+	*******************
+	*** SALUD  ***
+	*******************
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+replace cobsalud_ci=1 if ((s1>=0 & s1<7) | s1==8) 
+replace cobsalud_ci=0 if s1==7
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=1 if s1>=0 & s1<=5
+replace tipocobsalud_ci=2 if s1==6
+replace tipocobsalud_ci=3 if s1==8
+replace tipocobsalud_ci=0 if cobsalud==0
+replace tipocobsalud_ci=. if s1==9
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1"Publico" 2"Privado" 3"otro" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en últimos 30 días.
+ 
+gen probsalud_ci=1 if  s16==1 
+replace probsalud_ci=0 if s16==2
+replace probsalud_ci=. if s16==.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+* reporta que no tuvo consulta por costo
+gen costo_ci=.
+replace costo_ci=0 if s22!=3 
+replace costo_ci=1 if s22==3 
+replace costo_ci=. if s22==9
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+replace atencion_ci=0 if s22!=6
+replace atencion_ci=1 if s22==6
+replace atencion_ci=. if s22==9
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+	
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
 		
-
-
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci ***
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

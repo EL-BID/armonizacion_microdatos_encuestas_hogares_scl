@@ -2036,258 +2036,44 @@ by idh_ch: egen remesas_ch=sum(remesas_ci)if relacion_ci!=6
 /*						VARIABLES EDUCATIVAS			  */
 /******************************************************************************************/
 
+**************
+***aedu_ci****
+**************
 
-/*
-NIVEL Y AÑO MAS ALTO ALCANZADO	
-			e54_1_1	Año	Años cursados en Primaria
-			e54_1_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_2_1	Año	Años cursados en Secundaria
-			e54_2_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_3_1	Año	Años cursados en Enseñanza Técnica
-			e54_3_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_3_3	1	Exigencia de enseñanza secundaria completa para realizar curso de UTU
-				2	Exigencia de enseñanza secundaria primer ciclo para realizar curso de UTU
-				3	Exigencia de enseñanza primaria completa para realizar curso de UTU
-				4	Ninguna exigencia
-			e52-4_1	Año	Magisterio o Profesorado
-			e52-4_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_5-1	Año	Universidad o similar
-			e54_5_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e54_6_1	Año	Terciario no universitario
-			e54_6_2	1 = Si / 2 = No	Finalizo o no el nivel
-			e52-7-1	Año	Posgrado (maestría o doctorado)
-			e54_7_2	1 = Si / 2 = No	Finalizo o no el nivel
+gen aedu_ci = . 
+replace aedu_ci = 0 if e52_1 > 0 // 0 Anios cursados en preescolar.
+
+* Nivel más alto alcanzado y aprobado.
+replace aedu_ci = e54_1_1 if e54_1_1 > 0 // Escuela primaria.
+replace aedu_ci = e54_2_1 + 6 if e54_2_1 > 0 // Escuela secundaria. 
+replace aedu_ci = e54_3_1 + 6 if (e54_3_1 > 0 & e54_3_3 == 3) //  Enseñanza técnica requisito primaria.
+replace aedu_ci = e54_3_1 + 9 if (e54_3_1 > 0 & e54_3_3 == 2) //  Enseñanza técnica requisito primer ciclo.
+replace aedu_ci = e54_3_1 + 12 if (e54_3_1 > 0 & e54_3_3 == 1) // Enseñanza técnica requisito secundaria.
+replace aedu_ci = e54_4_1 + 12 if e54_4_1 > 0 // Magisterio o profesorado.
+replace aedu_ci = e54_5_1 + 12 if e54_5_1 > 0 // Universidad o similar.
+replace aedu_ci = e54_6_1 + 12 if e54_6_1 > 0  // Terciario no universitario.
+replace aedu_ci = e54_7_1 + 16 if e54_7_1 > 0 // Posgrado o doctorado.
+
+/* Anios cursados por nivel por asistentes. 
+
+	- Se considera que el anio anterior como aprobado al computar los anios 
+	de educacion.
+
+	- (**) Al no poder identificar los anios de educacion previos a aquellas
+	personas que reportan Formacion Profesional Básica se toman como perdidos.	
 */
 
+replace aedu_ci = e52_3 - 1 if e52_3 > 0 // Primaria Común.
+replace aedu_ci = 6 + e52_4 - 1 if e52_4 > 0 // Cliclo basico Liceo. 
+replace aedu_ci = 6 + e52_5 - 1 if e52_5 > 0 // Cliclo basico UTU.
+replace aedu_ci = 9 + e52_6 - 1 if e52_6 > 0 // Bachillerato Secundario.
+replace aedu_ci = 9 + e52_8 - 1 if e52_8 > 0 // Bachillerato Tecnológico.
+// Formación Profesional Básica (**).
+replace aedu_ci = 12 + e52_9 - 1  if e52_9 > 0 // Magisterio o profesorado.
+replace aedu_ci = 12 + e52_10 - 1 if e52_10 > 0 // Universidad o similar.
+replace aedu_ci = 12 + e52_11 - 1 if e52_11 > 0 // Terciario no universitario.
+replace aedu_ci = 16 + e52_12 - 1 if e52_12 > 0 // Posgrado (maestría o doctorado).
 
-** Aug, 2015: Se efectuan cambios en sintaxis de variable aedu_ci en base a revisión por Iván Bornacelly SCL/EDU **
-** Ajustado Jul, 2017 por Iván Bornacelly SLC/EDU
-
-*Replicando lo que está en la progrmación de años posteriores.
-*NOTA: No hay categoria ENSEÑANZA TÉCNICA para la variable de asistencia. Esta categoría si existe para el caso de lso
-
-*Para quienes están asistiendo.[e_52] - Si grupo de variables tiene 1 quiere decir que la persona asiste al nivel señalado. De lo contrario no asiste a ese nivel. 
-gen a_post=1 if e52_12>=1
-replace a_post=0 if e52_12==0
-
-gen a_terc=1 if e52_11>=1
-replace a_terc=0 if e52_11==0
-
-gen a_univ=1 if e52_10>=1
-replace a_univ=0 if e52_10==0
-
-gen a_mag=1 if e52_9>=1
-replace a_mag=0 if e52_9==0
-
-gen a_bachtec=1 if e52_8>=1
-replace a_bachtec=0 if e52_8==0
-
-gen a_bachsec=1 if e52_6>=1
-replace a_bachsec=0 if e52_6==0
-
-gen a_profbas=1 if e52_7>=1 // Esta podría ser equivalente a Enseñanza Técnica
-replace a_profbas=0 if e52_7==0
-
-gen a_cbutu=1 if e52_5>=1
-replace a_cbutu=0 if e52_5==0
-
-gen a_cbliceo=1 if e52_4>=1
-replace a_cbliceo=0 if e52_4==0
-
-gen a_priesp=1 if e52_2>=0
-replace a_priesp=0 if e52_2==0
-
-gen a_pricom=1 if e52_3>=1
-replace a_pricom=0 if e52_3==0
-
-gen a_preesc=1 if e52_1>=1
-replace a_preesc=0 if e52_1==0
-
-gen aedu_ci=.
-replace aedu_ci= 0            if a_preesc==1
-replace aedu_ci= e52_2        if a_priesp==1
-replace aedu_ci= e52_3        if a_pricom==1
-replace aedu_ci= e52_4 + 6    if a_cbliceo==1
-replace aedu_ci= e52_5 + 6    if a_cbutu==1
-replace aedu_ci= e52_6 + 6    if a_bachsec==1 // Se le adiciona 6 porque la variable toma valores 4-6
-replace aedu_ci= e52_8 + 6    if a_bachtec==1 // Se le adiciona 6 porque la variable toma valores 4-6
-replace aedu_ci= e52_7 + 12   if a_profbas==1 // Esto podría ser equivalente a Enseñanza Técnica.
-replace aedu_ci= e52_9 + 12   if a_mag==1
-replace aedu_ci= e52_10 + 12  if a_univ==1
-replace aedu_ci= e52_11 + 12  if a_terc==1
-replace aedu_ci= e52_12 + 17  if a_post==1
-*replace aedu_ci=0             if e50==2 & (edad>=5 & edad!=.)  <<------- Revisar si esto iría acá // No CREO
-
-replace aedu_ci=aedu_ci-1 if aedu_ci>=1 & aedu_ci!=.
-
-*Para quienes no asisten esta variable se completa con la pregunta: ¿cuál es el nivel y año más alto aprobado? [e_54]
-*NOTA: No existe la categoria PRESCOLAR.
-gen post=1 if e54_7_1>=1
-replace post=0 if e54_7_1==0
-
-gen terc=1 if e54_6_1>=1
-replace terc=0 if e54_6_1==0
-
-gen univ=1 if e54_5_1>=1
-replace univ=0 if e54_5_1==0
-
-gen mag=1 if e54_4_1>=1
-replace mag=0 if e54_4_1==0
-
-gen enstec=1 if e54_3_1>=1
-replace enstec=0 if e54_3_1==0
-
-gen bachsec=1 if e54_2_1>=1
-replace bachsec=0 if e54_2_1==0
-
-gen eprim=1 if e54_1_1>=1
-replace eprim=0 if e54_1_1==0
-
-replace aedu_ci=e54_1_1 if eprim==1 & e53==1
-replace aedu_ci=e54_2_1+6 if bachsec==1 & e53==1
-replace aedu_ci=e54_3_1+12 if enstec==1 & e53==1
-replace aedu_ci=e54_4_1+12 if mag==1 & e53==1
-replace aedu_ci=e54_5_1+12 if univ==1 & e53==1
-replace aedu_ci=e54_6_1+12 if terc==1 & e53==1
-replace aedu_ci=e54_7_1+17 if post==1 & e53==1
-
-replace aedu_ci=0             if e53==2 & (edad>=5 & edad!=.)
-
-replace aedu_ci=. if aedu_ci>=25
-replace aedu_ci=0 if aedu_ci==. & e53!=2 & e53!=.
-
-
-/*
-recode e52_6 (4=1) (5=2) (6=3)
-recode e52_8 (4=1) (5=2) (6=3)
-
-gen asiste=.
-replace asiste=1 if e50==1 // Asistiendo
-replace asiste=0 if e50==2 // No asistiendo
-
-gen ha_asistido=.
-replace ha_asistido=1 if e53==1 // Ha asistido
-replace ha_asistido=0 if e53==2 // No ha asistido
-
-/*
-gen dpri = 1 if (e54_1_1>0)
-gen dsec = 1 if (e54_2_1>0)
-gen dtec = 1 if (e54_3_1>0)
-gen dmag = 1 if (e54_4_1>0)
-gen duni = 1 if (e54_5_1>0)
-gen dter = 1 if (e54_6_1>0)
-gen dmae = 1 if (e54_7_1>0)
-
-gen aprees = (e52_1>0)
-gen aprie  = (e52_2>0)
-gen apric  = (e52_3>0)
-gen alic   = (e52_4>0)
-gen acicb  = (e52_5>0)
-gen abachs = (e52_6>0)
-gen abacht = (e52_8>0)
-gen amag   = (e52_9>0)
-gen auniv  = (e52_10>0)
-gen aterc  = (e52_11>0)
-gen aposg  = (e52_12>0)
-*/
-
-/*
-De acuerdo al manual del entrevistador 
-la formación profesional básica no es equivalente al
-ciclo basico. Por lo tanto no los años en este no se consideran.
-En caso de que alguien la haya tomado se consideran que tiene primaria
-ya que para tomarla es requisito haber finalizado la pimaria. 
-*/
-
-/*  Criterios para la elaboración de años de educación aprobados:
-       > No se toma en cuenta los años de preescolar
-	   > Los años de educacion primaria especial también son 6 años, como la primaria comun
-	   > Solo para años 2006 y 2007 se reconoce la educación técnica. Pero se asume que todos tiene ciclo basico 
-	     (o sea 9 años de educacion). Esto para no dejar con cero mising a estos individuos. En los otros años no es necesario hacerlo
-		 por que las preguntas son tomadas diferentes.
-*/
-
-
-*Para los que asisten
-
-gen aprees = (e52_1>0)
-gen aprie  = (e52_2>0) 
-gen apric  = (e52_3>0) // Primaria tradicional
-gen alic   = (e52_4>0) // Secundaria baja
-gen acicb  = (e52_5>0) // Secundaria baja
-gen abachs = (e52_6>0) // Secundaria alta
-gen fpbas  = (e52_7>0) // Formación profesional básica
-gen abacht = (e52_8>0)
-gen amag   = (e52_9>0)
-gen auniv  = (e52_10>0)
-gen aterc  = (e52_11>0)
-gen aposg  = (e52_12>0)
-
-/*
-
-gen aedu_ci = .
-replace aedu_ci = 0         if aprees==1 
-replace aedu_ci = e52_2     if aprie==1  & e52_2<=6
-replace aedu_ci = e52_3     if apric==1  & e52_3<=6
-replace aedu_ci = e52_4+6   if alic==1   & e52_4<=3
-replace aedu_ci = e52_5+6   if acicb==1  & e52_5<=3
-replace aedu_ci = e52_6+9   if abachs==1 & e52_6<=3
-replace aedu_ci = 7         if e52_7>=1 & e52_7!=.
-replace aedu_ci = e52_8+9   if abacht==1 & e52_8<=3
-replace aedu_ci = e52_9+12  if amag==1   & e52_9<9
-replace aedu_ci = e52_10+12 if auniv==1  & e52_10<9
-replace aedu_ci = e52_11+12 if aterc==1  & e52_11<9
-replace aedu_ci = e52_12+17 if aposg==1  & e52_12<9
-replace aedu_ci = aedu_ci-1 if aedu_ci>0 & aedu_ci!=.
-*/
-
-gen aedu_ci = .
-replace aedu_ci = 0         if aprees==1 
-replace aedu_ci = .         if aprie==1e52 // No se incluye. Equivale a educación especial.
-replace aedu_ci = e52_3     if apric==1  & e52_3<=6
-replace aedu_ci = e52_4+6   if alic==1   & e52_4<=3
-replace aedu_ci = e52_5+6   if acicb==1  & e52_5<=3
-replace aedu_ci = e52_6+9   if abachs==1 & e52_6<=3
-replace aedu_ci = .         if fpbas==1  // No se incluye. Corresponde a educación para adultos
-replace aedu_ci = e52_8+9   if abacht==1 & e52_8<=3
-replace aedu_ci = e52_9+12  if amag==1   & e52_9<9
-replace aedu_ci = e52_10+12 if auniv==1  & e52_10<9
-replace aedu_ci = e52_11+12 if aterc==1  & e52_11<9
-replace aedu_ci = e52_12+17 if aposg==1  & e52_12<9
-
-replace aedu_ci = aedu_ci-1 if aedu_ci>0 & aedu_ci!=.
-
-
-*Para los que asistieron
-
-gen dpri = 1 if (e54_1_1>0) // Primaria
-gen dsec = 1 if (e54_2_1>0) // Secundaria
-gen dtec = 1 if (e54_3_1>0) // Enseñanza técnica
-gen dmag = 1 if (e54_4_1>0) // Profesorado - Magisterio
-gen duni = 1 if (e54_5_1>0) // Universidad
-gen dter = 1 if (e54_6_1>0) // Terciario no Universitario
-gen dmae = 1 if (e54_7_1>0) // Postgrado
-
-/*
-replace aedu_ci = e54_1_1 		    if dpri==1 & e54_1_1 <=6
-replace aedu_ci = e54_2_1 + 6		if dsec==1 & e54_2_1 <=6
-replace aedu_ci = e54_3_1 + 9		if dtec==1 & e54_3_1 <=6
-replace aedu_ci = e54_4_1 + 12		if dmag==1 & e54_4_1 <9
-replace aedu_ci = e54_5_1 + 12		if duni==1 & e54_5_1 <9
-replace aedu_ci = e54_6_1 + 12		if dter==1 & e54_6_1 <9
-replace aedu_ci = e54_7_1 + 17		if dmae==1 & e54_7_1 <9
-replace aedu_ci=0                   if e53==2 & (edad>=5 & edad!=.)
-*/
-
-replace aedu_ci = e54_1_1 		    if dpri==1 & e54_1_1 <=6
-replace aedu_ci = e54_2_1 + 6		if dsec==1 & e54_2_1 <=6
-replace aedu_ci = e54_4_1 + 12		if dmag==1 & e54_4_1 <9
-replace aedu_ci = e54_5_1 + 12		if duni==1 & e54_5_1 <9
-replace aedu_ci = e54_6_1 + 12		if dter==1 & e54_6_1 <9
-replace aedu_ci = e54_7_1 + 17		if dmae==1 & e54_7_1 <9
-replace aedu_ci=. 		            if dtec==1 // No se incluye la educación para adultos
-replace aedu_ci = 0                 if e51==2 & (edad>=5 & edad!=.)  // Para quienes nunca asistieron y no están asistiendo.
-*/
 
 **************
 ***eduno_ci***
@@ -2366,7 +2152,13 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16)
+/* Considero aquellos que tengan mas de 12 anios de educacion junto con los anios
+aprobados sin haber finalizado nivel o aquellos que  estan cursando magisterio 
+o prof , tecnica o univ. 
+*/
+gen byte eduui_ci = (aedu_ci > 12 & e54_4_2 == 2) | (aedu_ci > 12 & e54_5_2 == 2) ///
+					| (aedu_ci > 12 & e54_6_2 == 2) | (aedu_ci > 12 & e52_9 > 0) ///
+					| (aedu_ci > 12 & e52_10 > 0) | (aedu_ci > 12 & e52_11 > 0)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -2374,7 +2166,12 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=(aedu_ci>=16) 
+/* Considero aquellos que tengan mas de 12 anios de educacion junto con los anios
+aprobados habiendo finalizado nivel o aquellos estan cursando posgrado y por ende
+terminaron la universidad. 
+*/
+gen byte eduuc_ci = (aedu_ci > 12 & e54_4_2 == 1) | (aedu_ci > 12 & e54_5_2 == 1) ///
+					| (aedu_ci > 12 & e54_6_2 == 1) | (aedu_ci > 12 & e52_12 > 0) 
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -2382,65 +2179,69 @@ label variable eduuc_ci "Universitaria completa o mas"
 ***edupre_ci***
 ***************
 
-gen edupre_ci=a_preesc
+gen edupre_ci = .
+label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
-* Agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if e50==1 & e52_1!=0 & e28>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"
+
+gen byte asispre_ci = (e52_2 > 0)
+la var asispre_ci "Asiste a educacion prescolar"
 
 
-/*
-e52_10	Año	Universidad o similar
-e52_11	Año	Terciario no universitario
-*/
+****************
+****eduac_ci****
+****************
 
 gen eduac_ci=.
-replace eduac_ci = 1 if e52_10>0
-replace eduac_ci = 0 if e52_11>0
-replace eduac_ci =. if e52_10>=10 | e52_11>=10
+replace eduac_ci = 1 if (aedu_ci > 12 & e52_10 > 0) ///
+						| (aedu_ci > 12 & e54_5_1 > 0) // universidad o similar. 
+replace eduac_ci = 0 if (aedu_ci > 12 & e52_9 > 0) | (aedu_ci > 12 & e52_11 > 0) ///
+						| (aedu_ci > 12 & e54_4_1 > 0) | (aedu_ci > 12 & e54_6_1 > 0) // magisterio o prof terciario no univ
 
-/*
-ASISTENCIA ACTUAL A ESTABLECIMIENTO DE ENSEÑANZA	e50	1 = Si / 2 = No	
-*/
+
+****************
+****asiste_ci***
+****************
 
 gen asiste_ci=.
 replace asiste_ci = 1 if (e50==1)
 replace asiste_ci = 0 if (e50==2)
 
+*****************
+***pqnoasis_ci***
+*****************
 
 gen pqnoasis_ci=.
-
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 	
-**************
-*pqnoasis1_ci*
-**************
-g       pqnoasis1_ci =.
+*****************
+***pqnoasis1_ci**
+*****************
 
+gen pqnoasis1_ci =.
+
+*****************
+****repite_ci****
+*****************
 
 gen repite_ci=.
+
+*****************
+**repiteult_ci***
+*****************
+
 gen repiteult_ci=.
 
-/*
-ESTABLECIMIENTO PÚBLICO O PRIVADO	e51	1	Público
-						2	Privado
-*/
+*****************
+****edupub_ci****
+*****************
 
 gen edupub_ci=.
-replace edupub_ci = 1 if (e51==1)
-replace edupub_ci = 0 if (e51==2)
+replace edupub_ci = 1 if (e51==1 & e50==1)
+replace edupub_ci = 0 if (e51==2 & e50==1)
 
 label var  aedu_ci "Anios de Educacion"
-****************
-***tecnica_ci **
-****************
-gen tecnica_ci=(e52_11>=1 & e52_11<=9)
-label var tecnica_ci "=1 formacion terciaria tecnica"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2463,7 +2264,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

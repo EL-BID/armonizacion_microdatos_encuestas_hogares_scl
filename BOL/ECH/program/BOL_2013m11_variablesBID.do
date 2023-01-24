@@ -1486,31 +1486,39 @@ replace aedu_ci = 8 if (s5_02b==8 & s5_02a==17) |  (s5_02b==3 & s5_02a==15) | (s
 replace aedu_ci = 9 if (s5_02b==1 & s5_02a==16) |  (s5_02b==1 & s5_02a==18) | (s5_02b==3 & s5_02a==20)
 replace aedu_ci = 10 if (s5_02b==2 & s5_02a==16) |  (s5_02b==2 & s5_02a==18) | (s5_02b==4 & s5_02a==20)
 replace aedu_ci = 11 if (s5_02b==3 & s5_02a==16) |  (s5_02b==3 & s5_02a==18) | (s5_02b==5 & s5_02a==20)
-replace aedu_ci = 12 if (s5_02b==4 & s5_02a==16) |  (s5_02b==4 & s5_02a==18) | (s5_02b==6 & s5_02a==20)
+replace aedu_ci = 12 if (s5_02b==4 & s5_02a==16) |  (s5_02b==4 & s5_02a==18) | (s5_02b==6 & s5_02a==20) | (s5_02a==37)
 
 * Superior
 
-replace aedu_ci = 13 if s5_02b==1 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36)
-replace aedu_ci = 14 if s5_02b==2 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36)
-replace aedu_ci = 15 if s5_02b==3 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36)
-replace aedu_ci = 16 if s5_02b==4 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36)
+replace aedu_ci = 13 if s5_02b==1 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36 )
+replace aedu_ci = 14 if s5_02b==2 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36 )
+replace aedu_ci = 15 if s5_02b==3 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36 )
+replace aedu_ci = 16 if s5_02b==4 & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==34 | s5_02a==35 | s5_02a==36 )
 replace aedu_ci = 17 if (s5_02b>=5 & s5_02b<=8) & (s5_02a==28 |  s5_02a==29 | s5_02a==30 |  s5_02a==29 | s5_02a==30 | s5_02a==34 | s5_02a==35 | s5_02a==36)
 
 
-replace aedu_ci = 18 if s5_02b==1 & (s5_02a==31 |  s5_02a==32 | s5_02a==33)
-replace aedu_ci = 19 if s5_02b==2 & (s5_02a==31 |  s5_02a==32 | s5_02a==33)
-replace aedu_ci = 20 if s5_02b==3 & (s5_02a==31 |  s5_02a==32 | s5_02a==33)
-replace aedu_ci = 21 if (s5_02b>=4 & s5_02b<=8) & (s5_02a==31 |  s5_02a==32)
-replace aedu_ci = 21 if (s5_02b==4 & s5_02a==33)
-replace aedu_ci = 22 if (s5_02b==5 & s5_02a==33)
-replace aedu_ci = 22 if (s5_02b==8 & s5_02a==33)
+
+*postgrado (1 anio)
+replace aedu_ci=17 if s5_02a==31 & s5_02b==1 //cursando
+replace aedu_ci=18 if s5_02a==31  & s5_02b==8 //terminado
+
+*maestria (2 anios)
+replace aedu_ci=18 if s5_02a==32 & s5_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=19 if s5_02a==32  & s5_02b==2 //4to semestre aprobado
+replace aedu_ci=19 if s5_02a==32  & s5_02b>=5 & s5_02b<=8 //egresado o titulado
+
+*doctorado (4 anios)
+replace aedu_ci=20 if s5_02a==33 & s5_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=21 if s5_02a==33 & s5_02b==2 //4to o 5to semestre aprobado
+replace aedu_ci=22 if s5_02a==33 & s5_02b==3 //6to o 7mo semestre aprobado
+replace aedu_ci=23 if s5_02a==33 & s5_02b==4 //8vo semestre aprobado
+replace aedu_ci=23 if s5_02a==33 & s5_02b>=5 & s5_02b<=8 //egresado o titulado
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
@@ -1521,7 +1529,6 @@ label variable eduno_ci "Cero anios de educacion"
 gen byte edupi_ci=(aedu_ci>=1 & aedu_ci<=5)
 replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
-
 **************
 ***edupc_ci***
 **************
@@ -1550,7 +1557,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1581,9 +1588,9 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-* Se incorpora la restricción s5_02b<8 para que sea comparable con los otros años LCM dic 2013
-
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s5_02b<8)
+gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<17 ) & (s5_02a==29 | s5_02a==30) // universitaria
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<17 ) & s5_02a==28   // normal
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<15 ) & s5_02a>=34 & s5_02a<=36   // tecnicaturas y formacion militar y policial
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1591,8 +1598,11 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s5_02b==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=17 ) & (s5_02a==29 | s5_02a==30) // universitaria
+replace eduuc_ci=1 if aedu_ci>=17  & s5_02a==28 // normal
+replace eduuc_ci=1 if (aedu_ci>=13 & aedu_ci>=15 ) & s5_02a>=34 & s5_02a<=36 // tecnicaturas
+replace eduuc_ci=1 if  s5_02a>=31 & s5_02a<=33 // postgrados
+
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
 
@@ -1600,32 +1610,27 @@ label variable eduuc_ci "Universitaria completa"
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s5_02a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
+
 
 ***************
 ***asispre_ci***
 ***************
 *Variable añadida por Iván Bornacelly - 01/12/2017
-	g asispre_ci=.	
-	replace asispre_ci=1 if s5_04==1 & s5_05a==13
-	recode asispre_ci (.=0)
+	g asispre_ci=s5_04==1 & s5_05a==13
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 **************
 ***eduac_ci***
 **************
 
-* Se cambia para universidad completa o más 
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s5_02a>=30 & s5_02a<=35 | s5_02a==37)
-replace eduac_ci=0 if (s5_02a==29 | s5_02a>=36 )
-label variable eduac_ci "Superior universitario vs superior no universitario"
-/*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
-YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
-los otros años*/
+replace eduac_ci=1 if (s5_02a>=29 & s5_02a<=35 ) // grados
+replace eduac_ci=0 if (s5_02a>=34 & s5_02a<=36 ) //tecnicaturas
+replace eduac_ci=0 if (s5_02a==28 ) // normal
 
+label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
@@ -1697,16 +1702,13 @@ s5_09:
  3 particular - privado
 */
 
-gen edupub_ci=(s5_09==1 | s5_09==2)
-replace edupub_ci=. if s5_09==.
+gen edupub_ci=(s5_09==1 | s5_09==2) 
+replace edupub_ci=0 if s5_09==3
+replace edupub_ci=. if s5_09==. | s5_09==9
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
 
-gen tecnica_ci = (s5_02a==34 | s5_02a==35)
-label var tecnica_ci "1=formacion terciaria tecnica"
+
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -2200,7 +2202,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

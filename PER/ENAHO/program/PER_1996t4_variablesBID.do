@@ -1,6 +1,6 @@
 
 
-/*
+
 
 * (Versión Stata 12)
 clear

@@ -1652,8 +1652,34 @@ gen tcylmpri_ch =.
 	replace miglac_ci = 0 if miglac_ci != 1 & migrante_ci == 1
 	replace miglac_ci = . if r1b_p_cod==.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
-
-/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2015.pdf */
+	
+	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2015.pdf */
+	
+	
+	**************************
+	** REGIONES ************** 
+	**************************
+	
+   gen ine01=.   
+   replace ine01=1 if  region==1		/*Tarapacá*/
+   replace ine01=2 if  region==2		/*Antofagasta*/
+   replace ine01=3 if  region==3		/*Atacama*/
+   replace ine01=4 if  region==4		/*Coquimbo*/
+   replace ine01=5 if  region==5    	/*Valparaíso*/
+   replace ine01=6 if  region==6		/*O'Higgins*/
+   replace ine01=7 if  region==7		/*Maule*/
+   replace ine01=8 if  region==8		/*Bío Bío*/
+   replace ine01=9 if  region==9		/*La Araucanía*/
+   replace ine01=10 if region==10		/*Los Lagos*/
+   replace ine01=11 if region==11		/*Aysén*/
+   replace ine01=12 if region==12		/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if region==13		/*Metropolitana Santiago*/
+   replace ine01=14 if region==14		/*Los Ríos*/
+   replace ine01=15 if region==15		/*Arica y Parinacota*/
+   
+	label define ine01 1"Tarapacá" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago" 14"Los Ríos" 15"Arica y Parinacota"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
 
 	
 /*_____________________________________________________________________________________________________*/

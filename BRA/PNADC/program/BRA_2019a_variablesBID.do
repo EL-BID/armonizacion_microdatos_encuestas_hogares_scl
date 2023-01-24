@@ -728,6 +728,15 @@ replace antiguedad_ci=. if v40403==. & v40401==. & v40402==.
 drop aux*
 label var antiguedad_ci "Antiguedad en la actividad actual en anios"
 
+*******************
+**TRABAJO EN CASA**
+*******************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if (v4022 == 4 | v4022 == 5) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (v4022>1 & v4022<=3) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (v4022>5 & v4022<=8) & (condocup_ci==1 | condocup_ci==2)
+
 **************
 ***INGRESOS***
 **************
@@ -1046,15 +1055,15 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci= aedu_ci>=13 & aedu_ci<=14 // entre 13 y 14 anios
-replace eduui_ci=1 if (aedu_ci>=15 & aedu_ci<16 & v3007!=1 & v3014!=1) // 15 anios de educacion, sin completar nivel
+replace eduui_ci=1 if aedu_ci == 15 & v3007 == 2 | aedu_ci == 15 & v3014 == 2 // 15 anios de educacion, sin completar nivel
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Terciaria/universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=(aedu>=15) // 15 anios o mas, que es la duracion de tecnica
-replace eduuc_ci=1 if (aedu_ci>=15 & aedu_ci<16 & (v3007==1 | v3014==1)) // entre 15 y 16 anios si completaron el curso
+gen byte eduuc_ci=(aedu > 15) // Mas de 15 anios.
+replace eduuc_ci=1 if (aedu_ci == 15 & (v3007==1 | v3014==1)) // 15 anios si completaron el curso u otro curso
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Terciaria/universitaria completa o mas"
 
@@ -1336,7 +1345,7 @@ label var compu_ch "El hogar posee computador"
 ***internet_ch***
 *****************
 gen internet_ch=(s01029==1)
-label var internet_ch "El hogar posee conexión a Interne
+label var internet_ch "El hogar posee conexión a Internet"
 
 ************
 ***cel_ch***

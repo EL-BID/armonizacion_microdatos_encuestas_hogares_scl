@@ -1078,46 +1078,8 @@ gen vivialqimp_ch=v1c_pagari
 ******************************
 *	aedu_ci
 ******************************
-
-/*
-generat grado=p6-10 if p6>=11 & p6<=16
-replace grado=p6-20 if p6>=21 & p6<=26
-replace grado=p6-30 if p6>=31 & p6<=33
-replace grado=p6-40 if p6>=41 & p6<=49
-replace grado=p6-50 if p6>=51 & p6<=53
-
-replace grado=p6-60 if p6>=61 & p6<=63
-replace grado=p6-70 if p6>=71 & p6<=73
-replace grado=p6-80 if p6>=81 & p6<=84
-replace grado=0 if p6==60
-
-gen nivel=0 if p6==60
-replace nivel=1 if p6>=11 & p6<=16
-replace nivel=2 if p6>=21 & p6<=26
-replace nivel=3 if p6>=31 & p6<=33
-replace nivel=4 if p6>=41 & p6<=49
-replace nivel=5 if p6>=51 & p6<=53
-
-replace nivel=6 if p6>=61 & p6<=84
-gen aedu_ci=0            if nivel==0 
-replace aedu_ci=grado    if nivel==1
-replace aedu_ci=grado+6  if nivel==2 | nivel==3
-replace aedu_ci=grado+12 if nivel==4 | nivel==5
-replace aedu_ci=grado+18 if nivel==6
-
-*replace aedu_ci=0 if edad_ci<5
-*/
-
-gen grado = .
-replace grado = p6 if p6>=0 & p6<=4
-replace grado = p6-10 if p6>=11 & p6<=16
-replace grado = p6-20 if p6>=21 & p6<=23
-replace grado = p6-30 if p6>=31 & p6<=36
-replace grado = p6-40 if p6>=41 & p6<=43
-replace grado = p6-50 if p6>=51 & p6<=56
-replace grado = p6-60 if p6>=61 & p6<=62
-replace grado = p6-70 if p6>=71 & p6<=72
-replace grado = p6-80 if p6>=81 & p6<=84
+*Javier
+// la pregunta P6 de grado educativo alcanzado se aplica unmicamente a mayores de 3 años. La clasificacion corresponde al nivel educativo alcanzado (primer digito) y años aprobados (segundo digito)
 
 gen nivel = .
 replace nivel = 0 if p6>=0 & p6<=4
@@ -1133,15 +1095,26 @@ replace nivel = 8 if p6>=81 & p6<=84
 label define nivel 1 "Primaria" 2 "Vocacional" 3 "Secundaria" 4 "Superior no universitaria" 5 "Superior universitaria" 6 "Especialidad (Postgrado)" 7 "Maestría" 8 "Doctorado"
 label values nivel nivel
 
+gen añosaprobados = .
+replace añosaprobados = 0 if p6>=0 & p6<=4
+replace añosaprobados = p6-10 if p6>=11 & p6<=16
+replace añosaprobados = p6-20 if p6>=21 & p6<=23
+replace añosaprobados = p6-30 if p6>=31 & p6<=36
+replace añosaprobados = p6-40 if p6>=41 & p6<=43
+replace añosaprobados = p6-50 if p6>=51 & p6<=56
+replace añosaprobados = p6-60 if p6>=61 & p6<=62
+replace añosaprobados = p6-70 if p6>=71 & p6<=72
+replace añosaprobados = p6-80 if p6>=81 & p6<=84
+
 gen aedu_ci = .
-replace aedu_ci = 0 if nivel== 0 
-replace aedu_ci = grado if nivel == 1
-replace aedu_ci = grado+6 if nivel == 2
-replace aedu_ci = grado+6 if nivel == 3
-replace aedu_ci = grado+12 if nivel == 4
-replace aedu_ci = grado+12 if nivel == 5
-replace aedu_ci = grado+12+4 if nivel == 6 | nivel == 7 
-replace aedu_ci = grado+12+4+2 if nivel == 8
+replace aedu_ci = 0 if añosaprobados== 0 
+replace aedu_ci = añosaprobados if nivel == 1
+replace aedu_ci = añosaprobados+6 if nivel == 2 
+replace aedu_ci = añosaprobados+6 if nivel == 3
+replace aedu_ci = añosaprobados+12 if nivel == 4
+replace aedu_ci = añosaprobados+12 if nivel == 5
+replace aedu_ci = añosaprobados+12+4 if nivel == 6 | nivel == 7 
+replace aedu_ci = añosaprobados+12+4+2 if nivel == 8
 
 ******************************
 *	eduno_ci
@@ -1168,7 +1141,7 @@ label var edupc_ci "Primaria Completa"
 *	edusi_ci
 ******************************
 gen edusi_ci=(aedu_ci>6 & aedu_ci<12)
-replace edupc_ci=. if aedu_ci==.
+replace edusi_ci=. if aedu_ci==.
 label var edusi_ci "Secundaria Incompleta"
 
 ******************************
@@ -1210,7 +1183,7 @@ label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 *	eduui_ci
 ******************************
 gen eduui_ci=(aedu_ci>12 & aedu_ci<16) & nivel==5
-replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15) & nivel==4
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<14) & nivel==4
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
@@ -1218,7 +1191,7 @@ label var eduui_ci "Universitaria o Terciaria Incompleta"
 *	eduuc_ci
 ******************************
 gen eduuc_ci=(aedu_ci>=16) 
-replace eduuc_ci=1 if (aedu_ci>=15) & nivel==4 
+replace eduuc_ci=1 if (aedu_ci>=14) & nivel==4 
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
 
@@ -1227,14 +1200,12 @@ label var eduuc_ci "Universitaria o Terciaria Completa"
 ******************************
 gen edupre_ci=.
 label var edupre_ci "Educacion preescolar"
-notes: la encuesta no tiene codigo de educacion preescolar 
 
 ******************************
 *	asispre_ci
 ******************************
 gen asispre_ci=.
 label var asispre_ci "Asistencia a Educacion preescolar"
-notes: la encuesta no tiene codigo de educacion preescolar 
 
 ******************************
 *	eduac_ci
@@ -1256,17 +1227,12 @@ label var asiste "Personas que actualmente asisten a centros de enseñanza"
 ******************************
 gen pqnoasis_ci=p5a if p5a>0
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label define pqnoasis_ci 5 "No se ofrece el nivel o grado escolar en la comunidad" 6 "Necesita trabajar",add
-label define pqnoasis_ci 2 "Falta de recursos económicos" 11 "Quehaceres domesticos", add 
-label define pqnoasis_ci 1 "Falta de interes" 10 "Embarazo" 9 "Enfermedad" , add
-label define pqnoasis_ci 3 "No tiene la edad requerida" 8 "Está muy distante" 4 "Ya se graduó" 7 "Se casó" 12 "Otros", add
-label value pqnoasis_ci pqnoasis_ci
+label define pqnoasis 1 "Falta de interes" 2 "Falta de recursos económicos" 3 "No tiene la edad requerida" 4 "Ya se graduó" 5 "No se ofrece el nivel o grado escolar en la comunidad" 6 "Necesita trabajar" 7 "Se casó" 8 "Está muy distante de su vivienda" 9 "Enfermedad" 10 "Embarazo" 11 "Quehaceres domesticos" 12 "Otros"
+label value pqnoasis_ci pqnoasis
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-** Correccion angela lopez 
 g       pqnoasis1_ci = 1 if p5a==2
 replace pqnoasis1_ci = 2 if p5a==6
 replace pqnoasis1_ci = 3 if p5a==9
@@ -1277,13 +1243,12 @@ replace pqnoasis1_ci = 7 if p5a==3
 replace pqnoasis1_ci = 8 if p5a==8 | p5a==5
 replace pqnoasis1_ci = 9 if p5a==12
 
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
+label define pqnoasis1 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
+label value  pqnoasis1_ci pqnoasis1
 
 ******************************
 *	edupub_ci
 ******************************
-*definida solo para los que asisten
 gen edupub_ci=.
 replace edupub_ci=1 if p5_tipo==3
 replace edupub_ci=0 if p5_tipo==4
@@ -1294,13 +1259,14 @@ label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 ******************************
 gen repiteult_ci=.
 label var repiteult_ci "Ha repetido el último grado"
-*la pregunta está en el cuestionatio, pero no en el diccionario o en la base
+*la pregunta está en el cuestionario, pero no en el diccionario o en la base
 
 
 gen repite_ci=(p7b==1)
 label var repite_ci "Ha repetido al menos un grado"
+*solo para personas de 5 a 18 años 
 
-drop nivel grado
+drop nivel añosaprobados
 
 
 /************************************************************************************************************

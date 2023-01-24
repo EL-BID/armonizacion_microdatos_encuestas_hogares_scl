@@ -1148,33 +1148,9 @@ replace formal_1=1 if afiliado_ci1==1 & (cotizando_ci!=1 | cotizando_ci!=0) & pa
 ******************************
 *	aedu_ci
 ******************************
-/*
-Nivel
-Valor Etiqueta
-1 Preescolar
-2 Primaria
-3 Secundaria
-4 Carrera técnica con secundaria terminada
-5 Preparatoria o bachillerato
-6 Carrera técnica con preparatoria terminada
-7 Normal
-8 Profesional
-9 Maestría o doctorado
-#33 grado: Grado escolar al que
+*Para generar años de educacion aprobados utilizamos nivelaprob y gradoaprob 
 
-Valor Etiqueta
-1 Primer año
-2 Segundo año
-3 Tercer año
-4 Cuarto año
-5 Quinto año
-6 Sexto año
-*/
-
-
-*Modificación Mayra Sáenz - Agosto 2015 - Inclusión de los cambios sugeridos por Ivan Bornacelly SCL/EDU.
-
-destring nivel nivelaprob gradoaprob, replace
+destring nivel nivelaprob gradoaprob antec_esc, replace
 
 gen nivel_ed=nivelaprob
 gen grado_ed= gradoaprob
@@ -1183,39 +1159,14 @@ gen aedu_ci=.
 replace aedu_ci=0 if nivel_ed==0 |nivel_ed==1 
 replace aedu_ci=grado_ed if nivel_ed==2
 replace aedu_ci= grado_ed+6 if nivel_ed==3
+replace aedu_ci= grado_ed+6 if nivel_ed==6 & antec_esc==1
 replace aedu_ci= grado_ed+9 if nivel_ed==4
-replace aedu_ci= grado_ed+12 if nivel_ed==5 | nivel_ed==6 |nivel_ed==7
+replace aedu_ci= grado_ed+9 if nivel_ed==6 & antec_esc==2
+replace aedu_ci= grado_ed+12 if nivel_ed==5 |nivel_ed==7
+replace aedu_ci= grado_ed+12 if nivel_ed==6 & antec_esc==3
 replace aedu_ci= grado_ed+12+5 if nivel_ed==8
 replace aedu_ci= grado_ed+12+5+2 if nivel_ed==9
 
-
-
-/*
-*asisten
-gen aedu_ci=.
-gen gradon=grado
-destring nivel gradon nivelaprob gradoaprob, replace
-replace aedu_ci=0 		    if nivel==1
-replace aedu_ci=gradon 		if nivel==2
-replace aedu_ci=gradon+6 	if nivel==3
-replace aedu_ci=gradon+9 	if nivel==5 
-replace aedu_ci=gradon+12 	if nivel==7
-replace aedu_ci=gradon+17 	if nivel==9 
-replace aedu_ci=gradon+12 	if nivel==8 
-replace aedu_ci=gradon+12 	if nivel==4 |nivel==6
-replace aedu_ci=aedu_ci-1 	if aedu_ci!=0
-
-*no asisten
-
-replace aedu_ci=0 if nivelaprob==0 | nivelaprob==1 
-replace aedu_ci=gradoaprob 	if nivelaprob==2  
-replace aedu_ci=gradoaprob+6 	if nivelaprob==3 
-replace aedu_ci=gradoaprob+9 	if nivelaprob==4  
-replace aedu_ci=gradoaprob+12 	if nivelaprob==5 
-replace aedu_ci=gradoaprob+17 	if nivelaprob==8 | nivelaprob==9 
-replace aedu_ci=gradoaprob+12 	if nivelaprob==7
-replace aedu_ci=gradoaprob+12 	if nivelaprob==6
-*/
 ******************************
 *	eduno_ci
 ******************************
@@ -1281,9 +1232,8 @@ label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 ******************************
 *	eduui_ci
 ******************************
-*copié la clasificación que está en el cuestionario
 gen byte eduui_ci=(aedu_ci>12 & aedu_ci<16) & (nivelaprob==7 | nivelaprob==5)
-replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15 & nivelaprob==6) 
+replace eduui_ci=1 if (aedu_ci>12 & aedu_ci<15 & nivelaprob==6 & (antec_esc==2 | antec_esc==3)) 
 replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "Universitaria o Terciaria Incompleta"
 
@@ -1291,7 +1241,7 @@ label var eduui_ci "Universitaria o Terciaria Incompleta"
 *	eduuc_ci
 ******************************
 gen byte eduuc_ci=(aedu_ci>=16) & (nivelaprob==7 | nivelaprob==5)
-replace eduui_ci=1 if (aedu_ci>=15  & nivelaprob==6) 
+replace eduui_ci=1 if (aedu_ci>=15  & nivelaprob==6 & (antec_esc==2 | antec_esc==3)) 
 replace eduuc_ci=1 if nivelaprob==8 | nivelaprob==9
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
@@ -1304,23 +1254,22 @@ label var edupre_ci "Educacion preescolar"
 ******************************
 *	asispre_ci
 ******************************
-*Variable agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=(asis_esc=="1" & nivel==1 & edad>=4)
-	la var asispre_ci "Asiste a educacion prescolar"	
+g asispre_ci=(asis_esc=="1" & nivel==1)
+la var asispre_ci "Asiste a educacion prescolar"	
+
 ******************************
 *	eduac_ci
 ******************************
 gen byte eduac_ci=.
+replace eduac_ci=0 if nivelaprob==6 & antec_esc==3 | nivelaprob==5
 replace eduac_ci=1 if nivelaprob>=7 & nivelaprob<=9
-replace eduac_ci=0 if nivelaprob==6
+label var eduac_ci "Superior universitario vs. no universitario"
 
-label var eduac_ci "Educacion terciaria academica versus Educacion terciaria no academica"
-*no se distingue entre superior universitario y no universitario (terciario)
 ******************************
 *	asiste_ci
 ******************************
 gen asiste_ci=(asis_esc=="1")
-replace asiste_ci=. if aedu_ci==. | asis_esc !="1" & asis_esc !="2"
+replace asiste_ci=. if asis_esc !="1" & asis_esc !="2"
 label var asiste_ci "Personas que actualmente asisten a la escuela"
 
 ******************************
@@ -1328,37 +1277,33 @@ label var asiste_ci "Personas que actualmente asisten a la escuela"
 ******************************
 gen pqnoasis_ci=.
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-*NA
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = .
+g pqnoasis1_ci = .
 
 ******************************
 *	repite_ci
 ******************************
 gen repite_ci=.
-*NA
+
 
 ******************************
 *	repiteult_ci
 ******************************
 gen repiteult_ci=.
-*NA
 
 ******************************
 *	edupub_ci
 ******************************
 gen edupub_ci=.
-replace edupub_ci=1 if tipoesc=="1" & asiste_ci==1
-replace edupub_ci=0 if (tipoesc=="2" | tipoesc=="3") & asiste_ci==1
+replace edupub_ci=1 if tipoesc=="1" & asis_esc=="1"
+replace edupub_ci=0 if (tipoesc=="2" | tipoesc=="3") & asis_esc=="1"
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
-
-
+drop nivel_ed grado_ed
 
 ******************************************************************************
 *	INFRAESTRUCTURE VARIABLES 

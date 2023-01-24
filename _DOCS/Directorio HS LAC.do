@@ -102,8 +102,12 @@ Creation Date:    19 Jul 2018 - 11:14:13
 	if "`pais'" == "HND" & ("`ano'" >= "2008" & "`ano'" <= "2013" ) local rondas m5
 	if "`pais'" == "HND" & ("`ano'" > "2013")  local rondas m6
 * Jamaica
+	if "`pais'" == "JAM"   & ( "`ano'" >= "1997" & "`ano'" >= "2007")                    local rondas m4
+	if "`pais'" == "JAM"   & (  "`ano'" >= "2010")                    local rondas m4
+    if "`pais'" == "JAM"   & ( "`ano'" == "1993" | "`ano'" == "1994" | "`ano'" == "2008" | "`ano'" == "2007")                    local rondas m4
+	if "`pais'" == "JAM"   & ("`ano'" == "1991" | "`ano'" == "1992" | "`ano'" == "1995" | "`ano'" == "1996")                    local rondas m5
 	if "`pais'" == "JAM"   & ("`ano'" == "2009" | "`ano'" == "2007")                    local rondas m10
-	if "`pais'" == "JAM"   & ("`ano'" >= "2010" | "`ano'" == "2008" | "`ano'" < "2007")                    local rondas m4
+	
 * México
 	if "`pais'" == "MEX" & ("`ano'" >= "2000" & "`ano'" <= "2011") local rondas m8_m11
 	if "`pais'" == "MEX" & ("`ano'" >  "2011") local rondas m8_m12

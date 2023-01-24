@@ -1,5 +1,4 @@
 
-
 * (Versión stata 12)
 clear
 set more off
@@ -664,6 +663,13 @@ label val rama_ci rama_ci
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 *Note: A los empleados e independientes se les esta dejando un mâ¹©mo de 5 añ¯³ de antiguedad.
 	
+	***************
+	*trabaja_casa_ci*
+	***************
+	gen trabaja_casa_ci = .
+    replace trabaja_casa_ci = 1 if pp04g == 6 & (condocup_ci==1 | condocup_ci==2)
+    replace trabaja_casa_ci = 0 if  (pp04g !=6) & (condocup_ci==1 | condocup_ci==2)
+	replace trabaja_casa_ci = 0 if  (pp04g ==99)
 
 			**************************
 			***VARIABLES DE INGRESO***
@@ -1326,7 +1332,7 @@ label val rama_ci rama_ci
 * 3. Creación ¤e nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_01_18.pdf pÃ¡gina 10. 
+/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_195EFE752E31.pdf pÃ¡gina 4-5. 
 calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
 Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio del hogar indigente en adulto equivalente */ 
 
@@ -1334,7 +1340,7 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =5733
+gen lp_ci = 36575/3.28
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1342,7 +1348,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =2289.7
+gen lpe_ci =14874/3.31
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1464,10 +1470,10 @@ label var salmm_ci "Salario minimo legal"
 gen categoinac_ci=.
 replace categoinac_ci=1 if cat_inac==1
 replace categoinac_ci=2 if cat_inac==3
-replace categoinac_ci=4 if cat_inac==4
+replace categoinac_ci=3 if cat_inac==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condición ¤e inactividad"
+label var categoinac_ci "Condición de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	

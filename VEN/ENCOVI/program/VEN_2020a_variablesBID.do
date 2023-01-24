@@ -543,15 +543,6 @@ gen salmm_ci=250000.00 if `ano'=="2020"
 replace salmm_ci=150000.00 if `ano'=="2019" 
 label var salmm_ci "Salario minimo legal"
 
-
-*************
-***tecnica_ci**
-*************
-tab s7q11
-
-gen tecnica_ci=(s7q11==7)
-label var tecnica_ci "=1 formacion terciaria tecnica"	
-
 ************
 ***emp_ci***
 ************
@@ -864,168 +855,171 @@ replace ynlm_ch =. if miembros_ci==0
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+* Mod. 6/2022 Agustina Thailinger y Javier Valverde (SCL/EDU)
 
 ***************
 ***asiste_ci***
 ***************
 gen byte asiste_ci=.
-replace asiste_ci=1 if s7q3 ==1 
-replace asiste_ci=0 if s7q3 ==2 
+replace asiste_ci=1 if s7q3==1 
+replace asiste_ci=0 if s7q3==2 
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
-
-***************
-***/aedu_ci****
-***************
-
-recode s7q11* s7q4*  (99=.) (98=.)
-recode s7q11b (7/2014=7)
+*************
+***aedu_ci***
+*************
+recode s7q11* (99=.) (98=.)
+replace s7q11b=.  if s7q11b==2014
+replace s7q11a=.  if s7q11b==.a
+replace s7q11b=.  if s7q11b==.a
+replace s7q11c=.  if s7q11c==.a
+replace s7q11d=.  if s7q11d==.a
+replace s7q11ba=. if s7q11ba==.a
 
 gen byte aedu_ci=.
-replace aedu_ci=0                 if s7q11==1 | s7q11==2
-replace aedu_ci=s7q11a           if s7q11==3
+replace aedu_ci=0         if s7q11==1 | s7q11==2 // Ninguno | Preescolar
+replace aedu_ci=s7q11a    if s7q11==3 /*regimen anterior: basica (1-9 años)*/ | s7q11==5 /*regimen actual: primaria (1-6 años)*/
+replace aedu_ci=s7q11a+9 if s7q11==4 // regimen anterior: media diversificado y profesional (1-3 años)
+replace aedu_ci=s7q11a+6 if s7q11==6 // regimen actual: media (1-6 años)
 
-replace aedu_ci=s7q11a+9           if s7q11==4
-replace aedu_ci=s7q11b+9 if s7q11==4 & aedu_ci==. //reportaron el grado donde tenian que reportar los anhos de educacion superior
+/*
+Explanation:
+For TSU, universitario, and postgrado, s7q11a and s7q11b are defined in years, s7q11c in semesters and s7q11d in trimesters
+Thus, to calculate it in years, we need to multiply the variables for the correct factor:
+s7q11a*1.0 / s7q11b*1.0 if it is reported in years
+s7q11c*0.5 if it is reported in semesters
+s7q11d*0.25 if it is reported in trimesters.
+*/
 
-replace aedu_ci=s7q11a           if s7q11==5
+replace aedu_ci=11+s7q11b      if s7q11ba==1 & (s7q11==7 | s7q11==8) // Técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11c*0.5  if s7q11ba==2 & (s7q11==7 | s7q11==8) // Técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11d*0.25 if s7q11ba==3 & (s7q11==7 | s7q11==8) // Técnico (TSU) | Universitario
 
-replace aedu_ci=s7q11a+6         if s7q11==6
-replace aedu_ci=s7q11b+6 if s7q11==6 & aedu_ci==.
+replace aedu_ci=16+s7q11b      if s7q11ba==1 & s7q11==9 // Posgrado
+replace aedu_ci=16+s7q11c*0.5  if s7q11ba==2 & s7q11==9 // Posgrado
+replace aedu_ci=16+s7q11d*0.25 if s7q11ba==3 & s7q11==9 // Posgrado
 
-replace aedu_ci = 12 + s7q11b if s7q11ba==1 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11b if s7q11ba==1 & s7q11==9 // postgrado
-replace aedu_ci = 12 + s7q11c*0.5 if s7q11ba==2 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11c*0.5 if s7q11ba==2 & s7q11==9 //posgrado
-replace aedu_ci = 12 + s7q11d*0.25 if s7q11ba==3 & (s7q11==7 | s7q11==8) // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11d*0.25 if s7q11ba==3 & s7q11==9 //posgrado
+**para los que s7q11<=6 pero tienen missing en s7q11a y valor en s7q11b
+replace aedu_ci=s7q11b+9 if s7q11==4 & s7q11b!=. & s7q11a==. & aedu_ci==. // regimen anterior: media diversificado y profesional (1-3 años)
+replace aedu_ci=s7q11b+6 if s7q11==6 & s7q11b!=. & s7q11a==. & aedu_ci==. // regimen actual: media (1-6 años)
 
-**para los que tienen missing en el regimen de estudio
-replace aedu_ci = 12 + s7q11b if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11b if s7q11==9 & aedu_ci==. // postgrado
-replace aedu_ci = 12 + s7q11c*0.5 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11c*0.5 if s7q11==9 & aedu_ci==. //posgrado
-replace aedu_ci = 12 + s7q11d*0.25 if (s7q11==7 | s7q11==8) & aedu_ci==. // técnico (TSU) | Universitario
-replace aedu_ci = 17 + s7q11d*0.25 if s7q11==9 & aedu_ci==. //posgrado
+**para los que tienen missing en el regimen de estudio (s7q11ba) pero tienen valor en s7q11b/s7q11c/s7q11d
+replace aedu_ci=11+s7q11b      if (s7q11==7 | s7q11==8) & s7q11b!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11c*0.5  if (s7q11==7 | s7q11==8) & s7q11c!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
+replace aedu_ci=11+s7q11d*0.25 if (s7q11==7 | s7q11==8) & s7q11d!=. & s7q11ba==. & aedu_ci==. // Técnico (TSU) | Universitario
 
+replace aedu_ci=16+s7q11b      if s7q11==9 & s7q11b!=. & s7q11ba==. & aedu_ci==. // Posgrado
+replace aedu_ci=16+s7q11c*0.5  if s7q11==9 & s7q11c!=. & s7q11ba==. & aedu_ci==. // Posgrado
+replace aedu_ci=16+s7q11d*0.25 if s7q11==9 & s7q11d!=. & s7q11ba==. & aedu_ci==. // Posgrado
+
+**para los que tienen missing en s7q11b/s7q11c/s7q11d pero no en s7q11ba
+replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba!=. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // Técnico (TSU) | Universitario
+
+**para los que solo tienen valor en s7q11
+replace aedu_ci=6  if s7q11==4 & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // regimen anterior: media diversificado y profesional (1-3 años)
+replace aedu_ci=11 if (s7q11==7 | s7q11==8) & s7q11ba==. & s7q11b==. & s7q11c==. & s7q11d==. & aedu_ci==. // Técnico (TSU) | Universitario
+				
 label variable aedu_ci "Años de Educacion"
 
+replace aedu_ci=floor(aedu_ci) // redondear la variable
 							
 **************
-***eduno_ci*** // ningún nivel de instrucción
+***eduno_ci***
 **************
-gen eduno_ci=.
-replace eduno=1 if s7q11==1 // ningún nivel, asiste y no asiste
-replace eduno=0 if s7q11>1 // preescolar para arriba, asiste y no asiste
+gen eduno_ci=(aedu_ci==0)
+replace eduno=. if aedu_ci==.
 label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
 
 ***************
 ***edupre_ci***
 ***************
 gen edupre_ci=.
-replace edupre=1 if s7q11==2 // preescolar asiste y no asiste
-replace edupre=0 if s7q11==1 | s7q11>2 // ningún nivel y básica o más, asiste o no asiste
 label var edupre_ci "Educacion preescolar"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=.
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=0 if aedu_ci==0 | (aedu_ci>=6 & aedu_ci!=.)
+gen edupi_ci=(aedu_ci>0 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
 label var edupi_ci "1 = personas que no han completado el nivel primario"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=.
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if (aedu_ci>=0 & aedu_ci<6)  | (aedu_ci>6 & aedu_ci!=.) 
+gen edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
 label var edupc_ci "1 = personas que han completado el nivel primario"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=.
-replace edusi=1 if aedu_ci>6 & aedu_ci<12
-replace edusi=0 if (aedu_ci>=0 & aedu_ci<=6) | (aedu_ci>=11 & aedu_ci!=.)
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11) // No se puede identificar técnica. De 2021 en adelante si. En 2021 el codigo cambia
+replace edusi=. if aedu_ci==.
 label var edusi_ci "1 = personas que no han completado el nivel secundario"
 
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=.
-replace edusc=1 if aedu_ci==12 
-replace edusc=0 if (aedu_ci>=0 & aedu_ci<12) 
+gen edusc_ci=(aedu_ci==11)
+replace edusc=. if aedu_ci==.
 label var edusc_ci "1 = personas que han completado el nivel secundario"
-
 
 **************
 ***eduui_ci***
 **************
-
-
-gen eduui_ci= (aedu_ci>12 & aedu_ci<17)
+gen eduui_ci=(aedu_ci>11 & aedu_ci<14)
+replace eduui_ci=. if aedu_ci==.
 label var eduui_ci "1 = personas que no han completado el nivel universitario o superior"
 
 ***************
 ***eduuc_ci***
 ***************
-gen byte eduuc_ci= (aedu_ci>=17)
+gen byte eduuc_ci=(aedu_ci>=14)
+replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "1 = personas que han completado el nivel universitario o superior"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=0
-replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+gen edus2i_ci=(aedu_ci>9 & aedu_ci<11)
+replace edus2i_ci=. if aedu_ci==.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
+gen edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
-
 
 **************
 ***eduac_ci***
 **************
 gen eduac_ci=.
+replace eduac_ci=1 if (s7q11==8)
+replace eduac_ci=0 if (s7q11==7)
 label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
-
 
 ***************
 ***asispre_ci**
 ***************
-g asispre_ci=.
-replace asispre_ci=1 if asiste_ci==1 & (s7q4==2)
-replace asispre_ci=1 if asiste_ci==1 & (s7q4==1) & (edad_ci<=5)
-recode asispre_ci (.=0)
+g asispre_ci=(s7q4==2) 
 la var asispre_ci "Asiste a educacion prescolar"
-	
-
-
+								
 ***************
 ***repite_ci***
 ***************
@@ -1041,40 +1035,20 @@ label var repiteult_ci "Personas que han repetido el ultimo grado"
 ***************
 ***edupub_ci***
 ***************
-gen edupub_ci=.
+gen edupub_ci=(s7q5==2)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
-
 
 **************
 ***pqnoasis***
 **************
-gen byte pqnoasis_ci=.
-replace pqnoasis=s7q2 if s7q2>1 & s7q2<9
-replace pqnoasis=10 if s7q2==9
-replace pqnoasis=11 if s7q2==10 |  s7q2==11
-replace pqnoasis=13 if s7q2==14
-replace pqnoasis=14 if s7q2==15
-replace pqnoasis=15 if s7q2==16 | s7q2==1
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-label define pqnoasis_ci 1 "Culmino sus estudios" 2 "Escuela distante" 3 "Escuela cerrada" 4 "Muchos paros/inasistencia de maestros" 5 "Costo de los útiles" 6 "Costo de los uniformes" 7 "Enfermedad/Discapacidad " 8 "Tiene que trabajar " 9 "No quiso seguir estudiando "  10 " Inseguridad al asistir al centro educat " 11 "Discriminación o violencia" 12 "Por embarazo/cuidar los hijos" 13 "Tiene que ayudar en tareas del hogar " 14 "No lo considera importante " 15 "otros"
-label values pqnoasis_ci pqnoasis_ci
+*La variable disponible es solo para personas que nunca asistieron
+gen pqnoasis_ci=.
 
-**************
-*pqnoasis1_ci*
-**************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
-g       pqnoasis1_ci = 1 if pqnoasis_ci ==5 & pqnoasis_ci==6
-replace pqnoasis1_ci = 2 if pqnoasis_ci ==8
-replace pqnoasis1_ci = 3 if pqnoasis_ci ==7  
-replace pqnoasis1_ci = 4 if pqnoasis_ci ==14 | pqnoasis_ci==9
-replace pqnoasis1_ci = 5 if pqnoasis_ci ==13 | pqnoasis_ci==12
-replace pqnoasis1_ci = 6 if pqnoasis_ci ==1
-replace pqnoasis1_ci = 8 if pqnoasis_ci ==2  | pqnoasis_ci ==3
-replace pqnoasis1_ci = 9 if pqnoasis_ci ==15 | pqnoasis_ci==11 | pqnoasis_ci==10 | pqnoasis_ci==4 | pqnoasis_ci==3
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
+******************
+***pqnoasis1_ci***
+******************
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+gen pqnoasis1_ci=.
 
 ********************************************
 ***Variables de Infraestructura del hogar***
@@ -1439,7 +1413,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
@@ -1451,6 +1425,9 @@ foreach var of varlist  lp19_ci lp31_ci lp5_ci {
 		format `var' %18.4f
 		}
 
+		
+gen codindustria= s9q14
+gen codocupa=s9q13
 compress
 
 save "`base_out'", replace

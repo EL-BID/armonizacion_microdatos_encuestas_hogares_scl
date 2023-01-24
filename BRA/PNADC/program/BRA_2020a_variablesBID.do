@@ -93,6 +93,14 @@ gen region_BID_c=4
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
+
+
+************************
+*** ine01 ***
+************************
+gen ine01=uf
+label define ine01 11 "Rondônia" 12 "Acre" 13 "Amazonas" 14 "Roraima" 15 "Pará" 16 "Amapá" 17 "Tocantins" 21 "Maranhão" 22 "Piauí" 23 "Ceará" 24 "Rio Grande do Norte" 25 "Paraíba" 26 "Pernambuco" 27 "Alagoas" 28 "Sergipe" 29 "Bahia" 31 "Minas Gerais" 32 "Espírito Santo" 33 "Rio de Janeiro" 35 "São Paulo" 41 "Paraná" 42 "Santa Catarina" 43 "Rio Grande do Sul" 50 "Mato Grosso do Sul" 51 "Mato Grosso" 52 "Goiás" 53 "Distrito Federal"
+label value ine01 ine01 
    
 ***************
 ***factor_ch***
@@ -1054,17 +1062,18 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci= aedu_ci>=13 & aedu_ci<=14 // entre 13 y 14 anios
-replace eduui_ci=1 if (aedu_ci>=15 & aedu_ci<16 & v3007!=1 & v3014!=1) // 15 anios de educacion, sin completar nivel
+replace eduui_ci=1 if aedu_ci == 15 & v3007 == 2 | aedu_ci == 15 & v3014 == 2 // 15 anios de educacion, sin completar nivel
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Terciaria/universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=(aedu>=15) // 15 anios o mas, que es la duracion de tecnica
-replace eduuc_ci=1 if (aedu_ci>=15 & aedu_ci<16 & (v3007==1 | v3014==1)) // entre 15 y 16 anios si completaron el curso
+gen byte eduuc_ci=(aedu > 15) // Mas de 15 anios.
+replace eduuc_ci=1 if (aedu_ci == 15 & (v3007==1 | v3014==1)) // 15 anios si completaron el curso u otro curso
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Terciaria/universitaria completa o mas"
+
 
 ***************
 ***edus1i_ci***

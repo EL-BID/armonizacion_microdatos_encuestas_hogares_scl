@@ -1055,15 +1055,15 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci= aedu_ci>=13 & aedu_ci<=14 // entre 13 y 14 anios
-replace eduui_ci=1 if (aedu_ci>=15 & aedu_ci<16 & v3007!=1 & v3014!=1) // 15 anios de educacion, sin completar nivel
+replace eduui_ci=1 if aedu_ci == 15 & v3007 == 2 | aedu_ci == 15 & v3014 == 2 // 15 anios de educacion, sin completar nivel
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Terciaria/universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=(aedu>=15) // 15 anios o mas, que es la duracion de tecnica
-replace eduuc_ci=1 if (aedu_ci>=15 & aedu_ci<16 & (v3007==1 | v3014==1)) // entre 15 y 16 anios si completaron el curso
+gen byte eduuc_ci=(aedu > 15) // Mas de 15 anios.
+replace eduuc_ci=1 if (aedu_ci == 15 & (v3007==1 | v3014==1)) // 15 anios si completaron el curso u otro curso
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Terciaria/universitaria completa o mas"
 
@@ -1442,7 +1442,6 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 *variables que faltan generar
 gen tcylmpri_ci=.
 gen tcylmpri_ch=.
-gen repiteult_ci=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.

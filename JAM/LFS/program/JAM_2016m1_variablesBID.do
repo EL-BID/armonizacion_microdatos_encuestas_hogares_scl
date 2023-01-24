@@ -969,6 +969,20 @@ replace spublico_ci=0 if spublico_ci==.
 *********
 *aedu_ci*
 *********
+
+/*
+Para la construcción de aedu_ci y por el hecho de contar solamente con anios
+declarados a nivel primaria y secundaria se realiza el siguiente ajuste:
+
+	- Para aquellos respondientes que hayan obtenido el grado más alto de 
+	primaria y secundaria y al menos uno de los dos examenes CAPE, se les imputa
+	12 anios de educación considerandolos dentro del nivel universitario inconpleto. 
+	
+	- Para aquellos respondientes que declaren tener Degree junto con el grado
+	más alto de primaria y secundaria se les imputa 14 anios de educación 
+	considerandolos dentro del nivel universitario completo.
+*/
+
 gen aedu_ci=.
 
 *ocupados
@@ -982,6 +996,15 @@ replace aedu_ci=q422a if q422a>0 & q422a<99 // secondary
 *inactivos
 replace aedu_ci=q514a if q514a<99           // primary
 replace aedu_ci=q515a if q515a>0 & q515a<99 // secondary
+
+* Ajuste universitario: 
+replace aedu_ci = 12 if (q322 == 6 | q322 == 7) & q322 != 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 12 if (q423 == 6 | q423 == 7) & q423 != 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 12 if (q516 == 6 | q516 == 7) & q516 != 8 & q514 == 7 & q515 == 8
+
+replace aedu_ci = 14 if q322 == 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 14 if q423 == 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 14 if q516 == 8 & q514 == 7 & q515 == 8
 
 // imputando valores perdidos
 replace aedu_ci=6 if q320a==99 & q321a!=99 & aedu_ci==.
@@ -1026,15 +1049,14 @@ label variable edusc_ci "Secundaria completa"
 **********
 *eduui_ci*
 **********
-gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 & q423!=8 & q322!=8))
+gen eduui_ci=(aedu_ci>11 & aedu_ci<14)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
 **********
 *eduuc_ci*
 **********
-gen eduuc_ci=(q516==8 | q423==8 | q322==8)
-replace eduuc_ci=1 if aedu_ci>=14
+gen eduuc_ci=(aedu_ci>=14)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 

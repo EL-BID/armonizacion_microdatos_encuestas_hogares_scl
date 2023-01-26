@@ -1051,6 +1051,7 @@ replace banoex_ch=. if ii9==0 | ii9==9
 *********
 *des1_ch*
 *********
+   *JL: This variable references bano_ch so it needs to be created above this point! 
 gen des1_ch=.
 replace des1_ch=0 if bano_ch==0
 replace des1_ch=1 if iv11==1 | iv11==2
@@ -1213,6 +1214,7 @@ gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 |
 
 
 **#
+
 * Variables incluidas por Ivan Jimenez linea
 
 *************
@@ -1300,12 +1302,22 @@ replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
 replace bano_ch=6 if iv10==3 & iv11==3
 replace bano_ch=6 if iv10==3
 *se asocia agua superficial o suelo a hoyo o excavacion en la tierra
-replace bano_ch=4 if iv10<3 & iv10>=1 & iv11==4
+	*JL: Should be: replace bano_ch=4 if if iv10 =< 3 & iv10>=1 & iv11==4 
+replace bano_ch=4 if iv10<3 & iv10>=1 & iv11==4 
 
 
 *****************
 *banomejorado_ch*  Altered
 *****************
+    *JL comments: Should only be 1 if it is known to be improved, if it is known to be unknown = 2, unimproved = 1. Code should be soemthing like:
+ *gen	banomejorado_ch=0
+ ** Improved is 1, 2 or 3 for bano_ch 
+ *replace banomejorado_ch=1 if iv10<3 & iv10>=1  & iv11==1
+ *replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==2
+ *replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==3
+ ** Unknown is the same as 6 for bano_ch
+ *replace banomejorado_ch=2 if iv10==3 & iv11==3
+ *replace banomejorado_ch=2 if iv10==3
 
 gen	banomejorado_ch=0
 replace banomejorado_ch=1 if iv10<3 & iv10>=1  & iv11==1

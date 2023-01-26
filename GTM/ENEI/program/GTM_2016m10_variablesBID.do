@@ -1111,9 +1111,14 @@ la var eduuc_ci "Universitaria o Terciaria Completa"
 g byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 ******************************
-*	asispre_ci:Pregunta sobre matriculacion no asistencia 
+*	asispre_ci:
 ******************************
-g byte asispre_ci=.
+/* 
+Proxy de asistencia p03a04a
+¿En qué nivel y grado se inscribió (……...) para el presente ciclo escolar?
+*/
+g byte asispre_ci = 0 
+replace asispre_ci = 1 if p03a04a == 1
 la var asispre_ci "Asiste a Educacion preescolar"
 **************
 ***eduac_ci***
@@ -1122,10 +1127,17 @@ gen byte eduac_ci=. // esta disponible solo para los con titulo
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ******************************
-*	asiste_ci: Pregunta sobre matriculacion no asistencia 
+*	asiste_ci: 
 ******************************
-g asiste_ci=.
-replace asiste_ci=. if p03a02==.
+/*
+Como proxy de asistencia se usa la variable p03a02
+(….), ¿Se inscribió en algún plantel educativo para el presente ciclo escolar?
+*/
+g asiste_ci = (p03a02 == 1)
+replace asiste_ci = 0 if p03a02 == 2
+replace asiste_ci = . if p03a02 == .
+lab var asiste_ci "Asiste a Centro educativo"
+
 
 ******************************
 *	pqnoasis_ci 

@@ -703,143 +703,149 @@ replace durades_ci= 0.23 if P10E01==0
 replace durades_ci=. if P10E01==.
 label var durades_ci "Duracion del Desempleo (en meses)"
 
+rename * , lower
 
-******************************************************************************************************
-* VARIABLES DE EDUCACION
+******************************************************************************
+*	EDUCATION 
+******************************************************************************
 
-* PARA PERSONAS DE 7 AÑOS O MAS DE PPA03 
-******************************************************************************************************
+/* 
+Notas: Para la construcción  de aedu_ci se toman:
 
-* AÑOS DE EDUCACION
+	- 6 anios de primaria.
+	- 11 secundaria completa.
+	- 5 anios grado.
+	- 2 anios de maestría.
+	
+A su vez se utilizan a los inscriptos para el presente ciclo
+escolar como proxy de asistencia.
 
-* There are two variables 'P06B25A' & 'P06B25B' that have nivel and grado 
+No se discrimina en este anio entre maestría o doctorado.
+	
+*/ 
+
+*******************************************
+*	aedu_ci
+*******************************************
 
 
-/* P06B25A: 
-	      Ninguno 
-		  Preprimaria 
-		  Prímaria  
-	      Básicos   
-		  Diversificado   
-	      Superior  
-	      Postgrado 
+gen aedu_ci = .
+replace	 aedu_ci = 0  if (p06b25a == 1 | p06b25a == 2) // Ninguno Preprimaria
+replace aedu_ci = p06b25b if p06b25a == 3 // Primaria
+replace aedu_ci = 6 + p06b25b if (p06b25a == 4 | p06b25a == 5) // Básico, Diversificado
+replace aedu_ci = 11 + p06b25b if p06b25a == 6 // Superior
+replace aedu_ci = 16 + p06b25b if p06b25a == 7 // Postgrado 
+label var aedu_ci "Anios de educacion aprobados"
 
+******************************
+*	eduno_ci
+******************************
+g byte eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==.
+
+******************************
+*	edupi_ci 
+******************************
+g byte edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
+
+******************************
+*	edupc_ci 
+******************************
+g byte edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
+
+******************************
+*	edusi_ci 
+******************************
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=. if aedu_ci==.
+
+******************************
+*	edusc_ci 
+******************************
+g byte edusc_ci=(aedu_ci==11) 
+replace edusc_ci=. if aedu_ci==.
+
+******************************
+*	edus1i_ci 
+******************************
+g byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
+
+******************************
+*	edus1c_ci 
+******************************
+g byte edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
+
+******************************
+*	edus2i_ci 
+******************************
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
+replace edus2i_ci=. if aedu_ci==.
+
+******************************
+*	edus2c_ci 
+******************************
+g byte edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
+
+******************************
+*	eduui_ci 
+******************************
+g byte eduui_ci=(aedu_ci>11 & aedu_ci<15) 
+replace eduui_ci=. if aedu_ci==.
+la var eduui_ci "Universitaria o Terciaria Incompleta"
+******************************
+*	eduuc_ci 
+******************************
+g byte eduuc_ci=aedu_ci>14
+replace eduuc_ci=. if aedu_ci==.
+la var eduuc_ci "Universitaria o Terciaria Completa"
+******************************
+*	edupre_ci 
+******************************
+g byte edupre_ci=.
+label variable edupre_ci "Educacion preescolar"
+
+******************************
+*	asispre_ci:
+******************************
+/* 
+Proxy de asistencia p03a04a
+¿En qué nivel y grado se inscribió (……...) para el presente ciclo escolar?
 */
+g byte asispre_ci = 0 
+replace asispre_ci = 1 if p06b06a == 1
+la var asispre_ci "Asiste a Educacion preescolar"
 
-gen byte aedu_ci=.
+**************
+***eduac_ci***
+**************
+* No se discrimina terciaria.
+gen byte eduac_ci=.
+label variable eduac_ci "Superior universitario vs superior no universitario"
 
-*** Ninguno 
-replace aedu_ci=0 if P06B25A==1 
-
-*** Preparatoria
-replace aedu_ci=0 if P06B25A==2
-
-*** Primaria
-replace aedu_ci=P06B25B  if P06B25A==3 
-
-
-*** BAsica
-replace aedu_ci=6 + P06B25B if P06B25A==4
-
-*** Diversificado
-replace aedu_ci=6 + P06B25B if P06B25A==5
-
-
-*** Educacion Superior
-replace aedu_ci=12 + P06B25B if P06B25A==6 
-
-*** Post-grado
-replace aedu_ci=17 + P06B25B if P06B25A==7 
-
-label variable aedu_ci "Años de Educacion"
+******************************
+*	asiste_ci: 
+******************************
+/*
+Como proxy de asistencia se usa la variable p03a02
+(….), ¿Se inscribió en algún plantel educativo para el presente ciclo escolar?
+*/
+g asiste_ci = (p06b05 == 1)
+replace asiste_ci = 0 if p06b05 == 2
+replace asiste_ci = . if p06b05 == .
+lab var asiste_ci "Asiste a Centro educativo"
 
 
-
-** Categorias educativas excluyentes
-
-gen eduno_ci=.
-replace eduno_ci=1 if aedu_ci==0 
-replace eduno_ci=0 if aedu_ci>0 & aedu_ci!=.
-label var eduno_ci "1 = personas sin educacion (excluye preescolar)"
-
-gen edupre_ci=.
-replace edupre=1 if P06B25A==2
-replace edupre=0 if P06B25A!=2 
-label var edupre_ci "Educacion preescolar"
-
-gen edupi_ci=.
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=0 if aedu_ci==0 | (aedu_ci>=6 & aedu_ci!=.)
-label var edupi_ci "1 = personas que no han completado el nivel primario"
-
-gen edupc_ci=.
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if (aedu_ci>=0 & aedu_ci<6)  | (aedu_ci>6 & aedu_ci!=.) 
-label var edupc_ci "1 = personas que han completado el nivel primario"
-
-gen edusi_ci=.
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
-replace edusi_ci=0 if (aedu_ci>=0 & aedu_ci<=6) | (aedu_ci>=12 & aedu_ci!=.)
-label var edusi_ci "1 = personas que no han completado el nivel secundario"
-
-gen edusc_ci=.
-replace edusc_ci=1 if aedu_ci==12
-replace edusc_ci=0 if (aedu_ci>=0 & aedu_ci<12) | (aedu_ci>12 & aedu_ci!=.) 
-label var edusc_ci "1 = personas que han completado el nivel secundario"
-
-gen eduui_ci=.
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
-replace eduui_ci=0 if (aedu_ci>=0 & aedu_ci<=12) | (aedu_ci>=17 & aedu_ci!=.)
-label var eduui_ci "1 = personas que no han completado el nivel universitario o superior"
-
-gen eduuc_ci=.
-replace eduuc_ci=1 if aedu_ci>=17 & aedu_ci!=.
-replace eduuc_ci=0 if aedu_ci>=0 & aedu_ci<17
-label var eduuc_ci "1 = personas que han completado el nivel universitario o superior"
-
-
-gen edus1i_ci=.
-replace edus1i=0 if edusi==1 | edusc==1 
-replace edus1i=1 if edusi==1 & (P06B25A==4 & (P06B25B==1 | P06B25B==2))
-label var edus1i_ci "1 = personas que no han completado el primer ciclo de la educacion secundaria"
-
-gen edus1c_ci=.
-replace edus1c=0 if edusi==1 | edusc==1 
-replace edus1c=1 if edusi==1 & (P06B25A==4 & P06B25B==3)
-label var edus1c_ci "1 = personas que han completado el primer ciclo de la educacion secundaria"
-
-gen edus2i_ci=.
-replace edus2i=0 if edusi==1 | edusc==1 
-replace edus2i=1 if edusi==1 & (P06B25A==5 & (P06B25B==4 |P06B25B==5)) 
-label var edus2i_ci "1 = personas que no han completado el segundo ciclo de la educacion secundaria"
-
-gen edus2c_ci=.
-replace edus2c=0 if edusi==1 
-replace edus2c=1 if edusc==1
-label var edus2c_ci "1 = personas que han completado el segundo ciclo de la educacion secundaria"
-
-gen eduac_ci=.
-label var eduac_ci "Educacion terciaria académica versus educación terciaria no-académica "
-
-gen repite_ci=.
-label var repite_ci "Personas que han repetido al menos un año o grado"
-
-gen repiteult_ci=.
-
-
-* ASISTENCIA ESCOLAR
-gen asiste_ci=.
-replace asiste_ci=1 if P06B22==1 & P06B05==1
-replace asiste_ci=0 if P06B22==2 & P06B05==1
-replace asiste_ci=0 if P06B05==2
-*Modificación Mayra Sáenz 10/22/2015 : Se incluyen a los menores de 5 que están asistiendo a guarder'ia
-replace asiste_ci=1 if P06A01==1
-label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
-
-* POR QUE NO ASISTE (En 1998 la pregunta sobre causa de inasistencia es solo para personas de 7 a 14 años de edad)
+******************************
+*	pqnoasis_ci 
+******************************
 
 gen pqnoasis_ci=.
-replace pqnoasis_ci=P06B23 if P06B23>0 & P06B23<99
+replace pqnoasis_ci = p06b23
 label var pqnoasis_ci "Razon principal por la cual ha abandonado o ha dejado de asistir a clases este año"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Falta de maestro" 3 "La madre trabaja" 4 "Oficios de la casa" 5  "Falta de dinero" 6"Trabajo" 7"No le interesa" 8"Mal tiempo" 9"Embarazo" 10"Migracion temporal" 11"Acoso de maras" 12"Violencia" 98"Otra"
 label value pqnoasis_ci pqnoasis_ci
@@ -858,6 +864,16 @@ replace pqnoasis1_ci= 9 if  pqnoasis_ci==98 | pqnoasis_ci==12 | pqnoasis_ci==11 
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
+
+******************************
+*	repite_ci 
+******************************
+g repite_ci=.  /*NA*/
+******************************
+*	repiteult_ci 
+******************************
+g repiteult_ci=. /*NA*/
+
 * EDUCACION PUBLICA OR PRIVADA
 /* 
 	 
@@ -877,25 +893,16 @@ Otra institución de Gobierno central |        533        2.88       73.73
 -------------------------------------+-----------------------------------
                                Total |     18,490      100.00
 
-	 
-	 
-	 
-
 Se han considerado como PUBLICAS las opciones 1, 2, 3, 4 y 5 */
-
-
+******************************
+*	edupub_ci 
+******************************
 gen edupub_ci=0
-replace edupub_ci=1 if ( P06B09==1 | P06B09==2 | P06B09==3 | P06B09==4 | P06B09==5 )
-replace edupub_ci=. if ( P06B09==. | P06B09==99)
+replace edupub_ci=1 if ( p06b09==1 | p06b09==2 | p06b09==3 | p06b09==4 | p06b09==5 )
+replace edupub_ci=. if ( p06b09==. | p06b09==99)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-*************
-**tecnica_ci*
-*************
-
-gen tecnica_ci=.
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
+rename * , upper
 
 
 
@@ -1323,7 +1330,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

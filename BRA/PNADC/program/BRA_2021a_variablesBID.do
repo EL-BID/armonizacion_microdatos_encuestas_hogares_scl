@@ -381,8 +381,13 @@ label var afiliado_ci "Afiliado a la Seguridad Social"
 ******************
 ***cotizando_ci***
 ******************
+*corrección de la variable vd4012, hay un error en 2021
+gen vd4012_fixed=.
+replace vd4012_fixed=1 if  v2009>=14 & v4009!=. & ((v4012==3 & v4029==1) | (v4012==1 & v4029==1) | (v4012==4 & v4029==1) | (v4012==2 | (v4012==4 & v4028==1)) | (v4032==1 & v4012==3 & v4029==2) | (v4032==1 & v4012==1 & v4029==2) | (v4032==1 & v4012==4 & v4029==2) | (v4032==1 & v4012==5) | (v4032==1 & v4012==6) | ((v4009==2 | v4009==3) & (v4043==1 | v4043==3) & v4048==1 ) | ((v4009==2 | v4009==3) & (v4043==1 | v4043==3) & v4048==2 & v4049==1) | ((v4009==2 | v4009==3) & v4043==2) | ((v4009==2 | v4009==3) & v4043==4 & v4047==1) | ((v4009==2 | v4009==3) & v4043==4 & v4047==2 & v4048==1) | ((v4009==2 | v4009==3) & v4043==4 & v4047==2 & v4048==2 & v4049==1) | ((v4009==2 | v4009==3) & (v4043==5 | v4043==6) & v4049==1) | (v4009==3 & v4057==1))
+replace vd4012_fixed=2 if v2009>=14 & v4009!=. & ((v4012!=3 & v4012!=1 & v4012!=4) | v4029!=1) & (v4012!=2 & (v4012!=4 | v4028!=1)) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==4 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==2 | v4012==3 | v4012==4 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==4 | v4012==6)) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==4 | v4012==5)) & (v4009==1 | (v4043!=1 & v4043!=3) | v4048 !=1) & (v4009==1 | (v4043!=1 & v4043!=3) | v4048!= 2 | v4049!=1) & (v4009==1 | v4043!=2) & (v4009==1 | v4043!=4 | v4047!= 1) & (v4009==1 | v4043!=4 | v4047!= 2 | v4048!= 1) & (v4009==1 | v4043!=4 | v4047!=2 | v4048!=2 | v4049!=1) & (v4009==1 | (v4043!=5 & v4043!=6) | v4049!=1) & (v4009!= 3 | v4057!=1) 
+
 gen cotizando_ci=0       if condocup_ci==1 | condocup_ci==2 
-replace cotizando_ci=1   if (vd4012==1) & cotizando_ci==0
+replace cotizando_ci=1   if (vd4012_fixed==1) & cotizando_ci==0
 label var cotizando_ci "Cotizante a la Seguridad Social"
 
 gen cotizapri_ci=0       if condocup_ci==1 | condocup_ci==2 
@@ -399,7 +404,7 @@ label var cotizaotros_ci "Cotizante a la Seguridad Social por otro trabajos o po
 
 *Cotizando sin restringir a PEA
 gen cotizando_ci1=0      if condocup_ci==1 | condocup_ci==2 | condocup_ci==3
-replace cotizando_ci1=1  if (vd4012==1) & cotizando_ci1==0
+replace cotizando_ci1=1  if (vd4012_fixed==1) & cotizando_ci1==0
 label var cotizando_ci "Cotizante a la Seguridad Social"
 
 ****************

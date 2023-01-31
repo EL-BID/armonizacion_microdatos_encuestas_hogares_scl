@@ -22,26 +22,30 @@ log using "`log_file'", replace
 					****************
 					***MERGE 2022***
 					****************
-					
-use "`base_in'\hogar.dta", clear
-rename hogar_no hogar
-sort llave_sec  hogar
-tempfile hogar_mod
-save `hogar_mod' , replace
 
 use "`base_in'\vivienda.dta", clear
-rename hogar_no hogar
-sort llave_sec  hogar
+drop hogar_no
+sort llave_sec provincia prov unidad cuestionar
 tempfile vivienda_mod
 save `vivienda_mod' , replace
 
-use "`base_in'\poblacio.dta", clear
-sort llave_sec  hogar
-merge m:1 llave_sec hogar using `hogar_mod' 
-drop _merge
 
+use "`base_in'\hogar.dta", clear
+rename hogar_no hogar
 sort llave_sec  hogar
-merge m:1 llave_sec hogar using `vivienda_mod'
+merge m:1 llave_sec provincia prov unidad cuestionar using `vivienda_mod'
+drop _merge
+tempfile hogar_viv
+save `hogar_viv' , replace
+
+
+
+use "`base_in'\poblacio.dta", clear
+rename estra estrato
+rename cuest cuestionar
+sort llave_sec  provincia prov estrato unidad cuestionar hogar
+merge m:1 llave_sec provincia prov estrato unidad cuestionar hogar using `hogar_viv' 
+
 drop if _merge!=3
 drop _merge
 

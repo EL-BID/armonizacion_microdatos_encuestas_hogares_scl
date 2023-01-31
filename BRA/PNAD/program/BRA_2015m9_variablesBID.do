@@ -1216,6 +1216,123 @@ drop nivel_asiste grado_asiste grado_no_asiste nivel_no_asiste finalizo
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
+
+		
+**#
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+*si el agua llega a una habitacion esta dentro de la casa
+replace aguadist_ch= 1 if v0211==1
+*si el agua llega al inmueble pero no llega dentro de la casa llega al terreno, o si la fuente de agua esta en el terreno
+replace aguadist_ch= 2 if (v0213==1|v0214==1)
+*la encuesta no pregunta por fuentes externas al terreno
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+*se asume que si tiene filtro de agua el agua es potable
+gen aguafconsumo_ch = 0
+*si tiene filtro se asume como una fuente mejorada
+replace aguafconsumo_ch = 7 if v0224==2
+*sin embargo si si es otro origen sin canalizacion interna se asume como otra fuente no mejorada
+replace aguafconsumo_ch = 9 if v0224==2 & v4624==6
+replace aguafconsumo_ch = 1 if v0224==2 & v4624==1
+replace aguafconsumo_ch = 2 if v0224==2 & v4624==4
+*se asume como pozo protegido si esta en la propiedad
+replace aguafconsumo_ch = 4 if(v4624==2|v4624==5) & v0224==2 & v0214==1
+replace aguafconsumo_ch = 10 if(v4624==2|v4624==5) & v0224==2 & v0214==2
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if v4624==1
+replace aguafuente_ch = 2 if v4624==4
+replace aguafuente_ch = 9 if v4624==6
+replace aguafuente_ch = 7 if v4624==3
+*se asume como pozo protegido si esta en la propiedad
+replace aguafuente_ch = 4 if(v4624==2|v4624==5) & v0214==1
+replace aguafuente_ch = 10 if(v4624==2|v4624==5) & v0214==2
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  0 if v0215==1
+replace sinbano_ch =  1 if v0215==1 & v0216==4
+replace sinbano_ch = 2 if v0215==2
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+*se asume tratada si tiene filtro
+gen aguatrat_ch = 9
+replace aguatrat_ch = 1 if v0224==2
+replace aguatrat_ch = 0 if v0224==4
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando la fuente es red general con fontaneria interior o tiene filtro y agua mala cundo no tiene filtro o la red general no tiene fontaneria interior
+gen aguamala_ch= 2
+replace aguamala_ch= 1 if v0224==4
+replace aguamala_ch= 1 if v4624==4
+replace aguamala_ch= 0 if v0224==2
+replace aguamala_ch= 0 if v4624==1
+
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando la fuente es red general con fontaneria interior o tiene filtro y agua mala cundo no tiene filtro o la red general no tiene fontaneria interior
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if v0224==4
+replace aguamejorada_ch= 0 if v4624==4
+replace aguamejorada_ch= 1 if v0224==2
+replace aguamejorada_ch= 1 if v4624==1
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=1 if (v0217==1|v0217==2)
+replace bano_ch=2 if v0217==3
+replace bano_ch=6 if v0217==4
+replace bano_ch=6 if v0217==7
+replace bano_ch=4 if (v0217==5|v0217==6)
+
+
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen	banomejorado_ch=0
+replace banomejorado_ch=1 if (v0217==1|v0217==2)
+replace banomejorado_ch=1 if v0217==3
+
+
+**#		
 		
 ****************
 ***aguared_ch***

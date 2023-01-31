@@ -1055,15 +1055,15 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 gen byte eduui_ci= aedu_ci>=13 & aedu_ci<=14 // entre 13 y 14 anios
-replace eduui_ci=1 if aedu_ci == 15 & v3007 == 2 | aedu_ci == 15 & v3014 == 2 // 15 anios de educacion, sin completar nivel
+replace eduui_ci=1 if (aedu_ci>=15 & aedu_ci<16 & v3007!=1 & v3014!=1) // 15 anios de educacion, sin completar nivel
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Terciaria/universitaria incompleta"
 
 **************
 ***eduuc_ci***
 **************
-gen byte eduuc_ci=(aedu > 15) // Mas de 15 anios.
-replace eduuc_ci=1 if (aedu_ci == 15 & (v3007==1 | v3014==1)) // 15 anios si completaron el curso u otro curso
+gen byte eduuc_ci=(aedu>=15) // 15 anios o mas, que es la duracion de tecnica
+replace eduuc_ci=1 if (aedu_ci>=15 & aedu_ci<16 & (v3007==1 | v3014==1)) // entre 15 y 16 anios si completaron el curso
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Terciaria/universitaria completa o mas"
 
@@ -1445,6 +1445,123 @@ gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
 
+* Variables incluidas por Ivan Jimenez linea
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=1 if s01010==1
+replace aguadist_ch=2 if s01010==2
+replace aguadist_ch=3 if s01010==3
+replace aguadist_ch=. if s01010==. 
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
+label val aguadist_ch aguadist_ch 
+
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 9
+*se asume que si llega a almenos una habitacion hay llave privada y llave publica si es canalizada hasta la vivienda
+replace aguafuente_ch = 1 if s01007==1 & s01010==1
+replace aguafuente_ch = 2 if s01007==1 & s01010==2
+replace aguafuente_ch = 5 if s01007==5
+replace aguafuente_ch = 10 if s01007<=2 & s01007>=4
+replace aguafuente_ch = 10 if s01007==6
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 0
+replace aguadisp1_ch = 1 if s01008==1
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 3 if s01008==1
+replace aguadisp2_ch = 2 if s01008==2
+replace aguadisp2_ch = 1 if s01008==1
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  1 if s01011b>=1
+replace sinbano_ch =  0 if s01011a>=1
+
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*Variables modificadas por Ivan Jimenez
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es diferente
+gen aguamala_ch= 2
+replace aguamala_ch= 0 if s01007==1
+replace aguamala_ch= 1 if s01007>1
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es diferente
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 1 if s01007==1
+replace aguamejorada_ch= 2 if s01007>1
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if (s01011a==0 | s01011b==0)
+replace bano_ch=1 if (s01011a>0 | s01011b>0) & (s01012a==1 | s01012a==2)
+*se clasifica inodoro a fosa septica sin importar si esta conectada a la red general
+replace bano_ch=2 if (s01011a>0 | s01011b>0) & s01012a==3
+*no se distingue si es letrina
+replace bano_ch=4 if (s01011a>0 | s01011b>0) & (s01012a==5 | s01012a==6)
+
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & (s01012a==1 | s01012a==2)
+replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & s01012a==3
+
+
+
+
+tab ano4
+tab aguafconsumo_ch
+tab aguafuente_ch
+tab aguadisp1_ch
+tab aguadisp2_ch
+tab sinbano_ch
+tab aguatrat_ch
+tab aguamala_ch
+tab aguamejorada_ch
+tab bano_ch
+tab banomejorado_ch
 
 ******************************
 *** VARIABLES DE MIGRACION ***

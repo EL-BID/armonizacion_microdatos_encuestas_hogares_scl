@@ -716,12 +716,10 @@ gen ynlm0_ci=.
 
 gen ynlnm0_ci=.
 
-*Modificación Mayra Sáenz - Septiembre 2014
+*Modificación David Cornejo - Feberro 2023
 *gen ynlm_ci= . /*NA, esta variable aparece recién en 1998*/
 
-egen ingrem = rsum(consumo vestuar cuota repara comer ahorros medicos educac insumos otros), missing
-replace ingrem = ingrem/8.76
-gen ynlm_ci=ingrem
+gen ynlm_ci=.
 
 
 gen ynlnm_ci=.

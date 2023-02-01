@@ -1192,8 +1192,19 @@ label var combust_ch "Principal combustible gas o electricidad"
 *************
 ***bano_ch***
 *************
+* Comentario JL: Este variable representa el TIPO de baño, corecciones despues del codigo.
+
 gen bano_ch=(s01011a>=1 | s01011b>=1 | s01011c>=1)
 label var bano_ch "El hogar tiene servicio sanitario"
+
+
+* gen bano_ch=.
+* replace bano_ch = 1 if (s01011a>0 | s01011b>0) & (s01012a == 1 | s01012a == 2 )
+* replace bano_ch = 2 if (s01011a>0 | s01011b>0) & s01012a == 3
+* replace bano_ch = 4 if (s01011a>0 | s01011b>0)&  (s01012a == 5 | s01012a == 6 )
+* replace bano_ch = 6 if (s01011a>0 | s01011b>0) & s01012a == 4
+*label var bano_ch "Tipo de instalación sanitaria del hogar"
+
 
 ***************
 ***banoex_ch***
@@ -1470,6 +1481,16 @@ gen aguafconsumo_ch = 0
 
 gen aguafuente_ch = 9
 *se asume que si llega a almenos una habitacion hay llave privada y llave publica si es canalizada hasta la vivienda
+
+	* Comentario JL: Si el punto de acceso está en el terreno o dentro de la casa generalmente lo consideramos "llave privada", un lave pública sería si está fuera de la propiedad en propiedad pública. También con los pozos profundos y artesian, normalente se hace con boreholes los que consideraría "protejidos"
+
+	* replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
+	* replace aguafuente_ch = 2 if s01007==1 & s01010==3
+	* replace aguafuente_ch = 4 if s01007==2         
+	* replace aguafuente_ch = 5 if s01007==5 
+	* replace aguafuente_ch = 9 if s01007==3 
+	* replace aguafuente_ch = 10 if s01007==4 | s01007==6
+
 replace aguafuente_ch = 1 if s01007==1 & s01010==1
 replace aguafuente_ch = 2 if s01007==1 & s01010==2
 replace aguafuente_ch = 5 if s01007==5
@@ -1480,21 +1501,38 @@ replace aguafuente_ch = 10 if s01007==6
 **************
 *aguadisp1_ch*
 **************
+* Comentario JL: La encuesta hace la pregunta en terminos de dias, entonces podemos poner 9 para esa
+
 gen aguadisp1_ch = 0
+
+* replace aguadisp1_ch = 9
+
 replace aguadisp1_ch = 1 if s01008==1
 
 
 **************
 *aguadisp2_ch*
 **************
+
+
 gen aguadisp2_ch = 3 if s01008==1
 replace aguadisp2_ch = 2 if s01008==2
+*Comentario JL: 
+* replace aguadisp2_ch = 1 if s01008==3 | s01008==4
 replace aguadisp2_ch = 1 if s01008==1
 
 
 ************
 *sinbano_ch*
 ************
+* Comentario JL: Si reportan que compartan un baño, los clasificamos con baño
+* gen sinbano_ch = .
+* replace sinbano_ch = 0 if s01011a >=1 | s01011b>=1
+* replace sinbano_ch = 1 if s01011a ==0 & s01011b==0 & s01011c ==1
+* replace sinbano_ch = 2 if  s01011a ==0 & s01011b==0 & s01011c == 2
+
+
+
 gen sinbano_ch = 3
 replace sinbano_ch =  1 if s01011b>=1
 replace sinbano_ch =  0 if s01011a>=1
@@ -1513,6 +1551,11 @@ gen aguatrat_ch = 9
 *aguamala_ch*  Altered
 *************
 *Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es diferente
+* Comentario JL: Las fuentes de agua mejoradas incluyen: agua de lluvia, de pozos protejidos, etc. La unica fuente que podemos clasificar 100% como no mejorado o "mala" es el 3. Algo como:
+*gen aguamala_ch = 0
+*replace aguamala_ch = 1 if s01107 = 3 
+*replace aguamala_ch = 2 if s01107 = 4 | s01107 = 6
+
 gen aguamala_ch= 2
 replace aguamala_ch= 0 if s01007==1
 replace aguamala_ch= 1 if s01007>1
@@ -1522,6 +1565,13 @@ replace aguamala_ch= 1 if s01007>1
 *aguamejorada_ch*  Altered
 *****************
 *Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es diferente
+
+* Comentarios JL: 
+*gen aguamala_ch = 1
+*replace aguamala_ch = 0 if s01107 = 3 
+*replace aguamala_ch = 2 if s01107 = 4 | s01107 = 6
+
+
 gen aguamejorada_ch= 2
 replace aguamejorada_ch= 1 if s01007==1
 replace aguamejorada_ch= 2 if s01007>1
@@ -1530,6 +1580,16 @@ replace aguamejorada_ch= 2 if s01007>1
 *****************
 *bano_ch         *  Altered
 *****************
+*Comentario JL: Este variable aparece arriba, por favor hace la edicion para que cada variable solo se crea una vez en el codigo. Es importante preservar la orden de creación porque el codigo se hace referencia a este variable arriba entonces hay que crearlo alla. 
+
+* gen bano_ch=.
+* replace bano_ch = 1 if (s01011a>0 | s01011b>0) & (s01012a == 1 | s01012a == 2 )
+* replace bano_ch = 2 if (s01011a>0 | s01011b>0) & s01012a == 3
+* replace bano_ch = 4 if (s01011a>0 | s01011b>0)&  (s01012a == 5 | s01012a == 6 )
+* replace bano_ch = 6 if (s01011a>0 | s01011b>0) & s01012a == 4
+*label var bano_ch "Tipo de instalación sanitaria del hogar"
+
+
 gen bano_ch=6
 replace bano_ch=0 if (s01011a==0 | s01011b==0)
 replace bano_ch=1 if (s01011a>0 | s01011b>0) & (s01012a==1 | s01012a==2)

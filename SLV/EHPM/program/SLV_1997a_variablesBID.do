@@ -856,16 +856,19 @@ replace ynlm_ci= ynlm_ci/8.76
 
 gen ynlnm_ci=.
 
+*Modificación Mayra Sáenz - Septiembre 2014
+*Conversión de colones a dólares
 * Para capturar el ingreso de los desocupados 
-egen ylmotros_ci = rsum(comisiones dietass viaticoss bonif aguinals bonificaciones), missing
-replace ylmotros_ci =. if emp_ci ==1
-*Conversión colones a dólares
-replace ylmotros_ci= ylmotros_ci/8.76 
 
-egen ylnmotros_ci=rsum(especiess combuss), missing
-replace ylnmotros_ci=. if emp_ci==1
+*Modificación David Cornejo - Febrero 2023
+* Está sumando doblemente comisiones, dietas, viaticos, bonificaciones, aguinaldo y bonificaciones 2, cuando ya están en ylm_ch
+gen ylmotros_ci = .
+
 *Conversión colones a dólares
-replace ylnmotros_ci= ylnmotros_ci/8.76 
+
+gen ylnmotros_ci= .
+
+*Conversión colones a dólares
 
 
 **********************

@@ -1450,7 +1450,110 @@ replace edupub_ci= 1 if e197==1 & e198==1 | e201==1 & e210_1==1 | e201==1 & e210
 ********************************************************************************
 *                                                                              *
 ********************************************************************************
+		**********************************
+		**** VARIABLES DE LA VIVIENDA ****
+		**********************************
 
+		
+**#
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+*si el agua llega a una habitacion esta dentro de la casa
+replace aguadist_ch= 1 if d12==1
+*si el agua llega al inmueble pero no llega dentro de la casa llega al terreno, o si la fuente de agua esta en el terreno
+replace aguadist_ch= 2 if d13==2
+*la encuesta no pregunta por fuentes externas al terreno
+replace aguadist_ch= 3 if d13==3
+
+*****************
+*aguafconsumo_ch*
+*****************
+*la encuesta no especifica la calidad del agua
+gen aguafconsumo_ch = 0
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if d11==1 & d12==1
+replace aguafuente_ch = 2 if d11==1 & d12>1
+replace aguafuente_ch = 4 if d11==3
+replace aguafuente_ch = 5 if d11==4
+replace aguafuente_ch = 10 if(d11==6|d11==2)
+replace aguafuente_ch = 8 if d11==5
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if (d13==1|d13==2)
+replace sinbano_ch = 1 if d15==2
+replace sinbano_ch = 2 if d13==3
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando la fuente es red general 
+gen aguamala_ch= 2
+replace aguamala_ch= 0 if d11==1
+replace aguamala_ch= 1 if d11>1
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando la fuente es red general
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if d11>1
+replace aguamejorada_ch= 1 if d11==1
+
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=1 if d16==1 & d13==1
+replace bano_ch=2 if d16==2 & d13==1
+*se asume letrina mejorada si no hay inodoro y va fosa septica
+replace bano_ch=3 if d16==2 & d13==2
+replace bano_ch=6 if d16==4
+replace bano_ch=4 if d16==3
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen	banomejorado_ch=0
+replace banomejorado_ch=1 if d16==1 & d13==1
+replace banomejorado_ch=1 if d16==2 & d13==1
+replace banomejorado_ch=1 if d16==2 & d13==2
+
+**#		
 *93. Acceso a una fuente de agua por red
 
 /*

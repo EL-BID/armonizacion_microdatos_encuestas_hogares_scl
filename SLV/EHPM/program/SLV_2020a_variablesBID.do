@@ -913,9 +913,18 @@ label var edusi_ci "Secundaria incompleta"
 **************
 ***edusc_ci***
 **************
-gen edusc_ci=(aedu_ci==11 & r217==2) // 11 anios y titulo de bachiller general
-replace edusc_ci=1 if aedu_ci==12 & (r217==1 | r217==3 | r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
-replace edusc_ci=. if aedu_ci==.
+/* 
+Nota: Ya que partir de 2016 podemos discriminar por título de bachiller técnico
+se extiende la definición de edusc_ci y edus2c_ci a aquellas observacines que presenten:
+
+ - 11 o 12 anios de educación sin declarar no obtencion de titulo, titulo de bachiller general, 
+	titulo de bachiller tecnico, perdido. 
+ - 11 anios y título de bachiller general
+ - 12 anios, no obtuvo titulo o bachiller tecnico o perdido.
+ */x
+gen edusc_ci = (aedu_ci == 11 | aedu_ci == 12) & (r217 != 1 & r217 != 2 & r217 != 3 & r217 != .) | (aedu_ci == 11 & r217 == 2) // 11 anios y titulo de bachiller general 
+replace edusc_ci = 1 if aedu_ci == 12 & inlist(r217, 1, 3, .) // 12 anios, sin titulo, bachiller tecnico o perdido.
+replace edusc_ci = . if aedu_ci == .
 label var edusc_ci "Secundaria Completa"
 
 **************
@@ -958,9 +967,9 @@ label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=(aedu_ci==11 & r217==2) //11  anios y titulo de bachiller general
-replace edus2c_ci=1 if aedu_ci==12 & (r217==1 | r217==3| r217==.) // 12 anios, sin titulo, bachiller tecnico o perdido.
-replace edus2c_ci=. if aedu_ci==.
+gen edus2c_ci = (aedu_ci == 11 | aedu_ci == 12) & (r217 != 1 & r217 != 2 & r217 != 3 & r217 != . ) | (aedu_ci == 11 & r217 == 2) // 11 anios y titulo de bachiller general 
+replace edus2c_ci = 1 if aedu_ci == 12 & inlist(r217, 1, 3, .) // 12 anios, sin titulo, bachiller tecnico o perdido.
+replace edus2c_ci = . if aedu_ci == .
 label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
 
 ***************
@@ -1033,9 +1042,9 @@ label var repiteult "Ha repetido el último grado"
 ***************
 ***edupub_ci***
 ***************
-gen edupub_ci=.
-replace edupub_ci=1 if r210a==1 & r203==1
-replace edupub_ci=0 if (r210a==2 | r210a==3) & r203==1
+gen edupub_ci = .
+replace edupub_ci = 1 if r210a == 1
+replace edupub_ci = 0 if inlist(r210a, 2, 3)
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 		**********************************

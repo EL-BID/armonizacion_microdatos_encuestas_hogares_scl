@@ -1345,7 +1345,7 @@ la var edupre_ci "Tiene Educacion preescolar"
 ***************
 ***asipre_ci***
 ***************
-gen byte asispre_ci=(cp401==1 & cp412==3) 
+gen byte asispre_ci=(cp412==3) // Asiste a pre-básica
 la var asispre_ci "Asiste a educacion prescolar"
 
 **************

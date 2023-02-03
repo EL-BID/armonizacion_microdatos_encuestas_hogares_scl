@@ -498,8 +498,10 @@ gen mesess=.
 replace mesess=r408b_me
 replace mesess=0.5 if r408b_me==0
 
+*Modificación David Cornejo - Febrero 2023
+* Para convertir años a meses se debe multiplicar por 12
 gen anosb=.
-replace anosb=r408c_an/12  /*La variable debe llevarse a meses*/
+replace anosb=r408c_an*12  /*La variable debe llevarse a meses*/
 replace anosb=6 if r408c_an==0
 
 egen durades_ci=rsum(sem mesess anosb)
@@ -561,9 +563,11 @@ label var pension_ci "1=Recibe pension contributiva"
 *************
 *ypen_ci*
 *************
+*Modificación David Cornejo - Febrero 2023
+* En los ocasiones que r439g2_v ==999 no se puede conocer el valor de la pension anual
 
 gen ypen_ci=r439g1_j*r439g2_v/12 if pension_ci==1
-replace ypen_ci = . if r439g1_j==999999
+replace ypen_ci = . if r439g1_j==999999 | r439g2_v ==999
 * Conversión Colones a dólares
 replace ypen_ci= ypen_ci/8.76
 label var ypen_ci "Valor de la pension contributiva"

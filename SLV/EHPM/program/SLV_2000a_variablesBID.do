@@ -395,10 +395,12 @@ label value condocup_ci condocup_ci
 label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 drop r405
 */
-* Se considera el limite inferior de la encuesta que es de 10 anios y mas. MGD 06/10/2014
+* Se considera el limite inferior de la encuesta que es de 5 anios y mas. MGD 06/10/2014
+*Modificación David Cornejo - Febrero 2023
+* Quitando la limpitación de desempleo por los meses de búsqueda de empleo (tpobusm)
 gen condocup_ci=.
 replace condocup_ci=1 if trabajo==1 | tienetra==1 | (labterre==1 | negpropio==1 | vendprodu==1 | cocilavo==1  | hizotorti==1 | homeprod==1 | ayudfami==1  | otroingr==1) 
-replace condocup_ci=2 if condocup_ci!=1 & (busco==1 | (pqnobus==14 | pqnobus==15) | (comobusco>=1 & comobusco<=8) | (tpobusm>=1 & tpobusm<=4))
+replace condocup_ci=2 if condocup_ci!=1 & (busco==1 | (pqnobus==14 | pqnobus==15) | (comobusco>=1 & comobusco<=8)
 replace condocup_ci=3 if (condocup_ci!=1 & condocup_ci!=2) & edad_ci>=5
 replace condocup_ci=4 if edad_ci<5
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"

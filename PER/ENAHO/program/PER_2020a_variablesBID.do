@@ -1671,7 +1671,111 @@ replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
+**#
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if p110==1
+replace aguadist_ch= 2 if p110==2
+*no esta en la vivienda ni en el edificio es =3
+replace aguadist_ch= 3 if p110>2
 
+*****************
+*aguafconsumo_ch*
+*****************
+
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 9 if p110a1==2
+replace aguafconsumo_ch = 7 if p110a1==1
+replace aguafconsumo_ch = 1 if p110a1==1 & p110==1
+*se asume llave publica si esta fuera de la vivienda pero dentro del edificio o en un pilon publico
+replace aguafconsumo_ch = 2 if p110a1==1 & (p110==1|p110==2)
+replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
+replace aguafconsumo_ch = 10 if p110a1==1 & p110==5
+replace aguafconsumo_ch = 8 if p110a1==1 & (p110==6|p110==7)
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 7 if p110a1==1
+replace aguafuente_ch = 1 if p110==1
+*se asume llave publica si esta fuera de la vivienda pero dentro del edificio o en un pilon publico
+replace aguafuente_ch = 2 if (p110==1|p110==2)
+replace aguafuente_ch = 6 if p110==4
+replace aguafuente_ch = 10 if p110==5
+replace aguafuente_ch = 8 if (p110==6|p110==7)
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =.
+replace aguadisp1_ch = 1 if p110c==1
+replace aguadisp1_ch = 0 if p110c==2
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =.
+replace aguadisp2_ch = 1 if p110c2<4
+replace aguadisp2_ch = 2 if (p110c==1|p110c2>=4)
+replace aguadisp2_ch = 3 if p110c==1 & p110c2==.
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if (p111a==1|p111a==2|p111a==3|p111a==4|p111a==5|p111a==6)
+replace sinbano_ch = 2 if p111a==9
+replace sinbano_ch = 3 if (p111a==7|p111a==.)
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando la fuente es red publica o el agua es potable
+gen aguamala_ch= 2
+replace aguamala_ch= 0 if (p110a1==1|p110==1|p110==2)
+replace aguamala_ch= 1 if p110a1==2
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando la fuente es red publica o el agua es potable
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if p110a1==2
+replace aguamejorada_ch= 1 if (p110a1==1|p110==1|p110==2)
+
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=1 if (p111a==1|p111a==2)
+replace bano_ch=3 if p111a==3
+replace bano_ch=6 if d16==4
+replace bano_ch=4 if (p111a==6|p111a==9)
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen	banomejorado_ch=0
+replace banomejorado_ch=1 if (p111a==1|p111a==2)
+replace banomejorado_ch=1 if p111a==3
+
+**#		
 ****************
 ***aguared_ch***
 ****************

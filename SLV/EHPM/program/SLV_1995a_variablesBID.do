@@ -70,13 +70,6 @@ label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
 
-************
-* Region_c *
-************
-*Inclusión Mayra Sáenz - Julio 2013
-
-gen region_c=  .
-label var region_c "División política"
 
 ***************
 ***factor_ch***
@@ -155,6 +148,50 @@ label value relacion_ci relacion_ci
 ****************************
 ***VARIABLES DEMOGRAFICAS***
 ****************************
+
+***********
+* Region_c *
+************
+gen region_c= depto
+label define region_c  ///
+          1 "Ahuachapán" ///
+           2 "Santa Ana" ///
+           3 "Sonsonate" ///
+           4 "Chalatenango" ///
+           5 "La Libertad" ///
+           6 "San Salvador" ///
+           7 "Cuscatlán" ///
+           8 "La Paz" ///
+           9 "Cabañas" ///
+          10 "San Vicente" ///
+          11 "Usulután" ///
+          12 "San Miguel" ///
+          13 "Morazán" ///
+          14 "La Unión" 
+		    
+label value region_c region_c
+label var region_c "División política, departamento"
+
+***************
+***ine01***
+***************
+gen ine01= depto
+label define ine01  ///
+          1 "Ahuachapán" ///
+           2 "Santa Ana" ///
+           3 "Sonsonate" ///
+           4 "Chalatenango" ///
+           5 "La Libertad" ///
+           6 "San Salvador" ///
+           7 "Cuscatlán" ///
+           8 "La Paz" ///
+           9 "Cabañas" ///
+          10 "San Vicente" ///
+          11 "Usulután" ///
+          12 "San Miguel" ///
+          13 "Morazán" ///
+          14 "La Unión" 
+label value ine01 ine01
 
 ***************
 ***factor_ci***
@@ -2057,6 +2094,116 @@ gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
 recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
+
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci= .
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado/otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en último mes. 
+
+gen probsalud_ci=1 if enfermo!=6
+replace probsalud_ci=0 if enfermo==6
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=1 if pqnoasis_orig==2
+recode distancia_ci(.=0) if pqnoasis_orig!=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=1 if pqnoasis_orig==3
+recode costo_ci (.=0) if pqnoasis_orig!=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=1 if pqnoasis_orig==1 | pqnoasis_orig==4 | pqnoasis_orig==5 | pqnoasis_orig==7
+recode atencion_ci (.=0) if pqnoasis_orig!=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 *variables que faltan generar
 gen tcylmpri_ci =.

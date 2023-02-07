@@ -747,9 +747,10 @@ gen antiguedad_ci=.
 ****************************
 
 /*Para los trabajadores dependientes*/
-
+*Modificación David Cornejo - Febrero 2023
+* Cuando dan salario diario se multiplica por 30
 gen yprid=.
-replace yprid= r423*20  if r422==1
+replace yprid= r423*30  if r422==1
 replace yprid= r423*4.3 if r422==2
 replace yprid= r423*2   if r422==3
 replace yprid= r423     if r422==4 | r422==5

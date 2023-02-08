@@ -1142,7 +1142,116 @@ g pqnoasis1_ci = .
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
+**#
+*************
+*aguadist_ch*
+*************
+*se asume que llega a la vivienda cuando es de acueducto por tuberia o de otra fuente por tuberia
+gen aguadist_ch=.
+replace aguadist_ch=1 if (p5050==1 | p5050==2)
+*se asume que llega al terreno si es pozo con bomba
+replace aguadist_ch=2 if p5050==3
+*se asume que llega fuera del terreno las demas opciones 
+replace aguadist_ch=3 if p5050>=4
 
+*****************
+*aguafconsumo_ch*
+*****************
+*la encuesta pregunta por agua para consumo humano
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if p5050==1
+replace aguafconsumo_ch = 3 if p5050==10
+replace aguafconsumo_ch = 4 if p5050==3
+replace aguafconsumo_ch = 5 if p5050==5
+replace aguafconsumo_ch = 6 if p5050==8
+replace aguafconsumo_ch = 8 if p5050==6
+replace aguafconsumo_ch = 10 if (p5050==4 | p5050==7)
+replace aguafconsumo_ch = 7 if p5050==2
+replace aguafconsumo_ch = 9 if (p5050==4 | p5050==9)
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if p5050==1
+replace aguafuente_ch = 3 if p5050==10
+replace aguafuente_ch = 4 if p5050==3
+replace aguafuente_ch = 5 if p5050==5
+replace aguafuente_ch = 6 if p5050==8
+replace aguafuente_ch = 8 if p5050==6
+replace aguafuente_ch = 10 if (p5050==4 | p5050==7)
+replace aguafuente_ch = 7 if p5050==2
+replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
+
+**************
+*aguadisp1_ch*
+**************
+*se asume constante si esta los 7 dias de la semana
+gen aguadisp1_ch = 1 if p4040==1
+replace aguadisp1_ch 0 if p4040==2
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*la encuesta no hace la pregunta
+
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if p5020<6
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+*Se asume mejorada cuando es agua limpia
+gen aguamala_ch= 2
+replace aguamala_ch= 0 if aguafuente_ch<=7
+replace aguamala_ch= 1 if (aguafuente_ch==8 | aguafuente_ch==9)
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+*Se asume mejorada cuando es agua limpia
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if (aguafuente_ch==8 | aguafuente_ch==9)
+replace aguamejorada_ch= 1 if aguafuente_ch<=7
+
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0 if p5020==6
+replace bano_ch=1 if p5020==1
+replace bano_ch=2 if p5020==2
+*se asume letrina mejorada si no hay inodoro y va fosa septica
+replace bano_ch=3 if p5020==4
+replace bano_ch=4 if (p5020==3 | p5020==5)
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen	banomejorado_ch=0
+replace banomejorado_ch=1 if p5020==1
+replace banomejorado_ch=1 if p5020==2
+replace banomejorado_ch=1 if p5020==4
+
+**#		
 ****************
 ***aguared_ch***
 ****************
@@ -1150,17 +1259,10 @@ g pqnoasis1_ci = .
 	replace aguared_ch =. if p4030s5==.
 	la var aguared_ch "Acceso a fuente de agua por red"
 
-*****************
-***aguadist_ch***
-*****************
-	g aguadist_ch = .
+
 	
-*****************
-***aguamala_ch***
-*****************
-	g aguamala_ch = (p5050 == 5 | p5050 == 6)
-	replace aguamala_ch = . if p5050 == .
-	la var aguamala_ch "Agua inadecuada (unimproved) según MDG" 
+
+	
 
 *****************
 ***aguamide_ch***
@@ -1188,12 +1290,6 @@ g pqnoasis1_ci = .
 	replace combust_ch =. if p5080==.
 	la var combust_ch "Principal combustible gas o electricidad" 
 
-*************
-***bano_ch***
-*************
-	g bano_ch = p5020 != 6
-	replace bano_ch = . if p5020 == .
-	la var bano_ch "El hogar tiene servicio sanitario"
 
 ***************
 ***banoex_ch***
@@ -1275,17 +1371,10 @@ g pqnoasis1_ci = .
 	
  **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (p5050 >=1 & p5050 <=5) | p5050==7
-replace aguamejorada_ch = 0 if  p5050 ==6 | (p5050 >=8 & p5050 <=10) 
 
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if ( p5020 >=1 &  p5020 <=4) & p5030 ==1
-replace banomejorado_ch = 0 if (( p5020 >=1 &  p5020 <=4) & p5030 ==2) | ( p5020 >=5 &  p5020 <=6)
+	
+
+
  
 *************
 ***dorm_ch***

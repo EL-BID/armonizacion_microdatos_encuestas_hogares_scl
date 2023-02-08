@@ -1702,24 +1702,25 @@ replace aguadist_ch= 3 if p110>2
 *****************
 *aguafconsumo_ch*
 *****************
+*aguafconsumo_ch*
+*****************
 * Comentarios JL: Este es tricky. Going to have a call with Lina about thi
 
 * 1. llave publica o standpipe (aguafconsumo = 2) es para la opcion publica. Tambien la linea que empieza con "aguafconsumo_ch = 2" va a remplazar todos los de aguafconsumo_ch = 1 como esta escrito actualmente. 
 
 * 2. Checando el archivo de stata parece que 110a solo se preguntó si la fuente es de la red, entonces solo nos funciona como indicador de uso para beber para aguafconsumo_ch = 1 & 2. 
-*    Podemos suponer que si p110a1 == 2 no usa la fuente para beber entonces estas respuestas podemos dar un valor nulo para este campo. En el analsis final vamos a compara este campo con lo de aguafuente_ch. 
+
+* 3.  La encuesta tiene una opcion mas para p110, te mando la version correcta.
 
 *Entonces lo cambaria a:
-
-
 *gen aguafconsumo_ch = 0
-*replace aguafconsumo_ch = . if p110a1==2
+*replace aguafconsumo_ch = 0 if p110a1==2
 *replace aguafconsumo_ch = 7 if p110a1==1
 *replace aguafconsumo_ch = 1 if (p110==1 |p110==2) & p110a1==1
 *replace aguafconsumo_ch = 2 if p110a1==1 & p110==3
 *replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
-*replace aguafconsumo_ch = 8 if p110a1==1 & p110==6
-*replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5| p110==7)
+*replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
+*replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5|  p110==6 |p110==7 )
 
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 9 if p110a1==2
@@ -1733,17 +1734,15 @@ replace aguafconsumo_ch = 8 if p110a1==1 & (p110==6|p110==7)
 *****************
 *aguafuente_ch*
 *****************
-* Comentarios JL: Change to:
+* Comentarios JL: La encuesta tiene una opcion mas para p110, te mando la version correcta. Change to:
 
 *gen aguafuente_ch =.
 *replace aguafuente_ch = 7 if p110a1==1
 *replace aguafuente_ch = 1 if (p110==1|p110==2) 
 *replace aguafuente_ch = 2 if p110==3
 *replace aguafuente_ch = 6 if p110==4
-*replace aguafuente_ch = 10 if (p110==5 |p110==7)
-*replace aguafuente_ch = 8 if p110==6 | p110==8 
-** 8 shouldnt be here but there is a weird inconsistency between the SCL data nand the survey question 
-
+*replace aguafuente_ch = 8 if p110==8 
+*replace aguafuente_ch = 10 if (p110==5 |p110==7| p110==6)
 
 
 gen aguafuente_ch =.
@@ -1754,7 +1753,6 @@ replace aguafuente_ch = 2 if (p110==1|p110==2)
 replace aguafuente_ch = 6 if p110==4
 replace aguafuente_ch = 10 if p110==5
 replace aguafuente_ch = 8 if (p110==6|p110==7)
-
 
 **************
 *aguadisp1_ch*

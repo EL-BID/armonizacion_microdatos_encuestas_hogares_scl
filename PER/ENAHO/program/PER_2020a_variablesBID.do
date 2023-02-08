@@ -1675,6 +1675,24 @@ replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 *************
 *aguadist_ch*
 *************
+* Comentarios JL: los opciones 4 y 5 normalmente estan en el terreno y incluyen un sistema entubado dentro de la casa. En este caso es un reto decir porque mezclan las temas de ubicacion y fuente
+* Lo cambiaria a:
+
+*gen aguadist_ch=.
+*replace aguadist_ch= 1 if p110==1 | p110==4 | p110==5 
+*replace aguadist_ch= 2 if p110==2
+*no esta en la vivienda ni en el edificio es =3
+*replace aguadist_ch= 3 if p110 == 3 | p110 == 6
+
+* OR agregar otra categoría
+*gen aguadist_ch=.
+*replace aguadist_ch= 1 if p110==1 
+*replace aguadist_ch= 2 if p110==2
+*replace aguadist_ch= 3 if p110 == 3 | p110 == 6
+*replace aguadist_ch= 0 iof p110==4 | p110==5 en el caso de que aguadist_ch= 0 significa que no es posible saber la ubicacion
+
+
+
 gen aguadist_ch=.
 replace aguadist_ch= 1 if p110==1
 replace aguadist_ch= 2 if p110==2
@@ -1684,6 +1702,24 @@ replace aguadist_ch= 3 if p110>2
 *****************
 *aguafconsumo_ch*
 *****************
+* Comentarios JL: Este es tricky. Going to have a call with Lina about thi
+
+* 1. llave publica o standpipe (aguafconsumo = 2) es para la opcion publica. Tambien la linea que empieza con "aguafconsumo_ch = 2" va a remplazar todos los de aguafconsumo_ch = 1 como esta escrito actualmente. 
+
+* 2. Checando el archivo de stata parece que 110a solo se preguntó si la fuente es de la red, entonces solo nos funciona como indicador de uso para beber para aguafconsumo_ch = 1 & 2. 
+*    Podemos suponer que si p110a1 == 2 no usa la fuente para beber entonces estas respuestas podemos dar un valor nulo para este campo. En el analsis final vamos a compara este campo con lo de aguafuente_ch. 
+
+*Entonces lo cambaria a:
+
+
+*gen aguafconsumo_ch = 0
+*replace aguafconsumo_ch = . if p110a1==2
+*replace aguafconsumo_ch = 7 if p110a1==1
+*replace aguafconsumo_ch = 1 if (p110==1 |p110==2) & p110a1==1
+*replace aguafconsumo_ch = 2 if p110a1==1 & p110==3
+*replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
+*replace aguafconsumo_ch = 8 if p110a1==1 & p110==6
+*replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5| p110==7)
 
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 9 if p110a1==2
@@ -1697,6 +1733,19 @@ replace aguafconsumo_ch = 8 if p110a1==1 & (p110==6|p110==7)
 *****************
 *aguafuente_ch*
 *****************
+* Comentarios JL: Change to:
+
+*gen aguafuente_ch =.
+*replace aguafuente_ch = 7 if p110a1==1
+*replace aguafuente_ch = 1 if (p110==1|p110==2) 
+*replace aguafuente_ch = 2 if p110==3
+*replace aguafuente_ch = 6 if p110==4
+*replace aguafuente_ch = 10 if (p110==5 |p110==7)
+*replace aguafuente_ch = 8 if p110==6 | p110==8 
+** 8 shouldnt be here but there is a weird inconsistency between the SCL data nand the survey question 
+
+
+
 gen aguafuente_ch =.
 replace aguafuente_ch = 7 if p110a1==1
 replace aguafuente_ch = 1 if p110==1
@@ -1710,6 +1759,9 @@ replace aguafuente_ch = 8 if (p110==6|p110==7)
 **************
 *aguadisp1_ch*
 **************
+** Comentarios JL: Esta encuesta no pregunta sobre disponiblidad en la manera necesaria para generar aguadisp1
+*gen aguadisp1_ch = 9
+
 gen aguadisp1_ch =.
 replace aguadisp1_ch = 1 if p110c==1
 replace aguadisp1_ch = 0 if p110c==2
@@ -1718,6 +1770,16 @@ replace aguadisp1_ch = 0 if p110c==2
 **************
 *aguadisp2_ch*
 **************
+* We will include the hours field as well here. Please change to:
+*gen aguadisp2_ch =.
+*  if they lack service more than half the time (either days or hours) aguadisp2_ch = 1
+*replace aguadisp2_ch = 1 if (p110c2<4 | p110c1 < 12 | p110c3 <12) 
+*  if they have service more than half the time (either days or hours) aguadisp2_ch = 2
+*replace aguadisp2_ch = 2 if p110c2>=4 & (p110c1>=12 | p110c3 <12)
+*  if they report NO service outages aguadisp2_ch = 2. Days p110c2 is excluded bc there are no p110c2 == 7, range is actually 1-6
+*replace aguadisp2_ch = 3 if p110c==1 & p110c1 == 24
+
+
 gen aguadisp2_ch =.
 replace aguadisp2_ch = 1 if p110c2<4
 replace aguadisp2_ch = 2 if (p110c==1|p110c2>=4)
@@ -1726,6 +1788,12 @@ replace aguadisp2_ch = 3 if p110c==1 & p110c2==.
 ************
 *sinbano_ch*
 ************
+* Comentarios JL: Pregunta a donde está conectado el baño, entonces no se si podemos calcular eso. Por ejemplo, el baño puede ser conectado a aire libre (arroyo o cesspool), pero tienen baño.
+* Cambia a:
+*gen sinbano_ch = .
+
+
+
 gen sinbano_ch = 3
 replace sinbano_ch = 0 if (p111a==1|p111a==2|p111a==3|p111a==4|p111a==5|p111a==6)
 replace sinbano_ch = 2 if p111a==9
@@ -1742,7 +1810,20 @@ gen aguatrat_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando la fuente es red publica o el agua es potable
+** JL Comentarios 
+*  Se crea este variable abajo, lo que significa que va a re-emplazar lo que tienes aquí. Super importante eliminar la creación posterior de estas variables! 
+
+*  Tambien en la mayoria de las encuestas no sabemos si es potable o no. La cuestion de una fuente mejorada no incluye especificaciones de calidad, solo que normalmente estas fuentes tienen mejor calidad que las no mejoradas. Entonces para mantener comparabilidad (y la definicion) podemos excluir p110a1 de este calculo. 
+
+*  Otra nota: Por favor para este variable usa la lista de fuentes mejoradas y no mejoradas del JMP que te mandé. Es un variable que mide los hogares SIN fuentes de agua mejoradas, entonces todas las fuentes mejoradas (red, camión/cisterna, pilón de uso público) se debería incluir en aguamala_ch = 0. Si tienes dudas sobre esto por favor avisame. Cambia el codigo a:
+
+*gen aguamala_ch= 2
+*replace aguamala_ch= 0 if p110 <=4
+*replace aguamala_ch= 1 if p110 ==6
+*replace aguamala_ch = 2 if p110 == 5 | p110 == 7 
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+
 gen aguamala_ch= 2
 replace aguamala_ch= 0 if (p110a1==1|p110==1|p110==2)
 replace aguamala_ch= 1 if p110a1==2
@@ -1751,6 +1832,12 @@ replace aguamala_ch= 1 if p110a1==2
 *****************
 *aguamejorada_ch*  Altered
 *****************
+* Comentarios JL: Es exactamente el opuesto de aguamala_ch, entonces cambialo a:
+*gen aguamejorada_ch= 2
+*replace aguamejorada_ch= 0 if p110==6
+*replace aguamejorada_ch= 1 if (p110 <= 4)
+*replace aguamejorada_ch = 2 if p110 == 5 | p110 == 7 
+
 *Se asume mejorada cuando la fuente es red publica o el agua es potable
 gen aguamejorada_ch= 2
 replace aguamejorada_ch= 0 if p110a1==2
@@ -1761,31 +1848,40 @@ replace aguamejorada_ch= 1 if (p110a1==1|p110==1|p110==2)
 *****************
 *bano_ch         *  Altered
 *****************
+* Comentarios JL: Agregue dos lineas como comentarios. Habia una linea que hacia referencia a d16 pero no podia encontrar el variable en el dataset, entonces creo que fue un error.
+
 gen bano_ch=0
 replace bano_ch=1 if (p111a==1|p111a==2)
+replace bano_ch = 2 if p11a == 4
 replace bano_ch=3 if p111a==3
-replace bano_ch=6 if d16==4
 replace bano_ch=4 if (p111a==6|p111a==9)
+replace bano_ch = 6 if (p111a == 5 | p111a ==7)
+
 
 
 *****************
 *banomejorado_ch*  Altered
 *****************
+** Comentarios JL: mismos comentarios que en aguamala_ch. Usa las definiciones del JMP para instalaciones. Cambios ya están incorporados.
 gen	banomejorado_ch=0
-replace banomejorado_ch=1 if (p111a==1|p111a==2)
-replace banomejorado_ch=1 if p111a==3
+replace banomejorado_ch=1 if p111a<=4
+replace banomejorado_ch=2 if  (p111a == 5 | p111a ==7)
 
 **#		
 ****************
 ***aguared_ch***
 ****************
+* Comentarios JL:
+*gen aguared_ch ==0
+*gen aguared_ch == 1 if (p110==1 | p110==2)
+
 gen aguared_ch=(p110==1 | p110==2)
 label var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
 ***aguadist_ch***
 *****************
-
+** Comentarios JL: Ya está creado arriba! super importante checar y eliminar lo que no pertenzca. Elimina los siguientes 3 lineas! Podemos dejar las etiquetas.
 gen aguadist_ch=1 if p110==1
 replace aguadist_ch=2 if p110==2
 replace aguadist_ch=3 if p110>=3 & p110<=7
@@ -1810,6 +1906,7 @@ p110:
 ***aguamala_ch***
 *****************
 *MGR: variable había sido creada como missing
+* Comentario JL: Borra esto!
 gen aguamala_ch= (p110==6 | p110==7)
 
 *****************

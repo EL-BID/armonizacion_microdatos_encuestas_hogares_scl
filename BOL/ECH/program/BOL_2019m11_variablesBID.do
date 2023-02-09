@@ -1793,7 +1793,7 @@ label var edupub_ci "Asiste a un centro de ensenanza público
 /* Comentarios JL: Normalmente cuando el agua llega al hogar por camion se considera "on premesis" lo que es el enfoque de este pregunta. Puede encontrar la informacion aqui https://washdata.org/sites/default/files/2022-01/jmp-2021-metadata-sdg-611.pdf
 
 Actualiza a:
-gen aguadist_ch=4
+gen aguadist_ch=0
 replace aguadist_ch=1 if s01a_10==1
 replace aguadist_ch=2 if s01a_10==2
 replace aguadist_ch=3 if (s01a_10==3)

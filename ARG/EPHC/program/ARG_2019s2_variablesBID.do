@@ -1061,6 +1061,9 @@ label val rama_ci rama_ci
 		**********************************
 
 **#
+*valores otros de fuente de distribucion
+gen iv7_otro = 0
+replace iv7_otro= 1 if missing(iv7_esp)
 *************
 *aguadist_ch*
 *************
@@ -1084,6 +1087,7 @@ gen aguafuente_ch = 9
 replace aguafuente_ch = 1 if iv7==1 & iv6<3
 replace aguafuente_ch = 2 if iv7==1 & iv6==3
 replace aguafuente_ch = 10 if iv7>1
+replace aguafuente_ch = 9 if iv7_otro==0
 *label var aguafuente_ch "=1 si es red de distribucion y llave privada"
 
 **************

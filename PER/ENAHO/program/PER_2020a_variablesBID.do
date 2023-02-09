@@ -1675,21 +1675,14 @@ replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 *************
 *aguadist_ch*
 *************
-* Comentarios JL: los opciones 4 y 5 normalmente estan en el terreno y incluyen un sistema entubado dentro de la casa. En este caso es un reto decir porque mezclan las temas de ubicacion y fuente
+* Comentarios JL: los opciones 4 y 5 normalmente estan en el terreno y incluyen un sistema entubado dentro de la casa. En este caso es un reto decir porque mezclan las temas de ubicacion y fuente. Vamos a agregar una opcion a este variable. 0 = no se puede determinar la ubicacion
 * Lo cambiaria a:
 
-*gen aguadist_ch=.
-*replace aguadist_ch= 1 if p110==1 | p110==4 | p110==5 
-*replace aguadist_ch= 2 if p110==2
-*no esta en la vivienda ni en el edificio es =3
-*replace aguadist_ch= 3 if p110 == 3 | p110 == 6
-
-* OR agregar otra categoría
 *gen aguadist_ch=.
 *replace aguadist_ch= 1 if p110==1 
 *replace aguadist_ch= 2 if p110==2
 *replace aguadist_ch= 3 if p110 == 3 | p110 == 6
-*replace aguadist_ch= 0 iof p110==4 | p110==5 en el caso de que aguadist_ch= 0 significa que no es posible saber la ubicacion
+*replace aguadist_ch= 0 if p110==4 | p110==5
 
 
 

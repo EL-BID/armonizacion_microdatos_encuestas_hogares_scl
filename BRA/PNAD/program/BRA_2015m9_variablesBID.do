@@ -1291,36 +1291,30 @@ replace aguatrat_ch = 0 if v0224==4
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando la fuente es red general con fontaneria interior o tiene filtro y agua mala cundo no tiene filtro o la red general no tiene fontaneria interior
 gen aguamala_ch= 2
-replace aguamala_ch= 1 if v0224==4
-replace aguamala_ch= 1 if v4624==4
-replace aguamala_ch= 0 if v0224==2
-replace aguamala_ch= 0 if v4624==1
+replace aguamala_ch= 1 if aguafuente_ch>7
+replace aguamala_ch= 0 if aguafuente_ch<=7
 
 *label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-*Se asume mejorada cuando la fuente es red general con fontaneria interior o tiene filtro y agua mala cundo no tiene filtro o la red general no tiene fontaneria interior
 gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if v0224==4
-replace aguamejorada_ch= 0 if v4624==4
-replace aguamejorada_ch= 1 if v0224==2
-replace aguamejorada_ch= 1 if v4624==1
+replace aguamejorada_ch= 0 if aguafuente_ch>7
+replace aguamejorada_ch= 1 if aguafuente_ch<=7
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 *bano_ch         *  Altered
 *****************
-gen bano_ch=0
+gen bano_ch=.
 replace bano_ch=1 if (v0217==1|v0217==2)
 replace bano_ch=2 if v0217==3
 replace bano_ch=6 if v0217==4
 replace bano_ch=6 if v0217==7
 replace bano_ch=4 if (v0217==5|v0217==6)
-
+label var bano_ch "Tipo de instalación sanitaria del hogar"
 
 
 
@@ -1343,19 +1337,15 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *****************
 ***aguadist_ch***
 *****************
-gen aguadist_ch=1 if v0211==1 |v0213==1
-replace aguadist_ch=2 if v0214==2
-replace aguadist_ch=3 if v0214==4
-replace aguadist_ch=. if v0214==9 
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
-label val aguadist_ch aguadist_ch  
+*gen aguadist_ch=1 if v0211==1 |v0213==1
+*replace aguadist_ch=2 if v0214==2
+*replace aguadist_ch=3 if v0214==4
+*replace aguadist_ch=. if v0214==9 
+*label var aguadist_ch "Ubicación de la principal fuente de agua"
+*label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
+*label val aguadist_ch aguadist_ch  
 
-*****************
-***aguamala_ch***
-*****************
-gen aguamala_ch=(v0212==6) 
-label var aguamala_ch "Agua unimproved según MDG"
+
 
 *****************
 ***aguamide_ch***
@@ -1381,11 +1371,7 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 gen combust_ch=(v0223==1|v0223==2|v0223==5)
 label var combust_ch "Principal combustible gas o electricidad" 
 
-*************
-***bano_ch***
-*************
-gen bano_ch=(v0215==1)
-label var bano_ch "El hogar tiene servicio sanitario"
+
 
 ***************
 ***banoex_ch***
@@ -1481,17 +1467,9 @@ label val resid_ch resid_ch
 
 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
-*********************
-***aguamejorada_ch***
-*********************
-gen aguamejorada_ch = 1 if v0212 == 2 | v0212 ==4
-replace aguamejorada_ch = 0 if v0212 == 6
+
 				
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch = 1 if (v0215 == 1 & (v0217 >= 1 & v0217 <=3) & v0216 == 2 )
-replace banomejorado_ch = 0 if (v0215 == 1 & (v0217 >= 1 & v0217 <=3) & v0216 == 4) | v0215 == 3 | (v0215 == 1 & (v0217 >= 4 & v0217<=7))
+
 
 *************
 ***dorm_ch***

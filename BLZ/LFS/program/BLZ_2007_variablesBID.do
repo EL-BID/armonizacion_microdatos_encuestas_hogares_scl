@@ -864,174 +864,189 @@ label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 *******************************
 *******************************
 
-******************************************
-* NUMERO DE AÑOS DE EDUCACION CULMINADOS *
-******************************************
-* MGD 09/09/2014: Clasificacion de añ de educacion en BLZ.  La ultima categoria es mas de dos años de universidad y se asumen 16 completos
-*Primary Primary School - 8 years
-*Secondary CSEC (Caribbean Secondary Education Certificate) Examinations - 4 years
-*Post-secondary CXC Caribbean Advanced Placement Examination (CAPE)- 2 years (para quienes no culminaron al secundaria)   
-*Tertiary University           
 
-gen aedu_ci =.
-replace aedu_ci=cq16b if cq16b <=12 & cq16b!=99
-replace aedu_ci=12 if cq16b==13 | cq16b==14
-replace aedu_ci=13 if cq16b==15
-replace aedu_ci=14 if cq16b==16
-replace aedu_ci=16 if cq16b==17
+// dk/ns va a missing
+replace cq13 = . if cq13 == 99
+replace q51b = . if q51b == 99
+replace cq16a = . if cq16a == 17
+replace cq16b = . if cq16b == 99
+
+*************
+** aedu_ci **
+*************
+/*
+MGD 09/09/2014: Clasificacion de añ de educacion en BLZ.  
+	
+Se toma como referencia:
+	
+	- Primary Primary School - 8 years
+	- Secondary CSEC (Caribbean Secondary Education Certificate) Examinations - 4 years
+	- Post-secondary CXC Caribbean Advanced Placement Examination (CAPE)- 2 years (para quienes no culminaron la secundaria)   
+	- Tertiary University  
+
+La ultima categoria es mas de dos años de universidad y se asumen 16 completos.
+
+Debido a inconsistencia en la encuesta entre las preguntas q51a q51b y cq16a cq16b se condiciona su uso por edad 
+siguiendo la clasificacion del cuestionario q51x es para menores de 14 anios y las cq16x de 14 anios en adelante. 
+	
+*/
+
+
+gen aedu_ci = .
+// Menores de 14 anios 
+replace aedu_ci = q51a if cq13 < 14 // Asistentes
+replace aedu_ci = q51b if cq13 < 14 // No asistentes
+
+// Mayores de 14 anios
+replace aedu_ci = cq16a if (cq16a < 16 & cq13 >= 14) // Asistentes 
+replace aedu_ci = cq16b if (cq16b < 17 & cq13 >= 14) // No asistentes
+
+// Universitarios de mas de 2 anios - se imputa universitario completo
+replace aedu_ci = 16 if cq16a == 16 & cq13 >= 14 
+replace aedu_ci = 16 if cq16b == 17 & cq13 >= 14 
 label var aedu_ci "número de años de educación culminados"
 
-******************************************
-*  NO TIENE NINGUN NIVEL DE INSTRUCCION  *
-******************************************
-gen eduno_ci=.
-replace eduno_ci=1 if cq16b==0 
-replace eduno_ci=0 if cq16b>=1 & cq16b!=99 & cq16b!=.
+**************
+** eduno_ci **
+**************
+gen eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == . 
 label var eduno_ci "No tiene ningún nivel de instrucción"
 
-******************************************
-* NO HA COMPLETADO LA EDUCACION PRIMARIA *
-******************************************
-gen edupi_ci=.
-replace edupi_ci=1 if cq16b<8
-replace edupi_ci=0 if cq16b>=8 & cq16b!=99 & cq16b!=.
+**************
+** edupi_ci **
+**************
+gen edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == .
 label var edupi_ci "No ha completado la educación primaria"
 
-******************************************
-*  HA COMPLETADO LA EDUCACION PRIMARIA   *
-******************************************
-gen edupc_ci=.
-replace edupc_ci=1 if cq16b>=8 & cq16b!=99 & cq16b!=.
-replace edupc_ci=0 if cq16b<8 
+***************
+** edupc_ci  **
+***************
+gen edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
 label var edupc_ci "Ha completado la educación primaria"
 
-******************************************
-*NO HA COMPLETADO LA EDUCACION SECUNDARIA*
-******************************************
-gen edusi_ci=.
-replace edusi_ci=1 if cq16b<12 & cq16b!=.
-replace edusi_ci=0 if cq16b>=12 & cq16b!=99 & cq16b!=.
+**************
+** edusi_ci **
+**************
+gen edusi_ci = (aedu_ci > 6 & aedu_ci < 12)
+replace edusi_ci = . if aedu_ci == . 
 label var edusi_ci "No ha completado la educación secundaria"
 
-******************************************
-* HA COMPLETADO LA EDUCACION SECUNDARIA  *
-******************************************
-gen edusc_ci =. 
-replace edusc_ci=1 if cq16b>=12 & cq16b!=99 & cq16b!=.
-replace edusc_ci=0 if cq16b<12 & cq16b!=.
+**************
+** edusc_ci **
+**************
+gen edusc_ci = (aedu_ci == 12)
+replace edusc_ci = . if aedu_ci == .
 label var edusc_ci "Ha completado la educación secundaria"
 
-*******************************************
-* NO HA COMPLETADO LA EDUCACION TERCIARIA *
-*******************************************
-gen eduui_ci=. 
-*replace eduui_ci=1 if cq16b<16
-*replace eduui_ci=0 if cq16b>=16 & cq16b!=99
+**************
+** eduui_ci **
+**************
+// NO se identifica estudios no universitarios.
+gen eduui_ci = (aedu_ci > 12 & aedu_ci < 16)
+replace eduui_ci = . if aedu_ci == . 
 label var eduui_ci "No ha completado la educación terciaria"
 
-*******************************************
-*  HA COMPLETADO LA EDUCACION TERCIARIA   *
-*******************************************
-gen eduuc_ci =.
-*replace edusc_ci=1 if cq16b>=14 & cq16b!=99
-*replace edusc_ci=0 if cq16b<4
+**************
+** eduuc_ci **
+**************
+gen eduuc_ci = (aedu_ci == 16)
+replace eduuc_ci = . if aedu_ci == .
 label var eduuc_ci "Ha completado la educación terciaria"
 
-**************************************************
-* NO HA COMPLETADO EL PRIMER CICLO DE SECUNDARIA *
-**************************************************
-gen edusli_ci =. 
-*replace edusli_ci=1 if 
-label var edusli_ci "No ha completado el primer ciclo de la secundaria"
+***************
+** edus1i_ci **
+***************
+gen edus1i_ci = (aedu_ci > 6 & aedu_ci < 10)
+replace edus1i_ci = . if aedu_ci == . 
+label var edus1i_ci "No ha completado el primer ciclo de la secundaria"
 
-**************************************************
-*  HA COMPLETADO EL PRIMER CICLO DE SECUNDARIA   *
-**************************************************
-gen eduslc_ci =. 
-*replace eduslc_ci=1 if 
-label var eduslc_ci "Ha completado el primer ciclo de la secundaria"
+***************
+** edus1c_ci **
+***************
+gen edus1c_ci = (aedu_ci == 10)
+replace edus1c_ci = . if aedu_ci == . 
+label var edus1c_ci "Ha completado el primer ciclo de la secundaria"
 
-**************************************************
-* NO HA COMPLETADO EL SEGUNDO CICLO DE SECUNDARIA *
-**************************************************
-gen edus2i_ci =.
-*replace edus2i_ci=1 if 
+***************
+** edus2i_ci **
+***************
+gen edus2i_ci = (aedu_ci == 11)
+replace edus2i_ci = . if aedu_ci == .
 label var edus2i_ci "No ha completado el segundo ciclo de la secundaria"
 
-**************************************************
-*  HA COMPLETADO EL SEGUNDO CICLO DE SECUNDARIA  *
-**************************************************
-gen edus2c_ci=. 
-*replace edus2c_ci=1 if 
+***************
+** edus2c_ci **
+***************
+gen edus2c_ci = (aedu_ci == 12)
+replace edus2c_ci = . if aedu_ci == .
 label var edus2c_ci "Ha completado el segundo ciclo de la secundaria"
 
-****************************************
-*  HA COMPLETADO EDUCACION PREESCOLAR  *
-****************************************
-gen edupre_ci=. 
-replace edupre_ci=1 if cq16b>=1
-replace edupre_ci=0 if cq16b==0 
+***************
+** edupre_ci **
+***************
+gen edupre_ci = . 
 label var edupre_ci "Ha completado educación preescolar"
 
-************************************************
-*  HA COMPLETADO EDUCACION TERCIARIA ACADEMICA *
-************************************************
+***************
+** asispre_ci **
+***************
+gen asispre_ci = . 
+label var asispre_ci "Ha completado educación preescolar"
+
+**************
+** eduac_ci **
+**************
+// No se distingue entre universitario y no universitario
 gen eduac_ci=.
 label var eduac_ci "Ha completado educación terciaria académica"
 
-************************************
-*  ASISTE A UN CENTRO DE ENSEÑANZA *
-************************************
+***************
+** asiste_ci **
+***************
 gen asiste_ci=.
-replace asiste_ci=1 if cq16==1 | cq16==2
-replace asiste_ci=0 if cq16==3
+replace asiste_ci = 1 if ((cq16 == 1 | cq16 == 2) & cq13 > 14) | ((q51 == 1 | q51 == 2) & cq13 <= 14)
+replace asiste_ci = 0 if (cq16 == 3  & cq13 > 14) |  (q51 == 3  & cq13 <= 14)
 label var asiste_ci "Asiste a algún centro de enseñanza"
 
-*********************************************
-* PORQUE NO ASISTE A UN CENTRO DE ENSEÑANZA *
-*********************************************
+
+*****************
+** pqnoasis_ci **
+*****************
 gen pqnoasis_ci=.
 label var pqnoasis_ci "Porque no asiste a algún centro de enseñanza"
 label define pqnoasis 1"Muy joven" 2"Razones financieras" 3"Trabaja en casa o negocio familiar" 4"Distancia a la escuela/transporte" 5"Enfermedad/inhabilidad" 6"falta de especio en la escuela" 7"Otra" 9"NS/NR"  
 label values pqnoasis_ci pqnoasis
 
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 
 ******************
 ***pqnoasis1_ci***
 ******************
-
+**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 gen pqnoasis1_ci=.
 
-************************************
-*  HA REPETIDO ALGUN AÑO O GRADO   *
-************************************
+***************
+** repite_ci **
+***************
 gen repite_ci=.
-*replace repite_ci=1 if
 label var repite_ci "Ha repetido algún año o grado"
 
-******************************
-*  HA REPETIDO EL ULTIMO AÑO *
-******************************
+******************
+** repiteult_ci **
+******************
 gen repiteult_ci=.
-*replace repiteult_ci=1 if
 label var repiteult_ci "Ha repetido el último grado"
 
-***************************************
-*ASISTE A CENTRO DE ENSEÑANZA PUBLICA *
-***************************************
+**************
+** edupub_ci **
+***************
 gen edupub_ci=.
-*replace edupub_ci=0 if
-label var repiteult_ci "Asiste a centro de enseñanza pública"
+label var edupub_ci "Asiste a centro de enseñanza pública"
 label define edupub 1"Pública" 0"Privada"  
 label values edupub_ci edupub
 
-**************************
-*  TIENE CARRERA TECNICA *
-**************************
-gen tecnica_ci=.
-*replace tecnica_ci=1 if
-label var tecnica_ci "Tiene carrera técnica"
 
 
 *******************************
@@ -1346,7 +1361,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

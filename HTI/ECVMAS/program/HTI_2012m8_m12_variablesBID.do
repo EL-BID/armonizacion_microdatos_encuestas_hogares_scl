@@ -1081,8 +1081,8 @@ label var repiteult "Ha repetido el último grado"
 ***edupub_ci***
 ***************
 
-gen edupub_ci = hh_e16b==1
-replace edupub_ci = 1 if i_h09 == 1
+gen edupub_ci = (hh_e16b == 1 | i_h09 == 1)
+replace edupub_ci = . if asiste_ci == 0 
 label var edupub_ci "Asiste a un centro de enseñanza público"
 
 

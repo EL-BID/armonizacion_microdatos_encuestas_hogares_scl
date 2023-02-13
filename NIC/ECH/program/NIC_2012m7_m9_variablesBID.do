@@ -1089,110 +1089,121 @@ label var remesas_ch "Remesas mensuales del hogar"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
+			
+**************
+** aedu_ci ***
+**************
 
-gen aedu_ci=.
-replace aedu_ci=0 if s07p15a==0 | s07p15a==1
-*Primaria
-replace aedu_ci=s07p15b 	if s07p15a==2 & s07p15b!=99
-*Secundaria
-replace aedu_ci=6+s07p15b   if s07p15a==3 & s07p15b!=99
-replace aedu_ci=9+s07p15b   if s07p15a>=4 & s07p15a<=5 & s07p15b!=99 //tecnico basico o medio
+/* 
+Notas construicción aedu_ci: 
 
-*Superior o universitaria
-replace aedu_ci=11+s07p15b   if (s07p15a==6 | s07p15a==7) & s07p15b!=99
-*Post-grado
-replace aedu_ci=11+5+s07p15b   if (s07p15a==8) & s07p15b!=99 // postgrado
-replace aedu_ci=11+5+2+s07p15b   if s07p15a==9 & s07p15b!=99 // doctorado
+Se utlilizan s07p15a y s07p15b - grado y anios escolar más alto que aprobó.
 
+		0 	Ninguno
+		1 	Preescolar
+		2	Primaria 
+		3	Secundaria
+		4	Técnico básico
+		5	Técnico medio
+		6	Técnico superior
+		7	Universitario
+		8	Maestría
+		9	Doctorado
+		
+*/
+
+* Ignorado y ns a missing 
+replace s07p15a = . if s07p15a == 99
+replace s07p15b = . if s07p15b == 9
+
+gen aedu_ci = . 
+replace aedu_ci = 0 if inlist(s07p15a, 0, 1) // Ninguno, Prescolar 
+replace aedu_ci = s07p15b if s07p15a == 2 // Primaria
+replace aedu_ci = 6 + s07p15b if s07p15a == 3 // Secundaria 
+replace aedu_ci = 9 + s07p15b if inlist(s07p15a, 4, 5) // Técnico básico, medio
+replace aedu_ci = 11 + s07p15b if inlist(s07p15a, 6, 7) // Técnico Superior, Universitario
+replace aedu_ci = 11 + 5 + s07p15b if s07p15a == 8 // Maestría 
+replace aedu_ci = 11 + 5 + 2 + s07p15b if s07p15a == 9 // Doctorado
 label var aedu_ci "Anios de educacion aprobados" 
+
 
 **************
 ***eduno_ci***
 **************
-gen eduno_ci=(aedu_ci==0)
-replace eduno_ci=. if aedu_ci==. 
+
+gen eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == . 
 label variable eduno_ci "Sin educacion"
 
 **************
 ***edupi_ci***
 **************
-gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
-replace edupi_ci=. if aedu_ci==.  
+gen edupi_ci = (aedu_ci >= 1 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == .  
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-gen edupc_ci=(aedu_ci==6) 
-replace edupc_ci=. if aedu_ci==.
+gen edupc_ci = (aedu_ci == 6) 
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-gen edusi_ci=(s07p15a==3 & s07p15b<5)  //bachillerato incompleto
-replace edusi=1 if  (s07p15a==4 | s07p15a==5) & s07p15b<3 //tecnico basico o medio
-replace edusi_ci=. if aedu_ci==. 
+gen edusi_ci = (aedu_ci > 6 & aedu_ci < 11)
+replace edusi_ci = . if aedu_ci == .
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
-**************
-gen edusc_ci= (s07p15a==3 & s07p15b>=5)  //bachillerato completo
-replace edusc=1 if (s07p15a==4 | s07p15a==5) & s07p15b>=3 //tecnico basico o medio completo
-replace edusc_ci=. if aedu_ci==.
+************** 
+gen edusc_ci = (aedu_ci == 11)
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
 **************
 ***eduui_ci***
 **************
-*Se trabaja con incompleto par universitaria, pues no es posible determinar esto para los programas técnicos
-gen eduui_ci=s07p15a==7 & s07p15b<5
-replace eduui_ci=1 if s07p15a==6 & s07p15b<3 
-replace eduui_ci=. if aedu_ci==.
+gen eduui_ci = (aedu_ci > 11 &  aedu_ci < 16) 
+replace eduui_ci = . if aedu_ci == . 
 label variable eduui_ci "Superior incompleto"
 
 **************
 ***eduuc_ci***
 **************
-*Para la educación superior no es posible saber cuantos anios dura el ciclo
-*por ello se hace una aproximación a través de titulación
-gen eduuc_ci=s07p15a==7 & s07p15b>=5
-replace eduuc_ci=1 if s07p15a==6  & s07p15b>=3
-replace eduuc_ci=1 if  s07p15a==8 | s07p15a==9
-replace eduuc_ci=. if aedu_ci==.
+gen eduuc_ci = (aedu_ci >= 16) 
+replace eduuc_ci = . if aedu_ci == .
 label variable eduuc_ci "Superior completo"
 
 ***************
 ***edus1i_ci***
 ***************
-gen edus1i_ci=aedu_ci>6 & aedu_ci<9
-replace edus1i_ci=. if aedu_ci==.
+gen edus1i_ci = (aedu_ci > 6 & aedu_ci < 9)
+replace edus1i_ci = . if aedu_ci == .
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-gen edus1c_ci=aedu_ci==9
-replace edus1c_ci=. if aedu_ci==.
+gen edus1c_ci = (aedu_ci == 9)
+replace edus1c_ci = . if aedu_ci == .
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-gen edus2i_ci=(s07p15a==3 & s07p15b==4)
-replace edus2i_ci=1 if (s07p15a==4 | s07p15a==5) & (s07p15b>=1 & s07p15b<=2)  
-replace edus2i_ci=. if aedu_ci==.
+gen edus2i_ci = (aedu_ci > 9 & aedu_ci < 11)
+replace edus2i_ci = . if aedu_ci == .
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-gen edus2c_ci=(s07p15a==3 & s07p15b>=5)
-replace edus2c_ci=1 if s07p15b>=3 & (s07p15a==4 | s07p15a==5)
-replace edus2c_ci=. if aedu_ci==.
+gen edus2c_ci = (aedu_ci == 11)
+replace edus2c_ci = . if aedu_ci == .
 label variable edus2c_ci "2do ciclo de la secundaria completo"
-
 
 ***************
 ***edupre_ci***
@@ -1203,30 +1214,32 @@ label variable edupre_ci "Educacion preescolar"
 ***************
 ***asipre_ci***
 ***************
-
-gen byte asispre_ci=(s07p16==1 & s07p15a==1 & s07p15b<3)
+/* Todos aquellos asistentes que no declaren haber aprobado el ultimo anio
+ de prescolar.
+*/
+gen byte asispre_ci = (s07p16==1 & s07p15a == 1 & s07p15b < 3)
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
 **************
 ***eduac_ci***
 **************
-gen eduac_ci=.
-replace eduac_ci=1 if (s07p15a==7 | s07p15a==8 | s07p15a==9)
-replace eduac_ci=0 if (s07p15a==6)
+gen eduac_ci = .
+replace eduac_ci = 1 if inlist(s07p15a, 7, 8 ,9) // Universitario, Maestría, Doctorado
+replace eduac_ci = 0 if (s07p15a == 6) // Técnico Superior
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
-gen asiste_ci=.
-replace asiste_ci=1 if s07p16==1
-replace asiste_ci=0 if s07p16==2
+gen asiste_ci = .
+replace asiste_ci = 1 if s07p16 == 1
+replace asiste_ci = 0 if s07p16 == 2
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
 ***pqnoasis***
 **************
-gen pqnoasis_ci=s07p17
+gen pqnoasis_ci = s07p17
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 
 **************
@@ -1235,18 +1248,19 @@ label var pqnoasis_ci "Razones para no asistir a la escuela"
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 ** creada por Angela Lopez Mayo 2019
 
-g       pqnoasis1_ci = 1 if s07p17==7
-replace pqnoasis1_ci = 2 if s07p17==9
-replace pqnoasis1_ci = 3 if s07p17==2 | s07p17==13
-replace pqnoasis1_ci = 4 if s07p17==12
-replace pqnoasis1_ci = 5 if s07p17== 5 | s07p17== 6
-replace pqnoasis1_ci = 6 if s07p17==10
-replace pqnoasis1_ci = 7 if s07p17==8
-replace pqnoasis1_ci = 8 if s07p17==3 | s07p17==4 
-replace pqnoasis1_ci = 9 if s07p17==1 | s07p17==11 | s07p17==99
+g       pqnoasis1_ci = 1 if s07p17 == 7
+replace pqnoasis1_ci = 2 if s07p17 == 9
+replace pqnoasis1_ci = 3 if s07p17 == 2 | s07p17 == 13
+replace pqnoasis1_ci = 4 if s07p17 == 12
+replace pqnoasis1_ci = 5 if s07p17 == 5 | s07p17 == 6
+replace pqnoasis1_ci = 6 if s07p17 == 10
+replace pqnoasis1_ci = 7 if s07p17 == 8
+replace pqnoasis1_ci = 8 if s07p17 == 3 | s07p17 == 4 
+replace pqnoasis1_ci = 9 if s07p17 == 1 | s07p17 == 11 | s07p17 == 99
  
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
+
 ***************
 ***repite_ci***
 ***************
@@ -1264,7 +1278,6 @@ label var repiteult "Ha repetido el último grado"
 ***************
 gen edupub_ci=.
 label var edupub_ci "Asiste a un centro de enseñanza público"
-
 
 
 

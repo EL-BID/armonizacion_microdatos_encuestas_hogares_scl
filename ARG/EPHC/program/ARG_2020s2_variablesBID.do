@@ -1120,10 +1120,7 @@ replace ypeoficial_ch=. if yoficial_ch==0
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
-**#
-*valores otros de fuente de distribucion
-gen iv7_otro = 0
-replace iv7_otro= 1 if missing(iv7_esp)
+
 *************
 *aguadist_ch*
 *************
@@ -1147,7 +1144,7 @@ gen aguafuente_ch = 9
 replace aguafuente_ch = 1 if iv7==1 & iv6<3
 replace aguafuente_ch = 2 if iv7==1 & iv6==3
 replace aguafuente_ch = 10 if iv7>1
-replace aguafuente_ch = 9 if iv7_otro==0
+
 *label var aguafuente_ch "=1 si es red de distribucion y llave privada"
 
 **************
@@ -1205,9 +1202,8 @@ replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
 *Se asocia fosa septica a camara septica o pozo ciego 
 replace bano_ch=2 if iv10<3 & iv10>=1   & iv11==2
 replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
-replace bano_ch=6 if iv10==3 & iv11==3
 replace bano_ch=6 if iv10==3
-replace bano_ch=4 if if iv10 =< 3 & iv10>=1 & iv11==4 
+replace bano_ch=4 if iv11==4 
 
 
 
@@ -1218,8 +1214,7 @@ gen	banomejorado_ch=0
 replace banomejorado_ch=1 if iv10<3 & iv10>=1  & iv11==1
 replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==2
 replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==3
-replace banomejorado_ch=2 if iv10==3 & iv11==3
-replace banomejorado_ch=2 if iv10==3
+replace banomejorado_ch=2 if iv11==9 
 
 **#
 
@@ -1227,9 +1222,8 @@ replace banomejorado_ch=2 if iv10==3
 	*aguared_ch*
 	************
 
-	gen aguared_ch=.
-	replace aguared_ch=(iv7==1)
-	replace aguared_ch=. if iv7==9
+	gen aguared_ch=(iv7==1)
+    replace aguared_ch=. if iv7==9
 
 
 	*************

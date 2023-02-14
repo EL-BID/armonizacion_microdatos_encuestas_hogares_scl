@@ -1444,6 +1444,135 @@ gen repiteult_ci=.
 gen edupub_ci= 0 if e197==1 & e198==2 | e201==1 & e210_1==2 | e201==1 & e210_2==2 | e201==1 & e210_3==2 |e212==1 & e213==2 | e215==1 & e216==2| e218==1 & e219==2 | e221==1 & e222==2| e224==1 & e225==2
 replace edupub_ci= 1 if e197==1 & e198==1 | e201==1 & e210_1==1 | e201==1 & e210_2==1 | e201==1 & e210_3==1 |e212==1 & e213==1 | e215==1 & e216==1| e218==1 & e219==1 | e221==1 & e222==1| e224==1 & e225==1
 
+		**********************************
+		**** VARIABLES DE LA VIVIENDA ****
+		**********************************
+
+
+*******************
+*aguared_ch.    *
+*******************
+
+gen aguared_ch=(d11==1)
+replace aguared_ch =. if d11==.
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+*la encuesta no especifica la calidad del agua
+gen aguafconsumo_ch = 0
+
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if d11==1 & d12==1
+replace aguafuente_ch = 2 if d11==1 & d12>1
+replace aguafuente_ch = 4 if d11==3
+replace aguafuente_ch = 6 if d11==4
+replace aguafuente_ch = 8 if d11==5
+replace aguafuente_ch = 9 if d11==2 
+replace aguafuente_ch = 10 if(d11==6)
+
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+*si el agua llega a una habitacion esta dentro de la casa
+replace aguadist_ch= 1 if d12==1
+*si el agua llega al inmueble pero no llega dentro de la casa llega al terreno, o si la fuente de agua esta en el terreno
+replace aguadist_ch= 2 if d12==2
+*la encuesta no pregunta por fuentes externas al terreno
+replace aguadist_ch= 3 if d12==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+
+gen aguamala_ch= 0
+replace aguamala_ch= 1 if (d11==2 | d11==5)
+replace aguamala_ch= 2 if d11==6
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+
+gen aguamejorada_ch= 1 
+replace aguamejorada_ch= 0 if (d11==2 |d11==5)
+replace aguamejorada_ch= 2 if d11==6
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+*aguamide_ch*  Altered
+*****************
+
+*96. El hogar usa un medidor para pagar por su consumo de agua
+gen aguamide_ch=.
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=1 if d16==1 & d13==1
+replace bano_ch=2 if d16==2 & d13==1
+*se asume letrina mejorada si no hay inodoro y va fosa septica
+replace bano_ch=3 if (d16==1 |d16==2) & d13==2
+replace bano_ch=6 if d16==4 & (d13==1 |d13==2)
+replace bano_ch=4 if d16==3 & (d13==1 |d13==2)
+
+
+
+*****************
+*banoex_ch         *  Altered
+*****************
+*101. El servicio higiénico es de uso exclusivo del hogar
+gen banoex_ch=1 if d15==1
+replace banoex_ch=0 if d15==2
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if d16==1 & d13==1
+replace banomejorado_ch=1 if d16==2 & d13==1
+replace banomejorado_ch=1 if d16==2 & d13==2
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch =3
+replace sinbano_ch = 0 if d14>0
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
 
 *93. Acceso a una fuente de agua por red
 
@@ -1457,23 +1586,17 @@ d11
 6 Otro
 */
 
-gen aguared_ch=(d11==1)
-replace aguared_ch =. if d11==.
 
 *94. Ubicación principal de la fuente de agua
 
-gen aguadist_ch=d12
-replace aguadist_ch=. if d12==4
 
 *95. La principal fuente de agua es unimproved según los mdg
 
-gen aguamala_ch=(d11==4 | d11==5) 
-replace aguamala_ch =. if d11==.
 
 *96. El hogar usa un medidor para pagar por su consumo de agua
 
 
-gen aguamide_ch=.
+
 
 *97. La principal fuente de iluminación es electricidad
 
@@ -1490,13 +1613,10 @@ replace combust_ch=0 if combust_ch==.
 
 *100. El hogar tiene algún tipo de servicio higíenico
 
-gen bano_ch=1 if d13<3
-replace bano_ch=0 if d13==3
+
 
 *101. El servicio higiénico es de uso exclusivo del hogar
 
-gen banoex_ch=1 if d15==1
-replace banoex_ch=0 if d15==2
 
 *102. Tipo de desagüe incluyendo la definición de unimproved del MDG
 
@@ -1535,19 +1655,9 @@ replace techo_ch=1 if c3<5
 *107. Método de eliminación de residuos
 gen resid_ch=.
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if d11 ==1 | d11 ==3 
-replace aguamejorada_ch = 0 if d11 ==2 | (d11 >=4 & d11 <=6)
 
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (d13 ==1 | d13 ==2) & d15 ==1 & (d16 ==1 | d16 ==2)
-replace banomejorado_ch = 0 if  ((d13 ==1 | d13 ==2) & d15 ==2) | d13 ==3 | ((d13 ==1 | d13 ==2) & d15 ==1 & (d16 ==3 | d16 ==4))
+
+
 
 
 *108. Cantidad de habitaciones que se destinan exclusivamente para dormir

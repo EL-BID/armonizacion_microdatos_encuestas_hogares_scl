@@ -1520,8 +1520,6 @@ gen aguatrat_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-*95. La principal fuente de agua es unimproved según los sdg
-* Comentarios JL: Las opciones son: 1 = red general, 2 = Pozo surgente no protegido, 3 = Pozo surgente protegido, 4 = Albije, 5 = Arroyo, rio, 6 = otro. En esta lista las fuentes no mejoradas son 2 y 5 mientras 6 es desconocido. Entonces:
 
 gen aguamala_ch= 0
 replace aguamala_ch= 1 if (d11==2 | d11==5)
@@ -1533,13 +1531,10 @@ replace aguamala_ch= 2 if d11==6
 *****************
 *aguamejorada_ch*  Altered
 *****************
-* Comentarios JL: Esa variable es si la fuente es mejorada. Se asume mejorada cuando la fuente es red general, pozo protegido, agua de lluvia, cisterna, pipa, agua embotellada etc. (hace referencia a los documentos del JMP)
 
 gen aguamejorada_ch= 1 
 replace aguamejorada_ch= 0 if (d11==2 |d11==5)
 replace aguamejorada_ch= 2 if d11==6
-
-
 
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 

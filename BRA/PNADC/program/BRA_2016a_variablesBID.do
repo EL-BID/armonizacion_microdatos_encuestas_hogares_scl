@@ -1141,12 +1141,32 @@ label var repiteult_ci "Personas que han repetido el último año o grado"
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
+
 		
 ****************
 ***aguared_ch***
 ****************
 gen aguared_ch=(s01007==1)
 label var aguared_ch "Acceso a fuente de agua por red"
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 9
+replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
+replace aguafuente_ch = 2 if s01007==1 & s01010==3
+replace aguafuente_ch = 4 if s01007==2         
+replace aguafuente_ch = 5 if s01007==5 
+replace aguafuente_ch = 9 if s01007==3 
+replace aguafuente_ch = 10 if (s01007==4 | s01007==6)
 
 *****************
 ***aguadist_ch***
@@ -1157,19 +1177,79 @@ replace aguadist_ch=3 if s01010==3
 replace aguadist_ch=. if s01010==. 
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
-label val aguadist_ch aguadist_ch  
+label val aguadist_ch aguadist_ch 
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+**************
+*aguadisp2_ch*
+**************
+
+gen aguadisp2_ch = 3 if s01008==1
+replace aguadisp2_ch = 2 if s01008==2
+replace aguadisp2_ch = 1 if (s01008==3 | s01008==4)
 
 *****************
 ***aguamala_ch***
 *****************
-gen aguamala_ch=(s01007==6) 
-label var aguamala_ch "Agua unimproved según MDG"
+gen aguamala_ch= 2
+replace aguamala_ch= 1 if aguafuente_ch>7
+replace aguamala_ch= 0 if aguafuente_ch<=7
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if aguafuente_ch>7
+replace aguamejorada_ch= 1 if aguafuente_ch<=7
 
 *****************
 ***aguamide_ch***
 *****************
 gen aguamide_ch=.
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*************
+***bano_ch***
+*************
+gen bano_ch=.
+replace bano_ch = 1 if s01011>0 & (s01012 == 1 | s01012 == 2 )
+replace bano_ch = 4 if s01011>0 &  (s01012 == 3 | s01012== 4 )
+replace bano_ch = 6 if s01011>0 &  s01012==5
+replace bano_ch = 0 if s01011==0
+label var bano_ch "Tipo de instalación sanitaria del hogar"
+
+***************
+***banoex_ch***
+***************
+*Pregunta única, se pregunta si el banio es de uso exclusivo para moradores
+gen banoex_ch=(s01011>=1)
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if s01011>0 & (s01012==1 | s01012==2)
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+replace sinbano_ch = 0 if s01011>=1
+replace sinbano_ch = 3 if s01011==0
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+
 
 ************
 ***luz_ch***
@@ -1189,18 +1269,9 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 gen combust_ch=(s010161==1| s010163==1)
 label var combust_ch "Principal combustible gas o electricidad" 
 
-*************
-***bano_ch***
-*************
-gen bano_ch=(s01011>=1)
-label var bano_ch "El hogar tiene servicio sanitario"
 
-***************
-***banoex_ch***
-***************
-*Pregunta única, se pregunta si el banio es de uso exclusivo para moradores
-gen banoex_ch=(s01011>=1)
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
 
 *************
 ***des1_ch***
@@ -1274,19 +1345,9 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-gen aguamejorada_ch = 1 if s01007>=1 & s01007<=4
-replace aguamejorada_ch=0 if s01007>=5
+
 				
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch=1 if (s01011>=1 & (s01012>= 1 & s01012<=2))
-replace banomejorado_ch=0 if (s01011>=1 & (s01012>=3 & s01012<=5))
+
 
 *************
 ***dorm_ch***

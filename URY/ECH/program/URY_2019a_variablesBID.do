@@ -1472,9 +1472,16 @@ replace aguadist_ch= 3 if d12==3
 *****************
 *aguafconsumo_ch*
 *****************
-*la encuesta no especifica la calidad del agua
-gen aguafconsumo_ch = 0
+* Specifically asks about drinking water
 
+gen aguafconsumo_ch =.
+replace aguafconsumo_ch = 1 if d11==1 & d12==1
+replace aguafconsumo_ch = 2 if d11==1 & d12>1
+replace aguafconsumo_ch = 4 if d11==3
+replace aguafconsumo_ch = 6 if d11==4
+replace aguafconsumo_ch = 8 if d11==5
+replace aguafconsumo_ch = 9 if d11==2 
+replace aguafconsumo_ch = 10 if(d11==6)
 
 *****************
 *aguafuente_ch*
@@ -1542,40 +1549,26 @@ replace aguamejorada_ch= 2 if d11==6
 *bano_ch         *  Altered
 *****************
 gen bano_ch=0
-replace bano_ch=1 if d16==1 & d13==1
-replace bano_ch=2 if d16==2 & d13==1
-*se asume letrina mejorada si no hay inodoro y va fosa septica
-replace bano_ch=3 if (d16==1 |d16==2) & d13==2
-replace bano_ch=6 if d16==4 & (d13==1 |d13==2)
-replace bano_ch=4 if d16==3 & (d13==1 |d13==2)
+replace bano_ch=1 if d16==1 
+replace bano_ch=2 if d16==2 
+replace bano_ch=6 if d16==4
+replace bano_ch=4 if d16==3 
 
 
 *****************
 *banomejorado_ch*  Altered
 *****************
 
-gen	banomejorado_ch=0
-replace banomejorado_ch=1 if d16==1 & d13==1
-replace banomejorado_ch=1 if d16==2 & d13==1
-replace banomejorado_ch=1 if d16==2 & d13==2
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if (d16==1 | d16 == 2)
+replace banomejorado_ch=2 if d16==4 
 
-**#		
-*93. Acceso a una fuente de agua por red
-
-/*
-d11
-1 Red general
-2 Pozo surgente no protegido
-3 Pozo surgente protegido
-4 Aljibe
-5 Arroyo, río
-6 Otro
-*/
+************
+*aguared_ch*
+************
 
 gen aguared_ch=(d11==1)
 replace aguared_ch =. if d11==.
-
-*94. Ubicación principal de la fuente de agua
 
 
 
@@ -1938,7 +1931,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguatrat_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch  banomejorado_ch  sinbano_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

@@ -1147,33 +1147,92 @@ label var repiteult_ci "Personas que han repetido el último año o grado"
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
-	*Al utilizar la visita 5 no se cuenta con esta información. De igual forma, la información de la visita 1 no fue publicada para este anio. 	
+
 ****************
 ***aguared_ch***
 ****************
 gen aguared_ch=.
-label var aguared_ch "Acceso a fuente de agua por red"
+
 
 *****************
-***aguadist_ch***
+*aguafconsumo_ch*
 *****************
+
+gen aguafconsumo_ch=.
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
 
-label var aguadist_ch "Ubicación de la principal fuente de agua"
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =.
 
 
-*****************
-***aguamala_ch***
-*****************
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =.
+
+
+*************
+*aguamala_ch*  Altered
+*************
 gen aguamala_ch=.
 
-label var aguamala_ch "Agua unimproved según MDG"
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch=.
+
 
 *****************
 ***aguamide_ch***
 *****************
 gen aguamide_ch=.
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=.
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=.
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch =.
+
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =.
+
 
 ************
 ***luz_ch***
@@ -1193,19 +1252,6 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 gen combust_ch=.
 label var combust_ch "Principal combustible gas o electricidad" 
 
-*************
-***bano_ch***
-*************
-gen bano_ch=.
-label var bano_ch "El hogar tiene servicio sanitario"
-
-***************
-***banoex_ch***
-***************
-*Pregunta única, se pregunta si el banio es de uso exclusivo para moradores
-
-gen banoex_ch=.
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *************
 ***des1_ch***
@@ -1258,21 +1304,7 @@ label var techo_ch "Materiales de construcción del techo"
 gen resid_ch=.
 label var resid_ch "Método de eliminación de residuos"
 
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch =.
 				
-*********************
-***banomejorado_ch***
-*********************
-
-gen banomejorado_ch=.
-
 *************
 ***dorm_ch***
 *************

@@ -1790,26 +1790,16 @@ label var edupub_ci "Asiste a un centro de ensenanza público
 *************
 *aguadist_ch*
 *************
-/* Comentarios JL: Normalmente cuando el agua llega al hogar por camion se considera "on premesis" lo que es el enfoque de este pregunta. Puede encontrar la informacion aqui https://washdata.org/sites/default/files/2022-01/jmp-2021-metadata-sdg-611.pdf
 
-Actualiza a:
 gen aguadist_ch=0
 replace aguadist_ch=1 if s01a_10==1
 replace aguadist_ch=2 if s01a_10==2
 replace aguadist_ch=3 if (s01a_10==3)
 
 
-*/
-
-gen aguadist_ch=.
-replace aguadist_ch=1 if s01a_10==1
-replace aguadist_ch=2 if s01a_10==2
-replace aguadist_ch=3 if (s01a_10==3 | s01a_10==12)
-
 *****************
 *aguafconsumo_ch*
 *****************
-/* Comentarios JL: unos cambios pequeños, cambia a:
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if s01a_10==1|s01a_10==2
 replace aguafconsumo_ch = 2 if s01a_10==3
@@ -1821,76 +1811,38 @@ replace aguafconsumo_ch = 7 if s01a_10 == 9
 replace aguafconsumo_ch = 8 if s01a_10==10
 replace aguafconsumo_ch = 9 if s01a_10== 8 |s01a_10== 13
 
-13 es categotizada como 9 porque todas las especificaciones de "otra" en s01a_10e no son mejoradas
-*/
-gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if s01a_10==1
-replace aguafconsumo_ch = 2 if s01a_10==2
-replace aguafconsumo_ch = 3 if s01a_10==11
-replace aguafconsumo_ch = 4 if (s01a_10==5 | s01a_10==6 | s01a_10==7)
-replace aguafconsumo_ch = 5 if s01a_10==4
-replace aguafconsumo_ch = 6 if s01a_10==12
-replace aguafconsumo_ch = 8 if s01a_10==10
-replace aguafconsumo_ch = 10 if (s01a_10==8 | s01a_10==9 | s01a_10==3)
-replace aguafconsumo_ch = 10 if s01a_10e==.
 *****************
 *aguafuente_ch*
 *****************
-/* commentarios JL: mismo que arriba. 
-
-gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if s01a_10==1|s01a_10==2
-replace aguafconsumo_ch = 2 if s01a_10==3
-replace aguafconsumo_ch = 3 if s01a_10==11
-replace aguafconsumo_ch = 4 if (s01a_10==5 | s01a_10==6 | s01a_10==7)
-replace aguafconsumo_ch = 5 if s01a_10==4
-replace aguafconsumo_ch = 6 if s01a_10==12
-replace aguafconsumo_ch = 7 if s01a_10 == 9
-replace aguafconsumo_ch = 8 if s01a_10==10
-replace aguafconsumo_ch = 9 if s01a_10== 8 | s01a_10== 13
-
-13 es categotizada como 9 porque todas las especificaciones de "otra" en s01a_10e no son mejoradas
-*/
-
-
 gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if s01a_10==1
-replace aguafuente_ch = 2 if s01a_10==2
+replace aguafuente_ch = 1 if s01a_10==1|s01a_10==2
+replace aguafuente_ch = 2 if s01a_10==3
 replace aguafuente_ch = 3 if s01a_10==11
 replace aguafuente_ch = 4 if (s01a_10==5 | s01a_10==6 | s01a_10==7)
 replace aguafuente_ch = 5 if s01a_10==4
 replace aguafuente_ch = 6 if s01a_10==12
+replace aguafuente_ch = 7 if s01a_10 == 9
 replace aguafuente_ch = 8 if s01a_10==10
-replace aguafuente_ch = 10 if (s01a_10==8 | s01a_10==9 | s01a_10==3)
-replace aguafuente_ch = 10 if s01a_10e==.
+replace aguafuente_ch = 9 if s01a_10== 8 | s01a_10== 13
+
 
 **************
 *aguadisp1_ch*
 **************
-/* Comentarios JL: no preguntan sobre este tema en esta manera. Cambia a:
 gen aguadisp1_ch = . 
-*/
 
-*se asume constante si esta los 7 dias de la semana
-gen aguadisp1_ch = 1 if s01a_11b==7
-replace aguadisp1_ch o if s01a_11b<7
+
+
 
 
 **************
 *aguadisp2_ch*
 **************
-/* Comentarios JL:
-Cambia a:
 gen aguadisp2_ch = 1 if s01a_11b<=3 | s01a_11a <12
 replace aguadisp2_ch = 2 if s01a_11b>=4 & s01a_11a >= 12
 replace aguadisp2_ch = 3 if s01a_11b==7 & s01a_11a == 24
-*/
 
-gen aguadisp2_ch = 1 if s01a_11b<=3
-replace aguadisp2_ch if s01a_11b>=4
-replace aguadisp2_ch if s01a_11b==7
 
-*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
 
 ************
 *sinbano_ch*
@@ -1903,55 +1855,30 @@ replace sinbano_ch = 2 if s01a_15==5
 *************
 *aguatrat_ch*
 *************
-/* Comentarios JL:
-This variable is for if the household treats their tap water before they drink it.
-
 gen aguatrat_ch =.
 
-*/
-
-gen aguatrat_ch = 1 s01a_14_1==1
-gen aguatrat_ch = 2 s01a_14_1==2
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando es agua limpia 
-
-/* Comentarios JL: La suposicion arriba no es correcta. Se asume mejorada cuando es una fuente mejorada del JMP.
 gen aguamala_ch = 2
 replace aguamala_ch = 0 if s01a_10 <8 | s01a_10 == 9 | s01a_10 ==11| s01a_10 ==12  
 replace aguamala_ch = 1 if s01a_10 == 8 | s01a_10 ==10| s01a_10 ==13
-*/
 
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if s01a_14_1==1
-replace aguamala_ch= 1 if s01a_14_1==2
-*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-*Se asume mejorada cuando es agua limpia
-/* Comentarios JL: La suposicion arriba no es correcta. Se asume mejorada cuando es una fuente mejorada del JMP. Lee las definiciones en el archivo de variables. Cambia a:
-
 gen aguamejorada_ch = 2
 replace aguamejorada_ch = 0 if s01a_10 == 8 | s01a_10 ==10| s01a_10 ==13  
 replace aguamejorada_ch = 1 if s01a_10 <8 | s01a_10 == 9 | s01a_10 ==11| s01a_10 ==12
-*/
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if s01a_14_1==2
-replace aguamejorada_ch= 1 if s01a_14_1==1
-
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 *bano_ch         *  Altered
 *****************
-/* Comentarios JL: cambios ya incorporados:*/
-
 gen bano_ch=6
 replace bano_ch=0 if s01a_15==5 
 replace bano_ch=1 if s01a_15==1 & s01a_16==1
@@ -1964,19 +1891,11 @@ replace bano_ch=5 if s01a_15 ==3 & s01a_16!=4
 *****************
 *banomejorado_ch*  Altered
 *****************
-/* Again, this does not follow the JMP definition. The code below will also replace the entire variable to be banomejorado_ch=1 if s01a_15==2. Change to:
+
 gen banomejorado_ch= 2
 replace banomejorado_ch =1 if s01a_15 <= 2 | s01a_15 == 4 & s01a_16 != 4
 replace banomejorado_ch =0 if (s01a_15 == 5| s01a_15 == 3) | s01a_16 == 4
 
-
-*/
-
-
-gen	banomejorado_ch=0
-replace banomejorado_ch=1 if s01a_15==1 & s01a_16==1
-replace banomejorado_ch=1 if s01a_15==1 & s01a_16==2
-replace banomejorado_ch=1 if s01a_15==2
 
 **#		
 ****************
@@ -1998,34 +1917,15 @@ replace banomejorado_ch=1 if s01a_15==2
 12 otro? (especifique)
 */
 
-/* Comentarios JL: Cambia a:
- gen aguared_ch = 0
- replace aguared_ch = 1 if (s01a_10==1 | s01a_10==2)
- replace aguared = . if s01a_10==.
-*/
-gen aguared_ch=(s01a_10==1 | s01a_10==2)
-replace aguared_ch=. if s01a_10==.
-label var aguared_ch "Acceso a fuente de agua por red"
-
 ****************
 ***aguared_ch***
 ****************
+gen aguared_ch = 0
+replace aguared_ch = 1 if (s01a_10==1 | s01a_10==2)
+replace aguared = . if s01a_10==.
+label var aguared_ch "Acceso a fuente de agua por red"
 
-*gen aguadist_ch=1 if s01a_10==1
-*replace aguadist_ch=2 if s01a_10==2
-*replace aguadist_ch=3 if (s01a_10==3 | s01a_10==12)
-*label var aguadist_ch "Ubicación de la principal fuente de agua"
-*label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-*label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-*label val aguadist_ch aguadist_chs1
 
-*****************
-***aguamala_ch***
-*****************
-
-*gen aguamala_ch=(s01a_10==8 | s01a_10==9 | s01a_10==10)
-*replace aguamala_ch=. if s01a_10==.
-*label var aguamala_ch "Agua unimproved según MDG" 
 
 *****************
 ***aguamide_ch***
@@ -2065,13 +1965,11 @@ label var combust_ch "Principal combustible gas o electricidad"
 ***************
 ***banoex_ch***
 ***************
-/* Comentarios JL: cambia a
+Comentarios JL: cambia a
 gen banoex_ch =.
 replace banoex_ch = 0 if s01a_17==2
 replace banoex_ch = 1 if s01a_17==1
-*/
-gen banoex_ch=(s01a_17==1)
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+*label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -2161,20 +2059,7 @@ label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-*Modificado SGR Julio 2018. En la encuesta se agregó una alternativa más : Cosecha de agua de lluvia
-*gen aguamejorada_ch = 1 if (s01a_10 >= 1 &  s01a_10 <=3) | s01a_10==5 | s01a_10==6 | s01a_10==9
-*replace aguamejorada_ch = 0 if (s01a_10 >=7 &  s01a_10 <=8) | (s01a_10 >= 10 &  s01a_10 <=13)
-				
-*********************
-***banomejorado_ch***
-*********************
-*gen banomejorado_ch = 1 if ((s01a_15>= 1 & s01a_15<=2) & (s01a_16 >= 1 & s01a_16 <=3) & s01a_17== 1)
-*replace banomejorado_ch = 0 if ((s01a_15>= 1 & s01a_15<=2) & (s01a_16 >= 1 & s01a_16 <=3) & s01a_17== 2) | (s01a_15>= 3 & s01a_15<= 6)  | ((s01a_15>= 1 & s01a_15<=2)  & (s01a_16 >= 4 & s01a_16 <=5))
+
 		
 *************
 ***dorm_ch***

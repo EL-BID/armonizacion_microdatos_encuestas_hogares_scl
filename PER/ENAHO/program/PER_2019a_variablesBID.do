@@ -1630,12 +1630,122 @@ replace edupub_ci=0 if (p308d==2) & asiste_ci==1
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=(p110==1 | p110==2)
+
+gen aguared_ch=0
+replace aguared_ch= 1 if (p110==1 | p110==2)
 label var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 0 if p110a1==2
+replace aguafconsumo_ch = 7 if p110a1==1
+replace aguafconsumo_ch = 1 if (p110==1 |p110==2) & p110a1==1
+replace aguafconsumo_ch = 2 if p110a1==1 & p110==3
+replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
+replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
+replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5|  p110==6 |p110==7)
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 7 if p110a1==1
+replace aguafuente_ch = 1 if (p110==1|p110==2) 
+replace aguafuente_ch = 2 if p110==3
+replace aguafuente_ch = 6 if p110==4
+replace aguafuente_ch = 8 if p110==8 
+replace aguafuente_ch = 10 if (p110==5 |p110==7| p110==6)
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+
+gen aguadisp2_ch =.
+replace aguadisp2_ch = 1 if (p110c2<4 | p110c1 < 12 | p110c3 <12) 
+replace aguadisp2_ch = 2 if p110c2>=4 & (p110c1>=12 | p110c3 <12)
+replace aguadisp2_ch = 3 if p110c==1 & p110c1 == 24
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch= 2
+replace aguamala_ch= 0 if p110 <=4
+replace aguamala_ch= 1 if p110 ==6
+replace aguamala_ch = 2 if p110 == 5 | p110 == 7 
+label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if p110==6
+replace aguamejorada_ch= 1 if (p110 <= 4)
+replace aguamejorada_ch = 2 if p110 == 5 | p110 == 7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+
+*****************
+*bano_ch         *  Altered
+*****************
+
+gen bano_ch=0
+replace bano_ch=1 if (p111a==1|p111a==2)
+replace bano_ch = 2 if p111a==4
+replace bano_ch=3 if p111a==3
+replace bano_ch=4 if (p111a==6|p111a==9)
+replace bano_ch = 6 if (p111a == 5 | p111a ==7)
+
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=.
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if p111a<=4
+replace banomejorado_ch=2 if  (p111a == 5 | p111a ==7)
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+
+
+
+
+
+
+
+
+
+
 
 *****************
 ***aguadist_ch***
@@ -1661,17 +1771,9 @@ p110:
 */
 
 
-*****************
-***aguamala_ch***
-*****************
-*MGR: variable había sido creada como missing
-gen aguamala_ch= (p110==6 | p110==7)
 
-*****************
-***aguamide_ch***
-*****************
 
-gen aguamide_ch=.
+
 
 ************
 ***luz_ch***
@@ -1692,12 +1794,7 @@ replace luzmide_ch=0 if p112a==3
 gen combust_ch=1 if p113a==1 | p113a==2 | p113a==3
 replace combust_ch=0 if p113a==5 | p113a==6 | p113a==7 | p113a==4
 
-*************
-***bano_ch***
-*************
-gen bano_ch=.
-replace bano_ch=1 if p111 >=1 & p111<=7
-replace bano_ch=0 if p111==8
+
 
 /*
 p111:
@@ -1710,10 +1807,7 @@ p111:
 ¿Otra? __________________________________ 7
 NO TIENE ................................................................. 8
 */
-***************
-***banoex_ch***
-***************
-gen banoex_ch=.
+
 
 *************
 ***des1_ch***
@@ -1831,19 +1925,11 @@ replace techo_ch=2 if p103a==8
 gen resid_ch=.
 /*NA*/
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
+
 	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (p110 >=1 & p110 <=3) | p110 ==5
-replace aguamejorada_ch = 0 if  p110 ==4 | (p110 >= 6 & p110 <=7)
+
 		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (p111 >=1 & p111 <=5)
-replace banomejorado_ch = 0 if (p111 >=6 & p111 <=7)
+
 
 	*************
 	***dorm_ch***

@@ -1838,9 +1838,9 @@ gen aguadisp1_ch = .
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 1 if s01a_11b<=3 | s01a_11a <12
-replace aguadisp2_ch = 2 if s01a_11b>=4 & s01a_11a >= 12
-replace aguadisp2_ch = 3 if s01a_11b==7 & s01a_11a == 24
+gen aguadisp2_ch = 1 if (s01a_11b<=3 | s01a_11aa <12)
+replace aguadisp2_ch = 2 if (s01a_11b>=4 & s01a_11aa >= 12)
+replace aguadisp2_ch = 3 if (s01a_11b==7 & s01a_11aa == 24)
 
 
 
@@ -1965,7 +1965,6 @@ label var combust_ch "Principal combustible gas o electricidad"
 ***************
 ***banoex_ch***
 ***************
-Comentarios JL: cambia a
 gen banoex_ch =.
 replace banoex_ch = 0 if s01a_17==2
 replace banoex_ch = 1 if s01a_17==1

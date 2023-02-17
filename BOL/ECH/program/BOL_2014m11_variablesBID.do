@@ -1724,51 +1724,117 @@ label var edupub_ci "Asiste a un centro de ensenanza público"
 ****************
 ***aguared_ch***
 ****************
-
-/*s1_09:	
-1 cañería de red dentro de la vivienda?
-2 cañería de red fuera de la vivienda, pero dentro del lote
-3 pileta pública
-4 pozo entubado o perforado?
-5 pozo excavado protegido?
-6 pozo excavado no protegido
-7 manantial o vertiente protegida?
-8 río-acequia-vertiente no protegida?
-9 agua embotellada?
-10 carro repartidor (aguatero)
-11 otro? (especifique)
-*/
-
-gen aguared_ch=(s1a_09==1 | s1a_09==2)
-replace aguared_ch=. if s1a_09==.
+gen aguared_ch = 0
+replace aguared_ch = 1 if (s1a_09==1 | s1a_09==2)
+replace aguared = . if s1a_09==.
 label var aguared_ch "Acceso a fuente de agua por red"
 
-****************
-***aguared_ch***
-****************
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if s1a_09==1|s1a_09==2
+replace aguafconsumo_ch = 2 if s1a_09==3
+replace aguafconsumo_ch = 3 if s1a_09==9
+replace aguafconsumo_ch = 4 if (s1a_09==4 | s1a_09==5 | s1a_09==6)
+replace aguafconsumo_ch = 6 if s1a_09==10
+replace aguafconsumo_ch = 7 if s1a_09 == 7
+replace aguafconsumo_ch = 8 if s1a_09==8
+replace aguafconsumo_ch = 9 if s1a_09== 11
 
-gen aguadist_ch=1 if s1a_09==1
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if s1a_09==1|s1a_09==2
+replace aguafuente_ch = 2 if s1a_09==3
+replace aguafuente_ch = 3 if s1a_09==9
+replace aguafuente_ch = 4 if (s1a_09==4 | s1a_09==5 | s1a_09==6)
+replace aguafuente_ch = 6 if s1a_09==10
+replace aguafuente_ch = 7 if s1a_09 == 7
+replace aguafuente_ch = 8 if s1a_09==8
+replace aguafuente_ch = 9 if s1a_09== 11
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if s1a_09==1
 replace aguadist_ch=2 if s1a_09==2
-replace aguadist_ch=3 if (s1a_09==3 | s1a_09==10)
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_chs1
+replace aguadist_ch=3 if (s1a_09==3)
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = . 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = .
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if s1a_09 <7 | s1a_09 == 7 | s1a_09 ==9| s1a_09 ==10  
+replace aguamala_ch = 1 if s1a_09 ==8 | s1a_09 ==11
 
 *****************
-***aguamala_ch***
+*aguamejorada_ch*  Altered
 *****************
-
-gen aguamala_ch=(s1a_09==6 | s1a_09==7 | s1a_09==8)
-replace aguamala_ch=. if s1a_09==.
-label var aguamala_ch "Agua unimproved según MDG" 
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if s1a_09 ==8 | s1a_09 ==11 
+replace aguamejorada_ch = 1 if s1a_09 <7 | s1a_09 == 7 | s1a_09 ==9| s1a_09 ==10   
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 ***aguamide_ch***
 *****************
-
 gen aguamide_ch=.
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if s1a_11==6 
+replace bano_ch=1 if s1a_11==1 & s1a_12==1
+replace bano_ch=2 if s1a_11==1 & s1a_12==2
+replace bano_ch=3 if ((s1a_11==2 | s1a_11 == 4) & s1a_12!=4) | (s1a_11==1 & s1a_12 == 3)
+replace bano_ch=4 if (s1a_11==1 |s1a_11==2 |s1a_11==3) & s1a_12==4
+replace bano_ch=5 if s1a_11 ==3 & s1a_12!=4
+replace bano_ch=6 if s1a_11 ==5
+***************
+***banoex_ch***
+***************
+gen banoex_ch =.
+replace banoex_ch = 0 if s1a_13==2
+replace banoex_ch = 1 if s1a_13==1
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if s1a_11 <= 2 | s1a_11 == 4 & s1a_12 != 4
+replace banomejorado_ch =0 if (s1a_11 == 6| s1a_11 == 3) | s1a_12 == 4
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if s1a_11!=6
+replace sinbano_ch = 2 if s1a_11==6
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =.
 
 
 ************
@@ -1797,20 +1863,6 @@ replace combust_ch = . if s1a_20==.
 label var combust_ch "Principal combustible gas o electricidad" 
 
 
-*************
-***bano_ch***
-*************
-
-gen bano_ch= ( s1a_11>=1 & s1a_11<=3)
-label var bano_ch "El hogar tiene servicio sanitario"
-
-
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=(s1a_13==1)
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -1899,21 +1951,8 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
+		
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-gen aguamejorada_ch = 1 if (s1a_09 >= 1 &  s1a_09 <=6)
-replace aguamejorada_ch = 0 if (s1a_09 >= 7 &  s1a_09 <=11)
-		
-		
-*********************
-***banomejorado_ch***
-*********************
-gen  banomejorado_ch = 1 if ((s1a_11 >= 1 & s1a_11 <=2) & (s1a_12 >= 1 & s1a_12 <=3) & s1a_13== 1)
-replace banomejorado_ch = 0 if ((s1a_11 >= 1 & s1a_11 <=2) & (s1a_12 >= 1 & s1a_12 <=3) & s1a_13== 2) | (s1a_11 >= 3 & s1a_11 <= 6)  | ((s1a_11 >= 1 & s1a_11 <=2)  & (s1a_12 >= 4 & s1a_12 <=5))
 	
 
 *************

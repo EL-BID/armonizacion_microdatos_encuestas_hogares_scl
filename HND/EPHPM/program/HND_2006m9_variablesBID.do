@@ -1113,7 +1113,7 @@ Solo seteo en minusculas aquellas variables que empiezan con
 P ya que hay al correr un rename * se genera conflicto con 
 NPER and Nper. 
 */
-rename P* , lower
+*rename P* , lower
 
 ***************
 ***asiste_ci***

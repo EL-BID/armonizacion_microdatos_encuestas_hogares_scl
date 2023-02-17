@@ -64,9 +64,7 @@ label value region_BID_c region_BID_c
 	***region_c ***
 	***************
 	gen region_c=.
-	/*No viene la variable ciudad en la versión 2018*/
-	
-	/*replace region_c=int(ciudad/10000)
+    replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
 	replace region_c =23 if canton==1706
@@ -95,7 +93,7 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-   */
+   
 	***************
 	***factor_ch***
 	***************

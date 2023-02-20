@@ -1310,17 +1310,40 @@ label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 *                                                     VARIABLES DE LA VIVIENDA                                                       *
 *====================================================================================================================================*
 
-********************************************************************************************************************************
-***1._AGUARED_CH : Acceso a una fuente de agua por red
-********************************************************************************************************************************
+
+****************
+***aguared_ch***
+****************
 gen aguared_ch=.
-replace aguared_ch=1 if v11>=1 & v11<=3
-replace aguared_ch=0 if v11==0
+replace aguared_ch=1 if (V11==1 | V11==2)
+replace aguared_ch=0 if (V11==0 | V11==3)
 label var aguared_ch "Acceso a una fuente de agua por red"
 
-********************************************************************************************************************************
-***2._AGUADIST_CH : Ubicación de la principal fuente de agua
-********************************************************************************************************************************
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if (V11==1 | V11==2) & V12<=4
+replace aguafconsumo_ch = 2 if V11==3 & V12<=4
+replace aguafconsumo_ch = 5 if V11==7
+replace aguafconsumo_ch = 8 if V11==6
+replace aguafconsumo_ch = 9 if V11==5
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if (V11==1 | V11==2) & V12<=4
+replace aguafuente_ch = 2 if V11==3 & V12<=4
+replace aguafuente_ch = 5 if V11==7
+replace aguafuente_ch = 8 if V11==6
+replace aguafuente_ch = 9 if V11==5
+
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
 replace aguadist_ch=1 if v11==1
 replace aguadist_ch=2 if v11==2
@@ -1328,18 +1351,76 @@ replace aguadist_ch=3 if v11==3
 label define aguadist_ch 1 "tubería dentro de la vivienda" 2 " tubería fuera de la vivienda pero dentro del lote o edificio" 3 "tubería fuera del lote o edificio"
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 
-********************************************************************************************************************************
-***3._AGUAMALA_CH : La principal fuente de agua es "Unimproved" según los MDG
-********************************************************************************************************************************
-gen aguamala_ch= (v12>=6 & v12<=7)
-replace aguamala_ch = . if v12==.
-label var aguamala_ch "Principal fuente de agua es unimproved"
 
-********************************************************************************************************************************
-***4._AGUAMIDE_CH : El hogar usa un medidor para pagar por su consumo de agua
-********************************************************************************************************************************
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = . 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = .
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
-label var aguamide "Hogar usa un medidor para pagar por su consumo de agua"
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if V13A==0 
+replace bano_ch=1 if V13A==1
+replace bano_ch=2 if V13A==2
+replace bano_ch=3 if V13A==3
+replace bano_ch=5 if V13A==4
+replace bano_ch=6 if V13A==5
+***************
+***banoex_ch***
+***************
+gen banoex_ch=.
+replace banoex_ch=1 if V14B==1
+replace banoex_ch=0 if V14B==2
+label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3
+replace banomejorado_ch =0 if bano_ch>=4
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if V13A!=0 & V13A!=9
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =.
 
 ********************************************************************************************************************************
 ***5._LUZ_CH : La principal fuente de iluminación es electricidad
@@ -1363,20 +1444,6 @@ replace combust_ch=1 if  v16==1 | v16==2
 replace combust_ch=0 if  v16==3 | v16==4
 label var combust_ch "Combustible principal del hogar es gas o electricidad"
 
-********************************************************************************************************************************
-***8._BANO_CH : El hogar tiene algún tipo de servicio higiénico (inodoro o letrina)
-********************************************************************************************************************************
-gen bano_ch=.
-replace bano_ch=1 if v14a==1
-replace bano_ch=0 if v14a==0
-label var bano_ch "Hogar tiene algún tipo de servicio higiénico"
-********************************************************************************************************************************
-***9._BANOEX_CH : El servicio higiénico es de uso exclusivo del hogar
-********************************************************************************************************************************
-gen banoex_ch=.
-replace banoex_ch=1 if v14b==1
-replace banoex_ch=0 if v14b==2
-label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
 
 ********************************************************************************************************************************
 ***10._DES1_CH : Tipo de desagüe incluyendo la definición de "Unimproved" del MDG
@@ -1441,19 +1508,6 @@ label define resid_ch 0 "Recolección pública" 1 "Quemados o enterrados" 2 "Tir
 label value resid_ch resid_ch
 label var resid_ch "Método de eliminación de residuos"
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (v12 >=1 & v12 <=5)
-replace aguamejorada_ch = 0 if (v12 >=6 & v12 <=7)
-			
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if  ((v13a >=1 & v13a <=4) & v13b ==1)
-replace banomejorado_ch = 0 if  ((v13a >=1 & v13a <=4) & v13b ==2) | (v13a ==5 | v13a ==0) |   v14a == 2
 
 ********************************************************************************************************************************
 ***16._DORM_CH : Cantidad de habitación que se destinan exclusivamente para dormir

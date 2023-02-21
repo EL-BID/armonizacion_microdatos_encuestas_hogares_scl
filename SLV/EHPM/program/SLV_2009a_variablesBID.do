@@ -1279,7 +1279,7 @@ gen tipopen_ci=.
 gen ylmotros_ci=.
 gen ylnmotros_ci=.
 gen rentaimp_ch=.
-gen eduac_ci=.
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

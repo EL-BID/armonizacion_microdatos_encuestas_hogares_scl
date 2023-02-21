@@ -1041,7 +1041,7 @@ label values edupub_ci edupub
 **************************
 gen aguared_ch=.
 replace aguared_ch=(water==1 | water==2 | water==3)
-label var tecnica_ci "Tiene acceso a agua por red"
+label var aguared_ch "Tiene acceso a agua por red"
 
 ***********************************
 *  UBICACION DE LA FUENTE DE AGUA *

@@ -1492,32 +1492,7 @@ gen vivialqimp_ch= p02a08
 label var vivialqimp_ch "Alquiler mensual imputado"
 
 
-******************************
-*** VARIABLES DE MIGRACION ***
-******************************
 
-* Variables incluidas por SCL/MIG Fernando Morales
-
-	*******************
-	*** migrante_ci ***
-	*******************
-	
-	gen migrante_ci=.
-	label var migrante_ci "=1 si es migrante"
-	
-	**********************
-	*** migantiguo5_ci ***
-	**********************
-	
-	gen migantiguo5_ci=.
-	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-		
-	**********************
-	*** migrantelac_ci ***
-	**********************
-	
-	gen migrantelac_ci=.
-	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
 	
 ******************************
 *** VARIABLES DE MIGRACION ***
@@ -1574,9 +1549,8 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
-rafroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

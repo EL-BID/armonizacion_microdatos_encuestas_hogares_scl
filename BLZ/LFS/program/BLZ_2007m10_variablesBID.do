@@ -1063,7 +1063,7 @@ label values edupub_ci edupub
 gen aguared_ch=0
 replace aguared_ch=1 if h71==1 | h72==1 
 *replace aguared_ch=0 if (h73==1 | h74==1 | h75==1 | h76==1 | h77==1 | h78==1) & (h71!=1 | h72!=1) 
-label var tecnica_ci "Tiene acceso a agua por red"
+label var aguared_ch "Tiene acceso a agua por red"
 
 ***********************************
 *  UBICACION DE LA FUENTE DE AGUA *
@@ -1337,8 +1337,7 @@ label var vivialqimp_ch "Monto ud cree le pagarían por su vivienda"
 g tcylmpri_ci=.
 g tcylmpri_ch=.
 g instcot_ci=.
-g edus1i_ci=.
-g edus1c_ci=.
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

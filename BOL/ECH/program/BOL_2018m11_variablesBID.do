@@ -1721,7 +1721,7 @@ replace eduac_ci=1 if (s05a_02a>=72 & s05a_02a<=75)
 replace eduac_ci=0 if s05a_02a==71 //educacion normal
 replace eduac_ci=0 if (s05a_02a>=76 & s05a_02a<=79)
 label variable eduac_ci "Superior universitario vs superior no universitario"
-los otros años*/
+
 
 ***************
 ***asiste_ci***

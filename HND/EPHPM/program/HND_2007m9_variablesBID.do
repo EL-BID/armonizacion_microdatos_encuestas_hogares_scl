@@ -1280,7 +1280,7 @@ label values quintil_ci quintil_ci
 *****************
 
 * Se setean las variables en minuscula:
-rename * , lower
+*rename * , lower
 
 ************
 * asiste_ci*

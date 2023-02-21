@@ -1473,6 +1473,15 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 rename rama2d codindustria
 rename oficio codocupa
+
+
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
+
+
 compress
 
 

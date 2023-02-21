@@ -703,7 +703,7 @@ replace durades_ci= 0.23 if P10E01==0
 replace durades_ci=. if P10E01==.
 label var durades_ci "Duracion del Desempleo (en meses)"
 
-rename * , lower
+*rename * , lower
 
 ******************************************************************************
 *	EDUCATION 
@@ -902,7 +902,7 @@ replace edupub_ci=1 if ( p06b09==1 | p06b09==2 | p06b09==3 | p06b09==4 | p06b09=
 replace edupub_ci=. if ( p06b09==. | p06b09==99)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
-rename * , upper
+*rename * , upper
 
 
 

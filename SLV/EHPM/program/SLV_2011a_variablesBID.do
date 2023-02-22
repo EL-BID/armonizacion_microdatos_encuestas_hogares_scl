@@ -99,7 +99,7 @@ label var region_c "División política, departamento"
 ***************
 ***ine01***
 ***************
-gen ine01= r004
+gen ine01= depto 
 label define ine01  ///
           1 "Ahuachapán" ///
            2 "Santa Ana" ///

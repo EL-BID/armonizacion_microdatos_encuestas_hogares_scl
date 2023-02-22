@@ -921,7 +921,7 @@ se extiende la definición de edusc_ci y edus2c_ci a aquellas observacines que p
 	titulo de bachiller tecnico, perdido. 
  - 11 anios y título de bachiller general
  - 12 anios, no obtuvo titulo o bachiller tecnico o perdido.
- */x
+ */
 gen edusc_ci = (aedu_ci == 11 | aedu_ci == 12) & (r217 != 1 & r217 != 2 & r217 != 3 & r217 != .) | (aedu_ci == 11 & r217 == 2) // 11 anios y titulo de bachiller general 
 replace edusc_ci = 1 if aedu_ci == 12 & inlist(r217, 1, 3, .) // 12 anios, sin titulo, bachiller tecnico o perdido.
 replace edusc_ci = . if aedu_ci == .

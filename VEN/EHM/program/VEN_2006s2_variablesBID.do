@@ -1772,30 +1772,6 @@ replace desalent_ci=1 if (pp29>4 & pp29<10) & pp30==11 & pp31==2 & pp36==2 & (pp
 replace desalent=. if edad_ci<10
 label var desalent_ci "Trabajadores desalentados, personas que creen que por alguna razon no conseguiran trabajo" 
 
-gen byte pqnoasis_ci=.
-replace pqnoasis=pp28 if pp28>0
-label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
-label define pqnoasis_ci 1 "Culmino sus estudios" 2 "No hay grado o agnos superiores" 3 "No hay cupo, escuela distante" 4 "falta de recursos economicos" 5 "esta trabajando" 6 "asiste a un curso de capacitacion" 7 "no quiere estudiar" 8 "enfermedad o defecto fisico" 9 "problemas de conducta o de aprendizaje" 10 "cambio de residencia" 11 "edad mayor que la regular" 12 "tiene que ayudar en la casa" 13 "edad menor que la regular" 14 "va a tener un hijo o se caso" 15 "otros"
-label values pqnoasis_ci pqnoasis_ci
-
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-	
-**************
-*pqnoasis1_ci*
-**************
-g       pqnoasis1_ci = 1 if pp28 ==4
-replace pqnoasis1_ci = 2 if pp28 ==5
-replace pqnoasis1_ci = 3 if pp28 ==8  | pp28 ==9
-replace pqnoasis1_ci = 4 if pp28 ==7
-replace pqnoasis1_ci = 5 if pp28 ==12 | pp28 ==14
-replace pqnoasis1_ci = 6 if pp28 ==1
-replace pqnoasis1_ci = 7 if pp28 ==11 | pp28 ==13
-replace pqnoasis1_ci = 8 if pp28 ==2  | pp28 ==3 
-replace pqnoasis1_ci = 9 if pp28 ==6  | pp28 ==10 | pp28 ==15
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
-
 
 gen aguadist_ch=.
 gen aguamala_ch=.

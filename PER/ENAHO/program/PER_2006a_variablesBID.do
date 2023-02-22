@@ -1536,7 +1536,7 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 ***pqnoasis_ci***
 *****************
 * se usa la recodificada que tiene mas detalle
-gen pqnoasis_ci=t313a if asiste_ci==0
+gen pqnoasis_ci=t313 if asiste_ci==0
 
 **************
 *pqnoasis1_ci*

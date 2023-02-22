@@ -1155,7 +1155,7 @@ label values quintil_ci quintil_ci
 *****************
 
 * Se setean en lowercase las variables de la base:
-rename * , lower
+
 
 * Label Variables Educación
 

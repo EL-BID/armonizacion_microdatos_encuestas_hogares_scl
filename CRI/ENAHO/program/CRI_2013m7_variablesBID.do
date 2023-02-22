@@ -1250,30 +1250,30 @@ label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 ***aguared_ch***
 ****************
 gen aguared_ch=.
-replace aguared_ch=1 if (V11==1 | V11==2)
-replace aguared_ch=0 if (V11==0 | V11==3)
+replace aguared_ch=1 if (v11==1 | v11==2)
+replace aguared_ch=0 if (v11==0 | v11==3)
 label var aguared_ch "Acceso a una fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (V11==1 | V11==2) & V12<=4
-replace aguafconsumo_ch = 2 if V11==3 & V12<=4
-replace aguafconsumo_ch = 5 if V11==7
-replace aguafconsumo_ch = 8 if V11==6
-replace aguafconsumo_ch = 9 if V11==5
+replace aguafconsumo_ch = 1 if (v11==1 | v11==2) & v12<=4
+replace aguafconsumo_ch = 2 if v11==3 & v12<=4
+replace aguafconsumo_ch = 5 if v11==7
+replace aguafconsumo_ch = 8 if v11==6
+replace aguafconsumo_ch = 9 if v11==5
 
 *****************
 *aguafuente_ch*
 *****************
 
 gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if (V11==1 | V11==2) & V12<=4
-replace aguafuente_ch = 2 if V11==3 & V12<=4
-replace aguafuente_ch = 5 if V11==7
-replace aguafuente_ch = 8 if V11==6
-replace aguafuente_ch = 9 if V11==5
+replace aguafuente_ch = 1 if (v11==1 | v11==2) & v12<=4
+replace aguafuente_ch = 2 if v11==3 & v12<=4
+replace aguafuente_ch = 5 if v11==7
+replace aguafuente_ch = 8 if v11==6
+replace aguafuente_ch = 9 if v11==5
 
 
 *************
@@ -1304,13 +1304,13 @@ gen aguadisp2_ch = .
 *************
 gen aguamala_ch = 2
 replace aguamala_ch = 0 if aguafuente_ch<=7
-replace aguamala_ch = 1 if aguafuente_ch>7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
@@ -1324,18 +1324,18 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if V13A==0 
-replace bano_ch=1 if V13A==1
-replace bano_ch=2 if V13A==2
-replace bano_ch=3 if V13A==3
-replace bano_ch=5 if V13A==4
-replace bano_ch=6 if V13A==5
+replace bano_ch=0 if v13a==0 
+replace bano_ch=1 if v13a==1
+replace bano_ch=2 if v13a==2
+replace bano_ch=3 if v13a==3
+replace bano_ch=5 if v13a==4
+replace bano_ch=6 if v13a==5
 ***************
 ***banoex_ch***
 ***************
 gen banoex_ch=.
-replace banoex_ch=1 if V14B==1
-replace banoex_ch=0 if V14B==2
+replace banoex_ch=1 if v14b==1
+replace banoex_ch=0 if v14b==2
 label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
 
 *****************
@@ -1343,14 +1343,14 @@ label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
 *****************
 gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3
-replace banomejorado_ch =0 if bano_ch>=4
+replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
 
 ************
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if V13A!=0 & V13A!=9
+replace sinbano_ch = 0 if v13a!=0 & v13a!=9
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************

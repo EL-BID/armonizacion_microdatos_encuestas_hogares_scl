@@ -1312,9 +1312,9 @@ replace aguafuente_ch = 9 if V11==5
 *aguadist_ch*
 *************
 gen aguadist_ch=.
-replace aguadist_ch=1 if v11==1
-replace aguadist_ch=2 if v11==2
-replace aguadist_ch=3 if v11==3
+replace aguadist_ch=1 if V11==1
+replace aguadist_ch=2 if V11==2
+replace aguadist_ch=3 if V11==3
 label define aguadist_ch 1 "tubería dentro de la vivienda" 2 " tubería fuera de la vivienda pero dentro del lote o edificio" 3 "tubería fuera del lote o edificio"
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 
@@ -1336,13 +1336,13 @@ gen aguadisp2_ch = .
 *************
 gen aguamala_ch = 2
 replace aguamala_ch = 0 if aguafuente_ch<=7
-replace aguamala_ch = 1 if aguafuente_ch>7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
@@ -1375,7 +1375,7 @@ label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
 *****************
 gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3
-replace banomejorado_ch =0 if bano_ch>=4
+replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
 
 ************

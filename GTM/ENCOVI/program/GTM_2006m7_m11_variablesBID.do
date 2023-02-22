@@ -730,11 +730,11 @@ No se discrimina en este anio entre maestría o doctorado.
 
 
 gen aedu_ci = .
-replace	 aedu_ci = 0  if (p06b25a == 1 | p06b25a == 2) // Ninguno Preprimaria
-replace aedu_ci = p06b25b if p06b25a == 3 // Primaria
-replace aedu_ci = 6 + p06b25b if (p06b25a == 4 | p06b25a == 5) // Básico, Diversificado
-replace aedu_ci = 11 + p06b25b if p06b25a == 6 // Superior
-replace aedu_ci = 16 + p06b25b if p06b25a == 7 // Postgrado 
+replace	 aedu_ci = 0  if (P06B25A == 1 | P06B25A== 2) // Ninguno Preprimaria
+replace aedu_ci = P06B25B if P06B25A == 3 // Primaria
+replace aedu_ci = 6 + P06B25B if (P06B25A == 4 | P06B25A == 5) // Básico, Diversificado
+replace aedu_ci = 11 + P06B25B if P06B25A== 6 // Superior
+replace aedu_ci = 16 + P06B25B if P06B25A == 7 // Postgrado 
 label var aedu_ci "Anios de educacion aprobados"
 
 ******************************
@@ -817,7 +817,7 @@ Proxy de asistencia p03a04a
 ¿En qué nivel y grado se inscribió (……...) para el presente ciclo escolar?
 */
 g byte asispre_ci = 0 
-replace asispre_ci = 1 if p06b06a == 1
+replace asispre_ci = 1 if P06B06A == 1
 la var asispre_ci "Asiste a Educacion preescolar"
 
 **************
@@ -834,9 +834,9 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 Como proxy de asistencia se usa la variable p03a02
 (….), ¿Se inscribió en algún plantel educativo para el presente ciclo escolar?
 */
-g asiste_ci = (p06b05 == 1)
-replace asiste_ci = 0 if p06b05 == 2
-replace asiste_ci = . if p06b05 == .
+g asiste_ci = (P06B05 == 1)
+replace asiste_ci = 0 if P06B05 == 2
+replace asiste_ci = . if P06B05 == .
 lab var asiste_ci "Asiste a Centro educativo"
 
 
@@ -845,7 +845,7 @@ lab var asiste_ci "Asiste a Centro educativo"
 ******************************
 
 gen pqnoasis_ci=.
-replace pqnoasis_ci = p06b23
+replace pqnoasis_ci = P06B23
 label var pqnoasis_ci "Razon principal por la cual ha abandonado o ha dejado de asistir a clases este año"
 label define pqnoasis_ci 1 "Enfermedad" 2 "Falta de maestro" 3 "La madre trabaja" 4 "Oficios de la casa" 5  "Falta de dinero" 6"Trabajo" 7"No le interesa" 8"Mal tiempo" 9"Embarazo" 10"Migracion temporal" 11"Acoso de maras" 12"Violencia" 98"Otra"
 label value pqnoasis_ci pqnoasis_ci
@@ -898,8 +898,8 @@ Se han considerado como PUBLICAS las opciones 1, 2, 3, 4 y 5 */
 *	edupub_ci 
 ******************************
 gen edupub_ci=0
-replace edupub_ci=1 if ( p06b09==1 | p06b09==2 | p06b09==3 | p06b09==4 | p06b09==5 )
-replace edupub_ci=. if ( p06b09==. | p06b09==99)
+replace edupub_ci=1 if ( P06B09==1 | P06B09==2 | P06B09==3 | P06B09==4 | P06B09==5 )
+replace edupub_ci=. if ( P06B09==. | P06B09==99)
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
 
 *rename * , upper

@@ -1603,7 +1603,7 @@ replace aguafconsumo_ch = 7 if p110a1==1
 replace aguafconsumo_ch = 1 if (p110==1 |p110==2) & p110a1==1
 replace aguafconsumo_ch = 2 if p110a1==1 & p110==3
 replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
-replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
+*replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
 replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5|  p110==6 |p110==7)
 
 *****************
@@ -1614,7 +1614,7 @@ replace aguafuente_ch = 7 if p110a1==1
 replace aguafuente_ch = 1 if (p110==1|p110==2) 
 replace aguafuente_ch = 2 if p110==3
 replace aguafuente_ch = 6 if p110==4
-replace aguafuente_ch = 8 if p110==8 
+*replace aguafuente_ch = 8 if p110==8 
 replace aguafuente_ch = 10 if (p110==5 |p110==7| p110==6)
 
 **************
@@ -1626,28 +1626,26 @@ label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es const
 **************
 *aguadisp2_ch*
 **************
+gen aguadisp2_ch = 9
+label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
 
-gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if (p110c2<4 | p110c1 < 12 | p110c3 <12) 
-replace aguadisp2_ch = 2 if p110c2>=4 & (p110c1>=12 | p110c3 <12)
-replace aguadisp2_ch = 3 if p110c==1 & p110c1 == 24
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch= 2
 replace aguamala_ch= 0 if p110 <=4
-replace aguamala_ch= 1 if p110 ==6
-replace aguamala_ch = 2 if p110 == 5 | p110 == 7 
+replace aguamala_ch= 1 if p110 ==8
+replace aguamala_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7 
 label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if p110==6
+replace aguamejorada_ch= 0 if p110==8
 replace aguamejorada_ch= 1 if (p110 <= 4)
-replace aguamejorada_ch = 2 if p110 == 5 | p110 == 7 
+replace aguamejorada_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7
 
 *****************
 ***aguamide_ch***
@@ -1675,14 +1673,16 @@ gen banoex_ch=.
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch=0
-replace banomejorado_ch=1 if p111<=4
+replace banomejorado_ch=1 if p111 <=4
 replace banomejorado_ch=2 if  (p111 == 5 | p111 ==7)
 
 
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = .
+gen sinbano_ch = 0
+replace sinbano_ch =3 if p111 == 8
+
 
 *************
 *aguatrat_ch*
@@ -1702,10 +1702,12 @@ gen aguatrat_ch = 9
 *****************
 ***aguadist_ch***
 *****************
-
-gen aguadist_ch=1 if p110==1
+gen aguadist_ch = 0
+replace aguadist_ch=1 if p110==1
 replace aguadist_ch=2 if p110==2
-replace aguadist_ch=3 if p110>=3 & p110<=7
+replace aguadist_ch=3 if p110==3 
+
+
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add

@@ -1196,15 +1196,16 @@ replace aguadisp2_ch = 1 if (s01008==3 | s01008==4)
 ***aguamala_ch***
 *****************
 gen aguamala_ch= 2
-replace aguamala_ch= 1 if aguafuente_ch>7
+replace aguamala_ch= 1 if aguafuente_ch>7 & aguafuente_ch<10
 replace aguamala_ch= 0 if aguafuente_ch<=7
+
 
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if aguafuente_ch>7
+replace aguamejorada_ch= 0 if aguafuente_ch>7 & aguafuente_ch<10
 replace aguamejorada_ch= 1 if aguafuente_ch<=7
 
 *****************
@@ -1237,6 +1238,9 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 gen banomejorado_ch=0
 replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & (s01012==1 | s01012==2)
+replace banomejorado_ch=2 if (s01011a>0 | s01011b>0) & s01012 ==5
+
+
 
 ************
 *sinbano_ch*

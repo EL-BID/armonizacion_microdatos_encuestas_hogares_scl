@@ -1159,12 +1159,22 @@ label var aguadist_ch "Ubicación de la principal fuente de agua"
 label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 3"Afuera de la casa y del terreno" 
 label val aguadist_ch aguadist_ch  
 
+
 *****************
 ***aguamala_ch***
 *****************
 gen aguamala_ch= 2
-replace aguamala_ch= 1 if aguafuente_ch>7
+replace aguamala_ch= 1 if aguafuente_ch>7 & aguafuente_ch<10
 replace aguamala_ch= 0 if aguafuente_ch<=7
+
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch= 2
+replace aguamejorada_ch= 0 if aguafuente_ch>7 & aguafuente_ch<10
+replace aguamejorada_ch= 1 if aguafuente_ch<=7
 
 *****************
 ***aguamide_ch***
@@ -1201,6 +1211,14 @@ replace bano_ch = 6 if (s01011a>0 | s01011b>0) & s01012a == 4
 replace bano_ch = 0 if (s01011a==0 | s01011b==0)
 label var bano_ch "Tipo de instalación sanitaria del hogar"
 
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+
+gen banomejorado_ch=0
+replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & (s01012==1 | s01012==2)
+replace banomejorado_ch=2 if (s01011a>0 | s01011b>0) & s01012 ==5
 
 ***************
 ***banoex_ch***
@@ -1281,22 +1299,7 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if aguafuente_ch>7
-replace aguamejorada_ch= 1 if aguafuente_ch<=7
-				
-*****************
-*banomejorado_ch*  Altered
-*****************
 
-gen banomejorado_ch=0
-replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & (s01012a==1 | s01012a==2)
-replace banomejorado_ch=1 if (s01011a>0 | s01011b>0) & s01012a==3
 
 
 *************

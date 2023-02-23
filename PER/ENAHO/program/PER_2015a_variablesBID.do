@@ -1600,7 +1600,7 @@ replace aguafconsumo_ch = 7 if p110a1==1
 replace aguafconsumo_ch = 1 if (p110==1 |p110==2) & p110a1==1
 replace aguafconsumo_ch = 2 if p110a1==1 & p110==3
 replace aguafconsumo_ch = 6 if p110a1==1 & p110==4
-replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
+*replace aguafconsumo_ch = 8 if p110a1==1 & p110==8
 replace aguafconsumo_ch = 10 if p110a1==1 & (p110==5|  p110==6 |p110==7)
 
 *****************
@@ -1611,7 +1611,7 @@ replace aguafuente_ch = 7 if p110a1==1
 replace aguafuente_ch = 1 if (p110==1|p110==2) 
 replace aguafuente_ch = 2 if p110==3
 replace aguafuente_ch = 6 if p110==4
-replace aguafuente_ch = 8 if p110==8 
+*replace aguafuente_ch = 8 if p110==8 
 replace aguafuente_ch = 10 if (p110==5 |p110==7| p110==6)
 
 **************
@@ -1623,28 +1623,26 @@ label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es const
 **************
 *aguadisp2_ch*
 **************
+gen aguadisp2_ch = 9
+label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
 
-gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if (p110c2<4 | p110c1 < 12 | p110c3 <12) 
-replace aguadisp2_ch = 2 if p110c2>=4 & (p110c1>=12 | p110c3 <12)
-replace aguadisp2_ch = 3 if p110c==1 & p110c1 == 24
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch= 2
 replace aguamala_ch= 0 if p110 <=4
-replace aguamala_ch= 1 if p110 ==6
-replace aguamala_ch = 2 if p110 == 5 | p110 == 7 
+replace aguamala_ch= 1 if p110 ==8
+replace aguamala_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7 
 label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if p110==6
+replace aguamejorada_ch= 0 if p110==8
 replace aguamejorada_ch= 1 if (p110 <= 4)
-replace aguamejorada_ch = 2 if p110 == 5 | p110 == 7 
+replace aguamejorada_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7
 
 *****************
 ***aguamide_ch***
@@ -1672,14 +1670,16 @@ gen banoex_ch=.
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch=0
-replace banomejorado_ch=1 if p111<=4
+replace banomejorado_ch=1 if p111 <=4
 replace banomejorado_ch=2 if  (p111 == 5 | p111 ==7)
 
 
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = .
+gen sinbano_ch = 0
+replace sinbano_ch =3 if p111 == 8
+
 
 *************
 *aguatrat_ch*
@@ -1688,20 +1688,15 @@ gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 
-
-
-
-
-
-
-
 *****************
 ***aguadist_ch***
 *****************
-
-gen aguadist_ch=1 if p110==1
+gen aguadist_ch = 0
+replace aguadist_ch=1 if p110==1
 replace aguadist_ch=2 if p110==2
-replace aguadist_ch=3 if p110>=3 & p110<=7
+replace aguadist_ch=3 if p110==3 
+
+
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
 label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
@@ -1717,7 +1712,6 @@ p110:
            6 río, acequia, manantial o similar
            7 otra
 */
-
 
 
 
@@ -2231,7 +2225,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

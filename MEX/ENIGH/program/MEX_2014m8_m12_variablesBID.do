@@ -3809,13 +3809,13 @@ label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 drop nivel_ed grado_ed
 
-******************************************************************************
+*******************************
 *	INFRAESTRUCTURE VARIABLES 
-******************************************************************************
+*******************************
 
-****************
-***aguared_ch***
-****************
+************
+*aguared_ch*
+************
 destring disp_agua , replace
 gen aguared_ch=.
 replace aguared_ch=1 if disp_agua ==1 | disp_agua ==2
@@ -3835,16 +3835,17 @@ gen aguafuente_ch = 0
 replace aguafuente_ch = 1 if (disp_agua==1 | disp_agua==2)
 replace aguafuente_ch = 2 if disp_agua==3
 replace aguafuente_ch = 5 if disp_agua==4
+replace aguafuente_ch = 9 if disp_agua==5
 replace aguafuente_ch = 6 if disp_agua==6
-replace aguafuente_ch = 10 if (disp_agua==7 | disp_agua==5)
+replace aguafuente_ch = 10 if disp_agua==7 
 
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
+gen aguadist_ch=0
 replace aguadist_ch= 1 if disp_agua==1
 replace aguadist_ch= 2 if disp_agua==2
-replace aguadist_ch= 3 if (disp_agua ==4 | disp_agua ==6)
+replace aguadist_ch= 3 if disp_agua ==3
 label var aguadist_ch "Ubicacion de la principal fuente de agua"
 
 
@@ -3852,15 +3853,14 @@ label var aguadist_ch "Ubicacion de la principal fuente de agua"
 *aguadisp1_ch*
 **************
 destring dotac_agua, replace
-gen aguadisp1_ch = . 
-replace aguadisp1_ch= 1 if dotac_agua==1
+gen aguadisp1_ch =9
 
 **************
 *aguadisp2_ch*
 **************
 destring dotac_agua, replace
 gen aguadisp2_ch = .
-replace aguadisp2_ch = 1 if dotac_agua<1
+replace aguadisp2_ch = 1 if dotac_agua>1
 replace aguadisp2_ch = 3 if dotac_agua==1
 
 *************
@@ -3888,13 +3888,14 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *****************
 destring excusado, replace
 destring drenaje, replace
+destring sanit_agua, replace
 gen bano_ch=.
 replace bano_ch=0 if excusado==2
-replace bano_ch=1 if drenaje==1 & excusado==1
-replace bano_ch=2 if drenaje==2 & excusado==1
-replace bano_ch=3 if drenaje==3 & excusado==1
-replace bano_ch=4 if drenaje==4 & excusado==1
-replace bano_ch=5 if drenaje==5 & excusado==1
+replace bano_ch=1 if drenaje==1 & excusado==1 & sanit_agua <3
+replace bano_ch=2 if drenaje==2 & excusado==1 & sanit_agua <3
+replace bano_ch=4 if (drenaje==4 | drenaje==3) & excusado==1
+replace bano_ch=6 if drenaje==5 & excusado==1 & sanit_agua== 3
+
 ***************
 ***banoex_ch***
 ***************
@@ -3915,13 +3916,15 @@ replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if excusado==2
+replace sinbano_ch = 0 if excusado == 1
+replace sinbano_ch = 1 if excusado == 2 & drenaje <=4
+replace sinbano_ch = 3 if excusado == 2 & drenaje ==5
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 
 ******************************

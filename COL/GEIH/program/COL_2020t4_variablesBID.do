@@ -1143,21 +1143,19 @@ g pqnoasis1_ci = .
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 **#
-*************
-*aguadist_ch*
-*************
-*se asume que llega a la vivienda cuando es de acueducto por tuberia o de otra fuente por tuberia
-gen aguadist_ch=.
-replace aguadist_ch=1 if (p5050==1 | p5050==2)
-*se asume que llega al terreno si es pozo con bomba
-replace aguadist_ch=2 if p5050==3
-*se asume que llega fuera del terreno las demas opciones 
-replace aguadist_ch=3 if p5050>=4
+
+
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if p4030s5==1 
+replace aguared_ch = 2 if p4030s5==2
+la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
-*la encuesta pregunta por agua para consumo humano
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if p5050==1
 replace aguafconsumo_ch = 3 if p5050==10
@@ -1182,21 +1180,79 @@ replace aguafuente_ch = 10 if (p5050==4 | p5050==7)
 replace aguafuente_ch = 7 if p5050==2
 replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
 
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch=1 if (p5050==1 | p5050==2)
+replace aguadist_ch=2 if p5050==3
+replace aguadist_ch=3 if p5050>=4
+
+
 **************
 *aguadisp1_ch*
 **************
-*se asume constante si esta los 7 dias de la semana
-gen aguadisp1_ch = 1 if p4040==1
-replace aguadisp1_ch 0 if p4040==2
+gen aguadisp1_ch =.
+replace aguadisp1_ch = 1 if p4040==1
+replace aguadisp1_ch = 0 if p4040==2
 
 
 **************
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch = 9
-*la encuesta no hace la pregunta
-
 *label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+generate aguamide_ch = .
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if p5020==6
+replace bano_ch=1 if p5020==1
+replace bano_ch=2 if p5020==2
+replace bano_ch=3 if p5020==4
+replace bano_ch=4 if (p5020==3 | p5020==5)
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=.
+replace banoex_ch = 1 if p5030==1
+replace banoex_ch = 0 if p5030==2
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3
+replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
 ************
 *sinbano_ch*
@@ -1213,62 +1269,7 @@ gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 
-*************
-*aguamala_ch*  Altered
-*************
-*Se asume mejorada cuando es agua limpia
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if aguafuente_ch<=7
-replace aguamala_ch= 1 if (aguafuente_ch==8 | aguafuente_ch==9)
-*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
-*****************
-*aguamejorada_ch*  Altered
-*****************
-*Se asume mejorada cuando es agua limpia
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if (aguafuente_ch==8 | aguafuente_ch==9)
-replace aguamejorada_ch= 1 if aguafuente_ch<=7
-
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
-
-*****************
-*bano_ch         *  Altered
-*****************
-gen bano_ch=0 if p5020==6
-replace bano_ch=1 if p5020==1
-replace bano_ch=2 if p5020==2
-*se asume letrina mejorada si no hay inodoro y va fosa septica
-replace bano_ch=3 if p5020==4
-replace bano_ch=4 if (p5020==3 | p5020==5)
-
-
-*****************
-*banomejorado_ch*  Altered
-*****************
-gen	banomejorado_ch=0
-replace banomejorado_ch=1 if p5020==1
-replace banomejorado_ch=1 if p5020==2
-replace banomejorado_ch=1 if p5020==4
-
-**#		
-****************
-***aguared_ch***
-****************
-    g aguared_ch = (p4030s5==1  )
-	replace aguared_ch =. if p4030s5==.
-	la var aguared_ch "Acceso a fuente de agua por red"
-
-
-	
-
-	
-
-*****************
-***aguamide_ch***
-*****************
-	g aguamide_ch = .
-	la var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 ************
 ***luz_ch***
@@ -1290,13 +1291,6 @@ replace banomejorado_ch=1 if p5020==4
 	replace combust_ch =. if p5080==.
 	la var combust_ch "Principal combustible gas o electricidad" 
 
-
-***************
-***banoex_ch***
-***************
-	g banoex_ch = p5030 == 1
-	replace banoex_ch = . if bano_ch == 0
-	la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *************
 ***des1_ch***
@@ -1366,14 +1360,6 @@ replace banomejorado_ch=1 if p5020==4
 					2 "Tirados a un espacio abierto" 	///
 					3 "Otros"
 	la val resid_ch resid_ch
-	
-
-	
- **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-
-	
-
 
  
 *************
@@ -1584,7 +1570,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first
 

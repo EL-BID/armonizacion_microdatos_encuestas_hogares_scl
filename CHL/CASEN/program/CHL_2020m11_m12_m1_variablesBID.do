@@ -994,36 +994,122 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
 		******************************************
 
-***************
-* aguared_ch  *
-***************
-gen aguared_ch=(v20==1)
-replace aguared_ch=. if v20==.
-label var aguared_ch "Acceso a fuente de agua por red"
+
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if v20==1 
+replace aguared_ch = 2 if v20!=1
+la var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+*se asume por el cuestionario y por los datos que agua para consumo es agua de red,
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if v20==1 & v22<=2
+replace aguafconsumo_ch = 2 if v20==13 & v22>2
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 1 if v20==1 & v22<=2
+replace aguafuente_ch = 2 if v20==1 & v22>2
+replace aguafuente_ch = 6 if v20==6
+replace aguafuente_ch = 8 if v20==5
+replace aguafuente_ch = 10 if (v20==7 | v20==4)
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if v22==1
+replace aguadist_ch=2 if v22==2
+replace aguadist_ch=3 if v22==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = 1 if v20_red<=2
+replace aguamide_ch  = 0 if v20_red>2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if v23==2
+replace bano_ch=1 if v23_sistema==1
+replace bano_ch=2 if v23_sistema==2
+replace bano_ch=3 if v23_sistema==3
+replace bano_ch=4 if v23_cajon==5
+replace bano_ch=5 if v23_cajon==4 
+replace bano_ch=6 if (v23_sistema==7 | v23_cajon==6)
 
 ***************
-* aguadist_ch *
+***banoex_ch***
 ***************
-*Es la mejor aproximación
-gen aguadist_ch=v22
-replace aguadist_ch=. if v22==9
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la vivienda" 2"Afuera de la vivienda" 3"La acarrean"
-label val aguadist_ch aguadist_ch
+generate banoex_ch=.
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
-***************
-* aguamala_ch *
-***************
-gen aguamala_ch=(v20>=4 & v20<=6)
-replace aguamala_ch=. if aguared_ch==.
-label var aguamala_ch "La principal fuente de agua es unimproved según MDG"
 
-***************
-* aguamide_ch *
-***************
-gen aguamide_ch=(v20_red==1)
-replace aguamide_ch=. if aguared_ch==.
-label var aguamide_ch "El hogar usa un medidor para pagar por su consumo de agua"
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+
+replace banomejorado_ch =1 if bano_ch<=3
+
+replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if v23==1
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 
 
 ***************
@@ -1050,19 +1136,6 @@ gen combust_ch=.
 *replace combust_ch=0 if v36a==7 | v36a==8 | v36a==3 | v36a==4 | v36a==5 | v36a==9
 label var combust_ch "Principal combustible gas o electricidad" 
 
-
-***************
-* bano_ch     *
-***************
-gen bano_ch=(v23==1)
-replace bano_ch=. if v23==.
-label var bano_ch "El hogar tiene algún tipo de servicio higiénico"
-
-***************
-* banoex_ch   *
-***************
-gen banoex_ch=.  // No está la pregunta en la encuesta 2020
-label var banoex_ch "El servicio higiénico es de uso exclusivo del hogar"
 
 ***************
 * des1_ch     *
@@ -1130,18 +1203,6 @@ label var techo_ch "Materiales de construcción del techo"
 gen resid_ch=. // No está la pregunta en la encuesta 2020
 label var resid_ch "Método de eliminación de residuos"
 
-	
- *********************
- ***aguamejorada_ch***
- *********************
-gen       aguamejorada_ch = 1 if (v20 >=1 | v20 <=4)
-replace aguamejorada_ch = 0 if (v20 >=5 & v20 <=7) | v22 ==3
-
- *********************
- ***banomejorado_ch***
- *********************
-gen     banomejorado_ch = 1 if  (v23_sistema>=1 & v23_sistema<=3) | v23_cajon==4 
-replace banomejorado_ch = 0 if  v23_cajon==5 | v23_cajon==6 | v23_sistema==7
 
 ***************
 * dorm_ch     *

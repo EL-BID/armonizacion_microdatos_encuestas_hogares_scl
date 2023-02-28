@@ -1112,7 +1112,7 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 ****************
 generate aguared_ch =.
 replace aguared_ch = 1 if v23<=3 
-replace aguared_ch = 2 if v23>3
+replace aguared_ch = 0 if v23>3
 la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************

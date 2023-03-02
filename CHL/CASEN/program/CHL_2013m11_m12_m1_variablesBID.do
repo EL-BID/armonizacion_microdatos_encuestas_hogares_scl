@@ -1120,9 +1120,6 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 *se asume a partir de los datos y el cuestionario que agua potable solo es de red.
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if v23<=3 & v24<=2
-replace aguafconsumo_ch = 2 if v23<=3 & v24>2
-
 
 *****************
 *aguafuente_ch*
@@ -1178,7 +1175,6 @@ gen aguamide_ch = 1 if v23<=2
 replace aguamide_ch  = 0 if v23>2
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
-
 *****************
 *bano_ch         *  Altered
 *****************
@@ -1186,15 +1182,15 @@ gen bano_ch=.
 replace bano_ch=0 if v25==8
 replace bano_ch=1 if v25==1
 replace bano_ch=2 if v25==2
-replace bano_ch=3 if v25==3
+replace bano_ch=3 if v25==3 | v25==4 
 replace bano_ch=4 if v25==5
-replace bano_ch=5 if v25==4 
-replace bano_ch=6 if (v25==7 | v25==6)
+replace bano_ch=5 if v25==7 
+replace bano_ch=6 if v25==6
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=.
+generate banoex_ch=9
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1202,9 +1198,7 @@ la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-
 replace banomejorado_ch =1 if bano_ch<=3
-
 replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
 

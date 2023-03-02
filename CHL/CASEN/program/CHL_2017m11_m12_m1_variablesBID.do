@@ -1109,11 +1109,6 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if v20<=3 & v22<=2
-replace aguafconsumo_ch = 2 if v20<=3 & v22>2
-replace aguafconsumo_ch = 6 if v20==6 & v21<=2
-replace aguafconsumo_ch = 8 if v20==5 & v21<=2
-replace aguafconsumo_ch = 10 if (v20==7 | v20==8 | v20==4)  & v21<=2
 
 *****************
 *aguafuente_ch*
@@ -1166,7 +1161,7 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 ***aguamide_ch***
 *****************
 gen aguamide_ch = 1 if v20<=2
-replace aguamide_ch  = 0 if v20>2
+replace aguamide_ch = 0 if v20>2
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 
@@ -1177,15 +1172,15 @@ gen bano_ch=.
 replace bano_ch=0 if v23==8
 replace bano_ch=1 if v23==1
 replace bano_ch=2 if v23==2
-replace bano_ch=3 if v23==3
+replace bano_ch=3 if v23==3 | v23==4
 replace bano_ch=4 if v23==5
-replace bano_ch=5 if v23==4 
-replace bano_ch=6 if (v23==7 | v23==6)
+replace bano_ch=5 if v23==7 
+replace bano_ch=6 if v23==6
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=.
+generate banoex_ch=9
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1193,9 +1188,7 @@ la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-
 replace banomejorado_ch =1 if bano_ch<=3
-
 replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
 

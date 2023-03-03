@@ -1111,35 +1111,36 @@ la var subemp_ci "Personas en subempleo por horas"
 ****************
 generate aguared_ch =.
 replace aguared_ch = 1 if p4030s5==1 
-replace aguared_ch = 2 if p4030s5==2
+replace aguared_ch = 0 if p4030s5==2
 la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if p5050==1
-replace aguafconsumo_ch = 3 if p5050==10
-replace aguafconsumo_ch = 4 if p5050==3
-replace aguafconsumo_ch = 5 if p5050==5
-replace aguafconsumo_ch = 6 if p5050==8
-replace aguafconsumo_ch = 8 if p5050==6
-replace aguafconsumo_ch = 10 if (p5050==4 | p5050==7)
+replace aguafconsumo_ch = 1 if p5050==1 
+replace aguafconsumo_ch = 2 if p5050==7 
+replace aguafconsumo_ch = 3 if p5050==10 
+replace aguafconsumo_ch = 5 if p5050==5 
+replace aguafconsumo_ch = 6 if p5050==8 
 replace aguafconsumo_ch = 7 if p5050==2
+replace aguafconsumo_ch = 8 if p5050==6  
 replace aguafconsumo_ch = 9 if (p5050==4 | p5050==9)
+replace aguafconsumo_ch = 10 if (p5050==3| p5050==2)
+
 *****************
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if p5050==1
-replace aguafuente_ch = 3 if p5050==10
-replace aguafuente_ch = 4 if p5050==3
-replace aguafuente_ch = 5 if p5050==5
-replace aguafuente_ch = 6 if p5050==8
-replace aguafuente_ch = 8 if p5050==6
-replace aguafuente_ch = 10 if (p5050==4 | p5050==7)
+replace aguafuente_ch = 1 if p5050==1 
+replace aguafuente_ch = 2 if p5050==7 
+replace aguafuente_ch = 3 if p5050==10 
+replace aguafuente_ch = 5 if p5050==5 
+replace aguafuente_ch = 6 if p5050==8 
 replace aguafuente_ch = 7 if p5050==2
+replace aguafuente_ch = 8 if p5050==6  
 replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
+replace aguafuente_ch = 10 if (p5050==3 | p5050==2)
 
 
 *************
@@ -1147,8 +1148,7 @@ replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
 *************
 gen aguadist_ch=.
 replace aguadist_ch=1 if (p5050==1 | p5050==2)
-replace aguadist_ch=2 if p5050==3
-replace aguadist_ch=3 if p5050>=4
+replace aguadist_ch=0 if p5050>2
 
 
 **************
@@ -1196,8 +1196,8 @@ gen bano_ch=.
 replace bano_ch=0 if p5020==6
 replace bano_ch=1 if p5020==1
 replace bano_ch=2 if p5020==2
-replace bano_ch=3 if p5020==4
-replace bano_ch=4 if (p5020==3 | p5020==5)
+replace bano_ch=4 if p5020==5
+replace bano_ch=6 if p5020==3 | p5020 ==4
 
 ***************
 ***banoex_ch***
@@ -1228,8 +1228,6 @@ replace sinbano_ch = 0 if p5020<6
 *************
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
-
 
 ************
 ***luz_ch***

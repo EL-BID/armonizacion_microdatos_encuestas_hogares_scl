@@ -1108,10 +1108,8 @@ la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
-
-replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************

@@ -1123,10 +1123,13 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
 	
+
+	
 ****************
 ***aguared_ch***
 ****************
-generat aguared_ch=(vi10==1 |vi10==2 |vi10==3)
+gen aguared_ch =0
+replace aguared_ch=1 if vi10==1
 replace aguared_ch=. if vi10==.
 label var aguared_ch "Acceso a fuente de agua por red"
 
@@ -1140,11 +1143,10 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch = 0
 replace aguafuente_ch = 1 if vi10==1
-replace aguafuente_ch = 2 if (vi10==2 | vi10==3)
+replace aguafuente_ch = 2 if vi10==2
 replace aguafuente_ch = 6 if vi10==4
 replace aguafuente_ch = 8 if vi10==6
-replace aguafuente_ch = 9 if (vi10==5| vi10==7)
-
+replace aguafuente_ch = 10 if (vi10==3|vi10==5| vi10==7)
 
 *************
 *aguadist_ch*
@@ -1157,13 +1159,13 @@ replace aguadist_ch=3 if vi10a==3
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch = . 
+gen aguadisp1_ch = 9 
 
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = .
+gen aguadisp2_ch = 9
 
 
 
@@ -1194,39 +1196,40 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=6
-replace bano_ch=0 if vi09==5
+replace bano_ch=0 if vi09==5 & vi09a!=1
 replace bano_ch=1 if vi09==1
 replace bano_ch=2 if vi09==2
-replace bano_ch=3 if (vi09==3 | vi09==4)
-replace bano_ch=4 if (vi09a==1 | vi09a==2)
+replace bano_ch=3 if (vi09==3 )
+replace bano_ch=4 if (vi09 ==5 & vi09a==1)
+replace bano_ch=6 if vi09==4
 
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *****************
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-replace banomejorado_ch =1 if bano_ch<=3
-replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if vi09!=5
+replace sinbano_ch = 0 if vi09!=5| vi09a==1
 replace sinbano_ch = 1 if vi09a==3
-replace sinbano_ch = 2 if (vi09a==2 | vi09a==1)
+replace sinbano_ch = 2 if vi09a==2
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 
 	************
@@ -1595,7 +1598,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first
 

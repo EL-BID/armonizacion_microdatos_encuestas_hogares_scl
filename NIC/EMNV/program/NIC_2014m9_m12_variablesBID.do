@@ -1208,8 +1208,9 @@ gen aguafconsumo_ch = 0
 gen aguafuente_ch = 1 if s1p15==1 | s1p15==2
 replace aguafuente_ch = 2 if s1p15==3
 replace aguafuente_ch= 6 if s1p15==7
-replace aguafuente_ch = 8 if s1p15==6
-replace aguafuente_ch= 10 if s1p15==4 | s1p15==5 | s1p15==8 | s1p15==9 | s1p15==10
+replace aguafuente_ch = 8 if s1p15==6 | s1p15==8
+replace aguafuente_ch =9 if | s1p15==9
+replace aguafuente_ch= 10 if s1p15==4 | s1p15==5 | s1p15==10
 
 *************
 *aguadist_ch*
@@ -1217,7 +1218,7 @@ replace aguafuente_ch= 10 if s1p15==4 | s1p15==5 | s1p15==8 | s1p15==9 | s1p15==
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  s1p15==1
 replace aguadist_ch= 2 if  s1p15==2
-replace aguadist_ch= 3 if  s1p15>2
+replace aguadist_ch= 3 if  s1p15==3
 
 **************
 *aguadisp1_ch*
@@ -1237,9 +1238,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1247,9 +1246,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1261,16 +1258,16 @@ gen aguamide_ch = .
 
 
 
-*****************
-*bano_ch         *  Altered
-*****************
+*********
+*bano_ch* 
+*********
 gen bano_ch=.
-replace bano_ch=0 if s1p18==6
-replace bano_ch=1 if s1p18==3
-replace bano_ch=2 if s1p18==4
-replace bano_ch=3 if s1p18==2
-replace bano_ch=4 if s1p18==5
-replace bano_ch=5 if s1p18==1
+replace bano_ch=0 if s1p18==6 
+replace bano_ch=1 if s1p18==3 
+replace bano_ch=2 if s1p18==4 
+replace bano_ch=3 if s1p18==2 
+replace bano_ch=4 if s1p18==5 
+replace bano_ch=6 if s1p18==1 
 
 
 ***************
@@ -1284,10 +1281,8 @@ la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
-
-replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************
@@ -1300,7 +1295,7 @@ replace sinbano_ch = 0 if s1p18!=6
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = .
+gen aguatrat_ch =9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 

@@ -1276,45 +1276,43 @@ label var edupub_ci "Personas asisten a centros de enseñanza públicos"
 *                                                     VARIABLES DE LA VIVIENDA                                                       *
 *====================================================================================================================================*
 
-
-
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=.
-replace aguared_ch=1 if (V11==1 | V11==2)
-replace aguared_ch=0 if (V11==0 | V11==3)
+gen aguared_ch=0
+replace aguared_ch=1 if (v12 <= 4 & v11 <3)
 label var aguared_ch "Acceso a una fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (V11==1 | V11==2) & V12<=4
-replace aguafconsumo_ch = 2 if V11==3 & V12<=4
-replace aguafconsumo_ch = 5 if V11==7
-replace aguafconsumo_ch = 8 if V11==6
-replace aguafconsumo_ch = 9 if V11==5
+replace aguafconsumo_ch = 1 if (v11==1 | v11==2) & v12<=4
+replace aguafconsumo_ch = 2 if (v11==3|v11==0) & v12<=4
+replace aguafconsumo_ch = 5 if v12==7
+replace aguafconsumo_ch = 8 if v12==6
+replace aguafconsumo_ch = 10 if v12==5
 
 *****************
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if (V11==1 | V11==2) & V12<=4
-replace aguafuente_ch = 2 if V11==3 & V12<=4
-replace aguafuente_ch = 5 if V11==7
-replace aguafuente_ch = 8 if V11==6
-replace aguafuente_ch = 9 if V11==5
+gen aguafuente_ch = .
+replace aguafuente_ch = 1 if (v11==1 | v11==2) & v12<=4
+replace aguafuente_ch = 2 if (v11==3|v11==0) & v12<=4
+replace aguafuente_ch = 5 if v12==7
+replace aguafuente_ch = 8 if v12==6
+replace aguafuente_ch = 10 if v12==5
 
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=.
-replace aguadist_ch=1 if V11==1
-replace aguadist_ch=2 if V11==2
-replace aguadist_ch=3 if V11==3
+replace aguadist_ch=1 if v11==1
+replace aguadist_ch=2 if v11==2
+replace aguadist_ch=3 if v11==3  
+replace aguadist_ch=0 if v11==0
 label define aguadist_ch 1 "tubería dentro de la vivienda" 2 " tubería fuera de la vivienda pero dentro del lote o edificio" 3 "tubería fuera del lote o edificio"
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 
@@ -1322,13 +1320,13 @@ label var aguadist_ch "Ubicación de la principal fuente de agua"
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch = . 
+gen aguadisp1_ch = 9
 
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = .
+gen aguadisp2_ch = 9
 
 
 *************
@@ -1356,18 +1354,16 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if V13A==0 
-replace bano_ch=1 if V13A==1
-replace bano_ch=2 if V13A==2
-replace bano_ch=3 if V13A==3
-replace bano_ch=5 if V13A==4
-replace bano_ch=6 if V13A==5
+replace bano_ch=0 if v13a==0 
+replace bano_ch=1 if v13a==1
+replace bano_ch=2 if v13a==2 | v13a==3
+replace bano_ch=6 if v13a==5 | v13a==4
 ***************
 ***banoex_ch***
 ***************
 gen banoex_ch=.
-replace banoex_ch=1 if V14B==1
-replace banoex_ch=0 if V14B==2
+replace banoex_ch=1 if v14b==1
+replace banoex_ch=0 if v14b==2
 label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
 
 *****************
@@ -1377,18 +1373,17 @@ gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3
 replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
 
-
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = 3
-replace sinbano_ch = 0 if V13A!=0 & V13A!=9
+gen sinbano_ch = 0
+replace sinbano_ch = 3 if v13a==0
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 
 ********************************************************************************************************************************
@@ -1787,7 +1782,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

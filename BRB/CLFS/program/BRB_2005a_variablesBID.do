@@ -607,6 +607,13 @@ replace ylmpri_ci=((1300+1600)/2)*4.3 if earngs==11 & emp_ci==1
 
 label var ylmpri_ci "Monto mensual de ingreso laboral de la actividad principal"
 
+*******************
+*** nrylmpri_ci ***
+*******************
+
+gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
+label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal" 
+
 ********************************
 * INGRESO MENSUAL NO MONETARIO *
 ********************************
@@ -668,6 +675,20 @@ gen ylm_ch=.
 bys idh_ch: replace ylm_ch=sum(ylm_ci) if miembros_ci==1 
 label var ylm_ch "Ingreso Laboral Monetario del Hogar (Bruto)"
 
+*******************
+*** nrylmpri_ch ***
+*******************
+by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing
+replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
+replace nrylmpri_ch=. if nrylmpri_ch==.
+label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
+
+**************************************************************
+* INGRESO MENSUAL NO LABORAL OTRAS ACTIVIDADES no respuesta  *
+**************************************************************
+egen ylmnr_ch=sum(ylm_ci) if miembros_ci==1 & nrylmpri_ch==0, by(idh_ch)
+label var ylmnr_ch "Ingreso Laboral Monetario del Hogar, considera 'missing' la No Respuesta"
+
 **************************************************
 * INGRESO MENSUAL LABORAL NO MONETARIO DEL HOGAR *
 **************************************************
@@ -715,7 +736,7 @@ label var autocons_ci "Monto mensual de ingreso por autoconsumo individuo"
 *****************************************************
 * MONTO MENSUAL DE INGRESO POR AUTOCONSUMO DEL HOGAR*
 *****************************************************
-egen autocons_ch=.
+gen autocons_ch=.
 label var autocons_ch "Autoconsumo del Hogar"
 
 ***************************
@@ -951,8 +972,7 @@ g vivialqimp_ch=.
 g tcylmpri_ci=.
 g tcylmpri_ch=.
 g instcot_ci=.
-g edus1i_ci=.
-g edus1c_ci=.
+
 
 rename x1 x_1
 rename x2 x_2

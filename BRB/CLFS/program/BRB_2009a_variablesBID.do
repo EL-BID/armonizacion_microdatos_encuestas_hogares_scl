@@ -81,6 +81,13 @@ label values region_BID_c region_BID
 ***************
 g region_ci=.
 
+g ine01=.
+
+*** calidad ****
+
+g upm_ci=.
+g estrato_ci=.
+
 ***************
 *    ZONA     *
 ***************

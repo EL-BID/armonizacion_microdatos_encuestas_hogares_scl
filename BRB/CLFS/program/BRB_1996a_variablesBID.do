@@ -13,16 +13,16 @@ set more off
 global ruta = "${surveysFolder}"
 
 local PAIS BRB
-local ENCUESTA CLFS
+local ENCUESTA CLFS_SLC
 local ANO "1996"
-local ronda a
+local ronda "m10-1996_m7-1997"
 
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
-local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_orig\\`PAIS'_`ANO'`ronda'.dta"
-local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
+*local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local base_in  = "Z:\survey\BRB\CLFS_SLC\1996\m10-1996_m7-1997\data_orig\brb9697.dta"
+local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'm7_BID.dta"
    
 capture log close
-log using "`log_file'", replace 
+*log using "`log_file'", replace 
 
 *log off
 

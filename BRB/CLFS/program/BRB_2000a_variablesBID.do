@@ -260,14 +260,14 @@ label variable nmayor65_ch "Numero de personas de 65 años o mas dentro del Hoga
 *  MIEMBROS EN EL HOGAR MENORES DE 6 AÑOS *
 ********************************************
 * No hay menores de 7 años en la encuesta
-egen nmenor6_ch=.
+gen nmenor6_ch=.
 label variable nmenor6_ch "Miembros menores a 6 años dentro del Hogar"
 
 ******************************************
 *  MIEMBROS EN EL HOGAR MENORES DE 1 AÑO *
 ******************************************
 * No hay menores de 7 años en la encuesta
-egen nmenor1_ch=.
+gen nmenor1_ch=.
 label variable nmenor1_ch "Miembros menores a 1 año dentro del Hogar"
 
 ********************************************
@@ -596,6 +596,13 @@ replace ylmpri_ci=((800+899)/2) if earngs==8 & emp_ci==1
 replace ylmpri_ci=((900+999)/2) if earngs==9 & emp_ci==1
 label var ylmpri_ci "Monto mensual de ingreso laboral de la actividad principal"
 
+*******************
+*** nrylmpri_ci ***
+*******************
+
+gen nrylmpri_ci=(ylmpri_ci==. & emp_ci==1)
+label var nrylmpri_ci "Id no respuesta ingreso de la actividad principal"  
+
 *******************************
 * INGRESO MENSUAL NO MONETARIO*
 *******************************
@@ -654,6 +661,7 @@ label var ynlnm_ci "Ingreso mensual NO laboral NO monetario otras actividades"
 * INGRESO MENSUAL LABORAL DEL HOGAR *
 *************************************
 gen ylm_ch=.
+sort idh_ch
 by idh_ch: replace ylm_ch=sum(ylm_ci) if miembros_ci==1 
 label var ylm_ch "Ingreso Laboral Monetario del Hogar (Bruto)"
 
@@ -662,6 +670,14 @@ label var ylm_ch "Ingreso Laboral Monetario del Hogar (Bruto)"
 **************************************************
 egen ylnm_ch=sum(ylnm_ci) if miembros_ci==1, by(idh_ch)
 label var ylnm_ch "Ingreso Laboral No Monetario del Hogar"
+
+*******************
+*** nrylmpri_ch ***
+*******************
+by idh_ch, sort: egen nrylmpri_ch=sum(nrylmpri_ci) if miembros_ci==1, missing
+replace nrylmpri_ch=1 if nrylmpri_ch>0 & nrylmpri_ch<.
+replace nrylmpri_ch=. if nrylmpri_ch==.
+label var nrylmpri_ch "Hogares con algún miembro que no respondió por ingresos"
 
 **************************************************************
 * INGRESO MENSUAL NO LABORAL OTRAS ACTIVIDADES no respuesta  *

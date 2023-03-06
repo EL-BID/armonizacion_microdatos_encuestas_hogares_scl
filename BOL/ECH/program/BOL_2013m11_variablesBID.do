@@ -1814,8 +1814,8 @@ replace banoex_ch = 1 if s1_13==1
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-replace banomejorado_ch =1 if s1_11 <= 2 | s1_11 == 4 & s1_12 != 4
-replace banomejorado_ch =0 if (s1_11 == 6| s1_11 == 3) | s1_12 == 4
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************

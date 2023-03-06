@@ -1821,9 +1821,9 @@ label var edupub_ci "Asiste a un centro de ensenanza público"
   *****************
   *banomejorado_ch*  Altered
   *****************
-  gen banomejorado_ch= 2
-  replace banomejorado_ch =1 if s1a_11 <= 2 | s1a_11 == 4 & s1a_12 != 4
-  replace banomejorado_ch =0 if (s1a_11 == 6| s1a_11 == 3) | s1a_12 == 4
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
   
   
   ************

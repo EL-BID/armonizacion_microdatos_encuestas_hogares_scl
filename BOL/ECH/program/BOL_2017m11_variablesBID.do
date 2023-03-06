@@ -1852,8 +1852,8 @@ replace bano_ch=5 if s01a_15 ==3 & s01a_16!=4
 *****************
 
 gen banomejorado_ch= 2
-replace banomejorado_ch =1 if s01a_15 <= 2 | s01a_15 == 4 & s01a_16 != 4
-replace banomejorado_ch =0 if (s01a_15 == 5| s01a_15 == 3) | s01a_16 == 4
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 **#		

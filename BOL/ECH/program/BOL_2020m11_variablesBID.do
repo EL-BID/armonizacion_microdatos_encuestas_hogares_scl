@@ -1999,8 +1999,8 @@ gen banoex_ch =.
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-replace banomejorado_ch =1 if bano_ch <=3
-replace banomejorado_ch =0 if (bano_ch == 4 | bano_ch == 5 | bano_ch ==0)
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 

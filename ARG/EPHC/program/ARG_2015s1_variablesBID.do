@@ -1233,11 +1233,9 @@ replace bano_ch=4 if iv11==4
 *****************
 *banomejorado_ch*  Altered
 *****************
-gen	banomejorado_ch=0
-replace banomejorado_ch=1 if iv10<3 & iv10>=1  & iv11==1
-replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==2
-replace banomejorado_ch=1 if iv10<3 & iv10>=1   & iv11==3
-replace banomejorado_ch=2 if iv11==9
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 **#
 

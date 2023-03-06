@@ -1696,9 +1696,9 @@ gen banoex_ch=.
 *****************
 *banomejorado_ch*  Altered
 *****************
-gen banomejorado_ch=0
-replace banomejorado_ch=1 if p111 <=4
-replace banomejorado_ch=2 if  (p111 == 5 | p111 ==7)
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************

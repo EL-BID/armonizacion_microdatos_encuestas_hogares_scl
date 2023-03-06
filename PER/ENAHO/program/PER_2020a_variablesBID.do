@@ -1773,9 +1773,9 @@ replace bano_ch = 6 if (p111a == 5 | p111a ==7)
 *****************
 *banomejorado_ch*  Altered
 *****************
-gen banomejorado_ch=0
-replace banomejorado_ch=1 if p111a<=4
-replace banomejorado_ch=2 if  (p111a == 5 | p111a ==7)
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 **#		
 ****************

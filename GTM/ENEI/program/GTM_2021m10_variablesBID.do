@@ -1240,42 +1240,42 @@ la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if (P02A05A==1| P02B03==1 | P02B03==2)
-replace aguared_ch = 0 if (P02A05A==2 | P02B03>2)
+replace aguared_ch = 1 if p02a05a==1
+replace aguared_ch = 0 if p02a05a==2
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (P02B03==1 | P02B03==2)
-replace aguafconsumo_ch = 2 if P02B03==3
-replace aguafconsumo_ch= 4 if P02B03==4
-replace aguafconsumo_ch = 5 if P02B03==7
-replace aguafconsumo_ch = 6 if P02B03==6
-replace aguafconsumo_ch = 8 if P02B03==5
-replace aguafconsumo_ch = 10 if P02B03==98
+replace aguafconsumo_ch = 1 if (p02b03==1 | p02b03==2) & p02b04!=5
+replace aguafconsumo_ch = 2 if p02b03==3 & p02b04!=5
+replace aguafconsumo_ch = 3 if p02b04==5 
+replace aguafconsumo_ch = 5 if p02b03==7 & p02b04!=5
+replace aguafconsumo_ch = 6 if p02b03==6 & p02b04!=5
+replace aguafconsumo_ch = 8 if p02b03==5 & p02b04!=5
+replace aguafconsumo_ch = 10 if (p02b03==98 | p02b03==4) & p02b04!=5
 
 
 *****************
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if (P02B03==1 | P02B03==2)
-replace aguafuente_ch = 2 if P02B03==3
-replace aguafuente_ch= 4 if P02B03==4
-replace aguafuente_ch = 5 if P02B03==7
-replace aguafuente_ch= 6 if P02B03==6
-replace aguafuente_ch = 8 if P02B03==5
-replace aguafuente_ch= 10 if P02B03==98
+gen aguafuente_ch = 1 if (p02b03==1 | p02b03==2)
+replace aguafuente_ch = 2 if p02b03==3
+replace aguafuente_ch = 5 if p02b03==7
+replace aguafuente_ch= 6 if p02b03==6
+replace aguafuente_ch = 8 if p02b03==5
+replace aguafuente_ch= 10 if p02b03==98 | p02b03==4
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  P02B03 ==1
-replace aguadist_ch= 2 if  P02B03 ==2
-replace aguadist_ch= 3 if  P02B03>=3 & P02B03 <=7 | P02B03==98
+replace aguadist_ch= 1 if  p02b03 ==1
+replace aguadist_ch= 2 if  p02b03 ==2
+replace aguadist_ch= 3 if  p02b03==3
+replace aguadist_ch= 0 if  p02b03>=4 & p02b03 <=98
 
 **************
 *aguadisp1_ch*
@@ -1295,9 +1295,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1305,9 +1303,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1315,8 +1311,8 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 *****************
 ***aguamide_ch***
 *****************
-gen aguamide_ch = 1 if  P02A05E==1
-replace aguamide_ch =  0 if P02A05E==2
+gen aguamide_ch = 1 if  p02a05e==1
+replace aguamide_ch =  0 if p02a05e==2
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 
@@ -1324,11 +1320,10 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if P02B07==5
-replace bano_ch=1 if P02B07==1
-replace bano_ch=2 if P02B07==2
-replace bano_ch=3 if P02B07==4
-replace bano_ch=6 if P02B07==3
+replace bano_ch=0 if p02b07==5
+replace bano_ch=1 if p02b07==1
+replace bano_ch=2 if p02b07==2
+replace bano_ch=6 if p02b07==3|p02b07==4
 
 ***************
 ***banoex_ch***
@@ -1349,7 +1344,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if P02B07!=5
+replace sinbano_ch = 0 if p02b07!=5
 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
@@ -1357,10 +1352,9 @@ replace sinbano_ch = 0 if P02B07!=5
 *aguatrat_ch*
 *************
 gen aguatrat_ch = 9
-replace aguatrat_ch = 1 if P02B04!=1
-replace aguatrat_ch = 0 if P02B04==1
+replace aguatrat_ch = 1 if p02b04!=1
+replace aguatrat_ch = 0 if p02b04==1|p02b04==5 
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
 
 
 

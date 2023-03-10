@@ -1170,21 +1170,21 @@ replace edupub_ci=0 if p03a03==2 // asiste y es privado
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if (p02a05a==1| p02b03==1 | p02b03==2)
-replace aguared_ch = 0 if (p02a05a==2 | p02b03>2)
+replace aguared_ch = 1 if p02a05a==1
+replace aguared_ch = 0 if p02a05a==2
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (p02b03==1 | p02b03==2)
-replace aguafconsumo_ch = 2 if p02b03==3
-replace aguafconsumo_ch= 4 if p02b03==4
-replace aguafconsumo_ch = 5 if p02b03==7
-replace aguafconsumo_ch = 6 if p02b03==6
-replace aguafconsumo_ch = 8 if p02b03==5
-replace aguafconsumo_ch = 10 if p02b03==98
+replace aguafconsumo_ch = 1 if (p02b03==1 | p02b03==2) & p02b04!=5
+replace aguafconsumo_ch = 2 if p02b03==3 & p02b04!=5
+replace aguafconsumo_ch = 3 if p02b04==5 
+replace aguafconsumo_ch = 5 if p02b03==7 & p02b04!=5
+replace aguafconsumo_ch = 6 if p02b03==6 & p02b04!=5
+replace aguafconsumo_ch = 8 if p02b03==5 & p02b04!=5
+replace aguafconsumo_ch = 10 if (p02b03==98 | p02b03==4) & p02b04!=5
 
 
 *****************
@@ -1193,11 +1193,10 @@ replace aguafconsumo_ch = 10 if p02b03==98
 
 gen aguafuente_ch = 1 if (p02b03==1 | p02b03==2)
 replace aguafuente_ch = 2 if p02b03==3
-replace aguafuente_ch= 4 if p02b03==4
 replace aguafuente_ch = 5 if p02b03==7
 replace aguafuente_ch= 6 if p02b03==6
 replace aguafuente_ch = 8 if p02b03==5
-replace aguafuente_ch= 10 if p02b03==98
+replace aguafuente_ch= 10 if p02b03==98 | p02b03==4
 
 *************
 *aguadist_ch*
@@ -1205,7 +1204,8 @@ replace aguafuente_ch= 10 if p02b03==98
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  p02b03 ==1
 replace aguadist_ch= 2 if  p02b03 ==2
-replace aguadist_ch= 3 if  p02b03>=3 & p02b03 <=7 | p02b03==98
+replace aguadist_ch= 3 if  p02b03==3
+replace aguadist_ch= 0 if  p02b03>=4 & p02b03 <=98
 
 **************
 *aguadisp1_ch*
@@ -1225,9 +1225,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1235,9 +1233,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1257,8 +1253,7 @@ gen bano_ch=.
 replace bano_ch=0 if p02b07==5
 replace bano_ch=1 if p02b07==1
 replace bano_ch=2 if p02b07==2
-replace bano_ch=3 if p02b07==4
-replace bano_ch=6 if p02b07==3
+replace bano_ch=6 if p02b07==3|p02b07==4
 
 ***************
 ***banoex_ch***
@@ -1288,7 +1283,7 @@ replace sinbano_ch = 0 if p02b07!=5
 *************
 gen aguatrat_ch = 9
 replace aguatrat_ch = 1 if p02b04!=1
-replace aguatrat_ch = 0 if p02b04==1
+replace aguatrat_ch = 0 if p02b04==1|p02b04==5 
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 

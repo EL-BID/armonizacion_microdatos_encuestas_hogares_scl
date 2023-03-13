@@ -1408,8 +1408,8 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if DV105==1 
-replace aguared_ch = 0 if DV105!=1
+replace aguared_ch = 1 if dv105==1 
+replace aguared_ch = 0 if dv105!=1
 la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
@@ -1422,21 +1422,21 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch = 1 if DV105==1 & DV106<=2
-replace aguafuente_ch = 2 if (DV105==1 & DV106>2) | DV105==4
-replace aguafuente_ch = 6 if DV105==6
-replace aguafuente_ch = 7 if DV105==7
-replace aguafuente_ch = 8 if DV105==5
-replace aguafuente_ch = 9 if DV105==8 
-replace aguafuente_ch = 10 if DV105==9 | DV105==2 | DV105==3
+gen aguafuente_ch = 1 if dv105==1 & dv106<=2
+replace aguafuente_ch = 2 if (dv105==1 & dv106>2) | dv105==4
+replace aguafuente_ch = 6 if dv105==6
+replace aguafuente_ch = 7 if dv105==7
+replace aguafuente_ch = 8 if dv105==5
+replace aguafuente_ch = 9 if dv105==8 
+replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if DV106==1
-replace aguadist_ch= 2 if DV106==2
-replace aguadist_ch= 3 if DV106==3 | DV106 ==4
+replace aguadist_ch= 1 if dv106==1
+replace aguadist_ch= 2 if dv106==2
+replace aguadist_ch= 3 if dv106==3 | dv106 ==4
 
 **************
 *aguadisp1_ch*
@@ -1473,19 +1473,19 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if DH204==2
-replace bano_ch=1 if DH205==1
-replace bano_ch=2 if DH205==2
-replace bano_ch=3 if DH205==6 | DH205==7
-replace bano_ch=4 if (DH205==3 | DH205==4)
-replace bano_ch=6 if DH205==8 | DH205==5 
+replace bano_ch=0 if dh204==2
+replace bano_ch=1 if dh205==1
+replace bano_ch=2 if dh205==2
+replace bano_ch=3 if dh205==6 | dh205==7
+replace bano_ch=4 if (dh205==3 | dh205==4)
+replace bano_ch=6 if dh205==8 | dh205==5 
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=9
-replace banoex_ch = 1 if DH206==1
-replace banoex_ch = 0 if DH206==2
+replace banoex_ch = 1 if dh206==1
+replace banoex_ch = 0 if dh206==2
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1501,7 +1501,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if DH204==1
+replace sinbano_ch = 0 if dh204==1
 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 

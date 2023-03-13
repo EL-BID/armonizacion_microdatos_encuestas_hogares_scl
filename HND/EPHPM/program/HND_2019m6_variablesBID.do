@@ -1424,11 +1424,11 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch = 1 if DV105==1 & DV106<=2
 replace aguafuente_ch = 2 if (DV105==1 & DV106>2) | DV105==4
-replace aguafuente_ch = 4 if DV105==2 | DV105==3
 replace aguafuente_ch = 6 if DV105==6
 replace aguafuente_ch = 7 if DV105==7
 replace aguafuente_ch = 8 if DV105==5
-replace aguafuente_ch = 10 if (DV105==8 | DV105==9)
+replace aguafuente_ch = 9 if DV105==8 
+replace aguafuente_ch = 10 if DV105==9 | DV105==2 | DV105==3
 
 *************
 *aguadist_ch*
@@ -1436,7 +1436,7 @@ replace aguafuente_ch = 10 if (DV105==8 | DV105==9)
 gen aguadist_ch=0
 replace aguadist_ch= 1 if DV106==1
 replace aguadist_ch= 2 if DV106==2
-replace aguadist_ch= 3 if DV106==3
+replace aguadist_ch= 3 if DV106==3 | DV106 ==4
 
 **************
 *aguadisp1_ch*
@@ -1448,28 +1448,19 @@ gen aguadisp1_ch =9
 **************
 gen aguadisp2_ch = 9
 
-
-
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
-
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-
-
 
 *****************
 ***aguamide_ch***
@@ -1485,9 +1476,9 @@ gen bano_ch=.
 replace bano_ch=0 if DH204==2
 replace bano_ch=1 if DH205==1
 replace bano_ch=2 if DH205==2
-replace bano_ch=3 if (DH205==5 | DH205==6 | DH205==7)
+replace bano_ch=3 if DH205==6 | DH205==7
 replace bano_ch=4 if (DH205==3 | DH205==4)
-replace bano_ch=6 if DH205==8
+replace bano_ch=6 if DH205==8 | DH205==5 
 
 ***************
 ***banoex_ch***

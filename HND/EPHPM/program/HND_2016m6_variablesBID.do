@@ -1375,7 +1375,7 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if DV06<=1 
+replace aguared_ch = 1 if DV06<=2 
 replace aguared_ch = 0 if DV06>2
 la var aguared_ch "Acceso a fuente de agua por red"
 
@@ -1391,11 +1391,11 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch = 1 if DV06<=2 & DV07<=2
 replace aguafuente_ch = 2 if (DV06<=2 & DV07>2) | DV06==8
-replace aguafuente_ch = 4 if DV06==3 | DV06==4
 replace aguafuente_ch = 6 if DV06==6
 replace aguafuente_ch = 7 if DV06==7
 replace aguafuente_ch = 8 if DV06==5
-replace aguafuente_ch = 10 if (DV06==9 | DV06==10)
+replace aguafuente_ch = 9 if DV06==9
+replace aguafuente_ch = 10 if  DV06==10 |DV06==3 | DV06==4
 
 *************
 *aguadist_ch*
@@ -1403,7 +1403,7 @@ replace aguafuente_ch = 10 if (DV06==9 | DV06==10)
 gen aguadist_ch=0
 replace aguadist_ch= 1 if DV07==1
 replace aguadist_ch= 2 if DV07==2
-replace aguadist_ch= 3 if DV07==3
+replace aguadist_ch= 3 if DV07==3|DV07 ==4
 
 **************
 *aguadisp1_ch*
@@ -1421,9 +1421,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1431,9 +1429,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1452,9 +1448,9 @@ gen bano_ch=.
 replace bano_ch=0 if DH05==2
 replace bano_ch=1 if DH06==1
 replace bano_ch=2 if DH06==2
-replace bano_ch=3 if (DH06==5 | DH06==6 | DH06==7 | DH06==8)
+replace bano_ch=3 if ( DH06==6 | DH06==7 | DH06==8)
 replace bano_ch=4 if (DH06==3 | DH06==4)
-replace bano_ch=6 if DH06==9
+replace bano_ch=6 if DH06==9 | DH06==5 
 
 ***************
 ***banoex_ch***
@@ -1486,7 +1482,6 @@ replace sinbano_ch = 0 if DH05==1
 *************
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
 
 ********
 *luz_ch*

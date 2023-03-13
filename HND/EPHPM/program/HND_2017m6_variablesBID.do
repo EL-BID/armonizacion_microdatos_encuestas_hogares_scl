@@ -1333,11 +1333,12 @@ label value  pqnoasis1_ci pqnoasis1_ci
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
+
 ****************
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if dv06<=1 
+replace aguared_ch = 1 if dv06<=2 
 replace aguared_ch = 0 if dv06>2
 la var aguared_ch "Acceso a fuente de agua por red"
 
@@ -1353,11 +1354,11 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch = 1 if dv06<=2 & dv07<=2
 replace aguafuente_ch = 2 if (dv06<=2 & dv07>2) | dv06==8
-replace aguafuente_ch = 4 if dv06==3 | dv06==4
 replace aguafuente_ch = 6 if dv06==6
 replace aguafuente_ch = 7 if dv06==7
 replace aguafuente_ch = 8 if dv06==5
-replace aguafuente_ch = 10 if (dv06==9 | dv06==10)
+replace aguafuente_ch = 9 if dv06==9
+replace aguafuente_ch = 10 if  dv06==10 |dv06==3 | dv06==4
 
 *************
 *aguadist_ch*
@@ -1365,7 +1366,7 @@ replace aguafuente_ch = 10 if (dv06==9 | dv06==10)
 gen aguadist_ch=0
 replace aguadist_ch= 1 if dv07==1
 replace aguadist_ch= 2 if dv07==2
-replace aguadist_ch= 3 if dv07==3
+replace aguadist_ch= 3 if dv07==3|dv07 ==4
 
 **************
 *aguadisp1_ch*
@@ -1383,9 +1384,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1393,9 +1392,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1414,9 +1411,9 @@ gen bano_ch=.
 replace bano_ch=0 if dh05==2
 replace bano_ch=1 if dh06==1
 replace bano_ch=2 if dh06==2
-replace bano_ch=3 if (dh06==5 | dh06==6 | dh06==7 | dh06==8)
+replace bano_ch=3 if ( dh06==6 | dh06==7 | dh06==8)
 replace bano_ch=4 if (dh06==3 | dh06==4)
-replace bano_ch=6 if dh06==9
+replace bano_ch=6 if dh06==9 | dh06==5 
 
 ***************
 ***banoex_ch***
@@ -1448,6 +1445,7 @@ replace sinbano_ch = 0 if dh05==1
 *************
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 
 
 ********

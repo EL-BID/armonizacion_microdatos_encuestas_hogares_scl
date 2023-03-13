@@ -1203,7 +1203,7 @@ gen bano_ch=.
 replace bano_ch=0 if tipo_sanitario==4
 replace bano_ch=1 if tipo_sanitario==1
 replace bano_ch=2 if tipo_sanitario==2
-replace bano_ch=3 if tipo_sanitario==3
+replace bano_ch=6 if tipo_sanitario==3
 
 ***************
 ***banoex_ch***

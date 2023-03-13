@@ -1277,7 +1277,7 @@ gen bano_ch=.
 replace bano_ch=0 if tipo_sanitario==4
 replace bano_ch=1 if tipo_sanitario==1
 replace bano_ch=2 if tipo_sanitario==2
-replace bano_ch=3 if tipo_sanitario==3
+replace bano_ch=6 if tipo_sanitario==3
 
 ***************
 ***banoex_ch***
@@ -1290,10 +1290,8 @@ la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
-
-replace banomejorado_ch =1 if bano_ch<=3
-
-replace banomejorado_ch =0 if bano_ch>=4 & bano_ch!=6
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 ************
@@ -1309,7 +1307,6 @@ replace sinbano_ch = 0 if tipo_sanitario!=4
 *************
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
 
 ************
 ***luz_ch***

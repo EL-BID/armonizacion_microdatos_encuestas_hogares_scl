@@ -1117,7 +1117,6 @@ label var edupub_ci "Asiste a un centro de enseñanza público"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
 ****************
 ***aguared_ch***
 ****************
@@ -1138,10 +1137,12 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 gen aguafuente_ch = 1 if (donde_proviene_agua==1 | donde_proviene_agua==2)
-replace aguafuente_ch = 2 if (donde_proviene_agua==3 | donde_proviene_agua==4 | donde_proviene_agua==5)
+replace aguafuente_ch = 2 if (donde_proviene_agua==4 | donde_proviene_agua==5)
 replace aguafuente_ch = 5 if donde_proviene_agua==7
 replace aguafuente_ch = 6 if donde_proviene_agua==9
-replace aguafuente_ch = 10 if (donde_proviene_agua==6 | donde_proviene_agua==8 | donde_proviene_agua==99)
+replace aguafuente_ch = 8 if donde_proviene_agua==6
+replace aguafuente_ch = 9 if donde_proviene_agua==3
+replace aguafuente_ch = 10 if donde_proviene_agua==8 | donde_proviene_agua==99)
 
 
 *************
@@ -1150,7 +1151,7 @@ replace aguafuente_ch = 10 if (donde_proviene_agua==6 | donde_proviene_agua==8 |
 gen aguadist_ch=0
 replace aguadist_ch=1 if donde_proviene_agua==1
 replace aguadist_ch=2 if donde_proviene_agua==2
-replace aguadist_ch=3 if donde_proviene_agua>2 & donde_proviene_agua!=99
+replace aguadist_ch=3 if donde_proviene_agua==3|donde_proviene_agua== 4 
 
 
 **************
@@ -1195,7 +1196,7 @@ gen bano_ch=.
 replace bano_ch=0 if tipo_sanitario==5
 replace bano_ch=1 if (tipo_sanitario==1 | tipo_sanitario==2) & se_encuentra_conectada_a==2
 replace bano_ch=2 if (tipo_sanitario==1 | tipo_sanitario==2) & se_encuentra_conectada_a==1
-replace bano_ch=3 if (tipo_sanitario==3 | tipo_sanitario==4)
+replace bano_ch=6 if (tipo_sanitario==3 | tipo_sanitario==4)
 
 ***************
 ***banoex_ch***
@@ -1227,8 +1228,6 @@ replace sinbano_ch = 0 if tipo_sanitario!=5
 *************
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
-
 
 
 ************

@@ -966,54 +966,56 @@ label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 
+
 ****************
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if (r312==1| r312==3)
-replace aguared_ch = 0 if (r312!=1 & r312!=3)
+replace aguared_ch = 1 if r312==1 | r312==2| r312==3| r312==4
+replace aguared_ch = 0 if r312> 4
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-
+replace aguafconsumo_ch= 3 if r315 ==3
 *****************
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if r312==1 | r312==3
+gen aguafuente_ch = 1 if r312==1 | r312==2| r312==3| r312==4
 replace aguafuente_ch = 2 if r313==2
-replace aguafuente_ch= 4 if (r313==4 | r313==4.1 | r313==5 | r313==5.1)
+replace aguafuente_ch= 4 if (r313==5 | r313==5.1)
 replace aguafuente_ch = 5 if r313==10
 replace aguafuente_ch= 6 if r313==3
-replace aguafuente_ch= 7 if r312==4.1 | r313==8
-replace aguafuente_ch = 8 if r313==7
-replace aguafuente_ch= 9 if r313==1 | r313==11
-replace aguafuente_ch= 10 if r312==2 | r312==4 | r313==6 | r313==6.1 | r313==9 | r313==13 | r313==12
+replace aguafuente_ch= 7 if r312==4.1 | r313==8 | r313==1 |r313==11
+replace aguafuente_ch = 8 if r313==7 | r313 ==9
+replace aguafuente_ch= 9 if  r313==6 |r313==6.1
+replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | r313==4.1   
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  (r312==1 | r312==2)
-replace aguadist_ch= 2 if  (r312==3| r312==4)
+replace aguadist_ch= 1 if  (r312==1 | r312==2) | r313==1 | r313==3 | r313==4| r313==5 | r313==6
+replace aguadist_ch= 2 if  (r312==3| r312==4|r312 == 4.1)
+replace aguadist_ch=3 if r313==2 | r313==4.1| r313==5.1 | r313==6.1 | r313==12 | r313==11 | r313==6.1
+
 
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch = 1 if r312d==7 & r312h == 24
-replace aguadisp1_ch = 0 if r312d!=7 & r312h!=24
+gen aguadisp1_ch =9
 
 
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 1 if r312d<=3 | r312h <12
-replace aguadisp2_ch = 2 if r312d>=4 & r312h >= 12
-replace aguadisp2_ch = 3 if r312d==7 & r312h == 24
+gen aguadisp2_ch = 1 if r312d<=3 | r312h<=11 
+replace aguadisp2_ch = 2 if r312d>=4 & r312h>=12
+replace aguadisp2_ch = 3 if r312d==7 & r312h ==24
 
 
 
@@ -1021,9 +1023,7 @@ replace aguadisp2_ch = 3 if r312d==7 & r312h == 24
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1031,9 +1031,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1044,16 +1042,16 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 gen aguamide_ch = .
 
 
-
 *****************
 *bano_ch         *  Altered
 *****************
+
 gen bano_ch=.
-replace bano_ch=0 if r319==4
 replace bano_ch=1 if (r319==1 | r319==3)
 replace bano_ch=2 if (r319==2 | r319==4)
-replace bano_ch=3 if (r319==5 | r319==6 | r319==7 | r319==8  | r319==9  | r319==10)
-
+replace bano_ch=3 if ( r319==7 | r319==8  | r319==9  | r319==10)
+replace bano_ch=6 if (r319==5 | r319==6 )
+replace bano_ch=0 if r317==4 
 
 ***************
 ***banoex_ch***
@@ -1075,20 +1073,19 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if r319!=4
-replace sinbano_ch = 1 if r321==1
-replace sinbano_ch = 2 if r324a==4
-
+replace sinbano_ch = 1 if r318==1
+replace sinbano_ch = 2 if r324a==4 & r318==2
+replace sinbano_ch = 0 if r317!=4
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = .
-replace aguatrat_ch = 1 if r315==1
-replace aguatrat_ch = 0 if r315==2
-*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+gen aguatrat_ch=0
+replace aguatrat_ch=1 if r315 ==1
 
+
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 
 ************

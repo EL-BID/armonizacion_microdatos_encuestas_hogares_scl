@@ -914,7 +914,6 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ******************************************************************************
 *	VARIABLES OF HOUSEHOLD INFRAESTRUCTURE 
 *****************************************************************************
-
 destring v1i_agua_b, replace
 destring v1i_otra, replace
 destring v1j_ubicac, replace
@@ -930,45 +929,46 @@ destring v1j2_invie, replace
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=.
-replace aguared_ch=1 if (v1i_agua_b==1 | v1i_agua_b==2)
-replace aguared_ch=0 if (v1i_agua_b!=1 | v1i_agua_b!=2)
+gen aguared_ch=0
+replace aguared_ch=1 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==1 | v1j_ubicac==2)
 label var aguared_ch "Acceso a una fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (v1i_agua_b==1 | v1i_agua_b==2) & (v1j_ubicac==1 | v1j_ubicac==2)
-replace aguafconsumo_ch = 2 if (v1i_agua_b==1 | v1i_agua_b==2) & (v1j_ubicac==3 | v1j_ubicac==4)
+replace aguafconsumo_ch = 1 if (v1i_agua_b==1 | v1i_agua_b==2 |v1i_agua_b==3) & (v1j_ubicac==1 | v1j_ubicac==2)
+replace aguafconsumo_ch = 2 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==4)
 replace aguafconsumo_ch = 3 if v1i_agua_b==10
 replace aguafconsumo_ch = 4 if v1i_agua_b==4
 replace aguafconsumo_ch = 5 if v1i_agua_b==6
 replace aguafconsumo_ch = 6 if v1i_agua_b==9
-replace aguafconsumo_ch = 7 if v1i_agua_b==3
-replace aguafconsumo_ch = 8 if (v1i_agua_b==7  | v1i_agua_b==8)
-replace aguafconsumo_ch = 9 if (v1i_agua_b==5 | v1i_agua_b==11)
+replace aguafconsumo_ch = 7 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==3)
+replace aguafconsumo_ch = 8 if ( v1i_agua_b==8)
+replace aguafconsumo_ch = 9 if (v1i_agua_b==7  |v1i_agua_b==5)
+replace aguafconsumo_ch=10 if v1i_agua_b==11
 
 *****************
 *aguafuente_ch*
 *****************
 
 gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if (v1i_agua_b==1 | v1i_agua_b==2) & (v1j_ubicac==1 | v1j_ubicac==2)
-replace aguafuente_ch = 2 if (v1i_agua_b==1 | v1i_agua_b==2) & (v1j_ubicac==3 | v1j_ubicac==4)
+replace aguafuente_ch = 1 if (v1i_agua_b==1 | v1i_agua_b==2 |v1i_agua_b==3) & (v1j_ubicac==1 | v1j_ubicac==2)
+replace aguafuente_ch = 2 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==4)
 replace aguafuente_ch = 3 if v1i_agua_b==10
 replace aguafuente_ch = 4 if v1i_agua_b==4
 replace aguafuente_ch = 5 if v1i_agua_b==6
 replace aguafuente_ch = 6 if v1i_agua_b==9
-replace aguafuente_ch = 7 if v1i_agua_b==3
-replace aguafuente_ch = 8 if (v1i_agua_b==7  | v1i_agua_b==8)
-replace aguafuente_ch = 9 if (v1i_agua_b==5 | v1i_agua_b==11)
+replace aguafuente_ch = 7 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==3)
+replace aguafuente_ch = 8 if ( v1i_agua_b==8)
+replace aguafuente_ch = 9 if (v1i_agua_b==7  |v1i_agua_b==5)
+replace aguafuente_ch=10 if v1i_agua_b==11
 
 
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
+gen aguadist_ch=0
 replace aguadist_ch=1 if v1j_ubicac==1
 replace aguadist_ch=2 if v1j_ubicac==2
 replace aguadist_ch=3 if v1j_ubicac==3 | v1j_ubicac==4
@@ -977,15 +977,13 @@ replace aguadist_ch=3 if v1j_ubicac==3 | v1j_ubicac==4
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch = . 
-replace aguadisp1_ch = 1 if v1j1_veran==7 & v1j1_invie==7 & v1j2_veran==24 & v1j2_invie==24
-replace aguadisp1_ch = 0 if v1j1_veran<7 & v1j1_invie<7 & v1j2_veran<24 & v1j2_invie<24
+gen aguadisp1_ch = 9
 
 **************
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch = .
-replace aguadisp2_ch = 1 if v1j1_veran<=3 & v1j1_invie<=3 & v1j2_veran<12 & v1j2_invie<12
+replace aguadisp2_ch = 1 if v1j1_veran<=3 | v1j1_invie<=3 | v1j2_veran<12 | v1j2_invie<12
 replace aguadisp2_ch = 2 if v1j1_veran>=4 & v1j1_invie>=4 & v1j2_veran>=12 & v1j2_invie>=12
 replace aguadisp2_ch = 3 if v1j1_veran==7 & v1j1_invie==7 & v1j2_veran==24 & v1j2_invie==24
 
@@ -1017,7 +1015,7 @@ gen bano_ch=.
 replace bano_ch=0 if v1k_servic==4
 replace bano_ch=1 if v1k_servic==2
 replace bano_ch=2 if v1k_servic==3
-replace bano_ch=3 if v1k_servic==1
+replace bano_ch=6 if v1k_servic==1
 
 ***************
 ***banoex_ch***
@@ -1041,12 +1039,13 @@ gen sinbano_ch = 3
 replace sinbano_ch = 0 if v1k_servic!=4
 replace sinbano_ch = 1 if v1k1_excre==4
 replace sinbano_ch = 2 if v1k1_excre<4
+replace sinbano_ch = 3 if v1k1_excre==5
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 
 gen luz_ch=(v1o_luz>=1 & v1o_luz<=3)

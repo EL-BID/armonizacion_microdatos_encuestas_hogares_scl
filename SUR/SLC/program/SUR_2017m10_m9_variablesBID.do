@@ -1104,8 +1104,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if (q13_15==1 |q13_15==2 |q13_15==3)
-replace aguared_ch = 0 if q13_15>3
+replace aguared_ch = 1 if (q13_15==1 |q13_15==2)
+replace aguared_ch = 0 if q13_15>2
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
@@ -1120,7 +1120,7 @@ gen aguafconsumo_ch = 0
 gen aguafuente_ch = 1 if (q13_15==1 | q13_15==2)
 replace aguafuente_ch = 2 if q13_15==3
 replace aguafuente_ch = 5 if q13_15==4
-replace aguafuente_ch= 6 if q13_15==6
+replace aguafuente_ch= 6 if q13_15==7
 replace aguafuente_ch = 8 if q13_15==6
 replace aguafuente_ch= 10 if q13_15==5 | q13_15==8
 
@@ -1137,42 +1137,29 @@ replace aguadist_ch= 3 if  q13_15>=3
 **************
 gen aguadisp1_ch = 9
 
-
-
 **************
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch = 9
 
-
-
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
-
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-
-
 
 *****************
 ***aguamide_ch***
 *****************
 gen aguamide_ch = .
-
-
 
 *****************
 *bano_ch         *  Altered
@@ -1181,15 +1168,13 @@ gen bano_ch=.
 replace bano_ch=0
 replace bano_ch=2 if q13_14==1
 replace bano_ch=4 if q13_14==4 | q13_14==5
-replace bano_ch=4 if q13_14==3
-replace bano_ch=6 if q13_14==6 | q13_14==2
+replace bano_ch=6 if q13_14==6 | q13_14==2|q13_14==3
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=9
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
-
 
 *****************
 *banomejorado_ch*  Altered
@@ -1198,18 +1183,17 @@ gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
-
 ************
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if q13_14>=1 & q13_14<=6
+replace sinbano_ch = 0 if q13_14!=5
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = .
+gen aguatrat_ch =9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 	

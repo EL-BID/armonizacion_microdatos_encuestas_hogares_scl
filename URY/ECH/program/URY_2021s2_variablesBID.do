@@ -89,7 +89,7 @@ label value region_BID_c region_BID_c
 
 *1. Factor de expansión del hogar: 
 
-gen fac_exp = w_sem/6 // w_sem es el ponderador semestral
+gen fac_exp = w_sem 
 gen factor_ch = fac_exp 
 label var factor_ch "Factor de Expansion del Hogar"
 

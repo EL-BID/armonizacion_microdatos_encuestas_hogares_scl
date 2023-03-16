@@ -1054,10 +1054,10 @@ gen aguafconsumo_ch = 0
 *****************
 
 gen aguafuente_ch = 1 if vsp5==1
-replace aguafuente_ch= 4 if vsp5==4 | vsp5==5
+replace aguafuente_ch = 2 if vsp5==2
+replace aguafuente_ch= 4 if  vsp5==5
 replace aguafuente_ch= 6 if vsp5==3
-replace aguafuente_ch = 8 if vsp5==2
-replace aguafuente_ch= 10 if vsp5==6
+replace aguafuente_ch= 10 if vsp5==4 | vsp5==6
 
 *************
 *aguadist_ch*
@@ -1069,24 +1069,22 @@ gen aguadist_ch=0
 *aguadisp1_ch*
 **************
 
-gen aguadisp1_ch = 1 if vsp6==1
-replace  aguadisp1_ch = 0 if vsp6!=1
+gen aguadisp1_ch =9
 
 
 **************
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if vsp6>1
+replace aguadisp2_ch = 1 if  vsp6==3|vsp6==4|vsp6==5
+replace aguadisp2_ch = 2 if vsp6==2
 replace aguadisp2_ch = 3 if vsp6==1
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1094,9 +1092,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1115,14 +1111,12 @@ gen bano_ch=.
 replace bano_ch=0 if vsp8==5
 replace bano_ch=1 if vsp8==1
 replace bano_ch=2 if vsp8==2
-replace bano_ch=3 if vsp8==4
-replace bano_ch=5 if vsp8==3
+replace bano_ch=6 if vsp8==4|vsp8==3
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=1 if dhp11==1
-replace banoex_ch=0 if dhp11==2 
+generate banoex_ch=9
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 

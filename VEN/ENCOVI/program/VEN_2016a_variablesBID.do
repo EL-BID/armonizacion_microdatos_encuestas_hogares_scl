@@ -1022,8 +1022,8 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if vp5==1
-replace aguared_ch = 0 if vp5!=1
+replace aguared_ch = 1 if vsp5==1
+replace aguared_ch = 0 if vsp5!=1
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
@@ -1036,11 +1036,11 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if vp5==1
-replace aguafuente_ch= 4 if vp5==4 | vp5==5
-replace aguafuente_ch= 6 if vp5==3
-replace aguafuente_ch = 8 if vp5==2
-replace aguafuente_ch= 10 if vp5==6
+gen aguafuente_ch = 1 if vsp5==1
+replace aguafuente_ch = 2 if vsp5==2
+replace aguafuente_ch= 4 if  vsp5==5
+replace aguafuente_ch= 6 if vsp5==3
+replace aguafuente_ch= 10 if vsp5==4 | vsp5==6
 
 *************
 *aguadist_ch*
@@ -1052,24 +1052,22 @@ gen aguadist_ch=0
 *aguadisp1_ch*
 **************
 
-gen aguadisp1_ch = 1 if vp6==1
-replace  aguadisp1_ch = 0 if vp6!=1
+gen aguadisp1_ch =9
 
 
 **************
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if vp6>1
-replace aguadisp2_ch = 3 if vp6==1
+replace aguadisp2_ch = 1 if  vsp6==3|vsp6==4|vsp6==5
+replace aguadisp2_ch = 2 if vsp6==2
+replace aguadisp2_ch = 3 if vsp6==1
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1077,9 +1075,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1095,17 +1091,14 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if vp8==5
-replace bano_ch=1 if vp8==1
-replace bano_ch=2 if vp8==2
-replace bano_ch=3 if vp8==4
-replace bano_ch=5 if vp8==3
+replace bano_ch=0 if vsp8==4
+replace bano_ch=3 if vsp8==2|vsp8==1
+replace bano_ch=6 if vsp8==3
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=9
-
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1121,14 +1114,13 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if vp8!=5
+replace sinbano_ch = 0 if vsp8!=4
 
 
 *************
 *aguatrat_ch*
 *************
 gen aguatrat_ch = 9
-
 
 
 ************

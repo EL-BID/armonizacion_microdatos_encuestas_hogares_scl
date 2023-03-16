@@ -1108,9 +1108,10 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if pv7==1
-replace aguafuente_ch= 6 if pv7==3
-replace aguafuente_ch = 8 if pv7==2
+gen aguafuente_ch=.
+replace aguafuente_ch=1 if pv7==1
+replace aguafuente_ch=2 if pv7==2
+replace aguafuente_ch=6 if pv7==3
 replace aguafuente_ch= 10 if pv7==4
 
 *************
@@ -1123,23 +1124,21 @@ gen aguadist_ch=0
 *aguadisp1_ch*
 **************
 
-gen aguadisp1_ch = 9
+gen aguadisp1_ch=9
 
 
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch =9
+gen aguadisp2_ch=9
 
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1147,9 +1146,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1169,14 +1166,13 @@ gen bano_ch=.
 replace bano_ch=0 if pv8==4
 replace bano_ch=1 if pv8==1
 replace bano_ch=2 if pv8==2
-replace bano_ch=3 if pv8==3
+replace bano_ch=6 if pv8==3
 
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=9
-
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1201,7 +1197,7 @@ replace sinbano_ch = 0 if pv8!=4
 destring ph14i, replace
 gen aguatrat_ch = .
 replace  aguatrat_ch = 1 if ph14i==1
-replace  aguatrat_ch = 0 if ph14i==2
+replace  aguatrat_ch = 9 if ph14i==2
 
 ************
 ***luz_ch***

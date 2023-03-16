@@ -1064,9 +1064,8 @@ gen pqnoasis1_ci=.
 ****************
 ***aguared_ch***
 ****************
-generate aguared_ch =.
-replace aguared_ch = 1 if (s5q13__1==1 | s5q13__1==2 | s5q13__1==3)
-replace aguared_ch = 0 if s5q13__1==0
+generate aguared_ch =0
+replace aguared_ch = 1 if (s4q5__1==1 | s4q5__1==2 | s4q5__1==3)
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
@@ -1074,20 +1073,23 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if s5q13__1==1
+replace aguafconsumo_ch= 2 if s5q13__2==1
 replace aguafconsumo_ch = 3 if s5q13__7==1
-replace aguafconsumo_ch = 4 if s5q13__5==1 | s5q13__4==1
+replace aguafconsumo_ch = 4 if s5q13__5==1 
 replace aguafconsumo_ch = 6 if s5q13__3==1
 replace aguafconsumo_ch = 8 if s5q13__6==1
-replace aguafconsumo_ch = 10 if s5q13__8==1 | s5q13__2==1
+replace aguafconsumo_ch = 10 if s5q13__8==1  | s5q13__4==1
 *****************
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if s5q13__1==1
-replace aguafuente_ch = 4 if s5q13__5==1 | s5q13__4==1
-replace aguafuente_ch = 6 if s5q13__3==1
-replace aguafuente_ch = 8 if s5q13__6==1
-replace aguafuente_ch = 10 if s5q13__8==1 | s5q13__2==1
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if s4q5__1==1
+replace aguafuente_ch= 2 if s4q5__2==1
+replace aguafuente_ch = 4 if s4q5__5==1 
+replace aguafuente_ch = 6 if s4q5__3==1
+replace aguafuente_ch = 8 if s4q5__6==1
+replace aguafuente_ch = 10 if s4q5__7 ==1|s4q5__4 ==1
 
 *************
 *aguadist_ch*
@@ -1099,24 +1101,22 @@ gen aguadist_ch=0
 *aguadisp1_ch*
 **************
 
-gen aguadisp1_ch = 1 if s4q6==1
-replace  aguadisp1_ch = 0 if s4q6!=1
+gen aguadisp1_ch =9
 
 
 **************
-*aguadisp2_ch*
+*aguadisp2_ch* 
 **************
 gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if s4q6>1
+replace aguadisp2_ch = 1 if  s4q6==3|s4q6==4|s4q6==5
+replace aguadisp2_ch = 2 if s4q6==2
 replace aguadisp2_ch = 3 if s4q6==1
 
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1124,9 +1124,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1139,20 +1137,19 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 
 *****************
-*bano_ch         *  Altered
+*bano_ch         *  Altered  ** WORKING ON THIS ONE **
 *****************
 gen bano_ch=.
 replace bano_ch=0 if s4q10==5
 replace bano_ch=1 if s4q10==1
 replace bano_ch=2 if s4q10==2
-replace bano_ch=3 if s4q10==4
-replace bano_ch=5 if s4q10==3
+replace bano_ch=6 if s4q10==3|s4q10==4
+
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch= 1 if s5q2==1
-replace banoex_ch= 0 if s5q2==2
+generate banoex_ch=9
 
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 

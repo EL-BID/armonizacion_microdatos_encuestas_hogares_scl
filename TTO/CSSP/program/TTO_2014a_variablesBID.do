@@ -1043,8 +1043,8 @@ replace aguafuente_ch= 10 if water==4 | water==7
 *************
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  water==1 | water==3
-replace aguadist_ch= 2 if  water==2
-replace aguadist_ch= 3 if  water==4 | water==5 | water==6 | water==7 | water==9
+replace aguadist_ch= 2 if  water==2| water==6 
+replace aguadist_ch= 3 if  water==4 |water==5 | water==7 | water==9
 
 **************
 *aguadisp1_ch*
@@ -1064,9 +1064,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1074,9 +1072,7 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 
@@ -1094,8 +1090,7 @@ gen aguamide_ch = .
 gen bano_ch=.
 replace bano_ch=0 if toilet==5
 replace bano_ch=1 if toilet==2
-replace bano_ch=2 if toilet==1
-replace bano_ch=6 if toilet==9 | toilet==4 | toilet==3
+replace bano_ch=6 if toilet==1|toilet==3|toilet==4|toilet==9 
 
 ***************
 ***banoex_ch***
@@ -1103,14 +1098,12 @@ replace bano_ch=6 if toilet==9 | toilet==4 | toilet==3
 generate banoex_ch=9
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
-
 *****************
 *banomejorado_ch*  Altered
 *****************
 gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
-
 
 ************
 *sinbano_ch*
@@ -1122,8 +1115,9 @@ replace sinbano_ch = 0 if toilet!=5
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = .
+gen aguatrat_ch =9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 
 
 *****************************

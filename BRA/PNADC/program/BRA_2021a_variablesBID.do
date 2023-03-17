@@ -381,8 +381,13 @@ label var afiliado_ci "Afiliado a la Seguridad Social"
 ******************
 ***cotizando_ci***
 ******************
+*corrección de la variable vd4012, hay un error en 2021
+gen vd4012_fixed=.
+replace vd4012_fixed=1 if  v2009>=14 & v4009!=. & ((v4012==3 & v4029==1) | (v4012==1 & v4029==1) | (v4012==4 & v4029==1) | (v4012==2 | (v4012==4 & v4028==1)) | (v4032==1 & v4012==3 & v4029==2) | (v4032==1 & v4012==1 & v4029==2) | (v4032==1 & v4012==4 & v4029==2) | (v4032==1 & v4012==5) | (v4032==1 & v4012==6) | ((v4009==2 | v4009==3) & (v4043==1 | v4043==3) & v4048==1 ) | ((v4009==2 | v4009==3) & (v4043==1 | v4043==3) & v4048==2 & v4049==1) | ((v4009==2 | v4009==3) & v4043==2) | ((v4009==2 | v4009==3) & v4043==4 & v4047==1) | ((v4009==2 | v4009==3) & v4043==4 & v4047==2 & v4048==1) | ((v4009==2 | v4009==3) & v4043==4 & v4047==2 & v4048==2 & v4049==1) | ((v4009==2 | v4009==3) & (v4043==5 | v4043==6) & v4049==1) | (v4009==3 & v4057==1))
+replace vd4012_fixed=2 if v2009>=14 & v4009!=. & ((v4012!=3 & v4012!=1 & v4012!=4) | v4029!=1) & (v4012!=2 & (v4012!=4 | v4028!=1)) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==4 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==2 | v4012==3 | v4012==4 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==5 | v4012==6) | v4029!=2) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==4 | v4012==6)) & (v4032!=1 | (v4012==1 | v4012==2 | v4012==3 | v4012==4 | v4012==5)) & (v4009==1 | (v4043!=1 & v4043!=3) | v4048 !=1) & (v4009==1 | (v4043!=1 & v4043!=3) | v4048!= 2 | v4049!=1) & (v4009==1 | v4043!=2) & (v4009==1 | v4043!=4 | v4047!= 1) & (v4009==1 | v4043!=4 | v4047!= 2 | v4048!= 1) & (v4009==1 | v4043!=4 | v4047!=2 | v4048!=2 | v4049!=1) & (v4009==1 | (v4043!=5 & v4043!=6) | v4049!=1) & (v4009!= 3 | v4057!=1) 
+
 gen cotizando_ci=0       if condocup_ci==1 | condocup_ci==2 
-replace cotizando_ci=1   if (vd4012==1) & cotizando_ci==0
+replace cotizando_ci=1   if (vd4012_fixed==1) & cotizando_ci==0
 label var cotizando_ci "Cotizante a la Seguridad Social"
 
 gen cotizapri_ci=0       if condocup_ci==1 | condocup_ci==2 
@@ -399,7 +404,7 @@ label var cotizaotros_ci "Cotizante a la Seguridad Social por otro trabajos o po
 
 *Cotizando sin restringir a PEA
 gen cotizando_ci1=0      if condocup_ci==1 | condocup_ci==2 | condocup_ci==3
-replace cotizando_ci1=1  if (vd4012==1) & cotizando_ci1==0
+replace cotizando_ci1=1  if (vd4012_fixed==1) & cotizando_ci1==0
 label var cotizando_ci "Cotizante a la Seguridad Social"
 
 ****************
@@ -594,7 +599,9 @@ label var horaspri_ci "Horas trabajadas semanalmente en el trabajo principal"
 *****************
 *Variable derivada por IBGE, para personas de 14 o más, por todos los trabajos 
 *Horas efectivas
-gen horastot_ci=vd4035
+*corregir variable derivada vd4035 en 2021
+egen vd4035_fixed= rsum(v4039c v4056c v4062c) if v2009>=14 & v4009!=.
+gen horastot_ci=vd4035_fixed
 replace horastot_ci=. if emp_ci==0 
 replace horastot_ci=. if (horaspri_ci==. & v4056==. & v4062==.) | horastot_ci>150
 label var horastot_ci "Horas efectivas trabajadas semana referencia en todos los empleos"
@@ -615,18 +622,40 @@ label var tiempoparc_c "Personas que trabajan medio tiempo"
 ******************
 ***categopri_ci***
 ******************
+* Corregir variables derivadas vd4008 y vd4009 en 2021
+gen vd4008_fixed=.
+replace vd4008_fixed=1 if v2009>=14 & v4009!=. & v4012==3
+replace vd4008_fixed=2 if v2009>=14 & v4009!=. & v4012==1
+replace vd4008_fixed=3 if v2009>=14 & v4009!=. & (v4012==2 | v4012==4)
+replace vd4008_fixed=4 if v2009>=14 & v4009!=. & v4012==5
+replace vd4008_fixed=5 if v2009>=14 & v4009!=. & v4012==6
+replace vd4008_fixed=6 if v2009>=14 & v4009!=. & v4012==7
+
+gen vd4009_fixed=.
+replace vd4009_fixed=1 if v2009 >= 14 & v4009 !=. & v4012==3 & v4029==1
+replace vd4009_fixed=2 if v2009 >= 14 & v4009 !=. & v4012==3 & v4029==2
+replace vd4009_fixed=3 if v2009 >= 14 & v4009 !=. & v4012==1 & v4029==1
+replace vd4009_fixed=4 if v2009 >= 14 & v4009 !=. & v4012==1 & v4029==2
+replace vd4009_fixed=5 if v2009 >= 14 & v4009 !=. & v4012==4 & v4029==1
+replace vd4009_fixed=6 if v2009 >= 14 & v4009 !=. & v4012==4 & v4029==2
+replace vd4009_fixed=7 if v2009 >= 14 & v4009 !=. & (v4012==2 | (v4012==4 & v4028==1))
+replace vd4009_fixed=8 if v2009 >= 14 & v4009 !=. & v4012==5
+replace vd4009_fixed=9 if v2009 >= 14 & v4009 !=. & v4012==6
+replace vd4009_fixed=10 if v2009>= 14 & v4009 !=. & v4012==7
+
+*Ahora usamos las variables fixed
 generate aux08 =.
-replace  aux08 = 1 if vd4009>=1 & vd4009<=7
-replace  aux08 = 2 if vd4009==9
-replace  aux08 = 3 if vd4009==8
-replace  aux08 = 4 if vd4009==10 | v40121!=.
+replace  aux08 = 1 if vd4009_fixed>=1 & vd4009_fixed<=7
+replace  aux08 = 2 if vd4009_fixed==9
+replace  aux08 = 3 if vd4009_fixed==8
+replace  aux08 = 4 if vd4009_fixed==10 | v40121!=.
 *AJAM-18. Se usan las variables derivadas, principalmente porque vd4009 está más desagregada, pero podría usarse la v4012. 
 *También, base no divide más entre agrícolas/no agrícolas
 gen categopri_ci=.
-replace categopri_ci=1 if  vd4008==4 | aux08==3
-replace categopri_ci=2 if  vd4008==5 | aux08==2
-replace categopri_ci=3 if (vd4008>=1 & vd4008<=3) | aux08==1
-replace categopri_ci=4 if vd4008==6 | aux08==4
+replace categopri_ci=1 if  vd4008_fixed==4 | aux08==3
+replace categopri_ci=2 if  vd4008_fixed==5 | aux08==2
+replace categopri_ci=3 if (vd4008_fixed>=1 & vd4008_fixed<=3) | aux08==1
+replace categopri_ci=4 if vd4008_fixed==6 | aux08==4
 replace categopri_ci=. if emp_ci!=1
 label define categopri_ci 1"Patron" 2"Cuenta propia" 0"Otro"
 label define categopri_ci 3"Empleado" 4" No remunerado" , add
@@ -658,7 +687,7 @@ label var nempleos_ci "Número de empleos"
 *****************
 ***spublico_ci***
 *****************
-gen spublico_ci=(vd4008==3)
+gen spublico_ci=(vd4008_fixed==3)
 replace spublico_ci=. if emp_ci!=1
 label var spublico_ci "Personas que trabajan en el sector público"
 

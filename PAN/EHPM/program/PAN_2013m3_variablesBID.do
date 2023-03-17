@@ -949,7 +949,7 @@ gen vivialqimp_ch=.
 ******************************
 
 * Lowercase variables:
-rename * , lower
+*rename * , lower
 
 * Codigo de variable 0 que no está en cuestionario se toma perdido.
 replace p5 = . if p5 == 0

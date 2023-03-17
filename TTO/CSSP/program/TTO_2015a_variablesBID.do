@@ -885,106 +885,105 @@ Education) A-level examinations que eran estándar hasta el año 2003.
 Además, esta base considera sólo a las personas mayores de 15 años.
 */
 
-******************************************
-* NUMERO DE AÑOS DE EDUCACION CULMINADOS *
-******************************************
+***********
+* aedu_ci *
+***********
 * No es posible generar años de educación porque no se indica si cumlminó o no el nivel indicado
 * se genera educación a partir de los códigos 
 gen aedu_ci =.
 label var aedu_ci "número de años de educación culminados"
 
-******************************************
-*  NO TIENE NINGUN NIVEL DE INSTRUCCION  *
-******************************************
+**************
+*  eduno_ci  *
+**************
 gen eduno_ci =(p06>=0 & p06<=10) /* infant y kinder*/
 replace eduno_ci =. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var eduno_ci "No tiene ningún nivel de instrucción"
 
-******************************************
-* NO HA COMPLETADO LA EDUCACION PRIMARIA *
-******************************************
+************
+* edupi_ci *
+************
 
-gen edupi_ci=(p06>=11 & p06<13) /* standars 1, 2, 3, 4*/
+gen edupi_ci=(p06>=11 & p06<13) /* standards 1, 2, 3, 4*/
 replace edupi_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edupi_ci "No ha completado la educación primaria"
 
-******************************************
-*  HA COMPLETADO LA EDUCACION PRIMARIA   *
-******************************************
+***************
+*  edupc_ci   *
+***************
 gen edupc_ci=(p06>=13 & p06<20) 
 replace edupc_ci=.  if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edupc_ci "No ha completado la educación primaria"
 
-******************************************
-*SECUNDARIA INCOMPLETA*
-******************************************
-gen edusi_ci=(p06==20 |p06==30)  /* secundaria incompleta con o sin 
-training */
+************
+* edusi_ci *
+************
+gen edusi_ci=(p06==20 | p06==30)  /* secundaria incompleta con o sin training */
 replace edusi_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edusi_ci "No ha completado la educación secundaria"
 
-******************************************
-* HA COMPLETADO LA EDUCACION SECUNDARIA  *
-******************************************
-gen edusc_ci =(p06>20 & p06<=38)  /* secundaria completa con examenes   */
+*************
+* edusc_ci  *
+*************
+gen edusc_ci = (p06 > 20 & p06 < 30 | p06 > 30 & p06 <= 38) /* secundaria completa con y sin examenes   */
 replace edusc_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edusc_ci "Ha completado la educación secundaria"
 
-*******************************************
-* NO HA COMPLETADO LA EDUCACION TERCIARIA *
-*******************************************
-gen eduui_ci=(p06==40)  /* secundaria completa con examenes   */ 
+************
+* eduui_ci *
+************
+gen eduui_ci=(p06==40)  /* Universidad sin título   */ 
 replace eduui_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var eduui_ci "No ha completado la educación terciaria"
 
-*******************************************
-*  HA COMPLETADO LA EDUCACION TERCIARIA   *
-*******************************************
-gen eduuc_ci=(p06>=41 & p06<=42)
+**************
+*  eduuc_ci  *
+**************
+gen eduuc_ci=(p06>=41 & p06<=42) /* Diploma/Certificados, título universitario */
 replace eduuc_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var eduuc_ci "Ha completado la educación terciaria"
 
-**************************************************
-* NO HA COMPLETADO EL PRIMER CICLO DE SECUNDARIA *
-**************************************************
+*************
+* edus1i_ci *
+*************
 gen edus1i_ci=. 
 label var edus1i_ci "No ha completado el primer ciclo de la secundaria"
 
-**************************************************
-*  HA COMPLETADO EL PRIMER CICLO DE SECUNDARIA   *
-**************************************************
+****************
+*  edus1c_ci   *
+****************
 gen edus1c_ci =. 
 label var edus1c_ci "Ha completado el primer ciclo de la secundaria"
 
-**************************************************
-* NO HA COMPLETADO EL SEGUNDO CICLO DE SECUNDARIA *
-**************************************************
-gen edus2i_ci =(p06==20 |p06==30)  /* secundaria incompleta*/
+*************
+* edus2i_ci *
+*************
+gen edus2i_ci =(p06==20 | p06==30)  /* secundaria incompleta*/
 replace edus2i_ci=. if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edus2i_ci "No ha completado el segundo ciclo de la secundaria"
 
-**************************************************
-*  HA COMPLETADO EL SEGUNDO CICLO DE SECUNDARIA  *
-**************************************************
-gen edus2c_ci=(p06>20 & p06<=38)  /* secundaria completa con examenes   */
+***************
+*  edus2c_ci  *
+***************
+gen edus2c_ci = (p06 > 20 & p06 < 30 | p06 > 30 & p06 <= 38)   /* secundaria completa con y sin examenes */
 replace edus2c_ci=.  if (p06==. | p06 == 98 | p06==99 | p06 == 60)
 label var edus2c_ci "Ha completado el segundo ciclo de la secundaria"
 
-****************************************
-*  HA COMPLETADO EDUCACION PREESCOLAR  *
-****************************************
+***************
+*  edupre_ci  *
+***************
 gen edupre_ci=. 
 label var edupre_ci "Ha completado educación preescolar"
 
-************************************************
-*  HA COMPLETADO EDUCACION TERCIARIA ACADEMICA *
-************************************************
+*************
+*  eduac_ci *
+*************
 gen eduac_ci=.
 label var eduac_ci "Ha completado educación terciaria académica"
 
-************************************
-*  ASISTE A UN CENTRO DE ENSEÑANZA *
-************************************
+**************
+*  asiste_ci *
+**************
 gen asiste_ci=.
 label var asiste_ci "Asiste a algún centro de enseñanza"
 
@@ -995,9 +994,9 @@ g asispre_ci=.
 la var asispre_ci "Asiste a educación prescolar"
 
 
-*********************************************
-* PORQUE NO ASISTE A UN CENTRO DE ENSEÑANZA *
-*********************************************
+***************
+* pqnoasis_ci *
+***************
 gen pqnoasis_ci=.
 label var pqnoasis_ci "Porque no asiste a algún centro de enseñanza"
 label define pqnoasis 1"Muy joven" 2"Razones financieras" 3"Trabaja en casa o negocio familiar" 4"Distancia a la escuela/transporte" 5"Enfermedad/inhabilidad" 6"falta de especio en la escuela" 7"Otra" 9"NS/NR"  
@@ -1008,31 +1007,26 @@ label values pqnoasis_ci pqnoasis
 **************
 g       pqnoasis1_ci =.
 
-************************************
-*  HA REPETIDO ALGUN AÑO O GRADO   *
-************************************
+****************
+*  repite_ci   *
+****************
 gen repite_ci=.
 label var repite_ci "Ha repetido algún año o grado"
 
-******************************
-*  HA REPETIDO EL ULTIMO AÑO *
-******************************
+*****************
+*  repiteult_ci *
+*****************
 gen repiteult_ci=.
 label var repiteult_ci "Ha repetido el último grado"
 
-***************************************
-*ASISTE A CENTRO DE ENSEÑANZA PUBLICA *
-***************************************
+*************
+* edupub_ci *
+*************
 gen edupub_ci=.
 label var edupub_ci "Asiste a centro de enseñanza pública"
 label define edupub 1"Pública" 0"Privada"  
 label values edupub_ci edupub
 
-**************************
-*  TIENE CARRERA TECNICA *
-**************************
-gen tecnica_ci=.
-label var tecnica_ci "Tiene carrera técnica"
 
 
 *******************************
@@ -1047,7 +1041,7 @@ label var tecnica_ci "Tiene carrera técnica"
 **************************
 gen aguared_ch=.
 replace aguared_ch=(water==1 | water==2 | water==3)
-label var tecnica_ci "Tiene acceso a agua por red"
+label var aguared_ch "Tiene acceso a agua por red"
 
 ***********************************
 *  UBICACION DE LA FUENTE DE AGUA *
@@ -1340,7 +1334,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

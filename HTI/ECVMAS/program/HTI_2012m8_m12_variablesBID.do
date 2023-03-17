@@ -890,114 +890,138 @@ replace ylmhopri_ci=. if ylmhopri_ci<=0
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 replace ylmho_ci=. if ylmho_ci<=0
 
+
 ****************************
-***VARIABLES DE EDUCACION***
+***VARIABLES DE EDUCACION*** 
 ****************************
+
+/*
+Para la construcción de aedu_ci se utilizan:
+
+	// Para mayores de 10 anios:
+
+		- i_h10 para los niveles 2 a 16 que abarcan la totalidad de primaria hasta 
+		secundaria.
+		- i_h11 para complementar con i_h11 == 17 que hace referencia a estudios superiores. 
+		i_h11 contiene los diplomas obtenidos. Se imputan los anios que corresponden tomando 
+		el limite inferior de cada categoria si se tiene información en la encuesta y 
+		en caso contrario se le adiciona 1 anio a los anios del nivel de educación anterior.
+		Ej: un invidivio con diploma de formación profesional declarado obtiene 13 anios de educacion 
+		por secundaria completa más 1 por diploma de centro de formacion profesional.
+		
+	// Para menores de 10 anios:
+	
+		- Al no contar con información de último grado aprobado (la pregunta hace referenfcia
+		a último nivel alcanzado) se imputan los anios correspondientes al nivel de educación 
+		anterior.
+		
+*/
 
 *************
 ***aedu_ci*** 
 *************
-*Pregunta para mayores de 10 anios
-recode i_h10 (-9 -8 =.) (1/3=0) (4=1) (5=2) (6=3) (7=4) (8=5) (9=6) (10=7) (11=8) (12=9) (13=10) (14=11) (15=12) (16=13) (.=.), gen(aedu_ci)
-recode hh_e15 (-9 -8 =.) (1/2=0) (3=6) (4=12) , gen(auxeduc)
-replace aedu_ci=auxeduc if edad_ci<10
+
+gen aedu_ci = . 
+// Respondientes mayores de 10 anios anios
+replace aedu_ci = 0 if inlist(i_h10, 1, 2) // Ninguno, Preescolar
+replace aedu_ci = i_h10 - 2 if (i_h10 > 2 & i_h10 <= 16) // Primaria, Secundaria, retorica , filosofía
+
+// Superior se asigna por titulo?
+replace aedu_ci = 13 + 3 if i_h11 == 7 // Diploma universitario (3-4 anios?)
+replace aedu_ci = 13 + 3 + 1 if i_h11 == 8 // Diploma maestría (1 - 2 anios)
+replace aedu_ci = 13 + 1 if i_h11 == 9 // Diploma universitario DEA? (1 anio)
+replace aedu_ci = 13 + 3 + 1 + 1 if i_h11 == 10 // Doctorado
+replace aedu_ci = 13 + 1 if i_h11 == 11 // Formacion Profesional
+
+// Respondientes menores de 10 anios ultimo nivel alcanzado, se imputan los anios del nivel anterior.
+replace aedu_ci = 0 if hh_e15 == 3 // Primaria
+replace aedu_ci = 6 if hh_e15 == 4 // Secundaria
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
-replace eduno_ci=. if aedu_ci==.
+gen byte eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=. if aedu_ci==.
+gen byte edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == .
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=. if aedu_ci==.
+gen byte edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
-replace edusi_ci=. if aedu_ci==.
+gen byte edusi_ci = (aedu_ci > 6 & aedu_ci < 13)
+replace edusi_ci = . if aedu_ci == .
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==11
-replace edusc_ci=. if aedu_ci==.
+gen byte edusc_ci = (aedu_ci == 13)
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci>6 & aedu_ci<9
-replace edus1i_ci=. if aedu_ci==.
+gen byte edus1i_ci = (aedu_ci > 6 & aedu_ci < 9)
+replace edus1i_ci = . if aedu_ci == .
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==9
-replace edus1c_ci=. if aedu_ci==.
+gen byte edus1c_ci = (aedu_ci == 9)
+replace edus1c_ci = . if aedu_ci == .
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
-replace edus2i_ci=. if aedu_ci==.
+gen byte edus2i_ci = (aedu_ci > 9 & aedu_ci < 13)
+replace edus2i_ci = . if aedu_ci == .
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
-replace edus2c_ci=. if aedu_ci==.
+gen byte edus2c_ci = (aedu_ci == 13)
+replace edus2c_ci = . if aedu_ci == .
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<17
-replace eduui_ci=. if aedu_ci==.
+gen byte eduui_ci = (aedu_ci > 13 & aedu_ci < 17)
+replace eduui_ci = . if aedu_ci == .
 label variable eduui_ci "Universitaria incompleta"
 
 ***************
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
-replace eduuc_ci=. if aedu_ci==.
+gen byte eduuc_ci = (aedu_ci >= 17)
+replace eduuc_ci = . if aedu_ci == .
 label variable eduuc_ci "Universitaria incompleta o mas"
 
 ***************
@@ -1006,6 +1030,13 @@ label variable eduuc_ci "Universitaria incompleta o mas"
 
 gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
+
+***************
+***asispre_ci***
+***************
+
+gen byte asispre_ci = .
+label variable asispre_ci "Asiste a preescolar"
 
 **************
 ***eduac_ci***
@@ -1016,16 +1047,15 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-gen asiste_ci=(hh_e16a==1)
-replace asiste_ci=1 if i_h08a==1
+gen asiste_ci = (hh_e16a == 1)
+replace asiste_ci = 1 if i_h08a == 1
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
 ***pqnoasis***
 **************
-*Pregunta contiene restricción de edad (menores de 10 años)
-recode hh_e16c (-9=.)
-gen pqnoasis_ci=hh_e16c
+// Al tener muy pocas obsercavaciones para cada grupo va a missing
+gen pqnoasis_ci = .
 label var pqnoasis_ci "Razones para no asistir"
 
 **************
@@ -1033,7 +1063,7 @@ label var pqnoasis_ci "Razones para no asistir"
 **************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = .
+g pqnoasis1_ci = .
 
 ***************
 ***repite_ci***
@@ -1051,15 +1081,10 @@ label var repiteult "Ha repetido el último grado"
 ***edupub_ci***
 ***************
 
-gen edupub_ci=hh_e16b==1
-replace edupub_ci=1 if i_h09==1
+gen edupub_ci = (hh_e16b == 1 | i_h09 == 1)
+replace edupub_ci = . if asiste_ci == 0 
 label var edupub_ci "Asiste a un centro de enseñanza público"
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=.
-label var tecnica_ci "=1 formacion terciaria tecnica"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1410,7 +1435,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first

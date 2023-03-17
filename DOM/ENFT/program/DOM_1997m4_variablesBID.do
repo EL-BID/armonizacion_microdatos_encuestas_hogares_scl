@@ -568,15 +568,15 @@ replace ocupac=x if length(ocupac)==2
 gen ocupa=real(substr(ocupac,1,2))
  
 gen ocupa_ci=.
-replace ocupa_ci=1 if (ocupa>=21 & ocupa<=34)  & emp_ci==1
-replace ocupa_ci=2 if (ocupa>=11 & ocupa<=13)  & emp_ci==1
-replace ocupa_ci=3 if (ocupa>=41 & ocupa<=42)  & emp_ci==1
-replace ocupa_ci=4 if (ocupa==52)              & emp_ci==1
-replace ocupa_ci=5 if (ocupa==51)              & emp_ci==1
-replace ocupa_ci=6 if (ocupa==61)              & emp_ci==1
-replace ocupa_ci=7 if (ocupa>=71 & ocupa<=83)  & emp_ci==1
+replace ocupa_ci=1 if (ocupa>=21 & ocupa<=34) | ocupa==93 & emp_ci==1
+replace ocupa_ci=2 if (ocupa>=11 & ocupa<=22)  & emp_ci==1
+replace ocupa_ci=3 if (ocupa>=41 & ocupa<=42) | ocupa==81 & emp_ci==1
+replace ocupa_ci=4 if (ocupa==52 | ocupa==73)  & emp_ci==1
+replace ocupa_ci=5 if (ocupa==51 | ocupa==72)  & emp_ci==1
+replace ocupa_ci=6 if (ocupa>=61 & ocupa<=62)  & emp_ci==1
+replace ocupa_ci=7 if (ocupa>=72 & ocupa<=83)  & emp_ci==1
 replace ocupa_ci=8 if (ocupa==1)               & emp_ci==1
-replace ocupa_ci=9 if (ocupa>=91 & ocupa<=93)  & emp_ci==1
+replace ocupa_ci=9 if (ocupa>=91 & ocupa<=92)  & emp_ci==1
 label define ocupa_ci 1"profesional y tecnico" 2"director o funcionario sup" 3"administrativo y nivel intermedio"
 label define ocupa_ci  4 "comerciantes y vendedores" 5 "en servicios" 6 "trabajadores agricolas", add
 label define ocupa_ci  7 "obreros no agricolas, conductores de maq y ss de transporte", add
@@ -599,13 +599,13 @@ tab rama1
 gen rama_ci=.
 replace rama_ci = 1 if (ramac>=11 & ramac<=50) & emp_ci==1
 replace rama_ci = 2 if (ramac>=101 & ramac<=142) & emp_ci==1
-replace rama_ci = 3 if (ramac>=151 & ramac<=372) & emp_ci==1
+replace rama_ci = 3 if (ramac>=151 & ramac<=343) & emp_ci==1
 replace rama_ci = 4 if (ramac>=401 & ramac<=410) & emp_ci==1
 replace rama_ci = 5 if (ramac>=451 & ramac<=455) & emp_ci==1
 replace rama_ci = 6 if (ramac>=501 & ramac<=552) & emp_ci==1
 replace rama_ci = 7 if (ramac>=601 & ramac<=642) & emp_ci==1
 replace rama_ci = 8 if (ramac>=651 & ramac<=702) & emp_ci==1
-replace rama_ci = 9 if (ramac>=711 & ramac<=990) & emp_ci==1
+replace rama_ci = 9 if (ramac>=711 & ramac<=990) | (ramac>=361 & ramac<=369) & emp_ci==1
 
 label var rama_ci "Rama de actividad"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
@@ -1640,8 +1640,8 @@ TENENCIA TENENCIA DE LA VIVIENDA (Pregunta 11)
 
 gen viviprop_ch=0 if tenencia==20
 replace viviprop_ch=1 if tenencia==11 | tenencia==14
-replace viviprop_ch=2 if tenencia==12 | tenencia==13
-replace viviprop_ch=3 if tenencia==15 | tenencia==16 | tenencia==17 | tenencia==30
+replace viviprop_ch=2 if tenencia==12 | tenencia==13 | tenencia==15 | tenencia==16
+replace viviprop_ch=3 if tenencia==17 | tenencia==30
 replace viviprop_ch=. if tenencia==40
 label var viviprop_ch "Propiedad de la vivienda"
 label def viviprop_ch 0"Alquilada" 1"Propia y totalmente pagada" 2 "Propia y en proceso de pago"

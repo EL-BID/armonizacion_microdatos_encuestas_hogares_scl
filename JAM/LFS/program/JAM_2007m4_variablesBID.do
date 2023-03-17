@@ -1044,266 +1044,184 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario  monetario de todas las actividades"
 
 
+*****************
+*   Educacion   *
+*****************
 
-
-*====================================================================================================================================*
-*                                                   VARIABLES DE EDUCACIÓN
-*====================================================================================================================================*	
-
-/*
-__________________________________________________________________________________________________________
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-NOTA METODOLÓGICA DEL CÁLCULO DE EDUCACIÓN EN JAMAICA
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Mayra Sáenz-Julio 2013
-
-*Años de educacion adicional a primaria.
-En Jamaica el sistema de Educación es distinto al resto de América Latina.
-
-*La primaria tiene seis años (1-6 grado).
-
-*La secundaria puede extenderse a más de 7 años y se divide en lower level (7-9 grado) y 
-upper level (10-11 grado) y para aprobar la secundaria deben rendir determinados exámenes que
-se encuentran en distintas categorías.
-
-Así, CXC basic, JSC 5 SSC;  CXC Gen, GCE 'O' 1-2 ;  CXC Gen, GCE 'O' 3-4;  CXC Gen, GCE 'O' 5+
-Estos cuatro exámenes corresponden a los Caribbean Examination Council's O'Level (Nivel Ordinario) school leaving
-examinations - Basic or General Proficiency levels. Los cuales están calificados del 1 al 6, en donde 1=
-pasar con distinción, 2= pasar con créditos , 3= pasar con nivel satisfactorio, 4 o más = 'basic level' pass.
-
-Al finalizar el grado 11 pueden optar por extender su educación secundaria hasta dos años más. Esta extensión
-se denomina 'Sixth Form', la misma que se divide en upper sixth (grado 13) y lower sixth (grado 12).
-Esta extensión también se conoce como 'advanced post secondary program', al final del cual se debe rendir los 
-exámenes CAPE (Caribbean Advanced Proficiency Exams), los mismos que equivalen a los GCE (General Certificate
-Education) A-level examinations que eran estándar hasta el año 2003.
-
-* La educación terciaria completa sólo puede ser alcanzada en la universidad y corresponde a los que declaran 
-´degree´ en la pregunta: What is the highest academic examination that you have / has passed.
-
-Además, esta base considera sólo a las personas mayores de 15 años.
-__________________________________________________________________________________________________________
-*/
 
 *********
 *aedu_ci*
 *********
 
+/*
+Para la construcción de aedu_ci y por el hecho de contar solamente con anios
+declarados a nivel primaria y secundaria se realiza el siguiente ajuste:
+
+	- Para aquellos respondientes que hayan obtenido el grado más alto de 
+	primaria y secundaria y al menos uno de los dos examenes CAPE, se les imputa
+	12 anios de educación considerandolos dentro del nivel universitario inconpleto. 
+	
+	- Para aquellos respondientes que declaren tener Degree junto con el grado
+	más alto de primaria y secundaria se les imputa 14 anios de educación 
+	considerandolos dentro del nivel universitario completo.
+*/
+
 gen aedu_ci=.
-* años de primaria de los ocupados/desocupados/inactivos
-replace aedu_ci= 1 if q320 == 2 | q421== 2 | q514==2
-replace aedu_ci= 2 if q320 == 3 | q421== 3 | q514==3
-replace aedu_ci= 3 if q320 == 4 | q421== 4 | q514==4
-replace aedu_ci= 4 if q320 == 5 | q421== 5 | q514==5
-replace aedu_ci= 5 if q320 == 6 | q421== 6 | q514==6
-replace aedu_ci= 6 if q320 == 7 | q421== 7 | q514==7
 
-* años de secundaria de los ocupados/desocupados/inactivos
-replace aedu_ci= 7 if q321 == 2 | q422== 2 | q515==2
-replace aedu_ci= 8 if q321 == 3 | q422== 3 | q515==3
-replace aedu_ci= 9 if q321 == 4 | q422== 4 | q515==4
-replace aedu_ci= 10 if q321 == 5 | q422== 5 | q515==5
-replace aedu_ci= 11 if q321 == 6 | q422== 6 | q515==6
-replace aedu_ci= 12 if q321 == 7 | q422== 7 | q515==7
-replace aedu_ci= 13 if q321 == 8 | q422== 8 | q515==8
+*ocupados
+replace aedu_ci=q320a if q320a<99           // primary
+replace aedu_ci=q321a if q321a>0 & q321a<99 // secondary
 
-label var aedu_ci "Años de educación"
+*desocupados
+replace aedu_ci=q421a if q421a<99           // primary
+replace aedu_ci=q422a if q422a>0 & q422a<99 // secondary
 
-gen exam = .
-replace exam = 1 if  (q322==1) | (q423==1) | (q516 ==1)
-replace exam = 2 if  (q322==2) | (q423==2) | (q516 ==2)
-replace exam = 3 if  (q322==3) | (q423==3) | (q516 ==3)
-replace exam = 4 if  (q322==4) | (q423==4) | (q516 ==4)
-replace exam = 5 if  (q322==5) | (q423==5) | (q516 ==5)
-replace exam = 6 if  (q322==6) | (q423==6) | (q516 ==6)
-replace exam = 7 if  (q322==7) | (q423==7) | (q516 ==7)
-replace exam = 8 if  (q322==8) | (q423==8) | (q516 ==8)
-replace exam = 9 if  (q322==9) | (q423==9) | (q516 ==9)
-replace exam = 99 if  (q322==99) | (q423==99) | (q516 ==99)
-recode exam (99=.)
- 
-label define exam 1 "none" 2 "CXC basic, JSC 5 SSC" 3 "CXC Gen, GCE 'O' 1-2" 4 "CXC Gen, GCE 'O' 3-4" ///  
-  5 "CXC Gen, GCE 'O' 5+" 6 "GCE 'A' 1-2label defi" 7 "CAPElabel define GCE" 8 "Degree" 9 "other" ///
-  99 "not stated"
-label value exam exam
-label var exam "Highest (academic) examination"
+*inactivos
+replace aedu_ci=q514a if q514a<99           // primary
+replace aedu_ci=q515a if q515a>0 & q515a<99 // secondary
 
+* Ajuste universitario: 
+replace aedu_ci = 12 if (q322 == 6 | q322 == 7) & q322 != 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 12 if (q423 == 6 | q423 == 7) & q423 != 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 12 if (q516 == 6 | q516 == 7) & q516 != 8 & q514 == 7 & q515 == 8
+
+replace aedu_ci = 14 if q322 == 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 14 if q423 == 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 14 if q516 == 8 & q514 == 7 & q515 == 8
+
+// imputando valores perdidos
+replace aedu_ci=6 if q320a==99 & q321a!=99 & aedu_ci==.
+replace aedu_ci=6 if q421a==99 & q422a!=99 & aedu_ci==.
+replace aedu_ci=6 if q514a==99 & q515a!=99 & aedu_ci==.
 
 **********
 *eduno_ci*
 **********
-
-gen eduno_ci=1 if aedu_ci==0
-replace eduno_ci=0 if aedu_ci>0 & aedu_ci!=.
+gen eduno_ci=(aedu_ci==0)
+replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
 
 **********
 *edupi_ci*
 **********
-gen edupi_ci=0 if aedu_ci!=.
-replace edupi_ci=1 if (aedu_ci >=1 & aedu_ci<6)
+gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+replace edupi_ci=. if aedu_ci==.
 label variable edupi_ci "Primaria incompleta"
-
 
 **********
 *edupc_ci*
 **********
-gen edupc_ci=1 if aedu_ci==6
-replace edupc_ci=0 if edupc_ci==. & aedu_ci != .
+gen edupc_ci=(aedu_ci==6)
+replace edupc_ci=. if aedu_ci==.
 label variable edupc_ci "Primaria completa"
 
 **********
 *edusi_ci*
 **********
-gen edusi_ci=0 if aedu_ci!=.
-replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<11)
+gen edusi_ci=(aedu_ci>6 & aedu_ci<11)
+replace edusi_ci=. if aedu_ci==.
 label variable edusi_ci "Secundaria incompleta"
 
 **********
 *edusc_ci*
 **********
-/*
-Para el caso de Jamaica, tendrán secundaria completa los que tengan más de once años de educación
-pero que NO declaren tener título universitario (serían los de terciaria completa). Además. que
-hayan rendido los exámenes de culminación de secundaria ya sea cualquiera de las ordinarias CXC gen, GCE 'O'
-o las avanzadas GCE 'A' , CAPE. Por otro lado, tendrán cero los que tengan menos de once años de educación.
-
-A PESAR DE QUE ESTA SINTAXIS ES MAS PRECISA, AL HACER UN TAB NO COINCIDE CON EL NÙMERO DE CASOS DE LA VARIABLE
-DE AÑOS DE ESCOLARIDAD.
-
-gen edusc_ci=1 if ((aedu_ci>=11)&(exam!=8))& aedu_ci!=. 
-replace edusc_ci=1 if (exam >=2 & exam<=7) & ((aedu_ci>=11)& aedu_ci!=.) & edusc_ci !=1
-replace edusc_ci=0 if (aedu_ci<11) & (edusc_ci == .)
+gen edusc_ci=(aedu_ci==11)
+replace edusc_ci=. if aedu_ci==.
 label variable edusc_ci "Secundaria completa"
-*/
-gen edusc_ci=1 if aedu_ci>=11 & aedu_ci!=.
-replace edusc_ci=0 if aedu_ci<11
-label variable edusc_ci "Secundaria completa"
-
 
 **********
+*eduui_ci*
+**********
+gen eduui_ci=(aedu_ci>11 & aedu_ci<14)
+replace eduui_ci=. if aedu_ci==.
+label variable eduui_ci "Universitaria incompleta"
+
+**********
+*eduuc_ci*
+**********
+gen eduuc_ci=(aedu_ci>=14)
+replace eduuc_ci=. if aedu_ci==.
+label variable eduuc_ci "Universitaria completa o mas"
+
+***********
 *edus1i_ci*
 ***********
-gen edus1i_ci=0 if aedu_ci!=.
-replace edus1i_ci=1 if (aedu_ci>=7 & aedu_ci<9)& aedu_ci!=.
+gen edus1i_ci=(aedu_ci>=7 & aedu_ci<9)
+replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
 
 ***********
 *edus1c_ci*
 ***********
-gen edus1c_ci=0 if aedu_ci!=.
-replace edus1c_ci=1 if aedu_ci==9 & aedu_ci!=.
+gen edus1c_ci=(aedu_ci==9)
+replace edus1c_ci=. if aedu_ci==.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***********
 *edus2i_ci*
 ***********
-gen edus2i_ci=0 if aedu_ci!=.
-replace edus2i_ci=1 if aedu_ci==10 
+gen edus2i_ci=(aedu_ci==10) 
+replace edus2i_ci=. if aedu_ci==.  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***********
 *edus2c_ci*
 ***********
-gen edus2c_ci=0 if aedu_ci!=.
-replace edus2c_ci=1 if aedu_ci>=11 & aedu_ci!=.
+gen edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=. if aedu_ci==.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
-**********
-*eduui_ci*
-**********
-
-gen eduui_ci=.
-label variable eduui_ci "Superior incompleto"
-**********
-*eduuc_ci*
-**********
-/* Se podría considerar a los que respondieron degree, sin embargo, al evaluar esta variable con ese criterio se 
-evidencian individuos que no acaban ni la secundaria y responden degree.
-
-gen eduuc_ci=0 if aedu_ci!=.
-replace eduuc_ci=1 if exam == 8
-label variable eduuc_ci "Superior completo"
-*/
-
-gen eduuc_ci=.
-label variable eduuc_ci "Superior completo"
-
-
-************************
-***Educacion preescolar.
-************************
+***********
+*edupre_ci*
+***********
 gen edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
-***************
-***asipre_ci***
-***************
-
+************
+*asispre_ci*
+************
 gen byte asispre_ci=.
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
-***************************************************************************
-***Educación terciaria académica versus educación terciaria no-académica***
-***************************************************************************
+**********
+*eduac_ci*
+**********
 gen eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-***************************************************************************
-***Personas que actualmente asisten a centros de enseñanza.
-***************************************************************************
-gen asiste_ci=1 if q21a==5
-replace asiste_ci=0 if asiste_ci==.
-label variable asiste_ci "Asiste actualmente a la escuela"
+***********
+*asiste_ci*
+***********
+gen asiste_ci=. 
 
-***************************************************************************
-***Razones para no asistir a la escuela.***
-***************************************************************************
+*************
+*pqnoasis_ci*
+*************
 gen pqnoasis_ci=.
-label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
+label variable pqnoasis_ci "Razón por que no asiste a la escuela"
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
+*Daniela Zuluaga-Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
+gen pqnoasis1_ci=.
 
-g       pqnoasis1_ci = .
-
-******************************************************
-*Personas que han repetido al menos un año o grado.***
-******************************************************
-
+***********
+*repite_ci*
+***********
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un grado o año"
 
-******************************************************
-***Personas que han repetido el ultimo grado.
-******************************************************
-
+**************
+*repiteult_ci*
+**************
 gen repiteult_ci=.
 label var repite_ci "Personas que han repetido el último grado"
 
-********************************************************
-***Personas que asisten a centros de enseñanza publicos.
-********************************************************
+***********
+*edupub_ci*
+***********
 gen edupub_ci=.
-label var edupub_ci "Personas asisten a centros de enseñanza públicos"
-
-
-***************
-***tecnica_ci**
-***************
-
-gen tecnica_ci=.
-label var tecnica_ci "1=formacion terciaria tecnica"
-
-
-/*sólo es posible determinar los anios de educación hasta finalizar la secundaria. posteriormente se pregunta sobre 
-los exámenes cxc pero no es posible determinar el nivel educativo con estos
-
-
-fin encuesta lfs
-*/
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1569,7 +1487,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

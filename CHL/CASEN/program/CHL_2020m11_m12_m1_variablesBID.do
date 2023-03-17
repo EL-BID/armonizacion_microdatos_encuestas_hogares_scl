@@ -950,7 +950,7 @@ label variable edupre_ci "Educacion preescolar"
 ****************
 ***asispre_ci***
 ****************
-gen asispre_ci=(e2==1 & (e6a==2 | e6a==3 | e6a==4)) 
+gen asispre_ci=(e2==1 & e6a==4) // Asiste a Prekínder / Kínder
 la var asispre_ci "Asiste a educacion prescolar"
 
 **************

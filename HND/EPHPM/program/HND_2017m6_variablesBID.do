@@ -524,7 +524,7 @@ replace ocupa_ci=6 if ((labor>=6000 & labor<=6999) | (labor>=9210 & labor<=9213)
 replace ocupa_ci=7 if ((labor>=7000 & labor<=8999) | (labor>=9311 & labor<=9333)) & emp_ci==1
 replace ocupa_ci=8 if labor>0 & labor<=9999 & emp_ci==1 & ocupa_ci==.
 replace ocupa_ci=9 if labor==9999 & emp_ci==1
-drop labor 
+*drop labor 
 
 label variable ocupa_ci "Ocupacion laboral"
 label define ocupa_ci 1"profesional y tecnico" 2"director o funcionario sup" 3"administrativo y nivel intermedio"
@@ -1274,7 +1274,7 @@ la var edupre_ci "Tiene Educacion preescolar"
 ***************
 ***asipre_ci***
 ***************
-gen byte asispre_ci=.
+gen byte asispre_ci= (ed103 == 1 & ed118 == 3) // Asiste a pre-básica
 la var asispre_ci "Asiste a educacion prescolar"
 
 **************
@@ -1709,7 +1709,8 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
-
+rename ramaop codindustria
+rename labor codocupa
 
 compress
 

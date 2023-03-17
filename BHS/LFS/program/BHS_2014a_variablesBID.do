@@ -1043,6 +1043,8 @@ replace aguafuente_ch= 10 if (water_supply==2 |water_supply==3 | water_supply==4
 *aguadist_ch*
 *************
 gen aguadist_ch=0
+replace aguadist_ch=1 if water_supply==1
+replace aguadist_ch=3 if water_supply==3
 
 **************
 *aguadisp1_ch*
@@ -1058,9 +1060,7 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-
 replace aguamala_ch = 0 if aguafuente_ch<=7
-
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
@@ -1068,17 +1068,13 @@ replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-
 replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-
-
 
 *****************
 ***aguamide_ch***
 *****************
-gen aguamide_ch = .
+gen aguamide_ch =.
 
 *****************
 *bano_ch         *  Altered
@@ -1088,7 +1084,7 @@ gen bano_ch=.
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=.
+generate banoex_ch=9
 
 
 *****************
@@ -1105,7 +1101,7 @@ gen sinbano_ch =.
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = .
+gen aguatrat_ch =9
 
 
 ************

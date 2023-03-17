@@ -1209,7 +1209,7 @@ replace banomejorado_ch=2 if iv11==9
 	************
 
 	gen aguared_ch=(iv7==1)
-    replace aguared_ch=. if iv7==9
+replace aguared_ch=. if iv7==9
 
 
 

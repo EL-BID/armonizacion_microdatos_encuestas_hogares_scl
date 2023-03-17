@@ -1148,7 +1148,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 	************
 
 	gen aguared_ch=(iv7==1)
-    replace aguared_ch=. if iv7==9
+replace aguared_ch=. if iv7==9
 
 
 	*************

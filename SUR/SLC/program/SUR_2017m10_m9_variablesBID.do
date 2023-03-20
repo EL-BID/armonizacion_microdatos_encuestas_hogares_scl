@@ -66,7 +66,7 @@ label value region_BID_c region_BID_c
 	***************
 	***  ine01  ***
 	***************
-	clonevar ine01=.
+	clonevar ine01=domain
 	label var ine01 "division politico-administrativa, distritos"
    
 	***************

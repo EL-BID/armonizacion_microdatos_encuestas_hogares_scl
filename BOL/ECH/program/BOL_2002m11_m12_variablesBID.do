@@ -11,7 +11,7 @@ set more off
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
 
-* global ruta = "${surveysFolder}"
+ global ruta = "${surveysFolder}"
 
 local PAIS BOL
 local ENCUESTA ECH
@@ -1544,6 +1544,9 @@ para análisis de trends (en el marco de estudios sobre el futuro del trabajo)
 BOLIVIA usaba para las EIHs usaba como referencia el CIUO -88 
 rename s512a codocupa
 rename s512b codindustria*/
+
+rename cob_p codocupa
+rename caeb_p codindustria
 
 compress
 

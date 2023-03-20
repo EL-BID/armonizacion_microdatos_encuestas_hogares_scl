@@ -886,7 +886,7 @@ label variable aedu_ci "Años de Educacion"
 replace aedu_ci=0  if emhp28n==3 & aedu_ci==.              // Primaria
 replace aedu_ci=6  if emhp28n==4 & aedu_ci==.              // Media
 replace aedu_ci=11 if (emhp28n==5 | emhp28n==6) & aedu_ci==. // Técnico (TSU) | Universitario
-replace aedu_ci=11 if emhp28n==7 & aedu_ci==. // Posgrado
+replace aedu_ci=16 if emhp28n==7 & aedu_ci==. // Posgrado
 
 replace aedu_ci=floor(aedu_ci) // redondear la variable
 

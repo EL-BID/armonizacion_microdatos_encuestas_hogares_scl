@@ -1155,7 +1155,7 @@ label values quintil_ci quintil_ci
 *****************
 
 * Se setean en lowercase las variables de la base:
-rename * , lower
+
 
 * Label Variables Educación
 
@@ -1323,7 +1323,7 @@ la var edupre_ci "Educacion preescolar"
 ***************
 ***asipre_ci***
 ***************
-g asispre_ci=.
+gen byte asispre_ci= (ed103 == 1 & ed118 == 2) // Asiste a pre-básica
 la var asispre_ci "Asiste a educacion prescolar"
 
 *****************

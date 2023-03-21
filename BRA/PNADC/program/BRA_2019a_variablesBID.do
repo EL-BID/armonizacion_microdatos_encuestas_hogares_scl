@@ -1142,6 +1142,55 @@ label var repiteult_ci "Personas que han repetido el último año o grado"
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 		
+		
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 9
+replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
+replace aguafuente_ch = 2 if s01007==1 & s01010==3
+replace aguafuente_ch = 4 if s01007==2         
+replace aguafuente_ch = 5 if s01007==5 
+replace aguafuente_ch = 9 if s01007==3 
+replace aguafuente_ch = 10 if (s01007==4 | s01007==6)
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+**************
+*aguadisp2_ch*
+**************
+
+gen aguadisp2_ch = 3 if s01008==1
+replace aguadisp2_ch = 2 if s01008==2
+replace aguadisp2_ch = 1 if (s01008==3 | s01008==4)
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+replace sinbano_ch = 0 if (s01011a>=1 | s01011b>=1)
+replace sinbano_ch = 1 if (s01011a==0 & s01011b==0 & s01011c==1)
+replace sinbano_ch = 3 if (s01011a==0 & s01011b==0 & s01011c>=2)
+
+
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+
+		
 ****************
 ***aguared_ch***
 ****************
@@ -1458,55 +1507,6 @@ gen tcylmpri_ch=.
 gen vivi1_ch =.
 gen vivi2_ch =.
 gen tipopen_ci=.
-
-
-
-*****************
-*aguafconsumo_ch*
-*****************
-*no se pregunta si es potable o para el consumo humano
-gen aguafconsumo_ch = 0
-
-*****************
-*aguafuente_ch*
-*****************
-
-gen aguafuente_ch = 9
-replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
-replace aguafuente_ch = 2 if s01007==1 & s01010==3
-replace aguafuente_ch = 4 if s01007==2         
-replace aguafuente_ch = 5 if s01007==5 
-replace aguafuente_ch = 9 if s01007==3 
-replace aguafuente_ch = 10 if (s01007==4 | s01007==6)
-
-**************
-*aguadisp1_ch*
-**************
-gen aguadisp1_ch = 9
-
-**************
-*aguadisp2_ch*
-**************
-
-gen aguadisp2_ch = 3 if s01008==1
-replace aguadisp2_ch = 2 if s01008==2
-replace aguadisp2_ch = 1 if (s01008==3 | s01008==4)
-
-
-************
-*sinbano_ch*
-************
-gen sinbano_ch = .
-replace sinbano_ch = 0 if (s01011a>=1 | s01011b>=1)
-replace sinbano_ch = 1 if (s01011a==0 & s01011b==0 & s01011c==1)
-replace sinbano_ch = 3 if (s01011a==0 & s01011b==0 & s01011c>=2)
-
-
-
-*************
-*aguatrat_ch*
-*************
-gen aguatrat_ch = 9
 
 
 

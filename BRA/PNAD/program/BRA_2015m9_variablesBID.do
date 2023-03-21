@@ -1348,14 +1348,6 @@ gen combust_ch=(v0223==1|v0223==2|v0223==5)
 label var combust_ch "Principal combustible gas o electricidad" 
 
 
-
-***************
-***banoex_ch***
-***************
-gen banoex_ch=(v0216==2)
-replace banoex_ch=. if bano_ch==0 | bano_ch==.|v0216==9
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
-
 *************
 ***des1_ch***
 *************

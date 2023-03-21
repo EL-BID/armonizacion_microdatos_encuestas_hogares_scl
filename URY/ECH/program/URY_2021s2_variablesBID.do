@@ -1657,20 +1657,6 @@ replace techo_ch = 1 if (c3 < 5)
 *107. Método de eliminación de residuos
 gen resid_ch =.
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-
-g       aguamejorada_ch = 1 if (d11 == 1 | d11 == 3) 
-replace aguamejorada_ch = 0 if (d11 == 2 | (d11 >= 4 & d11 <= 6))
-
-*********************
-***banomejorado_ch***
-*********************
-g banomejorado_ch = 1 if (d13 == 1 | d13 == 2) & (d15 == 1) & (d16 == 1 | d16 == 2)
-replace banomejorado_ch = 0 if ((d13 == 1 | d13 == 2) & d15 == 2) | d13 == 3 | ((d13 == 1 | d13 == 2) & d15 == 1 & (d16 == 3 | d16 == 4))
 
 
 *108. Cantidad de habitaciones que se destinan exclusivamente para dormir

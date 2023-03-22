@@ -1,4 +1,3 @@
-
 * (Versión Stata 12)
 clear
 set more off
@@ -9,52 +8,45 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
+* ________________________________________________________________________________________________________________*
  
-
-
+ 
 global ruta = "${surveysFolder}"
 
 local PAIS ECU
 local ENCUESTA ENEMDU
-local ANO "2014"
+local ANO "2022"
 local ronda m12 
 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
+
 capture log close
 log using "`log_file'", replace 
-
 
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Ecuador
 Encuesta: ENEMDU
 Round: m12
-Autores: Marcela Rubio (mrubio@iadb.org / marcelarubio28@hotmail.com)
-Fecha última modificación: Abril 2015
-
-							SCL/LMK - IADB
-****************************************************************************/
-/***************************************************************************
-Detalle de procesamientos o modificaciones anteriores:
-2014, 01 MLO cambio del limite de edad de condocup_ci a 5+
+Modificado por: Eric Torres (etorresram@gmail.com)
+Fecha última modificación: Marzo 2023
 
 ****************************************************************************/
-
 
 use `base_in', clear
+destring *, replace
+
 
 		*************************
 		***VARIABLES DEL HOGAR***
 		*************************
 		
-************
+**************
 * Region_BID *
-************
+**************
 gen region_BID_c=.
 replace region_BID_c=3 
 label var region_BID_c "Regiones BID"
@@ -64,7 +56,9 @@ label value region_BID_c region_BID_c
 	***************
 	***region_c ***
 	***************
-	gen region_c=int(ciudad/10000)
+	gen region_c=.
+	
+	replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
 	replace region_c =23 if canton==1706
@@ -93,20 +87,69 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-   
+
+
+	***************
+	***  ine01  ***
+	***************
+
+	gen ine01=.
+
+	replace ine01=int(ciudad/10000)
+	
+	label define ine01 ///
+	1 "Azuay" ///
+	2 "Bolívar" ///
+	3 "Cañar" ///
+	4 "Carchi" /// 
+	5 "Cotopaxi" ///
+	6 "Chimborazo" ///
+	7 "El Oro" ///
+	8 "Esmeraldas" ///
+	9 "Guayas" ///
+	10 "Imbabura" ///
+	11 "Loja" ///
+	12 "Los Ríos" ///
+	13 "Manabí" ///
+	14 "Morona Santiago" ///
+	15 "Napo" ///
+	16 "Pastaza" ///
+	17 "Pichincha" ///
+	18 "Tungurahua" ///
+	19 "Zamora Chinchipe" ///
+	20 "Galápagos" ///
+	21 "Sucumbíos" ///
+	22 "Orellana" ///
+	23 "Santo Domingo de los Tsáchilas" ///
+    24 "Santa Elena" 
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+
 	***************
 	***factor_ch***
 	***************
 	gen factor_ch=fexp
 	label variable factor_ch "Factor de expansion del hogar"
 	
+	***************
+	***upm_ci***
+	***************
+
+	clonevar upm_ci=upm
+	label variable upm_ci "Unidad Primaria de Muestreo"
+
+	***************
+	***estrato_ci***
+	***************
+
+	clonevar estrato_ci=estrato
+	label variable estrato_ci "Estrato"
+
 	*************
 	****idh_ch***
 	*************
-	sort area ciudad zona sector panelm vivienda hogar
-	* Modificación Marcela Rubio
-	*egen idh_ch = group( area ciudad zona sector panelm vivienda hogar)
-	egen idh_ch = group(ciudad zona sector panelm vivienda hogar)
+	sort  area estrato upm vivienda hogar p01
+	egen idh_ch = group(area estrato upm vivienda hogar)
 	label variable idh_ch "ID del hogar"
 	
 	*************
@@ -134,7 +177,7 @@ label value region_BID_c region_BID_c
 	***anio_c***
 	************
 
-	gen anio_c=2014
+	gen anio_c=2022
 	label variable anio_c "Anio de la encuesta" 
 		
 	***********
@@ -146,7 +189,6 @@ label value region_BID_c region_BID_c
 	*****************
 	***relacion_ci***
 	*****************
-	*la li p04
 	gen relacion_ci=1     if p04==1
 	replace relacion_ci=2 if p04==2
 	replace relacion_ci=3 if p04==3
@@ -169,24 +211,10 @@ label value region_BID_c region_BID_c
 	gen factor_ci=fexp
 	label variable factor_ci "Factor de expansion del individuo"
 	
-	***************
-	***upm_ci***
-	***************
-
-	clonevar upm_ci=sector
-	label variable upm_ci "Unidad Primaria de Muestreo"
-
-	***************
-	***estrato_ci***
-	***************
-
-	gen estrato_ci=.
-	label variable estrato_ci "Estrato"
 
 	*************
 	***sexo_ci***
 	*************
-	*la li p02
 	gen sexo_ci=p02
 	label var sexo_ci "Sexo del individuo" 
 	label def sexo_ci 1"Masculino" 2"Femenino" 
@@ -195,16 +223,16 @@ label value region_BID_c region_BID_c
 	**********
 	***edad***
 	**********
-	
 	*tab p03
 	gen edad_ci=p03 if p03<99
 	label variable edad_ci "Edad del individuo"
-	
+
+
 	**************
 	***civil_ci***
 	**************
-	*la li p06
-	gen civil_ci=1 		if p06==6
+	*p06: para personas de 12 años o más
+	gen civil_ci=1 if p06==6
 	replace civil_ci=2	if p06==1 | p06==5
 	replace civil_ci=3	if p06==2 | p06==3
 	replace civil_ci=4	if p06==4
@@ -260,7 +288,7 @@ label value region_BID_c region_BID_c
 	replace clasehog_ch=2 if (nhijos_ch>0| nconyuges_ch>0) & (notropari_ch==0 & notronopari_ch==0)
 	**** ampliado
 	replace clasehog_ch=3 if ((clasehog_ch ==2 & notropari_ch>0) & notronopari_ch==0) |(notropari_ch>0 & notronopari_ch==0) 
-	**** compuesto  (some relatives plus non relative)
+	**** compuesto  (some relatives plus non relatives)
 	replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))
 	**** corresidente
 	replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0
@@ -313,7 +341,6 @@ label value region_BID_c region_BID_c
 
 
 	
-	
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************
@@ -323,7 +350,7 @@ label value region_BID_c region_BID_c
 	***************
 	***afroind_ci***
 	***************
-**Pregunta: p15 (1 indígena, 2 afroecuatoriano, 3 negro, 4 mulato, 5 montubio, 6 mestizo, 7 blanco, 8 otro) (adiciona categorías afroecuatoriano y montubio)
+**Pregunta: p15 (1 indígena, 2 afroecuatoriano, 3 negro, 4 mulato, 5 montuvio, 6 mestizo, 7 blanco, 8 otro) 
 gen afroind_ci=. 
 replace afroind_ci=1  if p15 == 1
 replace afroind_ci=2 if p15 == 2 | p15 == 3 | p15 == 4
@@ -334,7 +361,7 @@ replace afroind_ci=9 if p15==. & edad_ci<5
 	***************
 	***afroind_ch***
 	***************
-gen afroind_jefe= afroind_ci if relacion_ci==1
+gen afroind_jefe = afroind_ci if relacion_ci==1
 egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
 drop afroind_jefe
 
@@ -362,24 +389,15 @@ gen dis_ch=.
 	****condocup_ci*
 	****************
 	
-	/*2014, 01 MLO cambio del limite de edad de condocup_ci a 5+
-	gen condocup_ci=.
-	replace condocup_ci=1 if condact>=0 & condact <=3
-	replace condocup_ci=2 if condact==5
-	replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-	*replace condocup_ci=4 if edad_ci<10
-	replace condocup_ci=4 if edad<5
-	*/
-	
-	*YL-> al cambiar la categoria 4 a <5 toca generar nuevamente la variable condocup caso contrario el grupo 6-9 se van a inactivos
+	*al cambiar la categoria 4 a <5 toca generar nuevamente la variable condocup caso contrario el grupo 6-9 se van a inactivos
 	generat condocup_ci=.
 	replace condocup_ci=1 if p20==1 | p21<12 | p22==1 
 	replace condocup_ci=2 if (p20==2 | p21==12 | p22==2) & p32<11
 	replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
-	replace condocup_ci=4 if edad_ci<5
+	replace condocup_ci=4 if edad_ci<15
 	label define condocup_ci 1 "ocupados" 2 "desocupados" 3 "inactivos" 4 "menor de PET"
 	label value condocup_ci condocup_ci
-	label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
+	label var condocup_ci "Condicion de ocupacion"
 
 	
 	****************
@@ -394,10 +412,25 @@ gen dis_ch=.
 	****************
 	*cotizando_ci***
 	****************
-	gen cotizando_ci=0     if condocup_ci==1 | condocup_ci==2 
-	replace cotizando_ci=1 if (p44f==1) & cotizando_ci==0 /*solo a emplead@s y asalariad@s, difiere con los otros paises*/
+	*Modficación SGR 15 de julio de 2018. Desde la encuesta 2017 existe una pregunta a los de 15 años y más. 
+	/*gen cotizando_ci=0     if condocup_ci==1 | condocup_ci==2 
+	replace cotizando_ci=1 if (p44f==1)  & cotizando_ci==0 /*solo a emplead@s y asalariad@s, difiere con los otros paises*/
+    replace cotizando_ci=1 if (p44f==1)  & p61b1<=4  & cotizando_ci==0
 	label var cotizando_ci "Cotizante a la Seguridad Social"
-
+	*/
+	
+	gen cotizando_ci=0     if condocup_ci==1 | condocup_ci==2 
+	replace cotizando_ci=1 if (p44f==1)  & cotizando_ci==0 /*solo a emplead@s y asalariad@s, difiere con los otros paises*/
+    *replace cotizando_ci=1 if (p44f==1)  & p61b1<=4  & cotizando_ci==0
+	replace cotizando_ci=1 if (p61b1>=1 & p61b1<=4)  & cotizando_ci==0
+	label var cotizando_ci "Cotizante a la Seguridad Social"
+	
+	gen cotizando_ci1=0     if (condocup_ci==1 | condocup_ci==2 | condocup_ci==3)
+	replace cotizando_ci1=1 if (p44f==1)  & cotizando_ci1==0 /*solo a emplead@s y asalariad@s, difiere con los otros paises*/
+    *replace cotizando_ci=1 if (p44f==1)  & p61b1<=4  & cotizando_ci==0
+	replace cotizando_ci1=1 if (p61b1>=1 & p61b1<=4)  & cotizando_ci1==0
+	label var cotizando_ci1 "Cotizante a la Seguridad Social"
+		
 	****************
 	*instpen_ci*****
 	****************
@@ -409,18 +442,7 @@ gen dis_ch=.
 	*** instcot_ci *****
 	********************
 	gen instcot_ci=iess /* a todas las personas*/
-	label var instcot_ci "institución a la cual cotiza"
-
-	*************
-	*tamemp_ci***
-	*************
-	/*
-	gen tamemp_ci=p47b
-	replace tamemp_ci=. if (p47b>=99 & p47b!=.)
-	replace tamemp_ci=100 if p47a==2
-	label define tamemp_ci 100 "100 y más empleados"
-	label value tamemp_ci tamemp_ci 
-	label var tamemp_ci "# empleados en la empresa de la actividad principal"*/
+	label var instcot_ci "Institución a la cual cotiza"
 
 	*************
 	*tamemp_ci
@@ -428,10 +450,9 @@ gen dis_ch=.
 	*Ecuador Pequeña 1 a 5 Mediana 6 a 50 Grande Más de 50
 	*1 = menos de 100
 	*2 = más de 100
-
 	gen tamemp_ci=.
 	replace tamemp_ci=1 if p47a==1 & (p47b>=1 & p47b<=5)
-	replace tamemp_ci=2 if p47b>=6 & p47b<=50
+	replace tamemp_ci=2 if p47a==1 & p47b>=6 & p47b<=50
 	replace tamemp_ci=3 if (p47a==2) | (p47b>50 & p47b!=.)
 	label var tamemp_ci "# empleados en la empresa segun rangos"
 	label define tamemp_ci 1 "Pequeña" 2 "Mediana" 3 "Grande"
@@ -446,7 +467,7 @@ gen dis_ch=.
 	label var pension_ci "1=Recibe pension contributiva"
 
 	*************
-	*ypen_ci*
+	*ypen_ci*****
 	*************
 	gen ypen_ci=p72b if pension_ci==1
 	replace ypen_ci=. if ypen_ci==999999 
@@ -477,30 +498,25 @@ gen dis_ch=.
 	*********
 	*lp_ci***
 	*********
-	
-	* MGR: http://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2014/Diciembre-2014/Reporte%20pobreza%20y%20desigualdad.pdf
-	gen lp_ci = 81.04
+    *https://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2020/Diciembre-2020/Boletin%20tecnico%20pobreza%20diciembre%202020.pdf	
+	gen lp_ci = 85.6
 	label var lp_ci "Linea de pobreza oficial del pais"
 
 	***********
 	*lpe_ci ***
 	***********
-	
-	* MGR: http://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2014/Diciembre-2014/Reporte%20pobreza%20y%20desigualdad.pdf
-	gen lpe_ci = 45.67
+	*https://www.ecuadorencifras.gob.ec/documentos/web-inec/POBREZA/2020/Diciembre-2020/Boletin%20tecnico%20pobreza%20diciembre%202020.pdf
+	gen lpe_ci = 48.24
 	label var lpe_ci "Linea de indigencia oficial del pais"
 
-
-		/************************************************************************************************************
+/************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 	*************
 	**salmm_ci***
-	*************
-	
-	* MGR: http://www.iess.gob.ec/es/web/guest/jubilacion-ordinaria-vejez
-	gen salmm_ci= 340
+	*************	
+	gen salmm_ci= 425
 	label var salmm_ci "Salario minimo legal"
 
 	************
@@ -519,7 +535,7 @@ gen dis_ch=.
 	***pea_ci***
 	*************
 	gen pea_ci=0
-	replace pea_ci=1 if emp_ci==1 |desemp_ci==1
+	replace pea_ci=1 if emp_ci==1 | desemp_ci==1
 	label var pea_ci "Población Económicamente Activa"
 
 	*****************
@@ -565,7 +581,6 @@ gen dis_ch=.
 	*******************
 	***tiempoparc_ci***
 	*******************
-	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como había sido generada antes
 	gen tiempoparc_ci=((horaspri_ci>=1 & horaspri_ci<30) & p27==4 & emp_ci==1)
 	replace tiempoparc_ci=. if emp_ci==0
 	label var tiempoparc_c "Personas que trabajan medio tiempo" 
@@ -619,19 +634,7 @@ gen dis_ch=.
 	label var nempleos_ci "Número de empleos" 
 	label define nempleos_ci 1 "Un empleo" 2 "Mas de un empleo"
 	label value nempleos_ci nempleos_ci
-/*
-	*****************
-	***firmapeq_ci***
-	*****************
-	*tab p47b
-	gen firmapeq_ci=.
-	replace firmapeq_ci=1 if p47b>=1 & p47b<=5 
-	replace firmapeq_ci=0 if (p47b>5 & p47b<99) | p47a==2
-	replace firmapeq_ci=. if emp_ci==0 
-	label var firmapeq_ci "Trabajadores informales"
-	label def firmapeq_ci 1"5 o menos trabajadores" 0"Mas de 5 trabajadores"
-	label val firmapeq_ci firmapeq_ci
-	*/	
+	
 	*****************
 	***spublico_ci***
 	*****************
@@ -660,28 +663,9 @@ gen dis_ch=.
 	label value ocupa_ci ocupa_ci
 	label variable ocupa_ci "Ocupacion laboral" 
 	
-	
 	*************
 	***rama_ci***
 	*************
-	/*
-	gen rama_ci=.
-	replace rama_ci = 1 if rama1==1
-	replace rama_ci = 2 if rama1==2
-	replace rama_ci = 3 if rama1==3
-	replace rama_ci = 4 if rama1>=4 & rama1<=5
-	replace rama_ci = 5 if rama1==6
-	replace rama_ci = 6 if rama1==7 | rama1==9
-	replace rama_ci = 7 if rama1==8
-	replace rama_ci = 8 if rama1>=11 & rama1<=12
-	replace rama_ci = 9 if rama1>=13 & rama1<=21
-	label var rama_ci "Rama de actividad"
-	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
-	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
-	label val rama_ci rama_ci
-	*/
-	* Clasificacion segun variable desagregada p40
 	
 	gen rama_ci=.
 	replace rama_ci = 1 if (p40>=111 & p40<=322) & emp_ci==1
@@ -693,13 +677,31 @@ gen dis_ch=.
 	replace rama_ci = 7 if ((p40>=4911 & p40<=5320) | (p40>=6110 & p40<=6190)) & emp_ci==1
 	replace rama_ci = 8 if (p40>=6411 & p40<=8299) & emp_ci==1
 	replace rama_ci = 9 if ((p40>=5811 & p40<=6020) | (p40>=6201 & p40<=6399) | (p40>=8410 & p40<=9900)) & emp_ci==1
-	label var rama_ci "Rama de actividad"
+	label var rama_ci "Rama de actividad de la ocupación principal"
 	label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
 	label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
 	label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 	label val rama_ci rama_ci
 
-	
+
+	* rama secundaria
+gen ramasec_ci=.
+replace ramasec_ci = 1 if (p52>=111 & p52<=322) & emp_ci==1
+replace ramasec_ci = 2 if (p52>=510 & p52<=990) & emp_ci==1
+replace ramasec_ci = 3 if (p52>=1010 & p52<=3320) & emp_ci==1
+replace ramasec_ci = 4 if (p52>=3510 & p52<=3900) & emp_ci==1
+replace ramasec_ci = 5 if (p52>=4100 & p52<=4390) & emp_ci==1
+replace ramasec_ci = 6 if ((p52>=4510 & p52<=4799) | (p52>=5510 & p52<=5630)) & emp_ci==1
+replace ramasec_ci = 7 if ((p52>=4911 & p52<=5320) | (p52>=6110 & p52<=6190)) & emp_ci==1
+replace ramasec_ci = 8 if (p52>=6411 & p52<=8299) & emp_ci==1
+replace ramasec_ci = 9 if ((p52>=5811 & p52<=6020) | (p52>=6201 & p52<=6399) | (p52>=8410 & p52<=9900)) & emp_ci==1
+label var ramasec_ci "Rama de actividad de la ocupacion secundaria"
+label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
+label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
+label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
+label val ramasec_ci ramasec_ci
+
+
 	****************
 	***durades_ci***
 	****************
@@ -709,7 +711,7 @@ gen dis_ch=.
 	***************
 	*antiguedad_ci*
 	***************
-	* MLO: no se puede distinguir menos de 1 año (indicados como  00)
+	* MLO: no se puede distinguir menos de 1 año (indicados como  0)
 	gen antiguedad_ci=p45
 	label var antiguedad_ci "antiguedad laboral (anios) - aproximacion"	
 
@@ -726,14 +728,31 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 *******************
 ***formal***
 *******************
-* MGD 04/2016; se cambia por afiliado ya que usa la pregunta que abarca a todos los ocupados.
-g formal_ci=(afiliado_ci==1)
-
-* Formalidad sin restringir a PEA
-g formal_1=afiliado_ci
-*gen formal_ci=(cotizando_ci==1)
+/*SGR 07/2019 desde 2017 se incluye una pregunta sobre aporte a la seguridad social para */
+***************
+***formal_ci***
+***************
+gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
+recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
+g formal_1=cotizando_ci1
+
+***************
+***trabaja_casa_ci***
+***************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if p46 == 9 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (p46 != 9) & (condocup_ci==1 | condocup_ci==2)
+
+
+
+/* MGD 04/2016; se cambia por afiliado ya que usa la pregunta que abarca a todos los ocupados.
+g formal_ci=(afiliado_ci==1)
+*gen formal_ci=(cotizando_ci==1)
+label var formal_ci "1=afiliado o cotizante / PEA"
+*/
 
 
 			**************************
@@ -766,7 +785,6 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 	****************
 	gen ylnmpri_ci=p68b
 	label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"   
-
 
 	***************
 	***ylmsec_ci***
@@ -841,8 +859,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	****************
 	gen remesas_ci=p74b
 	label var remesas_ci "Remesas mensuales reportadas por el individuo" 
-
-
 
 		************************
 		***INGRESOS DEL HOGAR***
@@ -924,12 +940,9 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	by idh_ch, sort: egen remesas_ch=sum(remesas_ci) if miembros_ci==1
 	label var remesas_ch "Remesas mensuales del hogar"	
 
-
-
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-*Javier
 			
 	*************
 	***aedu_ci***
@@ -1064,11 +1077,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	recode p09 (14=17)	// JV: No tiene opción "Falta de recursos tecnológicos". Recoded accordingly
-	
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
-	
 	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar" 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar" 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado" 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Falta de recursos tecnologicos" 17"Otra razón" 
 	label val pqnoasis_ci pqnoasis_ci
 	
@@ -1112,103 +1122,13 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
-
-****************
-***aguared_ch***
-****************
-gen aguared_ch =0
-replace aguared_ch=1 if vi10==1
-replace aguared_ch=. if vi10==.
-label var aguared_ch "Acceso a fuente de agua por red"
-
-
-*****************
-*aguafconsumo_ch*
-*****************
-gen aguafconsumo_ch = 0
-
-*****************
-*aguafuente_ch*
-*****************
-gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if vi10==1
-replace aguafuente_ch = 2 if vi10==2
-replace aguafuente_ch = 6 if vi10==4
-replace aguafuente_ch = 8 if vi10==6
-replace aguafuente_ch = 10 if (vi10==3|vi10==5| vi10==7)
-
-
-**************
-*aguadisp1_ch*
-**************
-gen aguadisp1_ch = 9 
-
-
-**************
-*aguadisp2_ch*
-**************
-gen aguadisp2_ch = 9
-
-
-
-*************
-*aguamala_ch*  Altered
-*************
-gen aguamala_ch = 2
-replace aguamala_ch = 0 if aguafuente_ch<=7 
-replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
-
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
-
-*****************
-***aguamide_ch***
-*****************
-gen aguamide_ch=.
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
-
-*****************
-*bano_ch         *  Altered
-*****************
-gen bano_ch=6
-replace bano_ch=0 if vi09==5
-replace bano_ch=1 if vi09==1
-replace bano_ch=2 if vi09==2
-replace bano_ch=3 if vi09==3 
-replace bano_ch=6 if vi09==4
-
-***************
-***banoex_ch***
-***************
-gen banoex_ch=.
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
-
-*****************
-*banomejorado_ch*  Altered
-*****************
-gen banomejorado_ch= 2
-replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
-replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
-
-
-
-************
-*sinbano_ch*
-************
-gen sinbano_ch = 3
-replace sinbano_ch = 0 if vi09!=5
-*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
-
-*************
-*aguatrat_ch*
-*************
-gen aguatrat_ch =9
-
+	
+	****************
+	***aguared_ch***
+	****************
+	generat aguared_ch=(vi10==1 |vi10==2 |vi10==3)
+	replace aguared_ch=. if vi10==.
+	label var aguared_ch "Acceso a fuente de agua por red"
 
 	*****************
 	***aguadist_ch***
@@ -1223,7 +1143,18 @@ gen aguatrat_ch =9
 	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
 	label val aguadist_ch aguadist_ch
 
-
+	*****************
+	***aguamala_ch***
+	*****************
+	gen aguamala_ch=(vi10==6)
+	replace aguamala_ch=. if vi10==.
+	label var aguamala_ch "Agua unimproved según MDG" 
+	
+	*****************
+	***aguamide_ch***
+	*****************
+	gen aguamide_ch=(vi101==1) if vi101!=.
+	label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 	************
 	***luz_ch***
@@ -1240,14 +1171,18 @@ gen aguatrat_ch =9
 	****************
 	***combust_ch***
 	****************
-	gen combust_ch=0 if vi08>=1 & vi08<=4
+	gen combust_ch=0
 	replace combust_ch=1 if  vi08==1 | vi08==3 
-	label var combust_ch "Principal combustible gas o electricidad" 
+	label var combust_ch "Principal combustible gas o electricidad"  
 	
+	*************
+	***bano_ch***
+	*************
+	gen bano_ch=1
+	replace bano_ch=0 if vi09==5 
+	replace bano_ch=. if vi09==.
+	label var bano_ch "El hogar tiene servicio sanitario"
 
-	*************
-	***des1_ch***
-	*************
 
 	gen des1_ch=.
 	replace des1_ch=0 if bano_ch==0
@@ -1258,31 +1193,37 @@ gen aguatrat_ch =9
 	label def des1_ch 2"Letrina o conectado a pozo ciego" 3"Desemboca en río o calle", add
 	label val des1_ch des1_ch
 	
-	
 	*************
 	***des2_ch***
 	*************
 	gen des2_ch=.
 	replace des2_ch=0 if bano_ch==0
 	replace des2_ch=1 if vi09==1 | vi09==2 | vi09==3 | vi09==4
-	label var des2_ch "Tipo de desague sin incluir definición MDG"
+	label var des2_ch "Tipo de desague sin	
+	***************
+	***banoex_ch***
+	***************
+	gen banoex_ch=.
+	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+	*************
+	***des1_ch***
+	************* incluir definición MDG"
 	label def des2_ch 0"No tiene servicio sanitario" 1"Conectado a red general, cámara séptica, pozo o letrina"
-	label def des2_ch 2"Cualquier otro caso", add
+	*label def des2_ch 2"Cualquier otro caso", add
 	label val des2_ch des2_ch
-	
-	
+		
 	*************
 	***piso_ch***
 	*************
-	gen piso_ch=1 		if vi04a==1 |vi04a==2| vi04a==3 | vi04a==4 
-	replace piso_ch=0 	if vi04a==7
+	gen piso_ch= 0 	if vi04a==7
+	replace piso_ch=1	if vi04a==1 |vi04a==2| vi04a==3 | vi04a==4 
 	replace piso_ch=2 	if vi04a==5| vi04a==6 | vi04a==8 	
 	replace piso_ch=. 	if vi04a==.
 	label var piso_ch "Materiales de construcción del piso"  
 	label def piso_ch 0"Piso de tierra" 1"Materiales permanentes" 2"Otros materiales"
 	label val piso_ch piso_ch
-	
-	
+		
 	**************
 	***pared_ch***
 	**************
@@ -1291,7 +1232,6 @@ gen aguatrat_ch =9
 	label var pared_ch "Materiales de construcción de las paredes"
 	label def pared_ch 0"No permanentes" 1"Permanentes"
 	label val pared_ch pared_ch
-	
 	
 	**************
 	***techo_ch***
@@ -1315,7 +1255,19 @@ gen aguatrat_ch =9
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
- 
+	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
+	
+    *********************
+    ***aguamejorada_ch***
+    *********************
+	g       aguamejorada_ch = 1 if (vi10 >=1 & vi10 <=3) | vi10 ==5  | vi10 ==7
+	replace aguamejorada_ch = 0 if  vi10 ==4  | vi10 ==6
+    *********************
+    ***banomejorado_ch***
+    *********************
+	g       banomejorado_ch = 1 if (vi09 >=1 & vi09 <=4)
+	replace banomejorado_ch = 0 if  vi09 ==5 
+		
 	
 	*************
 	***dorm_ch***
@@ -1327,7 +1279,6 @@ gen aguatrat_ch =9
 	gen dorm_ch=vi07
 	replace dorm_ch=1 if vi07==0 & vi06==1
 	replace dorm_ch=. if vi07==0 & vi06>1
-	replace dorm_ch=. if vi06==99
 	label var dorm_ch "Habitaciones para dormir"
 	
 	****************
@@ -1339,26 +1290,29 @@ gen aguatrat_ch =9
 	***************
 	***cocina_ch***
 	***************
-	gen cocina_ch=.
+	*Modificado por SGR 2019.
+	gen cocina_ch=1 if vi07b==1
+	replace cocina_ch=0 if vi07b==2
 	label var cocina_ch "Cuarto separado y exclusivo para cocinar"
 
 	**************
 	***telef_ch***
 	**************
-	gen telef_ch=0
+	gen telef_ch=.
+	/*gen telef_ch=.0
 	replace telef_ch=1 if eq1501==1
-	replace telef_ch=. if eq1501==.
+	replace telef_ch=. if eq1501==.*/
 	label var telef_ch "El hogar tiene servicio telefónico fijo"
 	
 	***************
 	***refrig_ch***
 	***************
-	gen refrig_ch=0
+	gen refrig_ch=.
+	/*gen refrig_ch=0
 	replace refrig_ch=1 if  eq0101==1
 	replace refrig_ch=. if  eq0101==.
-	label var refrig_ch "El hogar posee refrigerador o heladera"
-	
-	
+	label var refrig_ch "El hogar posee refrigerador o heladera"*/
+		
 	**************
 	***freez_ch***
 	**************
@@ -1368,39 +1322,39 @@ gen aguatrat_ch =9
 	*************
 	***auto_ch***
 	*************
-	gen auto_ch=0
+	gen auto_ch=.
+	/*gen auto_ch=0
 	replace auto_ch=1 if eq1401==1
 	replace auto_ch=. if eq1401==.
-	label var auto_ch "El hogar posee automovil particular"
+	label var auto_ch "El hogar posee automovil particular"*/
 
-	
 	**************
 	***compu_ch***
 	**************
-	gen compu_ch=0
+	gen compu_ch=.
+	/*gen compu_ch=0
 	replace compu_ch=1 if eq0401 ==1 | eq1801==1 
 	replace compu_ch=. if eq0401==. & eq1801==.
-	label var compu_ch "El hogar posee computador"
-	
+	label var compu_ch "El hogar posee computador"*/
 	
 	*****************
 	***internet_ch***
 	*****************
-	
-	gen internet_ch=0
-	replace internet_ch=1 if vi20==1 
-	replace internet_ch=. if vi20==. 
-	label var internet_ch "El hogar posee conexión a Internet"
+	gen internet_ch=.
+	/*gen internet_ch=0
+	replace internet_ch=1 if vi22==1 
+	replace internet_ch=. if vi22==. 
+	label var internet_ch "El hogar posee conexión a Internet"*/
 
 	************
 	***cel_ch***
 	************
-	gen cel_ch=0
+	gen cel_ch=.
+	/*gen cel_ch=0
 	replace cel_ch=1 if eq1701==1 
 	replace cel_ch=. if eq1701==. 
-	label var cel_ch "El hogar tiene servicio telefonico celular"
+	label var cel_ch "El hogar tiene servicio telefonico celular"*/
 	
-		
 	**************
 	***vivi1_ch***
 	**************
@@ -1411,8 +1365,7 @@ gen aguatrat_ch =9
 	label var vivi1_ch "Tipo de vivienda en la que reside el hogar"
 	label def vivi1_ch 1"Casa" 2"Departamento" 3"Otros"
 	label val vivi1_ch vivi1_ch
-	
-	
+		
 	**************
 	***vivi2_ch***
 	**************
@@ -1420,23 +1373,10 @@ gen aguatrat_ch =9
 	replace vivi2_ch=1 if vi02==1 | vi02==2
 	replace vivi2_ch=. if vi02==.
 	label var vivi2_ch "La vivienda es casa o departamento"
-		
+	
 	*****************
 	***viviprop_ch***
 	*****************
-	
-	/*
-	gen viviprop_ch=.
-	replace viviprop_ch = 0 if vi14==1 | vi14==2
-	replace viviprop_ch = 1 if vi14==4	
-	replace viviprop_ch = 2 if vi14==3
-	replace viviprop_ch = 3 if vi14==5
-	label var viviprop_ch "Propiedad de la vivienda"
-	label def viviprop_ch 0"Alquilada" 1"Propia y totalmente pagada" 2"Propia y en proceso de pago"
-	label def viviprop_ch 3"Ocupada (propia de facto)", add
-	label val viviprop_ch viviprop_ch
-	*/
-	
 	gen viviprop_ch=.
 	replace viviprop_ch = 0 if vi14==1 | vi14==2
 	replace viviprop_ch = 1 if vi14==4	
@@ -1451,6 +1391,7 @@ gen aguatrat_ch =9
 	***vivitit_ch***
 	****************
 	gen vivitit_ch=.
+	*gen vivitit_ch=(vi08b==1) if vi08b!=.
 	label var vivitit_ch "El hogar posee un título de propiedad"
 
 	****************
@@ -1495,10 +1436,9 @@ gen aguatrat_ch =9
 	**********************
 	*** migantiguo5_ci ***
 	**********************
-	
+	 
 	gen migantiguo5_ci=.
 	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
-	/* Encuesta pregunta sobre tiempo que lleva viviendo en esa ciudad */
 		
 	**********************
 	*** migrantelac_ci ***
@@ -1506,7 +1446,6 @@ gen aguatrat_ch =9
 	
 	gen migrantelac_ci=(inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1) if migrante_ci!=.
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
-	/* Fuente https://aplicaciones2.ecuadorencifras.gob.ec/SIN/descargas/cu.pdf */
 	
 	**********************
 	*** migrantiguo5_ci ***
@@ -1523,8 +1462,6 @@ gen aguatrat_ch =9
 	replace miglac_ci = 0 if !inlist(p15ab,32,44,52,68,76,84,152,170,188,214,222,320,328,332,340,388,484,558,591,600,604,740,780,858,862) & migrante_ci==1
 	replace miglac_ci = . if migrante_ci==0
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
-	
-
 
 ******************************
 * Variables SPH - PMTC y PNC *
@@ -1555,12 +1492,11 @@ gen mayor64_ci=(edad>64 & edad!=.)
 
 lab def ptmc_ch 1 "Beneficiario PTMC" 0 "No beneficiario PTMC"
 lab val ptmc_ch ptmc_ch
-	
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
 /*_____________________________________________________________________________________________________*/
-
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
@@ -1596,7 +1532,7 @@ lab val grupo_int grupo_int
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
@@ -1605,11 +1541,10 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
-aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
+aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
-
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch, first
 
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
@@ -1620,11 +1555,5 @@ compress
 
 saveold "`base_out'", version(12) replace
 
-
 log close
 
-
-
-
-
-	

@@ -1335,8 +1335,9 @@ replace aguamejorada_ch = 0 if agua_red_publica ==2
  *********************
  ***banomejorado_ch***
  *********************
-g       banomejorado_ch = 1 if (tipo_sanitario >=1 & tipo_sanitario <=3)
-replace banomejorado_ch = 0 if  tipo_sanitario == 4
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 
 *************

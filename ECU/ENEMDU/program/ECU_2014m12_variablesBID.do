@@ -1138,14 +1138,6 @@ replace aguafuente_ch = 8 if vi10==6
 replace aguafuente_ch = 10 if (vi10==3|vi10==5| vi10==7)
 
 
-*************
-*aguadist_ch*
-*************
-gen aguadist_ch=0
-replace aguadist_ch=1 if vi10a==1
-replace aguadist_ch=2 if vi10a==2
-replace aguadist_ch=3 if vi10a==3
-
 **************
 *aguadisp1_ch*
 **************

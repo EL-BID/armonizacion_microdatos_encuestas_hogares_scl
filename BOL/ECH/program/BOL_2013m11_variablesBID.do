@@ -1734,7 +1734,7 @@ replace aguafconsumo_ch = 6 if s1_09==10
 replace aguafconsumo_ch = 7 if s1_09 == 7
 replace aguafconsumo_ch = 8 if s1_09==8
 replace aguafconsumo_ch = 9 if s1_09==6
-replace aguafuente_ch = 10 if s1_09== 11 
+replace aguafconsumo_ch = 10 if s1_09== 11 
 
 *****************
 *aguafuente_ch*

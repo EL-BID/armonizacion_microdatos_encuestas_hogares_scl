@@ -1022,8 +1022,8 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if vsp5==1
-replace aguared_ch = 0 if vsp5!=1
+replace aguared_ch = 1 if vp5==1
+replace aguared_ch = 0 if vp5!=1
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
@@ -1036,11 +1036,11 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if vsp5==1
-replace aguafuente_ch = 2 if vsp5==2
-replace aguafuente_ch= 4 if  vsp5==5
-replace aguafuente_ch= 6 if vsp5==3
-replace aguafuente_ch= 10 if vsp5==4 | vsp5==6
+gen aguafuente_ch = 1 if vp5==1
+replace aguafuente_ch = 2 if vp5==2
+replace aguafuente_ch= 4 if  vp5==5
+replace aguafuente_ch= 6 if vp5==3
+replace aguafuente_ch= 10 if vp5==4 | vp5==6
 
 *************
 *aguadist_ch*

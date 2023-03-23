@@ -1081,7 +1081,7 @@ replace aguafuente_ch= 2 if s4q5__2==1
 replace aguafuente_ch = 4 if s4q5__5==1 
 replace aguafuente_ch = 6 if s4q5__3==1
 replace aguafuente_ch = 8 if s4q5__6==1
-replace aguafuente_ch = 10 if s4q5__7 ==1|s4q5__4 ==1
+replace aguafuente_ch = 10 if s4q5__4 ==1
 
 *************
 *aguadist_ch*

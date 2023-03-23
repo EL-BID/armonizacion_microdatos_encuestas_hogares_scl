@@ -1870,6 +1870,14 @@ replace sinbano_ch = 0 if s01a_15!=5
 replace sinbano_ch = 2 if s01a_15==5
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
+***************
+***banoex_ch***
+***************
+gen banoex_ch =.
+replace banoex_ch = 0 if s01a_17==2
+replace banoex_ch = 1 if s01a_17==1
+
+
 *************
 *aguatrat_ch*
 *************

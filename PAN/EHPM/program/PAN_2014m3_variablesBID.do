@@ -8,7 +8,7 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
+ *____________________________________________F____________________________________________________________________*
  
 
 

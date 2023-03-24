@@ -907,7 +907,7 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ******************************************************************************
 *	VARIABLES OF HOUSEHOLD INFRAESTRUCTURE 
 ******************************************************************************
-notes: Survey de Panama no pregunta caracteristicas de vivienda por lo que no se pueden construir las variables aguared_ch,aguadist_ch,aguamala_ch,aguamide_ch,luz_ch,luzmide_ch,combust_ch,bano_ch,banoex_ch,des1_ch,des2_ch,piso_ch,pared_ch,techo_ch,resid_ch,dorm_ch,cuartos_ch,cocina_ch,telef_ch,refrig_ch,freez_ch,auto_ch,compu_ch,internet_ch,cel_ch,vivi1_ch,vivi2_ch,viviprop_ch,vivitit_ch,vivialq_ch,vivialqimp_ch.
+*notes: Survey de Panama no pregunta caracteristicas de vivienda por lo que no se pueden construir las variables aguared_ch,aguadist_ch,aguamala_ch,aguamide_ch,luz_ch,luzmide_ch,combust_ch,bano_ch,banoex_ch,des1_ch,des2_ch,piso_ch,pared_ch,techo_ch,resid_ch,dorm_ch,cuartos_ch,cocina_ch,telef_ch,refrig_ch,freez_ch,auto_ch,compu_ch,internet_ch,cel_ch,vivi1_ch,vivi2_ch,viviprop_ch,vivitit_ch,vivialq_ch,vivialqimp_ch.
 *Inclusión Variables de vivienda ms abril 2014
 gen aguared_ch=.
 gen aguafconsumo_ch=.
@@ -922,8 +922,6 @@ gen aguamide_ch=.
 gen luz_ch=(h2a_luz_el == 1)
 gen luzmide_ch=.
 gen combust_ch=.
-gen bano_ch=.
-gen banoex_ch=.
 gen des1_ch=.
 gen des2_ch=.
 gen piso_ch=.

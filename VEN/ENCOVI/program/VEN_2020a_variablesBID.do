@@ -1132,10 +1132,10 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered  ** WORKING ON THIS ONE **
 *****************
 gen bano_ch=.
-replace bano_ch=0 if s4q10==5
-replace bano_ch=1 if s4q10==1
-replace bano_ch=2 if s4q10==2
-replace bano_ch=6 if s4q10==3|s4q10==4
+replace bano_ch=0 if s4q9==5
+replace bano_ch=1 if s4q9==1
+replace bano_ch=2 if s4q9==2
+replace bano_ch=6 if s4q9==3|s4q9==4
 
 
 ***************
@@ -1158,7 +1158,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if s4q10!=5
+replace sinbano_ch = 0 if s4q9!=5
 
 
 *************

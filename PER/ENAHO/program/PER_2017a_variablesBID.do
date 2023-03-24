@@ -1681,7 +1681,10 @@ replace bano_ch=3 if p111a==3
 replace bano_ch=4 if (p111a==6|p111a==9)
 replace bano_ch = 6 if (p111a == 5 | p111a ==7)
 
-
+*****************
+*banoex_ch         *  
+*****************
+gen banoex_ch=.
 
 *****************
 *banomejorado_ch*  Altered

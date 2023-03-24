@@ -1745,6 +1745,11 @@ gen aguared_ch=0
 replace aguared_ch=1 if (p110==1 | p110==2)
 label var aguared_ch "Acceso a fuente de agua por red"
 
+*****************
+*banoex_ch         *  
+*****************
+gen banoex_ch=.
+
 
 
 /*

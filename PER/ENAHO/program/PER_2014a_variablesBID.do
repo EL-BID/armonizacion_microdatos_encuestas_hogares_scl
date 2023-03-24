@@ -1760,12 +1760,6 @@ replace luzmide_ch=0 if p112a==3
 gen combust_ch=1 if p113a==1 | p113a==2 | p113a==3
 replace combust_ch=0 if p113a==5 | p113a==6 | p113a==7 | p113a==4
 
-*************
-***bano_ch***
-*************
-gen bano_ch=.
-replace bano_ch=1 if p111 >=1 & p111<=7
-replace bano_ch=0 if p111==8
 
 /*
 p111:

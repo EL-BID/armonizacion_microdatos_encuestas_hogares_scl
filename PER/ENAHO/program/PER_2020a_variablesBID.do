@@ -1787,7 +1787,6 @@ replace aguared_ch=1 if (p110==1 | p110==2)
 label var aguared_ch "Acceso a fuente de agua por red"
 
 
-
 /*
 p110:
            1 red pública, dentro de la vivienda

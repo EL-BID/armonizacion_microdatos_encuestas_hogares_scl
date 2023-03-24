@@ -1059,9 +1059,9 @@ gen aguadisp1_ch =9
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if  vsp6==3|vsp6==4|vsp6==5
-replace aguadisp2_ch = 2 if vsp6==2
-replace aguadisp2_ch = 3 if vsp6==1
+replace aguadisp2_ch = 1 if  vp6==3|vp6==4|vp6==5
+replace aguadisp2_ch = 2 if vp6==2
+replace aguadisp2_ch = 3 if vp6==1
 
 *************
 *aguamala_ch*  Altered
@@ -1091,9 +1091,9 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if vsp8==4
-replace bano_ch=3 if vsp8==2|vsp8==1
-replace bano_ch=6 if vsp8==3
+replace bano_ch=0 if vp8==4
+replace bano_ch=3 if vp8==2|vp8==1
+replace bano_ch=6 if vp8==3
 
 ***************
 ***banoex_ch***
@@ -1114,7 +1114,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if vsp8!=4
+replace sinbano_ch = 0 if vp8!=4
 
 
 *************

@@ -1672,7 +1672,7 @@ replace aedu_ci = 12 + e50_9 - 1  if e50_9 > 0 // Magisterio o profesorado.
 replace aedu_ci = 12 + e50_10 - 1 if e50_10 > 0 // Universidad o similar.
 replace aedu_ci = 12 + e50_11 - 1 if e50_11 > 0 // Terciario no universitario.
 replace aedu_ci = 16 + e50_12 - 1 if e50_12 > 0 // Posgrado (maestría o doctorado).
-
+label var  aedu_ci "Anios de Educacion"
 
 
 **************
@@ -1771,9 +1771,16 @@ aprobados habiendo finalizado nivel o aquellos estan cursando posgrado y por end
 terminaron la universidad. 
 */
 gen byte eduuc_ci = (aedu_ci > 12 & e52_4_2 == 1) | (aedu_ci > 12 & e52_5_2 == 1) ///
-					| (aedu_ci > 12 & e52_6_2 == 1) | (aedu_ci > 12 & e50_12 > 0) 
+					| (aedu_ci > 12 & e52_6_2 == 1) | (aedu_ci > 12 & e52_7_2 > 0) | (aedu_ci > 12 & e50_12 > 0) 
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
+
+/* 
+Para los casos en los cuales el respondiente imputa un nivel finalizado pero 
+otro incompleto y por ende se pisan eduuc con eduui se le da prioridad al 
+nivel completo.
+*/
+replace eduui_ci = 0 if eduuc_ci == 1
 
 ***************
 ***edupre_ci***
@@ -1840,7 +1847,6 @@ gen edupub_ci=.
 replace edupub_ci = 1 if (e49 == 1 & e48 == 1)
 replace edupub_ci = 0 if (e49 == 2 & e48 == 1)
 
-label var  aedu_ci "Anios de Educacion"
 
 ******************************
 *** VARIABLES DE MIGRACION ***

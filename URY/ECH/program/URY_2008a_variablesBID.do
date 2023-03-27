@@ -1760,6 +1760,14 @@ gen byte eduuc_ci=(aedu_ci>12 & e52_8>=4 & e52_8!=9) | (aedu_ci>12 & e52_10>=3 &
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
+/* 
+Para los casos en los cuales el respondiente imputa un nivel finalizado pero 
+otro incompleto y por ende se pisan eduuc con eduui se le da prioridad al 
+nivel completo.
+*/
+replace eduui_ci = 0 if eduuc_ci == 1
+
+
 ***************
 ***edupre_ci***
 ***************

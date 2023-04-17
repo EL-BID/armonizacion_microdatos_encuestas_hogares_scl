@@ -845,7 +845,6 @@ label var ypeoficial_ch "Ingreso per cápita generado por el país"
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-*Mod. 5/2022 Agustina Thailinger SCL/EDU
 
 *************
 ***aedu_ci***
@@ -1437,10 +1436,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *El promedio anual de la canasta basica alimentaria (Rural y urbana) se divide en 3.73 miembros para zona urbana y en 4.26 miembros para la zona rural*
 gen lp_ci =.
 *zona urbana
-replace lp_ci= 54.316354*2 if  zona_c == 1
+replace lp_ci= li*2 if  zona_c == 1
 
 *zona rural
-replace lp_ci= 34.025822*2 if  zona_c == 0
+replace lp_ci= li*2 if  zona_c == 0
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1452,10 +1451,10 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *2018
 gen lpe_ci =.
 *zona urbana
-replace lpe_ci= 54.32 if zona_c == 1
+replace lpe_ci= li if zona_c == 1
 
 *zona rural
-replace lpe_ci= 34.03 if  zona_c == 0
+replace lpe_ci= li if  zona_c == 0
 
 label var lpe_ci "Linea de indigencia oficial del pais"
 

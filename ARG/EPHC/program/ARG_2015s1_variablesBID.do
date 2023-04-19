@@ -1165,7 +1165,7 @@ gen aguafconsumo_ch = 0
 *****************
 *no se pregunta si es potable o para el consumo humano
 *se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
-gen aguafuente_ch = 9
+gen aguafuente_ch =.
 replace aguafuente_ch = 1 if iv7==1 & iv6<3
 replace aguafuente_ch = 2 if iv7==1 & iv6==3
 replace aguafuente_ch = 10 if iv7>1

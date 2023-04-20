@@ -1135,7 +1135,7 @@ replace bano_ch=1 if (r316==1 | r316==3)
 replace bano_ch=2 if (r316==2 | r316==4)
 replace bano_ch=3 if ( r316==7 | r316==8  | r316==9  | r316==10)
 replace bano_ch=6 if (r316==5 | r316==6 )
-replace bano_ch=0 if r314==4 
+replace bano_ch=0 if r315==4 |r315==3
 
 ***************
 ***banoex_ch***

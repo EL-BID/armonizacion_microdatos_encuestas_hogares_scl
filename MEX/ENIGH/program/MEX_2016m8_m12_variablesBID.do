@@ -1350,8 +1350,8 @@ destring drenaje, replace
 destring sanit_agua, replace
 gen bano_ch=.
 replace bano_ch=0 if excusado==2
-replace bano_ch=1 if drenaje==1 & excusado==1 & sanit_agua <3
-replace bano_ch=2 if drenaje==2 & excusado==1 & sanit_agua <3
+replace bano_ch=1 if drenaje==1 & excusado==1 
+replace bano_ch=2 if drenaje==2 & excusado==1
 replace bano_ch=4 if (drenaje==4 | drenaje==3) & excusado==1
 replace bano_ch=6 if drenaje==5 & excusado==1 & sanit_agua== 3
 

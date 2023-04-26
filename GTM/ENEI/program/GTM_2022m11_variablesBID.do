@@ -10,18 +10,18 @@ set more off
  * El servidor contiene las bases de datos MECOVI.
  *________________________________________________________________________________________________________________*
 
-*global surveysFolder "C:\Users\jilli\IADB_2023\Harmonizacion_encuestas\surveys"
 global ruta = "${surveysFolder}"
-*global ruta = "C:\Users\jilli\IADB_2023\Harmonizacion_encuestas\surveys"
-*display "$ruta"
+*global ruta = "C:\Users\jilli\IADB_2023\Armonizacion_encuestas\surveys"
+
+display "$ruta"
 
 local PAIS GTM
 local ENCUESTA ENEI
 local ANO "2022"
 local ronda m11
 
-
-local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+local log_file = $ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
+*local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 display "`log_file'"
 
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
@@ -331,7 +331,6 @@ gen miembros_ci=(relacion_ci<6)
 label variable miembros_ci "Miembro del hogar"
 
 
-
          ******************************
          *** VARIABLES DE DIVERSIDAD **
          ******************************
@@ -427,7 +426,7 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 
 /************************************************************************************************************
-* 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
+*  Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
 ****************
@@ -436,12 +435,20 @@ label var lpe_ci "Linea de indigencia oficial del pais"
 
 * Modifico variable de como fué creada por MGD
 * MGR: Modifico serie en base a correcciones Laura Castrillo: delimitar la condición de edad para que no tome los missing en caso que existan
-* 2021: Esta condición está rara rara: replace condocup_ci=2 if (p04a02==2 | p04a03==2 | p04a04==2 | p04a05==2 | p04a06==2) & p04a02==2 & (p04b01==1 | p04b02==1)
-* 2022: cambian las categorías de las respuestas
+* 2021:
+/*gen condocup_ci=.
+replace condocup_ci=1 if p04a02==1 | p04a03==1 | p04a04==1 | p04a05==1 | p04a06==1
+replace condocup_ci=2 if (p04a02==2 | p04a03==2 | p04a04==2 | p04a05==2 | p04a06==2) & p04a02==2 & (p04b01==1 | p04b02==1)
+replace condocup_ci=2 if (p04a03==2 | p04a04==2 | p04a05==2 | p04a06==2) & p04a02==2 & (p04b01==1 | p04b02==1)
+recode condocup_ci .=3 if edad_ci>=7 & edad_ci!=.
+replace condocup_ci=4 if edad<7
+*/
+* 2022 modificación JCK: En coodrinación con el sector de Mercado Laboral, se utilizaron las variables construidas por la misma ENEI para determinar condocup_ci. 
+
 gen condocup_ci=.
-replace condocup_ci=1 if p05a02==1 | p05a03==1 | p05a04==1 | p05a05==1 | p05a06==1 //trabajó al menos 1h, ayudó o se ausentó temporalmente
-replace condocup_ci=2 if (p05a03==2 | p05a04==2 | p05a05==2 | p05a06==2) & p05a02==3 & p05b01==1 //no trabajó & pero buscó & hizo trámite para buscar 4s
-recode condocup_ci .=3 if edad_ci>=7 & edad_ci!=. //inactivo: ni ocupado ni desocupado con 7 o más años
+replace condocup_ci=1 if ocupados ==1 
+replace condocup_ci=2 if desocupados ==1
+replace condocup_ci=3 if inactivos ==1  & edad_ci>=7 & edad_ci!=.
 replace condocup_ci=4 if edad<7
 
 label var condocup_ci "Condicion de ocupación de acuerdo a def de cada pais"
@@ -847,9 +854,9 @@ replace formal_1=1 if cotizando_ci1==1
 replace formal_1=1 if afiliado_ci==1 & (cotizando_ci1!=1 | cotizando_ci1!=0) & pais_c=="CRI"
 
 
-************************************************************************
-**************************INGRESOS**************************************
-************************************************************************
+         ******************************
+         ***  VARIABLES DE INGRESOS  **
+         ******************************
 
 ***************
 ***ylmpri_ci***
@@ -913,7 +920,7 @@ label var ylnmpri_ci "Ingreso laboral NO monetario actividad principal"
 ***************
 /*
 2021 (2022)
-p04d08b (------) Quinceavo sueldo, Bono vacacional, onos de productividad, bonos de desempeño o estímulos laborales 2da ocu
+p04d08b (------) Quinceavo sueldo, Bono vacacional, bonos de productividad, bonos de desempeño o estímulos laborales 2da ocu
 p04d10b(p05d11b) bono 14 2da ocu
 p04d11b (p05d12b) aguinaldo 2da ocu
 
@@ -1111,9 +1118,9 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
 
-******************************************************************************
-*	EDUCATION 
-******************************************************************************
+         ******************************
+         *** VARIABLES DE EDUCACIÓN  **
+         ******************************
 
 ******************************
 *	asiste_ci: Definida aqui como inscritos en plantel educativo en el presente anio escolar  OK
@@ -1128,7 +1135,7 @@ notes: asiste is defined as enrolled in the current school year
 *******************************************
 
 /* 2021 p03a01 y 2022 p04a01: analfabetos (2) que no contestan sobre nivel y grado
-   2021 la variabla p03a05b va de 1-6 y en el 2022 p04a05b va de 1-26:
+   202 la variabla p03a05b va de 1-6 y en el 2022 p04a05b va de 1-26:
            1 1ro primaria
            2 2do primaria
            3 3ro primaria
@@ -1158,11 +1165,7 @@ notes: asiste is defined as enrolled in the current school year
 		  
 		  tab p04a05b p04a05a*/
 
-gen aedu_ci=.
-replace	aedu_ci=0  if p04a05a==1 //preprimaria
-replace aedu_ci=0  if p04a01 ==2 & (p04a05a==. & p04a05b==.) 
-
-/* 2021
+/* Antes del 2022 el código era así:
 gen aedu_ci=.
 replace	 aedu_ci=0  if p03a05a==1
 
@@ -1207,9 +1210,27 @@ replace aedu_ci=0 if p03a05a==0 & p03a05b==.
 label var aedu_ci "Anios de educacion aprobados"
 */
 
-drop aedu_ci
-gen aedu_ci=p04a05b //max grado alcanzado
-replace	 aedu_ci=0  if p04a05a==1 //preprimaria
+* Sin embargo para el 2022, se cambia por este código:
+*primaria, básico y diversificado
+gen aedu_ci=p04a05b if p04a05b <= 13 //max grado alcanzado
+*universitaria
+replace aedu_ci= 11+1 if p04a05b ==14
+replace aedu_ci= 11+2 if p04a05b ==15
+replace aedu_ci= 11+3 if p04a05b ==16
+replace aedu_ci= 11+4 if p04a05b ==17
+replace aedu_ci= 11+5 if p04a05b ==18 
+replace aedu_ci= 11+6 if p04a05b ==19
+*maestria
+replace aedu_ci= 11+5+1 if p04a05b ==20
+replace aedu_ci= 11+5+2 if p04a05b ==21
+replace aedu_ci= 11+5+3 if p04a05b ==22
+*doctorado
+replace aedu_ci= 11+5+3+1 if p04a05b ==23
+replace aedu_ci= 11+5+3+2 if p04a05b ==24
+replace aedu_ci= 11+5+3+3 if p04a05b ==25
+replace aedu_ci= 11+5+3+4 if p04a05b ==26
+
+replace	 aedu_ci=0  if p04a05a==1 //max grado preprimaria
 replace aedu_ci=0  if p04a01 ==2 & (p04a05a==. & p04a05b==.) //analfabetos que no contestan sobre nivel y grado
 replace aedu_ci=0 if p04a05a==0 & p04a05b==. //ningún nivel y sin info en grado
 label var aedu_ci "Anios de educacion aprobados"
@@ -1248,10 +1269,10 @@ la var edusi_ci "Secundaria Incompleta"
 *	edusc_ci 
 ******************************
 
-g byte edusc_ci=(aedu_ci==12) // son 11 o 12
+g byte edusc_ci=(aedu_ci==11) // 
 replace edusc_ci=1 if aedu_ci==11 & p04a06>=100 & p04a06<=999 // con diploma de bachiller
 replace edusc_ci=. if aedu_ci==.
-la var edusc_ci "Secundaria Completa" // Nota: hasta 5to diversificado sería completa?
+la var edusc_ci "Secundaria Completa" // Nota: hasta 5to diversificado sería completa
 
 ******************************
 *	edus1i_ci 
@@ -1270,33 +1291,31 @@ la var edus1c_ci "1er ciclo de Educacion Secundaria Completo" //nota: hasta 3ro 
 ******************************
 *	edus2i_ci 
 ******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11) //nota: hasta 4to diversificado
-replace edus2i_ci=1 if aedu_ci==11 & p04a06<100 // nota: 5to diversi sin bachiller
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11) 
+replace edus2i_ci=1 if aedu_ci==11 & p04a06<100 
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
 
 ******************************
 *	edus2c_ci 
 ******************************
-g byte edus2c_ci=(aedu_ci==12)
-replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 //con 11 anios pero grado de bachiller
+g byte edus2c_ci=(aedu_ci==11)
+replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
 
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>13 &  p03a06>=100 & p03a06<999) | (aedu_ci>13 &  p03a06>=100 & p03a06==.) // mas de 12 anios pero grado de bachiller 
-replace eduui_ci=. if aedu_ci==.
-la var eduui_ci "Universitaria o Terciaria Incompleta" //nota decia 12, lo cambié por 13
+g byte eduui_ci=(aedu_ci>11 &  p03a06>=100 & p03a06<999) | (aedu_ci>11 &  p03a06>=100 & p03a06==.) 
+la var eduui_ci "Universitaria o Terciaria Incompleta" // mas de 11 anios pero grado de bachiller 
 
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>13 &  p03a06>=1000 & p03a06<9999 ) // Nota: decia 12, lo cambié por 13
+g byte eduuc_ci=(aedu_ci>11 &  p03a06>=1000 & p03a06<9999)
 replace eduuc_ci=. if aedu_ci==.
-la var eduuc_ci "Universitaria o Terciaria Completa"
+la var eduuc_ci "Universitaria o Terciaria Completa" // mas de 11 anios y grado terciario
 
 ******************************
 *	edupre_ci 
@@ -1360,10 +1379,9 @@ label define edupub_ci 1 "Público" 0 "Privado"
 label value edupub_ci edupub_ci
 la var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
-**********************************
-**** VARIABLES DE LA VIVIENDA ****
-**********************************
-
+         ******************************
+         ***  VARIABLES DE VIVIENDA  **
+         ******************************
 
 ****************
 ***aguared_ch***
@@ -1652,11 +1670,10 @@ g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
 
-******************************
-*** VARIABLES DE MIGRACION ***
-******************************
-
-* Variables incluidas por SCL/MIG Fernando Morales
+         ******************************
+		 *** VARIABLES DE MIGRACION *** 
+         ******************************
+		 * Variables incluidas por SCL/MIG Fernando Morales
 
 	*******************
 	*** migrante_ci ***
@@ -1700,8 +1717,7 @@ label var ybenefdes_ci "Monto de seguro de desempleo"
 /*_____________________________________________________________________________________________________*/
 
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
-*do "C:\Users\jilli\IADB_2023\Harmonizacion_encuestas\surveys\Labels&ExternalVars_Harmonized_DataBank.do"
-
+*do "C:\Users\jilli\IADB_2023\Armonizacion_encuestas\surveys\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 

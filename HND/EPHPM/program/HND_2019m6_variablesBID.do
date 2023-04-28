@@ -1483,7 +1483,8 @@ replace bano_ch=6 if dh205==8 | dh205==5
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=9
+generate banoex_ch=.
+replace banoex_ch = 9 if dh204 ==2
 replace banoex_ch = 1 if dh206==1
 replace banoex_ch = 0 if dh206==2
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
@@ -1500,7 +1501,8 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = 3
+gen sinbano_ch =.
+replace sinbano_ch = 3 if dh204==2
 replace sinbano_ch = 0 if dh204==1
 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"

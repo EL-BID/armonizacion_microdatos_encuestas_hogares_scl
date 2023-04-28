@@ -1431,7 +1431,8 @@ replace bano_ch=6 if dh06==9 | dh06==5
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=9
+generate banoex_ch=.
+replace banoex_ch = 9 if dh05==2
 replace banoex_ch = 1 if dh07==1
 replace banoex_ch = 0 if dh07==2
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"

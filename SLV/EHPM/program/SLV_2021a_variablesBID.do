@@ -1255,20 +1255,6 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if  (r312 >=1 & r312 <=4) |  (r312 >4 & r312 <5) | (r313 >=4 & r313 <6) | r313 == 8 | r313 == 10
-replace aguamejorada_ch = 0 if ((r312 >=5 & r312 <=6) & (r313 != 4 | r313 != 5 | r313 != 8 | r313 != 10) ) | (r313 >=1 & r313 <=3) | (r313 >=6 & r313 <=7) | r313 == 9 | (r313 >=11 & r313 <=13)		
-								
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = .
-*g       banomejorado_ch = 1 if  ((r314>=1 & r314 <=2) | r314 == 5 | r314 == 7 ) & r315 ==2
-*replace banomejorado_ch = 0 if (((r314>=1 & r314 <=2) | r314 == 5 | r314 == 7 ) & r315 ==1) | (r314>=3 & r314 <=4) | r314 == 6   | r314 == 8 | r314 == 10 | r31 ==4 | r316 ==2
 
 *************
 ***dorm_ch***
@@ -1790,7 +1776,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
-aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

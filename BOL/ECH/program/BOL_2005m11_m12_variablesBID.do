@@ -31,10 +31,10 @@ log using "`log_file'", replace
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Bolivia
 Encuesta: ECH
-Round: m11_m12
+Round: m11
 Autores: 
-Última versión: Mayra Sáenz E-mail: mayras@iadb.org / saenzmayra.a@gmail.com
-Fecha última modificación: 4 de Octubre de 2013
+Última versión: Nathalia Maya  E-mail: sandramay@iadb.org 
+Fecha última modificación: 25 de agosto de 2022
 
 							SCL/LMK - IADB
 ****************************************************************************/
@@ -55,6 +55,25 @@ gen region_BID_c=3
 label var region_BID_c "Regiones BID"
 label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(CAN)" 4 "Cono_Sur_(CSC)"
 label value region_BID_c region_BID_c
+
+	************
+	* region_c *
+	************
+*destring depto, gen(region_c)
+gen region_c= depto
+label define region_c ///
+1"Chuquisaca"         ///     
+2"La Paz"             ///
+3"Cochabamba"         ///
+4"Oruro"              ///
+5"Potosí"             ///
+6"Tarija"             ///
+7"Santa Cruz"         ///
+8"Beni"               ///
+9"Pando"
+label values region_c region_c              
+clonevar ine01 = region_c
+
 ***************
 ***factor_ch***
 ***************
@@ -62,6 +81,16 @@ label value region_BID_c region_BID_c
 gen factor_ch=.
 replace factor_ch = factor
 label variable factor_ch "Factor de expansion del hogar"
+
+	***************
+	***upm_ci***
+	***************
+gen upm_ci=upm
+	***************
+	***estrato_ci**
+	***************
+gen estrato_ci=. //No es claro si la variable "estrato" corresponde a un estrato muestral
+
 
 ***************
 ****idh_ch*****
@@ -88,15 +117,6 @@ replace zona_c=1 	if urb_rur==1
 label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
-
-
-
-**************
-***region_c***
-**************
-
-gen region_c=.
-label var region_c "Region" 
 
 
 ************
@@ -351,7 +371,6 @@ drop afroind_jefe
 	***afroind_ano_c***
 	*******************
 gen afroind_ano_c=2005 
-
 
 	*******************
 	***dis_ci***

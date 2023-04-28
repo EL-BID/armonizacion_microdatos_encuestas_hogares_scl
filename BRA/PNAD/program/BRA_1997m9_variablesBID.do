@@ -762,295 +762,266 @@ ren firmapeq firmapeq_ci
 gen spublico_ci=(sectorem==4)
 replace spublico_ci=. if sectorem==9
 
-/******************************************************************************************/
-/*						VARIABLES EDUCATIVAS			  */
-/******************************************************************************************/
-gen asiste_ci=(asist==2)
-*Codigo original de Suzanne!*
-gen aedu_ci=99
+					****************************
+					***	VARIABLES EDUCATIVAS ***
+					****************************
+					
+/* 
+Notas construcción aedu_ci: 
 
-preserve
-keep if asiste_ci==0
-/*not aplicable or no response*/	
-	replace aedu_ci=. if ultcurso==-1 | ultcurso==8
-** pre-escolar
-	replace aedu_ci=0 if ultcurso==9 & anio_c<2001
-	replace aedu_ci=0 if (ultcurso==9 | ultcurso==10) & anio_c>=2001
-** elementar(primario)  ** admissao=4
-	replace aedu_ci=min(ultserie,4) if ultcurso==1 & ultserie>=1 & ultserie<=5
-** elementar(primario)  -- problem  people said 6 years of primario in 1995
-** there were no people who answered v317==1 & v315==6 in 1990
-** here we decided to give people who answered ultcurso==1 & ultserie==6 aedu_ci==6
-** this is questionable but avoids missings
-         replace aedu_ci=6 if ultcurso==1 & ultserie==6   
-** medio 1 ciclo (ginasial, etc)
-	replace aedu_ci=min(ultserie+4,8) if ultcurso==2 & ultserie>=1 & ultserie<=5
-** medio 2 ciclo (cientifico, clasico, etc, etc)
-	replace aedu_ci=min(ultserie+8,11) if ultcurso==3 & ultserie>=1 & ultserie<=4
-** primeiro grau
-	replace aedu_ci=ultserie if ultcurso==4 & ultserie>=1 & ultserie<=8
-** segundo grau
-	replace aedu_ci=min(ultserie+8,11) if ultcurso==5 & ultserie>=1 & ultserie<=4
-** superior
-	replace aedu_ci=min(ultserie+11,17) if ultcurso==6 & ultserie>=1 & ultserie<=8
-** maestria o doctorado  (set to 17 as in algorithm  -- unknown years)
-*** I don't understand why everyone who reports ultcurso=7 has a 0 for ultserie?????
-replace aedu_ci=17 if ultcurso==7 & ultserie==0
-replace aedu_ci=min(20,(15+serieasi)) if ultcurso==7 & ultserie>0 & ultserie<9 /**** this is the number of observations in the out of school data set*/
-replace aedu_ci=0  if ultcurso==1 & ultserie==0 & terult!=1
-replace aedu_ci=4  if ultcurso==2 & ultserie==0 & terult!=1
-replace aedu_ci=8  if ultcurso==3 & ultserie==0 & terult!=1
-replace aedu_ci=0  if ultcurso==4 & ultserie==0 & terult!=1
-replace aedu_ci=8 if ultcurso==5 & ultserie==0 & terult!=1
-replace aedu_ci=11 if ultcurso==6 & ultserie==0 & terult!=1
-*** careful:  all who answer ultcurso==7 (master/doctorado) report 0 for ultserie and 0 for termino so must use terult to classify
-replace aedu_ci=16 if ultcurso==7 & ultserie==0 & terult!=1
+En todos los casos Alfabetização de jóvens e adultos, Creche, 
+Classe de alfabetização - CA, Maternal, jardim de infáncia, etc... imputan 0 
+años de educación.
 
-*** what if series==0 but terult==1  (we give them the usual diploma years)
-*** should we check the variable eraseria  -- este curso que asistio era seriado?
+En todos los casos, para aquellos que asisten se le resta 1 al grado declarado 
+para el computo de aedu_ci ya que el asistente no completó dicho año. 
 
-replace aedu_ci=4 if ultcurso==1 & ultserie==0 & terult==1
-replace aedu_ci=8 if ultcurso==2 & ultserie==0 & terult==1
-replace aedu_ci=11 if ultcurso==3 & ultserie==0 & terult==1 
-replace aedu_ci=8   if ultcurso==4 & ultserie==0 & terult==1
-replace aedu_ci=11 if ultcurso==5 & ultserie==0 & terult==1 
-replace aedu_ci=15 if ultcurso==6 & ultserie==0 & terult==1 
-replace aedu_ci=18 if ultcurso==7 & ultserie==0 & terult==1
-save "$ruta\survey\BRA\PNAD\1997\m9\data_orig\Noasiste.dta", replace
+Hay dos sistemas:  Esino fundamental ou 1er  grau, abarca 8 años de 
+duración y siguen 4 de Esino fundamental ou 2do grau (en este anio aparecen como
+Regular ou 1er grau y Regular ou 2do grau respectivamente). El otro, se computan 
+4 años obligatorios de Elementar, 4 años de Medio 1er ciclo y se completa con 4 años 
+de Medio 2do ciclo (científico, classico, etc..)
 
+Para los que declaran cursos no seriados, en el caso de los asistentes, al 
+no contar con información sobre los años de escolaridad aprobados (ya que 
+declaran nivel pero no grado) se imputa por metodología el número máximo de años
+del nivel anterior. Para los no asistentes, el procedimiento es análogo salvo 
+para aquellos en los que pueda discriminarse la finalización del curso en cuyo 
+caso se asignan los años que correspondan.
 
+La Educación Pre-Vestibular hace referencia a cursos de nivelación cortos 
+(menores a un año) que son requisito de admisión para las universidades 
+o servicio público. En esos casos, se imputan los 12 años de educación 
+por secundario completo.
 
-restore
-keep if asiste_ci==1
-*** for those  currently enrolled in school  (if answer both use not enrolled)
-*** drop if answered yes to in school and was in school
-	replace aedu_ci=. if cursoasi==-1 | cursoasi==6
-** pre-escolar
-	replace aedu_ci=0 if cursoasi==7 & anio_c<2001
-	replace aedu_ci=0 if (cursoasi==7 | cursoasi==8) & anio_c>=2001
-** pre-vestibular
-	replace aedu_ci=11 if cursoasi==8 & anio_c<2001
-	replace aedu_ci=11 if cursoasi==9 & anio_c>=2001
-** regular primeiro grau  (** note this creates a zero if in 1st year of 1 grau)
-	replace aedu_ci=(serieasi-1) if cursoasi==1 & serieasi>=1 & serieasi<=8
-** regular segundo grau
-	replace aedu_ci=min(serieasi+7,10) if cursoasi==2 & serieasi>=1 & serieasi<=4
-** supletivo de primeiro grau
-	replace aedu_ci=(serieasi-1) if cursoasi==3 & serieasi>=1 & serieasi<=8
-** supletivo de segundo grau
-	replace aedu_ci=min(serieasi+7,10) if cursoasi==4 & serieasi>=1 & serieasi<=4
-** superior
-	replace aedu_ci=min(serieasi+10,16) if cursoasi==5 & serieasi>=1 & serieasi<=8
-** maestria o doctorado  (??? why set to 17 -- see algorithm)
-	replace aedu_ci=17 if cursoasi==9 /** check if we missed some diploma year  (valid grau but 0 for serie)*/
+En la encuesta, para el nivel superior (Maestría o Doctorado) no se pregunta el
+grado al que asisten, por lo que se imputan los años requeridos para 
+acceder a ese nivel. En caso de haber finalizado dicha instancia, se imputan 
+como aprobados el promedio de duración entre maestría y doctorado al no poder 
+discriminar que individuo pertenece a cada nivel.
 
-replace aedu_ci=0  if cursoasi==1 & serieasi==0 & termino==0
-replace aedu_ci=8  if cursoasi==2 & serieasi==0 & termino==0
-replace aedu_ci=0  if cursoasi==3 & serieasi==0 & termino==0
-replace aedu_ci=8  if cursoasi==4 & serieasi==0 & termino==0
-replace aedu_ci=11 if cursoasi==5 & serieasi==0 & termino==0
-replace aedu_ci=11 if cursoasi==8 & serieasi==0 & termino==0
-replace aedu_ci=15 if cursoasi==9 & serieasi==0 & termino==0
-replace aedu_ci=(15+serieasi) if cursoasi==9 & serieasi>0 & serieasi<6
-*** top code at 20 years
-replace aedu_ci=20 if cursoasi==9 & serieasi>0 & serieasi<9
-save "$ruta\survey\BRA\PNAD\1997\m9\data_orig\Asiste.dta", replace
-append using "$ruta\survey\BRA\PNAD\1997\m9\data_orig\Noasiste.dta"
-
-** zero if never attended school and invalid anwsers for all other school questions
-replace aedu_ci=0 if (asisant==4) & (asist==4) & (ultcurso<1 | ultcurso>7) & (ultserie==0 | ultserie==9)
-
-** zero if 
-replace aedu_ci=0 if (asist==4) & (asisant==4) & (cursoasi<1 | cursoasi==6 | cursoasi==7) & (serieasi==0 | serieasi==9)
-
-** zero if never attended and it is not even attending now
-replace aedu_ci=0 if ultcurso==-1 & cursoasi==-1
-
-replace aedu_ci=. if asisant==9
-
-tab aedu_ci if ultcurso==7 & ultserie==0
-
-** missing combinations
-replace aedu_ci=. if asist==9 & asisant==9
-replace aedu_ci=. if asist==0 & asisant==0
-replace aedu_ci=. if asist==0 & asisant==9
-replace aedu_ci=. if asist==9 & asisant==0
-
-** children younger than 5 should be missing
-replace aedu_ci=. if edad_ci<5
-
-replace aedu_ci=. if aedu_ci==99
-replace aedu_ci=. if edad_ci<5
-
-
-/*
-PROGRAMACION VIEJA:
-gen aedu_ci=.
-replace aedu_ci=serieasi if cursoasi==1 
-replace aedu_ci=ultserie if ultcurso==1 | ultcurso==4
-replace aedu_ci=9 if (cursoasi==2 & serieasi==1)| ultcurso==2 | (ultcurso==5 & ultserie==1)
-replace aedu_ci=10 if cursoasi==2 & serieasi==2 | ultcurso==3 | (ultcurso==5 & ultserie==2)
-replace aedu_ci=10+serieasi if cursoasi==5 
-replace aedu_ci=10+ultserie if ultcurso==6
-replace aedu_ci=14+ultserie if ultcurso==7
-
-if `i'<2001{
-replace aedu_ci=14+serieasi if cursoasi==9 
-replace aedu_ci=0 if (cursoasi==7 | cursoasi==8) | ultcurso==9
-}
-if `i'>=2001{
-replace aedu_ci=14+serieasi if cursoasi==10 
-replace aedu_ci=0 if (cursoasi>=7 & cursoasi<=9) | (ultcurso==9 | ultcurso==10)
-}
+Para mantener consistencia con los scipts de los anios 2002 a 2020 se construye
+asispre_ci condicionando por edad el nivel educativo cursoasi == 7 (Pre-escolar 
+oou creche) para identificar los asistentes a pre-escolar, se toman individuos
+de 4 a 5 anios. 
 */
 
-/*
-PROGRAMACION VIEJA
-gen eduno_ci=(asist==4 & asisant==4)
-gen edupi_ci=((cursoasi==1 & serieasi<8) | ((ultcurso==1 | ultcurso==4) & ultserie<8)) 
-gen edupc_ci=((cursoasi==1 & serieasi==8) | ((ultcurso==1 | ultcurso==4) & ultserie==8))
-gen edusi_ci=((cursoasi==2 & serieasi==1) | ultcurso==2 |(ultcurso==5 & ultserie==1))
-gen edusc_ci=((cursoasi==2 & serieasi==2) | ultcurso==3 |(ultcurso==5 & ultserie==2))
-gen eduui_ci=((cursoasi==5 & serieasi<=4) | (ultcurso==6 & (termino==3 | terult==3)))
-gen eduuc_ci=((cursoasi==5 & serieasi>4) | (ultcurso==6 & terult==1))
-gen edus1i_ci=((cursoasi==2 & serieasi==1) | (ultcurso==2 & terult==3))
-gen edus1c_ci=((cursoasi==2 & serieasi==2) | (ultcurso==2 & terult==1) | (ultcurso==5 & ultserie==1))
-gen edus2i_ci=((cursoasi==2 & serieasi==2) | (ultcurso==3 & terult==3))
-gen edus2c_ci=((cursoasi==5) | (ultcurso==3 & terult==1) | (ultcurso==5 & ultserie==2))
-gen edupre_ci=(cursoasi==7 | ultcurso==9)
-gen eduac_ci=.
+* Valores ignorados o no aplicables van a perdidos:
 
-label var  eduno_ci "Sin Educacion"
-label var  edupi_ci "Primaria Incompleta"		
-label var  edupc_ci "Primaria Completa"		
-label var  edusi_ci "Secundaria Incompleta"		
-label var  edusc_ci "Secundaria Completa"
-label var  eduui_ci "Universitaria o Terciaria Incompleta"		
-label var  eduuc_ci  "Universitaria o Terciaria Completa"
-*/
+replace asist = . if asist == 0 | asist == 9
+replace cursoasi = . if cursoasi == -1 | cursoasi == 0
+replace serieasi = . if serieasi == 0 | serieasi == 9 
+replace asisant = . if asisant == 0 | asisant == 9
+replace ultcurso = . if ultcurso == -1 | ultcurso == 0
+replace ultserie = . if ultserie == 0 | ultserie == 9
+replace terult = . if terult == 0 | terult == 9
 
 
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
-replace eduno_ci=. if aedu_ci==.
+**************
+**asiste_ci***
+**************
+gen asiste_ci = (asist == 2)
+label var asiste_ci "Personas que actualmente asisten a un centro de enseñanza"
+
+***************
+***edupub_ci***
+***************
+// No se pregunta por el tipo de centro educativo
+gen edupub_ci = .
+label var  edupub_ci "Personas que asisten a centros de enseñanza públicos"
+
+
+*************
+***aedu_ci***
+*************
+
+gen aedu_ci = . 
+
+* PARA LOS QUE ASISTEN:
+***********************
+* Alfabetização de adultos, Creche, Pré-escolar
+replace aedu_ci = 0 if inlist(cursoasi, 6, 7) 
+
+* Regular de grado 1 y 2
+replace aedu_ci = serieasi - 1 if inlist(cursoasi, 1, 3) // Regular ou 1º grau
+replace aedu_ci = serieasi + 8 - 1 if inlist(cursoasi, 2, 4) // Regular ou 2º grau
+
+* Superior 
+replace aedu_ci = serieasi + 12 - 1 if cursoasi == 5 // Superior 
+
+* Imputación para los que declaran nivel pero no grado (incluye no seriados)
+replace aedu_ci = 0 if (inlist(cursoasi, 1, 3) & serieasi == .) // Regular ou 1º grau
+replace aedu_ci = 8 if (inlist(cursoasi, 2, 4) & serieasi == .) // Regular ou 2º grau
+replace aedu_ci = 12 if cursoasi == 8 // Pre-Vestibular
+replace aedu_ci = 12 if (cursoasi == 5 & serieasi == .) // Superior
+replace aedu_ci = 12 + 4 if cursoasi == 9 // Maestría o Doctorado
+
+* PARA LOS QUE NO ASISTEN:
+**************************
+
+* Alfabetização de adultos, Creche, Pré-escolar
+replace aedu_ci = 0 if inlist(ultcurso, 8, 9) 
+
+* Regular 
+
+* Sistema antiguo 
+replace aedu_ci = ultserie if ultcurso == 1 // Elementar (primario) - 4 anios
+replace aedu_ci = ultserie + 4 if ultcurso == 2 // Medio 1er ciclo (ginasal) - 4 anios
+replace aedu_ci = ultserie + 8 if ultcurso == 3 // Medio 2do ciclo (científico, clasico etc.)
+
+* Sistema actual 
+replace aedu_ci = ultserie if ultcurso == 4 // 1 grado
+replace aedu_ci = ultserie + 8 if ultcurso == 5 // 2 grado
+
+* Superior 
+replace aedu_ci = ultserie + 12 if ultcurso == 6 // Superior
+
+* Imputación para los que declaran nivel pero no grado
+
+* No finalizado
+replace aedu_ci = 0 if (inlist(ultcurso, 1, 4) & ultserie == . & inlist(terult, 3, .)) // Elementar, Regular ou 1º grau
+replace aedu_ci = 4 if (ultcurso == 2 & ultserie == . & inlist(terult, 3, .)) // Medio 1 
+replace aedu_ci = 8 if (ultcurso == 3 & ultserie == . & inlist(terult, 3, .)) // Medio 2 
+replace aedu_ci = 8 if (ultcurso == 5 & ultserie == . & inlist(terult, 3, .)) // Regular ou 2º grau
+replace aedu_ci = 12 if (ultcurso == 6 & ultserie == . & inlist(terult, 3, .)) // Superior
+replace aedu_ci = 12 + 4 if (ultcurso == 7 & ultserie == . & inlist(terult, 3, .)) // Maestría o Doctorado
+
+* Finalizado 
+replace aedu_ci = 4 if (ultcurso == 1  & ultserie == . & terult == 1) // Elementar
+replace aedu_ci = 8 if (ultcurso == 2 & ultserie == . & terult == 1) // Medio 1 
+replace aedu_ci = 8 if (ultcurso == 4 & ultserie == . & terult == 1) // Regular ou 1º grau
+replace aedu_ci = 12 if (ultcurso == 3 & ultserie == . & terult == 1) // Medio 2 
+replace aedu_ci = 12 if (ultcurso == 5 & ultserie == . & terult == 1) // Regular ou 2º grau
+replace aedu_ci = 12 + 4 if (ultcurso == 6 & ultserie == . & terult == 1) // Universitario
+replace aedu_ci = 12 + 4 + 2 if (ultcurso == 7 & ultserie == . & terult == 1) // Maestría o Doctorado
+
+**************
+***eduno_ci***
+**************
+gen byte eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == . 
 label variable eduno_ci "Cero anios de educacion"
 
-* Modificaciones Marcela Rubio Septiembre 2014
-/*
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<4
-replace edupi_ci=. if aedu_ci==.
-label variable edupi_ci "Primaria incompleta"
-*/
-
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<8
-replace edupi_ci=. if aedu_ci==.
+**************
+***edupi_ci***
+**************
+gen byte edupi_ci = (aedu_ci > 0 & aedu_ci < 5)
+replace edupi_ci = . if aedu_ci == .
 label variable edupi_ci "Primaria incompleta"
 
-/*
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==4
-replace edupc_ci=. if aedu_ci==.
-label variable edupc_ci "Primaria completa"
-*/
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==8
-replace edupc_ci=. if aedu_ci==.
+**************
+***edupc_ci***
+**************
+gen byte edupc_ci = (aedu_ci == 5)
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
-/*
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>4 & aedu_ci<11
-replace edusi_ci=. if aedu_ci==.
-label variable edusi_ci "Secundaria incompleta"
-*/
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>8 & aedu_ci<11
-replace edusi_ci=. if aedu_ci==.
+**************
+***edusi_ci***
+**************
+gen byte edusi_ci = (aedu_ci > 5 & aedu_ci < 12) 
+replace edusi_ci = . if aedu_ci == .
 label variable edusi_ci "Secundaria incompleta"
 
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==11
-replace edusc_ci=. if aedu_ci==.
+**************
+***edusc_ci***
+**************
+gen byte edusc_ci = (aedu_ci == 12) 
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
-** SE DEFINE PRIMER CICLO DE SECUNDARIA LOS PRIMEROS 4 DE 7 ANIOS **
-
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci>4 & aedu_ci<9
-replace edus1i_ci=. if aedu_ci==.
-label variable edus1i_ci "1er ciclo de la secundaria incompleto" 
-
-
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==8
-replace edus1c_ci=. if aedu_ci==.
-label variable edus1c_ci "1er ciclo de la secundaria completo" 
-
-***
-
-** SE DEFINE SEGUNDO CICLO DE SECUNDARIA LOS ULTIMOS 3 DE 7 ANIOS **
-
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci>8 & aedu_ci<11
-replace edus2i_ci=. if aedu_ci==.
-label variable edus2i_ci "2do ciclo de la secundaria incompleto" 
-
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==11
-replace edus2c_ci=. if aedu_ci==.
-label variable edus2c_ci "2do ciclo de la secundaria completo" 
-
-***
-
-/*
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<15
-replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta"
-*/
-
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>11 & aedu_ci<17
+**************
+***eduui_ci***
+**************
+* Entre 13 y 14 anios o 15 que no declaran nivel finalizado.
+gen byte eduui_ci = (aedu_ci >= 13 & aedu_ci <= 14) | (aedu_ci == 15 & terult != 1) 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
-/*
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=15
-replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria incompleta o mas"
-*/
-
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
-replace eduuc_ci=. if aedu_ci==.
+**************
+***eduuc_ci***
+**************
+/* Aquellos con 15 anios que completaron nivel 
+o cualqueira con mas de 15 anios de educ.*/
+gen byte eduuc_ci = (aedu_ci == 15 & terult == 1 | aedu_ci > 15) 
+replace eduuc_ci = . if aedu_ci == .
 label variable eduuc_ci "Universitaria completa o mas"
 
+***************
+***edus1i_ci***
+***************
+gen edus1i_ci = (aedu_ci > 5 & aedu_ci < 9)
+replace edus1i_ci = . if aedu_ci == .
+label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
+***************
+***edus1c_ci***
+***************
+gen edus1c_ci = (aedu_ci == 9)
+replace edus1c_ci = . if aedu_ci == .
+label variable edus1c_ci "1er ciclo de la secundaria completo" 
+
+***************
+***edus2i_ci***
+***************
+gen byte edus2i_ci = (aedu_ci > 9 & aedu_ci < 12)
+replace edus2i_ci = . if aedu_ci == .
+label variable edus2i_ci "2do ciclo de la secundaria incompleto" 
+
+***************
+***edus2c_ci***
+***************
+gen edus2c_ci = (aedu_ci == 12)
+replace edus2c_ci = . if aedu_ci == .
+label variable edus2c_ci "2do ciclo de la secundaria completo" 
+
+***************
+***edupre_ci***
+***************
+* No se declara la finalización en ese nivel.
 gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
+***************
+***asispre_ci**
+***************
+g asispre_ci = (cursoasi == 7 & inlist(edad, 4, 5))
+la var asispre_ci "Asiste a educacion prescolar"	
+
+
+**************
+***eduac_ci***
+**************
+* No puede discriminarse educación superior no unviersitaria.
 gen byte eduac_ci=.
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-foreach var of varlist edu* {
-replace `var'=. if aedu_ci==.
-}
+******************
+***pqnoasis_ci***
+******************
+gen pqnoasis_ci = .
+label var pqnoasis_ci "Razones para no asistir a la escuela"
 
-gen pqnoasis_ci=.
-
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-	
 **************
 *pqnoasis1_ci*
 **************
+**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 gen pqnoasis1_ci = .
 
+***************
+***repite_ci***
+***************
 gen repite_ci=.
-gen edupub_ci=.
-label var  aedu_ci "Anios de Educacion"
+label var repite_ci "Personas que han repetido al menos un año o grado"
+
+******************
+***repiteult_ci***
+******************
+gen repiteult_ci=.
+label var repiteult_ci "Personas que han repetido el último año o grado"
+
+***********************************************************
+***********************************************************
 
 
 *******************
@@ -1110,7 +1081,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

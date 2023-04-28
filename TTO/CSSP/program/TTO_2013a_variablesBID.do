@@ -1045,7 +1045,7 @@ gen aguafconsumo_ch = 0
 gen aguafuente_ch = 1 if (water==1 | water==2 | water==3)
 replace aguafuente_ch = 2 if water==5
 replace aguafuente_ch= 6 if water==6
-replace aguafuente_ch= 10 if water==4 | water==7
+replace aguafuente_ch= 10 if water==4 | water==7 |water==8 |water==9
 
 *************
 *aguadist_ch*
@@ -1053,7 +1053,7 @@ replace aguafuente_ch= 10 if water==4 | water==7
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  water==1 | water==3
 replace aguadist_ch= 2 if  water==2| water==6 
-replace aguadist_ch= 3 if  water==4 |water==5 | water==7 | water==9
+replace aguadist_ch= 3 if  water==4 |water==5 | water==7 |water==8 | water==9
 
 **************
 *aguadisp1_ch*

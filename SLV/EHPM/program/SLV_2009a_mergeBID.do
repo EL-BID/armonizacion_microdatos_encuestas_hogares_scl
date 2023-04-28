@@ -61,46 +61,58 @@ cap gen numorden = r701
 sort lote  tipo  folio  viv  numorden
 save "`base_in'\sec07_m.dta", replace
 
+*SEC021
+use "`base_in'\sec021.dta", clear
+cap gen numorden = r2011
+sort lote  tipo  folio  viv  numorden
+save "`base_in'\sec021_m.dta", replace
+
 *** MERGE
 
 **** Persons
 
 use "`base_in'\sec01_m.dta", clear
 
-merge lote  tipo  folio  viv  numorden using "`base_in'\sec02_m.dta"
+merge m:m lote  tipo  folio  viv  numorden using "`base_in'\sec02_m.dta"
 
 	tab _merge
 	drop _merge
 	sort lote  tipo  folio  viv  numorden 
 	
-merge lote  tipo  folio  viv  numorden using "`base_in'\sec04_m.dta"
+merge m:m lote  tipo  folio  viv  numorden using "`base_in'\sec04_m.dta"
 
 	tab _merge
 	drop _merge
 	sort lote  tipo  folio  viv  numorden 
 	
-merge lote  tipo  folio  viv  numorden using "`base_in'\sec06_m.dta"
+merge m:m lote  tipo  folio  viv  numorden using "`base_in'\sec06_m.dta"
 
 	tab _merge
 	drop _merge
 	sort lote  tipo  folio  viv  
+	
+merge m:m lote  tipo  folio  viv  numorden using "`base_in'\sec021_m.dta"
+
+	tab _merge
+	drop _merge
+	sort lote  tipo  folio  viv  numorden
 
 	
 **** Households
 
-merge lote  tipo  folio  viv   using "`base_in'\sec00_m.dta"
+merge m:1 lote  tipo  folio  viv   using "`base_in'\sec00_m.dta"
 
 	tab _merge
 	drop _merge
 	sort lote  tipo  folio  viv  
 
-merge lote  tipo  folio  viv  using "`base_in'\sec03_m.dta"
+merge m:1 lote  tipo  folio  viv  using "`base_in'\sec03_m.dta"
 
 	tab _merge
 	drop _merge
 	sort lote  tipo  folio  viv  
 
-merge lote  tipo  folio  viv  using "`base_in'\sec07_m.dta"
+merge m:1 lote  tipo  folio  viv  using "`base_in'\sec07_m.dta"
 
 	tab _merge
 	drop _merge
@@ -119,4 +131,5 @@ erase "`base_in'\sec03_m.dta"
 erase "`base_in'\sec04_m.dta"
 erase "`base_in'\sec06_m.dta"
 erase "`base_in'\sec07_m.dta"
+erase "`base_in'\sec021_m.dta"
 

@@ -1454,7 +1454,6 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
 
-
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
@@ -1462,236 +1461,185 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 /*En esta sección es sólo para los mayores a los 5 años de edad*/
 
 /*
-s4_03a:
-          11 Ninguno
-          12 Curso de alfabetización
-          13 Educación pre-escolar
-          14 Básico (1 a 5 años)
-          15 Intermedio (1 a 3 años)
-          16 Medio (1 a 4 años)
-          17 Primaria (1 a 8 años)
-          18 Secundaria (1 a 4 años)
-          19 Educación básica de adultos (EBA)
-          20 Centro de educación media de adultos (CEMA)
-          21 Educación juvenil alternativa(EJA)
-          22 Educación primaria de adultos(EPA)
-          23 Eduación secundaria de adultos(ESA)
-          24 Normal
-          25 Universidad  pública(Licenciatura)
-          26 Universidad  privada (Licenciatura)
-          27 Postgrado (Diplomado, especialidad, maestría, doctorado)
-          28 Técnico de universidad
-          29 Técnico de instituto(Duración mayor o igual a 1 año)
-          30 Institutos de formación militar y policial
-          31 Otros cursos(Duración menor a 1 año)
-
-
-
-gen byte aedu_ci=.
-
-replace aedu_ci=0 if s4_03a==11 | s4_03a==12 | s4_03a==13
-
-replace aedu_ci=1 if (s4_03a==14 | s4_03a==17) & s4_03b==1
-replace aedu_ci=2 if (s4_03a==14 | s4_03a==17) & s4_03b==2
-replace aedu_ci=3 if (s4_03a==14 | s4_03a==17) & s4_03b==3
-replace aedu_ci=4 if (s4_03a==14 | s4_03a==17) & s4_03b==4
-replace aedu_ci=5 if (s4_03a==14 | s4_03a==17) & s4_03b==5
-
-replace aedu_ci=6 if (s4_03a==17 & s4_03b==6) | (s4_03a==15 & s4_03b==1)
-replace aedu_ci=7 if (s4_03a==17 & s4_03b==7) | (s4_03a==15 & s4_03b==2)
-replace aedu_ci=8 if (s4_03a==17 & s4_03b==8) | (s4_03a==15 & s4_03b==3)
-
-replace aedu_ci=9 if (s4_03a==16 | s4_03a==18) & s4_03b==1
-replace aedu_ci=10 if (s4_03a==16 | s4_03a==18) & s4_03b==2
-replace aedu_ci=11 if (s4_03a==16 | s4_03a==18) & s4_03b==3
-replace aedu_ci=12 if (s4_03a==16 | s4_03a==18) & s4_03b==4
-
-replace aedu_ci=13 if (s4_03a>=24 & s4_03a<=30 & s4_03a~=27) & s4_03b==1
-replace aedu_ci=14 if (s4_03a>=24 & s4_03a<=30 & s4_03a~=27) & s4_03b==2
-replace aedu_ci=15 if (s4_03a>=24 & s4_03a<=30 & s4_03a~=27) & s4_03b==3
-replace aedu_ci=16 if (s4_03a>=24 & s4_03a<=30 & s4_03a~=27) & s4_03b==4
-replace aedu_ci=16 if (s4_03a==24 | s4_03a==28 | s4_03a==29) & s4_03b==5
-replace aedu_ci=17 if (s4_03a==25 | s4_03a==26 | s4_03a==30) & s4_03b==5
-
-replace aedu_ci=16 if (s4_03a==24 | s4_03a==28 | s4_03a==29) & s4_03b==8
-replace aedu_ci=17 if (s4_03a==25 | s4_03a==26 | s4_03a==30) & s4_03b==8
-
-replace aedu_ci=18 if s4_03a==27 & s4_03b==1
-replace aedu_ci=19 if s4_03a==27 & s4_03b==2
-
-label var aedu_ci "Anios de educacion aprobados" 
-*/
-
-* Modificaciones Marcela Rubio Septiembre 2014
-
-/*
-s4_03a
-
-CERO AÑOS DE EDUCACION
+ 0 A~NOS DE EDUCACIÓN
           11 ninguno
           12 curso de alfabetización
           13 educación pre-escolar
-		  35 otros cursos
 
-PRIMARIA
-		  
+PRIMARIA 		  
           14 básico (1 a 5 años)
           15 intermedio (1 a 3 años)
           17 primaria (1 a 8 años)
 		  
-SECUNDARIA
-          16 medio (1 a 4 años)  
+		  
+SECUNDARIA		  
+		  16 medio (1 a 4 años)
           18 secundaria (1 a 4 años)
 		  
 
-EDUCACION SUPERIOR
+EDUCACION SUPERIOR	
+	      TÉCNICA 
           26 normal
-          27 universidad pública
-          28 universidad privada
-          29 postgrado diplomado
-          30 postgrado maestría
-          31 postgrado doctorado
           32 técnico de universidad
           33 técnico de instituto
+		  UNIVERSITARIA
+		  27 universidad pública
+          28 universidad privada
           34 institutos de formación militar y policial
-
-No se consideran por no ser educación formal sino "Alternativa" o "No formal"
-          19 educación básica de adultos (eba)
+		  POSTGRADO
+		  29 postgrado diplomado
+          30 postgrado maestría
+          31 postgrado doctorado
+          
+ 
+ *No se consideran por no ser educación formal sino "Alternativa" o "No formal"
+          25 educación especial
+		  19 educación básica de adultos (eba)
           20 centro de educación media de adultos (cema)
           21 educación juvenil alternativa (eja)
           22 educación primaria de adultos (epa)
           23 educación secundaria de adultos (esa)
           24 educación técnica de adultos (eta)
-          25 educación especial
+
+		  
+		  35 otros cursos (menor a 1 anio)
+ 
 */
 
+**************
+****aedu_ci***
+**************
+
 gen aedu_ci = .
-* Primaria y Secundaria
-replace aedu_ci = 0 if s4_03a==11 | s4_03a==12 | s4_03a==13 
-replace aedu_ci = 1 if (s4_03a==14 | s4_03a==17) & s4_03b==1
-replace aedu_ci = 2 if (s4_03a==14 | s4_03a==17) & s4_03b==2
-replace aedu_ci = 3 if (s4_03a==14 | s4_03a==17) & s4_03b==3
-replace aedu_ci = 4 if (s4_03a==14 | s4_03a==17) & s4_03b==4
-replace aedu_ci = 5 if (s4_03a==14 | s4_03a==17) & s4_03b==5
-replace aedu_ci = 6 if (s4_03a==17 & s4_03b==6) | (s4_03a==15 & s4_03b==1) 
-replace aedu_ci = 7 if (s4_03a==17 & s4_03b==7) | (s4_03a==15 & s4_03b==2) 
-replace aedu_ci = 8 if (s4_03a==17 & s4_03b==8) | (s4_03a==15 & s4_03b==3) 
-replace aedu_ci = 9 if (s4_03a==16 | s4_03a==18) & s4_03b==1
-replace aedu_ci = 10 if (s4_03a==16 | s4_03a==18) & s4_03b==2
-replace aedu_ci = 11 if (s4_03a==16 | s4_03a==18) & s4_03b==3
-replace aedu_ci = 12 if (s4_03a==16 | s4_03a==18) & s4_03b==4
-* Superior
-replace aedu_ci = 13 if s4_03b==1 & (s4_03a==26 | s4_03a==27 | s4_03a==28 | s4_03a==32 | s4_03a==33 | s4_03a==34 ) 
-replace aedu_ci = 14 if s4_03b==2 & (s4_03a==26 | s4_03a==27 | s4_03a==28 | s4_03a==32 | s4_03a==33 | s4_03a==34 ) 
-replace aedu_ci = 15 if s4_03b==3 & (s4_03a==26 | s4_03a==27 | s4_03a==28 | s4_03a==32 | s4_03a==33 | s4_03a==34 ) 
-replace aedu_ci = 16 if s4_03b==4 & (s4_03a==26 | s4_03a==27 | s4_03a==28 | s4_03a==32 | s4_03a==33 | s4_03a==34 ) 
-replace aedu_ci = 17 if (s4_03b>=5 & s4_03b<=8 ) & (s4_03a==26 | s4_03a==27 | s4_03a==28 | s4_03a==32 | s4_03a==33 | s4_03a==34 ) 
-*Postgrado
-replace aedu_ci = 18 if s4_03b==1 & (s4_03a==29 | s4_03a==30 | s4_03a==31 ) 
-replace aedu_ci = 19 if s4_03b==2 & (s4_03a==29 | s4_03a==30 | s4_03a==31 ) 
-replace aedu_ci = 20 if s4_03b==3 & (s4_03a==29 | s4_03a==30 | s4_03a==31 )
-replace aedu_ci = 21 if (s4_03b>=4 & s4_03b>=8) & (s4_03a==29 | s4_03a==30)
-replace aedu_ci = 21 if (s4_03b==4  & s4_03a==31)
-replace aedu_ci = 22 if (s4_03b==5  & s4_03a==31)
-replace aedu_ci = 22 if (s4_03b==8  & s4_03a==31)
+replace aedu_ci = 0 if inlist(s4_03a, 11, 12, 13) // Ninguno, alfabetización, preescolar
+replace aedu_ci = s4_03b if inlist(s4_03a, 14, 17) // Básico, primaria
+replace aedu_ci = s4_03b + 5 if s4_03a == 15 // Intermedio
+replace aedu_ci = s4_03b + 8 if inlist(s4_03a, 16, 18) // Secundaria 
+replace aedu_ci = 12 if s4_03a == 35 // Imputación Otros curos
+
+// Para educación Superior el codigo 5 u 8 indica egreso o titulación respectivamente
+
+// Educación Superior:
+replace aedu_ci = s4_03b + 12 if inlist(s4_03a, 26, 32, 33, 27, 28, 34) // Superior hasta 4 anios
+replace aedu_ci = 17 if inlist(s4_03a, 26, 32, 33, 27, 28, 34) & inlist(s4_03b, 5, 8) // Egreso, titulación
+
+*postgrado (1 anio)
+replace aedu_ci = 17 if s4_03a == 29 & s4_03b == 1 // cursando
+replace aedu_ci = 18 if s4_03a == 29  & s4_03b == 8 // terminado
+
+*maestria (2 anios)
+replace aedu_ci = 18 if s4_03a == 30 & s4_03b == 1 // 2do o 3er semestre aprobado
+replace aedu_ci = 19 if s4_03a == 30  & s4_03b == 2 // 4to semestre aprobado
+replace aedu_ci = 19 if s4_03a == 30  & s4_03b >= 5 & s4_03b <= 8 // egresado o titulado
+
+*doctorado (4 anios)
+replace aedu_ci = 20 if s4_03a == 31 & s4_03b == 1 // 2do o 3er semestre aprobado
+replace aedu_ci = 21 if s4_03a == 31 & s4_03b == 2 // 4to o 5to semestre aprobado
+replace aedu_ci = 22 if s4_03a == 31 & s4_03b == 3 // 6to o 7mo semestre aprobado
+replace aedu_ci = 23 if s4_03a == 31 & s4_03b == 4 // 8vo semestre aprobado
+replace aedu_ci = 23 if s4_03a == 31 & s4_03b >= 5 & s4_03b <= 8 // egresado o titulado
+
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci=(s4_03a==11 | s4_03a==12 | s4_03a==13) 
-replace eduno_ci=. if aedu_ci==.
+gen byte eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 
-gen byte edupi_ci=(aedu>=1 & aedu_ci<=5)
-replace edupi_ci=. if aedu_ci==.
+gen byte edupi_ci = (aedu_ci >= 1 & aedu_ci <= 5)
+replace edupi_ci = . if aedu_ci == .
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
 
-gen byte edupc_ci=(aedu_ci==6)
-replace edupc_ci=. if aedu_ci==.
+
+gen byte edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
 
-gen byte edusi_ci=(aedu_ci>=6 & aedu_ci<=11)
-replace edusi_ci=. if aedu_ci==.
+gen byte edusi_ci = (aedu_ci >= 7 & aedu_ci <= 11)
+replace edusi_ci = . if aedu_ci == .
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
 
-gen byte edusc_ci=(aedu_ci==12)
-replace edusc_ci=. if aedu_ci==.
+gen byte edusc_ci = (aedu_ci == 12)
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
-replace edus1i_ci=. if aedu_ci==.
+gen byte edus1i_ci = (aedu_ci > 6 & aedu_ci <= 7)
+replace edus1i_ci = . if aedu_ci == .
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
+
 
 ***************
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=(aedu_ci==8)
-replace edus1c_ci=. if aedu_ci==.
+gen byte edus1c_ci = (aedu_ci == 8)
+replace edus1c_ci = . if aedu_ci == .
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=(aedu_ci>=9 & aedu_ci<=11)
-replace edus2i_ci=. if aedu_ci==.
+gen byte edus2i_ci = (aedu_ci >= 9 & aedu_ci <= 11)
+replace edus2i_ci = . if aedu_ci == .
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=(aedu_ci==12)
-replace edus2c_ci=. if aedu_ci==.
+gen byte edus2c_ci = (aedu_ci == 12)
+replace edus2c_ci = . if aedu_ci == .
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s4_03b<8)
-replace eduui_ci=. if aedu_ci==.
+gen byte eduui_ci = (aedu_ci >= 13 & aedu_ci < 17 ) & (s4_03a == 27 | s4_03a == 28) // universitaria
+replace  eduui_ci = 1 if (aedu_ci >= 13 & aedu_ci < 17 ) & s4_03a == 26   // normal
+replace  eduui_ci = 1 if (aedu_ci >= 13 & aedu_ci < 15 ) & (s4_03a >= 32 & s4_03a <= 34)   // tecnicaturas y formacion militar y policial
+replace eduui_ci = . if aedu_ci == .
 label variable eduui_ci "Universitaria incompleta"
 
 ***************
 ***eduuc_ci***
 ***************
+gen byte eduuc_ci = (aedu_ci >= 17 ) & (s4_03a == 27 | s4_03a == 28) // universitaria
+replace eduuc_ci = 1 if aedu_ci >= 17  & s4_03a == 26 // normal
+replace eduuc_ci = 1 if (aedu_ci >= 13 & aedu_ci >= 15 ) & s4_03a >= 32 & s4_03a <= 34 // tecnicaturas
+replace eduuc_ci = 1 if  s4_03a >= 29 & s4_03a <= 31 // postgrados
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s4_03b==8) | (aedu_ci>=17 & aedu_ci<.)
 replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria incompleta o mas"
-
-
+label variable eduuc_ci "Universitaria completa"
 
 ***************
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s4_03a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
@@ -1703,16 +1651,14 @@ label variable edupre_ci "Educacion preescolar"
 	replace asispre_ci=1 if s4_05==1 & s4_06a==13
 	recode asispre_ci (.=0)
 	la var asispre_ci "Asiste a educacion prescolar"
-
+	
 **************
 ***eduac_ci***
 **************
-
-* Cambia a terciaria académica a los insitutos militares o policiales. LCM dic-2013
-
-gen byte eduac_ci=.
-replace eduac_ci=1 if (s4_03a>=27 & s4_03a<=32 | s4_03a==34)
-replace eduac_ci=0 if (s4_03a==26 | s4_03a>=33 )
+gen byte eduac_ci = .
+replace eduac_ci = 1 if (s4_03a >= 27 & s4_03a <= 31) // grados
+replace eduac_ci = 0 if (s4_03a >= 32 & s4_03a <= 34) //tecnicaturas
+replace eduac_ci = 0 if (s4_03a == 26 ) // normal
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
@@ -1777,8 +1723,8 @@ label var repite_ci "Ha repetido al menos un grado"
 ***repiteult_ci***
 ******************
 
-gen repiteult_ci=(s4_12 ==1)
-replace repiteult_ci=. if s4_09==.
+gen repiteult_ci=(s4_12 == 1)
+replace repiteult_ci=. if s4_12==.
 label var repiteult "Ha repetido el último grado"
 
 
@@ -1794,24 +1740,10 @@ s4_06:
 */
 
 
-gen edupub_ci=(s4_07==2 | s4_07==3)
+gen edupub_ci = (s4_07 == 1 | s4_07 == 2)
+replace edupub_ci = 0 if s4_07 == 3
 replace edupub_ci=. if s4_07==.
 label var edupub_ci "Asiste a un centro de ensenanza público"
-
-**************
-***tecnica_ci*
-**************
-/*
-gen tecnica_ci=.
-replace tecnica_ci=1 if s4_03a==28 | s4_03a==29
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
-*/
-*Modificación Mayra Sáenz- Octubre 2013
-gen tecnica_ci=.
-replace tecnica_ci=1 if s4_03a==32 | s4_03a==33
-recode tecnica_ci .=0 
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 
 **********************************
@@ -2254,7 +2186,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

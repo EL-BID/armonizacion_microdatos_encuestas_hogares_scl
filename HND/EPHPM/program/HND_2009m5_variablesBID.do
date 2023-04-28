@@ -1260,11 +1260,13 @@ la var eduuc_ci "Universitaria o Terciaria Completa"
 g byte edupre_ci=.
 la var edupre_ci "Educacion preescolar"
 
+
 ***************
 ***asipre_ci***
 ***************
-g asispre_ci=.
+gen byte asispre_ci= (p103 == 1 & p118 == 3) // Asiste a pre-básica
 la var asispre_ci "Asiste a educacion prescolar"
+
 
 *****************
 ***pqnoasis_ci***

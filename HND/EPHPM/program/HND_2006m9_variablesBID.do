@@ -1108,12 +1108,6 @@ solo hay información para los agregados*/
 *****************
 *	Educación   *
 *****************
-/* 
-Solo seteo en minusculas aquellas variables que empiezan con
-P ya que hay al correr un rename * se genera conflicto con 
-NPER and Nper. 
-*/
-rename P* , lower
 
 ***************
 ***asiste_ci***
@@ -1247,7 +1241,7 @@ la var edupre_ci "Educacion preescolar"
 ***************
 ***asipre_ci***
 ***************
-g asispre_ci=.
+gen byte asispre_ci= (p019 == 1 & p026 == 3) // Asiste a pre-escolar
 la var asispre_ci "Asiste a educacion prescolar"
 	
 *****************

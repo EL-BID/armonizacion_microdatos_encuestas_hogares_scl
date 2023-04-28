@@ -1552,6 +1552,12 @@ pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
+
 
 compress
 

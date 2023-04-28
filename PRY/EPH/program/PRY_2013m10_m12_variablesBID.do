@@ -1255,41 +1255,128 @@ drop nivgra aedu_temp
 ********************************************
 ***Variables de Infraestructura del hogar***
 ********************************************
-
-***************
-**aguared_ch***
-***************
-
-gen aguared_ch=(v06==1 | v06==2 |v06==3|v06==4)  
-
-
 ****************
-**aguadist_ch***
+***aguared_ch***
 ****************
-
-gen aguadist_ch=. 
-
-	replace aguadist_ch=1 if v09==2
-	replace aguadist_ch=2 if v09==1| v09==4
+generate aguared_ch =.
+replace aguared_ch = 1 if (v06==1 | v06==2 | v06==3| v06==4)
+replace aguared_ch = 0 if v06>4
+la var aguared_ch "Acceso a fuente de agua por red"
 	
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if (v08==4 | v08==1 | v08==2 |v08==3) & v09<=2
+replace aguafconsumo_ch = 2 if (v08==4 | v08==1 | v08==2 |v08==3) & v09>2
+replace aguafconsumo_ch = 3 if v08==11
+replace aguafconsumo_ch= 4 if (v08==5 | v08==6)
+replace aguafconsumo_ch = 5 if v08==10
+replace aguafconsumo_ch = 6 if v08==12
+replace aguafconsumo_ch = 7 if v08==8
+replace aguafconsumo_ch = 8 if v08==13
+replace aguafconsumo_ch = 9 if v08==9 | v08==7
+replace aguafconsumo_ch = 10 if v08==14 
 
-****************
-**aguamala_ch***
-****************
-*cuya fuente de agua es diferente de red pública, privada o de pozo
-gen aguamala_ch=0 
-replace aguamala_ch=(v08>=8 & v08 <=13)
-label var aguamala_ch "Agua unimproved según MDG" 
 
-****************
-**aguamide_ch***
-****************
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if (v06==4 | v06==1 | v06==2 |v06==3) & v09<=2
+replace aguafuente_ch = 2 if (v06==4 | v06==1 | v06==2 |v06==3) & v09>2
+replace aguafuente_ch= 4 if (v06==5 | v06==6)
+replace aguafuente_ch = 5 if v06==10
+replace aguafuente_ch = 6 if v06==11
+replace aguafuente_ch = 8 if v06==9
+replace aguafuente_ch = 10 if (v06==12 | v06==8 |v06==7)
 
-gen aguamide_ch=.
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch= 1 if v09==2
+replace aguadist_ch= 2 if v09==1 | v09==4 
+replace aguadist_ch= 3 if v09==3 
+
+**************
+*aguadisp1_ch*
+**************
+destring v07, replace
+gen aguadisp1_ch =0
+replace aguadisp1_ch =1 if v07==1
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch =.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+destring v13, replace
+gen bano_ch=.
+replace bano_ch=0 if v12==6
+replace bano_ch=1 if v13==1
+replace bano_ch=2 if v13==2
+replace bano_ch=3 if (v13==5 | v13==6)
+replace bano_ch=4 if v13==4
+replace bano_ch=5 if v13==7
+replace bano_ch=6 if (v13==8 | v13==3) 
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if v12==1
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 
 ****************
@@ -1310,21 +1397,7 @@ gen luzmide_ch=.
 
 gen combust_ch=(v14b==4 | v14b==2)
 
- 
 
-****************
-****bano_ch*****
-****************
-* Si existe la pregunta tiene baño (v12) pero se obtiene los mismos resultados con la v13 
-* que pregunta del tipo de desague sanitario.
-gen bano_ch=(v12==1)
-
-
-****************
-****banoex_ch***
-****************
-
-gen banoex_ch=. 
 
 ****************
 ****des1_ch*****
@@ -1384,20 +1457,6 @@ gen resid_ch=0 if basura==2 | basura==3
 replace resid_ch=1 if basura==1 | basura==4
 replace resid_ch=2 if basura>=5 & basura<=8
 drop basura
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (v06 >=1 & v06 <=7) | v06 == 10
-replace aguamejorada_ch = 0 if (v06 >=8 & v06 <=9) | v06 == 11
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (v13 >=1 & v13 <=3) | (v13 >=5 & v13 <=6) 
-replace banomejorado_ch = 0 if  v13 ==4 | (v13 >=7 & v13 <=8) | v12==6
 
 
 ****************
@@ -1534,6 +1593,40 @@ gen vivialqimp_ch=v19
 	*******************
 	g ybenefdes_ci=.
 	label var ybenefdes_ci "Monto de seguro de desempleo"
+	
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1557,7 +1650,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

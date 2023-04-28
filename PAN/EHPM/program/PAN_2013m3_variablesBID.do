@@ -907,17 +907,21 @@ gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 ******************************************************************************
 *	VARIABLES OF HOUSEHOLD INFRAESTRUCTURE 
 ******************************************************************************
-notes: Survey de Panama no pregunta caracteristicas de vivienda por lo que no se pueden construir las variables aguared_ch,aguadist_ch,aguamala_ch,aguamide_ch,luz_ch,luzmide_ch,combust_ch,bano_ch,banoex_ch,des1_ch,des2_ch,piso_ch,pared_ch,techo_ch,resid_ch,dorm_ch,cuartos_ch,cocina_ch,telef_ch,refrig_ch,freez_ch,auto_ch,compu_ch,internet_ch,cel_ch,vivi1_ch,vivi2_ch,viviprop_ch,vivitit_ch,vivialq_ch,vivialqimp_ch.
+*notes: Survey de Panama no pregunta caracteristicas de vivienda por lo que no se pueden construir las variables aguared_ch,aguadist_ch,aguamala_ch,aguamide_ch,luz_ch,luzmide_ch,combust_ch,bano_ch,banoex_ch,des1_ch,des2_ch,piso_ch,pared_ch,techo_ch,resid_ch,dorm_ch,cuartos_ch,cocina_ch,telef_ch,refrig_ch,freez_ch,auto_ch,compu_ch,internet_ch,cel_ch,vivi1_ch,vivi2_ch,viviprop_ch,vivitit_ch,vivialq_ch,vivialqimp_ch.
 *Inclusión Variables de vivienda ms abril 2014
 gen aguared_ch=.
+gen aguafconsumo_ch=.
+gen aguafuente_ch=.
+gen aguadisp1_ch = . 
+gen aguadisp2_ch = .
 gen aguadist_ch=.
 gen aguamala_ch=.
+gen bano_ch=.
+gen banoex_ch=.
 gen aguamide_ch=.
 gen luz_ch=(h2a_luz_el == 1)
 gen luzmide_ch=.
 gen combust_ch=.
-gen bano_ch=.
-gen banoex_ch=.
 gen des1_ch=.
 gen des2_ch=.
 gen piso_ch=.
@@ -926,6 +930,8 @@ gen techo_ch=.
 gen resid_ch=. 
 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**	
 gen aguamejorada_ch = .
+gen aguatrat_ch =.
+gen sinbano_ch = .
 gen  banomejorado_ch = .  
 gen dorm_ch=.
 gen cuartos_ch=.
@@ -949,7 +955,7 @@ gen vivialqimp_ch=.
 ******************************
 
 * Lowercase variables:
-rename * , lower
+*rename * , lower
 
 * Codigo de variable 0 que no está en cuestionario se toma perdido.
 replace p5 = . if p5 == 0
@@ -1375,6 +1381,40 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 	g ybenefdes_ci=.
 	label var ybenefdes_ci "Monto de seguro de desempleo"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"	
+	
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

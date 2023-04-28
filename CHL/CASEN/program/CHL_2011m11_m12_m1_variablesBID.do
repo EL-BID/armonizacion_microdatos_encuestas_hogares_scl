@@ -920,7 +920,7 @@ label variable edupre_ci "Educacion preescolar"
 ***asispre_ci***
 ****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-gen asispre_ci=(e3==1 & (e6a==2 | e6a==3))
+gen asispre_ci=(e3==1 & e6a==3) // Asiste Prekinder / Kinder
 la var asispre_ci "Asiste a educacion prescolar"
 
 **************

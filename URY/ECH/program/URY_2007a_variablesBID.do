@@ -2175,6 +2175,14 @@ gen byte eduuc_ci = (aedu_ci > 12 & e54_4_2 == 1) | (aedu_ci > 12 & e54_5_2 == 1
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
+/* 
+Para los casos en los cuales el respondiente imputa un nivel finalizado pero 
+otro incompleto y por ende se pisan eduuc con eduui se le da prioridad al 
+nivel completo.
+*/
+replace eduui_ci = 0 if eduuc_ci == 1
+
+
 ***************
 ***edupre_ci***
 ***************
@@ -2242,6 +2250,40 @@ replace edupub_ci = 1 if (e51==1 & e50==1)
 replace edupub_ci = 0 if (e51==2 & e50==1)
 
 label var  aedu_ci "Anios de Educacion"
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

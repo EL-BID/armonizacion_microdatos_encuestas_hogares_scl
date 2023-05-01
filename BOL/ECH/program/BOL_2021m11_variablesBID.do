@@ -1990,16 +1990,17 @@ replace aguadisp2_ch = 3 if (s07a_11c==7 & s07a_11a == 24)
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-replace aguamala_ch = 0 if aguafconsumo_ch <= 7  
-replace aguamala_ch = 1 if aguafconsumo_ch == 8 | aguafconsumo_ch == 9
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafconsumo_ch == 8 | aguafconsumo_ch == 9
-replace aguamejorada_ch = 1 if aguafconsumo_ch <= 7  
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 ***aguamide_ch***

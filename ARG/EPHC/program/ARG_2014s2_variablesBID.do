@@ -1124,6 +1124,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 		**********************************
 **#
 
+
 *************
 *aguadist_ch*
 *************
@@ -1215,14 +1216,14 @@ gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
-**#
+
 
 	************
 	*aguared_ch*
 	************
 
 	gen aguared_ch=(iv7==1)
-    replace aguared_ch=. if iv7==9
+	replace aguared_ch=. if iv7==9
 	
 	*************
 	*aguadist_ch*

@@ -1,5 +1,6 @@
 clear
 set more off
+
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
@@ -7,10 +8,8 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
+*________________________________________________________________________________________________________________*
  
-
-
 global ruta = "${surveysFolder}"
 
 local PAIS BRB
@@ -25,23 +24,19 @@ local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ro
 capture log close
 log using "`log_file'", replace 
 
-
-
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Barbados
 Encuesta: LFS
 Round: 
 Autores: Melany Gualavisi melanyg@iadb.org
+Modificación 2022: Agustina Thailinger SCL/EDU
+Última modificación: Diciembre 2022
 
-
-							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
 Detalle de procesamientos o modificaciones anteriores:
-
 ****************************************************************************/
-
 
 use `base_in', clear
 
@@ -55,20 +50,20 @@ label variable anio_c "Año de la Encuesta"
 * MES DE LA ENCUESTA *
 **********************
 gen mes_c=.
-*label variable mes_c "Mes de la Encuesta"
+label variable mes_c "Mes de la Encuesta"
 
 *************************
 * FACTORES DE EXPANSION *
 *************************
 sum wtfactor
 scalar pob=r(sum)
-gen pop=wtfactor*(274000/pob)
+gen pop=wtfactor*(277475/pob) // población BRB 2006
 sum pop
 ret list
 gen factor_ch=pop 
 drop pop
-
 label var factor_ch "Factor de Expansion del Hogar"
+
 gen factor_ci=  factor_ch
 label var factor_ci "Factor de Expansion del Individuo"
 
@@ -84,6 +79,12 @@ label values region_BID_c region_BID
 * REGION PAIS *
 ***************
 g region_ci=.
+g ine01=.
+
+*** calidad ****
+
+g upm_ci=.
+g estrato_ci=.
 
 ***************
 *    ZONA     *

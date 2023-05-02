@@ -1103,20 +1103,18 @@ gen aguatrat_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if iv7==1
-replace aguamala_ch= 2 if iv7>1
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-*Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 1 if iv7==1
-replace aguamejorada_ch= 2 if iv7>1
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 *bano_ch         *  Altered

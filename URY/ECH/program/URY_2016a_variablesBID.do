@@ -1523,19 +1523,18 @@ gen aguadisp2_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-
-gen aguamala_ch= 0
-replace aguamala_ch= 1 if (d11==2 | d11==5)
-replace aguamala_ch= 2 if d11==6
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
 
-gen aguamejorada_ch= 1 
-replace aguamejorada_ch= 0 if (d11==2 |d11==5)
-replace aguamejorada_ch= 2 if d11==6
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 *aguamide_ch*  Altered

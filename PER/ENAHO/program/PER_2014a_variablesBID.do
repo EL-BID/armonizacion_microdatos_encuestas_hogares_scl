@@ -1657,19 +1657,18 @@ label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es const
 *************
 *aguamala_ch*  Altered
 *************
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if p110 <=4
-replace aguamala_ch= 1 if p110 ==8
-replace aguamala_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7 
-label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if p110==8
-replace aguamejorada_ch= 1 if (p110 <= 4)
-replace aguamejorada_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 ***aguamide_ch***

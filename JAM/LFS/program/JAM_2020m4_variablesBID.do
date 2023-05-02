@@ -16,8 +16,8 @@ global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA LFS
-local ANO "2019"
-local ronda m4 
+local ANO "2020"
+local ronda m1
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_orig\\`PAIS'_`ANO'`ronda'.dta"
@@ -134,13 +134,13 @@ gen pais_c="JAM"
 ****************************
 * Anio de la encuesta ******
 
-gen anio_c=2019
+gen anio_c=2020
 
 ***********************
 *  Mes de la encuesta *
 ***********************
 
-gen mes_c=4
+gen mes_c=1
 
 
 *******************************
@@ -505,15 +505,15 @@ replace rama_ci=. if rama_ci==0
 drop rama1
 */
 gen rama_ci=.
-replace rama_ci=1 if (q39m==1) & emp_ci==1
-replace rama_ci=2 if (q39m==2) & emp_ci==1
-replace rama_ci=3 if (q39m==3) & emp_ci==1
-replace rama_ci=4 if (q39m==4) & emp_ci==1
-replace rama_ci=5 if (q39m==5) & emp_ci==1
-replace rama_ci=6 if (q39m==6 | q39m==7) & emp_ci==1
-replace rama_ci=7 if (q39m==8) & emp_ci==1
-replace rama_ci=8 if (q39m==9 | q39m==10 ) & emp_ci==1
-replace rama_ci=9 if (q39m>=11 & q39m<=16) & emp_ci==1
+replace rama_ci=1 if (q39m_industry==1) & emp_ci==1
+replace rama_ci=2 if (q39m_industry==2) & emp_ci==1
+replace rama_ci=3 if (q39m_industry==3) & emp_ci==1
+replace rama_ci=4 if (q39m_industry==4) & emp_ci==1
+replace rama_ci=5 if (q39m_industry==5) & emp_ci==1
+replace rama_ci=6 if (q39m_industry==6 | q39m_industry==7) & emp_ci==1
+replace rama_ci=7 if (q39m_industry==8) & emp_ci==1
+replace rama_ci=8 if (q39m_industry==9 | q39m_industry==10 ) & emp_ci==1
+replace rama_ci=9 if (q39m_industry>=11 & q39m_industry<=16) & emp_ci==1
 
 label var rama_ci "Rama de actividad"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
@@ -1209,7 +1209,6 @@ gen sinbano_ch = .
 *aguatrat_ch*
 *************
 gen aguatrat_ch = 9
-
 	************
 	***luz_ch***
 	************
@@ -1280,6 +1279,7 @@ gen aguatrat_ch = 9
 	label val resid_ch resid_ch
 	
 
+	 
 	*************
 	***dorm_ch***
 	*************
@@ -1477,7 +1477,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y de industrias y dejarlo en base armonizada 
 para análisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 clonevar  codocupa = q38m
-clonevar codindustria = q39m
+clonevar codindustria = q39m_industry
  
 compress
 

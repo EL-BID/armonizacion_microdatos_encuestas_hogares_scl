@@ -16,8 +16,8 @@ global ruta = "${surveysFolder}"
 
 local PAIS JAM
 local ENCUESTA LFS
-local ANO "2019"
-local ronda m4 
+local ANO "2016"
+local ronda m1 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_orig\\`PAIS'_`ANO'`ronda'.dta"
@@ -59,7 +59,7 @@ rename *, lower
 ***********
 * Region_c *
 ************
-gen region_c=.
+gen region_c=  par
 
 label define region_c  ///
            1 "Kingston" ///
@@ -83,7 +83,7 @@ label var region_c "División política, parroquias"
 ***********
 * INE01 *
 ************
-gen ine01=.
+gen ine01=  par
 
 **************
 * Región BID *
@@ -99,13 +99,13 @@ label value region_BID_c region_BID_c
 *  Factor de expansión  *
 *************************
 
-gen factor_ch=rfact
+ren  rfact factor_ch
 
 **************************
 * Identificador del hogar*
 **************************
-gen idh_ch =.
-*egen idh_ch =group(par const ed dwell hh)
+
+egen idh_ch = group(par const ed dwell hh)
 sort idh*
 
 ****************************
@@ -114,7 +114,7 @@ sort idh*
 
 * Corrección en sintáxis MGR: de la manera generada no identifica al individuo dentro del hogar
 *egen idp_ci = group(par const ed dwell hh ind)
-gen idp_ci = id
+gen idp_ci = ind
 
 ***************************
 * Zona urbana o zona rural*
@@ -134,7 +134,7 @@ gen pais_c="JAM"
 ****************************
 * Anio de la encuesta ******
 
-gen anio_c=2019
+gen anio_c=2016
 
 ***********************
 *  Mes de la encuesta *
@@ -146,7 +146,7 @@ gen mes_c=4
 *******************************
 *Relación con el jefe de hogar*
 *******************************
-destring relat sex age q* , replace i("NA")
+destring relat sex age q* factor_*, replace i("NA")
 
 /*
 RELAT
@@ -176,7 +176,7 @@ replace relacion_ci=6 if relat==8
 *Factor de expansión a nivel individual*
 ****************************************
 
-gen factor_ci=rfact
+gen factor_ci=factor_ch
 
 ********
 * Sexo *
@@ -366,8 +366,8 @@ label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
 *Se modifico segun la edad minima de la encuesta de 14 anios y la sintaxis. MGD 06/10/2014
 gen condocup_ci =.
 replace condocup_ci=1 if q21==1 | q21a==1 | q21a==2 | q21b==1 |  q22==1  | q23==1
-replace condocup_ci=2 if condocup_ci!=1 & (((q21==2 | q21b==2 |  q22==2  | q23==2) & q21a==3) | (q24==1))  //& (q25==1 | q25==2)
-replace condocup_ci=3 if (condocup_ci ~=1 & condocup_ci ~=2) & edad_ci>=14 & edad_ci!=.
+replace condocup_ci=2 if condocup_ci!=1 & (((q21==2 | q21b==2 |  q22==2  | q23==2) & q21a==3) | (q24==1 & (q25==1 | q25==2)))  
+replace condocup_ci=3 if (condocup_ci ~=1 & condocup_ci ~=2) & edad_ci>=14
 replace condocup_ci=4 if edad_ci<14 
 label define condocup_ci 1"ocupados" 2"desocupados" 3"inactivos" 4"menor de PET"
 label value condocup_ci condocup_ci
@@ -387,7 +387,7 @@ label var desemp_ci "Desempleado que buscó empleo en el periodo de referencia"
   
 *************
 ***pea_ci***
-***********tab **
+*************
 gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 label var pea_ci "Población Económicamente Activa"
@@ -396,7 +396,7 @@ label var pea_ci "Población Económicamente Activa"
 * Cesante *
 ***********
 generat cesante_ci=0 if condocup_ci==2
-replace cesante_ci=1 if q424<7 & condocup_ci==2 //q45==1
+replace cesante_ci=1 if q45==1 & condocup_ci==2
 label var cesante_ci "Desocupado - definicion oficial del pais"
 ***************
 *tipopen_ci*
@@ -483,7 +483,7 @@ label var lpe_ci "Linea de pobreza extrema local (Adulto Equivalente)"
 *********
 *salmm_ci***
 *********
-gen salmm_ci=.
+gen salmm_ci=5600*4.3
 label var salmm_ci "Salario Minimo en dolares de Jamaica"
 
 
@@ -505,15 +505,15 @@ replace rama_ci=. if rama_ci==0
 drop rama1
 */
 gen rama_ci=.
-replace rama_ci=1 if (q39m==1) & emp_ci==1
-replace rama_ci=2 if (q39m==2) & emp_ci==1
-replace rama_ci=3 if (q39m==3) & emp_ci==1
-replace rama_ci=4 if (q39m==4) & emp_ci==1
-replace rama_ci=5 if (q39m==5) & emp_ci==1
-replace rama_ci=6 if (q39m==6 | q39m==7) & emp_ci==1
-replace rama_ci=7 if (q39m==8) & emp_ci==1
-replace rama_ci=8 if (q39m==9 | q39m==10 ) & emp_ci==1
-replace rama_ci=9 if (q39m>=11 & q39m<=16) & emp_ci==1
+replace rama_ci=1 if (q39m>=100 & q39m<=599) & emp_ci==1
+replace rama_ci=2 if (q39m>=1000 & q39m<=1499) & emp_ci==1
+replace rama_ci=3 if (q39m>=1500 & q39m<=3799) & emp_ci==1
+replace rama_ci=4 if (q39m>=4000 & q39m<=4100) & emp_ci==1
+replace rama_ci=5 if (q39m>=4500 & q39m<=4599) & emp_ci==1
+replace rama_ci=6 if (q39m>=5000 & q39m<=5599) & emp_ci==1
+replace rama_ci=7 if (q39m>=6000 & q39m<=6499) & emp_ci==1
+replace rama_ci=8 if (q39m>=6500 & q39m<=7499) & emp_ci==1
+replace rama_ci=9 if (q39m>=7500 & q39m<=9900) & emp_ci==1
 
 label var rama_ci "Rama de actividad"
 label def rama_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
@@ -542,10 +542,10 @@ replace horastot_ci=. if horastot_ci==99
 *tamemp_ci*
 ************************
 
-gen tamemp_ci=1 if q324==1 | q324==2 | q324==3
+gen tamemp_ci=1 if q324==1 | q324==2
 label var  tamemp_ci "Tamaño de Empresa" 
 *Empresas medianas
-replace tamemp_ci=2 if q324==4
+replace tamemp_ci=2 if q324==3 | q324==4
 *Empresas grandes
 replace tamemp_ci=3 if q324==5
 label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
@@ -564,7 +564,7 @@ label values tamemp_o tamemp_o
 *categoinac_ci*
 ************************
 
-gen categoinac_ci =.  //if (q55 ==7 & condocup_ci==3)
+gen categoinac_ci = 1 if (q55 ==7 & condocup_ci==3)
 replace categoinac_ci = 2 if (q21a == 5 & condocup_ci==3)
 replace categoinac_ci = 3 if (q21a == 4 & condocup_ci==3)
 replace categoinac_ci = 4 if  ((categoinac_ci ~=1 & categoinac_ci ~=2 & categoinac_ci ~=3) & condocup_ci==3)
@@ -590,9 +590,9 @@ g formal_1=.
 tampoco se pregunta por pago en especie.*/
 
 gen ylmpri_ci=.
-/*replace ylmpri_ci=q325a if q325ap==4
+replace ylmpri_ci=q325a if q325ap==4
 replace ylmpri_ci=q325a*4.3 if q325ap==1
-replace ylmpri_ci=q325a/12 if q325ap==7*/
+replace ylmpri_ci=q325a/12 if q325ap==7
 
 
 **************************************************
@@ -645,9 +645,9 @@ gen tcylmpri_ci=.
 *****************************************
 
 gen ylm_ci=.
-/*replace ylm_ci=q325a if q325ap==4
+replace ylm_ci=q325a if q325ap==4
 replace ylm_ci=q325a*4.3 if q325ap==1
-replace ylm_ci=q325a/12 if q325ap==7*/
+replace ylm_ci=q325a/12 if q325ap==7
 
 ************************************
 *Ingreso laboral no monetario total*
@@ -660,9 +660,9 @@ gen ylnm_ci=.
 ******************************
 
 gen ynlm_ci=.
-/*replace ynlm_ci=q325b if q325bp==4
+replace ynlm_ci=q325b if q325bp==4
 replace ynlm_ci=q325b*4.2 if q325bp==1
-replace ynlm_ci=q325b/12 if q325bp==7*/
+replace ynlm_ci=q325b/12 if q325bp==7
 
 **********************************************************************
 *Identificador de los hogares en donde alguno de los miembros no sabe*
@@ -781,7 +781,7 @@ not stated					99
 */
 
 gen durades_ci=.
-/*replace durades_ci=0.5/4.3 if q41==1
+replace durades_ci=0.5/4.3 if q41==1
 replace durades_ci=(1+4.3)/2/4.3 if q41==2
 replace durades_ci=(1+3)/2 if q41==3
 replace durades_ci=(3+6)/2 if q41==4
@@ -790,21 +790,21 @@ replace durades_ci=(9+12)/2 if q41==6
 replace durades_ci=(12+24)/2 if q41==7
 replace durades_ci=(24+36)/2 if q41==8
 
-*/
+
 
 ***************
 *antiguedad_ci*
 ***************
 * Correccion MGD 7/30/2014: ae cambiaron los promedios de acuerdo a la temporalidad correcta de la variable.
 gen antiguedad_ci=.
-/*replace antiguedad_ci=((1+3)/2)/12 if q311==1
+replace antiguedad_ci=((1+3)/2)/12 if q311==1
 replace antiguedad_ci=((3+6)/2)/12 if q311==2
 replace antiguedad_ci=((6+9)/2)/12 if q311==3
 replace antiguedad_ci=((9+12)/2)/12 if q311==4
 replace antiguedad_ci=((12+24)/2)/12 if q311==5
 replace antiguedad_ci=((24+60)/2)/12 if q311==6
 replace antiguedad_ci=((60+72)/2)/12 if q311==7
-*/
+
 /*
 ********
 *emp_ci*
@@ -860,9 +860,8 @@ gen pea3_ci=1 if emp_ci==1 |desemp3_ci==1
 *desalent_ci*
 *************
 
-gen desalent_ci=.   
-/*1 if q44==1 | q44==4
-replace desalent_ci=0 if desalent_ci==.*/
+gen desalent_ci=1 if q44==1 | q44==4
+replace desalent_ci=0 if desalent_ci==.
 
 ***********
 *subemp_ci*
@@ -970,6 +969,20 @@ replace spublico_ci=0 if spublico_ci==.
 *********
 *aedu_ci*
 *********
+
+/*
+Para la construcción de aedu_ci y por el hecho de contar solamente con anios
+declarados a nivel primaria y secundaria se realiza el siguiente ajuste:
+
+	- Para aquellos respondientes que hayan obtenido el grado más alto de 
+	primaria y secundaria y al menos uno de los dos examenes CAPE, se les imputa
+	12 anios de educación considerandolos dentro del nivel universitario inconpleto. 
+	
+	- Para aquellos respondientes que declaren tener Degree junto con el grado
+	más alto de primaria y secundaria se les imputa 14 anios de educación 
+	considerandolos dentro del nivel universitario completo.
+*/
+
 gen aedu_ci=.
 
 *ocupados
@@ -983,6 +996,15 @@ replace aedu_ci=q422a if q422a>0 & q422a<99 // secondary
 *inactivos
 replace aedu_ci=q514a if q514a<99           // primary
 replace aedu_ci=q515a if q515a>0 & q515a<99 // secondary
+
+* Ajuste universitario: 
+replace aedu_ci = 12 if (q322 == 6 | q322 == 7) & q322 != 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 12 if (q423 == 6 | q423 == 7) & q423 != 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 12 if (q516 == 6 | q516 == 7) & q516 != 8 & q514 == 7 & q515 == 8
+
+replace aedu_ci = 14 if q322 == 8 & q320 == 7 & q321 == 8
+replace aedu_ci = 14 if q423 == 8 & q421 == 7 & q422 == 8
+replace aedu_ci = 14 if q516 == 8 & q514 == 7 & q515 == 8
 
 // imputando valores perdidos
 replace aedu_ci=6 if q320a==99 & q321a!=99 & aedu_ci==.
@@ -1027,15 +1049,14 @@ label variable edusc_ci "Secundaria completa"
 **********
 *eduui_ci*
 **********
-gen eduui_ci=((aedu_ci>11 & aedu_ci<14) & (q516!=8 | q423!=8 | q322!=8))
+gen eduui_ci=(aedu_ci>11 & aedu_ci<14)
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
 **********
 *eduuc_ci*
 **********
-gen eduuc_ci=(q516==8 | q423==8 | q322==8)
-replace eduuc_ci=1 if aedu_ci>=14
+gen eduuc_ci=(aedu_ci>=14)
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1124,7 +1145,6 @@ gen edupub_ci=.
 **********************************
 	
 	*Esta base de datos no tiene módulo de vivienda.
-	
 ****************
 ***aguared_ch***
 ****************
@@ -1210,6 +1230,9 @@ gen sinbano_ch = .
 *************
 gen aguatrat_ch = 9
 
+
+
+
 	************
 	***luz_ch***
 	************
@@ -1279,7 +1302,7 @@ gen aguatrat_ch = 9
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
-
+	 
 	*************
 	***dorm_ch***
 	*************
@@ -1469,8 +1492,8 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
-pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch ///
+piso_ch pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
@@ -1486,3 +1509,11 @@ saveold "`base_out'", replace
 
 
 log close
+
+
+
+
+
+
+
+

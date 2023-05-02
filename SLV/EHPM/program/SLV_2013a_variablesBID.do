@@ -1005,7 +1005,7 @@ gen aguadisp1_ch =9
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch = 1 if r312h<=11 
-replace aguadisp2_ch = 2 if  r312h>=12
+*replace aguadisp2_ch = 2 if  r312h>=12
 replace aguadisp2_ch = 3 if r312h ==24
 
 

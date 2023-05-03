@@ -1219,20 +1219,6 @@ gen aguatrat_ch = 9
 	la var combust_ch "Principal combustible gas o electricidad" 
 
 *************
-***bano_ch***
-*************
-	g bano_ch = p5020 != 6
-	replace bano_ch = . if p5020 == .
-	la var bano_ch "El hogar tiene servicio sanitario"
-
-***************
-***banoex_ch***
-***************
-	g banoex_ch = p5030 == 1
-	replace banoex_ch = . if bano_ch == 0
-	la var banoex_ch "El servicio sanitario es exclusivo del hogar"
-
-*************
 ***des1_ch***
 *************
 	g des1_ch = .
@@ -1301,10 +1287,6 @@ gen aguatrat_ch = 9
 					3 "Otros"
 	la val resid_ch resid_ch
 	
-
-	
-
- 
 *************
 ***dorm_ch***
 *************

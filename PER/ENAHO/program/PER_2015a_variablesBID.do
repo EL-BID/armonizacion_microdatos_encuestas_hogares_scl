@@ -404,13 +404,31 @@ gen afroind_ano_c=2012
 	*******************
 	***dis_ci***
 	*******************
-gen dis_ci=. 
+	
+	/* Respuestas binarias (1 = si; 2 = no)
+	 p401h1. Moverse o caminar, para usar brazos o piernas?  
+	 p401h2. Ver, aun usando anteojos?  
+	 p401h3. Hablar o comunicarse, aún usando el lenguaje de señas u otro?  
+	 p401h4. Oír, aún usando audífonos ?  
+	 p401h5. Entender o aprender (concentrarse y recordar)? 
+	 
+	 No considerar p401h6:
+	 p401h6. Relacionarse con los demás, por sus pensamientos, sentimientos, emociones o conductas? 
+	
+	*/
+	
+	
+gen dis_ci =.
+replace dis_ci = 1 if (p401h1 == 1 | p401h2 == 1 | p401h3 == 1 | p401h4 == 1 | p401h5 == 1) 
+replace dis_ci = 0 if (p401h1 == 2 & p401h2 == 2 & p401h3 == 2 & p401h4 == 2 & p401h5 == 2) 
+
 
 	*******************
 	***dis_ch***
 	*******************
-gen dis_ch=. 
-
+	
+egen dis_ch = sum(dis_ci), by(idh_ch) 
+replace dis_ch = 1 if (dis_ch > 0)
 
 
 ************************************

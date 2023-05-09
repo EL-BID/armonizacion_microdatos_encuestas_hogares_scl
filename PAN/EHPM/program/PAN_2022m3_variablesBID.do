@@ -188,7 +188,7 @@ label var ocu_des       "Condición en la actividad económica desagregada de la
 label var p24           "Tiempo de haber realizado su último trabajo:"
 label var	p26	        "Código de la ocupación, oficio o trabajo"
 label var	p26reco	    "Ocupación principal a 1 dígito:	"
-label var	p28	        "Código de la categoría en la actividad económica	"
+label var	p28_sector	        "Código de la categoría en la actividad económica	"
 label var	p28reco	    "Categoría en la actividad económica principal a 1 dígito.	"
 label var     p39a      "Código de la ocupación del segundo trabajo"
 label var	grado_ap	"Grado aprobado:	"
@@ -314,7 +314,7 @@ label define ine01  ///
 12	"Ngäbe-Buglé"      ///
 13	"Panamá Oeste"			  
 label value ine01 ine01
-label var ine01 "División política administrativa, provincias y comarcas (incluye Panamá Oeste)"
+label var ine01 "División política administrativa, provincias y comarcas"
 
 
 ******************************

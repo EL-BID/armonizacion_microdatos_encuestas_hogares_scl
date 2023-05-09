@@ -48,11 +48,11 @@ Fecha última modificación: abril 2023
 *1. Import original dataset Excel/SPSS and save it as dta
 *Excel: import excel "$ruta\ENEI-1-2022_HOGARES.xlsx", sheet("Sheet1") firstrow clear case(lower)
 
-import spss "$ruta\ENEI-1-2022_HOGARES.sav" , clear
+import spss "$ruta\hogares.sav" , clear
 label values * // se remueven labels porque hay conflicto con base a nivel de peronas
 save "$ruta\ENEI-1-2022_HOGARES.dta", replace 
 
-import spss "$ruta\ENEI-1-2022_PERSONAS.sav",clear
+import spss "$ruta\personas.sav",clear
 save "$ruta\ENEI-1-2022_PERSONAS.dta", replace 
 
 *2. Merge

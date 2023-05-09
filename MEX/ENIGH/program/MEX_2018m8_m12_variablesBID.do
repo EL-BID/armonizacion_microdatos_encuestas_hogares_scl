@@ -411,9 +411,9 @@ gen afroind_ano_c=2010
 	***dis_ci***
 	**************
 gen dis_ci= disc1
-replace dis_ci="." if inlist(disc1,"&","7")
+replace dis_ci="." if inlist(disc1,"&","6","7")
 destring dis_ci, replace			
-recode  dis_ci (8 = 0) (1/6=1)
+recode  dis_ci (8 = 0) (1/5=1)
 
 	*************
 	***dis_ch***
@@ -1829,30 +1829,5 @@ saveold "`base_out'", replace
 
 
 log close
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

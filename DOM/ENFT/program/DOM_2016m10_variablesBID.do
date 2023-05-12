@@ -1155,6 +1155,8 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
+replace aguafuente_ch = 1 if agua_red_publica==1 
+replace aguafuente_ch = 10 if agua_red_publica==2 
 
 
 *************

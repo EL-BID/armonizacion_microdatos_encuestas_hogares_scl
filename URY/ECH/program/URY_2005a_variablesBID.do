@@ -136,16 +136,124 @@ label var region_c "División política"
 /************************************************************************/
 /*			VARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
 /************************************************************************/	
+
+*******************
+*aguared_ch.    *
+*******************
+
 gen aguared_ch=(d5==1)
-gen aguadist_ch=d6
-replace aguadist_ch=0 if d6==3
-gen aguamala_ch=(d5==3|d5==3) /*Cachimba=ojo de agua o arroyo*/	
+replace aguared_ch =. if d5==.
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+
+gen aguafconsumo_ch =.
+replace aguafconsumo_ch = 1 if d5==1 & d6==1
+replace aguafconsumo_ch = 2 if (d5==1 & d6>1)
+replace aguafconsumo_ch = 10 if d5==3 | d5==2
+
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if d5==1 & d6==1
+replace aguafuente_ch = 2 if (d5==1 & d6>1)
+replace aguafuente_ch = 10 if d5==3 | d5==2
+
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if d6==1
+replace aguadist_ch= 2 if d6==2
+replace aguadist_ch= 3 if d6==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+
+*****************
+*aguamide_ch*  Altered
+*****************
+
+*96. El hogar usa un medidor para pagar por su consumo de agua
 gen aguamide_ch=.
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=1 if d8==1 
+replace bano_ch=2 if d8==2 
+replace bano_ch=6 if d8==4
+replace bano_ch=4 if d8==3 
+
+
+
+*****************
+*banoex_ch         *  Altered
+*****************
+*101. El servicio higiénico es de uso exclusivo del hogar
+gen banoex_ch=.
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch =3
+replace sinbano_ch = 0 if d7==1 | d7==2
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 gen luz_ch=.
 gen luzmide_ch=.
 gen combust_ch=(d9==1 | d9==2 | d9==3)
-gen bano_ch=(d7!=3)
-gen banoex_ch=.
 gen des1_ch=.
 replace des1_ch=0 if d7==3
 replace des1_ch=1 if d8==1
@@ -157,21 +265,6 @@ gen piso_ch=.
 gen pared_ch=.
 gen techo_ch=.
 gen resid_ch=.
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if d5 ==1 | d5 ==2
-replace aguamejorada_ch = 0 if d5 ==3
-
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (d7 ==1 | d7 ==2) & (d8 ==1 | d8 ==2) // NO se puede identificar si el banho es privado o compartido
-replace banomejorado_ch = 0 if  d7 ==3 | ((d7 ==1 | d7 ==2) & d8 ==3)
-
 gen dorm_ch=d4
 replace dorm_ch=. if d4==9
 gen cuartos_ch=d3
@@ -1348,7 +1441,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

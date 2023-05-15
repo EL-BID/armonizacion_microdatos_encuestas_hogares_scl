@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS DOM
 local ENCUESTA ENFT

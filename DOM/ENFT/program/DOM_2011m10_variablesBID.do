@@ -13,7 +13,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS DOM
 local ENCUESTA ENFT
@@ -1383,23 +1383,6 @@ replace combust_ch=1 if combustible_cocina==1 | combustible_cocina==3 | combusti
 replace combust_ch=0 if combustible_cocina==99
 label var combust_ch "Principal combustible gas o electricidad" 
 *Modificado Mayra Sáenz - Febrero 2014. De acuerdo al documento metodológico 1 es sí y 0 el resto.
-
-
-*************
-***bano_ch***
-*************
-
-gen bano_ch=1
-replace bano_ch=0 if tipo_sanitario==4 
-label var bano_ch "El hogar tiene servicio sanitario"
-
-
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=.
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************

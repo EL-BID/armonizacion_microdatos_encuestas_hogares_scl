@@ -72,6 +72,13 @@ label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(
 gen region_c=  .
 label var region_c "División política"
 
+************
+* ine01 *
+************
+*Inclusión David Cornejo - Mayo 2023
+
+gen ine01=  .
+label var ine01 "División política"
 
 ***************
 ***factor_ci***

@@ -70,6 +70,14 @@ label define region_BID_c 1 "Centroamérica_(CID)" 2 "Caribe_(CCB)" 3 "Andinos_(
 
 destring prov, replace
 gen region_c=  .
+
+************
+* ine01 *
+************
+*Inclusión David Cornejo - Mayo 2023
+
+gen ine01=  .
+label var ine01 "División política"
 /*
 la variable prov a diferencia del resto de años sólo tiene 9 valores, se debe revisar.
 

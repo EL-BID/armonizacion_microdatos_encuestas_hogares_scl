@@ -94,6 +94,14 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, provincias"
 
+************
+* ine01 *
+************
+*Inclusión David Cornejo - Mayo 2023
+
+gen ine01=  .
+label var ine01 "División política"
+
 ***************
 ***factor_ci***
 ***************

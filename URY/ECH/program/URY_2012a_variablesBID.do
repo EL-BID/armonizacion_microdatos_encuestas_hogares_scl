@@ -1514,13 +1514,13 @@ replace aguared_ch =. if d11==.
 *****************
 
 gen aguafconsumo_ch =.
-replace aguafconsumo_ch = 1 if d11==1 & d12==1
-replace aguafconsumo_ch = 2 if d11==1 & d12>1
+replace aguafconsumo_ch = 1 if d11==1 & d12<=2
+replace aguafconsumo_ch = 2 if d11==1 & d12>2
 replace aguafconsumo_ch = 4 if d11==3
-replace aguafconsumo_ch = 6 if d11==4
 replace aguafconsumo_ch = 8 if d11==5
 replace aguafconsumo_ch = 9 if d11==2 
-replace aguafconsumo_ch = 10 if d11==6
+replace aguafconsumo_ch = 10 if d11==6 | d11==4
+
 
 
 
@@ -1528,13 +1528,12 @@ replace aguafconsumo_ch = 10 if d11==6
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if d11==1 & d12==1
-replace aguafuente_ch = 2 if d11==1 & d12>1
+replace aguafuente_ch = 1 if d11==1 & d12<=2
+replace aguafuente_ch = 2 if d11==1 & d12>2
 replace aguafuente_ch = 4 if d11==3
-replace aguafuente_ch = 6 if d11==4
 replace aguafuente_ch = 8 if d11==5
 replace aguafuente_ch = 9 if d11==2 
-replace aguafuente_ch = 10 if d11==6
+replace aguafuente_ch = 10 if d11==6 | d11==4
 
 
 

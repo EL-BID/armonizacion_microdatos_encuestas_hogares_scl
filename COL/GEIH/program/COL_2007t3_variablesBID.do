@@ -1279,53 +1279,53 @@ label var edupub_ci "Asiste a un centro de enseñanza público"
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if p4030S5==1 
-replace aguared_ch = 0 if p4030S5==2
+replace aguared_ch = 1 if P4030S5==1 
+replace aguared_ch = 0 if P4030S5==2
 la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if p5050==1 
-replace aguafconsumo_ch = 2 if p5050==7 
-replace aguafconsumo_ch = 3 if p5050==10 
-replace aguafconsumo_ch = 5 if p5050==5 
-replace aguafconsumo_ch = 6 if p5050==8 
-replace aguafconsumo_ch = 7 if p5050==2
-replace aguafconsumo_ch = 8 if p5050==6  
-replace aguafconsumo_ch = 9 if (p5050==4 | p5050==9)
-replace aguafconsumo_ch = 10 if (p5050==3| p5050==2)
+replace aguafconsumo_ch = 1 if P5050==1 
+replace aguafconsumo_ch = 2 if P5050==7 
+replace aguafconsumo_ch = 3 if P5050==10 
+replace aguafconsumo_ch = 5 if P5050==5 
+replace aguafconsumo_ch = 6 if P5050==8 
+replace aguafconsumo_ch = 7 if P5050==2
+replace aguafconsumo_ch = 8 if P5050==6  
+replace aguafconsumo_ch = 9 if (P5050==4 | P5050==9)
+replace aguafconsumo_ch = 10 if (P5050==3| P5050==2)
 
 *****************
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if p5050==1 
-replace aguafuente_ch = 2 if p5050==7 
-replace aguafuente_ch = 3 if p5050==10 
-replace aguafuente_ch = 5 if p5050==5 
-replace aguafuente_ch = 6 if p5050==8 
-replace aguafuente_ch = 7 if p5050==2
-replace aguafuente_ch = 8 if p5050==6  
-replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
-replace aguafuente_ch = 10 if (p5050==3 | p5050==2)
+replace aguafuente_ch = 1 if P5050==1 
+replace aguafuente_ch = 2 if P5050==7 
+replace aguafuente_ch = 3 if P5050==10 
+replace aguafuente_ch = 5 if P5050==5 
+replace aguafuente_ch = 6 if P5050==8 
+replace aguafuente_ch = 7 if P5050==2
+replace aguafuente_ch = 8 if P5050==6  
+replace aguafuente_ch = 9 if (P5050==4 | P5050==9)
+replace aguafuente_ch = 10 if (P5050==3 | P5050==2)
 
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=.
-replace aguadist_ch=1 if (p5050==1 | p5050==2)
-replace aguadist_ch=0 if p5050>2
+replace aguadist_ch=1 if (P5050==1 | P5050==2)
+replace aguadist_ch=0 if P5050>2
 
 
 **************
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch =.
-replace aguadisp1_ch = 1 if p4040==1
-replace aguadisp1_ch = 0 if p4040==2
+replace aguadisp1_ch = 1 if P4040==1
+replace aguadisp1_ch = 0 if P4040==2
 
 
 **************
@@ -1362,18 +1362,18 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if p5020==6
-replace bano_ch=1 if p5020==1
-replace bano_ch=2 if p5020==2
-replace bano_ch=4 if p5020==5
-replace bano_ch=6 if p5020==3 | p5020 ==4
+replace bano_ch=0 if P5020==6
+replace bano_ch=1 if P5020==1
+replace bano_ch=2 if P5020==2
+replace bano_ch=4 if P5020==5
+replace bano_ch=6 if P5020==3 | p5020 ==4
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=.
-replace banoex_ch = 1 if p5030==1
-replace banoex_ch = 0 if p5030==2
+replace banoex_ch = 1 if P5030==1
+replace banoex_ch = 0 if P5030==2
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1388,7 +1388,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if p5020<6
+replace sinbano_ch = 0 if P5020<6
 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 

@@ -4095,7 +4095,6 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 ********************************************
 ***Variables de Infraestructura del hogar***
 ********************************************
-
 ************
 *aguared_ch*
 ************
@@ -4116,9 +4115,10 @@ gen aguafconsumo_ch = 0
 
 gen aguafuente_ch = 0
 replace aguafuente_ch = 1 if (agua15==1 | agua15==2)
-replace aguafuente_ch = 2 if (agua15==3 | agua15==4)
+replace aguafuente_ch = 2 if agua15==3
 replace aguafuente_ch = 6 if agua15==5
-replace aguafuente_ch = 10 if (agua15==6 | agua15==7 | agua15==8)
+replace aguafuente_ch = 8 if agua15 ==7
+replace aguafuente_ch = 10 if (agua15==6 | agua15==8 | agua15==4)
 
 *************
 *aguadist_ch*
@@ -4176,7 +4176,7 @@ replace bano_ch=0 if bano17==2
 replace bano_ch=1 if drenaje21==1 & bano17==1 
 replace bano_ch=2 if drenaje21==2 & bano17==1 
 replace bano_ch=4 if (drenaje21==4 | drenaje21==3) & bano17==1
-replace bano_ch=6 if drenaje21==5 & bano17==1 & bano19== 3
+replace bano_ch=6 if drenaje21==5 & bano17==1
 
 ***************
 ***banoex_ch***

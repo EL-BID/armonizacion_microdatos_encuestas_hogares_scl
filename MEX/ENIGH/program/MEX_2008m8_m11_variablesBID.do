@@ -3533,8 +3533,9 @@ gen aguafconsumo_ch = 0
 
 gen aguafuente_ch = 0
 replace aguafuente_ch = 1 if (agua13==1 | agua13==2)
-replace aguafuente_ch = 2 if (agua13==3 | agua13==4)
+replace aguafuente_ch = 2 if agua13==4
 replace aguafuente_ch = 6 if agua13==5
+replace aguafuente_ch = 7 if agua13==3 
 replace aguafuente_ch = 10 if (agua13==6 | agua13==7)
 
 *************
@@ -3543,7 +3544,7 @@ replace aguafuente_ch = 10 if (agua13==6 | agua13==7)
 gen aguadist_ch=0
 replace aguadist_ch= 1 if agua13==1
 replace aguadist_ch= 2 if agua13==2
-replace aguadist_ch= 3 if agua13 ==3
+replace aguadist_ch= 3 if (agua13 ==3|agua13==4)
 label var aguadist_ch "Ubicacion de la principal fuente de agua"
 
 

@@ -379,42 +379,6 @@ gen dis_ci=.
 	***dis_ch***
 	*******************
 gen dis_ch=.	
-*******************************************************
-***           VARIABLES DE DIVERSIDAD               ***
-*******************************************************				
-* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
-
-	***************
-	*** afroind_ci ***
-	***************
-**Pregunta: ¿Se considera usted indígena? (indi_rec) (1 - no indígena; 2 - indígena)
-**No se identifica a personas afrodescendientes. Todos los no-indígenas se categorizan como "otro". 
-**En el 2011 se convierte en la EHPM (no solo EH) 
-
-	***************
-	***afroind_ci***
-	***************
-gen afroind_ci=. 
-
-	***************
-	***afroind_ch***
-	***************
-gen afroind_ch=. 
-
-	*******************
-	***afroind_ano_c***
-	*******************
-gen afroind_ano_c=.		
-
-	*******************
-	*** dis_ci ***
-	*******************
-gen dis_ci=. 
-
-	*******************
-	*** dis_ch ***
-	*******************
-gen dis_ch=. 
 
 ************************************
 *** VARIABLES DEL MERCADO LABORAL***

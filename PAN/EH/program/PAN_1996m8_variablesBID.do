@@ -848,13 +848,83 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 *gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 
 *** HOUSING ***
-gen aguared_ch=.
+****************
+***aguared_ch***
+****************
+gen aguared_ch =.
+label var aguared_ch "Acceso a fuente de agua por red"
 
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = .
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
 
-gen aguamala_ch=.
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
 
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = .
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch =.
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=.
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
 
 gen luz_ch=.
 
@@ -862,12 +932,7 @@ gen luzmide_ch=.
 
 gen combust_ch=.
 
-gen bano_ch=.
-
-gen banoex_ch=.
-
 gen des1_ch=.
-
 
 gen des2_ch=.
 
@@ -878,12 +943,6 @@ gen pared_ch=.
 gen techo_ch=.
 
 gen resid_ch=. 
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-gen aguamejorada_ch = .
-
-gen  banomejorado_ch = .
 
 gen dorm_ch=.
 

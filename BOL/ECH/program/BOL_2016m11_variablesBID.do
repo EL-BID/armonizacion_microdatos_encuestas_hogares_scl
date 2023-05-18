@@ -60,6 +60,7 @@ label value region_BID_c region_BID_c
 	************
 
 gen region_c=depto
+gen ine01 = region_c
 
 label define region_c ///
 1"Chuquisaca"         ///     
@@ -1440,47 +1441,35 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 
 /*En esta sección es sólo para personas de 4 años o más de edad*/
 
-/*
- s5_02a
-11. NINGUNO
-12. CURSO DE ALFABETIZACIÓN
-13. EDUCACIÓN INICIAL O PRE-ESCOLAR (PRE KINDER/KINDER)
-81.OTROS CURSOS (Duración menor a 1 año)
-
-PRIMARIA
-21.BÁSICO (1 A 5 AÑOS)
-22.INTERMEDIO (1 A 3 AÑOS)
-23.MEDIO (1 A 4 AÑOS)
-31. PRIMARIA (1 A 8 AÑOS)
-41. PRIMARIA (1 A 6 AÑOS)
-
-
-SECUNDARIA
-32. SECUNDARIA (1 A 4 AÑOS)
-42. SECUNDARIA (1 A 6 AÑOS)
-
-EDUCACIÓN SUPERIOR
-71. NORMAL (ESCUELA SUP. DE FORMACIÒN DE MAESTROS)
-72. UNIVERSIDAD PÚBLICA (Licenciatura)
-73. UNIVERSIDAD PRIVADA (Licenciatura)
-74.POSTGRADO DIPLOMADO
-75. POSTGRADO MAESTRÍA,
-76. POSTGRADO DOCTORADO
-77. TÉCNICO DE UNIVERSIDAD
-78 TÉCNICO DE INSTITUTO (Duración mayor o igual a 1 año)
-79. INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL
-
-		  
-*No se consideran por no ser educación formal sino "Alternativa" o "No formal"
-EDUCACIÓN DE ADULTOS(Sistema Antiguo)
-51. EDUCACIÓN BÁSICA DE ADULTOS (EBA)
-52. CENTRO DE EDUCACIÓN MEDIA DE ADULTOS (CEMA)
-61.EDUCACIÓN JUVENIL ALTERNATIVA (EJA)
-62.EDUCACIÓN PRIMARIA DE ADULTOS (EPA)
-63.EDUCACIÓN SECUNDARIA DE ADULTOS (ESA)
-64.PROGRAMA NACIONAL DE POST ALFABETIZACIÓN
-65.EDUCACIÓN ESPECIAL
-80. EDUCACIÓN TÉCNICA DE ADULTOS (ETA)	  
+/*			s05a_02a 
+		  11 11.NINGUNO
+          12 12.CURSO DE ALFABETIZACIÓN
+          13 13.EDUCACIÓN INICIAL O PRE-ESCOLAR (PRE KINDER/KINDER)
+          21 21.BÁSICO (1 A 5 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          22 22.INTERMEDIO (1 A 3 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          23 23.MEDIO (1 A 4 AÑOS) - SISTEMA ESCOLAR ANTIGUO
+          31 31.PRIMARIA (1 A 8 AÑOS) - SISTEMA ESCOLAR ANTERIOR
+          32 32.SECUNDARIA (1 A 4 AÑOS) - SISTEMA ESCOLAR ANTERIOR
+          41 41.PRIMARIA (1 A 6 AÑOS) - SISTEMA ESCOLAR ACTUAL
+          42 42.SECUNDARIA (1 A 6 AÑOS) - SISTEMA ESCOLAR ACTUAL
+          51 51.EDUCACIÓN BÁSICA  DE   ADULTOS (EBA) - EDUCACIÓN DE ADULTOS (SISTEMA ANTIGUO)
+          52 52.CENTRO DE EDUCACIÓN MEDIA  DE ADULTOS (CEMA) - EDUCACIÓN DE ADULTOS (SISTEMA ANTIGUO)
+          61 61.EDUCACIÓN JUVENIL ALTERNATIVA (EJA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          62 62.EDUCACIÓN PRIMARIA DE ADULTOS (EPA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          63 63.EDUCACIÓN SECUNDARIA DE ADULTOS (ESA) - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          64 64.PROGRAMA NACIONAL DE POST ALFABETIZACIÓN - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          65 65.EDUCACIÓN  ESPECIAL - EDUCACIÓN ALTERNATIVA Y ESPECIAL
+          71 71.NORMAL (ESCUELA SUP. DE FORMACIÒN DE  MAESTROS) - EDUCACIÓN SUPERIOR
+          72 72.UNIVERSIDAD - EDUCACIÓN SUPERIOR
+          73 73.POSTGRADO DIPLOMADO - EDUCACIÓN SUPERIOR
+          74 74.POSTGRADO MAESTRÍA - EDUCACIÓN SUPERIOR
+          75 75.POSTGRADO DOCTORADO - EDUCACIÓN SUPERIOR
+          76 76.TÉCNICO DE UNIVERSIDAD - EDUCACIÓN SUPERIOR
+          77 77.TÉCNICO DE INSTITUTO (Duración mayor o igual a 2 años) - EDUCACIÓN SUPERIOR
+          78 78.INSTITUTOS DE FORMACIÓN MILITAR Y POLICIAL - EDUCACIÓN SUPERIOR
+          79 79.EDUCACIÓN TÉCNICA DE ADULTOS (ETA) - EDUCACIÓN SUPERIOR
+          80 80.OTROS CURSOS  (Duración menor a 2 años) - EDUCACIÓN SUPERIOR
+ 
 */
 
 
@@ -1525,33 +1514,50 @@ replace aedu_ci = 8 if (s05a_02b==8 & s05a_02a==31) |  (s05a_02b==3 & s05a_02a==
 replace aedu_ci = 9 if (s05a_02b==1 & s05a_02a==23) |  (s05a_02b==1 & s05a_02a==32) | (s05a_02b==3 & s05a_02a==42)
 replace aedu_ci = 10 if (s05a_02b==2 & s05a_02a==23) |  (s05a_02b==2 & s05a_02a==32) | (s05a_02b==4 & s05a_02a==42)
 replace aedu_ci = 11 if (s05a_02b==3 & s05a_02a==23) |  (s05a_02b==3 & s05a_02a==32) | (s05a_02b==5 & s05a_02a==42)
-replace aedu_ci = 12 if (s05a_02b==4 & s05a_02a==23) |  (s05a_02b==4 & s05a_02a==32) | (s05a_02b==6 & s05a_02a==42)
+replace aedu_ci = 12 if (s05a_02b==4 & s05a_02a==23) |  (s05a_02b==4 & s05a_02a==32) | (s05a_02b==6 & s05a_02a==42) | (s05a_02a==80)
 
-* Superior
+* Superior, licenciaturas
 
-replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=71 & s05a_02a<=79)
-replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=71 & s05a_02a<=79)
+replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=71 & s05a_02a<=72)
+replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=71 & s05a_02a<=72)
 
-replace aedu_ci = 18 if s05a_02b==1 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 19 if s05a_02b==2 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 20 if s05a_02b==3 & (s05a_02a>=74 & s05a_02a<=76)
-replace aedu_ci = 21 if (s05a_02b>=4 & s05a_02b<=8) & (s05a_02a>=74 & s05a_02a<=75)
-replace aedu_ci = 21 if (s05a_02b==4) & (s05a_02a==76)
-replace aedu_ci = 22 if (s05a_02b==5) & (s05a_02a==76)
-replace aedu_ci = 22 if (s05a_02b==8) & (s05a_02a==76)
+
+*superior, tecnicaturas
+
+replace aedu_ci = 13 if s05a_02b==1 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 14 if s05a_02b==2 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 15 if s05a_02b==3 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 16 if s05a_02b==4 & (s05a_02a>=76 & s05a_02a<=78)
+replace aedu_ci = 17 if (s05a_02b>=5 & s05a_02b<=8) & (s05a_02a>=76 & s05a_02a<=78)
+
+*postgrado (1 anio)
+replace aedu_ci=17 if s05a_02a==73 & s05a_02b==1 //cursando
+replace aedu_ci=18 if s05a_02a==73 & s05a_02b==8 //terminado
+
+*maestria (2 anios)
+replace aedu_ci=18 if s05a_02a==74 & s05a_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=19 if s05a_02a==74  & s05a_02b==2 //4to semestre aprobado
+replace aedu_ci=19 if s05a_02a==74  & s05a_02b>=5 & s05a_02b<=8 //egresado o titulado
+
+*doctorado (4 anios)
+replace aedu_ci=20 if s05a_02a==75 & s05a_02b==1 //2do o 3er semestre aprobado
+replace aedu_ci=21 if s05a_02a==75 & s05a_02b==2 //4to o 5to semestre aprobado
+replace aedu_ci=22 if s05a_02a==75 & s05a_02b==3 //6to o 7mo semestre aprobado
+replace aedu_ci=23 if s05a_02a==75 & s05a_02b==4 //8vo semestre aprobado
+replace aedu_ci=23 if s05a_02a==75 & s05a_02b>=5 & s05a_02b<=8 //egresado o titulado
 
 
 **************
 ***eduno_ci***
 **************
 
-gen byte eduno_ci= 1 if aedu_ci == 0
-replace eduno_ci= 0 if aedu_ci > 0
+gen byte eduno_ci=(aedu_ci == 0)
 replace eduno_ci=. if aedu_ci==.
 label variable eduno_ci "Cero anios de educacion"
+
 
 **************
 ***edupi_ci***
@@ -1589,7 +1595,7 @@ label variable edusc_ci "Secundaria completa"
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=(aedu_ci>=6 & aedu_ci<=7)
+gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<=7)
 replace edus1i_ci=. if aedu_ci==.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
@@ -1620,50 +1626,52 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 ***eduui_ci***
 **************
-* Se incorpora la restricción s5_02b<8 para que sea comparable con los otros años LCM dic 2013
 
-gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<=16 & s05a_02b<8)
+gen byte eduui_ci=(aedu_ci>=13 & aedu_ci<17 ) & s05a_02a==71 //educacion normal. 
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<17 ) & s05a_02a==72 // universitaria
+replace  eduui_ci= 1 if (aedu_ci>=13 & aedu_ci<15 ) & s05a_02a>=76 & s05a_02a<=78  // tecnico superior 
+
+
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
+
 
 ***************
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (aedu_ci==16 & s05a_02b==8) | (aedu_ci>=17 & aedu_ci<.)
+gen byte eduuc_ci=(aedu_ci>=17 & s05a_02a==72 ) // duracion del grado universitario
+replace eduuc_ci=1 if (aedu_ci>=17 & s05a_02a==71) // educacion normal
+replace eduuc_ci=1 if (aedu_ci>=13 & s05a_02a>=73 & s05a_02a<=75) // postgrados
+replace eduuc_ci=1 if (aedu_ci>=15 & s05a_02a>=76 & s05a_02a<=78) // tecnico superior
+
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa"
+
 
 ***************
 ***edupre_ci***
 ***************
 
-gen byte edupre_ci=(s05a_02a==13)
-replace edupre_ci=. if aedu_ci==.
+gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
 ***asispre_ci***
 ***************
 *Variable añadida por Iván Bornacelly - 01/12/2017
-	g asispre_ci=.	
-	replace asispre_ci=1 if s05a_05==1 & s05a_06a==13
-	recode asispre_ci (.=0)
+	g asispre_ci=s05a_05==1 & s05a_06a==13
 	la var asispre_ci "Asiste a educacion prescolar"
-	
 **************
 ***eduac_ci***
 **************
 
 * Se cambia para universidad completa o más 
 gen byte eduac_ci=.
-replace eduac_ci=1 if (s05a_02a>=72 & s05a_02a<=73)
-replace eduac_ci=0 if (s05a_02a>=77 & s05a_02a<=79)
+replace eduac_ci=1 if (s05a_02a>=72 & s05a_02a<=75)
+replace eduac_ci=0 if s05a_02a==71 //educacion normal
+replace eduac_ci=0 if (s05a_02a>=76 & s05a_02a<=78)
 label variable eduac_ci "Superior universitario vs superior no universitario"
-/*cambio de eduuc_ci de LCM introcucido por YL solo para este año.
-YL: No estoy segura de aceptar esta definicion pero la copio para hacerla comparable con
-los otros años*/
 
 ***************
 ***asiste_ci***
@@ -1731,21 +1739,17 @@ label var repiteult "Ha repetido el último grado"
 
 /*
 s5_09:	   
- 1 fiscal - pÚblico
- 2 pÚblico de convenio
- 3 particular - privado
+ 1 fiscal/ publico/convenio
+ 2 particular / privado
 */
 
-gen edupub_ci=(s05a_09==1)
+gen edupub_ci=(s05a_09==1  & asiste_ci==1)
+replace edupub_ci= 0 if s05a_09==2 & asiste_ci==1
+replace edupub_ci=. if  asiste_ci==0
 replace edupub_ci=. if s05a_09==.
 label var edupub_ci "Asiste a un centro de ensenanza público"
 
-**************
-***tecnica_ci*
-**************
 
-gen tecnica_ci = (s05a_02a==77 | s05a_02a==78)
-label var tecnica_ci "1=formacion terciaria tecnica"
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1754,52 +1758,123 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ****************
 ***aguared_ch***
 ****************
-
-/*s1a_11 :	
-1 cañería de red dentro de la vivienda?
-2 cañería de red fuera de la vivienda, pero dentro del lote
-3 pileta pública
-4  pozo perforado o entubado, con bomba?
-5 pozo escavado cubierto, con bomba? 
-6 pozo excavado cubierto, sin bomba?
-7 pozo excavado no cubierto? 
-8 manantial o vertiente protegida?
-9 río/acequia/vertiente no protegida?
-10  agua embotellada?
-11 carro repartidor (aguatero)?
-12 otro? (especifique)
-*/
-
-gen aguared_ch=(s01a_10==1 | s01a_10==2)
-replace aguared_ch=. if s01a_10==.
+gen aguared_ch = 0
+replace aguared_ch = 1 if (s01a_10==1 | s01a_10==2)
+replace aguared = . if s01a_10==.
 label var aguared_ch "Acceso a fuente de agua por red"
 
-****************
-***aguared_ch***
-****************
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if s01a_10==1|s01a_10==2
+replace aguafconsumo_ch = 2 if s01a_10==3
+replace aguafconsumo_ch = 3 if s01a_10==10
+replace aguafconsumo_ch = 4 if (s01a_10==4 | s01a_10==5 | s01a_10==6)
+replace aguafconsumo_ch = 6 if s01a_10==11
+replace aguafconsumo_ch = 7 if s01a_10 == 8
+replace aguafconsumo_ch = 8 if s01a_10==9
+replace aguafconsumo_ch = 9 if s01a_10== 7 
+replace aguafconsumo_ch = 10 if s01a_10== 12
 
-gen aguadist_ch=1 if s01a_10==1
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if s01a_10==1|s01a_10==2
+replace aguafuente_ch = 2 if s01a_10==3
+replace aguafuente_ch = 3 if s01a_10==10
+replace aguafuente_ch = 4 if (s01a_10==4 | s01a_10==5 | s01a_10==6)
+replace aguafuente_ch = 6 if s01a_10==11
+replace aguafuente_ch = 7 if s01a_10 == 8
+replace aguafuente_ch = 8 if s01a_10==9
+replace aguafuente_ch = 9 if s01a_10== 7 
+replace aguafuente_ch = 10 if s01a_10== 12
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if s01a_10==1
 replace aguadist_ch=2 if s01a_10==2
-replace aguadist_ch=3 if (s01a_10==3 | s01a_10==11)
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_chs1
+replace aguadist_ch=3 if (s01a_10==3)
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 1 if (s01a_11b<=3 | s01a_11aa <12)
+replace aguadisp2_ch = 2 if (s01a_11b>=4 & s01a_11aa >= 12)
+replace aguadisp2_ch = 3 if (s01a_11b==7 & s01a_11aa == 24)
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
-***aguamala_ch***
+*aguamejorada_ch*  Altered
 *****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
 
-gen aguamala_ch=(s01a_10==7 | s01a_10==8 | s01a_10==9)
-replace aguamala_ch=. if s01a_10==.
-label var aguamala_ch "Agua unimproved según MDG" 
 
 *****************
 ***aguamide_ch***
 *****************
-
-gen aguamide_ch=.
+gen aguamide_ch=9
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if s01a_15==5 
+replace bano_ch=1 if s01a_15==1 & s01a_16==1
+replace bano_ch=2 if s01a_15==1 & s01a_16==2
+replace bano_ch=3 if ((s01a_15==2 | s01a_15 == 4) & s01a_16!=4) | (s01a_15==1 & s01a_16 == 3)
+replace bano_ch=4 if (s01a_15==1 |s01a_15==2 |s01a_15==3) & s01a_16==4
+replace bano_ch=5 if s01a_15 ==3 & s01a_16!=4
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch =.
+replace banoex_ch = 0 if s01a_17==2
+replace banoex_ch = 1 if s01a_17==1
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if s01a_15!=5
+replace sinbano_ch = 2 if s01a_15==5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
 
 
 ************
@@ -1828,19 +1903,8 @@ replace combust_ch = . if s01a_25==.
 label var combust_ch "Principal combustible gas o electricidad" 
 
 
-*************
-***bano_ch***
-*************
 
-gen bano_ch= ( s01a_15>=1 & s01a_15<=4)
-label var bano_ch "El hogar tiene servicio sanitario"
 
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=(s01a_17==1)
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -1929,19 +1993,9 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-gen aguamejorada_ch = 1 if (s01a_10 >= 1 &  s01a_10 <=5) | s01a_10==8
-replace aguamejorada_ch = 0 if (s01a_10 >= 6 &  s01a_10 <=7) | (s01a_10 >= 9 &  s01a_10 <=12)
+
 				
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch = 1 if ((s01a_15>= 1 & s01a_15<=2) & (s01a_16 >= 1 & s01a_16 <=3) & s01a_17== 1)
-replace banomejorado_ch = 0 if ((s01a_15>= 1 & s01a_15<=2) & (s01a_16 >= 1 & s01a_16 <=3) & s01a_17== 2) | (s01a_15>= 3 & s01a_15<= 6)  | ((s01a_15>= 1 & s01a_15<=2)  & (s01a_16 >= 4 & s01a_16 <=5))
+
 		
 *************
 ***dorm_ch***
@@ -2216,8 +2270,8 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

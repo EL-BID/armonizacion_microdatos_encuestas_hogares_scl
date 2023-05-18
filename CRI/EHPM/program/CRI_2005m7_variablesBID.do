@@ -119,6 +119,17 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************
 ****pais****
 ************
@@ -677,7 +688,6 @@ label variable ocupa_ci "Ocupacion laboral"
 *************
 destring c17, replace
 
-
 gen rama_ci=.
 replace rama_ci=1 if (c17>=1110 & c17<=5002) & emp_ci==1
 replace rama_ci=2 if (c17>=10101 & c17<=14292) &  emp_ci==1
@@ -686,8 +696,8 @@ replace rama_ci=4 if (c17>=40100 & c17<=41000) & emp_ci==1
 replace rama_ci=5 if (c17>=45100 & c17<=45500) & emp_ci==1
 replace rama_ci=6 if (c17>=50101 & c17<=55300) & emp_ci==1
 replace rama_ci=7 if (c17>=60100 & c17<=64203) & emp_ci==1
-replace rama_ci=8 if (c17>=65110 & c17<=70200) & emp_ci==1
-replace rama_ci=9 if (c17>=71111 & c17<=99999) & emp_ci==1
+replace rama_ci=8 if (c17>=65110 & c17<=74110) & emp_ci==1
+replace rama_ci=9 if (c17>=74120 & c17<=99000) & emp_ci==1
 
 
 
@@ -951,6 +961,8 @@ gen byte aedu_ci=.
 
 replace aedu_ci=0 if b08==0 | b08==1 
 
+replace aedu_ci=. if b08==2 //Educacion Especial. Solo como check
+
 *Primaria
 replace aedu_ci=1 if b08==11 
 replace aedu_ci=2 if b08==12
@@ -976,6 +988,15 @@ replace aedu_ci=17 if b08==55
 replace aedu_ci=18 if b08==56
 replace aedu_ci=19 if b08==57
 replace aedu_ci=20 if b08==58
+
+
+// imputando valores perdidos con el valor maximo del anio anterior
+replace aedu_ci=0 if b08==19
+replace aedu_ci=6 if b08==29
+replace aedu_ci=6 if b08==39
+replace aedu_ci=11 if b08==49
+replace aedu_ci=11 if b08==59
+
 
 **************
 ***eduno_ci***
@@ -1386,6 +1407,41 @@ gen vivialqimp_ch=.
 	gen miglac_ci=.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* No se puede diferenciar paises LAC de no LAC */
+	
+	
+	**************************
+	** REGIONES **************
+	************************** 
+
+	gen ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
+	gen ine02=.   
+	replace ine02=1 if  provincia==1	/*San José*/
+	replace ine02=2 if  provincia==2	/*Alajuela*/
+	replace ine02=3 if  provincia==3	/*Cartago*/
+	replace ine02=4 if  provincia==4	/*Heredia*/
+	replace ine02=5 if  provincia==5	/*Guanacaste*/
+	replace ine02=6 if  provincia==6	/*Puntarenas*/
+	replace ine02=7 if  provincia==7	/*Limón*/
+	
+	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
+	label value ine02 ine02
+	label var ine02 "Segunda division politico-administrativa, Provincia"	
+	
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

@@ -2752,6 +2752,9 @@ gen  tcylmpri_ch =.
 append using "`base_out1'"
 order re_* ca_*
 
+gen codocupa=ca_26_T06
+gen codindustria=ca_28_T06
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza

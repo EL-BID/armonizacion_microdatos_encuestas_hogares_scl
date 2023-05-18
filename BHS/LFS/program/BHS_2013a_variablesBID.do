@@ -91,6 +91,23 @@ la var idp_ci "Individual ID"
 g zona_c=1
 label variable zona_c "Zona del pais"
 
+***************
+*****upm_ci****
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci**
+***************
+gen estrato_ci=.
+
+*************
+****Islas****
+*************
+gen ine01=island
+label define ine01 1"New Providence" 2"Grand Bahama" 3"Other Famiy Island"
+label value ine01 ine01
+label var ine01 " Primera division politico-administrativa, Isla"
 
 ************
 ****pais****
@@ -839,106 +856,100 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 ****************************
 ***VARIABLES DE EDUCACION***
 ****************************
+*Modificado por Agustina Thailinger 3/24/2020
+/*NO es posible saber cuantos años de educación tienen los individuos pero si definir cual es el nivel mas alto alcanzado*/
 
-/*NO es posible saber cuantos años de educación tienen los individuos pero si definir cual es 
-el nivel mas alto alcanzado*/
-
-
-gen aedu_ci = .
+*************
+***aedu_ci***
+*************
+gen aedu_ci=.
 
 **************
 ***eduno_ci***
 **************
-
-gen byte eduno_ci= (education==1)
+gen byte eduno_ci=(education==1)
+replace eduno_ci=. if education==9
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
-
-gen byte edupi_ci= (education==2)
+gen byte edupi_ci=(education==2)
+replace eduno_ci=. if education==9
 label variable edupi_ci "Primaria incompleta"
 
 **************
 ***edupc_ci***
 **************
-
 gen byte edupc_ci=(education==3)
+replace eduno_ci=. if education==9
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-
 gen byte edusi_ci=(education==4)
+replace eduno_ci=. if education==9
 label variable edusi_ci "Secundaria incompleta"
 
 **************
 ***edusc_ci***
 **************
-
 gen byte edusc_ci=(education==5)
+replace eduno_ci=. if education==9
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
-
 gen byte edus1i_ci=.
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
 ***edus1c_ci***
 ***************
-
 gen byte edus1c_ci=.
 label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 ***************
 ***edus2i_ci***
 ***************
-
 gen byte edus2i_ci=.
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
 ***edus2c_ci***
 ***************
-
 gen byte edus2c_ci=.
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
-gen byte eduui_ci=((education==6 | education==7) & (highest_certi==5))
+gen byte eduui_ci=.
 label variable eduui_ci "Universitaria incompleta"
 
 ***************
 ***eduuc_ci***
 ***************
-gen byte eduuc_ci=((education==6 | education==7) & (highest_certi==6 | highest_certi==7))
+gen byte eduuc_ci=.
 label variable eduuc_ci "Universitaria completa"
 
 ***************
 ***edupre_ci***
 ***************
-
 gen byte edupre_ci=.
 label variable edupre_ci "Educacion preescolar"
 
 ***************
 ***asipre_ci***
 ***************
-
 gen byte asispre_ci=.
-label variable asispre_ci "Asistencia a Educacion preescolar"
+label variable asispre_ci "Asistencia a educacion preescolar"
 
 **************
 ***eduac_ci***
 **************
-
 gen byte eduac_ci=1 if (education==6 | education==7)
 replace eduac_ci=0 if education==8
 label variable eduac_ci "Superior universitario vs superior no universitario"
@@ -946,106 +957,123 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-
 gen asiste_ci=.
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 *****************
 ***pqnoasis_ci***
 *****************
-
 gen pqnoasis_ci=.
-label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"vacación/receso" 2"falta de dinero" 3"por trabajo" 4"por enfermedad/accidente/discapacidad"
-label def pqnoasis_ci 5"los establecimientos son distantes" 6"culminó sus estudios" 7"edad temprana/ edad avanzada", add
-label def pqnoasis_ci 8"falta de interés" 9"labores de casa/ embarazo/cuidado de niños/as" 10"otra", add
-label val pqnoasis_ci pqnoasis 
-
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 
 ******************
 ***pqnoasis1_ci***
 ******************
-
+**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci**
 gen pqnoasis1_ci=.
-
 
 ***************
 ***repite_ci***
 ***************
-
 gen repite_ci=.
 label var repite_ci "Ha repetido al menos un grado"
-
 
 ******************
 ***repiteult_ci***
 ******************
-
 gen repiteult_ci=.
 label var repiteult "Ha repetido el último grado"
-
 
 ***************
 ***edupub_ci***
 ***************
-
 gen edupub_ci=.
 label var edupub_ci "Asiste a un centro de ensenanza público"
-
-**************
-***tecnica_ci*
-**************
-
-gen tecnica_ci=(education==8)
-label var tecnica_ci "1=formacion terciaria tecnica"
-
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
-* Daniela Zuluaga-Enero 2018: Se generan variables de vivienda que no habían sido creadas pero cuya información está disponible en la base.
-
 ****************
 ***aguared_ch***
 ****************
-
 gen aguared_ch=.
 replace aguared_ch=1 if water_supply==1
-replace aguared_ch=0 if (water_supply>=2 & water_supply<=4)
+replace aguared_ch=0 if (water_supply>=2 & water_supply<=5)
 label var aguared_ch "Acceso a fuente de agua por red"
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
 
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 1 if water_supply==1
+replace aguafuente_ch= 10 if (water_supply==2 |water_supply==3 | water_supply==4 | water_supply==5)
 
-****************
-***aguadist_ch***
-****************
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if water_supply==1
+replace aguadist_ch=3 if water_supply==3
 
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
 
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_ch
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
 *****************
-***aguamala_ch***
+*aguamejorada_ch*  Altered
 *****************
-
-gen aguamala_ch=.
-replace aguamala_ch=1 if water_supply==4
-replace aguamala_ch=0 if (water_supply>=1 & water_supply<=3)
-label var aguamala_ch "Agua unimproved según MDG" 
-
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 
 *****************
 ***aguamide_ch***
 *****************
+gen aguamide_ch =.
 
-gen aguamide_ch=.
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
 
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=.
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch =.
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
 
 ************
 ***luz_ch***
@@ -1072,21 +1100,6 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 gen combust_ch= .
 label var combust_ch "Principal combustible gas o electricidad" 
 
-
-*************
-***bano_ch***
-*************
-
-gen bano_ch= .
-label var bano_ch "El hogar tiene servicio sanitario"
-
-
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=.
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -1287,20 +1300,6 @@ label var vivialq_ch "Alquiler mensual"
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Alquiler mensual imputado"
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch=.
-replace aguamejorada_ch=1 if water_supply>=1 & water_supply<=3
-replace aguamejorada_ch=0 if water_supply==4
-	
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch=.
 
 *******************
 *** benefdes_ci ***
@@ -1378,8 +1377,8 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

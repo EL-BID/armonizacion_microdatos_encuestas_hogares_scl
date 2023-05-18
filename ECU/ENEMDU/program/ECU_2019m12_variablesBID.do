@@ -64,9 +64,7 @@ label value region_BID_c region_BID_c
 	***region_c ***
 	***************
 	gen region_c=.
-	/*No viene la variable ciudad en la versión 2018*/
-	
-	/*replace region_c=int(ciudad/10000)
+    replace region_c=int(ciudad/10000)
 	gen canton =int(ciudad/100)
 	recode  region_c (14/16=89) (19/22=89)
 	replace region_c =23 if canton==1706
@@ -95,7 +93,7 @@ label value region_BID_c region_BID_c
    label value region_c region_c
    drop canton
    label var region_c "division politico-administrativa, provincia"
-   */
+   
 	***************
 	***factor_ch***
 	***************
@@ -718,6 +716,14 @@ label var formal_ci "1=afiliado o cotizante / PEA"
 
 g formal_1=cotizando_ci1
 
+***************
+***trabaja_casa_ci***
+***************
+
+gen trabaja_casa_ci = .
+replace trabaja_casa_ci = 1 if p46 == 9 & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (p46 != 9) & (condocup_ci==1 | condocup_ci==2)
+
 
 /* MGD 04/2016; se cambia por afiliado ya que usa la pregunta que abarca a todos los ocupados.
 g formal_ci=(afiliado_ci==1)
@@ -914,142 +920,105 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 			****************************
 			***VARIABLES DE EDUCACION***
 			****************************
-/*
-	*************
-	***aedu_ci***
-	*************
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
-	
-	replace nivinst=. if (nivinst>=11)
-	replace anoinst=. if (anoinst>=20)
-	replace anoinst= 0 if (nivinst == 1)
-
-	* 26/08/2015: Cambios educación I.B-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst    if nivinst==4
-	replace aedu_ci = anoinst    if nivinst==5
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
-	label var aedu_ci "Anios de educacion aprobados" 
-*/
-
 	*************
 	***aedu_ci***
 	*************
 	
-	cap clonevar nivinst = p10a
-	cap clonevar anoinst = p10b
+	cap clonevar nivinst = p10a /*nivel de instruccion*/ 
+	cap clonevar anoinst = p10b /*años aprobados*/
+	
+	//Categorias nivel (formulario) - se explican los dos sistemas y cuales son sus equivalentes //
+	label define P10a 1 "Ninguno" 2 "Centro de alfabetización" 3 "Jardín de Infantes" 4 "Primaria" 5 "Educación Básica" 6 "Secundaria" 7 "Educación Media / Bachillerato" 8 "Superior no Universitario" 9 "Superior Universitario" 10 "Post - grado"
+	label values p10a P10a
+	label values nivinst P10a
 
-	replace anoinst= 0 if (nivinst == 1)
-
-	*09/29/2015: Cambios educación por Iván Bornacelly SCL/EDU-no se cuenta como años de educación la educación para adultos
-	gen aedu_ci = .
-	replace aedu_ci = 0          if nivinst==1
-	/*replace aedu_ci = 0          if nivinst==2 & (anoinst==0)
-	replace aedu_ci = 2          if nivinst==2 & (anoinst==1)
-	replace aedu_ci = 4          if nivinst==2 & (anoinst==2)
-	replace aedu_ci = 6          if nivinst==2 & (anoinst==3)*/
-	replace aedu_ci = 0          if nivinst==3
-	replace aedu_ci = anoinst-1    if nivinst==4
-	replace aedu_ci = anoinst-1    if nivinst==5 // Se le resta 1 dado que el nivel primaria y educación básica tienen incluido el primer año de educación inicial
-		* siguiente linea Mod. Ivan B./EDU 2015, 12
-	replace aedu_ci=0 if aedu_ci==-1
-	replace aedu_ci = anoinst+6  if nivinst==6
-	replace aedu_ci = anoinst+9  if nivinst==7
-	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9
-	replace aedu_ci = anoinst+17 if nivinst==10
-	replace aedu_ci =. if (nivinst==. | anoinst==. | anoinst==99)
+	gen aedu_ci=.
+	replace aedu_ci=0 if nivinst==1 | nivinst==2 | nivinst==3
+	replace aedu_ci= anoinst if nivinst==4 // Años primaria
+	replace aedu_ci = anoinst-1 if nivinst==5 // Años educacion básica 1 a 10 nuevos sistema - se resta uno porque considera un año de educacion inicial  
+	replace aedu_ci =0 if nivinst==5 & aedu_ci==-1 // para que no queden en -1 los de 0 años aprobados 
+	replace aedu_ci = anoinst+6  if nivinst==6 // secundaria
+	replace aedu_ci = anoinst+9  if nivinst==7 // bachillerato
+	replace aedu_ci = anoinst+12 if nivinst==8 | nivinst==9 //superior
+	replace aedu_ci = anoinst+16 if nivinst==10 // posgrado
 	label var aedu_ci "Anios de educacion aprobados"
 
 	**************
 	***eduno_ci***
 	**************
-	gen eduno_ci=0
-	replace eduno_ci=1 if aedu_ci==0
+	gen eduno_ci=aedu_ci==0
+	replace eduno_ci=. if aedu_ci==. 
 	label variable eduno_ci "Sin educacion"
 
 	**************
 	***edupi_ci***
 	**************
-	gen edupi_ci=0
-	replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+	gen edupi_ci=(aedu_ci>=1 & aedu_ci<6)
+	replace edupi_ci=. if aedu_ci==. 
 	label variable edupi_ci "Primaria incompleta"
 
 	**************
 	***edupc_ci***
 	**************
-	gen edupc_ci=0
-	replace edupc_ci=1 if aedu_ci==6 
+	gen edupc_ci=aedu_ci==6 
+	replace edupc_ci=. if aedu_ci==.
 	label variable edupc_ci "Primaria completa"
 
 	**************
 	***edusi_ci***
 	**************
-	gen edusi_ci=0
-	replace edusi_ci=1 if (aedu_ci>=7 & aedu_ci<12) 
+	gen edusi_ci=(aedu_ci>=7 & aedu_ci<12) 
+	replace edusi_ci=. if aedu==.  
 	label variable edusi_ci "Secundaria incompleta"
 
 	**************
 	***edusc_ci***
 	**************
-	gen edusc_ci=0
-	replace edusc_ci=1 if aedu_ci==12 
+	gen edusc_ci=aedu_ci==12
+	replace edusc_ci=. if aedu_ci==.
 	label variable edusc_ci "Secundaria completa"
 
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17)
+	gen eduui_ci=(p12a==2 & nivinst==9) | (p12a==2 & nivinst==8)
+	replace eduui_ci=. if aedu_ci==. 
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17)
+	gen byte eduuc_ci= (p12a==1 & nivinst==9) | (p12a==1 & nivinst==8) | (nivinst==10)	
+	replace eduuc_ci=. if aedu_ci==. 
 	label variable eduuc_ci "Superior completo"
 
 	***************
 	***edus1i_ci***
 	***************
-	gen edus1i_ci=0
-	replace edus1i_ci=1 if (aedu_ci>6 & aedu_ci<9)
+	gen edus1i_ci=(aedu_ci>6 & aedu_ci<9)
+	replace edus1i_ci=. if aedu_ci==.
 	label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 	***************
 	***edus1c_ci***
 	***************
-	gen edus1c_ci=0
-	replace edus1c_ci=1 if aedu_ci==9
+	gen edus1c_ci=aedu_ci==9
+	replace edus1c_ci=. if aedu_ci==. 
 	label variable edus1c_ci "1er ciclo de la secundaria completo"
 
 	***************
 	***edus2i_ci***
 	***************
-	gen edus2i_ci=0
-	replace edus2i_ci=1 if aedu_ci>9 & aedu_ci<12
+	gen edus2i_ci=(aedu_ci>9 & aedu_ci<12)
+	replace edus2i_ci=. if aedu_ci==. 
 	label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 	***************
 	***edus2c_ci***
 	***************
-	gen edus2c_ci=0
-	replace edus2c_ci=1 if aedu_ci==12
+	gen edus2c_ci=aedu_ci==12
+	replace edus2c_ci=. if aedu_ci==.
 	label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-	local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-	foreach x of local var {
-	replace `x'_ci=. if aedu_ci==.
-	}
 
 	***************
 	***edupre_ci***
@@ -1060,29 +1029,23 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***************
 	***asispre_ci**
 	***************
-	/*Variable agregada por Iván Bornacelly - 01/16/2017
+	* No viene la preguntá pe01 en la base 2018, 2019, 2020
 	g asispre_ci=.
-	replace asispre_ci=1 if pe01==1 & pe02a==3
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"*/
-	
-	*Variable modificada por Stephanie González - No viene la preguntá pe01 en la base 2018
-	g asispre_ci=.
-	replace asispre_ci=1 if p07==1 & p10a==3
-	recode asispre_ci (.=0)
 	la var asispre_ci "Asiste a educacion prescolar"
 	
 	**************
 	***eduac_ci***
 	**************
-	gen eduac_ci=.
+	gen eduac_ci=.	
+	replace eduac_ci=1 if p10a==9 | p10a==10 
+	replace eduac_ci=0 if p10a==8
 	label variable eduac_ci "Superior universitario vs superior no universitario"
+
 
 	***************
 	***asiste_ci***
 	***************
 	
-	* MGR Dic, 2015: corrección sintaxis para que niños <5 no aparezcan como no asiste, si no como missing
 	gen asiste_ci=(p07==1)
 	replace asiste_ci=. if p07==.
 	label variable asiste_ci "Asiste actualmente a la escuela"
@@ -1090,20 +1053,17 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***pqnoasis_ci***
 	**************
-	*Esta variable no tiene opciones predeterminadas por los que se mantienen las opciones del país
-	*Modificación SGR 2017/05/09 se cambia la opción 6 de "Temor a los maestros" a "Asistir a nivelación SENESCYT"
+	recode p09 (16=17)	// JV: No tiene opción "Falta de recursos tecnológicos". Recoded accordingly
+	
 	gen pqnoasis_ci=p09
 	label var pqnoasis_ci "Razones para no asistir a la escuela"
-	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar"
-	label def pqnoasis_ci 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar", add
-	label def pqnoasis_ci 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado", add
-	label def pqnoasis_ci 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Otra razón" , add
+	
+	label def pqnoasis_ci 1"edad" 2"terminó sus estudios" 3"falta recursos económicos" 4"fracaso escolar" 5"por trabajo" 6"por asistir a nivelación SENESCYT" 7"enfermedad o discapacidad" 8"quehaceres del hogar" 9"familia no permite" 10"no hay establecimientos educativos" 11"no está interesado" 12"por embarazo" 13"por falta de cupo" 14"Temor a los compañeros" 15"Cuidar a los hijos" 16"Falta de recursos tecnologicos" 17"Otra razón" 
 	label val pqnoasis_ci pqnoasis_ci
 	
 	**************
     *pqnoasis1_ci*
     **************
-    **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
     g       pqnoasis1_ci = 1 if p09==3
     replace pqnoasis1_ci = 2 if p09==5
     replace pqnoasis1_ci = 3 if p09==7  | p09==9
@@ -1111,8 +1071,8 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
     replace pqnoasis1_ci = 5 if p09==8  | p09==12 | p09==15
     replace pqnoasis1_ci = 6 if p09==2
     replace pqnoasis1_ci = 7 if p09==1 
-    replace pqnoasis1_ci = 8 if p09==10
-    replace pqnoasis1_ci = 9 if p09==4  | p09==6 | p09==13 | p09==14 | p09==16
+    replace pqnoasis1_ci = 8 if p09==10 | p09==13
+    replace pqnoasis1_ci = 9 if p09==4 | p09==6 | p09==14 | p09==16 | p09==17
 
     label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
     label value  pqnoasis1_ci pqnoasis1_ci
@@ -1135,55 +1095,117 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen edupub_ci=.
 	label var edupub_ci "Asiste a un centro de ensenanza público"
 
-	****************
-	***tecnica_ci **
-	****************
-	gen tecnica_ci=(nivinst==8)
-	label var tecnica_ci "=1 formacion terciaria tecnica"
-	
-	********************
-	***universidad_ci **
-	****************
-	gen universidad_ci=(nivinst==9)
-	label var universidad_ci "=1 formacion terciaria universitaria"
+	drop nivinst anoinst
 
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
 	
-	****************
-	***aguared_ch***
-	****************
-	generat aguared_ch=(vi10==1 |vi10==2 |vi10==3)
-	replace aguared_ch=. if vi10==.
-	label var aguared_ch "Acceso a fuente de agua por red"
+****************
+***aguared_ch***
+****************
+gen aguared_ch =0
+replace aguared_ch=1 if vi10==1
+replace aguared_ch=. if vi10==.
+label var aguared_ch "Acceso a fuente de agua por red"
 
-	*****************
-	***aguadist_ch***
-	*****************
-	gen aguadist_ch=.
-	replace aguadist_ch=1 if vi10a==1
-	replace aguadist_ch=2 if vi10a==2
-	replace aguadist_ch=3 if vi10a==3
-	replace aguadist_ch=. if vi10a==.
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
 
-	*****************
-	***aguamala_ch***
-	*****************
-	gen aguamala_ch=(vi10==6)
-	replace aguamala_ch=. if vi10==.
-	label var aguamala_ch "Agua unimproved según MDG" 
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if vi10==1
+replace aguafuente_ch = 2 if vi10==2
+replace aguafuente_ch = 6 if vi10==4
+replace aguafuente_ch = 8 if vi10==6
+replace aguafuente_ch = 10 if (vi10==3|vi10==5| vi10==7)
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if vi10a==1
+replace aguadist_ch=2 if vi10a==2
+replace aguadist_ch=3 if vi10a==3
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7 
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+replace aguamide_ch = 1 if vi101==1
+replace aguamide_ch = 0 if vi101==2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if vi09==5
+replace bano_ch=1 if vi09==1
+replace bano_ch=2 if vi09==2
+replace bano_ch=3 if (vi09==3) 
+replace bano_ch=6 if vi09==4
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if vi09!=5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
 	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=(vi101==1) if vi101!=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
-
 	************
 	***luz_ch***
 	************
@@ -1202,14 +1224,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen combust_ch=0
 	replace combust_ch=1 if  vi08==1 | vi08==3 
 	label var combust_ch "Principal combustible gas o electricidad"  
-	
-	*************
-	***bano_ch***
-	*************
-	gen bano_ch=1
-	replace bano_ch=0 if vi09==5 
-	replace bano_ch=. if vi09==.
-	label var bano_ch "El hogar tiene servicio sanitario"
 
 
 	gen des1_ch=.
@@ -1228,11 +1242,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace des2_ch=0 if bano_ch==0
 	replace des2_ch=1 if vi09==1 | vi09==2 | vi09==3 | vi09==4
 	label var des2_ch "Tipo de desague sin	
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
 
 	*************
 	***des1_ch***
@@ -1283,19 +1293,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
-	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-    *********************
-    ***aguamejorada_ch***
-    *********************
-	g       aguamejorada_ch = 1 if (vi10 >=1 & vi10 <=3) | vi10 ==5  | vi10 ==7
-	replace aguamejorada_ch = 0 if  vi10 ==4  | vi10 ==6
-    *********************
-    ***banomejorado_ch***
-    *********************
-	g       banomejorado_ch = 1 if (vi09 >=1 & vi09 <=4)
-	replace banomejorado_ch = 0 if  vi09 ==5 
-		
 	
 	*************
 	***dorm_ch***
@@ -1571,8 +1568,8 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

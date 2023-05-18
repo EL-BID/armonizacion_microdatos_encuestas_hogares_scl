@@ -1,5 +1,6 @@
 clear
 set more off
+
 *________________________________________________________________________________________________________________*
 
  * Activar si es necesario (dejar desactivado para evitar sobreescribir la base y dejar la posibilidad de 
@@ -7,9 +8,7 @@ set more off
  * Los datos se obtienen de las carpetas que se encuentran en el servidor: ${surveysFolder}
  * Se tiene acceso al servidor únicamente al interior del BID.
  * El servidor contiene las bases de datos MECOVI.
- *________________________________________________________________________________________________________________*
- 
-
+*________________________________________________________________________________________________________________*
 
 global ruta = "${surveysFolder}"
 
@@ -25,22 +24,19 @@ local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ro
 capture log close
 log using "`log_file'", replace 
 
-
 /***************************************************************************
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 País: Barbados
 Encuesta: LFS
 Round: 
 Autores: Melany Gualavisi melanyg@iadb.org
+Modificación 2022: Agustina Thailinger SCL/EDU
+Última modificación: Diciembre 2022
 
-
-							SCL/LMK - IADB
 ****************************************************************************/
 /***************************************************************************
 Detalle de procesamientos o modificaciones anteriores:
-
 ****************************************************************************/
-
 
 use `base_in', clear
 
@@ -54,24 +50,22 @@ label variable anio_c "Año de la Encuesta"
 * MES DE LA ENCUESTA *
 **********************
 gen mes_c=.
-*label variable mes_c "Mes de la Encuesta"
+label variable mes_c "Mes de la Encuesta"
 
 *************************
 * FACTORES DE EXPANSION *
 *************************
 sum wtfactor
 scalar pob=r(sum)
-gen pop=wtfactor*(279000/pob)
+gen pop=wtfactor*(284294/pob) // población BRB 2013
 sum pop
 ret list
 gen factor_ch=pop 
 drop pop
-
 label var factor_ch "Factor de Expansion del Hogar"
-gen factor_ci=  factor_ch
+
+gen factor_ci=factor_ch
 label var factor_ci "Factor de Expansion del Individuo"
-
-
 
 **************
 * REGION BID *
@@ -85,6 +79,13 @@ label values region_BID_c region_BID
 * REGION PAIS *
 ***************
 g region_ci=.
+
+g ine01=.
+
+*** calidad ****
+
+g upm_ci=.
+g estrato_ci=.
 
 ***************
 *    ZONA     *
@@ -843,147 +844,119 @@ label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 *******************************
 *******************************
 *******************************
+*Modificado por Agustina Thailinger SCL/EDU 3/24/2020
+/*NO es posible saber cuantos años de educación tienen los individuos pero si definir cual es el nivel mas alto alcanzado*/
 
+*************
+***aedu_ci*** 
+*************
+gen aedu_ci=.
+label var aedu_ci "Numero de años de educación culminados"
 
-
-******************************************
-* NUMERO DE AÑOS DE EDUCACION CULMINADOS *
-******************************************
-*Nota: numero de años-->  http://www.classbase.com/countries/Barbados/Education-System
-gen aedu_ci =.
-replace aedu_ci=0 if educlev==0
-replace aedu_ci=6 if educlev==1
-replace aedu_ci=11 if educlev==2
-replace aedu_ci=16 if educlev==4
-replace aedu_ci=13 if educlev==3
-label var aedu_ci "número de años de educación culminados"
-
-******************************************
-*  NO TIENE NINGUN NIVEL DE INSTRUCCION  *
-******************************************
-gen eduno_ci=.
-replace eduno_ci=1 if educlev==0 
-replace eduno_ci=0 if educlev>=1 & educlev<5
+**************
+***eduno_ci***
+**************
+gen eduno_ci=(educlev==0) 
+replace eduno_ci=. if educlev==9
 label var eduno_ci "No tiene ningún nivel de instrucción"
 
-******************************************
-* NO HA COMPLETADO LA EDUCACION PRIMARIA *
-******************************************
+**************
+***edupi_ci***
+**************
 gen edupi_ci=.
-/*replace edupi_ci=1 if educlev==0
-replace edupi_ci=0 if educlev>=1 & educlev<9*/
 label var edupi_ci "No ha completado la educación primaria"
 
-******************************************
-*  HA COMPLETADO LA EDUCACION PRIMARIA   *
-******************************************
-g edupc_ci=((educlev>=1 & educlev<=4) & educlev!=. & educlev!=9)
+**************
+***edupc_ci***
+**************
+gen edupc_ci=(educlev==1)
+replace edupc_ci=. if educlev==9
 label var edupc_ci "Ha completado la educación primaria"
 
-
-******************************************
-*NO HA COMPLETADO LA EDUCACION SECUNDARIA*
-******************************************
+**************
+***edusi_ci***
+**************
 gen edusi_ci=.
-/*replace edusi_ci=1 if aedu_ci<14 & aedu_ci!=.
-replace edusi_ci=0 if aedu_ci>=14 & aedu_ci!=.*/
 label var edusi_ci "No ha completado la educación secundaria"
 
-******************************************
-* HA COMPLETADO LA EDUCACION SECUNDARIA  *
-******************************************
-g edusc_ci=((educlev>=2 & educlev<=4) & educlev!=. & educlev!=9)
+**************
+***edusc_ci***
+**************
+gen edusc_ci=(educlev==2)
+replace edusc_ci=. if educlev==9
 label var edusc_ci "Ha completado la educación secundaria"
 
-*******************************************
-* NO HA COMPLETADO LA EDUCACION TERCIARIA *
-*******************************************
-gen eduui_ci=. 
-/*replace eduui_ci=1 if aedu_ci<18 & aedu_ci!=.
-replace eduui_ci=0 if aedu_ci>=18 & aedu_ci!=.*/
-label var eduui_ci "No ha completado la educación terciaria"
+**************
+***eduui_ci***
+**************
+gen eduui_ci=.
+label var eduui_ci "No ha completado la educación terciaria/universitaria"
 
-*******************************************
-*  HA COMPLETADO LA EDUCACION TERCIARIA   *
-*******************************************
-g eduuc_ci=((educlev>=3 & educlev<=4) & educlev!=. & educlev!=9)
-label var eduuc_ci "Ha completado la educación terciaria"
+**************
+***eduuc_ci***
+**************
+gen eduuc_ci=(educlev==3 | educlev==4)
+replace eduuc_ci=. if educlev==9
+label var eduuc_ci "Ha completado la educación terciaria/universitaria"
 
-
-****************************************
-*  HA COMPLETADO EDUCACION PREESCOLAR  *
-****************************************
-gen edupre_ci=. 
-*replace edupre_ci=0 if
+***************
+***edupre_ci***
+***************
+gen edupre_ci=.
 label var edupre_ci "Ha completado educación preescolar"
 
 ***************
 ***asipre_ci***
 ***************
-
 gen byte asispre_ci=.
 label variable asispre_ci "Asistencia a Educacion preescolar"
 
-************************************************
-*  HA COMPLETADO EDUCACION TERCIARIA ACADEMICA *
-************************************************
+**************
+***eduac_ci***
+**************
 gen eduac_ci=.
-/*replace eduac_ci=1 if educlev==3 | educlev==5
-replace eduac_ci=0 if educlev==4*/
+replace eduac_ci=1 if educlev==4
+replace eduac_ci=0 if educlev==3
 label var eduac_ci "Ha completado educación terciaria académica"
 
-************************************
-*  ASISTE A UN CENTRO DE ENSEÑANZA *
-************************************
+***************
+***asiste_ci***
+***************
 gen asiste_ci=.
-*replace asiste_ci=1 if educlev==3 | educlev==5
 label var asiste_ci "Asiste a algún centro de enseñanza"
 
-*********************************************
-* PORQUE NO ASISTE A UN CENTRO DE ENSEÑANZA *
-*********************************************
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=.
-*replace pqnoasis_ci=1 if wnattsch
 label var pqnoasis_ci "Porque no asiste a algún centro de enseñanza"
 label define pqnoasis 1"Muy joven" 2"Razones financieras" 3"Trabaja en casa o negocio familiar" 4"Distancia a la escuela/transporte" 5"Enfermedad/inhabilidad" 6"falta de especio en la escuela" 7"Otra" 9"NS/NR"  
 label values pqnoasis_ci pqnoasis
 
+******************
+***pqnoasis1_ci***
+******************
+gen pqnoasis1_ci=.
 
-**************
-*pqnoasis1_ci*
-**************
-gen pqnoasis1_ci = .
-
-
-************************************
-*  HA REPETIDO ALGUN AÑO O GRADO   *
-************************************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
-*replace repite_ci=1 if
 label var repite_ci "Ha repetido algún año o grado"
 
-******************************
-*  HA REPETIDO EL ULTIMO AÑO *
-******************************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
-*replace repiteult_ci=1 if
 label var repiteult_ci "Ha repetido el último grado"
 
-***************************************
-*ASISTE A CENTRO DE ENSEÑANZA PUBLICA *
-***************************************
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
-*replace edupub_ci=1 if 
 label var edupub_ci "Asiste a centro de enseñanza pública"
 label define edupub 1"Pública" 0"Privada"  
 label values edupub_ci edupub
-
-**************************
-*  TIENE CARRERA TECNICA *
-**************************
-gen tecnica_ci=.
-label var tecnica_ci "Tiene carrera técnica"
-
 
 **************************
 *       TRAINING         *
@@ -1032,23 +1005,29 @@ g nrylmpri_ci=.
 g ylmnr_ch=.
 g nrylmpri_ch=.
 * Variables de vivienda
-g aguared_ch=.
-g aguadist_ch=.
-g aguamala_ch=.
-g aguamide_ch=.
+gen aguared_ch=.
+gen aguafconsumo_ch = 0
+gen aguafuente_ch =.
+gen aguadist_ch=0
+gen aguadisp1_ch = 9
+gen aguadisp2_ch = 9
+gen aguamala_ch = .
+gen aguamejorada_ch = .
+gen aguamide_ch = .
+gen bano_ch=.
+generate banoex_ch=9
+gen banomejorado_ch=.
+gen sinbano_ch =.
+gen aguatrat_ch =9
 g luz_ch=.
 g luzmide_ch=.
 g combust_ch=.
-g bano_ch=.
-g banoex_ch=.
 g des1_ch=.
 g des2_ch=.
 g piso_ch=.
 g pared_ch=.
 g techo_ch=.
 g resid_ch=.
-g aguamejorada_ch =.
-g banomejorado_ch =.
 g dorm_ch=.
 g cuartos_ch=.
 g cocina_ch=.
@@ -1138,8 +1117,8 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

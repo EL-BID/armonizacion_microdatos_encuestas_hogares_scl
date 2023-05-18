@@ -1033,7 +1033,7 @@ label variable edupre_ci "Educacion preescolar"
 ***asispre_ci***
 ****************
 *Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	g asispre_ci=(e3==1 & (e6a==2 | e6a==3 | e6a==4)) 
+	g asispre_ci=(e3==1 & e6a==4) // Asiste Kinder Prekinder
 	la var asispre_ci "Asiste a educacion prescolar"
 
 
@@ -1097,37 +1097,117 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
 		******************************************
 
-***************
-* aguared_ch  *
-***************
-gen aguared_ch=(v20>=1 & v20<=3)
-replace aguared_ch=. if v20==.
-label var aguared_ch "Acceso a fuente de agua por red"
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if v20<=3 
+replace aguared_ch = 0 if v20>3
+la var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 1 if v20<=3 & v22<=2
+replace aguafuente_ch = 2 if v20<=3 & v22>2
+replace aguafuente_ch = 6 if v20==6
+replace aguafuente_ch = 8 if v20==5
+replace aguafuente_ch = 10 if (v20==7 | v20==8 | v20==4)
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if v22==1
+replace aguadist_ch=2 if v22==2
+replace aguadist_ch=3 if v22==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = 1 if v20<=2
+replace aguamide_ch = 0 if v20>2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if v23==8
+replace bano_ch=1 if v23==1
+replace bano_ch=2 if v23==2
+replace bano_ch=3 if v23==3 | v23==4
+replace bano_ch=4 if v23==5
+replace bano_ch=5 if v23==7 
+replace bano_ch=6 if v23==6
 
 ***************
-* aguadist_ch *
+***banoex_ch***
 ***************
-*Es la mejor aproximación
-gen aguadist_ch=v22
-replace aguadist_ch=. if v22==9
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la vivienda" 2"Afuera de la vivienda" 3"La acarrean"
-label val aguadist_ch aguadist_ch
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
-***************
-* aguamala_ch *
-***************
-gen aguamala_ch=(v20>=5 & v20<=6)
-replace aguamala_ch=. if aguared_ch==.
-label var aguamala_ch "La principal fuente de agua es unimproved según MDG"
 
-***************
-* aguamide_ch *
-***************
-gen aguamide_ch=(v20==1 | v20==2)
-replace aguamide_ch=. if aguared_ch==.
-label var aguamide_ch "El hogar usa un medidor para pagar por su consumo de agua"
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if v23!=8
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+		
 ***************
 * luz_ch      *
 ***************
@@ -1150,18 +1230,6 @@ replace combust_ch=1 if v36a==1  | v36a==6 | v36a==2
 replace combust_ch=0 if v36a==7 | v36a==8 | v36a==3 | v36a==4 | v36a==5 | v36a==9
 label var combust_ch "Principal combustible gas o electricidad" 
 
-***************
-* bano_ch     *
-***************
-gen bano_ch=(v23<=7)
-replace bano_ch=. if v23==.
-label var bano_ch "El hogar tiene algún tipo de servicio higiénico"
-
-***************
-* banoex_ch   *
-***************
-gen banoex_ch=.
-label var banoex_ch "El servicio higiénico es de uso exclusivo del hogar"
 
 ***************
 * des1_ch     *
@@ -1222,19 +1290,6 @@ label val techo_ch techo_ch
 gen resid_ch=.
 label var resid_ch "Método de eliminación de residuos"
 
- **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (v20 >=1 & v20 <=4)
-replace aguamejorada_ch = 0 if (v20 >=5 & v20 <=7) | v22 ==3
-
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if  (v23 >=1 & v23 <=4) 
-replace banomejorado_ch = 0 if  (v23 >=5 & v23 <=8)
 
 ***************
 * dorm_ch     *
@@ -1723,6 +1778,97 @@ lab val atencion_ci atencion_ci
 	/* Fuente: http://observatorio.ministeriodesarrollosocial.gob.cl/casen-multidimensional/casen/docs/Libro_de_Codigos_Casen_2017.pdf */
 				
 
+	**************************
+	** REGIONES **************
+	************************** 
+	
+   gen ine01=.   
+   replace ine01=1 if  region==1		/*Tarapacá*/
+   replace ine01=2 if  region==2		/*Antofagasta*/
+   replace ine01=3 if  region==3		/*Atacama*/
+   replace ine01=4 if  region==4		/*Coquimbo*/
+   replace ine01=5 if  region==5    	/*Valparaíso*/
+   replace ine01=6 if  region==6		/*O'Higgins*/
+   replace ine01=7 if  region==7		/*Maule*/
+   replace ine01=8 if  region==8		/*Bío Bío*/
+   replace ine01=9 if  region==9		/*La Araucanía*/
+   replace ine01=10 if region==10		/*Los Lagos*/
+   replace ine01=11 if region==11		/*Aysén*/
+   replace ine01=12 if region==12		/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if region==13		/*Metropolitana Santiago*/
+   replace ine01=14 if region==14		/*Los Ríos*/
+   replace ine01=15 if region==15		/*Arica y Parinacota*/
+   replace ine01=15 if region==16		/*Ñuble*/
+   
+	label define ine01 1"Tarapacá" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago" 14"Los Ríos" 15"Arica y Parinacota" 16"Ñuble"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
+	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+		
+   gen ine02=.   
+   replace ine02=11 if provincia==11			/*Iquique*/
+   replace ine02=14 if provincia==14			/*Tamarugal*/
+   replace ine02=21 if provincia==21			/*Antofagasta*/
+   replace ine02=22 if provincia==22		    /*El Loa*/
+   replace ine02=23 if provincia==23			/*Tocopilla*/
+   replace ine02=31 if provincia==31			/*Copiapó*/
+   replace ine02=32 if provincia==32			/*Chañaral*/
+   replace ine02=33 if provincia==33			/*Huasco*/
+   replace ine02=41 if provincia==41			/*Elqui*/
+   replace ine02=42 if provincia==42			/*Choapa*/
+   replace ine02=43 if provincia==43			/*Limarí*/
+   replace ine02=51 if provincia==51			/*Valparaíso*/
+   replace ine02=53 if provincia==53	    	/*Los Andes*/
+   replace ine02=54 if provincia==54			/*Petorca*/
+   replace ine02=55 if provincia==55			/*Quillota*/
+   replace ine02=56 if provincia==56			/*San Antonio*/
+   replace ine02=57 if provincia==57			/*San Felipe*/
+   replace ine02=58 if provincia==58			/*Marga Marga*/
+   replace ine02=61 if provincia==61			/*Cachapoal*/
+   replace ine02=62 if provincia==62			/*Cardenal Caro*/
+   replace ine02=63 if provincia==63			/*Colchagua*/
+   replace ine02=71 if provincia==71			/*Talca*/
+   replace ine02=72 if provincia==72			/*Cauquenes*/
+   replace ine02=73 if provincia==73			/*Curicó*/
+   replace ine02=74 if provincia==74	    	/*Linares*/
+   replace ine02=81 if provincia==81			/*Concepción*/
+   replace ine02=82 if provincia==82			/*Arauco*/
+   replace ine02=83 if provincia==83			/*Bio Bío*/
+   replace ine02=84 if provincia==84			/*Ñuble*/
+   replace ine02=91 if provincia==91			/*Cautín*/
+   replace ine02=92 if provincia==92			/*Malleco*/
+   replace ine02=101 if provincia==101			/*Llanquihue*/
+   replace ine02=102 if provincia==102			/*Chiloé*/
+   replace ine02=103 if provincia==103			/*Osorno*/
+   replace ine02=111 if provincia==111			/*Cohaique*/
+   replace ine02=112 if provincia==112	    	/*Aysén*/
+   replace ine02=113 if provincia==113			/*Capitán Prat*/
+   replace ine02=114 if provincia==114			/*General Carrera*/
+   replace ine02=121 if provincia==121			/*Magallanes*/
+   replace ine02=123 if provincia==123			/*Tierra del Fuego*/
+   replace ine02=124 if provincia==124			/*Última Esperanza*/
+   replace ine02=131 if provincia==131			/*Santiago*/
+   replace ine02=132 if provincia==132			/*Cordillera*/
+   replace ine02=133 if provincia==133			/*Chacabuco*/
+   replace ine02=134 if provincia==134			/*Maipo*/
+   replace ine02=135 if provincia==135			/*Melipilla*/
+   replace ine02=136 if provincia==136			/*Talagante*/
+   replace ine02=141 if provincia==141			/*Valdivia*/
+   replace ine02=142 if provincia==142			/*Ranco*/
+   replace ine02=151 if provincia==151			/*Arica*/
+   replace ine02=152 if provincia==152			/*Parinatoca*/
+   replace ine02=161 if provincia==161			/*Diguillin*/
+   replace ine02=162 if provincia==162			/*Itata*/
+   replace ine02=163 if provincia==163			/*Punilla*/
+
+	label define ine02 11"Iquique" 14"Tamarugal" 21"Antofagasta" 22"El Loa" 23"Tocopilla" 31"Copiapó" 32"Chañaral" 33"Huasco" 41"Elqui" 42"Choapa" 43"Limarí" 51"Valparaíso" 53"Los Andes" 54"Petorca" 55"Quillota" 56"San Antonio" 57"San Felipe" 58"Marga Marga" 61"Cachapoal" 62"Cardenal Caro" 63"Colchagua" 71"Talca" 72"Cauquenes" 73"Curicó" 74"Linares" 81"Concepción" 82"Arauco" 83"Bio Bío" 84"Ñuble" 91"Cautín" 92"Malleco" 101"Llanquihue" 102"Chiloé" 103"Osorno" 104"Palena" 111"Cohaique" 112"Aisén" 113"Capitán Prat" 114"General Carrera" 121"Magallanes" 122"Antártica" 123"Tierra del Fuego" 124"Última Esperanza" 131"Santiago" 132"Cordillera" 133"Chacabuco" 134"Maipo" 135"Melipilla" 136"Talagante" 141"Valdivia" 142"Ranco" 151"Arica" 152"Parinatoca" 161"Diguillin" 162"Itata" 163"Punilla"
+	label value ine02 ine02
+	label var ine02 " Segunda division politico-administrativa, Provincia"			
+				
 	
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1735,7 +1881,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
 
-order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci o9a o9b o21 o22 oficio1 oficio4  ///
+order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci upm_ci estrato_ci sexo_ci edad_ci o9a o9b o21 o22 oficio1 oficio4 ///
 afroind_ci afroind_ch afroind_ano_c dis_ci dis_ch relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
@@ -1745,7 +1891,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

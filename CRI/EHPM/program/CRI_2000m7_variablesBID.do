@@ -117,6 +117,17 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************
 ****pais****
 ************
@@ -976,6 +987,8 @@ gen byte aedu_ci=.
 
 replace aedu_ci=0 if niveduc==0 | niveduc==1 
 
+replace aedu_ci=. if niveduc==2 //Educacion Especial. Solo como check
+
 *Primaria
 replace aedu_ci=1 if niveduc==11 
 replace aedu_ci=2 if niveduc==12
@@ -1002,12 +1015,19 @@ replace aedu_ci=18 if niveduc==56
 replace aedu_ci=19 if niveduc==57
 replace aedu_ci=20 if niveduc==58
 
+// imputando valores perdidos con el valor maximo del anio anterior
+replace aedu_ci=0 if niveduc==19
+replace aedu_ci=6 if niveduc==29
+replace aedu_ci=6 if niveduc==39
+replace aedu_ci=11 if niveduc==49
+replace aedu_ci=11 if niveduc==59
+
 **************
 ***eduno_ci***
 **************
 
 gen byte eduno_ci=0
-replace eduno_ci=1 if niveduc==0 | niveduc==1 
+replace eduno_ci=1 if inlist(niveduc,0, 1, 19)
 label variable eduno_ci "Cero anios de educacion"
 
 **************
@@ -1023,7 +1043,7 @@ label variable edupi_ci "Primaria incompleta"
 **************
 
 gen byte edupc_ci=0
-replace edupc_ci=1 if niveduc==16
+replace edupc_ci=1 if inlist(niveduc,16, 29, 39)
 label variable edupc_ci "Primaria completa"
 
 **************
@@ -1031,8 +1051,7 @@ label variable edupc_ci "Primaria completa"
 **************
 
 gen byte edusi_ci=0
-replace edusi_ci=1 if (niveduc>=21 & niveduc<=25) 
-replace edusi_ci=1 if (niveduc>=31 & niveduc<=35) 
+replace edusi_ci=1 if (niveduc>=21 & niveduc<=24) | (niveduc>=31 & niveduc<=35)
 label variable edusi_ci "Secundaria incompleta"
 
 **************
@@ -1040,7 +1059,7 @@ label variable edusi_ci "Secundaria incompleta"
 **************
 
 gen byte edusc_ci=0
-replace edusc_ci=1 if niveduc==36
+replace edusc_ci=1 if inlist(niveduc,25, 26, 36, 37, 49, 59)
 label variable edusc_ci "Secundaria completa"
 
 ***************
@@ -1048,8 +1067,7 @@ label variable edusc_ci "Secundaria completa"
 ***************
 
 gen byte edus1i_ci=0
-replace edus1i_ci=1 if (niveduc>=21 & niveduc<=22)
-replace edus1i_ci=1 if (niveduc>=31 & niveduc<=32)
+replace edus1i_ci=1 if inlist(niveduc,21, 22, 31, 32)
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
 
 ***************
@@ -1065,8 +1083,7 @@ label variable edus1c_ci "1er ciclo de la secundaria completo"
 ***************
 
 gen byte edus2i_ci=0
-replace edus2i_ci=1 if (niveduc>=24 & niveduc<=25)
-replace edus2i_ci=1 if (niveduc>=34 & niveduc<=35)
+replace edus2i_ci=1 if inlist(niveduc,24,34,35)
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 
 ***************
@@ -1074,7 +1091,7 @@ label variable edus2i_ci "2do ciclo de la secundaria incompleto"
 ***************
 
 gen byte edus2c_ci=0
-replace edus2c_ci=1 if niveduc==36
+replace edus2c_ci=1 if inlist(niveduc,25,26,36,37,49,59)
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
@@ -1082,7 +1099,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 **************
 
 gen byte eduui_ci=0
-replace eduui_ci=1 if (niveduc>=41 & niveduc<=44)
+replace eduui_ci=1 if (niveduc>=41 & niveduc<=42)
 replace eduui_ci=1 if (niveduc>=51 & niveduc<=54)
 label variable eduui_ci "Superior incompleto"
 
@@ -1091,7 +1108,7 @@ label variable eduui_ci "Superior incompleto"
 ***************
 
 gen byte eduuc_ci=0
-replace eduuc_ci=1 if (niveduc>=55 & niveduc<=58)
+replace eduuc_ci=1 if niveduc==43 | (niveduc>=55 & niveduc<=58)
 label variable eduuc_ci "Superior completo"
 
 local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
@@ -1291,6 +1308,75 @@ gen vivialqimp_ch=.
 ren ocup ocup_old
 
 
+	**************************
+	** REGIONES **************
+	************************** 
+
+	gen ine01=.   
+	replace ine01=1 if  region==2	/*Central*/
+	replace ine01=2 if  region==3	/*Chorotega*/
+	replace ine01=3 if  region==4	/*Pacífico central*/
+	replace ine01=4 if  region==5	/*Brunca*/
+	replace ine01=5 if  region==6	/*Huetar Atlántica*/
+	replace ine01=6 if  region==7	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
+	gen ine02=.   
+	replace ine02=1 if  provinci==1		/*San José*/
+	replace ine02=2 if  provinci==2		/*Alajuela*/
+	replace ine02=3 if  provinci==3		/*Cartago*/
+	replace ine02=4 if  provinci==4		/*Heredia*/
+	replace ine02=5 if  provinci==5		/*Guanacaste*/
+	replace ine02=6 if  provinci==6		/*Puntarenas*/
+	replace ine02=7 if  provinci==7		/*Limón*/
+	
+	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
+	label value ine02 ine02
+	label var ine02 "Segunda division politico-administrativa, Provincia"	
+	
+	***************************
+	** VARIABLES ADICIONALES **
+	***************************
+	* Incluidas como missing por Juan Camilo Perdomo (jcamilop@iadb.org), dado que no se halló una forma para crecalas - 10/18/2022
+
+	*****************
+	** migrante_ci **
+	*****************
+	gen migrante_ci = .
+	label var migrante_ci "=1 si es migrante"
+
+	********************
+	** migantiguo5_ci **
+	********************
+	gen migantiguo5_ci = .
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+
+	********************
+	** migrantelac_ci **
+	********************
+	gen migrantelac_ci  = .
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	*********************
+	** migrantiguo5_ci **
+	*********************
+	gen migrantiguo5_ci = .
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas), calculado sobre población migrante"
+
+	********************
+	***** miglac_ci ****
+	********************
+	gen miglac_ci  = .
+	label var miglac_ci "=1 si es migrante de un pais LAC, calculado sobre población migrante"
+
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), Paridad de Poder Adquisitivo (PPA 2011),  líneas de pobreza
@@ -1320,6 +1406,8 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 rename ramap codindustria
 rename ocupp codocupa
+replace codindustria=. if codindustria==0
+replace codocupa=. if codocupa==0
 compress
 saveold "`base_out'", replace
 

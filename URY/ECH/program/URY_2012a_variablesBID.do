@@ -1436,7 +1436,7 @@ label variable edus2c_ci "2do ciclo de la secundaria completo"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=(aedu_ci>12 & e51_8<4) & (aedu_ci>12 & e51_10<3) & (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
+gen byte eduui_ci=(aedu_ci>12 & e51_8<4) | (aedu_ci>12 & e51_10<3) | (aedu_ci>12 & e51_9<4) // magisterio, profesorado, tecnica, universitaria
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1447,6 +1447,14 @@ label variable eduui_ci "Universitaria incompleta"
 gen byte eduuc_ci=(aedu_ci>12 & e51_8>=4 & e51_8!=9) | (aedu_ci>12 & e51_10>=3 & e51_10!=9) | (aedu_ci>12 & e51_9>=4 & e51_9!=9) // magisterio, tecnica, universitaria
 replace eduuc_ci=. if aedu_ci==.
 label variable eduuc_ci "Universitaria completa o mas"
+
+/* 
+Para los casos en los cuales el respondiente imputa un nivel finalizado pero 
+otro incompleto y por ende se pisan eduuc con eduui se le da prioridad al 
+nivel completo.
+*/
+replace eduui_ci = 0 if eduuc_ci == 1
+
 
 ***************
 ***edupre_ci***
@@ -1472,7 +1480,7 @@ replace eduac_ci = 1 if aedu_ci>12 & e51_9>0 & e51_9!=9
 
 
 *88. Personas que actualmente asisten a centros de ensenanza
-gen byte asiste_ci=(e197==1 | e201==1 | e212==1 | e215==1 | e218==1 | e221==1 | e224==1)
+gen byte asiste_ci=(e193==1  | e197==1 | e201==1 | e212==1 | e215==1 | e218==1 | e221==1 | e224==1)
 
 *89. Razones para no asistir a la escuela
 * Se genera como mising porque no hay para todas las preguntas. 

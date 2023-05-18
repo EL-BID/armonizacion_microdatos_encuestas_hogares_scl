@@ -122,6 +122,17 @@ label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
+
+
 ************
 ****pais****
 ************
@@ -692,8 +703,8 @@ replace rama_ci=4 if (c17>=40100 & c17<=41000) & emp_ci==1
 replace rama_ci=5 if (c17>=45100 & c17<=45500) & emp_ci==1
 replace rama_ci=6 if (c17>=50101 & c17<=55300) & emp_ci==1
 replace rama_ci=7 if (c17>=60100 & c17<=64203) & emp_ci==1
-replace rama_ci=8 if (c17>=65110 & c17<=70200) & emp_ci==1
-replace rama_ci=9 if (c17>=71111 & c17<=99999) & emp_ci==1
+replace rama_ci=8 if (c17>=65110 & c17<=72100) & emp_ci==1
+replace rama_ci=9 if (c17>=72200 & c17<=99999) & emp_ci==1
 
 
 ****************
@@ -958,202 +969,189 @@ gen ylnmotros_ci=.
 ***VARIABLES DE EDUCACION***
 ****************************
 
-gen byte aedu_ci=.
+**************
+***aedu_ci***
+**************
 
-replace aedu_ci=0 if b08==0 | b08==1 
+/*
+Para construir aedu tenemos: 
 
-*Primaria
-replace aedu_ci=1 if b08==11 
-replace aedu_ci=2 if b08==12
-replace aedu_ci=3 if b08==13
-replace aedu_ci=4 if b08==14
-replace aedu_ci=5 if b08==15
-replace aedu_ci=6 if b08==16
+b08 "Cuál es el último grado aprobado?"
+							Nivel Anio
+Ninguno       				   0   0 
+Preparatoria				   0   1
+Especial                       0   2
+Primaria                       1   X
+Secundaria Académica           2   X
+Secundaria Técnica             3   X
+Parauniversitaria              4   X
+Universidad                    5   X
+*/
 
-*Secundaria (académica y técnica)
-replace aedu_ci=7 if b08==21 | b08==31
-replace aedu_ci=8 if b08==22 | b08==32
-replace aedu_ci=9 if b08==23 | b08==33
-replace aedu_ci=10 if b08==24 | b08==34
-replace aedu_ci=11 if b08==25 | b08==35
-replace aedu_ci=12 if b08==36 
+gen nivgra = b08
+tostring nivgra, gen(nivgra_str)  // convertimos nivgra en string para hacerla mutable
+gen aedu_temp = substr(nivgra_str, -1, 1)  // Tomamos el último char para usar de anio de c/nivel
+destring aedu_temp, replace
+replace aedu_temp = . if aedu_temp == 9 // Eliminamos los anios ignorados 
 
-*Superior (universitario o para-universitario)
-replace aedu_ci=13 if b08==41 | b08==51
-replace aedu_ci=14 if b08==42 | b08==52
-replace aedu_ci=15 if b08==43 | b08==53
-replace aedu_ci=16 if b08==44 | b08==54
-replace aedu_ci=17 if b08==55
-replace aedu_ci=18 if b08==56
-replace aedu_ci=19 if b08==57
-replace aedu_ci=20 if b08==58
+gen aedu_ci = . 
+replace aedu_ci = 0 if inlist(b08, 0, 1) // Ninguno, preparatoria
+replace aedu_ci = aedu_temp if (b08 >= 10 & b08 < 19) // Primaria
+replace aedu_ci = aedu_temp + 6 if (b08 >= 20 & b08 < 29) | (b08 >= 30 & b08 < 39) // Secundaria
+replace aedu_ci = aedu_temp + 12 if (b08 >= 40 & b08 < 49) | (b08 >= 50 & b08 < 59) // Parauniversitaria o Universitaria
+
+// Imputación valores perdidos 
+replace aedu_ci = 0 if b08 == 19 // Primaria ignorada
+replace aedu_ci = 6 if (b08 == 29 | b08 == 39) // Secundaria Ignorada
+replace aedu_ci = 11 if (b08 == 49 | b08 == 59) //  Superior Ignorada
 
 **************
 ***eduno_ci***
 **************
 
-/*gen byte eduno_ci=0
-replace eduno_ci=1 if b08==0 | b08==1 
-label variable eduno_ci "Cero anios de educacion"*/
-
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu==0
+gen eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
 label variable eduno_ci "Cero anios de educacion"
 
 **************
 ***edupi_ci***
 **************
 
-/*gen byte edupi_ci=0
-replace edupi_ci=1 if (b08>=11 & b08<16) 
-label variable edupi_ci "Primaria incompleta"*/
-
-gen byte edupi_ci=0
-replace edupi_ci=1 if (aedu_ci>=1 & aedu_ci<6) 
+gen byte edupi_ci = (b08 >= 11 & b08 <= 15) 
+replace edupi_ci = . if aedu_ci == .
 label variable edupi_ci "Primaria incompleta"
+
 **************
 ***edupc_ci***
 **************
-/*gen byte edupc_ci=0
-replace edupc_ci=1 if b08==16
-label variable edupc_ci "Primaria completa"*/
 
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
+gen byte edupc_ci = inlist(b08, 16, 29, 39)
+replace edupc_ci = . if aedu_ci == .
 label variable edupc_ci "Primaria completa"
 
 **************
 ***edusi_ci***
 **************
-/*gen byte edusi_ci=0
-replace edusi_ci=1 if (b08>=21 & b08<=25) 
-replace edusi_ci=1 if (b08>=31 & b08<=35) 
-label variable edusi_ci "Secundaria incompleta"*/
 
-gen byte edusi_ci=0
-replace edusi_ci=1 if (aedu_ci>6 & aedu_ci<11) 
+gen byte edusi_ci = (b08 >= 21 & b08 <= 24) | (b08 >= 31 & b08 <= 35) 
+replace edusi_ci = . if aedu_ci == . 
 label variable edusi_ci "Secundaria incompleta"
-
 
 **************
 ***edusc_ci***
 **************
 
-/*gen byte edusc_ci=0
-replace edusc_ci=1 if b08==36
-label variable edusc_ci "Secundaria completa"*/
-
-gen byte edusc_ci=0
-replace edusc_ci=1 if (aedu_ci==11 | aedu_ci==12) & b08!=35
+gen byte edusc_ci = inlist(b08, 25, 36, 49, 59)
+replace edusc_ci = . if aedu_ci == .
 label variable edusc_ci "Secundaria completa"
 
 ***************
 ***edus1i_ci***
 ***************
 
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if (b08>=21 & b08<=22)
-replace edus1i_ci=1 if (b08>=31 & b08<=32)
+gen byte edus1i_ci = (b08 >= 21 & b08 <= 22) | (b08 >=31 & b08 <= 32)
+replace edus1i_ci = . if aedu_ci == .
 label variable edus1i_ci "1er ciclo de la secundaria incompleto"
-
 
 ***************
 ***edus1c_ci***
 ***************
 
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if b08==23 | b08==33
+gen byte edus1c_ci = (b08 == 23 | b08 == 33)
+replace edus1c_ci = . if aedu_ci == .
 label variable edus1c_ci "1er ciclo de la secundaria completo"
-
 
 ***************
 ***edus2i_ci***
 ***************
 
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if (b08>=24 & b08<=25)
-replace edus2i_ci=1 if (b08>=34 & b08<=35)
+gen byte edus2i_ci = (b08 == 24 | b08 == 34 | b08 == 35)
+replace edus2i_ci = . if aedu_ci == .  
 label variable edus2i_ci "2do ciclo de la secundaria incompleto"
-
 
 ***************
 ***edus2c_ci***
 ***************
 
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if b08==36
+gen byte edus2c_ci = inlist(b08, 25, 36, 49, 59)
+replace edus2c_ci = . if aedu_ci == .
 label variable edus2c_ci "2do ciclo de la secundaria completo"
 
 **************
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=0
-replace eduui_ci=1 if (b08>=41 & b08<=44)
-replace eduui_ci=1 if (b08>=51 & b08<=54)
+/*
+Se toman:
+- hasta dos anios de educación parauniversitaria
+- hasta tres anios de universidad 
+- cuatro anios pero sin título superior
+*/
+
+gen byte eduui_ci = (b08 >= 41 & b08 <= 42) | (b08 >= 51 & b08 <= 53) /// 
+					| (b08 == 54 & b101 < 4)
+replace eduui_ci = . if aedu_ci == .
 label variable eduui_ci "Superior incompleto"
 
 ***************
 ***eduuc_ci***
 ***************
 
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if (b08>=55 & b08<=58)
+/*
+Se toman:
+- tres o 4 anios de parauniversitaria (hay una sola obs con 4)
+- cuatro anios de universitaria y titulo de licenciatura o superior
+- cuatro anios pero sin título superior
+- cinco anios o mas de universitaria,
+*/
+
+gen byte eduuc_ci = (b08 == 43 | b08 == 44) | (b08 == 54 & b101 > 3) ///
+					| (b08 >= 55 & b08 < 59)
+replace eduuc_ci = . if aedu_ci == .
 label variable eduuc_ci "Superior completo"
-
-
-
-local var = "eduno edupi edupc edusi edusc edusc eduui eduuc edus1i edus1c edus2i edus2c"
-foreach x of local var {
-replace `x'_ci=. if aedu_ci==.
-}
-
 
 ***************
 ***edupre_ci***
 ***************
 
 gen byte edupre_ci=.
-replace edupre_ci=(b08==1)
 label variable edupre_ci "Educacion preescolar"
 
 ****************
 ***asispre_ci***
 ****************
 *Variable agregada por Iván Bornacelly - 01/16/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if (b09==1 | b09==8) & b05>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"
-	
+g asispre_ci = (b09 == 1 | b09 == 8)
+la var asispre_ci "Asiste a educacion prescolar"
+
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=.
-replace eduac_ci=0 if (b08>=41 & b08<=49) 
-replace eduac_ci=1 if (b08>=51 & b08<=59) 
+gen byte eduac_ci = .
+replace eduac_ci = 0 if (b08 >= 41 & b08 <= 49) // Parauniversitario
+replace eduac_ci = 1 if (b08 >= 51 & b08 <= 59) // Universitario
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 ***************
 ***asiste_ci***
 ***************
-*Aquí se estaban tomando las opciones equivocadas. Se guarda la programación original y se habilita la 
-*propuesta por Melisa:
-*gen asiste_ci=.
-*replace asiste_ci=1 if b09>=1 & b09<=7
-*replace asiste_ci=0 if b09==8
-
-*(Melisa,mmorales,2009): deberia ser
-gen asiste_ci=.
-replace asiste_ci=1 if b09>=1 & b09<=8
-replace asiste_ci=0 if b09==0
+gen asiste_ci = (b09 >= 1 & b09 <= 8)
+replace asiste_ci = . if b09 == .
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************
 ***pqnoasis***
 **************
 
-gen pqnoasis_ci=b11
+gen pqnoasis_ci = b11
+label define pqnoasis_ci 1  "tiene que trabajar" 2  "tiene que ayudar en oficios domésticos" 3  "no puede pagar los estudios" ///
+4  "problemas de acceso al sistema escolar" 5  "embarazo o matrimonio" 6  "enfermedad o discapacidad" ///
+7  "le cuesta el estudio" 8  "no está interesado en el aprendizaje formal" 9  "no tiene edad" 10  "Otro" ///
+11  "prefiere trabajar"
+
+label value pqnoasis_ci pqnoasis_ci
+label variable pqnoasis_ci  " Razón por que no asiste a la escuela"
+
 
 **************
 *pqnoasis1_ci*
@@ -1161,14 +1159,14 @@ gen pqnoasis_ci=b11
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
 destring b11, replace
-g       pqnoasis1_ci = 1 if b11==3
-replace pqnoasis1_ci = 2 if b11==1
-replace pqnoasis1_ci = 3 if b11==6 | b11==7
-replace pqnoasis1_ci = 4 if b11==8 | b11==11
-replace pqnoasis1_ci = 5 if b11==2 | b11==5
-replace pqnoasis1_ci = 7 if b11==9 
-replace pqnoasis1_ci = 8 if b11==4
-replace pqnoasis1_ci = 9 if b11==10
+g       pqnoasis1_ci = 1 if b11 == 3
+replace pqnoasis1_ci = 2 if b11 == 1
+replace pqnoasis1_ci = 3 if b11 == 6 | b11 == 7
+replace pqnoasis1_ci = 4 if b11 == 8 | b11 == 11
+replace pqnoasis1_ci = 5 if b11 == 2 | b11 == 5
+replace pqnoasis1_ci = 7 if b11 == 9 
+replace pqnoasis1_ci = 8 if b11 == 4
+replace pqnoasis1_ci = 9 if b11 == 10
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
@@ -1176,26 +1174,24 @@ label value  pqnoasis1_ci pqnoasis1_ci
 ***************
 ***repite_ci***
 ***************
-
 gen repite_ci=.
+label var repite_ci "Personas que han repetido al menos un grado o año"
+
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
+label var repiteult_ci "Personas que han repetido el último grado"
 
 ***************
 ***edupub_ci***
 ***************
 
 gen edupub_ci=.
-replace edupub_ci=1 if b091==1 | b091==2
-replace edupub_ci=0 if b091==3
+replace edupub_ci = 1 if inlist(b091, 1, 2) // Incluye a los semi públicos 
+replace edupub_ci = 0 if b091 == 3 
 
-*************
-***tecnica_ci**
-*************
-gen tecnica_ci=.
-replace tecnica_ci=1 if b08>=41 & b08<=44
-recode tecnica_ci .=0 
-label var tecnica_ci "=1 formacion terciaria tecnica"
-
+drop aedu_temp nivgra nivgra_str
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
@@ -1409,6 +1405,41 @@ gen vivialqimp_ch=.
 	gen miglac_ci=.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 	/* No se puede diferenciar paises LAC de no LAC */
+	
+	
+	**************************
+	** REGIONES **************
+	************************** 
+
+	gen ine01=.   
+	replace ine01=1 if  region==1	/*Central*/
+	replace ine01=2 if  region==2	/*Chorotega*/
+	replace ine01=3 if  region==3	/*Pacífico central*/
+	replace ine01=4 if  region==4	/*Brunca*/
+	replace ine01=5 if  region==5	/*Huetar Atlántica*/
+	replace ine01=6 if  region==6	/*Huetar Norte*/
+	
+	label define ine01 1"Central" 2"Chorotega" 3"Pacífico central" 4"Brunca" 5"Huetar Atlántica" 6"Huetar Norte" 
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Región"	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+
+	gen ine02=.   
+	replace ine02=1 if  provincia==1	/*San José*/
+	replace ine02=2 if  provincia==2	/*Alajuela*/
+	replace ine02=3 if  provincia==3	/*Cartago*/
+	replace ine02=4 if  provincia==4	/*Heredia*/
+	replace ine02=5 if  provincia==5	/*Guanacaste*/
+	replace ine02=6 if  provincia==6	/*Puntarenas*/
+	replace ine02=7 if  provincia==7	/*Limón*/
+	
+	label define ine02 1"San José" 2"Alajuela" 3"Cartago" 4"Heredia" 5"Puntarenas" 6"Huetar Norte" 7"Limón"
+	label value ine02 ine02
+	label var ine02 "Segunda division politico-administrativa, Provincia"
+	
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1431,7 +1462,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

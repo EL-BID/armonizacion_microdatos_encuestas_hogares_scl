@@ -716,12 +716,10 @@ gen ynlm0_ci=.
 
 gen ynlnm0_ci=.
 
-*Modificación Mayra Sáenz - Septiembre 2014
+*Modificación David Cornejo - Feberro 2023
 *gen ynlm_ci= . /*NA, esta variable aparece recién en 1998*/
 
-egen ingrem = rsum(consumo vestuar cuota repara comer ahorros medicos educac insumos otros), missing
-replace ingrem = ingrem/8.76
-gen ynlm_ci=ingrem
+gen ynlm_ci=.
 
 
 gen ynlnm_ci=.
@@ -2064,7 +2062,7 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-clonevar codocupa=ocup
+clonevar codocupa=ocuppr
 clonevar codindustria=rama
 
 compress

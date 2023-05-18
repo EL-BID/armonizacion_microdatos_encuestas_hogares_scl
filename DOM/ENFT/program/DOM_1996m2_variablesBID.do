@@ -106,6 +106,15 @@ label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
 
+***************
+***upm_ci***
+***************
+gen upm_ci=. 
+
+***************
+***estrato_ci***
+***************
+gen estrato_ci=.
 
 
 **********
@@ -1671,6 +1680,12 @@ gen vivialqimp_ch=.
 label var vivialqimp_ch "Alquiler mensual imputado"
 
 ren ocup ocup_old
+
+**************************
+** PROVINCIAS ************
+************************** 
+gen ine01=.   
+label var ine01 " Primera division politico-administrativa, Provincia"
 
 
 /*_____________________________________________________________________________________________________*/

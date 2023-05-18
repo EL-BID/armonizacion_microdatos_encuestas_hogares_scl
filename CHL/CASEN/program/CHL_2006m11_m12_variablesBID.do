@@ -128,7 +128,8 @@ gen upm_ci=.
 	***************
 	***estrato_ci***
 	***************
-gen estrato_ci=.
+clonevar estrato_ci=estrato
+label variable estrato_ci "Estrato"
 
 *************
 * idh_ch    *
@@ -1172,90 +1173,156 @@ replace spublico_ci=. if emp_ci!=1
 * VARIABLES EDUCATIVAS *
 ************************
 
-****************
-* aedu_ci      * 
-**************** 
+***************
+***asiste_ci*** 
+*************** 
+gen asiste_ci = (e4 == 1)
+replace asiste_ci = . if e4 == .
+label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
-*Yanira Julio 2010:
-recode e8t (99=.)
-recode e8c (99=.)
-*
+*************
+***aedu_ci*** 
+************* 
+replace e8t = . if e8t == 99
+replace e8c = . if e8c == 99
 
+gen aedu_ci=.
+replace aedu_ci = 0 if inlist(e8t, 1, 16) // Prescolar o Parvularia o Ninguno
 
-gen byte aedu_ci=.
-*replace aedu_ci=0 if e8t==0 | e8t==1 | e8t==16 
-replace aedu_ci=0 if e8t==1 | e8t==16 
-replace aedu_ci=e8c if e8t==2 | e8t==3 /*El máximo es 6 u 8 dependiendo si es el sistema viejo (preparatoria) o el nuevo (basica)*/
-replace aedu_ci=. if e8t==4 // Educación Especial
-*We assume that 'e8t==4', Diferential Education, will be equivalent to missing
+* Para no asistentes:
+replace aedu_ci = e8c if e8t == 2 & asiste_ci != 1 // Preparatoria (Sistema Antiguo)
+replace aedu_ci = e8c if e8t == 3 & asiste_ci != 1 // Básica
+replace aedu_ci = e8c + 6 if e8t == 5 & asiste_ci != 1 // Humanidades (Sistema Antiguo)
+replace aedu_ci = e8c + 8 if e8t == 6 & asiste_ci != 1 // Media Científico-Humanística
+replace aedu_ci = e8c + 6 if e8t == 7 & asiste_ci != 1 // Técnica, Comercial, Industrial o Normalista (Sistema Antiguo)
+replace aedu_ci = e8c + 8 if e8t == 8 & asiste_ci != 1 // Media Técnica Profesional
+replace aedu_ci = e8c + 12 if (e8t >= 9 & e8t <= 14) & asiste_ci != 1 // Superior
+replace aedu_ci = e8c + 17 if e8t == 15 & asiste_ci != 1 // Postgrado
 
-*NEW: 16 Oct 2006 (Victoria)
-replace aedu_ci=6 if (e8c>=6 & e8t==2) 
-replace aedu_ci=8 if (e8c>=8 & e8t==3) 
+* Para asistentes:
+replace aedu_ci = e8c - 1 if e8t == 2 & asiste_ci == 1 // Preparatoria (Sistema Antiguo)
+replace aedu_ci = e8c - 1 if e8t == 3 & asiste_ci == 1 // Básica
+replace aedu_ci = e8c + 6 - 1 if e8t == 5 & asiste_ci == 1 // Humanidades (Sistema Antiguo)
+replace aedu_ci = e8c + 8 - 1 if e8t == 6 & asiste_ci == 1 // Media Científico-Humanística
+replace aedu_ci = e8c + 6 - 1 if e8t == 7 & asiste_ci == 1 // Técnica, Comercial, Industrial o Normalista (Sistema Antiguo)
+replace aedu_ci = e8c + 8 - 1 if e8t == 8 & asiste_ci == 1 // Media Técnica Profesional
+replace aedu_ci = e8c + 12 - 1 if (e8t >= 9 & e8t <= 14) & asiste_ci == 1 // Superior
+replace aedu_ci = e8c + 17 - 1 if e8t == 15 & asiste_ci == 1 // Postgrado
+label var aedu_ci "Anios de educacion aprobados" 
 
-/*
- table e7c e8t, c(mean edad)
---------------------------------------------------------------------------------------------------
-          |                                          tipo                                         
-    curso |          humanidades  educación media cien  técnica, comercial,   educación media técn
-----------+---------------------------------------------------------------------------------------
-        0 |                                                                                       
-        1 |             63.51868               26.9809              62.61818              20.29556
-        2 |             63.62524               29.3199              63.13158              23.61858
-        3 |              65.1869              28.73852              61.97458              24.17076
-        4 |             64.29607              32.52289              61.84691              28.57235
-        5 |             65.15193                                    62.48571              35.31684
-        6 |             65.25408                                    64.89024                      
---------------------------------------------------------------------------------------------------
-Esta bastante claro que Humanidades y Tecnica, Comercial, etc... eran parte del sistema viejo (6 años de primaria) y que las otras dos son 
-parte del sistema nuevo (8 años de primaria)
+**************
+***eduno_ci***
+**************
+gen byte eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
+label variable eduno_ci "Cero anios de educacion"
+
+**************
+***edupi_ci***
+**************
+gen byte edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == .
+label variable edupi_ci "Primaria incompleta"
+
+**************
+***edupc_ci***
+**************
+gen byte edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
+label variable edupc_ci "Primaria completa"
+
+**************
+***edusi_ci***
+**************
+gen byte edusi_ci = (aedu_ci > 6 & aedu_ci < 12)
+replace edusi_ci=. if aedu_ci==.
+label variable edusi_ci "Secundaria incompleta"
+
+**************
+***edusc_ci***
+**************
+/* 
+Se considera con edusc tambien a aquellos que 
+reporten educacion media tecnica con 13 anios
+de educación ya que no es un terciario.
 */
-replace aedu_ci=e8c+6 if e8t==5 | e8t==7
-replace aedu_ci=e8c+8 if e8t==6 | e8t==8
-replace aedu_ci=e8c+12 if e8t>=9 & e8t<=14
-*Mod. 8/2015 Ivan Bonacelli
-*replace aedu_ci=e8c+17 if e8t==15
-replace aedu_ci=e8c+12 if e8t==15
-replace aedu_ci=. if e8t==99
+gen byte edusc_ci = (aedu_ci == 12) | (aedu_ci == 13 & e8t == 8)
+replace edusc_ci = . if aedu_ci == .
+label variable edusc_ci "Secundaria completa"
 
-** Generating attend. Dummy variable for school attendance
-*Yanira Oviedo, Junio 2010: anteriormente se había tomado la variable e2 se corrige a e4
-gen byte asiste_ci=(e4==1) 
-label variable asiste_ci "Dummy variable for school attendance"
-
-/*(Melisa- mmorales June 1st 2009): deberia ser
-gen byte asiste_ci=(e4==1) 
-replace asiste_ci=. if e4==.*/
-
-* We substract one year of education for those who are attending school at the moment that the survey took place
-*Cambio Ivan Bornacelly 10/06/2017
-*gen ban_aedu=aedu_ci
-*replace ban_aedu=aedu_ci-1 if aedu_ci!=0 & asiste_ci==1
-
-
+**************
+***eduui_ci***
+**************
 /*
-OLD CODE:
-gen eduno_ci=(e8t==0 | e8t==1 | e7t==16)
-gen edupi_ci=((e7t==2 & e7c>0 & e7c<6) | (e7t==3 & e7c>0 & e7c<8))
-gen edupc_ci=((e7t==2 & e7c==6) | (e7t==3 & e7c==8))
-gen edus1i_ci=(((e7t==5 | e7t==7) & (e7c>=1 & e7c<4)) | ((e7t==6 | e7t==8) & (e7c>=1 & e7c<2)))
-gen edus1c_ci=(((e7t==5 | e7t==7) & e7c==4) | ((e7t==6 | e7t==8) & e7c==2))
-gen edus2i_ci=((e7t==5 | e7t==7) & (e7c>4 & e7c<6)) | ((e7t==6 | e7t==8) & (e7c>2 & e7c<4))
-gen edus2c_ci=((e7t==5 | e7t==7) & (e7c==6)) | ((e7t==6 | e7t==8) & (e7c==4 | e7c==5))
-
-gen eduui_ci=(e7t==9 | e7t==11 | e7t==13) 
-gen eduuc_ci=(e7t==10 | e7t==12 | e7t==14 | e7t==15)
-gen edusi_ci=(edus1i_ci==1 | edus1c_ci==1 | edus2i_ci==1)
-gen edusc_ci=edus2c_ci
+En esta encuesta puede discriminarse entre terciario y universitario completo
+o incompleto. 
 */
+
+gen byte eduui_ci = (aedu_ci > 12 & inlist(e8t, 9, 11, 13)) //tecnica, profesional o universitaria incompleta.
+replace eduui_ci = . if aedu_ci == .
+label variable eduui_ci "Universitaria incompleta"
+
+***************
+***eduuc_ci****
+***************
+gen byte eduuc_ci = (aedu_ci > 12 & inlist(e8t, 10, 12, 14, 15)) //tecnica, profesional o universitaria completa o postgrado.
+replace eduuc_ci = . if aedu_ci == .
+label variable eduuc_ci "Universitaria completa o mas"
+
+***************
+***edus1i_ci***
+***************
+gen edus1i_ci = (aedu_ci > 6 & aedu_ci < 8) 
+replace edus1i_ci = . if aedu_ci == .
+label variable edus1i_ci "1er ciclo de la secundaria incompleto"
+
+***************
+***edus1c_ci***
+***************
+gen edus1c_ci = (aedu_ci == 8) 
+replace edus1c_ci = . if aedu_ci == . 
+label variable edus1c_ci "1er ciclo de la secundaria completo"
+
+***************
+***edus2i_ci***
+***************
+gen edus2i_ci = (aedu_ci > 8 & aedu_ci < 12)
+replace edus2i_ci = . if aedu_ci == .
+label variable edus2i_ci "2do ciclo de la secundaria incompleto"
+
+***************
+***edus2c_ci***
+***************
+gen edus2c_ci = (aedu_ci == 12) | (aedu_ci == 13 & e8t == 8)
+replace edus2c_ci = .  if aedu_ci == .
+label variable edus2c_ci "2do ciclo de la secundaria completo"
+
+***************
+***edupre_ci***
+***************
+gen edupre_ci=.
+label variable edupre_ci "Educacion preescolar"
+
+***************
+***asispre_ci***
+***************
+*Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
+g asispre_ci=.
+replace asispre_ci = 1 if (e4 == 1 & e8t == 1)
+la var asispre_ci "Asiste a educacion prescolar"
+
+**************
+***eduac_ci***
+**************
+gen eduac_ci = (e8t >= 11 & e8t <= 15) // Superior universitario
+replace eduac_ci = 0 if inlist(e8t, 9, 10) // Formacion técnica
+label variable eduac_ci "Superior universitario vs superior no universitario"
 
 *****************
 ***pqnoasis_ci***
 *****************
 *Modificado Mayra Sáenz Junio, 2016: antes se generaba como missing, la e6 es para personas de 7 a 40 años
 * y la variable e5 es para niños de 0 a 6 años.
-
-
 gen pqnoasis_ci= e6
 
 **************
@@ -1263,164 +1330,39 @@ gen pqnoasis_ci= e6
 **************
 **Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
 
-g       pqnoasis1_ci = 1 if e6 ==3
-replace pqnoasis1_ci = 2 if e6 ==4
-replace pqnoasis1_ci = 3 if e6 ==6 | e6 ==10 | e6 ==13 | e6 ==14
-replace pqnoasis1_ci = 4 if e6 ==9
-replace pqnoasis1_ci = 5 if e6 ==5 | e6 ==7 | e6 ==8
-replace pqnoasis1_ci = 6 if e6 ==17
-replace pqnoasis1_ci = 7 if e6 ==18 
-replace pqnoasis1_ci = 8 if e6 ==1  | e6 ==2  
-replace pqnoasis1_ci = 9 if e6 ==11 | e6 ==12 | e6 ==15 | e6 ==16 | e6 ==19 | e6 ==20
+g       pqnoasis1_ci = 1 if e6 == 3
+replace pqnoasis1_ci = 2 if e6 == 4
+replace pqnoasis1_ci = 3 if e6 == 6 | e6 == 10 | e6 == 13 | e6 == 14
+replace pqnoasis1_ci = 4 if e6 == 9
+replace pqnoasis1_ci = 5 if e6 == 5 | e6 == 7 | e6 == 8
+replace pqnoasis1_ci = 6 if e6 == 17
+replace pqnoasis1_ci = 7 if e6 == 18 
+replace pqnoasis1_ci = 8 if e6 == 1  | e6 == 2  
+replace pqnoasis1_ci = 9 if e6 == 11 | e6 == 12 | e6 == 15 | e6 == 16 | e6 == 19 | e6 == 20
 
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-**************
-***eduno_ci***
-**************
-
-gen byte eduno_ci=0
-replace eduno_ci=1 if aedu_ci==0
-replace eduno_ci=. if aedu_ci==.
-label variable eduno_ci "Cero anios de educacion"
-
-**************
-***edupi_ci***
-**************
-
-gen byte edupi_ci=0
-replace edupi_ci=1 if aedu_ci>0 & aedu_ci<6
-replace edupi_ci=. if aedu_ci==.
-label variable edupi_ci "Primaria incompleta"
-
-**************
-***edupc_ci***
-**************
-
-gen byte edupc_ci=0
-replace edupc_ci=1 if aedu_ci==6
-replace edupc_ci=. if aedu_ci==.
-label variable edupc_ci "Primaria completa"
-
-**************
-***edusi_ci***
-**************
-
-gen byte edusi_ci=0
-replace edusi_ci=1 if aedu_ci>6 & aedu_ci<12
-replace edusi_ci=. if aedu_ci==.
-label variable edusi_ci "Secundaria incompleta"
-
-**************
-***edusc_ci***
-**************
-
-gen byte edusc_ci=0
-replace edusc_ci=1 if aedu_ci==12
-replace edusc_ci=. if aedu_ci==.
-label variable edusc_ci "Secundaria completa"
-
 ***************
-***edus1i_ci***
+***repite_ci***
 ***************
-
-gen byte edus1i_ci=0
-replace edus1i_ci=1 if aedu_ci==9
-replace edus1i_ci=. if aedu_ci==.
-label variable edus1i_ci "1er ciclo de la secundaria incompleto"
-
-***************
-***edus1c_ci***
-***************
-
-gen byte edus1c_ci=0
-replace edus1c_ci=1 if aedu_ci==10
-replace edus1c_ci=. if aedu_ci==.
-label variable edus1c_ci "1er ciclo de la secundaria completo"
-
-***************
-***edus2i_ci***
-***************
-
-gen byte edus2i_ci=0
-replace edus2i_ci=1 if aedu_ci==11
-replace edus2i_ci=. if aedu_ci==.
-label variable edus2i_ci "2do ciclo de la secundaria incompleto"
-
-***************
-***edus2c_ci***
-***************
-
-gen byte edus2c_ci=0
-replace edus2c_ci=1 if aedu_ci==12
-replace edus2c_ci=. if aedu_ci==.
-label variable edus2c_ci "2do ciclo de la secundaria completo"
-
-**************
-***eduui_ci***
-**************
-
-gen byte eduui_ci=0
-replace eduui_ci=1 if aedu_ci>12 & aedu_ci<17
-replace eduui_ci=. if aedu_ci==.
-label variable eduui_ci "Universitaria incompleta"
-
-***************
-***eduuc_ci****
-***************
-
-gen byte eduuc_ci=0
-replace eduuc_ci=1 if aedu_ci>=17
-replace eduuc_ci=. if aedu_ci==.
-label variable eduuc_ci "Universitaria incompleta o mas"
-
-
-***************
-***edupre_ci***
-***************
-
-gen edupre_ci=(e8t==1)
-label variable edupre_ci "Educacion preescolar"
-
-***************
-***asispre_ci***
-***************
-*Creación de la variable asistencia a preescolar por Iván Bornacelly - 01/12/17
-	g asispre_ci=.
-	replace asispre_ci=1 if e4==1 & e8t==1 & edad>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"
-
-**************
-***eduac_ci***
-**************
-gen eduac_ci=.
-replace eduac_ci=0 if e8t>=9 & e8t<=12
-replace eduac_ci=1 if e8t>=13 & e8t<=15
-label variable eduac_ci "Superior universitario vs superior no universitario"
-
-
-foreach var of varlist edu* {
-replace `var'=. if  aedu_ci==.
-}
-
-**************
-**repite_ci***
-**************
-
 gen repite_ci=.
+label var repite_ci "Personas que han repetido al menos un grado"
 
-**************
-*repiteult_ci*
-**************
+******************
+***repiteult_ci***
+******************
 gen repiteult_ci=.
+label var repiteult_ci "Personas que han repetido el último grado"
 
-**************
-*edupub_ci   *
-**************
-
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
+replace edupub_ci=1 if inlist(e10, 1) & asiste_ci==1 //Municipales
+replace edupub_ci=0 if inlist(e10, 2, 4) & asiste_ci==1 // Particular pagado, particular subvencionado
+label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
+
 
 ***********************
 *** CHILE 2003	    ***
@@ -2240,6 +2182,91 @@ lab val atencion_ci atencion_ci
 	
 	gen miglac_ci=.
 	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	
+	**************************
+	** REGIONES **************
+	************************** 
+	
+   gen ine01=.   
+   replace ine01=1 if  r==1				/*Arica y Parinacota*/
+   replace ine01=2 if  r==2				/*Antofagasta*/
+   replace ine01=3 if  r==3				/*Atacama*/
+   replace ine01=4 if  r==4				/*Coquimbo*/
+   replace ine01=5 if  r==5		    	/*Valparaíso*/
+   replace ine01=6 if  r==6				/*O'Higgins*/
+   replace ine01=7 if  r==7				/*Maule*/
+   replace ine01=8 if  r==8				/*Bío Bío*/
+   replace ine01=9 if  r==9				/*La Araucanía*/
+   replace ine01=10 if r==10			/*Los Lagos*/
+   replace ine01=11 if r==11			/*Aysén*/
+   replace ine01=12 if r==12			/*Magallanes y Antártica Chilena*/
+   replace ine01=13 if r==13			/*Metropolitana Santiago*/
+
+	label define ine01 1"Arica y Parinacota" 2"Antofagasta" 3"Atacama" 4"Coquimbo" 5"Valparaíso" 6"O'Higgins" 7"Maule" 8"Bío Bío" 9"La Araucanía" 10"Los Lagos" 11"Aysén" 12"Magallanes y Antártica Chilena" 13"Metropolitana Santiago"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, región"
+	
+	
+	**************************
+	** PROVINCIAS ************
+	**************************
+		
+   gen ine02=.   
+   replace ine02=11 if p==11			/*Iquique*/
+   replace ine02=12 if p==12			/*Arica*/
+   replace ine02=13 if p==13			/*Parinacota*/
+   replace ine02=21 if p==21			/*Antofagasta*/
+   replace ine02=22 if p==22		    /*El Loa*/
+   replace ine02=23 if p==23			/*Tocopilla*/
+   replace ine02=31 if p==31			/*Copiapó*/
+   replace ine02=32 if p==32			/*Chañaral*/
+   replace ine02=33 if p==33			/*Huasco*/
+   replace ine02=41 if p==41			/*Elqui*/
+   replace ine02=42 if p==42			/*Choapa*/
+   replace ine02=43 if p==43			/*Limarí*/
+   replace ine02=51 if p==51			/*Valparaíso*/
+   replace ine02=53 if p==53	    	/*Los Andes*/
+   replace ine02=54 if p==54			/*Petorca*/
+   replace ine02=55 if p==55			/*Quillota*/
+   replace ine02=56 if p==56			/*San Antonio*/
+   replace ine02=57 if p==57			/*San Felipe*/   
+   replace ine02=61 if p==61			/*Cachapoal*/
+   replace ine02=62 if p==62			/*Cardenal Caro*/
+   replace ine02=63 if p==63			/*Colchagua*/
+   replace ine02=71 if p==71			/*Talca*/
+   replace ine02=72 if p==72			/*Cauquenes*/
+   replace ine02=73 if p==73			/*Curicó*/
+   replace ine02=74 if p==74	    	/*Linares*/
+   replace ine02=81 if p==81			/*Concepción*/
+   replace ine02=82 if p==82			/*Arauco*/
+   replace ine02=83 if p==83			/*Bio Bío*/
+   replace ine02=84 if p==84			/*Ñuble*/
+   replace ine02=91 if p==91			/*Cautín*/
+   replace ine02=92 if p==92			/*Malleco*/
+   replace ine02=101 if p==101			/*Llanquihue*/
+   replace ine02=102 if p==102			/*Chiloé*/
+   replace ine02=103 if p==103			/*Osorno*/
+   replace ine02=104 if p==104			/*Palena*/
+   replace ine02=105 if p==105			/*Valdivia*/
+   replace ine02=111 if p==111			/*Cohaique*/
+   replace ine02=112 if p==112	    	/*Aysén*/
+   replace ine02=113 if p==113			/*Capitán Prat*/
+   replace ine02=114 if p==114			/*General Carrera*/
+   replace ine02=121 if p==121			/*Magallanes*/
+   replace ine02=122 if p==122			/*Antártica*/
+   replace ine02=123 if p==123			/*Tierra del Fuego*/
+   replace ine02=124 if p==124			/*Última Esperanza*/
+   replace ine02=131 if p==131			/*Santiago*/
+   replace ine02=132 if p==132			/*Cordillera*/
+   replace ine02=133 if p==133			/*Chacabuco*/
+   replace ine02=134 if p==134			/*Maipo*/
+   replace ine02=135 if p==135			/*Melipilla*/
+   replace ine02=136 if p==136			/*Talagante*/
+
+	label define ine02 11"Iquique" 12"Arica" 13"Parinacota" 21"Antofagasta" 22"El Loa" 23"Tocopilla" 31"Copiapó" 32"Chañaral" 33"Huasco" 41"Elqui" 42"Choapa" 43"Limarí" 51"Valparaíso" 53"Los Andes" 54"Petorca" 55"Quillota" 56"San Antonio" 57"San Felipe" 61"Cachapoal" 62"Cardenal Caro" 63"Colchagua" 71"Talca" 72"Cauquenes" 73"Curicó" 74"Linares" 81"Concepción" 82"Arauco" 83"Bio Bío" 84"Ñuble" 91"Cautín" 92"Malleco" 101"Llanquihue" 102"Chiloé" 103"Osorno" 104"Palena" 105"Valdivia" 111"Cohaique" 112"Aisén" 113"Capitán Prat" 114"General Carrera" 121"Magallanes" 122"Antártica" 123"Tierra del Fuego" 124"Última Esperanza" 131"Santiago" 132"Cordillera" 133"Chacabuco" 134"Maipo" 135"Melipilla" 136"Talagante"
+	label value ine02 ine02
+	label var ine02 " Segunda division politico-administrativa, Provincia"
 
 
 /*_____________________________________________________________________________________________________*/
@@ -2263,7 +2290,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

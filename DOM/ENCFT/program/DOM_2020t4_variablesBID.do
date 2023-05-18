@@ -47,7 +47,7 @@ Detalle de procesamientos o modificaciones anteriores:
 use `base_in', clear
 
 
-include "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\\`PAIS'\\`ENCUESTA'\\program\\Código-de-pobreza-monetaria-2016-2020-en-STATA.do"
+
  
 		**********************************
 		***VARIABLES DEL IDENTIFICACION***
@@ -585,28 +585,6 @@ label def rama_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, resta
 label def rama_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
 label val rama_ci rama_ci
 
-
-* rama secundaria
-rename rama_secundaria_cod ramac2
-gen ramasec_ci=.
-replace ramasec_ci = 1 if (ramac2>=111 & ramac2<=322)  & emp_ci==1
-replace ramasec_ci = 2 if (ramac2>=510 & ramac2<=990)  & emp_ci==1
-replace ramasec_ci = 3 if (ramac2>=1010 & ramac2<=3320)  & emp_ci==1
-replace ramasec_ci = 4 if (ramac2>=3510 & ramac2<=3900)  & emp_ci==1
-replace ramasec_ci = 5 if (ramac2>=4100 & ramac2<=4390)  & emp_ci==1
-replace ramasec_ci = 6 if (ramac2>=4510 & ramac2<=4799)  & emp_ci==1
-replace ramasec_ci = 7 if (ramac2>=4911 & ramac2<=6399)  & emp_ci==1
-replace ramasec_ci = 8 if (ramac2>=6411 & ramac2<=6820)  & emp_ci==1
-replace ramasec_ci = 9 if (ramac2>=6910 & ramac2<=9990)  & emp_ci==1
-
-label var ramasec_ci "Rama de actividad"
-label def ramasec_ci 1"Agricultura, caza, silvicultura y pesca" 2"Explotación de minas y canteras" 3"Industrias manufactureras"
-label def ramasec_ci 4"Electricidad, gas y agua" 5"Construcción" 6"Comercio, restaurantes y hoteles" 7"Transporte y almacenamiento", add
-label def ramasec_ci 8"Establecimientos financieros, seguros e inmuebles" 9"Servicios sociales y comunales", add
-label val ramasec_ci ramasec_ci
-
-
-
 ************
 *durades_ci*
 ************
@@ -948,16 +926,6 @@ label var ylmhopri_ci "Salario monetario de la actividad principal"
 gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 label var ylmho_ci "Salario monetario de todas las actividades" 
 
-******************
-*Ingreso Nacional*
-******************
-gen yoficial_ch=ingtotaldeflactado
-label var yoficial_ch "Ingreso del hogar total generado por el país"
-
-gen ypeoficial_ch=ingpercapitadef
-label var yoficial_ch "Ingreso per cápita generado por el país"
-
-
 	****************************
 	***VARIABLES DE EDUCACION***
 	****************************
@@ -973,83 +941,14 @@ label values nivel_ultimo_ano_aprobado nivel
 label values nivel_se_matriculo nivel
 
 replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==1  
-replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 | nivel_ultimo_ano_aprobado==9
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==9
+replace aedu_ci= 0 if nivel_ultimo_ano_aprobado==10
+replace aedu_ci= . if nivel_ultimo_ano_aprobado==99
+replace aedu_ci= ultimo_ano_aprobado if nivel_ultimo_ano_aprobado==2 
 replace aedu_ci = ultimo_ano_aprobado+8 if nivel_ultimo_ano_aprobado == 3 | nivel_ultimo_ano_aprobado == 4  
 replace aedu_ci = ultimo_ano_aprobado+12 if nivel_ultimo_ano_aprobado == 5  
-replace aedu_ci = ultimo_ano_aprobado+12+4 if inlist(nivel_ultimo_ano_aprobado, 6, 7) 
+replace aedu_ci = ultimo_ano_aprobado+12+4 if nivel_ultimo_ano_aprobado==6 | nivel_ultimo_ano_aprobado==7 
 replace aedu_ci = ultimo_ano_aprobado+12+4+2 if nivel_ultimo_ano_aprobado==8 
-
-replace aedu_ci = . if nivel_ultimo_ano_aprobado==10 | nivel_ultimo_ano_aprobado==99
-
-//imputando valores perdidos por nivel
-
-replace aedu_ci = 0 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado, 2,9) 
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==4
-replace aedu_ci = 12 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==5
-replace aedu_ci = 12+4 if ultimo_ano_aprobado==. & inlist(nivel_ultimo_ano_aprobado,6, 7)
-replace aedu_ci = 12+4+2 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==8
-replace aedu_ci = 8 if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==3
-
- 
-replace aedu_ci = . if ultimo_ano_aprobado==. & nivel_ultimo_ano_aprobado==.
-
-/*
-************************************************************** Actualmente asisten ***********************************************
-*prescolar
-
-replace aedu_ci = 0 if nivel_se_matriculo == 1 & asiste_centro_educativo ==1 
-
-* Primaria 
-
-replace aedu_ci = curso_matriculado-1 if nivel_se_matriculo == 2 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 8 & nivel_se_matriculo == 2 & asiste_centro_educativo ==1
-
-* Secundaria 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==3 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 3 & asiste_centro_educativo ==1
-
-* secundaria tecnica 
-
-replace aedu_ci = curso_matriculado-1+8 if nivel_se_matriculo ==4 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 4 & nivel_se_matriculo == 4 & asiste_centro_educativo ==1
-
-* universitario
-
-replace aedu_ci = curso_matriculado-1+12 if nivel_se_matriculo ==5 & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & nivel_se_matriculo == 5 & asiste_centro_educativo ==1
-
-* postrgrado, maestria doctorado
-
-replace aedu_ci = curso_matriculado-1+12+4 if (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1 
-replace aedu_ci = . if curso_matriculado > 5 & (nivel_se_matriculo ==6 |nivel_se_matriculo ==7 | nivel_se_matriculo ==8) & asiste_centro_educativo ==1
-
-
-********************************************************** Actualmete no asisten **************************************************
-
-replace aedu_ci=0  if (nivel_ultimo_ano_aprobado==1) | (nivel_ultimo_ano_aprobado==9) & asiste_centro_educativo ==2
-
-* primaria
-replace aedu_ci=ultimo_ano_aprobado  if nivel_ultimo_ano_aprobado==2 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 8 & nivel_ultimo_ano_aprobado == 2 & asiste_centro_educativo ==2
-
-* secundaria
-replace aedu_ci=ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==3 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 3 & asiste_centro_educativo ==2
-
-* secundaria tecnica 
-replace aedu_ci = ultimo_ano_aprobado+8  if nivel_ultimo_ano_aprobado==4 & asiste_centro_educativo==2 
-replace aedu_ci = . if ultimo_ano_aprobado > 4 & nivel_ultimo_ano_aprobado == 4 & asiste_centro_educativo ==2
-
-*Universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4 if nivel_ultimo_ano_aprobado==5 & asiste_centro_educativo ==2
-replace aedu_ci = . if ultimo_ano_aprobado > 5 & nivel_ultimo_ano_aprobado == 5 & asiste_centro_educativo ==2
-
-*Post-universitario
-replace aedu_ci=ultimo_ano_aprobado+8+4+4  if nivel_ultimo_ano_aprobado==6 & asiste_centro_educativo ==2
-
-*/
 replace aedu_ci=.  if nivel_ultimo_ano_aprobado==.
 
 label var aedu_ci "Anios de educacion aprobados" 
@@ -1103,7 +1002,7 @@ label variable edusc_ci "Secundaria completa"
 ***eduui_ci***
 **************
 
-gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==1 | mayor_nivel==2 | mayor_nivel==7 | mayor_nivel==8) // 12+ anios, titulo de bachilleres, ninguno o primario 
+gen byte eduui_ci=aedu_ci>12 & aedu_ci<16 
 replace eduui_ci=. if aedu_ci==.
 label variable eduui_ci "Universitaria incompleta"
 
@@ -1111,8 +1010,7 @@ label variable eduui_ci "Universitaria incompleta"
 ***eduuc_ci****
 ***************
 
-gen byte eduuc_ci=aedu_ci>12 & aedu_ci<16 & (mayor_nivel==3 | mayor_nivel==4 | mayor_nivel==5 | mayor_nivel==6) //entre 12 y 16 y un titulo superior
-replace eduuc_ci=1 if aedu_ci>=16 // mas de 16 todos
+gen byte eduuc_ci=aedu_ci>=16 // mas de 16 todos
 replace eduuc_ci=. if aedu_ci==. 
 label variable eduuc_ci "Universitaria completa o mas"
 
@@ -1159,14 +1057,14 @@ label variable edupre_ci "Educacion preescolar completa"
 ****************
 ***asispre_ci***
 ****************
-*Agregado por Iván Bornacelly - 01/23/2017
-	g asispre_ci=(nivel_se_matriculo==1 & asiste_centro_educativo ==1)
-	label variable asispre_ci "Asistencia a Educacion preescolar"
+g asispre_ci= 1 if nivel_se_matriculo==1 & asiste_centro_educativo ==1
+replace asispre_ci=0 if nivel_se_matriculo!=1 & asiste_centro_educativo ==1
+label variable asispre_ci "Asistencia a Educacion preescolar"
 	
 **************
 ***eduac_ci***
 **************
-gen byte eduac_ci=.  //solo disponible la diferenciacion para los con titulo
+gen byte eduac_ci=.  
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
 
@@ -1184,19 +1082,13 @@ label variable asiste_ci "Asiste actualmente a la escuela"
 **************
 *ver que labels cambiaron en esta nueva encuesta
 gen pqnoasis_ci=porque_no_estudia
-replace pqnoasis_ci=. if porque_no_estudia==99
 label var pqnoasis_ci "Razones para no asistir a la escuela"
-label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal"
-label def pqnoasis_ci 5"Nunca lo inscribieron" 6"No tiene documentos", add
-label def pqnoasis_ci 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad", add
-label def pqnoasis_ci 11"Razones familiares" 12"No quiere / No le gusta", add
-label val pqnoasis_ci pqnoasis_ci
+label def pqnoasis_ci 1"En espera del inicio de un nuevo período" 2"Finalizó sus estudios" 3"Muy lejos" 4"Le fue mal" 5"Nunca lo inscribieron" 6"No tiene documentos" 7"El trabajo no se lo permite" 8"Muy caro" 9"Por incapacidad física o mental" 10"Por edad" 11"Razones familiares" 12"No quiere / No le gusta" 99 "Otra"
+label value  pqnoasis_ci pqnoasis_ci
 
 **************
 *pqnoasis1_ci*
 **************
-**Daniela Zuluaga- Enero 2018: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-
 g		pqnoasis1_ci = .						
 replace pqnoasis1_ci = 1 if porque_no_estudia==8
 replace pqnoasis1_ci = 2 if porque_no_estudia==7
@@ -1231,50 +1123,125 @@ label var repiteult "Ha repetido el último grado"
 ***************
 gen edupub_ci=.
 replace edupub_ci=1 if tipo_centro_estudios==3 & asiste_centro_educativo==1 //publico
-replace edupub_ci=0 if (tipo_centro_estudios==1 | tipo_centro_estudios==2) & asiste_centro_educativo==1 //privado y semi-privado
+replace edupub_ci=0 if tipo_centro_estudios==1 & asiste_centro_educativo==1 // privado
+replace edupub_ci=0 if tipo_centro_estudios==2 & asiste_centro_educativo==1 // semiprivado
 label var edupub_ci "Asiste a un centro de enseñanza público"
-
-
 
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
-
 ****************
 ***aguared_ch***
 ****************
+generate aguared_ch =.
+replace aguared_ch = 1 if tiene_agua_red_publica==1 
+replace aguared_ch = 0 if tiene_agua_red_publica==2
+la var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguared_ch=.
-replace aguared_ch=(tiene_agua_red_publica==1)
-label var aguared_ch "Acceso a fuente de agua por red"
+*****************
+*aguafconsumo_ch*
+*****************
+*se asume por el cuestionario y por los datos que agua para consumo es agua de red,
+gen aguafconsumo_ch = 0
+
 
 
 *****************
-***aguadist_ch***
+*aguafuente_ch*
 *****************
+gen aguafuente_ch = 1 if (donde_proviene_agua==1 | donde_proviene_agua==2)
+replace aguafuente_ch = 2 if (donde_proviene_agua==4 | donde_proviene_agua==5)
+replace aguafuente_ch = 5 if donde_proviene_agua==7
+replace aguafuente_ch = 6 if donde_proviene_agua==9
+replace aguafuente_ch = 8 if donde_proviene_agua==6
+replace aguafuente_ch = 9 if donde_proviene_agua==3
+replace aguafuente_ch = 10 if (donde_proviene_agua==8 | donde_proviene_agua==99)
 
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_ch
 
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if donde_proviene_agua==1
+replace aguadist_ch=2 if donde_proviene_agua==2
+replace aguadist_ch=3 if donde_proviene_agua==3|donde_proviene_agua== 4 
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
-***aguamala_ch***
+*aguamejorada_ch*  Altered
 *****************
-
-gen aguamala_ch=.
-label var aguamala_ch "Agua unimproved según MDG" 
-
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 ***aguamide_ch***
 *****************
-
-gen aguamide_ch=.
+gen aguamide_ch =.
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if tipo_sanitario==5
+replace bano_ch=1 if (tipo_sanitario==1 | tipo_sanitario==2) & se_encuentra_conectada_a==2
+replace bano_ch=2 if (tipo_sanitario==1 | tipo_sanitario==2) & se_encuentra_conectada_a==1
+replace bano_ch=6 if (tipo_sanitario==3 | tipo_sanitario==4)
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+replace banoex_ch= 1 if (tipo_sanitario==1 | tipo_sanitario==3)
+replace banoex_ch= 0 if (tipo_sanitario==2 | tipo_sanitario==4)
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if tipo_sanitario!=5
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 
 
 ************
@@ -1305,21 +1272,6 @@ replace combust_ch=1 if combustible_para_cocinar==1 | combustible_para_cocinar==
 replace combust_ch=0 if combustible_para_cocinar==99 | combustible_para_cocinar==4 | combustible_para_cocinar==5
 label var combust_ch "Principal combustible gas o electricidad" 
 
-*************
-***bano_ch***
-*************
-
-gen bano_ch=1
-replace bano_ch=0 if tipo_sanitario==5 //*2018, cambio de categoria 5 "no tiene"
-label var bano_ch "El hogar tiene servicio sanitario"
-
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=.
-replace banoex_ch=(tipo_sanitario==1 | tipo_sanitario==3)
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *************
 ***des1_ch***
@@ -1392,19 +1344,6 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if tiene_agua_red_publica ==1
-replace aguamejorada_ch = 0 if tiene_agua_red_publica ==2
-		
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if (tipo_sanitario >=1 & tipo_sanitario <=3)
-replace banomejorado_ch = 0 if  tipo_sanitario == 4
 
 *************
 ***dorm_ch***
@@ -1560,22 +1499,21 @@ label var rentaimp_ch "Rentas imputadas del hogar"
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-***********************
-*llave lp nacionales***
-***********************
-egen llave_lp=group(lpgeneral lpextrema)
-
 *********
 *lp_ci***
 *********
 
-gen lp_ci =lpgeneral
+gen lp_ci =.
+replace lp_ci =  5319.5 if zona_c==1
+replace lp_ci =  4736.2 if zona_c==0
 label var lp_ci "Linea de pobreza oficial del pais"
 
 *********
 *lpe_ci***
 *********
-gen lpe_ci =lpextrema
+gen lpe_ci =.
+replace lpe_ci =  2395.2 if zona_c==1
+replace lpe_ci =  2295.0 if zona_c==0
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1817,6 +1755,50 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 	replace miglac_ci = 0 if !inlist(pais_nacimiento,63,77,83,88,97,105,169,196,211,239,242,317,325,341,345,391,493,580,586,589,770,810,845,850) & migrante_ci==1
 	replace miglac_ci = . if migrante_ci==0 
 	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"	
+	
+	
+	**************************
+	** PROVINCIAS ************
+	************************** 
+
+   gen ine01=.   
+   replace ine01=1  if  id_provincia==1			    /*Distrito Nacional*/
+   replace ine01=2  if  id_provincia==2				/*Azua*/
+   replace ine01=3  if  id_provincia==3				/*Bahoruco*/
+   replace ine01=4  if  id_provincia==4				/*Barahona*/
+   replace ine01=5  if  id_provincia==5		    	/*Dajabon*/
+   replace ine01=6  if  id_provincia==6				/*Duarte*/
+   replace ine01=7  if  id_provincia==7				/*Elias Piña*/
+   replace ine01=8  if  id_provincia==8				/*El Seibo*/
+   replace ine01=9  if  id_provincia==9				/*Espaillat*/
+   replace ine01=10 if  id_provincia==10			/*Independencia*/
+   replace ine01=11 if  id_provincia==11			/*La Altagracia*/
+   replace ine01=12 if  id_provincia==12			/*La Romana*/
+   replace ine01=13 if  id_provincia==13			/*La Vega*/
+   replace ine01=14 if  id_provincia==14			/*Maria Trinidad Sanchez*/
+   replace ine01=15 if  id_provincia==15			/*Monte Cristi*/
+   replace ine01=16 if  id_provincia==16			/*Pedernales*/
+   replace ine01=17 if  id_provincia==17			/*Peravia*/
+   replace ine01=18 if  id_provincia==18			/*Puerto Plata*/
+   replace ine01=19 if  id_provincia==19			/*Salcedo*/
+   replace ine01=20 if  id_provincia==20		    /*Samana*/
+   replace ine01=21 if  id_provincia==21			/*San Cristobal*/
+   replace ine01=22 if  id_provincia==22			/*San Juan*/
+   replace ine01=23 if  id_provincia==23			/*San Pedro De Macoris*/
+   replace ine01=24 if  id_provincia==24			/*Sanchez Ramirez*/
+   replace ine01=25 if  id_provincia==25			/*Santiago*/
+   replace ine01=26 if  id_provincia==26			/*Santiago Rodriguez*/
+   replace ine01=27 if  id_provincia==27			/*Valverde*/
+   replace ine01=28 if  id_provincia==28			/*Monseñor Nouel*/
+   replace ine01=29 if  id_provincia==29			/*Monte Plata*/
+   replace ine01=30 if  id_provincia==30			/*Hato Mayor*/
+   replace ine01=31 if  id_provincia==31			/*San Jose De Ocoa*/
+   replace ine01=32 if  id_provincia==32			/*Santo Domingo*/
+
+	label define ine01 1"Distrito Nacional" 2"Azua" 3"Bahoruco" 4"Barahona" 5"Dajabon" 6"Duarte" 7"Elias Piña" 8"El Seibo" 9"Espaillat" 10"Independencia" 11"La Altagracia" 12"La Romana" 13"La Vega" 14"Maria Trinidad Sanchez" 15"Monte Cristi" 16"Pedernales" 17"Peravia" 18"Puerto Plata" 19"Salcedo" 20"Samana" 21"San Cristobal" 22"San Juan" 23"San Pedro De Macoris" 24"Sanchez Ramirez" 25"Santiago" 26"Santiago Rodriguez" 27"Valverde" 28"Monseñor Nouel" 29"Monte Plata" 30"Hato Mayor" 31"San Jose De Ocoa" 32"Santo Domingo"
+	label value ine01 ine01
+	label var ine01 " Primera division politico-administrativa, Provincia"
+	
 
 
 ******************************
@@ -1900,7 +1882,10 @@ replace ptmc_ingneto4 = 1 if ptmc_ch == 1 & gpo_ingneto4 == 1
 lab def grupo_int 1 "Pobre extremo" 2 "Pobre moderado" 3 "Vulnerable" 4 "No pobre"
 lab val grupo_int grupo_int
 
-drop ipcbase* usd* eur* chf* ars* gbp* ingasal -alqimputadodef
+
+
+gen codocupa=ocupacion_principal_cod
+gen codindustria=ramac
 /*_____________________________________________________________________________________________________*/
 * Verificación de que se encuentren todas las variables armonizadas 
 /*_____________________________________________________________________________________________________*/
@@ -1915,7 +1900,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

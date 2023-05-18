@@ -1204,204 +1204,177 @@ label define quintil_ci 1 "Quintil 1" 2 "Quintil 2" 3 "Quintil 3" 4 "Quintil 4" 
 label values quintil_ci quintil_ci
 
 
-******************************************************************************
-*	Educación
-*****************************************************************************
+*****************
+*	Educación   *
+*****************
+*Modificado por Agustina Thailinger EDU/SCL Mayo 2022
 
-************
-* asiste_ci*
-************
-**DZ Mar 2019:Se agrega centro de educación temprana**
+*rename *, lower
+
+***************
+***asiste_ci***
+***************
+*DZ Mar 2019:Se agrega centro de educación temprana**
 generat asiste_ci=.
 replace asiste_ci=1 if cp405==1 | cp401==1
-replace asiste_ci=0 if cp405==2  | cp401==2
+replace asiste_ci=0 if cp405==2 | cp401==2
 label var asiste "Personas que actualmente asisten a centros de enseñanza"
 
-
-	*************
-	***aedu_ci***
-	*************
-		
-* Años de educacion aprobados **
-/*replace ed108 =. if ed108 >9
-replace ed115=. if ed115>9
-
-** para quienes ya no asisten
-gen aedu_ci=.
-replace aedu_ci=0 if ed105>=1 & ed105<=3
-replace aedu_ci=ed108  if ed105==4 
-replace aedu_ci=ed108 +6 if ed105==5 | ed105==6
-replace aedu_ci=ed108 +12 if ed105==7 | ed105==8 | ed105==9
-replace aedu_ci=ed108 +17 if ed105==10
-** para quienes asisten actualmente
-replace aedu_ci=0 if ed110==1 | ed110==2 | ed110==3 
-replace aedu_ci=ed115-1 if ed110==4
-replace aedu_ci=ed115+6-1 if ed110==5 | ed110==6
-replace aedu_ci=ed115+12-1 if ed110==7 | ed110==8 | ed110==9
-replace aedu_ci=ed115+17-1 if ed110==10
-label var aedu_ci "Años de educacion aprobados"	*/
-
+*************
+***aedu_ci***
+*************
 *Modificación Mayra Sáenz - Octubre 2016: Corrección enviada por Ivan Bornacelly SCL/EDU	
-* Años de educacion aprobados **
 replace cp407=. if cp407==99
+replace cp412=. if cp412==99
 replace cp410=. if cp410>9
 replace cp417=. if cp417>9
-replace cp410=3 if cp407==6 & cp407>3 //truncar valores
 
-
-** para quienes ya no asisten
+*Para quienes ya no asisten:
 gen aedu_ci=.
 replace aedu_ci=0 if cp407>=1 & cp407<=3
 replace aedu_ci=cp410 if cp407==4 
 replace aedu_ci=cp410+6 if cp407==5
 replace aedu_ci=cp410+9 if cp407==6
-replace aedu_ci=cp410+12 if cp407==7 | cp407==8 | cp407==9
-replace aedu_ci=cp410+12+4 if cp407==10 
+replace aedu_ci=cp410+11 if cp407==7 | cp407==8 | cp407==9
+replace aedu_ci=cp410+11+4 if cp407==10
 
-** para quienes asisten actualmente
-*DZ Jul 2017: Cambio de categoria respecto al anio anterior**
-replace aedu_ci=0 if cp412==1 | cp412==2 | cp412==3 
+*Para quienes asisten actualmente:
+*DZ Jul 2017: Cambio de categoria respecto al anio anterior
+replace aedu_ci=0 if cp412==1 | cp412==2 | cp412==3
 replace aedu_ci=cp417-1 if cp412==4
 replace aedu_ci=cp417+6-1 if cp412==5
 replace aedu_ci=cp417+9-1 if cp412==6
-replace aedu_ci=cp417+12-1 if cp412==7 | cp412==8 | cp412==9
-replace aedu_ci=cp417+12+4-1 if cp412==10
+replace aedu_ci=cp417+11-1 if cp412==7 | cp412==8 | cp412==9
+replace aedu_ci=cp417+11+4-1 if cp412==10
 label var aedu_ci "Años de educacion aprobados"	
 		
- // imputando los años perdidos
+// imputando los años perdidos
+replace aedu_ci=0 if (cp407==1 | cp407==2 | cp407==3) & cp410==. // alfabetizacion 
+replace aedu_ci=0 if (cp412==2 | cp412==3) & cp417==. // alfabetizacion
+replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) // educacion basica
+replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) // ciclo comun
+replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) // diversificado
+replace aedu_ci=11 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) // terciaria
+replace aedu_ci=15 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) // postgrado
  
- replace aedu_ci=0 if (cp407==1 | cp407==2 | cp407==3) & cp410==. // alfabetizacion 
- replace aedu_ci=0 if (cp412==2 | cp412==3) & cp417==. // alfabetizacion
- replace aedu_ci=0 if (cp407==4 & cp410==.) | (cp412==4 & cp417==.) //educacion basica
- replace aedu_ci=6 if (cp407==5 & cp410==.) | (cp412==5 & cp417==.) //ciclo comun
- replace aedu_ci=9 if (cp407==6 & cp410==.) | (cp412==6 & cp417==.) //diversificado
- replace aedu_ci=12 if (inlist(cp407,7, 8,9) & cp410==.) | (inlist(cp412,7,8,9) & cp417==.) //terciaria
- replace aedu_ci=16 if (cp407==10 & cp410==.) | (cp412==10 & cp417==.) //postgrado
- 
-******************************
-*	eduno_ci
-******************************
+**************
+***eduno_ci***
+**************
 g byte eduno_ci=(aedu_ci==0)
 replace eduno_ci=. if aedu_ci==.
 la var eduno_ci "Personas sin educacion. Excluye preescolar"
-******************************
-*	edupi_ci 
-******************************
+
+**************
+***edupi_ci*** 
+**************
 g byte edupi_ci=(aedu_ci>=1 & aedu_ci<6)
 replace edupi_ci=. if aedu_ci==.
 la var edupi_ci "Personas que no han completado Primaria"
-******************************
-*	edupc_ci 
-******************************
+
+**************
+***edupc_ci*** 
+**************
 g byte edupc_ci=(aedu_ci==6)
 replace edupc_ci=. if aedu_ci==.
 la var edupc_ci "Primaria Completa"
-******************************
-*	edusi_ci 
-******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<=11)
-replace edusi_ci=0 if aedu_ci==11 & cp409==1
+
+**************
+***edusi_ci*** 
+**************
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<=10)
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta"
-******************************
-*	edusc_ci 
-******************************
-*dependiendo de la modalidad son 11 o 12 años, entonces incluyo la variable cp409 "Finalizó sus estudios?"
-g byte edusc_ci=(aedu_ci==12)
-replace edusc_ci=1 if aedu_ci==11 & cp409==1 
+
+**************
+***edusc_ci***
+**************
+g byte edusc_ci=(aedu_ci==11)
 replace edusc_ci=. if aedu_ci==.
 la var edusc_ci "Secundaria Completa"
-******************************
-*	edus1i_ci 
-******************************
+
+***************
+***edus1i_ci*** 
+***************
 g byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
 replace edus1i_ci=. if aedu_ci==.
 la var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus1c_ci 
-******************************
+
+***************
+***edus1c_ci*** 
+***************
 g byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
 la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
-******************************
-*	edus2i_ci 
-******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
-replace edus2i_ci=0 if aedu_ci==11 & cp409==1
+
+***************
+***edus2i_ci*** 
+***************
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
 replace edus2i_ci=. if aedu_ci==.
 la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus2c_ci 
-******************************
-g byte edus2c_ci=(aedu_ci==12)
-replace edus2c_ci=1 if aedu_ci==11 & cp409==1
+
+***************
+***edus2c_ci*** 
+***************
+g byte edus2c_ci=(aedu_ci==11)
 replace edus2c_ci=. if aedu_ci==.
 la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
-******************************
-*	eduui_ci 
-******************************
 
-g byte eduui_ci=(aedu>12 & aedu<=16) & cp409==2 //no finalizó estudios
-replace eduui_ci=1 if (aedu>12 & aedu<=16) & cp409==.
+**************
+***eduui_ci*** 
+**************
+g byte eduui_ci=(aedu>=12 & aedu<=15) & cp409==2 // no finalizó estudios
+replace eduui_ci=1 if (aedu>=12 & aedu<=15) & cp409==.
 replace eduui_ci=. if aedu_ci==. 
 la var eduui_ci "Universitaria o Terciaria Incompleta"
-******************************
-*	eduuc_ci 
-******************************
 
-g byte eduuc_ci=(aedu>12 & aedu<=16) & cp409==1
-replace eduuc_ci=1 if aedu_ci>16 
+**************
+***eduuc_ci*** 
+**************
+g byte eduuc_ci=(aedu>=12 & aedu<=15) & cp409==1
+replace eduuc_ci=1 if aedu_ci>15
 replace eduuc_ci=. if aedu_ci==.
 la var eduuc_ci "Universitaria o Terciaria Completa"
-******************************
-*	edupre_ci 
-******************************
+
+***************
+***edupre_ci***
+***************
 g byte edupre_ci=.
 la var edupre_ci "Tiene Educacion preescolar"
 
 ***************
 ***asipre_ci***
 ***************
-
-gen byte asispre_ci=(cp405==1 & cp412==3) 
+gen byte asispre_ci=(cp412==3) // Asiste a pre-básica
 la var asispre_ci "Asiste a educacion prescolar"
 
-******************************
-*	pqnoasis 
-******************************
+**************
+***pqnoasis*** 
+**************
 gen pqnoasis_ci=cp406 
 label var pqnoasis_ci "Razones para no asistir a centros de enseñanza"
 
-******************************
-*	repite_ci 
-******************************
+***************
+***repite_ci*** 
+***************
 gen repite_ci=.
 label var repite_ci "Personas que han repetido al menos un año o grado"
 
-******************************
-*	repiteult_ci 
-******************************
+******************
+***repiteult_ci*** 
+******************
 gen repiteult_ci=.
 replace repiteult_ci=1 if cp415==1
 replace repiteult_ci=0 if cp415==2
 label var repiteult_ci "Personas que están repetiendo el ultimo grado"
 
-******************************
-*	edupub_ci 
-******************************
+***************
+***edupub_ci*** 
+***************
 gen edupub_ci=.
-/*
-Esta pregunta no se incluye porque el concepto de esta variable es para aquellas personas que actualmente
-están estudiando en un centro educativo público.
-replace edupub_ci=1 if (ed109==1|ed109==2|ed109==3|ed109==4|ed109==7|ed109==8|ed109==13)
-replace edupub_ci=0 if (ed109==5|ed109==6|ed109==9|ed109==10|ed109==11|ed109==12)
-*/
-replace edupub_ci=1 if (cp418==1|cp418==2|cp418==3|cp418==4|cp418==8|cp418==10) & cp405==1
-replace edupub_ci=0 if (cp418==5|cp418==6| cp418==7 | cp418==9|cp418==11|cp418==12) & cp405==1
+replace edupub_ci=1 if (cp418==1 | cp418==2 | cp418==3 | cp418==4 | cp418==8  | cp418==10) & cp405==1
+replace edupub_ci=0 if (cp418==5 | cp418==6 | cp418==7 | cp418==9 | cp418==11 | cp418==12) & cp405==1
 label var edupub_ci "1 = personas que asisten a centros de enseñanza publicos"
-
-
 
 **************
 ***eduac_ci***
@@ -1411,11 +1384,10 @@ replace eduac_ci= 1 if (cp407==9 | cp407==10 | cp412==9| cp412==10)
 replace eduac_ci= 0 if (cp407==7 | cp407==8 ) | (cp412==7| cp412==8)
 label variable eduac_ci "Superior universitario vs superior no universitario"
 
-
-**DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz**
-*****************
+******************
 ***pqnoasis1_ci***
-*****************
+******************
+*DZ Noviembre 2017: Se agrega la variable pqnoasis1_ci cuya sintaxis fue elaborada por Mayra Saenz
 g       pqnoasis1_ci = 1 if pqnoasis_ci==7
 replace pqnoasis1_ci = 2 if pqnoasis_ci==11
 replace pqnoasis1_ci = 3 if pqnoasis_ci==6
@@ -1432,32 +1404,116 @@ label value  pqnoasis1_ci pqnoasis1_ci
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-************
-*aguared_ch*
-************
-gen aguared_ch=.
-replace aguared_ch=1 if dh204==1
-replace aguared_ch=0 if dh204==2 
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if dv105==1 
+replace aguared_ch = 0 if dv105!=1
+la var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 1 if dv105==1 & dv106<=2
+replace aguafuente_ch = 2 if (dv105==1 & dv106>2) | dv105==4
+replace aguafuente_ch = 6 if dv105==6
+replace aguafuente_ch = 7 if dv105==7
+replace aguafuente_ch = 8 if dv105==5
+replace aguafuente_ch = 9 if dv105==8 
+replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3
 
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
-replace aguadist_ch=1 if dv106==1
-replace aguadist_ch=2 if dv106==2
-replace aguadist_ch=3 if (dv106==3| dv106==4)
+gen aguadist_ch=0
+replace aguadist_ch= 1 if dv106==1
+replace aguadist_ch= 2 if dv106==2
+replace aguadist_ch= 3 if dv106==3 | dv106 ==4
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
 
 *************
-*aguamala_ch*
+*aguamala_ch*  Altered
 *************
-gen aguamala_ch=.
-replace aguamala_ch=1 if dv105>=5 & dv105<=8
-replace aguamala_ch=0 if dv105>=1 & dv105<=4
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch =.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if dh204==2
+replace bano_ch=1 if dh205==1
+replace bano_ch=2 if dh205==2
+replace bano_ch=3 if dh205==6 | dh205==7
+replace bano_ch=4 if (dh205==3 | dh205==4)
+replace bano_ch=6 if dh205==8 | dh205==5 
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=.
+replace banoex_ch = 9 if dh204 ==2
+replace banoex_ch = 1 if dh206==1
+replace banoex_ch = 0 if dh206==2
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch =.
+replace sinbano_ch = 3 if dh204==2
+replace sinbano_ch = 0 if dh204==1
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
-*aguamide_ch*
+*aguatrat_ch*
 *************
-gen aguamide_ch=.
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
 
 ********
 *luz_ch*
@@ -1476,16 +1532,6 @@ gen luzmide_ch=.
 gen combust_ch=1 if dh203==3 | dh203==2 | dh203==4
 replace combust_ch=0 if dh203==5 | dh203==1
 
-*********
-*bano_ch*
-*********
-gen bano_ch=.
-replace bano_ch=1 if dh204==1
-replace bano_ch=0 if dh204==2
-
-gen banoex_ch=.
-replace banoex_ch=1 if dh206==1
-replace banoex_ch=0 if dh206==2
 
 * DZ Jul 2017: corrección nueva categoría respecto al anio anterior**
 gen des1_ch=.
@@ -1667,19 +1713,6 @@ label var benefdes_ci "=1 si tiene seguro de desempleo"
 g ybenefdes_ci=.
 label var ybenefdes_ci "Monto de seguro de desempleo"
 
-**DZ Noviembre 2017: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-
-*********************
-***aguamejorada_ch***
-*********************
-g aguamejorada_ch = 1 if (dv105 >=1 & dv105 <=4) | dv105==8
-replace aguamejorada_ch = 0 if (dv105 >=5 & dv105 <=7) | (dv105 >=9 & dv105 <=10)
-
-*********************
-***banomejorado_ch***
-*********************
-g banomejorado_ch = 1 if ( dh204 ==1 & ((dh205 >=1 & dh205 <=2) | (dh205 >=5 & dh205 <=8)) & dh206 ==1)
-replace banomejorado_ch = 0 if ( dh204 ==1 & ((dh205 >=1 & dh205 <=2) | (dh205 >=5 & dh205 <=8)) & dh206 ==2) | (dh205 >=3 & dh205 <=4) | (dh204==2)
 
 
 ******************************
@@ -1750,7 +1783,7 @@ ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmp
 trapri_ci trapri_ch progpub_ci progpub_ch trapub_ci  trapub_ch capital_ci capital_ch otros_ci otros_ch ypen_ch ytotal_ci  ytotal_ch ytotalpc_ch quintil_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

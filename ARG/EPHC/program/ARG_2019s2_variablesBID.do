@@ -1,5 +1,4 @@
 
-
 * (Versión stata 12)
 clear
 set more off
@@ -664,6 +663,13 @@ label val rama_ci rama_ci
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 *Note: A los empleados e independientes se les esta dejando un mâ¹©mo de 5 añ¯³ de antiguedad.
 	
+	***************
+	*trabaja_casa_ci*
+	***************
+	gen trabaja_casa_ci = .
+    replace trabaja_casa_ci = 1 if pp04g == 6 & (condocup_ci==1 | condocup_ci==2)
+    replace trabaja_casa_ci = 0 if  (pp04g !=6) & (condocup_ci==1 | condocup_ci==2)
+	replace trabaja_casa_ci = 0 if  (pp04g ==99)
 
 			**************************
 			***VARIABLES DE INGRESO***
@@ -1055,29 +1061,104 @@ label val rama_ci rama_ci
 		**********************************
 
 
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if iv6==1
+replace aguadist_ch= 2 if iv6==2
+replace aguadist_ch= 3 if iv6==3
+
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+*se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if iv7==1 & iv6<3
+replace aguafuente_ch = 2 if iv7==1 & iv6==3
+replace aguafuente_ch = 10 if iv7>1
+
+*label var aguafuente_ch "=1 si es red de distribucion y llave privada"
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  0 if iv8==1
+replace sinbano_ch = 1 if iv9==3
+replace sinbano_ch = 2 if iv8==2
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=6 if iv8==1
+replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
+replace bano_ch=2 if iv10<3 & iv10>=1   & iv11==2
+replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
+replace bano_ch=6 if iv10==3
+replace bano_ch=4 if iv11==4 
+
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+**#
 	************
 	*aguared_ch*
 	************
 
-	gen aguared_ch=.
-	replace aguared_ch=(iv7==1)
-	replace aguared_ch=. if iv7==9
+	gen aguared_ch=(iv7==1)
+replace aguared_ch=. if iv7==9
 
-
-	*************
-	*aguadist_ch*
-	*************
-
-	gen aguadist_ch=.
-	replace aguadist_ch=(iv6==1 | iv6==2)
-	replace aguadist_ch=. if iv6==9 | iv6==.
-
-	*************
-	*aguamala_ch*
-	*************
-
-	gen aguamala_ch=(iv7==4)
-	replace aguamala_ch=. if iv7==9
 
 	*************
 	*aguamide_ch*
@@ -1110,9 +1191,9 @@ label val rama_ci rama_ci
 	*bano_ch*
 	*********
 
-	gen bano_ch=0
-	replace bano_ch=1 if ii9!=4
- 	replace bano_ch=. if ii9==9 | ii9==0
+	*gen bano_ch=0
+	*replace bano_ch=1 if ii9!=4
+ 	*replace bano_ch=. if ii9==9 | ii9==0
 
 
 	***********
@@ -1308,25 +1389,25 @@ label val rama_ci rama_ci
 	*********************
     ***aguamejorada_ch***
     *********************
-	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
-	replace aguamejorada_ch = 0 if iv7 == 4
+	*gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
+	*replace aguamejorada_ch = 0 if iv7 == 4
 		
 	*********************
     ***banomejorado_ch***
     *********************
-   gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
-   replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
+   *gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
+   *replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 	
 	
 	
 	gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 | aglomera==19 | aglomera==23 | aglomera==26 | aglomera==30 | aglomera==26 | aglomera==30 | aglomera==13 | aglomera==10 | aglomera==4| aglomera==29)
-	
+
 
 /************************************************************************************************************
 * 3. Creación ¤e nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_01_18.pdf pÃ¡gina 10. 
+/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_195EFE752E31.pdf pÃ¡gina 4-5. 
 calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
 Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio del hogar indigente en adulto equivalente */ 
 
@@ -1334,7 +1415,7 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =5733
+gen lp_ci = 36575/3.28
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1342,7 +1423,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =2289.7
+gen lpe_ci =14874/3.31
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1464,10 +1545,10 @@ label var salmm_ci "Salario minimo legal"
 gen categoinac_ci=.
 replace categoinac_ci=1 if cat_inac==1
 replace categoinac_ci=2 if cat_inac==3
-replace categoinac_ci=4 if cat_inac==4
+replace categoinac_ci=3 if cat_inac==4
 recode categoinac_ci .= 4 if condocup_ci==3
 
-label var categoinac_ci "Condición ¤e inactividad"
+label var categoinac_ci "Condición de inactividad"
 	label define categoinac_ci 1 "jubilado/pensionado" 2 "estudiante" 3 "quehaceres_domesticos" 4 "otros_inactivos" 
 	label value categoinac_ci categoinac_ci
 	

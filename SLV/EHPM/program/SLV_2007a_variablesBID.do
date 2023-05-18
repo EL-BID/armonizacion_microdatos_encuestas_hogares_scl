@@ -22,9 +22,6 @@ local ronda a
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
 local base_in  = "$ruta\survey\\`PAIS'\\`ENCUESTA'\\`ANO'\\`ronda'\data_merge\\`PAIS'_`ANO'`ronda'.dta"
 local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ronda'_BID.dta"
-   
-
-
 
 capture log close
 log using "`log_file'", replace 
@@ -97,6 +94,27 @@ label define region_c  ///
           14 "La Unión" 
 label value region_c region_c
 label var region_c "División política, departamento"
+
+***************
+***ine01***
+***************
+gen ine01= r004
+label define ine01  ///
+          1 "Ahuachapán" ///
+           2 "Santa Ana" ///
+           3 "Sonsonate" ///
+           4 "Chalatenango" ///
+           5 "La Libertad" ///
+           6 "San Salvador" ///
+           7 "Cuscatlán" ///
+           8 "La Paz" ///
+           9 "Cabañas" ///
+          10 "San Vicente" ///
+          11 "Usulután" ///
+          12 "San Miguel" ///
+          13 "Morazán" ///
+          14 "La Unión" 
+label value ine01 ine01
 
 ******************************
 *	factor_ch
@@ -733,164 +751,133 @@ gen durades_ci=r409/4.3 if /*desemp_ci==1 & */r409>0
 gen antiguedad_ci=.
 
 
+			****************************
+			***VARIABLES DE EDUCACION***
+			****************************
+			
+/* 
+Nota: Al no poder discriminar este anio entre bachillerato tecnico o general 
+se adopta el secundario completo a los 11 anios de educación. 
+*/
 
-******************************************************************************
-*	EDUCATION
-******************************************************************************
+*************
+***aedu_ci***
+*************
 
-notes: Para las variables de educacion no se considera educacion especial.
+* MGD 12/9/2016: si está disponible aproba1
+g aedu_ci = aproba1
+label var aedu_ci "Anios de educacion aprobados" 
 
-******************************
-*	aedu_ci
-******************************
-gen byte aedu_ci=.
+**************
+***eduno_ci***
+**************
+gen eduno_ci = (aedu_ci == 0)
+replace eduno_ci = . if aedu_ci == .
+label var eduno_ci "Sin educacion"
 
-**Asisten actualmente a un centro de ensenanza
+**************
+***edupi_ci***
+**************
+gen edupi_ci = (aedu_ci >= 1 & aedu_ci < 6)
+replace edupi_ci = . if aedu_ci == . 
+label var edupi_ci "Primaria incompleta"
 
-*maternal/parvularia
-replace aedu_ci=0 if (r204==0 | r204==1) & r203==1
+**************
+***edupc_ci***
+**************
+gen edupc_ci = (aedu_ci == 6)
+replace edupc_ci = . if aedu_ci == .
+label var edupc_ci "Primaria completa"
 
-*basica
-replace aedu_ci=r205 if r204==2 & (r205>=1 & r205<=9)
-replace aedu_ci=9 if r204==2 & (r205>=10)
+**************
+***edusi_ci***
+**************
+gen edusi_ci = (aedu_ci > 6 & aedu_ci <= 10) 
+replace edusi_ci = . if aedu_ci == .  
+label var edusi_ci "Secundaria incompleta"
 
-*media
-replace aedu_ci=10 if r204==3 & (r205>=1 & r205<=9)
-replace aedu_ci=r205 if r204==3 & (r205>=10 & r205<=12)
-
-*sup univ
-replace aedu_ci=12+r205 if r204==4 & (r205>=1 & r205<=14)
-replace aedu_ci=27 if r204==4 & r205==15
-
-*sup no univ
-replace aedu_ci=12+r205 if r204==5 & (r205>=1 & r205<=4)
-
-*restar 1 para otbtener los anios de educacion completados
-replace aedu_ci=aedu_ci-1 if aedu_ci!=0
-
-**No asisten actualmente a un centro de ensenanza
-*no asiste por edad
-/*pienso que corresponde dar cero anios de educacion a los menores a 3 anios (que no responden bloque de educacion.
-Si no se incluye advertir que los missing values incluiran personas con educacion especial + ninos menores a 3 anios*/
-*replace aedu_ci=0 if edad_ci<3
-*replace aedu_ci=0 if r203==2 & edad_ci<4
-
-*nunca asistio a una escuela
-replace aedu_ci=0 if r217==2
-
-*no asisten pero asistieron-max nivel alcanzado
-replace aedu_ci=0 if (r219a==0 | r219a==1 ) & r217==1 
-
-replace aedu_ci=r219b if r219a==2 & (r219b>=1 & r219b<=9)
-replace aedu_ci=9 if r219a==2 & (r219b>=10)
-
-replace aedu_ci=10 if r219a==3 & (r219b>=1 & r219b<10)
-replace aedu_ci=r219b if r219a==3 & (r219b>=10 & r219b<=12)
-
-replace aedu_ci=13 if r219a==4 & r219b==1
-replace aedu_ci=12+r219b if r219a==4 & (r219b>=1 & r219b<=15)
- 
-replace aedu_ci=13 if r219a==5 & r219b==1
-replace aedu_ci=12+r219b if r219a==5 & (r219b>=2 & r219b<=5)
-
-******************************
-*	eduno_ci
-******************************
-gen byte eduno_ci=(aedu_ci==0)
-replace eduno_ci=. if r219a==1 | aedu_ci==.
-replace eduno_ci=. if (r204==0 | r204==1) & r203==1
-label var eduno_ci "Personas sin educacion. Excluye preescolar"
-******************************
-*	edupi_ci
-******************************
-gen byte edupi_ci=(aedu_ci>=1 & aedu_ci<6)
-replace edupi_ci=. if aedu_ci==.
-label var edupi_ci "Personas que no han completado Primaria"
-******************************
-*	edupc_ci
-******************************
-gen byte edupc_ci=(aedu_ci==6)
-replace edupc_ci=. if aedu_ci==.
-label var edupc_ci "Primaria Completa"
-******************************
-*	edusi_ci
-******************************
-gen byte edusi_ci=(aedu_ci>6 & aedu_ci<12)
-replace edusi_ci=. if aedu_ci==.
-label var edusi_ci "Secundaria Incompleta"
-******************************
-*	edusc_ci
-******************************
-gen byte edusc_ci=(aedu_ci==12)
-replace edusc_ci=. if aedu_ci==.
+**************
+***edusc_ci***
+**************
+gen edusc_ci = (aedu_ci == 11)
+replace edusc_ci = . if aedu_ci == .
 label var edusc_ci "Secundaria Completa"
-******************************
-*	edus1i_ci
-******************************
-gen byte edus1i_ci=(aedu_ci>6 & aedu_ci<9)
-replace edus1i_ci=. if aedu_ci==.
-label var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus1c_ci
-******************************
-gen byte edus1c_ci=(aedu_ci==9)
-replace edus1c_ci=. if aedu_ci==.
-label var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
-******************************
-*	edus2i_ci
-******************************
-gen byte edus2i_ci=(aedu_ci>9 & aedu_ci<12)
-replace edus2i_ci=. if aedu_ci==.
-label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
-******************************
-*	edus2c_ci
-******************************
-gen byte edus2c_ci=(aedu_ci==12)
-replace edus2c_ci=. if aedu_ci==.
-label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
-*pongo primaria y secundaria, como equivalente a basica y media
-******************************
-*	eduui_ci
-******************************
-gen byte eduui_ci=(aedu_ci>12 & aedu_ci<17) 
-replace eduui_ci=. if aedu_ci==.
+
+**************
+***eduui_ci***
+**************
+* Hay 5 personas con mas de 12 anios de educación en esta base que no declaran tituo alguno, se toman como universitario incompleto.
+gen eduui_ci = (aedu_ci == 12 | aedu_ci >= 12 & r220 == 2) // 12 anios de estudio o mas y título de bachiller
+replace eduui_ci = 1 if aedu_ci >= 13 & inlist(r220, 1 ,  .) // mas de 12 anios de estudio, perdido, no obtuvo.
+replace eduui_ci = . if aedu_ci == .
 label var eduui_ci "Universitaria o Terciaria Incompleta"
-******************************
-*	eduuc_ci
-******************************
-gen byte eduuc_ci=(aedu_ci>=17)
+
+**************
+***eduuc_ci***
+**************
+gen eduuc_ci=(aedu_ci > 12 & (r220 >= 3 & r220 <= 11)) // mas de 12 anios de estudio pero con titulo terciario; incluye profesorado
 replace eduuc_ci=. if aedu_ci==.
 label var eduuc_ci "Universitaria o Terciaria Completa"
-******************************
-*	edupre_ci
-******************************
-gen byte edupre_ci=(r219a==1 | r204==0 |r204==1) 
-replace edupre_ci=. if aedu_ci==.
+
+***************
+***edus1i_ci***
+***************
+gen  edus1i_ci = (aedu_ci > 6 & aedu_ci < 9)
+replace edus1i_ci = . if aedu_ci == .
+label var edus1i_ci "1er ciclo de la secundaria incompleto"
+
+***************
+***edus1c_ci***
+***************
+gen byte edus1c_ci = (aedu_ci == 9)
+replace edus1c_ci = . if aedu_ci == .
+label var edus1c_ci "1er ciclo de la secundaria completo"
+
+***************
+***edus2i_ci***
+***************
+gen edus2i_ci=(aedu_ci == 10)
+replace edus2i_ci = . if aedu_ci==.
+label var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
+
+***************
+***edus2c_ci***
+***************
+gen edus2c_ci = (aedu_ci == 11)
+replace edus2c_ci = . if aedu_ci == .
+label var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
+
+***************
+***edupre_ci***
+***************
+gen edupre_ci = (r209 == 1)
 label var edupre_ci "Educacion preescolar"
+
 ****************
 ***asispre_ci***
 ****************
 *Agregada por Iván Bornacelly - 01/23/2017
-	g asispre_ci=.
-	replace asispre_ci=1 if r203==1 & r204==1 & r106>=4
-	recode asispre_ci (.=0)
-	la var asispre_ci "Asiste a educacion prescolar"	
-******************************
-*	eduac_ci
-******************************
-gen byte eduac_ci=.
-replace eduac_ci=1 if (r219a==4 | r204==4) & aedu_ci~=.
-replace eduac_ci=0 if (r219a==5 | r204==5) & aedu_ci~=.
-label var eduac_ci "Educacion terciaria academica versus Educacion Educacion terciaria no academica"
-******************************
-*	asiste_ci
-******************************
-gen asiste_ci=(r203==1)
-replace asiste_ci=. if r203==.
-label var asiste_ci "Personas que actualmente asisten a la escuela"
-******************************
-*	pqnoasis_ci
-******************************
+g asispre_ci = (r203 == 1 & r204 == 1) // no consideramos menores de 3 años (r201a)
+la var asispre_ci "Asiste a educacion prescolar"
+	
+**************
+***eduac_ci***
+**************
+gen eduac_ci = .
+replace eduac_ci = 1 if r219a == 4
+replace eduac_ci = 0 if r219a == 5
+label variable eduac_ci "Superior universitario vs superior no universitario"
+
+***************
+***asiste_ci***
+***************
+gen asiste_ci = (r203 == 1)
+replace asiste_ci = . if r203 == .
+label variable asiste_ci "Asiste actualmente a la escuela"
+
+*****************
+***pqnoasis_ci***
+*****************
 gen pqnoasis_ci=r221
 label var pqnoasis_ci "Razones para no asistir a la escuela"
 label define pqnoasis_ci 1 "Necesita trabajar" 2 " Causas del hogar"
@@ -920,28 +907,26 @@ replace pqnoasis1_ci = 9 if r221 ==10 | r221 ==13
 label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
 label value  pqnoasis1_ci pqnoasis1_ci
 
-******************************
-*	repite_ci
-******************************
+***************
+***repite_ci***
+***************
 gen repite_ci=.
-*NA
-******************************
-*	repiteult_ci
-******************************
-gen repiteult_ci=(r207a==1)
-replace repiteult_ci=. if r207a==.
-label variable repiteult_ci "Personas que han repetido el ultimo grado o curso"
-******************************
-*	edupub_ci
-******************************
+label var repite_ci "Ha repetido al menos un grado"
+
+******************
+***repiteult_ci***
+******************
+gen repiteult_ci= (r207a == 1)
+replace repiteult_ci = . if  r207a == .
+label var repiteult "Ha repetido el último grado"
+
+***************
+***edupub_ci***
+***************
 gen edupub_ci=.
-replace edupub_ci=1 if r210a==1 
-replace edupub_ci=2 if r210a==2 | r210a==3
+replace edupub_ci=1 if r210a == 1 
+replace edupub_ci=0 if r210a == 2 | r210a == 3
 label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
-
-/*estrictamente hablando esta variable no podria generarse porque existen colegios privados laicos y privados religiosos. 
-
-210. EL CENTRO DE ENSEÑANZA AL QUE ASISTE...ES: a) 1. ¿Oficial? 2. ¿Laico? 3. ¿Religioso?*/
 
 
 
@@ -1332,6 +1317,41 @@ gen aguadist_ch=.
 *gen cuartos_ch=.
 gen vivialqimp_ch=.
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
+
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
 * Consumidor (2011=100), líneas de pobreza
@@ -1353,7 +1373,7 @@ formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci	pensionsub_ci pension
 tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm_ci	ynlm_ci	ynlnm_ci ylm_ch	ylnm_ch	ylmnr_ch  ///
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
-edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
+edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first

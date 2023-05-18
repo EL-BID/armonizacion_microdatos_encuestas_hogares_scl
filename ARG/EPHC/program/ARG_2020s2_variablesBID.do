@@ -117,6 +117,65 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
    label value region_c region_c
    label var region_c "division politico-administrativa, provincia"
    
+    ************
+	*ine01_2020*
+	************
+   
+   gen ine01=.
+replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
+replace ine01=10  if aglomerado==22                          /*Catamarca*/
+replace ine01=22  if aglomerado==8                           /*Chaco*/
+replace ine01=26  if aglomerado==9 | aglomerado==91          /*Chubut*/
+replace ine01=2  if aglomerado==32                          /*Ciudad de Buenos Aires*/
+replace ine01=14  if aglomerado==13 | aglomerado==36         /*Córdoba*/
+replace ine01=18  if aglomerado==12                          /*Corrientes*/
+replace ine01=30  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
+replace ine01=34  if aglomerado==15                          /*Formosa*/
+replace ine01=38 if aglomerado==19                          /*Jujuy*/
+replace ine01=42 if aglomerado==30                          /*La pampa*/
+replace ine01=46 if aglomerado==25                          /*La Rioja*/
+replace ine01=50 if aglomerado==10                          /*Mendoza*/
+replace ine01=54 if aglomerado==7                           /*Misiones*/
+replace ine01=58 if aglomerado==17                          /*Neuquen*/
+replace ine01=62 if aglomerado==93                          /*Río Negro*/ 
+replace ine01=66 if aglomerado==23                          /*Salta*/
+replace ine01=70 if aglomerado==27                          /*San Juan*/ 
+replace ine01=74 if aglomerado==26                          /*San Luis*/
+replace ine01=78 if aglomerado==20                          /*Santa Cruz*/
+replace ine01=82 if aglomerado>=4 & aglomerado<=5           /*Santa Fe*/
+replace ine01=86 if aglomerado==18                          /*Santiago de Estero*/
+replace ine01=94 if aglomerado==31                          /*Tierra del Fuego*/
+replace ine01=90 if aglomerado==29                          /*Tucuman*/
+   
+   label define ine01     ///
+	6"Buenos Aires"           ///	
+	10"Catamarca"              ///
+	22"Chaco"                  /// 
+	26"Chubut"                 ///
+	2"Ciudad de Buenos Aires" ///
+	14"Córdoba"                ///
+	18"Corrientes"             ///
+	30"Entre Ríos"             ///
+	34"Formosa"                ///
+	38"Jujuy"                 ///
+	42"La Pampa"              ///
+	46"La Rioja"              ///
+	50"Mendoza"               ///
+	54"Misiones"              ///
+	58"Neuquon"               ///
+	62"Río Negro"             ///
+	66"Salta"                 ///
+	70"San Juan"              ///
+	74"San Luis"              ///
+	78"Santa Cruz"            ///
+	82"Santa Fe"              ///
+	86"Santiago del Estero"   ///
+	94"Tierra del Fuego"      ///
+	90"Tucumán"                    
+  
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, ine01"
+   
 	*******************************************
 	*Factor de expansion del hogar (factor_ch)*
 	*******************************************
@@ -653,6 +712,15 @@ label val ramasec_ci ramasec_ci
 	replace antiguedad_ci= antiguedad3 if antiguedad3!=.
 	replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 *Note: A los empleados e independientes se les esta dejando un mâ¹©mo de 5 añ¯³ de antiguedad.
+
+***************
+*trabaja_casa_ci*
+***************
+gen trabaja_casa_ci = .
+    replace trabaja_casa_ci = 1 if pp04g == 6 & (condocup_ci==1 | condocup_ci==2)
+    replace trabaja_casa_ci = 0 if  (pp04g !=6) & (condocup_ci==1 | condocup_ci==2)
+replace trabaja_casa_ci = 0 if  (pp04g ==99)
+
 	
 
 			**************************
@@ -1053,30 +1121,121 @@ replace ypeoficial_ch=. if yoficial_ch==0
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if iv6==1
+replace aguadist_ch= 2 if iv6==2
+replace aguadist_ch= 3 if iv6==3
+
+*****************
+*aguafconsumo_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+*no se pregunta si es potable o para el consumo humano
+*se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if iv7==1 & iv6<3
+replace aguafuente_ch = 2 if iv7==1 & iv6==3
+replace aguafuente_ch = 10 if iv7>1
+
+*label var aguafuente_ch "=1 si es red de distribucion y llave privada"
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+*label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  0 if iv8==1
+replace sinbano_ch = 1 if iv9==3
+replace sinbano_ch = 2 if iv8==2
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+replace bano_ch=6 if iv8==1
+replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
+*Se asocia fosa septica a camara septica o pozo ciego 
+replace bano_ch=2 if iv10<3 & iv10>=1   & iv11==2
+replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
+replace bano_ch=6 if iv10==3
+replace bano_ch=4 if iv11==4 
+
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+**#
 
 	************
 	*aguared_ch*
 	************
 
-	gen aguared_ch=.
-	replace aguared_ch=(iv7==1)
-	replace aguared_ch=. if iv7==9
+	gen aguared_ch=(iv7==1)
+replace aguared_ch=. if iv7==9
 
 
 	*************
 	*aguadist_ch*
 	*************
 
-	gen aguadist_ch=.
-	replace aguadist_ch=(iv6==1 | iv6==2)
-	replace aguadist_ch=. if iv6==9 | iv6==.
+	*gen aguadist_ch=.
+	*replace aguadist_ch=(iv6==1 | iv6==2)
+	*replace aguadist_ch=. if iv6==9 | iv6==.
 
 	*************
 	*aguamala_ch*
 	*************
 
-	gen aguamala_ch=(iv7==4)
-	replace aguamala_ch=. if iv7==9
+	*gen aguamala_ch=(iv7==4)
+	*replace aguamala_ch=. if iv7==9
 
 	*************
 	*aguamide_ch*
@@ -1109,9 +1268,9 @@ replace ypeoficial_ch=. if yoficial_ch==0
 	*bano_ch*
 	*********
 
-	gen bano_ch=0
-	replace bano_ch=1 if ii9!=4
- 	replace bano_ch=. if ii9==9 | ii9==0
+	*gen bano_ch=0
+	*replace bano_ch=1 if ii9!=4
+ 	*replace bano_ch=. if ii9==9 | ii9==0
 
 
 	***********
@@ -1307,25 +1466,27 @@ replace ypeoficial_ch=. if yoficial_ch==0
 	*********************
     ***aguamejorada_ch***
     *********************
-	gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
-	replace aguamejorada_ch = 0 if iv7 == 4
+	*gen  aguamejorada_ch = 1 if iv7 == 1  | iv7 ==2 | iv7 ==3 //No se utiliza la pregunta de ubicación del grifo porque no se detallan las fuentes de agua
+	*replace aguamejorada_ch = 0 if iv7 == 4
 		
 	*********************
     ***banomejorado_ch***
     *********************
-   gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
-   replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
+   *gen  banomejorado_ch = 1 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & ii9 == 1)
+   *replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 	
 	
 	
 	gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 | aglomera==19 | aglomera==23 | aglomera==26 | aglomera==30 | aglomera==26 | aglomera==30 | aglomera==13 | aglomera==10 | aglomera==4| aglomera==29)
+	
+	
 	
 
 /************************************************************************************************************
 * 3. Creación ¤e nuevas variables de SS and LMK a incorporar en Armonizadas
 ************************************************************************************************************/
 
-/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_01_18.pdf pÃ¡gina 10. 
+/* https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_02_2082FA92E916.pdf pÃ¡gina 5-6. 
 calculo: Canasta BÃ¡sica Total promedio del hogar pobre/TamaÃ±o promedio del hogar pobre en adulto equivalente,
 Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio del hogar indigente en adulto equivalente */ 
 
@@ -1337,7 +1498,7 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 *lp_ci***
 *********
 capture drop lp_ci
-gen lp_ci =50854/4.10
+gen lp_ci =50854/3.28
 
 label var lp_ci "Linea de pobreza oficial del pais"
 
@@ -1345,7 +1506,7 @@ label var lp_ci "Linea de pobreza oficial del pais"
 *lpe_ci***
 *********
 
-gen lpe_ci =21572/4.17
+gen lpe_ci =21572/3.35
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 ****************
@@ -1589,6 +1750,7 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci mi
 /*Homologar nombre del identificador de ocupaciones (isco, ciuo, etc.) y dejarlo en base armonizada 
 para anÃ¡lisis de trends (en el marco de estudios sobre el futuro del trabajo)*/
 rename pp04d_cod codocupa
+rename pp04b_cod codindustria
 
 compress
 

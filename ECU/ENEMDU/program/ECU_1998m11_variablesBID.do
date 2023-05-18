@@ -1207,34 +1207,82 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*El año 1998 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
 	
 	****************
-	***aguared_ch***
-	****************
-	gen aguared_ch=.
-	label var aguared_ch "Acceso a fuente de agua por red"	
-	
+***aguared_ch***
+****************
+gen aguared_ch =.
+label var aguared_ch "Acceso a fuente de agua por red"
 
-	*****************
-	***aguadist_ch***
-	*****************
-	gen aguadist_ch=.
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = .
 
-	*****************
-	***aguamala_ch***
-	*****************
-	
-	gen aguamala_ch=.
-	label var aguamala_ch "Agua unimproved según MDG" 
-	
-	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = .
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch =.
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=.
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
 
 	************
 	***luz_ch***
@@ -1254,19 +1302,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	
 	gen combust_ch=.
 	label var combust_ch "Principal combustible gas o electricidad"	
-	
-	*************
-	***bano_ch***
-	*************
-	
-	gen bano_ch=.
-	label var bano_ch "El hogar tiene servicio sanitario"	
-	
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 	*************
 	***des1_ch***
@@ -1317,18 +1352,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
-	 	
-	 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-    *********************
-    ***aguamejorada_ch***
-    *********************
-    g       aguamejorada_ch = .
-		
-    *********************
-    ***banomejorado_ch***
-    *********************
-    g       banomejorado_ch = .
 	
 	*************
 	***dorm_ch***

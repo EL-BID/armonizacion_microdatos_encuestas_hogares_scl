@@ -1223,17 +1223,74 @@ Son todos los centros educativos que pertenecen a una Congregación Religiosa.
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-gen aguared_ch=(SERVAGUA==1 | SERVAGUA==2)
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (SERVAGUA==1 | SERVAGUA==2)
+replace aguared_ch=0 if (SERVAGUA==3 | SERVAGUA==4)
+label var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguadist_ch=1 if SERVAGUA==1
-replace aguadist_ch=2 if SERVAGUA==2
-replace aguadist_ch=3 if ABASAGUA>=1 & ABASAGUA<=8
+****************
+***aguadist_ch***
+****************
+gen aguadist_ch=.
 
-gen aguamala_ch=.
+replace aguadist_ch = 1 if SERVAGUA ==1 | ABASAGUA ==3 | ABASAGUA == 8
+
+replace aguadist_ch = 2 if SERVAGUA == 2
+
+replace aguadist_ch = 3 if (SERVAGUA == 3|SERVAGUA==4) & (ABASAGUA == 2 | ABASAGUA == 1)
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
+label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
+label val aguadist_ch aguadist_ch
+
+****************
+***aguafconsumo_ch***
+****************
+gen aguafconsumo_ch = .
+
+******************
+***aguafuente_ch**
+******************
+gen aguafuente_ch = 1 if SERVAGUA==1|SERVAGUA==2
+replace aguafuente_ch = 2 if ABASAGUA==1
+replace aguafuente_ch = 4 if ABASAGUA==4
+replace aguafuente_ch = 5 if ABASAGUA==8
+replace aguafuente_ch = 6 if ABASAGUA==3
+replace aguafuente_ch = 7 if ABASAGUA==2
+replace aguafuente_ch = 8 if ABASAGUA==5|ABASAGUA==6
+replace aguafuente_ch = 9 if ABASAGUA==7
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 /*NA*/
 
-gen aguamide_ch=.
-/*NA*/
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
 
 gen luz_ch=(SERVALUM==1 | SERVALUM==2)
 
@@ -1242,9 +1299,40 @@ gen luzmide_ch=.
 
 gen combust_ch=(SERVALUM>=1 & SERVALUM<=4)
 
-gen bano_ch=((SERVSANI>=1 & SERVSANI<=4) | (NOTIENE>=1 & NOTIENE<=3))
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch = .
+replace bano_ch = 1 if (SERVSANI==1|NOTIENE==1)
+replace bano_ch = 2 if (SERVSANI==2|NOTIENE==2)
+replace bano_ch = 3 if (SERVSANI==4)
+replace bano_ch = 6 if (SERVSANI==3|NOTIENE==3)
+replace bano_ch = 0 if (SERVSANI==5)
 
-gen banoex_ch=(NOTIENE>=1 & NOTIENE<=3)
+*****************
+*banoex_ch         *  Altered
+*****************
+gen banoex_ch=(SERVSANI>=1 & SERVSANI<=4)
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if SERVSANI!=5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch=9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 * MGR Jul, 2015: variable había sido generada como missing, construyo variable de la misma manera que los otros años
 gen des1_ch=.
@@ -1271,19 +1359,6 @@ replace resid_ch=1 if BASURA==4 | BASURA==5
 replace resid_ch=2 if BASURA==6
 replace resid_ch=3 if BASURA==3 | BASURA==7
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (SERVAGUA >=1 & SERVAGUA <=2) | ABASAGUA == 1 | ABASAGUA == 4 | ABASAGUA == 8
-replace aguamejorada_ch = 0 if (SERVAGUA >=3 & SERVAGUA <=4) | ABASAGUA == 2 | ABASAGUA == 3 | (ABASAGUA >=5 & ABASAGUA <=7) | ABASAGUA == 9
-
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (SERVSANI >=1 & SERVSANI <=4)
-replace banomejorado_ch = 0 if  SERVBANO ==3 | SERVSANI ==5
 
 gen dorm_ch=NRODORM
 replace dorm_ch=. if NRODORM==9

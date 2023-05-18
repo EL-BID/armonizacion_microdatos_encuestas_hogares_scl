@@ -1582,17 +1582,75 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-gen aguared_ch=(r305b1_t==1 | r305b1_t==2)
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (r305b1_t==1 | r305b1_t==2)
+replace aguared_ch=0 if (r305b1_t==3 | r305b1_t==4)
+label var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguadist_ch=1 if r305b1_t==1
-replace aguadist_ch=2 if r305b1_t==2
-replace aguadist_ch=3 if r305c1_a>=1 & r305c1_a<=8
+****************
+***aguadist_ch***
+****************
 
-gen aguamala_ch= (r305c1_a>=6 & r305c1_a<=9)
-/*NA*/
+gen aguadist_ch=.
 
-gen aguamide_ch=.
-/*NA*/
+replace aguadist_ch = 1 if r305b1_t ==1 | r305c1_a ==3 | r305c1_a == 8
+
+replace aguadist_ch = 2 if r305b1_t == 2
+
+replace aguadist_ch = 3 if (r305b1_t == 3|r305b1_t==4) & (r305c1_a == 2 | r305c1_a == 1)
+
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
+label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
+label val aguadist_ch aguadist_ch
+
+****************
+***aguafconsumo_ch***
+****************
+gen aguafconsumo_ch = .
+
+******************
+***aguafuente_ch**
+******************
+gen aguafuente_ch = 1 if r305b1_t==1|r305b1_t==2
+replace aguafuente_ch = 2 if r305c1_a==1
+replace aguafuente_ch = 4 if r305c1_a==4
+replace aguafuente_ch = 5 if r305c1_a==8
+replace aguafuente_ch = 6 if r305c1_a==3
+replace aguafuente_ch = 7 if r305c1_a==2
+replace aguafuente_ch = 8 if r305c1_a==5|r305c1_a==6
+replace aguafuente_ch = 9 if r305c1_a==7
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
 
 gen luz_ch=(r305a1_a==1 | r305a1_a==2)
 
@@ -1601,9 +1659,42 @@ gen luzmide_ch=.
 
 gen combust_ch=(r305a1_a>=1 & r305a1_a<=4)
 
-gen bano_ch = ( r305i_sa>=1 & r305i_sa<=5) | (r305g_ti==1 | r305g_ti==2)
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch = .
+replace bano_ch = 1 if (r305i_sa==1|r305g_ti==1)
+replace bano_ch = 2 if (r305i_sa==2|r305g_ti==2)
+replace bano_ch = 3 if (r305i_sa==4|r305i_sa==5)
+replace bano_ch = 6 if (r305i_sa==3|r305g_ti==3)
+replace bano_ch = 0 if (r305i_sa==6)
 
-gen banoex_ch=(r305j_no>=1 & r305j_no<=3)
+*****************
+*banoex_ch         *  Altered
+*****************
+gen banoex_ch=(r305i_sa>=1 & r305i_sa<=5)
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if r305i_sa!=6
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch=.
+replace aguatrat_ch = 1 if r305k1_c==1|r305k1_c==2|r305k1_c==3|r305k1_c==5
+replace aguatrat_ch = 2 if r305k1_c==4
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 gen des1_ch=.
 replace des1_ch = 0 if r305i_sa==6
@@ -1630,19 +1721,6 @@ replace resid_ch=1 if r305n1_b==4 | r305n1_b==5
 replace resid_ch=2 if r305n1_b==6
 replace resid_ch=3 if r305n1_b==3 | r305n1_b==7
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (r305b1_t >=1 & r305b1_t <=2) | r305c1_a == 1 | r305c1_a == 4 | r305c1_a == 8
-replace aguamejorada_ch = 0 if (r305b1_t >=3 & r305b1_t <=4) | r305c1_a == 2 | r305c1_a == 3 | (r305c1_a >=5 & r305c1_a <=7) | r305c1_a == 9
-
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (r305i_sa>=1 & r305i_sa <=4)
-replace banomejorado_ch = 0 if  r305g_ti ==3 | r305i_sa ==5
 
 gen dorm_ch=r303b_do
 replace dorm_ch=. if r303b_do==9

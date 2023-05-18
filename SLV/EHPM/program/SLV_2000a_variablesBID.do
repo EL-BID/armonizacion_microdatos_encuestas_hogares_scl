@@ -611,7 +611,7 @@ replace firmapeq_ci=0 if tamest>=5 & tamest<99
 replace firmapeq_ci=. if categ==9
 replace firmapeq_ci=. if emp==0
 
-/* No se le pregunta a los empleados domesticos, en la codificación se les asignó cero
+/* No se le pregunta a los empleados domesticos, en la codificación se SERVSANIles asignó cero
 lo reeplazamos por missing*/
 */
 *****************
@@ -1470,18 +1470,71 @@ Son todos los centros educativos que pertenecen a una Congregación Religiosa.
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (r313==1 | r313==2)
+replace aguared_ch=0 if (r313==3 | r313==4)
+label var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguared_ch=(r313==1 | r313==2)
 
-gen aguadist_ch=1 if r313==1
-replace aguadist_ch=2 if r313==2
-replace aguadist_ch=3 if r313>=2 & r313<=9
+****************
+***aguadist_ch***
+****************
+gen aguadist_ch=.
+replace aguadist_ch = 1 if r313 ==1 | r313 ==6
+replace aguadist_ch = 2 if r313 == 2
+replace aguadist_ch = 3 if r313 == 3|r313==4|r313 == 5 | r313 == 8
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
+label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
+label val aguadist_ch aguadist_ch
 
-gen aguamala_ch=(r314==2)
-replace aguamala_ch=. if r314==9
+****************
+***aguafconsumo_ch***
+****************
+gen aguafconsumo_ch = .
 
-gen aguamide_ch=.
-/*NA*/
+******************
+***aguafuente_ch**
+******************
+gen aguafuente_ch = 1 if r313==1|r313==2
+replace aguafuente_ch = 2 if r313==4
+replace aguafuente_ch = 4 if r313==7
+replace aguafuente_ch = 6 if r313==6
+replace aguafuente_ch = 7 if r313==3
+replace aguafuente_ch = 8 if r313==8
+replace aguafuente_ch = 9 if r313==5|r313==9
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
 
 gen luz_ch=(r312==1 | r312==2)
 replace luz_ch=. if r312==9
@@ -1492,9 +1545,40 @@ gen luzmide_ch=.
 gen combust_ch=(r312>=1 & r312<=3)
 replace combust_ch=. if r312==9
 
-gen bano_ch=(r317>=1 & r317<=6)
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch = .
+replace bano_ch = 1 if r317==1|r317==4
+replace bano_ch = 2 if r317==2|r317==5
+replace bano_ch = 6 if r317==3|r317==6
+replace bano_ch = 0 if r317==7
 
+*****************
+*banoex_ch         *  Altered
+*****************
 gen banoex_ch=(r317>=4 & r317<=6)
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if r317!=7
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch=.
+replace aguatrat_ch = 1 if r315==1|r315==2|r315==3|r315==5|r315==6
+replace aguatrat_ch = 2 if r315==4
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 * MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
 gen des1_ch=.
@@ -1525,19 +1609,7 @@ replace resid_ch=1 if r324==4 | r324==5
 replace resid_ch=2 if r324==6
 replace resid_ch=3 if r324==3 | r324==7
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (r313 >=1 & r313 <=3) | r313 == 6 
-replace aguamejorada_ch = 0 if (r313 >=4 & r313 <=5) | (r313 >=7 & r313 <=9)
 
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (r317>=1 & r317 <=3)
-replace banomejorado_ch = 0 if (r317>=4 & r317 <=7)
 
 gen dorm_ch=r306
 

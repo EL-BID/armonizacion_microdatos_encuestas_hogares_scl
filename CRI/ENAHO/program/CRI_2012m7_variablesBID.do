@@ -334,8 +334,8 @@ gen afroind_ano_c=.
 	**************
 gen nodis = inlist(0,a7a, a7b)
 replace nodis=. if a7a>=.
-recode nodis 1=0 if inrange(a7a,1,7)
-recode nodis 1=0 if inrange(a7b,1,7)
+recode nodis 1=0 if inrange(a7a,1,5)
+recode nodis 1=0 if inrange(a7b,1,5)
 gen dis_ci = nodis
 recode dis_ci 0=1 1=0
 drop nodis

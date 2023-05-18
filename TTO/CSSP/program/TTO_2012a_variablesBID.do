@@ -1025,7 +1025,7 @@ label values edupub_ci edupub
 *  ACCEDE A AGUA POR RED *
 **************************
 gen aguared_ch=.
-label var tecnica_ci "Tiene acceso a agua por red"
+label var aguared_ch "Tiene acceso a agua por red"
 
 ***********************************
 *  UBICACION DE LA FUENTE DE AGUA *

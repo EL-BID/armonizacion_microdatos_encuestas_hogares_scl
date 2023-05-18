@@ -411,9 +411,9 @@ gen afroind_ano_c=2010
 	***dis_ci***
 	**************
 gen dis_ci= disc1
-replace dis_ci="." if inlist(disc1,"&","7")
+replace dis_ci="." if inlist(disc1,"&","6","7")
 destring dis_ci, replace			
-recode  dis_ci (8 = 0) (1/6=1)
+recode  dis_ci (8 = 0) (1/5=1)
 
 	*************
 	***dis_ch***
@@ -1269,38 +1269,122 @@ label var edupub_ci "Personas que asisten a centros de ensenanza publicos"
 
 drop nivel_ed grado_ed
 
-******************************************************************************
+*******************************
 *	INFRAESTRUCTURE VARIABLES 
-******************************************************************************
+*******************************
 
-******************************
-*	aguared_ch
-******************************
+************
+*aguared_ch*
+************
 destring disp_agua , replace
 gen aguared_ch=.
 replace aguared_ch=1 if disp_agua ==1 | disp_agua ==2
 replace aguared_ch=0 if disp_agua >=3 & disp_agua <=6
 label var aguared_ch "Acceso a una fuente de agua por red"
 
-******************************
-*	aguadist_ch
-******************************
-gen aguadist_ch=.
-replace aguadist_ch= 1 if disp_agua ==1
-replace aguadist_ch= 2 if disp_agua ==2
-replace aguadist_ch= 3 if disp_agua ==4 | disp_agua ==6
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if (disp_agua==1 | disp_agua==2)
+replace aguafuente_ch = 2 if disp_agua==3
+replace aguafuente_ch = 5 if disp_agua==4
+replace aguafuente_ch = 9 if disp_agua==5
+replace aguafuente_ch = 6 if disp_agua==6
+replace aguafuente_ch = 10 if disp_agua==7 
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch= 1 if disp_agua==1
+replace aguadist_ch= 2 if disp_agua==2
+replace aguadist_ch= 3 if disp_agua ==3
 label var aguadist_ch "Ubicacion de la principal fuente de agua"
 
-******************************
-*	aguamala_ch
-******************************
-gen aguamala_ch=.
-*NA
-******************************
-*	aguamide_ch
-******************************
+
+**************
+*aguadisp1_ch*
+**************
+destring dotac_agua, replace
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+destring dotac_agua, replace
+gen aguadisp2_ch = .
+replace aguadisp2_ch = 1 if dotac_agua>1
+replace aguadisp2_ch = 3 if dotac_agua==1
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
-*NA
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+destring excusado, replace
+destring drenaje, replace
+destring sanit_agua, replace
+gen bano_ch=.
+replace bano_ch=0 if excusado==2
+replace bano_ch=1 if drenaje==1 & excusado==1 
+replace bano_ch=2 if drenaje==2 & excusado==1 
+replace bano_ch=4 if (drenaje==4 | drenaje==3) & excusado==1
+replace bano_ch=6 if drenaje==5 & excusado==1 & sanit_agua== 3
+
+***************
+***banoex_ch***
+***************
+destring uso_compar, replace
+gen banoex_ch=.
+replace banoex_ch=1 if uso_compar==2
+replace banoex_ch=0 if uso_compar==1
+label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if excusado == 1
+replace sinbano_ch = 1 if excusado == 2 & drenaje <=4
+replace sinbano_ch = 3 if excusado == 2 & drenaje ==5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
 ******************************
 *	luz_ch
 ******************************
@@ -1323,23 +1407,6 @@ replace combust_ch=1 if combustible==3 | combustible==4 | combustible==5
 replace combust_ch=0 if combustible==1 | combustible ==2 | combustible==6
 label var combust_ch "Principal combustible usado es gas o electric"
 
-******************************
-*	bano_ch
-******************************
-destring excusado, replace 
-gen bano_ch=.
-replace bano_ch=1 if excusado==1
-replace bano_ch=0 if excusado==2
-label var bano_ch "Hogar con algun sc higienico (inodoro o letrina)"
-
-******************************
-*	banoex_ch
-******************************
-destring  uso_com, replace
-gen banoex_ch=.
-replace banoex_ch=0 if uso_compar==1
-replace banoex_ch=1 if uso_compar==2
-label var banoex_ch "Sc hig con uso exclusivo del hogar"
 
 ******************************
 *	des1_ch
@@ -1452,20 +1519,6 @@ replace resid_ch=3 if eli_ba==8
 7 la tiran en la barraca o grieta?
 8 la tiran al rio, lago o mar?
 */
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (disp_agua  >=1 &  disp_agua <=3) 
-replace aguamejorada_ch = 0 if (disp_agua  >=4 &  disp_agua <=6)
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (excusado   ==1  & (drenaje >=1 &  drenaje<=2) & uso_compar == 2)
-replace banomejorado_ch = 0 if (excusado   ==1  & (drenaje >=1 &  drenaje<=2) & uso_compar == 1) | excusado   ==2 | (excusado  ==1  & (drenaje >=3 &  drenaje<=5))
 
 
 ******************************
@@ -1763,7 +1816,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
@@ -1776,30 +1829,5 @@ saveold "`base_out'", replace
 
 
 log close
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

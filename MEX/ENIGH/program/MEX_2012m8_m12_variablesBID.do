@@ -413,9 +413,9 @@ gen afroind_ano_c=2010
 	***dis_ci***
 	**************
 gen dis_ci= disc1
-replace dis_ci="." if inlist(disc1,"&","7")
+replace dis_ci="." if inlist(disc1,"&","6","7")
 destring dis_ci, replace			
-recode  dis_ci (8 = 0) (1/6=1)
+recode  dis_ci (8 = 0) (1/5=1)
 
 	*************
 	***dis_ch***
@@ -4382,6 +4382,41 @@ lab val ptmc_ch ptmc_ch
 
 lab def pnc_ci 1 "Beneficiario PNC" 0 "No beneficiario PNC"
 lab val pnc_ci pnc_ci
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

@@ -128,6 +128,21 @@ label variable factor_ch "Factor de expansion del hogar"
 
 
 ***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+
+***************
 ****idh_ch*****
 **************
 
@@ -1615,17 +1630,10 @@ replace resid_ch=3 if r324==3 | r324==7
 
 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (r313 >=1 & r313 <=3) | r313 == 6 
-replace aguamejorada_ch = 0 if (r313 >=4 & r313 <=5) | (r313 >=7 & r313 <=9)
 
 *********************
 ***banomejorado_ch***
 *********************
-g       banomejorado_ch = 1 if (r317>=1 & r317 <=3)
-replace banomejorado_ch = 0 if (r317>=4 & r317 <=7) 
 
 gen dorm_ch=r306
 replace dorm_ch=. if r306==99

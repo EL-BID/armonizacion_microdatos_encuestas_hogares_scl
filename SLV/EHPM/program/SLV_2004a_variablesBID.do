@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -126,6 +126,22 @@ label value ine01 ine01
 
 gen factor_ch= fac01 
 label variable factor_ch "Factor de expansion del hogar"
+
+
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=estrato
+label variable upm_ci "Estrato"
+
 
 
 ***************

@@ -131,6 +131,22 @@ label variable factor_ch "Factor de expansion del hogar"
 
 
 ***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=estrato
+label variable estrato_ci "Estrato"
+
+
+
+***************
 ****idh_ch*****
 **************
 

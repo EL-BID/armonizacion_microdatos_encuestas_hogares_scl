@@ -92,6 +92,21 @@ label variable idh_ch "ID del hogar"
 gen idp_ci=nrorden
 label variable idp_ci "ID de la persona en el hogar"
 
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+
 **********
 ***zona***
 **********
@@ -796,7 +811,7 @@ gen ynlnm_ci=.
 *gen remesas_ci=. /*NA, esta variable aparece recién en 1998*/
 *Modificación Mayra Sáenz - Septiembre 2014
 *No se puede identificar si las remesas son mensuales
-g remesas_ci= ingrem
+g remesas_ci= .
 
 ************************
 *** HOUSEHOLD INCOME ***

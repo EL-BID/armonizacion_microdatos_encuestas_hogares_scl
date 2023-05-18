@@ -123,6 +123,21 @@ label variable idh_ch "ID del hogar"
 gen idp_ci=nrorden
 label variable idp_ci "ID de la persona en el hogar"
 
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+
 **********
 ***zona***
 **********

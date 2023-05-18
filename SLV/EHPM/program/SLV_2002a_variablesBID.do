@@ -127,6 +127,21 @@ label value depto depto
 gen factor_ch=factori
 label variable factor_ch "Factor de expansion del hogar"
 
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+
 
 ***************
 ****idh_ch*****

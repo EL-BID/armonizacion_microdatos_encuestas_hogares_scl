@@ -1206,7 +1206,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	
 	*El año 1998 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
 	
-	****************
+****************
 ***aguared_ch***
 ****************
 gen aguared_ch =.

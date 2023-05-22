@@ -1366,7 +1366,7 @@ replace bano_ch=0 if P5020==6
 replace bano_ch=1 if P5020==1
 replace bano_ch=2 if P5020==2
 replace bano_ch=4 if P5020==5
-replace bano_ch=6 if P5020==3 | p5020 ==4
+replace bano_ch=6 if P5020==3 | P5020 ==4
 
 ***************
 ***banoex_ch***
@@ -1709,6 +1709,11 @@ vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
 compress
 
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr(`"`longlabel'"',1,79)
+label var `i' `"`shortlabel'"'
+}
 
 saveold "`base_out'", replace
 

@@ -288,26 +288,60 @@ label value region_BID_c region_BID_c
 *******************************************************				
 * Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
+
+/* q1_07 Options
+
+Creole/ Afrosurinamese
+East Indian
+Maroon
+Amerindian/ Indigenous
+Javanese
+Chinese
+White
+Mixed
+Other
+
+*/ 
 			
 	***************
    *** afroind_ci ***
 	***************
 gen afroind_ci=. 
+replace afroind_ci = 1 if (q1_07 == 4)
+replace afroind_ci = 2 if (q1_07 == 1 | q1_07 == 3 | q1_07 == 8)
+replace afroind_ci = 3 if (q1_07 == 2 | q1_07 == 5 | q1_07 == 6 | q1_07 == 7 | q1_07 == 9)
 
 	***************
    *** afroind_ch ***
 	***************
-gen afroind_ch=. 
+gen afroind_jefe=.
+replace afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe
 
 	*******************
    *** afroind_ano_c ***
 	*******************
-gen afroind_ano_c=.		
+gen afroind_ano_c = 2017		
 
 	*******************
 	*** dis_ci ***
 	*******************
-gen dis_ci=. 
+	
+	/*
+	
+	La pregunta no está de acuerdo con el Washington Group, entonces no debe de ser armonizada.
+	
+	q5_07a -  Speech
+	q5_07b - Sight
+	q5_07c - Hearing 
+	q5_07d - Physical
+	
+	*/
+	
+* gen dis_ci=0 
+* replace dis_ci = 1 if (q5_07a == 1 | q5_07b == 1 | q5_07c == 1 | q5_07d == 1)
 
 	*******************
 	*** dis_ch ***

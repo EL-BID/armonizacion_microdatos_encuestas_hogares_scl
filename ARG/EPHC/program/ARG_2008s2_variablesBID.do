@@ -1341,7 +1341,7 @@ gen aguafconsumo_ch = 0
 gen aguafuente_ch =.
 replace aguafuente_ch = 1 if iv7==1 & iv6<3
 replace aguafuente_ch = 2 if iv7==1 & iv6==3
-replace aguafuente_ch = 10 if iv7>1
+replace aguafuente_ch = 10 if iv7>1| iv7 ==0
 
 
 *************
@@ -1394,7 +1394,7 @@ replace bano_ch=6 if iv8==1
 replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
 replace bano_ch=2 if iv10<3 & iv10>=1   & iv11==2
 replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
-replace bano_ch=6 if iv10==3
+replace bano_ch=6 if iv10==3 | iv8 ==0
 replace bano_ch=4 if iv11==4
 
 ***************
@@ -1416,8 +1416,8 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch =  0 if iv8==1
-replace sinbano_ch = 1 if iv9==3
+replace sinbano_ch =  0 if iv8==1| iv8 ==0
+replace sinbano_ch = 1 if iv9==3 
 replace sinbano_ch = 2 if iv8==2
 
 *************

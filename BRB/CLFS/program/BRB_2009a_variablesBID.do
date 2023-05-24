@@ -1007,84 +1007,20 @@ g nrylmpri_ci=.
 g ylmnr_ch=.
 g nrylmpri_ch=.
 * Variables de vivienda
-****************
-***aguared_ch***
-****************
-generate aguared_ch =.
-
-
-*****************
-*aguafconsumo_ch*
-*****************
-gen aguafconsumo_ch = .
-
-
-*****************
-*aguafuente_ch*
-*****************
+gen aguared_ch=.
+gen aguafconsumo_ch = 0
 gen aguafuente_ch =.
-
-
-*************
-*aguadist_ch*
-*************
-gen aguadist_ch=.
-
-
-**************
-*aguadisp1_ch*
-**************
-gen aguadisp1_ch =.
-
-
-**************
-*aguadisp2_ch*
-**************
-gen aguadisp2_ch =.
-
-
-*************
-*aguamala_ch*  Altered
-*************
-gen aguamala_ch =.
-
-
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch =.
-
-*****************
-***aguamide_ch***
-*****************
-generate aguamide_ch = .
-
-
-*****************
-*bano_ch         *  Altered
-*****************
+gen aguadist_ch=0
+gen aguadisp1_ch = 9
+gen aguadisp2_ch = 9
+gen aguamala_ch = .
+gen aguamejorada_ch = .
+gen aguamide_ch = .
 gen bano_ch=.
-
-***************
-***banoex_ch***
-***************
-generate banoex_ch=.
-
-
-*****************
-*banomejorado_ch*  Altered
-*****************
+generate banoex_ch=9
 gen banomejorado_ch=.
-
-************
-*sinbano_ch*
-************
 gen sinbano_ch =.
-
-*************
-*aguatrat_ch*
-*************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 		
 g luz_ch=.

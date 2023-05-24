@@ -340,8 +340,7 @@ gen afroind_ano_c = 2017
 	
 	*/
 	
-* gen dis_ci=0 
-* replace dis_ci = 1 if (q5_07a == 1 | q5_07b == 1 | q5_07c == 1 | q5_07d == 1)
+ gen dis_ci=.
 
 	*******************
 	*** dis_ch ***

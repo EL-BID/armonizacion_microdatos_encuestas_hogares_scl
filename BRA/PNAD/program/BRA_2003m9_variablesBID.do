@@ -127,15 +127,15 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *****************
 *aguafconsumo_ch*
 *****************
-gen aguafconsumo_ch =.
+gen aguafconsumo_ch =0
 
 
 *****************
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if v0213 == 1
-replace aguafuente_ch = 2 if v0213 == 3 
+replace aguafuente_ch = 1 if v0212 == 2 | v0213 == 1
+replace aguafuente_ch = 10 if (v0212 == 4 |v0212 == 6|v0212 == 9)
 
 
 *************
@@ -143,7 +143,7 @@ replace aguafuente_ch = 2 if v0213 == 3
 *************
 gen aguadist_ch=.
 replace aguadist_ch= 1 if v0211==1
-replace aguadist_ch= 2 if (v0213==1|v0214==1)
+replace aguadist_ch= 2 if (v0213==1|v0214==2)
 replace aguadist_ch = 3 if (v0213 ==3 & v0214 ==4)
 
 

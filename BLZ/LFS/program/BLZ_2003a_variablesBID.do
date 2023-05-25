@@ -108,12 +108,13 @@ label var idp_ci "Identificador Individual dentro del Hogar"
 ************************************
 *  RELACION CON EL JEFE DE HOGAR   *
 ************************************
-gen relacion_ci=1 if relate2==1 | relate1==1
-replace relacion_ci=2 if relate2==2 | relate1==2
-replace relacion_ci=3 if relate2==3 | relate1==3
-replace relacion_ci=4 if relate2==4 | relate2==5 | relate2==6 | relate2==7 | relate1==4 | relate1==5 | relate1==6 | relate1==7
-replace relacion_ci=5 if relate2==8 | relate1==8
-replace relacion_ci=. if relate2==9 | relate1==9 /* No sabe */
+* David Cornejo: 25 de mayo, modificando de acuerdo a que tiene jefe de hgoar como opción
+gen relacion_ci=1 if relate2==1
+replace relacion_ci=2 if relate2==2
+replace relacion_ci=3 if relate2==3
+replace relacion_ci=4 if relate2==4 | relate2==5 | relate2==6 | relate2==7
+replace relacion_ci=5 if relate2==8
+replace relacion_ci=. if relate2==9 /* No sabe */
 label var relacion_ci "relación con el jefe de hogar"
 label define relacion 1"Jefe" 2"Cónguye, Esposo/a, Compañero/a" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio doméstico" 
 label values relacion_ci relacion

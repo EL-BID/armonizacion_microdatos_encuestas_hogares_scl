@@ -1244,7 +1244,7 @@ gen aguared_ch=.
 *****************
 *aguafconsumo_ch*
 *****************
-gen aguafconsumo_ch=.
+gen aguafconsumo_ch=0
 
 *****************
 *aguafuente_ch*
@@ -1254,17 +1254,17 @@ gen aguafuente_ch =.
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
+gen aguadist_ch=0
 
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch =.
+gen aguadisp1_ch =9
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch =.
+gen aguadisp2_ch =9
 
 *************
 *aguamala_ch*  Altered
@@ -1289,7 +1289,7 @@ gen bano_ch=.
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 
 *****************
 *banomejorado_ch*  Altered
@@ -1304,7 +1304,7 @@ gen sinbano_ch =.
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
+gen aguatrat_ch =9
 
 ************
 ***luz_ch***

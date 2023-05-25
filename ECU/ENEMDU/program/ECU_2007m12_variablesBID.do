@@ -1140,9 +1140,8 @@ replace aguafuente_ch = 1 if vi08==1 | vi08==2
 replace aguafuente_ch = 2 if vi08==3
 replace aguafuente_ch = 5 if vi08==8
 replace aguafuente_ch = 6 if vi08==5
-replace aguafuente_ch = 7 if vi08==4
 replace aguafuente_ch = 8 if vi08==7
-replace aguafuente_ch = 10 if (vi08==6|vi08==9)
+replace aguafuente_ch = 10 if (vi08==6|vi08==9|vi08==4)
 
 
 *************
@@ -1198,7 +1197,7 @@ replace bano_ch=6 if vi07==4
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *****************

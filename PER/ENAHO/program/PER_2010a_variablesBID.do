@@ -1619,7 +1619,7 @@ replace aguafuente_ch = 1 if (p110==1|p110==2)
 replace aguafuente_ch = 2 if p110==3
 replace aguafuente_ch = 6 if p110==4
 *replace aguafuente_ch = 8 if p110==8 
-replace aguafuente_ch = 10 if (p110==5 |p110==7| p110==6)
+replace aguafuente_ch = 10 if (p110==5 |p110==6 |p110==7 )
 
 **************
 *aguadisp1_ch*
@@ -1661,16 +1661,15 @@ gen aguamide_ch=.
 
 gen bano_ch=0
 replace bano_ch=1 if (p111==1|p111==2)
-replace bano_ch = 2 if p111==4
-replace bano_ch=3 if p111==3
-replace bano_ch=4 if (p111==6|p111==9)
-replace bano_ch = 6 if (p111 == 5 | p111 ==7)
+replace bano_ch = 2 if p111==3
+replace bano_ch=4 if (p111==5)
+replace bano_ch = 6 if (p111 == 4 |p111 == 5)
 
 
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 
 *****************
 *banomejorado_ch*  Altered
@@ -1684,7 +1683,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 0
-replace sinbano_ch =3 if p111 == 8
+replace sinbano_ch =3 if p111 == 6
 
 
 *************

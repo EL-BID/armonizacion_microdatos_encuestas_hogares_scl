@@ -329,7 +329,7 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 ****************
 * horaspri_ci  * 
 ****************
-gen horaspri_ci= y2_hrs
+gen horaspri_ci= y2_hrs/4
 replace horaspri_ci=. if emp_ci!=1
 label var horaspri_ci "Horas totales trabajadas en la actividad principal"
 

@@ -1920,55 +1920,51 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
+
 ****************
 ***aguared_ch***
 ****************
 gen aguared_ch = 0
-replace aguared_ch = 1 if (a6_16==1 | a6_16==2)
-replace aguared = . if a6_16==.
+replace aguared_ch = 1 if s6_16==1
+replace aguared = . if s6_16==.
 label var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if a6_16==1|a6_16==2
-replace aguafconsumo_ch = 2 if a6_16==3
-replace aguafconsumo_ch = 3 if a6_16==9
-replace aguafconsumo_ch = 4 if (a6_16==4 | a6_16==5)
-replace aguafconsumo_ch = 6 if a6_16==10
-replace aguafconsumo_ch = 7 if a6_16 == 7
-replace aguafconsumo_ch = 8 if a6_16==8
-replace aguafconsumo_ch = 9 if a6_16==6
-replace aguafconsumo_ch = 10 if a6_16== 11 
+replace aguafconsumo_ch = 1 if a6_16==1
+replace aguafconsumo_ch = 2 if a6_16==2
+replace aguafconsumo_ch = 4 if a6_16==4
+replace aguafconsumo_ch = 6 if a6_16==3
+replace aguafconsumo_ch = 8 if a6_16==7
+replace aguafconsumo_ch = 10 if a6_16== 6 |a6_16== 8 |a6_16==5
 
 *****************
 *aguafuente_ch*
 *****************
 gen aguafuente_ch = 0
-replace aguafuente_ch = 1 if a6_16==1|a6_16==2
-replace aguafuente_ch = 2 if a6_16==3
-replace aguafuente_ch = 3 if a6_16==9
-replace aguafuente_ch = 4 if (a6_16==4 | a6_16==5)
-replace aguafuente_ch = 6 if a6_16==10
-replace aguafuente_ch = 7 if a6_16 == 7
-replace aguafuente_ch = 8 if a6_16==8
-replace aguafuente_ch = 9 if a6_16==6
-replace aguafuente_ch = 10 if a6_16== 11 
-
+replace aguafuente_ch = 1 if a6_16==1
+replace aguafuente_ch = 2 if a6_16==2
+replace aguafuente_ch = 4 if a6_16==4
+replace aguafuente_ch = 6 if a6_16==3
+replace aguafuente_ch = 8 if a6_16==7
+replace aguafuente_ch = 10 if a6_16== 6 |a6_16== 8|a6_16==5
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch=1 if a6_16==1
-replace aguadist_ch=2 if a6_16==2
-replace aguadist_ch=3 if (a6_16==3)
+replace aguadist_ch=1 if a6_19==1
+replace aguadist_ch=2 if a6_19==2
+replace aguadist_ch=3 if a6_19==3
 
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch = 9 
+gen aguadisp1_ch = .
+replace aguadisp1 = 1 if a6_18 ==1
+replace aguadisp1 = 0 if a6_18 ==2
 
 
 **************
@@ -2003,13 +1999,11 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=6
-replace bano_ch=0 if a6_21==6 
-replace bano_ch=1 if a6_21==1 & a6_23==1
-replace bano_ch=2 if a6_21==1 & a6_23==2
-replace bano_ch=3 if ((a6_21==2 | a6_21 == 4) & a6_23!=4) | (a6_21==1 & a6_23 == 3)
-replace bano_ch=4 if (a6_21==1 |a6_21==2 |a6_21==3) & a6_23==4
-replace bano_ch=5 if a6_21 ==3 & a6_23!=4
-replace bano_ch=6 if a6_21 ==5 
+replace bano_ch=0 if a6_21==2 
+replace bano_ch=1 if a6_21==1 & a6_23 ==1
+replace bano_ch=2 if a6_21==1 & a6_23 ==2
+replace bano_ch=3 if a6_21==1 & a6_23 ==3
+replace bano_ch=4 if a6_21==1 & a6_23 ==4
 ***************
 ***banoex_ch***
 ***************
@@ -2029,14 +2023,15 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if a6_21!=6
-replace sinbano_ch = 2 if a6_21==6
+replace sinbano_ch = 0 if a6_21==1
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************
 *aguatrat_ch*
 *************
 gen aguatrat_ch =9
+
+
 
 /*
 a6_16:

@@ -1054,41 +1054,6 @@ label var edupub_ci "Asiste a un centro de ensenanza público"
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
 
-****************
-***aguared_ch***
-****************
-gen aguared_ch=(V4D==1)
-replace aguared_ch=. if V4D==.
-label var aguared_ch "Acceso a fuente de agua por red"
-
-
-*****************
-***aguadist_ch***
-*****************
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_ch
-
-
-*****************
-***aguamala_ch***
-*****************
-*gen aguamala_ch=(VA6==5 | VA6==6)
-*Y.L. cambio categoria para hacerla comparable con GEIH
-gen aguamala_ch=(VA6==5 | VA6==9)
-replace aguamala_ch=. if VA6==.
-label var aguamala_ch "Agua unimproved según MDG" 
-
-
-*****************
-***aguamide_ch***
-*****************
-
-gen aguamide_ch=.
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
-
 
 ************
 ***luz_ch***
@@ -1113,23 +1078,6 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
 gen combust_ch=0 if VA7!=.
 replace combust_ch=1 if  VA7==1 | VA7==3 | VA7==4
 label var combust_ch "Principal combustible gas o electricidad" 
-
-
-*************
-***bano_ch***
-*************
-gen bano_ch=1
-replace bano_ch=0 if VA3==6
-replace bano_ch=. if VA3==.
-label var bano_ch "El hogar tiene servicio sanitario"
-
-
-***************
-***banoex_ch***
-***************
-gen banoex_ch=0 if VA4!=.
-replace banoex_ch=1 if VA4==1
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************

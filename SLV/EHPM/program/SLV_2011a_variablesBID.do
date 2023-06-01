@@ -1056,10 +1056,7 @@ gen aguadisp1_ch =9
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 1 if r312h<=11 
-*replace aguadisp2_ch = 2 if  r312h>=12
-replace aguadisp2_ch = 3 if r312h ==24
-
+gen aguadisp2_ch = 9
 
 
 *************
@@ -1093,6 +1090,7 @@ gen bano_ch=.
 replace bano_ch=1 if (r319==1 | r319==3)
 replace bano_ch=2 if (r319==2 | r319==4)
 replace bano_ch=3 if ( r319==7 | r319==8  | r319==9  | r319==10)
+replace bano_ch=4 if (r317a ==1 | r317a ==2) &  (r324a == 3 |r324a == 4) 
 replace bano_ch=6 if (r319==5 | r319==6 )
 replace bano_ch=0 if r317a==4 |r317a==3 
 
@@ -1117,7 +1115,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 1 if r318==1
-replace sinbano_ch = 2 if r324a==4 & r318==2
+replace sinbano_ch = 2 if (r324a==4|r324a==3)& r318==2
 replace sinbano_ch = 0 if r317a!=4
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 

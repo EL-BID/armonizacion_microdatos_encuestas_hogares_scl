@@ -1573,6 +1573,7 @@ la var aguared_ch "Acceso a fuente de agua por red"
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if (r313==1 |  r313==2) & r314==1
 replace aguafconsumo_ch = 2 if (r313==4) & r314==1
+replace aguafconsumo_ch = 3 if r315 ==5
 replace aguafconsumo_ch= 6 if (r313==6) & r314==1
 replace aguafconsumo_ch= 7 if (r313==3) & r314==1
 replace aguafconsumo_ch = 8 if (r313==8) & r314==1
@@ -1641,15 +1642,14 @@ gen aguamide_ch = .
 gen bano_ch=.
 replace bano_ch=1 if (r317==1 | r317==4)
 replace bano_ch=2 if (r317==2 | r317==5)
-replace bano_ch=3 if ( r317==7)
 replace bano_ch=6 if (r317==3 | r317==6 )
-replace bano_ch=0 if r317==8 
+replace bano_ch=0 if r317==7
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=1 if r321==2
-replace banoex_ch=0 if r321!=2
+generate banoex_ch=1 if r317 == 1 |r317 == 2 |r317 == 3
+replace banoex_ch=0 if r317 == 4 |r317 == 5 |r317 == 6
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
@@ -1665,8 +1665,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 *sinbano_ch*
 ************
 gen sinbano_ch = 3
-replace sinbano_ch = 0 if r317==8
-replace sinbano_ch = 1 if r318==2
+replace sinbano_ch = 0 if r317!=7
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************

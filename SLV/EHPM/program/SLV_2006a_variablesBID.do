@@ -1032,6 +1032,7 @@ la var aguared_ch "Acceso a fuente de agua por red"
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if (r31301==1 |  r31301==2) & r314==1
 replace aguafconsumo_ch = 2 if (r313a1==2) & r314==1
+replace aguafconsumo_ch = 3 if r315 ==5
 replace aguafconsumo_ch = 5 if (r313a1==7) & r314==1
 replace aguafconsumo_ch= 6 if (r313a1==4) & r314==1
 replace aguafconsumo_ch= 7 if (r313a1==1) & r314==1
@@ -1068,9 +1069,7 @@ gen aguadisp1_ch =9
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 1 if r313a2<=11 
-*replace aguadisp2_ch = 2 if  r313a2>=12
-replace aguadisp2_ch = 3 if r313a2 ==24
+gen aguadisp2_ch = 9
 
 
 
@@ -1104,7 +1103,8 @@ gen aguamide_ch = .
 gen bano_ch=.
 replace bano_ch=1 if (r317==1 | r317==4)
 replace bano_ch=2 if (r317==2 | r317==5)
-replace bano_ch=3 if ( r317==7)
+replace bano_ch=3 if (r317==7)
+replace bano_ch=4 if (r317!=8 & (r318b==4 | r318b==5))
 replace bano_ch=6 if (r317==3 | r317==6 )
 replace bano_ch=0 if r317==8 
 
@@ -1129,8 +1129,8 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 0 if r317==8
-replace sinbano_ch = 1 if r318==2
-replace sinbano_ch = 2 if r318a==5 & r318==2
+replace sinbano_ch = 1 if r317!=8 
+replace sinbano_ch = 2 if r318a==5 & r317!=8 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************

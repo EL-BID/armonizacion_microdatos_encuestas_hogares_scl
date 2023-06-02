@@ -1125,7 +1125,7 @@ label variable edupi_ci "Primaria incompleta"
 ********************************************************************************************************************************
 ***EDUPC_CI: Personas que han completado la educacion primaria
 ********************************************************************************************************************************
-gen edupc_ci=a14>=16  
+gen edupc_ci=a14==16  | (a14==29 | a14==39)  
 replace edupc_ci=. if aedu_ci==. 
 label variable edupc_ci "Primaria completa"
 

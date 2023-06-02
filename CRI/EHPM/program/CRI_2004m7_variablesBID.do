@@ -1185,7 +1185,7 @@ replace aguafconsumo_ch = 1 if (v10==1 | v10==2) & abagua<=4
 replace aguafconsumo_ch = 2 if (v10==3) & abagua<=4
 replace aguafconsumo_ch = 5 if abagua==7
 replace aguafconsumo_ch = 8 if abagua==6
-replace aguafconsumo_ch = 10 if abagua==5
+replace aguafconsumo_ch = 10 if abagua==5| abagua==9 
 
 *****************
 *aguafuente_ch*
@@ -1196,7 +1196,7 @@ replace aguafuente_ch = 1 if (v10==1 | v10==2) & abagua<=4
 replace aguafuente_ch = 2 if (v10==3) & abagua<=4
 replace aguafuente_ch = 5 if abagua==7
 replace aguafuente_ch = 8 if abagua==6
-replace aguafuente_ch = 10 if abagua==5
+replace aguafuente_ch = 10 if abagua==5 | abagua==9 
 
 
 *************
@@ -1206,7 +1206,7 @@ gen aguadist_ch=.
 replace aguadist_ch=1 if v10==1
 replace aguadist_ch=2 if v10==2
 replace aguadist_ch=3 if v10==3  
-replace aguadist_ch=0 if v10==4
+replace aguadist_ch=0 if v10==4 | v10==9 
 label define aguadist_ch 1 "tubería dentro de la vivienda" 2 " tubería fuera de la vivienda pero dentro del lote o edificio" 3 "tubería fuera del lote o edificio"
 label var aguadist_ch "Ubicación de la principal fuente de agua"
 
@@ -1248,10 +1248,10 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if v13a==0 
-replace bano_ch=1 if v13a==1
-replace bano_ch=2 if v13a==2 | v13a==3
-replace bano_ch=6 if v13a==5 | v13a==4
+replace bano_ch=0 if servsani==5 
+replace bano_ch=1 if servsani==1
+replace bano_ch=2 if servsani==2 
+replace bano_ch=6 if servsani==3 | servsani==4|servsani==9
 ***************
 ***banoex_ch***
 ***************

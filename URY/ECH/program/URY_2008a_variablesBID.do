@@ -1667,6 +1667,8 @@ replace aedu_ci =. if (años_prim==. & años_cb==. & años_bc==. & años_sup==. 
 replace aedu_ci =. if e52_2 == 9
 replace aedu_ci = floor(aedu_ci)
 
+replace aedu_ci = 0 if e52_2 == 9 // Se agrega aquellos que estan comenzando el primer anio de primaria común.
+
 ** eliminamos las variables temporales 
 drop años_prim años_post cb_añostc bach_años bach_añostc sup_años sup_añostc años_cb años_bc años_sup
 

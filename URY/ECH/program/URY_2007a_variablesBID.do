@@ -2041,7 +2041,7 @@ by idh_ch: egen remesas_ch=sum(remesas_ci)if relacion_ci!=6
 **************
 
 gen aedu_ci = . 
-replace aedu_ci = 0 if e52_1 > 0 // 0 Anios cursados en preescolar.
+replace aedu_ci = 0 if e52_1 > 0  // 0 Anios cursados en preescolar
 
 * Nivel más alto alcanzado y aprobado.
 replace aedu_ci = e54_1_1 if e54_1_1 > 0 // Escuela primaria.
@@ -2066,8 +2066,8 @@ replace aedu_ci = e54_7_1 + 16 if e54_7_1 > 0 // Posgrado o doctorado.
 replace aedu_ci = e52_3 - 1 if e52_3 > 0 // Primaria Común.
 replace aedu_ci = 6 + e52_4 - 1 if e52_4 > 0 // Cliclo basico Liceo. 
 replace aedu_ci = 6 + e52_5 - 1 if e52_5 > 0 // Cliclo basico UTU.
-replace aedu_ci = 9 + e52_6 - 1 if e52_6 > 0 // Bachillerato Secundario.
-replace aedu_ci = 9 + e52_8 - 1 if e52_8 > 0 // Bachillerato Tecnológico.
+replace aedu_ci = 6 + e52_6 - 1 if e52_6 > 0 // Bachillerato Secundario.
+replace aedu_ci = 6 + e52_8 - 1 if e52_8 > 0 // Bachillerato Tecnológico.
 // Formación Profesional Básica (**).
 replace aedu_ci = 12 + e52_9 - 1  if e52_9 > 0 // Magisterio o profesorado.
 replace aedu_ci = 12 + e52_10 - 1 if e52_10 > 0 // Universidad o similar.

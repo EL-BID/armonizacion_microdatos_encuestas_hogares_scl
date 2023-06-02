@@ -970,7 +970,7 @@ gen aguafuente_ch = 1 if v8<=3 & v9<=2
 replace aguafuente_ch = 2 if v8<=3 & v9>2
 replace aguafuente_ch = 6 if v8==6
 replace aguafuente_ch = 8 if v8==5
-replace aguafuente_ch = 10 if (v8==7 | v8==8 | v8==4)
+replace aguafuente_ch = 10 if (v8==7 | v8==4)
 
 
 *************

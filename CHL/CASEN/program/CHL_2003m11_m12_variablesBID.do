@@ -159,7 +159,7 @@ gen aguafconsumo_ch = 0
 gen aguafuente_ch = 1 if v4<=3 & v5<=2
 replace aguafuente_ch = 2 if v4<=3 & v5>2
 replace aguafuente_ch = 8 if v4==5
-replace aguafuente_ch = 10 if (v4==6 | v4==8 | v4==4)
+replace aguafuente_ch = 10 if (v4==6 | v4==4)
 
 
 *************

@@ -1024,7 +1024,7 @@ gen aguafuente_ch = 1 if v18<=3 & v20<=2
 replace aguafuente_ch = 2 if v18<=3 & v20>2
 replace aguafuente_ch = 6 if v18==6
 replace aguafuente_ch = 8 if v18==5
-replace aguafuente_ch = 10 if (v18==7 | v18==8 | v18==4)
+replace aguafuente_ch = 10 if (v18==7 |v18==4)
 
 
 *************

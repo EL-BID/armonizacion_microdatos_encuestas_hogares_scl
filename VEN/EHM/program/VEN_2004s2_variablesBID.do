@@ -1563,13 +1563,14 @@ gen aguafuente_ch=.
 replace aguafuente_ch=1 if pv7==1
 replace aguafuente_ch=2 if pv7==2
 replace aguafuente_ch=6 if pv7==3
-replace aguafuente_ch= 10 if pv7==4
+replace aguafuente_ch= 10 if pv7==4 | pv7==-1
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-
+replace aguadist_ch=1 if pv7==1|pv7==3
+replace aguadist_ch=3 if pv7==2
 
 **************
 *aguadisp1_ch*
@@ -1617,7 +1618,7 @@ gen bano_ch=.
 replace bano_ch=0 if pv8==4
 replace bano_ch=1 if pv8==1
 replace bano_ch=2 if pv8==2
-replace bano_ch=6 if pv8==3
+replace bano_ch=6 if pv8==3|pv8==-1
 
 
 ***************

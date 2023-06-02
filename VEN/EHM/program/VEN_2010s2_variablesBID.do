@@ -1199,6 +1199,8 @@ replace aguafuente_ch= 10 if pv7==4
 *aguadist_ch*
 *************
 gen aguadist_ch=0
+replace aguadist_ch =1 if  pv7 ==1| pv7 ==3
+replace aguadist_ch =3 if  pv7 ==2
 
 
 **************

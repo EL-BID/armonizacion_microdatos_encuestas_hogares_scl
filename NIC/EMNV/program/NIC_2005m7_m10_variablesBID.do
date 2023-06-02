@@ -94,17 +94,116 @@ replace relacion_ci=6 if s2p2==10
 Variables de Infraestructura del Hogar
 **************************************/
 
-gen aguared_ch=(s1p20a==1 | s1p20a==2) /*Esta definido como acceso a agua de red!*/
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if (s1p20a==1| s1p20a==2)
+replace aguared_ch = 0 if s1p20a>2
+la var aguared_ch "Acceso a fuente de agua por red"
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
 
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = 1 if s1p20a==1 | s1p20a==2
+replace aguafuente_ch = 2 if s1p20a==3
+replace aguafuente_ch= 6 if s1p20a==7
+replace aguafuente_ch = 8 if s1p20a==6 | s1p20a==8
+replace aguafuente_ch =9 if s1p20a==9
+replace aguafuente_ch= 10 if s1p20a==4 | s1p20a==5 | s1p20a==10
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=0
-replace aguadist_ch=1 if s1p20a==1
-replace aguadist_ch=2 if s1p20a==2 & s1p24m<=100
-replace aguadist_ch=3 if s1p20a==2 & (s1p24m>100 & s1p24m!=.)
-replace aguadist_ch=3 if s1p20a>=3 & s1p20a<=10
+replace aguadist_ch= 1 if  s1p20a==1
+replace aguadist_ch= 2 if  s1p20a==2
+replace aguadist_ch= 3 if  s1p20a==3
 
-gen aguamala_ch=(s1p20a>=3 & s1p20a<=10)
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
 
-gen aguamide_ch=(s1p27==1)
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
+
+
+*********
+*bano_ch* 
+*********
+gen bano_ch=.
+replace bano_ch=0 if s1p32==6 
+replace bano_ch=1 if s1p32==3 
+replace bano_ch=2 if s1p32==4 
+replace bano_ch=3 if s1p32==2 
+replace bano_ch=4 if s1p32==5 
+replace bano_ch=6 if s1p32==1 
+
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if s1p32!=6
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
 
 gen luz_ch=(s1p36==1)
 
@@ -114,9 +213,7 @@ gen cocina_ch=(s1p41==1)
 
 gen combust_ch=(s1p42==2 | s1p42==3 | s1p42==5)
 
-gen bano_ch=(s1p32!=6) /*Esta definido como si posee servicio higienico: inodoro o letrina*/
 
-gen banoex_ch=.
 
 
 gen des1_ch=0
@@ -143,17 +240,7 @@ replace resid_ch=1 if s1p34==2 | s1p34==3 /*Quemada o enterrada*/
 replace resid_ch=2 if s1p34==4 /*Tirada*/
 replace resid_ch =3 if s1p34!=1 & s1p34!=2 & s1p34!=3 & s1p34!=4 /*"Otros: llevada al lugar"*/
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = .
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = .
+
 
 gen dorm_ch=s1p13
 
@@ -1033,7 +1120,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

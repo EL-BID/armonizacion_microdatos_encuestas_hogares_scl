@@ -1165,36 +1165,97 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 		**********************************
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
-	
-	****************
+		
+****************
 	***aguared_ch***
 	****************
 	
-	gen aguared_ch=(vi07==1 |vi07==2 | vi07==3 | vi07==4)
-	label var aguared_ch "Acceso a fuente de agua por red"	
-	
-	*****************
-	***aguadist_ch***
-	*****************
-	gen aguadist_ch=.	
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+gen aguared_ch =0
+replace aguared_ch=1 if vi07==1
+replace aguared_ch=. if vi07==.
+label var aguared_ch "Acceso a fuente de agua por red"
 
-	*****************
-	***aguamala_ch***
-	*****************
-	gen aguamala_ch=(vi07==7 | vi07==8)
-	replace aguamala_ch=. if vi08==.
-	label var aguamala_ch "Agua unimproved según MDG" 
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if vi07==1 | vi07 ==2
+replace aguafuente_ch = 2 if vi07==3
+replace aguafuente_ch = 5 if vi07==8
+replace aguafuente_ch = 6 if vi07==5
+replace aguafuente_ch = 8 if vi07==7
+replace aguafuente_ch = 10 if (vi07==4|vi07==6| vi07==9)
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
+
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7 
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 	
-	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if vi06==5
+replace bano_ch=1 if vi06==1
+replace bano_ch=2 if vi06==2
+replace bano_ch=3 if vi06==3 
+replace bano_ch=6 if vi06==4
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=.
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
 
 	************
 	***luz_ch***
@@ -1219,21 +1280,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	gen combust_ch=0
 	replace combust_ch=1 if  vi05==1 | vi05==3 
 	label var combust_ch "Principal combustible gas o electricidad" 
-	
-	
-	*************
-	***bano_ch***
-	*************
-	gen bano_ch=1
-	replace bano_ch=0 if vi06==5 
-	label var bano_ch "El hogar tiene servicio sanitario"
-	
-
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 	*************
 	***des1_ch***
@@ -1311,20 +1357,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
-	
-	 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-    *********************
-    ***aguamejorada_ch***
-    *********************
-    g       aguamejorada_ch = 1 if (vi07 >=1 & vi07 <=4) | vi07 ==6 | vi07 ==8
-	replace aguamejorada_ch = 0 if  vi07 ==5 | vi07 ==7 | vi07 ==9
-		
-    *********************
-    ***banomejorado_ch***
-    *********************
-    g       banomejorado_ch = 1 if (vi06 >=1 & vi06 <=4)
-	replace banomejorado_ch = 0 if  vi06 ==5 
 	
 	*************
 	***dorm_ch***
@@ -1470,7 +1502,7 @@ do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&Exter
 /*_____________________________________________________________________________________________________*/
 
 order region_BID_c region_c pais_c anio_c mes_c zona_c factor_ch	idh_ch	idp_ci	factor_ci sexo_ci edad_ci ///
-raza_idioma_ci  id_ind_ci id_afro_ci raza_ci  relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
+relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch ///
 clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch	nmenor1_ch	condocup_ci ///
 categoinac_ci nempleos_ci emp_ci antiguedad_ci	desemp_ci cesante_ci durades_ci	pea_ci desalent_ci subemp_ci ///
 tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci instcot_ci	afiliado_ci ///

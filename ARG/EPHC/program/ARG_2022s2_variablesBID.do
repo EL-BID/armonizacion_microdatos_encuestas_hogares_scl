@@ -649,6 +649,8 @@ replace antiguedad_ci= antiguedad4 if antiguedad4!=.
 **************************
 ***VARIABLES DE INGRESO***
 **************************
+
+destring ipcf itf p21, replace
 ***********
 *ylmpri_ci*
 ***********
@@ -794,6 +796,7 @@ label var yoficial_ch "Ingreso del hogar total generado por el país"
 gen ypeoficial_ch=ipcf
 label var ypeoficial_ch "Ingreso per cápita generado por el país"
 
+replace  ypeoficial_ch=subinstr(ypeoficial_ch,",",".",.)
 destring yoficial_ch ypeoficial_ch, replace
 replace ypeoficial_ch=. if yoficial_ch==0
 			
@@ -1291,13 +1294,13 @@ Canasta BÃ¡sica Alimentaria promedio del hogar indigente/TamaÃ±o promedio de
 /*
 capture drop lp_ci
 */
-gen lp_ci= 74059/3.29
+gen lp_ci= .
 label var lp_ci "Linea de pobreza oficial del pais"
 
 ********
 *lpe_ci*
 ********
-gen lpe_ci= 31834/3.29
+gen lpe_ci= .
 label var lpe_ci "Linea de indigencia oficial del pais"
 
 **************

@@ -1198,6 +1198,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 		**********************************
 	
 	*El año 1998 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
+
 	
 	****************
 ***aguared_ch***
@@ -1215,16 +1216,18 @@ gen aguafconsumo_ch = .
 *****************
 gen aguafuente_ch =.
 
+
 *************
 *aguadist_ch*
 *************
+
 gen aguadist_ch=.
+
 
 **************
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch = 9 
-
 
 **************
 *aguadisp2_ch*
@@ -1237,10 +1240,13 @@ gen aguadisp2_ch = 9
 *************
 gen aguamala_ch = .
 
+
 *****************
 *aguamejorada_ch*  Altered
 *****************
+
 gen aguamejorada_ch =.
+
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
@@ -1248,6 +1254,7 @@ gen aguamejorada_ch =.
 *****************
 gen aguamide_ch=.
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
 
 *****************
 *bano_ch         *  Altered
@@ -1257,18 +1264,23 @@ gen bano_ch=.
 ***************
 ***banoex_ch***
 ***************
+
 gen banoex_ch=9
+
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *****************
 *banomejorado_ch*  Altered
 *****************
+
 gen banomejorado_ch=.
+
 
 
 ************
 *sinbano_ch*
 ************
+
 gen sinbano_ch = .
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
@@ -1276,6 +1288,7 @@ gen sinbano_ch = .
 *aguatrat_ch*
 *************
 gen aguatrat_ch =9
+
 
 	************
 	***luz_ch***

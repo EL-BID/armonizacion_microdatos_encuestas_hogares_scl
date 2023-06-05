@@ -16,7 +16,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
-local ANO "2021"
+local ANO "2022"
 local ronda s2 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -32,12 +32,13 @@ cap log off
                  BASES DE DATOS DE ENCUESTA DE HOGARES - SOCIOMETRO 
 Pais: Argentina
 Encuesta: EPHC
-Round: IISem-2021
+Round: IISem-2022
 Autores: 
 Versión 2012: Yessenia Loaysa
 Alvaro Altamirano (LMK/SCL) - Email: alvaroalt@iadb.org, 24 de junio de 2020
 Cesar Lins (SCL/GDI) Marzo 2021
 Agustina Thailinger (SCL/EDU) Junio 2022
+Agustina Thailinger (SCL/EDU) Mayo  2023
 ****************************************************************************/
 
 /***************************************************************************
@@ -112,36 +113,36 @@ replace region_c=24 if aglomerado==29                          /*Tucuman*/
 label value region_c region_c
 label var region_c "division politico-administrativa, provincia"
    
-***********
-***ine01***
-***********
+*******
+*ine01*
+*******
 gen ine01=.
 replace ine01=6  if (aglomerado>=2 & aglomerado<=3) | (aglomerado>=33 & aglomerado<=34) | (aglomerado==38) /*Buenos Aires */
-replace ine01=10  if aglomerado==22                          /*Catamarca*/
-replace ine01=22  if aglomerado==8                           /*Chaco*/
-replace ine01=26  if aglomerado==9 | aglomerado==91          /*Chubut*/
-replace ine01=2  if aglomerado==32                           /*Ciudad de Buenos Aires*/
-replace ine01=14  if aglomerado==13 | aglomerado==36         /*Córdoba*/
-replace ine01=18  if aglomerado==12                          /*Corrientes*/
-replace ine01=30  if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
-replace ine01=34  if aglomerado==15                          /*Formosa*/
-replace ine01=38 if aglomerado==19                           /*Jujuy*/
-replace ine01=42 if aglomerado==30                           /*La pampa*/
-replace ine01=46 if aglomerado==25                           /*La Rioja*/
-replace ine01=50 if aglomerado==10                           /*Mendoza*/
-replace ine01=54 if aglomerado==7                            /*Misiones*/
-replace ine01=58 if aglomerado==17                           /*Neuquen*/
-replace ine01=62 if aglomerado==93                           /*Río Negro*/ 
-replace ine01=66 if aglomerado==23                           /*Salta*/
-replace ine01=70 if aglomerado==27                           /*San Juan*/ 
-replace ine01=74 if aglomerado==26                           /*San Luis*/
-replace ine01=78 if aglomerado==20                           /*Santa Cruz*/
-replace ine01=82 if aglomerado>=4 & aglomerado<=5            /*Santa Fe*/
-replace ine01=86 if aglomerado==18                           /*Santiago de Estero*/
-replace ine01=94 if aglomerado==31                           /*Tierra del Fuego*/
-replace ine01=90 if aglomerado==29                           /*Tucuman*/
+replace ine01=10 if aglomerado==22                          /*Catamarca*/
+replace ine01=22 if aglomerado==8                           /*Chaco*/
+replace ine01=26 if aglomerado==9 | aglomerado==91          /*Chubut*/
+replace ine01=2  if aglomerado==32                          /*Ciudad de Buenos Aires*/
+replace ine01=14 if aglomerado==13 | aglomerado==36         /*Córdoba*/
+replace ine01=18 if aglomerado==12                          /*Corrientes*/
+replace ine01=30 if aglomerado==6 | aglomerado==14          /*Entre Ríos*/
+replace ine01=34 if aglomerado==15                          /*Formosa*/
+replace ine01=38 if aglomerado==19                          /*Jujuy*/
+replace ine01=42 if aglomerado==30                          /*La pampa*/
+replace ine01=46 if aglomerado==25                          /*La Rioja*/
+replace ine01=50 if aglomerado==10                          /*Mendoza*/
+replace ine01=54 if aglomerado==7                           /*Misiones*/
+replace ine01=58 if aglomerado==17                          /*Neuquen*/
+replace ine01=62 if aglomerado==93                          /*Río Negro*/ 
+replace ine01=66 if aglomerado==23                          /*Salta*/
+replace ine01=70 if aglomerado==27                          /*San Juan*/ 
+replace ine01=74 if aglomerado==26                          /*San Luis*/
+replace ine01=78 if aglomerado==20                          /*Santa Cruz*/
+replace ine01=82 if aglomerado>=4 & aglomerado<=5           /*Santa Fe*/
+replace ine01=86 if aglomerado==18                          /*Santiago de Estero*/
+replace ine01=94 if aglomerado==31                          /*Tierra del Fuego*/
+replace ine01=90 if aglomerado==29                          /*Tucuman*/
    
-   label define ine01          ///
+    label define ine01         ///
 	6"Buenos Aires"            ///	
 	10"Catamarca"              ///
 	22"Chaco"                  /// 
@@ -214,7 +215,7 @@ gen str3 pais_c="ARG"
 ******
 *anio*
 ******
-gen anio_c=2021
+gen anio_c=2022
 
 **********
 *semestre*
@@ -691,8 +692,7 @@ gen ylnmotros_ci=.
 ********
 *ylm_ci*
 ********
-/***********
-Para crear el ingreso laboral anteriormente se sumaban los ingresos provenientes de trabajar como
+/*Para crear el ingreso laboral anteriormente se sumaban los ingresos provenientes de trabajar como
 asalariado, cuentapropista y patron. Pero en este caso son excluyentes y a pesar de que en la encuesta
 trimestral existe una variable para los ingresos de las demas ocupaciones (tot_p12) en la encuesta 
 semestral no aparece. No se que hacer con el monto de aguinaldo, bonificaciones no habituales y monto retrocativos*/
@@ -991,7 +991,6 @@ replace edupub_ci = 0 if ch11==2 & asiste_ci==1
 ***VARIABLES DE LA VIVIENDA***
 ******************************
 
-
 *************
 *aguadist_ch*
 *************
@@ -1006,9 +1005,9 @@ replace aguadist_ch= 3 if iv6==3
 *no se pregunta si es potable o para el consumo humano
 gen aguafconsumo_ch = 0
 
-*****************
+***************
 *aguafuente_ch*
-*****************
+***************
 *no se pregunta si es potable o para el consumo humano
 *se toma perforacion con bomba como pozo, mantial o otra sin clasificación clara
 gen aguafuente_ch =.
@@ -1045,7 +1044,6 @@ replace sinbano_ch = 2 if iv8==2
 gen aguatrat_ch = 9
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
-
 *************
 *aguamala_ch*  Altered
 *************
@@ -1061,10 +1059,9 @@ gen aguamejorada_ch = 2
 replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
 replace aguamejorada_ch = 1 if aguafuente_ch<=7
 
-
-*****************
-*bano_ch         *  Altered
-*****************
+*********
+*bano_ch*  Altered
+*********
 gen bano_ch=0
 replace bano_ch=6 if iv8==1
 replace bano_ch=1 if iv10<3 & iv10>=1  & iv11==1
@@ -1073,8 +1070,6 @@ replace bano_ch=3 if iv10<3 & iv10>=1   & iv11==3
 replace bano_ch=6 if iv10==3
 replace bano_ch=4 if iv11==4 
 
-
-
 *****************
 *banomejorado_ch*  Altered
 *****************
@@ -1082,14 +1077,11 @@ gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
-
 ************
 *aguared_ch*
 ************
 gen aguared_ch=(iv7==1)
 replace aguared_ch=. if iv7==9
-
-
 
 *************
 *aguamide_ch*
@@ -1113,7 +1105,6 @@ gen luzmide_ch=.
 gen combust_ch=0
 replace combust_ch=1 if ii8==1 | ii8==2 
 replace combust_ch=. if ii8==0 | ii8==9
-
 
 ***********
 *banoex_ch*
@@ -1283,11 +1274,6 @@ gen vivialqimp_ch=.
 *replace banomejorado_ch = 0 if (iv8 == 1 & (iv10 == 1 | iv10 == 2)  & (iv11==1 | iv11==2 | iv11==3) & (ii9 == 2| ii9==3)) | (iv8 == 1 & (iv10 == 1 | iv10 == 2 | iv10 == 3) & (iv11==4) & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | (iv8 == 1 & iv10 == 3 & (ii9 == 1 | ii9 == 2 | ii9 ==3)) | iv8 == 2
 	
 gen byte muestra_92=(aglomerado==32 | aglomera==33 | aglomera==6 | aglomera==9 | aglomera==19 | aglomera==23 | aglomera==26 | aglomera==30 | aglomera==26 | aglomera==30 | aglomera==13 | aglomera==10 | aglomera==4| aglomera==29)
-
-
-
-
-
 
 /************************************************************************************************************
 * 3. Creación de nuevas variables de SS and LMK a incorporar en Armonizadas
@@ -1460,7 +1446,7 @@ gen instcot_ci=.
 ****************************
 ***VARIABLES DE MIGRACION***
 ****************************
-* Variables incluidas por SCL/MIG Fernando Morales
+*Variables incluidas por SCL/MIG Fernando Morales
 
 *************
 *migrante_ci*
@@ -1552,7 +1538,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS ARG
 local ENCUESTA EPHC
-local ANO "2021"
+local ANO "2022"
 local ronda s2 
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -1562,6 +1548,3 @@ local base_out = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\data_arm\\`PAIS'_`ANO'`ro
 saveold "`base_out'", version(12) replace
 
 cap log close
-
-
-	

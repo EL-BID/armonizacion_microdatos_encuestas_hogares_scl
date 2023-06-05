@@ -1104,11 +1104,13 @@ gen vivi2_ch=(r301>=1 & r301<=2)
 ******************************
 *	viviprop_ch
 ******************************
+*Modificación David Cornejo - Febrero 2023
+* Modificación de ocupado para que incluya más opciones
 gen viviprop_ch=.
 replace viviprop_ch=0 if r308a==1
 replace viviprop_ch=1 if r308a==3
 replace viviprop_ch=2 if r308a==2
-replace viviprop_ch=3 if r308a>=6 & r308a<=9
+replace viviprop_ch=3 if r308a>=4 & r308a<=9
 label var viviprop_ch "Propiedad de la vivienda" 
 
 ******************************

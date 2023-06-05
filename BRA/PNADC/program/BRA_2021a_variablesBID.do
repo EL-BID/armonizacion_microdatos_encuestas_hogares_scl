@@ -1177,6 +1177,7 @@ label var repiteult_ci "Personas que han repetido el último año o grado"
 		**** VARIABLES DE LA VIVIENDA ****
 		**********************************
 
+		
 ****************
 ***aguared_ch***
 ****************
@@ -1187,7 +1188,7 @@ gen aguared_ch=.
 *aguafconsumo_ch*
 *****************
 
-gen aguafconsumo_ch=.
+gen aguafconsumo_ch=0
 
 
 *****************
@@ -1199,19 +1200,19 @@ gen aguafuente_ch =.
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
+gen aguadist_ch=0
 
 
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch =.
+gen aguadisp1_ch =9
 
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch =.
+gen aguadisp2_ch =9
 
 
 *************
@@ -1242,7 +1243,7 @@ gen bano_ch=.
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 
 
 *****************
@@ -1260,8 +1261,8 @@ gen sinbano_ch =.
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch =.
-
+gen aguatrat_ch =9
+		
 
 ************
 ***luz_ch***

@@ -87,6 +87,86 @@ gen region_c=int(ciudad/10000)
 	18 "Tungurahua" ///
 	89 "Amazonia" 
    label value region_c region_c
+
+
+   	***************
+	***  ine01  ***
+	***************
+	gen ine01=.
+	replace ine01=int(ciudad/10000)
+	
+	label define ine01 ///
+	1 "Azuay" ///
+	2 "Bolívar" ///
+	3 "Cañar" ///
+	4 "Carchi" /// 
+	5 "Cotopaxi" ///
+	6 "Chimborazo" ///
+	7 "El Oro" ///
+	8 "Esmeraldas" ///
+	9 "Guayas" ///
+	10 "Imbabura" ///
+	11 "Loja" ///
+	12 "Los Ríos" ///
+	13 "Manabí" ///
+	14 "Morona Santiago" ///
+	15 "Napo" ///
+	16 "Pastaza" ///
+	17 "Pichincha" ///
+	18 "Tungurahua" ///
+	19 "Zamora Chinchipe" ///
+	20 "Galápagos" ///
+	21 "Sucumbíos" ///
+	22 "Orellana" ///
+	23 "Santo Domingo de los Tsáchilas" ///
+    24 "Santa Elena" 
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+
+
+   	***************
+	***  ine02  ***
+	***************
+	gen ine02=.
+	replace ine02=int(ciudad/100)
+	
+	label define ine02 101 "Cuenca" 102 "Girón" 103 "Gualaceo" 104 "Nabón" 105 "Paute" 106 "Pucará" 107 "San Fernando" /*
+	*/ 108 "Santa Isabel" 109 "Sigsig" 110 "Oña" 111 "Chordeleg" 112 "El Pan" 113 "Sevilla De Oro" 114 "Guachapala" /*
+	*/ 115 "Camilo Ponce Enríquez" 201 "Guaranda" 202 "Chillanes" 203 "Chimbo" 204 "Echeandia" 205 "San Miguel" /*
+	*/ 206 "Caluma" 207 "Las Naves" 301 "Azoques" 302 "Biblian" 303 "Cañar" 304 "La Troncal" 305 "El Tambo" 306 "Deleg"/*
+	*/ 307 "Suscal" 401 "Tulcán" 402 "Bolívar" 403 "Espejo" 404 "Mira" 405 "Montúfar" 406 "San Pedro De Huaca" 501 "Latacunga" /*
+	*/ 502 "La Maná" 503 "Pangua" 504 "Pujilí" 505 "Salcedo" 506 "Saquisilí" 507 "Sigchos" 601 "Riobamba" /*
+	*/ 602 "Alausí" 603 "Colta" 604 "Chambo" 605 "Chunchi" 606 "Guamote" 607 "Guano" 608 "Pallatanga" 609 "Penípe" /*
+	*/ 610 "Cumandá" 701 "Machala" 702 "Arenillas" 703 "Atahualpa" 704 "Balsas" 705 "Chilla" 706 "El Guabo" /*
+	*/ 707 "Huaquillas" 708 "Marcabelí" 709 "Pasaje" 710 "Piñas" 711 "Portovelo" 712 "Santa Rosa" 713 "Zaruma" /*
+	*/ 714 "Las Lajas" 801 "Esmeraldas" 802 "Eloy Alfaro" 803 "Muisne" 804 "Quininde" 805 "San Lorenzo" 806 "Atacames" /*
+	*/ 807 "Ríoverde" 901 "Guayaquil" 902 "Alfredo Baquerizo Moreno" 903 "Balao" 904 "Balzar" 905 "Colimes" /*
+	*/ 906 "Daule" 907 "Durán" 908 "Empalme" 909 "El Triunfo" 910 "Milagro" 911 "Naranjal"	912 "Naranjito" /*
+	*/ 913 "Palestina" 914 "Pedro Carbo" 916 "Samborondón" 918 "Santa Lucia" 919 "Salitre" 920 "San Jacinto De Yaguachi" /*
+	*/ 921 "Playas" 922 "Simón Bolívar" 923 "Crnel. Marcelino Maridueña" 924 "Lomas De Sargentillo" 925 "Nobol" /*
+	*/ 927 "Gnral. Antonio Elizalde" 928 "Isidro Ayora" 1001 "Ibarra" 1002 "Antonio Ante" 1003 "Cotacahi" 1004 "Otavalo" /*
+	*/ 1005 "Pimampiro" 1006 "San Miguel De Urcuqui" 1101 "Loja" 1102 "Calvas" 1103 "Catamayo" 1104 "Célica"/*
+	*/ 1105 "Chaguarpamba" 1106 "Espíndola" 1107 "Gonzanamá" 1108 "Macará" 1109 "Paltas" 1110 "Puyango" 1111 "Saraguro" /*
+	*/ 1112 "Sozoranga" 1113 "Zapotillo" 1114 "Pindal" 1115 "Quilanga" 1116 "Olemdo" 1201 "Babahoyo" 1202 "Baba" /*
+	*/ 1203 "Montalvo" 1204 "Puebloviejo" 1205 "Quevedo" 1206 "Urdaneta" 1207 "Ventanas" 1208 "Vinces" 1209 "Palenque" /*
+	*/ 1210 "Buena Fé" 1211 "Valencia" 1212 "Mocache" 1213 "Quinsaloma" 1301 "Portoviejo" 1302 "Bolívar" 1303 "Chone" /*
+	*/ 1304 "El Carmen" 1305 "Flavio Alfaro" 1306 "Jipijapa" 1307 "Junín" 1308 "Manta" 1309 "Montecristi" 1310 "Paján" /*
+	*/ 1311 "Pichincha" 1312 "Rocafuerte" 1313 "Santa Ana" 1314 "Sucre" 1315 "Tosagua" 1316 "24 De Mayo" 1317 "Pedernales" /*
+	*/ 1318 "Olmedo" 1319 "Puerto López" 1320 "Jama" 1321 "Jaramijó" 1322 "San Vicente" 1401 "Morona" 1402 "Gualaquiza" /*
+	*/ 1403 "Limón Indanza" 1404 "Palora" 1405 "Santiago" 1406 "Sucúa" 1407 "Huamboya" 1408 "San Juan Bosco" 1409 "Taisha" /*
+	*/ 1410 "Logroño" 1411 "Pablo Sexto" 1412 "Tiwintza" 1501 "Tena" 1503 "Archidona" 1504 "El Chaco" 1507 "Quijos" /*
+	*/ 1509 "Carlos Julio Arrosemena Tola" 1601 "Pastaza" 1602 "Mera" 1603 "Santa Clara" 1604 "Arajuno" 1701 "Quito" /*
+	*/ 1702 "Cayambe" 1703 "Mejía" 1704 "Pedro Moncayo" 1705 "Rumiñahui" 1707 "San Miguel De Los Bancos" 1708 "Pedro Vicente Maldonado" /*
+	*/ 1709 "Puerto Quito" 1801 "Ambato" 1802 "Baños De Agua Santa" 1803 "Cevallos" 1804 "Mocha" 1805 "Patate" 1806 "Quero" /*
+	*/ 1807 "San Pedro De Pelileo" 1808 "Santiago De Pillaro" 1809 "Tisaleo" 1901 "Zamora" 1902 "Chinchipe" 1903 "Nangaritza" /*
+	*/ 1904 "Yacuambi" 1905 "Yantzaza" 1906 "El Pangui" 1907 "Centinela Del Cóndor" 1908 "Palanda" 1909 "Paquisha" 2001 "San Cristobal" /*
+	*/ 2002 "Isabela" 2003 "Santa Cruz" 2101 "Lago Agrio" 2102 "Gonzalo Pizarro" 2103 "Putumayo" 2104 "Shushufindi" 2105 "Sucumbios" /*
+	*/ 2106 "Cascales" 2107 "Cuyabeno" 2201 "Orellana" 2202 "Aguarico" 2203 "La Joya De Los Sachas" 2204 "Loreto" 2301 "Santo Domingo" /*
+	*/ 2302 "La Condordía" 2401 "Santa Elena" 2402 "La Libertad" 2403 "Salinas"
+	label value ine02 ine02
+	label var ine02 "division politico-administrativa, cantones"
+
+
    
 	***************
 	***factor_ch***
@@ -304,11 +384,24 @@ gen region_c=int(ciudad/10000)
 ************************
 *Condición de ocupación*
 ************************
+/*2014, 01 MLO cambio del limite de edad de condocup_ci a 5+
+*Ocupado*
+gen condocup_ci=1 if trabajo==1 | aunotra==1
+*Desocupado*
+replace condocup_ci=2 if (trabajo==2 | aunotra==2) & bustrama==1 
+*Inactivo*
+replace condocup_ci=3 if (condocup_ci ~=1 & condocup_ci ~=2)
+*No responde*
+*replace condocup_ci=4 if edad<=9
+replace condocup_ci=4 if edad<5
+*/
+*MGD-> el limite de la encuesta pasa a ser 10 anios;
+*ademas, se genera con las variables originales para corregir el desempleo oculto. 06/04/2014
 	generat condocup_ci=.
-	replace condocup_ci=1 if condact<=4
-	replace condocup_ci=2 if condact==5 | condact==6
-	replace condocup_ci=3 if condact==7
-	replace condocup_ci=4 if condact==8
+	replace condocup_ci=1 if trabajo==1 | actayuda<12 | aunotra==1 
+	replace condocup_ci=2 if (trabajo==2 | actayuda==12 | aunotra==2 ) & (bustrasa==1 | bustrama==1)
+	replace condocup_ci=3 if condocup_ci!=1 & condocup_ci!=2
+	replace condocup_ci=4 if edad_ci<10
 	label define condocup_ci 1 "ocupados" 2 "desocupados" 3 "inactivos" 4 "menor de PET"
 	label value condocup_ci condocup_ci
 	label var condocup_ci "Condicion de ocupacion utilizando definicion del pais"
@@ -353,10 +446,9 @@ gen tipopen_ci=.
 **************
 **ypen_ci*
 **************
-
-*A partir del anio 2000 la economía de Ecuador se dolarizó y se usa: gen ypen_ci=ingjub
-*Antes de 2000 se usa el tipo de cambio interbancario promedio compra del periodo: https://contenido.bce.fin.ec/documentos/PublicacionesNotas/Catalogo/IEMensual/m1783/m1783_45.htm
-
+* 2014, 01, modificacion MLO
+*gen ypen_ci=ingjub 
+* MGD 12/17/2015: faltaba dividir por el tipo de cambio
 gen ypen_ci=ingjub/2896 if ingjub>0 & ingjub!=. & ingjub!=9999999
 label var ypen_ci "Valor de la pension contributiva"
 
@@ -383,7 +475,8 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ***************
 *2014, 01 modificacion MLO
 *gen pension_ci=1 if ingjub!=.
-gen pension_ci=(ypen_ci>0 & ypen_ci!=.)
+gen pension_ci=1 if ingjub>0 & ingjub!=. & ingjub!=9999999
+recode pension_ci .=0
 label var pension_ci "1=Recibe pension contributiva"
 
 *********
@@ -422,7 +515,55 @@ gen pea_ci=0
 replace pea_ci=1 if emp_ci==1 |desemp_ci==1
 label var pea_ci "Población Económicamente Activa"
 
+/*
+	************
+	***emp_ci***
+	************
 
+	gen emp_ci= (condact>=0 & condact<=4)
+	label var emp_ci "Ocupado (empleado)"
+
+	****************
+	***desemp1_ci***
+	****************
+	
+	gen desemp1_ci=0 		
+	replace desemp1_ci=1 if (condact==5 | condact==6) & bustrasa==1
+	label var desemp1_ci "Desempleado que buscó empleo en el periodo de referencia"
+
+
+	****************
+	***desemp2_ci***
+	****************
+	gen desemp2_ci=0
+	replace desemp2_ci=1 if desemp1_ci==1 | (motnobus==7 | motnobus==8) 
+	label var desemp2_ci "desemp1_ci + personas que esperan respuesta a solicitud o temporada alta"
+
+	****************
+	***desemp3_ci***
+	**************** 
+	gen desemp3_ci=0
+	replace desemp3_ci =1 if desemp2_ci==1 |  bustrama==1
+	label var desemp3_ci "desemp2_ci + personas que buscaron antes del periodo de referencia"
+
+	*************
+	***pea1_ci***
+	*************
+	gen pea1_ci=(emp_ci==1 | desemp1_ci==1)
+	label var pea1_ci "Población Económicamente Activa con desemp1_ci"
+
+	*************
+	***pea2_ci***
+	*************
+	gen pea2_ci= (emp_ci==1 | desemp2_ci==1)
+	label var pea2_ci "Población Económicamente Activa con desemp2_ci"	
+
+	*************
+	***pea3_ci***
+	*************
+	gen pea3_ci=(emp_ci==1 | desemp3_ci==1)
+	label var pea3_ci "Población Económicamente Activa con desemp3_ci"
+*/
 	*****************
 	***desalent_ci***
 	*****************
@@ -449,6 +590,7 @@ label var pea_ci "Población Económicamente Activa"
 	***************
 	***subemp_ci***
 	***************
+	*Modificacion MGD 06/18/2014 solo horas de actividad principal.
 	gen subemp_ci=0
 	replace subemp_ci=1 if (hormas>=4 & hormas<=8) & horaspri_ci<=30 & emp_ci==1
 	label var subemp_ci "Personas en subempleo por horas"
@@ -456,6 +598,8 @@ label var pea_ci "Población Económicamente Activa"
 	*******************
 	***tiempoparc_ci***
 	*******************
+	
+	* MGR: Modifico serie en base a correcciones Laura Castrillo: se debe utilizar horaspri en lugar de horastot como había sido generada antes
 	gen tiempoparc_ci=((horaspri_ci>=1 & horaspri_ci<30) & ratmeh==3 & emp_ci==1)
 	replace tiempoparc_ci=. if emp_ci==0
 	label var tiempoparc_c "Personas que trabajan medio tiempo" 
@@ -473,7 +617,7 @@ label var pea_ci "Población Económicamente Activa"
 	label define categopri_ci 1"Patron" 2"Cuenta propia" 0"Otro"
 	label define categopri_ci 3"Empleado" 4" No remunerado" , add
 	label value categopri_ci categopri_ci
-	label variable categopri_ci "Categoria ocupacional en la ocupación principal'"
+	label variable categopri_ci "Categoria ocupacional"
 
 	******************
 	***categosec_ci***
@@ -488,15 +632,22 @@ label var pea_ci "Población Económicamente Activa"
 	label define categosec_ci 1"Patron" 2"Cuenta propia" 0"Otro"
 	label define categosec_ci 3"Empleado" 4" No remunerado" , add
 	label value categosec_ci categosec_ci
-	label variable categosec_ci "Categoria ocupacional en la ocupación secundaria"
+	label variable categosec_ci "Categoria ocupacional en la segunda actividad"
 
-	*****************
+		*****************
 	*tipocontrato_ci*
 	*****************
-	gen tipocontrato_ci=. /* Solo disponible para asalariados*/
+	/*
+	gen tipocontrato_ci=estabil
+	label var tipocontrato_ci "Tipo de contrato segun su duracion"
+	label define tipocontrato_ci 1 "nombramiento" 2 "Definitivo o indefinido" 3 "Temporal u obra cierta" 4"Otros"
+	label value tipocontrato_ci tipocontrato_ci
+	*/
+	* Segun la clasificacion de la encuesta. MGD 6/12/2014
+	generat tipocontrato_ci=. /* Solo disponible para asalariados*/
 	replace tipocontrato_ci=1 if (estabil>=1 & estabil<=2) & categopri_ci==3
-	replace tipocontrato_ci=2 if (estabil==3) & categopri_ci==3
-	replace tipocontrato_ci=3 if (estabil==4)  & categopri_ci==3
+	replace tipocontrato_ci=2 if (estabil==3)              & categopri_ci==3
+	replace tipocontrato_ci=3 if ((estabil==4) | tipocontrato_ci==.) & categopri_ci==3
 	label var tipocontrato_ci "Tipo de contrato segun su duracion en act principal"
 	label define tipocontrato_ci 1 "Permanente/indefinido" 2 "Temporal" 3 "Sin contrato/verbal" 
 	label value tipocontrato_ci tipocontrato_ci
@@ -511,22 +662,39 @@ label var pea_ci "Población Económicamente Activa"
 	***segsoc_ci***
 	***************
 	gen segsoc_ci=(iess==1) 
-	replace segsoc_ci=. if emp_ci!=1
+	replace segsoc_ci=. if emp_ci~=1
 	label var segsoc_ci "Personas que tienen seguridad social en PENSIONES por su trabajo"
 
 	*****************
 	***nempleos_ci***
 	*****************
+	
+	/*
+	*En 1995 se categoriza la variable número de trabajos como
+	numtrab:
+           3 ninguno
+           4 uno
+           5 más de uno
+
+    */
 	generat nempleos_ci=1 if numtrab==4
 	replace nempleos_ci=2 if numtrab==5
 	replace nempleos_ci=. if emp_ci!=1
 	label var nempleos_ci "Número de empleos" 
 	label define nempleos_ci 1 "Un empleo" 2 "Mas de un empleo"
 	label value nempleos_ci nempleos_ci
-
-	
+/*
 	*****************
 	***firmapeq_ci***
+	*****************
+	gen firmapeq_ci=.
+	replace firmapeq_ci=1 if (npertra>=1 & npertra<=5)
+	replace firmapeq_ci=0 if (npertra>=6 & npertra<99)| (pertrabn==2)
+	label var firmapeq_ci "Trabajadores informales"
+	label def firmapeq_ci 1"5 o menos trabajadores" 0"Mas de 5 trabajadores"
+	label val firmapeq_ci firmapeq_ci*/
+	*****************
+	***tamemp_ci***
 	*****************
 gen tamemp_ci=1 if npertra>=1 & npertra<=5
 label var  tamemp_ci "Tamaño de Empresa" 
@@ -550,7 +718,6 @@ label define categoinac_ci 1 "jubilados o pensionados" 2 "Estudiantes" 3 "Quehac
 *******************
 ***formal***
 *******************
-* Despues del anio 2000 se incorporan las variables de cotizacion (antes de 2007: p42f o p46f) y (desde de 2007: p44f) 
 gen formal=1 if cotizando_ci==1
 
 replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="BOL"   /* si se usa afiliado, se restringiendo a ocupados solamente*/
@@ -574,7 +741,7 @@ g formal_1=formal_ci
 	***spublico_ci***
 	*****************
 	gen spublico_ci=(catetrab==6 & emp_ci==1)
-	replace spublico_ci=. if emp_ci!=1
+	replace spublico_ci=. if emp_ci==.
 	label var spublico_ci "Personas que trabajan en el sector público"
 
 	**************
@@ -602,8 +769,8 @@ g formal_1=formal_ci
 	*************
 	***rama_ci***
 	*************
-	*Nota: se contruye la variable rama_ci siguiendo a CIUU revision2
-	*En el 2022 esta disponible la revisión 4, por lo tanto hay que revisar en cada anio si cambian los codigos con la rev3 o rev4 y hacer que coincidan con los grupos.
+	*Nota: se contruye la variable rama_ci siguiendo a CIUU revision2 
+	* Ultima actualizacion MGD 4/16/2014
 	gen rama_ci=.
 	replace rama_ci = 1 if (rama>=1110 & rama<=1302) & emp_ci==1
 	replace rama_ci = 2 if (rama>=2100 & rama<=2909) & emp_ci==1
@@ -750,7 +917,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	***ylnm_ci***
 	*************
 	gen ylnm_ci=.
-	label var ylnm_ci "Ingreso laboral no monetario total"  
+	label var ylnm_ci "Ingreso laboral NO monetario total"  
 
 	*************
 	***ynlm_ci***
@@ -922,13 +1089,13 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**************
 	***eduui_ci***
 	**************
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<16)
 	label variable eduui_ci "Superior incompleto"
 
 	***************
 	***eduuc_ci***
 	***************
-	gen byte eduuc_ci= (aedu_ci>=17)
+	gen byte eduuc_ci= (aedu_ci>=16)
 	label variable eduuc_ci "Superior completo"
 	
 	
@@ -1029,6 +1196,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*El año 1998 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
 	
 	****************
+
 	***aguared_ch***
 	****************
 	
@@ -1109,6 +1277,7 @@ gen banomejorado_ch= 2
 ************
 gen sinbano_ch = 3
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
 
 	************
 	***luz_ch***

@@ -1152,7 +1152,7 @@ replace bano_ch=6 if vi09==4
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *****************

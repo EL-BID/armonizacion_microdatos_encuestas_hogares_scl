@@ -1216,7 +1216,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *aguafconsumo_ch*
 *****************
 *La encuesta no hace este pregunta directamente
-gen aguafconsumo_ch =.
+gen aguafconsumo_ch =0
 
 *****************
 *aguafuente_ch*
@@ -1244,7 +1244,7 @@ gen aguadist_ch=.
 *si el agua llega a una habitacion esta dentro de la casa
 replace aguadist_ch= 1 if v0211==1
 *si el agua llega al inmueble pero no llega dentro de la casa llega al terreno, o si la fuente de agua esta en el terreno
-replace aguadist_ch= 2 if (v0213==1|v0214==1)
+replace aguadist_ch= 2 if (v0213==1|v0214==2)
 replace aguadist_ch = 3 if (v0213 ==3 & v0214 ==4)
 *la encuesta no pregunta por fuentes externas al terreno
 

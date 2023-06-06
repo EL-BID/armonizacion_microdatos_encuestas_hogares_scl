@@ -1190,7 +1190,7 @@ replace aguafconsumo_ch = 3 if p02b04==5
 replace aguafconsumo_ch = 5 if p02b03==7 & p02b04!=5
 replace aguafconsumo_ch = 6 if p02b03==6 & p02b04!=5
 replace aguafconsumo_ch = 8 if p02b03==5 & p02b04!=5
-replace aguafconsumo_ch = 10 if (p02b03==98 | p02b03==4) & p02b04!=5
+replace aguafconsumo_ch = 10 if (p02b03==98 | p02b03==8 |p02b03==4) & p02b04!=5
 
 
 *****************
@@ -1202,7 +1202,7 @@ replace aguafuente_ch = 2 if p02b03==3
 replace aguafuente_ch = 5 if p02b03==7
 replace aguafuente_ch= 6 if p02b03==6
 replace aguafuente_ch = 8 if p02b03==5
-replace aguafuente_ch= 10 if p02b03==98 | p02b03==4
+replace aguafuente_ch= 10 if p02b03==98 | p02b03==8| p02b03==4 
 
 *************
 *aguadist_ch*

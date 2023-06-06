@@ -1493,12 +1493,7 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *aguafconsumo_ch*
 *****************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch = 1 if (p02a05==1 | p02a05==2)
-replace aguafconsumo_ch = 2 if p02a05==3
-replace aguafconsumo_ch = 5 if p02a05==8
-replace aguafconsumo_ch = 6 if p02a05==5
-replace aguafconsumo_ch = 8 if p02a05==6
-replace aguafconsumo_ch = 10 if (p02a05==9 | p02a05==4 | p02a05==7)
+
 
 
 *****************
@@ -1510,7 +1505,7 @@ replace aguafuente_ch = 2 if p02a05==3
 replace aguafuente_ch = 5 if p02a05==8
 replace aguafuente_ch= 6 if p02a05==5
 replace aguafuente_ch = 8 if p02a05==6
-replace aguafuente_ch= 10 if p02a05==9 | p02a05==4 | p02a05==7
+replace aguafuente_ch= 10 if p02a05==98 | p02a05==4 | p02a05==7
 
 *************
 *aguadist_ch*
@@ -1519,7 +1514,7 @@ gen aguadist_ch=0
 replace aguadist_ch= 1 if  p02a05 ==1
 replace aguadist_ch= 2 if  p02a05 ==2
 replace aguadist_ch= 3 if  p02a05==3
-replace aguadist_ch= 0 if  p02a05>=4 & p02a05 <=9
+replace aguadist_ch= 0 if  p02a05>=4 & p02a05 <=98
 
 **************
 *aguadisp1_ch*

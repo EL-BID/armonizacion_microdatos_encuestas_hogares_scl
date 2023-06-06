@@ -1320,7 +1320,7 @@ replace aguafconsumo_ch = 6 if v10==12
 replace aguafconsumo_ch = 7 if v10==8
 replace aguafconsumo_ch = 8 if v10==13
 replace aguafconsumo_ch = 9 if v10==9 | v10==7
-replace aguafconsumo_ch = 10 if v10==14 
+replace aguafconsumo_ch = 10 if v10==14 | v10==99
 
 
 *****************
@@ -1331,9 +1331,8 @@ replace aguafuente_ch = 1 if (v06==4 | v06==1 | v06==2 |v06==3) & v11<=2
 replace aguafuente_ch = 2 if (v06==4 | v06==1 | v06==2 |v06==3) & v11>2
 replace aguafuente_ch= 4 if (v06==5 | v06==6)
 replace aguafuente_ch = 5 if v06==10
-replace aguafuente_ch = 6 if v06==11
 replace aguafuente_ch = 8 if v06==9
-replace aguafuente_ch = 10 if (v06==12 | v06==8 |v06==7)
+replace aguafuente_ch = 10 if (v06==11 | v06==8 |v06==7|v06==99)
 
 *************
 *aguadist_ch*
@@ -1392,7 +1391,7 @@ replace bano_ch=2 if v16==2
 replace bano_ch=3 if (v16==5 | v16==6)
 replace bano_ch=4 if v16==4
 replace bano_ch=5 if v16==7
-replace bano_ch=6 if (v16==8 | v16==3) 
+replace bano_ch=6 if (v16==8 | v16==3| v16==9) 
 
 ***************
 ***banoex_ch***

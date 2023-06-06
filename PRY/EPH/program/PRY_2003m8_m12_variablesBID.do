@@ -1298,8 +1298,8 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 ***aguared_ch***
 ****************
 generate aguared_ch =.
-replace aguared_ch = 1 if (v06==1 | v06==5)
-replace aguared_ch = 0 if (v06==2 | v06==3 | v06==4 | v06>5)
+replace aguared_ch = 1 if (v06==1 | v06==4)
+replace aguared_ch = 0 if (v06==2 | v06==3 | v06==5 | v06>5)
 la var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************
@@ -1313,20 +1313,21 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if ((v06==1 | v06==5) & v07<=3)
-replace aguafuente_ch = 2 if ((v06==1 | v06==5) & v07>3)
-replace aguafuente_ch= 4 if (v06==2 | v06==4)
-replace aguafuente_ch = 7 if v06==7
-replace aguafuente_ch = 8 if v06==6
-replace aguafuente_ch = 10 if v06==3
+replace aguafuente_ch = 1 if ((v06==1 | v06==4) & v07<=3)
+replace aguafuente_ch = 2 if ((v06==1 | v06==4) & (v07==4| v07==7))
+replace aguafuente_ch= 4 if (v06==3)
+replace aguafuente_ch = 6 if v07 == 6 & (v06==1 | v06==3 | v06==4)
+replace aguafuente_ch = 7 if ((v06==1 | v06==3 | v06==4) & v07==5)
+replace aguafuente_ch = 8 if v06==5
+replace aguafuente_ch = 10 if (v06==2 |v06==6 |v06==7) 
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if v07==2 | v07==3
-replace aguadist_ch= 2 if v07==1
-replace aguadist_ch= 3 if v07>3 
+replace aguadist_ch= 1 if v07==2 | v07==6
+replace aguadist_ch= 2 if v07==1 | v07==3
+replace aguadist_ch= 3 if v07==4 | v07==5
 
 **************
 *aguadisp1_ch*
@@ -1373,13 +1374,16 @@ destring v10, replace
 gen bano_ch=0
 replace bano_ch=1 if v10==1
 replace bano_ch=2 if v10==2
-replace bano_ch=3 if (v10==4)
-replace bano_ch=6 if v10==3 | v10==5
+replace bano_ch=3 if v10==3
+replace bano_ch=6 if v10==4| v10==5
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=9
+generate banoex_ch=.
+replace banoex_ch =1 if v10 == 1 |v10 == 2
+replace banoex_ch =0 if v10 == 3 |v10 == 4
+
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 

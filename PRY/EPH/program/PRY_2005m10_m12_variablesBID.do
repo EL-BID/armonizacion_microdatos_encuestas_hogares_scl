@@ -1384,19 +1384,20 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch =.
 replace aguafuente_ch = 1 if ((v06==1 | v06==5) & v08<=3)
-replace aguafuente_ch = 2 if ((v06==1 | v06==5) & v08>3)
+replace aguafuente_ch = 2 if ((v06==1 | v06==5) & (v08==4 |v08 == 7))
 replace aguafuente_ch= 4 if (v06==2 | v06==4)
-replace aguafuente_ch = 7 if v06==7
+replace aguafuente_ch = 6 if v08 == 6 & (v06==1 | v06==2 | v06==4 | v06==5)
+replace aguafuente_ch = 7 if ((v06==1 | v06==2 | v06==4 | v06==5) & v08==5)
 replace aguafuente_ch = 8 if v06==6
-replace aguafuente_ch = 10 if v06==3
+replace aguafuente_ch = 10 if (v06==3 |v06==7 |v06==8)
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if v08==2 | v08==3
-replace aguadist_ch= 2 if v08==1
-replace aguadist_ch= 3 if v08>3 
+replace aguadist_ch= 1 if v08==2 | v08==6
+replace aguadist_ch= 2 if v08==1 | v08==3
+replace aguadist_ch= 3 if v08==4 | v08==5
 
 **************
 *aguadisp1_ch*
@@ -1443,13 +1444,16 @@ destring v14, replace
 gen bano_ch=0
 replace bano_ch=1 if v14==1
 replace bano_ch=2 if v14==2
-replace bano_ch=3 if (v14==4)
-replace bano_ch=6 if v14==3 | v14==5
+replace bano_ch=3 if v14==3
+replace bano_ch=6 if v14==4| v14==5
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=9
+replace banoex_ch =1 if v13 == 1 |v13 == 2
+replace banoex_ch =0 if v13 == 3 |v13 == 4
+
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 

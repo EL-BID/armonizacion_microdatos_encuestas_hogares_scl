@@ -1349,8 +1349,7 @@ replace aguafuente_ch = 2 if (v06<=2 & v09>2) | v06==8
 replace aguafuente_ch = 6 if v06==6
 replace aguafuente_ch = 7 if v06==7
 replace aguafuente_ch = 8 if v06==5
-replace aguafuente_ch = 9 if v06==9
-replace aguafuente_ch = 10 if  v06==10 |v06==3 | v06==4
+replace aguafuente_ch = 10 if  v06==10 |v06==3 | v06==4|v06==9
 
 *************
 *aguadist_ch*
@@ -1371,9 +1370,9 @@ replace aguadisp1_ch = 0 if v07==2
 *aguadisp2_ch*
 **************
 gen aguadisp2_ch =.
-replace aguadisp2_ch = 1 if v08_2<=3 & v08_3<12
-replace aguadisp2_ch = 2 if v08_2>3 & v08_3>=12
-replace aguadisp2_ch = 3 if v07==1
+replace aguadisp2_ch = 1 if v08_2<=3 | v08_3<12
+replace aguadisp2_ch = 2 if (v08_2>3 & v08_2<7) & (v08_3>=12 & v08_3<24)
+replace aguadisp2_ch = 3 if v08_2==7 & v08_3 ==24
 
 *************
 *aguamala_ch*  Altered

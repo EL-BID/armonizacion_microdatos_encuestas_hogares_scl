@@ -1340,11 +1340,17 @@ replace aguadist_ch= 3 if v05e==3|v05e ==4
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch =9
+replace aguadisp1_ch = 1 if v05c == 1
+replace aguadisp1_ch = 0 if v05c == 2
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 9
+gen aguadisp2_ch =.
+replace aguadisp2_ch = 1 if v05d2<=3 | v05d3<12
+replace aguadisp2_ch = 2 if (v05d2>3 & v05d2<7) & (v05d3>=12 & v05d3<24)
+replace aguadisp2_ch = 3 if v05d2==7 & v05d3 ==24
+
 
 
 
@@ -1379,9 +1385,9 @@ gen bano_ch=.
 replace bano_ch=0 if v06a==2
 replace bano_ch=1 if v06b==1
 replace bano_ch=2 if v06b==2
-replace bano_ch=3 if ( v06b==6 | v06b==7)
+replace bano_ch=3 if (v06b==6 | v06b==7)
 replace bano_ch=4 if (v06b==3 | v06b==4)
-replace bano_ch=6 if v06b==8 | v06b==5 
+replace bano_ch=6 if  v06b==5 |v06b==8
 
 ***************
 ***banoex_ch***

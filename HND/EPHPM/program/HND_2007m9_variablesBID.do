@@ -1513,13 +1513,17 @@ replace aguadist_ch= 3 if v09==3|v09 ==4
 **************
 *aguadisp1_ch*
 **************
-gen aguadisp1_ch =9
+gen aguadisp1_ch =.
+replace aguadisp1_ch = 1 if v07==1
+replace aguadisp1_ch = 0 if v07==2
 
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 9
-
+gen aguadisp2_ch =.
+replace aguadisp2_ch = 1 if v08a2<=3 | v08b3<12
+replace aguadisp2_ch = 2 if (v08a2>3 & v08a2<7) & (v08b3>=12 & v08b3<24)
+replace aguadisp2_ch = 3 if v08a2==7 & v08b3 ==24
 
 
 *************

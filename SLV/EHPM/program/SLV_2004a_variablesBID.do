@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -101,11 +101,47 @@ label value region_c region_c
 label var region_c "División política, departamento"
 
 ***************
+***ine01***
+***************
+gen ine01= region_c
+label define ine01 1 "Ahuachapán" ///
+2 "Santa Ana" ///
+3 "Sonsonate" ///
+4 "Chalatenango" ///
+5 "La Libertad" ///
+6 "San Salvador" ///
+7 "Cuscatlán" ///
+8 "La Paz" ///
+9 "Cabañas" ///
+10 "San Vicente" ///
+11 "Usulután" ///
+12 "San Miguel" ///
+13 "Morazán" ///
+14 "La Unión" 
+label value ine01 ine01
+
+***************
 ***factor_ch***
 ***************
 
 gen factor_ch= fac01 
 label variable factor_ch "Factor de expansion del hogar"
+
+
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=estrato
+label variable upm_ci "Estrato"
+
 
 
 ***************
@@ -1538,6 +1574,13 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 *****************
 gen aguamide_ch = .
 
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (r313==1 | r313==2)
+replace aguared_ch=0 if (r313==3 | r313==4)
+label var aguared_ch "Acceso a fuente de agua por red"
+
 
 *****************
 *bano_ch         *  Altered
@@ -1583,6 +1626,63 @@ replace aguatrat_ch=1 if r315 <4
 
 
 /*NA*/
+=======
+****************
+***aguadist_ch***
+****************
+gen aguadist_ch=1 if r313==1
+replace aguadist_ch=2 if r313==2
+replace aguadist_ch=3 if r313>2 & r313<=9
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
+label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
+label val aguadist_ch aguadist_ch
+
+****************
+***aguafconsumo_ch***
+****************
+gen aguafconsumo_ch = .
+
+******************
+***aguafuente_ch**
+******************
+gen aguafuente_ch = 1 if r313==1|r313==2
+replace aguafuente_ch = 2 if r313==4
+replace aguafuente_ch = 4 if r313==7
+replace aguafuente_ch = 6 if r313==6
+replace aguafuente_ch = 7 if r313==3
+replace aguafuente_ch = 8 if r313==8
+replace aguafuente_ch = 9 if r313==5|r313==9
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
 
 gen luz_ch=(r312==1 | r312==2)
 replace luz_ch=. if r312==9
@@ -1592,7 +1692,6 @@ gen luzmide_ch=.
 
 gen combust_ch=(r312>=1 & r312<=3)
 replace combust_ch=. if r312==9
-
 
 * MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
 gen des1_ch=.
@@ -2542,6 +2641,116 @@ gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
 recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado/otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en último mes. 
+
+gen probsalud_ci=.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=1 if r617==4
+recode distancia_ci(.=0) if r617!=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=1 if r617==3
+recode costo_ci(.=0) if r617!=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=1 if r617==1 | r617==2 | r617==5 | r617==11
+recode atencion_ci(.=0) if r617!=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+
+
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 *variables que faltan generar
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
@@ -2576,7 +2785,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
 

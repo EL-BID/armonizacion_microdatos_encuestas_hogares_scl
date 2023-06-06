@@ -1315,6 +1315,8 @@ replace vivi1_ch=3 if r301>=3 & r301<10
 *	vivi2_ch
 ******************************
 gen vivi2_ch=(r301>=1 & r301<=2)
+*Modificación David Cornejo - Febrero 2023
+* Modificando a ocupado de 4 a 9
 ******************************
 *	viviprop_ch
 ******************************
@@ -1322,7 +1324,7 @@ gen viviprop_ch=.
 replace viviprop_ch=0 if r308a==1
 replace viviprop_ch=1 if r308a==3
 replace viviprop_ch=2 if r308a==2
-replace viviprop_ch=3 if r308a>=6 & r308a<=9
+replace viviprop_ch=3 if r308a>=4 & r308a<=9
 label var viviprop_ch "Propiedad de la vivienda" 
 
 /*ARM

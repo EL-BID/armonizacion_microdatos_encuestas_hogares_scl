@@ -1029,32 +1029,92 @@ label var tecnica_ci "Tiene carrera técnica"
 *******************************
 
 * No se armonizaro las variables de vivienda
-**************************
-*  ACCEDE A AGUA POR RED *
-**************************
-gen aguared_ch=.
-label var tecnica_ci "Tiene acceso a agua por red"
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if (water==1 | water==2 | water==3)
+replace aguared_ch = 0 if water>3
+la var aguared_ch "Acceso a fuente de agua por red"
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
 
-***********************************
-*  UBICACION DE LA FUENTE DE AGUA *
-***********************************
+*****************
+*aguafuente_ch*
+*****************
 
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la fuente de agua"
-label define aguadist 1"Adentro de la vivienda" 2"Fuera de la vivienda pero dentro del terreno" 3"Fuera de la vivienda y fuera del terreno"
-label values aguadist_ch aguadist
+gen aguafuente_ch = 1 if (water==1 | water==2 | water==3)
+replace aguafuente_ch = 2 if water==5
+replace aguafuente_ch= 6 if water==6
+replace aguafuente_ch= 10 if water==4 | water==7 |water==8 |water==9
 
-********************************
-*  FUENTE DE AGUA "Unimproved" *
-********************************
-gen aguamala_ch=.
-label var aguamala_ch "Fuente de agua es Unimproved"
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch= 1 if  water==1 | water==3
+replace aguadist_ch= 2 if  water==2| water==6 
+replace aguadist_ch= 3 if  water==4 |water==5 | water==7 |water==8 | water==9
 
-************************
-*  USA MEDIDOR DE AGUA *
-************************
-gen aguamide_ch=.
-label var aguamide_ch "Usa medidor de agua para pagar por su consumo"
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if toilet==5
+replace bano_ch=1 if toilet==2
+replace bano_ch=6 if toilet==1|toilet==3|toilet==4|toilet==9 
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
 *****************************
 *  ILUMINACION ES ELÉCTRICA *
@@ -1073,18 +1133,6 @@ label var luzmide_ch "Usa medidor de luz para pagar por su consumo"
 ********************************************
 gen combust_ch=.
 label var combust_ch "Usa combustible como fuente de energía"
-
-****************
-*  TIENE BAÑO  *
-****************
-gen bano_ch=.
-label var bano_ch "Tiene baño, inodoro, letrina o pozo ciego"
-
-*********************************
-*  TIENE BAÑO DE USO EXCLUSIVO  *
-*********************************
-gen banoex_ch=.
-label var banoex_ch "Tiene baño, inodoro, letrina o pozo ciego de uso exclusivo del hogar"
 
 *******************************************
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
@@ -1133,20 +1181,6 @@ gen resid_ch=.
 label var resid_ch "Metodo de eliminacion de residuos"
 label define resid 0"Recolección pública o privada" 1"Quemados o enterrados" 2"Tirados en un espacio abierto" 3"Otros"
 label values resid_ch resid
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (water>=1 & water <=3) | water ==5
-replace aguamejorada_ch = 0 if  water ==4 | (water>=6 & water <=7)
-
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (water>=1 & water <=2)
-replace banomejorado_ch = 0 if (water>=3 & water <=5)
 
 *****************************************
 *  CANTIDAD DE DORMITORIOS EN EL HOGAR  *

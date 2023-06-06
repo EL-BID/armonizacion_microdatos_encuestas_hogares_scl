@@ -1151,7 +1151,7 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 9
+gen aguafuente_ch =.
 replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
 replace aguafuente_ch = 2 if s01007==1 & s01010==3
 replace aguafuente_ch = 4 if s01007==2         
@@ -1210,7 +1210,8 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 ***bano_ch***
 *************
 gen bano_ch=.
-replace bano_ch = 1 if (s01011a>0 | s01011b>0) & (s01012 == 1 | s01012 == 2 )
+replace bano_ch = 1 if (s01011a>0 | s01011b>0) & (s01012 == 1)
+replace bano_ch = 2 if (s01011a>0 | s01011b>0) & s01012 == 2
 replace bano_ch = 4 if (s01011a>0 | s01011b>0)&  (s01012 == 3 | s01012== 4 )
 replace bano_ch = 6 if (s01011a>0 | s01011b>0)&  s01012==5
 replace bano_ch = 0 if (s01011a==0 | s01011b==0)

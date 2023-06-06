@@ -1739,9 +1739,9 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 gen bano_ch=0
 replace bano_ch=1 if (p111a==1|p111a==2)
 replace bano_ch = 2 if p111a==4
-replace bano_ch=3 if p111a==3
-replace bano_ch=4 if (p111a==6|p111a==9)
-replace bano_ch = 6 if (p111a == 5 | p111a ==7)
+replace bano_ch=3 if p111a==5
+replace bano_ch=4 if (p111a==6|p111a==8)
+replace bano_ch = 6 if (p111a == 3 | p111a ==7)
 
 
 
@@ -1764,20 +1764,8 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *****************
 *banoex_ch         *  
 *****************
-gen banoex_ch=.
+gen banoex_ch=9
 
-
-
-/*
-p110:
-           1 red pública, dentro de la vivienda
-           2 red pública, fuera de la vivienda pero dentro del edificio
-           3 pilón de uso público
-           4 camión - cisterna u otro similar
-           5 pozo
-           6 río, acequia, manantial o similar
-           7 otra
-*/
 
 
 

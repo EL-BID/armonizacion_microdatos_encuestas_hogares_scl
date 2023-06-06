@@ -1281,11 +1281,13 @@ municipales. Ejemplos. A orilla de la línea férrea, a orilla de las quebradas,
 otra persona. Ejemplos: viviendas en fincas, zonas verdes de colonias etc.
 
 *Se debe revisar en años anteriores y posteriores.
+*Modificación David Cornejo - Febrero 2023
+* Agregando otros a las opciones de ocupado de la vivienda
 */
 gen viviprop_ch=0 		if r308==1
 replace viviprop_ch=1 	if r308==3 
 replace viviprop_ch=2 	if r308==2 
-replace viviprop_ch=3 	if r308==6 |r308==7 | r308==8 | r308==4 | r308==5
+replace viviprop_ch=3 	if r308==6 |r308==7 | r308==8 | r308==4 | r308==5| r308==9
 replace viviprop_ch=. 	if r308==.
 label var viviprop_ch "Propiedad de la vivienda"
 label def viviprop_ch 0"Alquilada" 1"Propia y totalmente pagada" 2"Propia y en proceso de pago"

@@ -801,7 +801,7 @@ replace ypeoficial_ch=. if yoficial_ch==0
 ***VARIABLES DE EDUCACION***
 ****************************
 * Mod. 8/2015 Ivan Bonacelli EDU/SLC
-* Mod. 3/2022 Pia Iocco y Agustina Thailinger EDU/SLC
+* Mod. 3/2022 Pia Iocco y Agustina Thailinger SCL/EDU
 
 *Ajustando variables
 replace ch11=. if ch11==9

@@ -12,7 +12,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS SLV
 local ENCUESTA EHPM
@@ -127,6 +127,20 @@ label value ine01 ine01
 
 gen factor_ch= fac01 
 label variable factor_ch "Factor de expansion del hogar"
+
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=estrato
+label variable estrato_ci "Estrato"
 
 
 ***************
@@ -747,9 +761,10 @@ gen antiguedad_ci=.
 ****************************
 
 /*Para los trabajadores dependientes*/
-
+*Modificación David Cornejo - Febrero 2023
+* Cuando dan salario diario se multiplica por 30
 gen yprid=.
-replace yprid= r423*20  if r422==1
+replace yprid= r423*30  if r422==1
 replace yprid= r423*4.3 if r422==2
 replace yprid= r423*2   if r422==3
 replace yprid= r423     if r422==4 | r422==5
@@ -1486,6 +1501,7 @@ Son todos los centros educativos que pertenecen a una Congregación Religiosa.
 ****************
 ***aguared_ch***
 ****************
+
 generate aguared_ch =.
 replace aguared_ch = 1 if r313==1 | r313==2
 replace aguared_ch = 0 if r313> 2
@@ -1603,6 +1619,7 @@ replace aguatrat_ch=1 if r315 <4
 
 /*NA*/
 
+
 gen luz_ch=(r312==1 | r312==2)
 replace luz_ch=. if r312==9
 
@@ -1613,6 +1630,27 @@ gen combust_ch=(r312>=1 & r312<=3)
 replace combust_ch=. if r312==9
 
 
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if r317!=7
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch=.
+replace aguatrat_ch = 1 if r315==1|r315==2|r315==3|r315==5|r315==6|r315==7
+replace aguatrat_ch = 2 if r315==4
 
 * MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
 gen des1_ch=.
@@ -1641,7 +1679,6 @@ gen resid_ch=0 if r324==1 | r324==2
 replace resid_ch=1 if r324==4 | r324==5
 replace resid_ch=2 if r324==6
 replace resid_ch=3 if r324==3 | r324==7
- 
 
 gen dorm_ch=r306
 replace dorm_ch=. if r306==99
@@ -1862,6 +1899,50 @@ gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
 recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+
+
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 *variables que faltan generar
 gen tcylmpri_ci =.
 gen tcylmpri_ch =.
@@ -1966,7 +2047,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
 

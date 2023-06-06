@@ -1849,7 +1849,6 @@ replace aguadisp2_ch = 3 if (s01a_11b==7 & s01a_11aa == 24)
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 0 if s01a_15!=5
-replace sinbano_ch = 2 if s01a_15==5
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************

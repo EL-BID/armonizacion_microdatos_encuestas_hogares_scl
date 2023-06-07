@@ -1026,28 +1026,28 @@ replace aguared_ch= 1 if water==1 | water==3 | water==4
 replace aguared_ch= 0 if water==2 |water==5 | water==6 | water==7 | water==8 | water==9
 *********************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch= 1 if (water==1 | water==3) & potwater==1
-replace aguafconsumo_ch= 2 if (water==4 | water==5) & potwater==1
+replace aguafconsumo_ch= 1 if (water==1 | water==3|water==4) & potwater==1
+replace aguafconsumo_ch= 2 if ( water==5) & potwater==1
 replace aguafconsumo_ch= 3 if (water==7) & potwater==1
 replace aguafconsumo_ch= 4 if (water==2) & potwater==1
 replace aguafconsumo_ch= 8 if (water==8) & potwater==1
-replace aguafconsumo_ch= 10 if (water==9 | water==6) & potwater==1
+replace aguafconsumo_ch= 10 if (water==9 | water==6 | water==10) & potwater==1
 
 *********************
 gen aguafuente_ch =.
-replace aguafuente_ch= 1 if water==1 | water==3
-replace aguafuente_ch= 2 if water==4 | water==5
+replace aguafuente_ch= 1 if water==1 | water==3 |water==4 
+replace aguafuente_ch= 2 if water==5
 replace aguafuente_ch= 3 if water==7
 replace aguafuente_ch= 4 if water==2
 replace aguafuente_ch= 8 if water==8
-replace aguafuente_ch= 10 if water==9 | water==6
+replace aguafuente_ch= 10 if water==9 | water==6| water==10
 
 *********************
 
 gen aguadist_ch=0
 replace aguadist_ch=1 if water==1 | water==3
 replace aguadist_ch=2 if water==4 | water==2
-replace aguadist_ch=3 if water==5 | water==6 | water==7 | water==8 | water==9
+replace aguadist_ch=3 if water==5 | water==6 
 *********************
 gen aguadisp1_ch = 9
 
@@ -1077,7 +1077,7 @@ replace bano_ch=1 if toilet==1
 replace bano_ch=2 if toilet==2
 replace bano_ch=3 if toilet==3 | toilet==4 | toilet==5
 replace bano_ch=5 if toilet==6
-replace bano_ch=6 if toilet==7
+replace bano_ch=6 if toilet==7 |toilet==9
 
 *********************
 generate banoex_ch=9

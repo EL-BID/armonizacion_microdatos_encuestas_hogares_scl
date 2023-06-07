@@ -1011,7 +1011,8 @@ replace aguared_ch= 1 if water==1 | water==2 | pipewate==1 | stdpipe==1
 replace aguared_ch= 0 if water>2 | hdpump==1 | covvat==1 | uncvat==1 | purifywa==1 | river==1 | otherfac==1 
 *********************
 gen aguafconsumo_ch = 0
-replace aguafconsumo_ch= 1 if water==1 | water==2
+replace aguafconsumo_ch= 1 if water==1
+replace aguafconsumo_ch= 2 if water==2
 replace aguafconsumo_ch= 3 if water==6
 replace aguafconsumo_ch= 4 if water==4
 replace aguafconsumo_ch= 7 if water==3
@@ -1021,13 +1022,14 @@ replace aguafconsumo_ch= 10 if water==8
 
 *********************
 gen aguafuente_ch =.
-replace aguafuente_ch= 1 if water==1 | water==2 | pipewate==1 | stdpipe==1
-replace aguafuente_ch= 3 if water==6 | purifywa==1
-replace aguafuente_ch= 4 if water==4 | covvat==1
-replace aguafuente_ch= 7 if water==3 | hdpump==1
-replace aguafuente_ch= 8 if water==7 | river==1
-replace aguafuente_ch= 9 if water==5 | uncvat==1
-replace aaguafuente_ch= 10 if water==8 | otherfac==1
+replace aguafuente_ch= 1 if water==1 
+replace aguafuente_ch= 2 if water==2
+replace aguafuente_ch= 3 if water==6
+replace aguafuente_ch= 4 if water==4
+replace aguafuente_ch= 7 if water==3
+replace aguafuente_ch= 8 if water==7
+replace aguafuente_ch= 9 if water==5
+replace aaguafuente_ch= 10 if water==8 
 
 *********************
 
@@ -1062,7 +1064,7 @@ replace bano_ch=1 if toilet==1
 replace bano_ch=2 if toilet==2
 replace bano_ch=3 if toilet==3 | toilet==4 | toilet==5
 replace bano_ch=5 if toilet==6
-replace bano_ch=6 if toilet==7
+replace bano_ch=6 if toilet==7 | toilet ==9
 
 *********************
 generate banoex_ch=9

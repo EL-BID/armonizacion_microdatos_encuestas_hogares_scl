@@ -115,8 +115,7 @@ gen aguafuente_ch = 1 if s1p20a==1 | s1p20a==2
 replace aguafuente_ch = 2 if s1p20a==3
 replace aguafuente_ch= 6 if s1p20a==7
 replace aguafuente_ch = 8 if s1p20a==6 | s1p20a==8
-replace aguafuente_ch =9 if s1p20a==9
-replace aguafuente_ch= 10 if s1p20a==4 | s1p20a==5 | s1p20a==10
+replace aguafuente_ch= 10 if s1p20a==4 | s1p20a==5 | s1p20a==10 |s1p20a==9
 
 *************
 *aguadist_ch*
@@ -173,7 +172,7 @@ replace bano_ch=1 if s1p32==3
 replace bano_ch=2 if s1p32==4 
 replace bano_ch=3 if s1p32==2 
 replace bano_ch=4 if s1p32==5 
-replace bano_ch=6 if s1p32==1 
+replace bano_ch=6 if s1p32==1 | s1p32==8 | s1p32==9
 
 
 ***************

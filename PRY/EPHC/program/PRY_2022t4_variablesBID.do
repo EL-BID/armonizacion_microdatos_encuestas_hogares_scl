@@ -16,7 +16,7 @@ global ruta = "${surveysFolder}"
 
 local PAIS PRY
 local ENCUESTA EPHC
-local ANO "2021"
+local ANO "2022"
 local ronda t4
 
 local log_file = "$ruta\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_variablesBID.log"
@@ -32,8 +32,7 @@ log using "`log_file'", replace
 País: Paraguay
 Encuesta: EPHC
 Round: Cuarto trimestre 2022
-Autores: Marta Luzes
-Última versión: Agustina Thailinger SCL/EDU
+Autores: David Cornejo
 Fecha de última modificación: Agosto 2022
 
 							   SCL - IADB
@@ -43,42 +42,25 @@ Detalle de procesamientos o modificaciones anteriores:
 ****************************************************************************/
 use "`base_in'", clear
 
+
+		**********************************
+		***VARIABLES DEL IDENTIFICACION***
+		**********************************
+
 **************
 ***region_c***
 **************
-/*gen region_c=  dpto 
-label define region_c  ///
-           0 "Asunción" ///    
-           1 "Concepción" ///  
-           2 "San pedro" ///   
-           3 "Cordillera" ///  
-           4 "Guairá" ///      
-           5 "Caaguazú" ///    
-           6 "Caazapá" ///     
-           7 "Itapúa" ///      
-           8 "Misiones" ///    
-           9 "Paraguarí" ///   
-          10 "Alto paraná" /// 
-          11 "Central" ///     
-          12 "ñeembucú" ///    
-          13 "Amambay" ///     
-          14 "Canindeyú" ///   
-          15 "Pdte. hayes" /// 
-          16 "Boquerón" ///
-          17 "Alto paraguay"
-label value region_c region_c
-label var region_c "División política, departamento"*/
 
 *Modificación Mayra Sáenz - Septiembre 2014	
-gen region_c    = 1 if dptorep == 0
-replace region_c= 2 if dptorep == 2		  
-replace region_c= 3 if dptorep == 5		  
-replace region_c= 4 if dptorep == 7
-replace region_c= 5 if dptorep == 10
-replace region_c= 6 if dptorep == 11
+gen region_ci    = 1 if dptorep == 0
+replace region_ci= 2 if dptorep == 2		  
+replace region_ci= 3 if dptorep == 5		  
+replace region_ci= 4 if dptorep == 7
+replace region_ci= 5 if dptorep == 10
+replace region_ci= 6 if dptorep == 11
 *replace region_c= 7 if dptorep == 1 | dptorep == 3 | dptorep == 4 | dptorep == 6 | dptorep == 8 | dptorep == 9 | (dptorep >= 12 & dptorep >= 15) 
-replace region_c= 7 if dptorep == 20
-label define region_c ///
+replace region_ci= 7 if dptorep == 20
+label define region_ci ///
 1 "Asunción" ///
 2 "San Pedro" ///
 3 "Caaguazú" ///
@@ -86,8 +68,30 @@ label define region_c ///
 5 "Alto Paraná" ///
 6 "Central" ///
 7 "Resto" 
-label value region_c region_c
-label var region_c "División política"
+label value region_ci region_ci
+label var region_ci "División política"
+
+**************
+***ine01***
+**************
+gen ine01    = 1 if dptorep == 0
+replace ine01= 2 if dptorep == 2		  
+replace ine01= 3 if dptorep == 5		  
+replace ine01= 4 if dptorep == 7
+replace ine01= 5 if dptorep == 10
+replace ine01= 6 if dptorep == 11
+*replace region_c= 7 if dptorep == 1 | dptorep == 3 | dptorep == 4 | dptorep == 6 | dptorep == 8 | dptorep == 9 | (dptorep >= 12 & dptorep >= 15) 
+replace ine01= 7 if dptorep == 20
+label define ine01 ///
+1 "Asunción" ///
+2 "San Pedro" ///
+3 "Caaguazú" ///
+4 "Itapúa" ///
+5 "Alto Paraná" ///
+6 "Central" ///
+7 "Resto" 
+label value ine01 ine01
+label var ine01 "División política"
 
 ***************
 ***factor_ch***
@@ -1680,7 +1684,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

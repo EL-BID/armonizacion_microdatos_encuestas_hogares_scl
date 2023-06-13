@@ -1256,7 +1256,7 @@ replace aedu_ci = e8c + 8 if e8t == 6 & asiste_ci != 1 // Media Científico-Huma
 replace aedu_ci = e8c + 6 if e8t == 7 & asiste_ci != 1 // Técnica, Comercial, Industrial o Normalista (Sistema Antiguo)
 replace aedu_ci = e8c + 8 if e8t == 8 & asiste_ci != 1 // Media Técnica Profesional
 replace aedu_ci = e8c + 12 if (e8t >= 9 & e8t <= 14) & asiste_ci != 1 // Superior
-replace aedu_ci = e8c + 17 if e8t == 15 & asiste_ci != 1 // Postgrado
+replace aedu_ci = e8c + 16 if e8t == 15 & asiste_ci != 1 // Postgrado
 
 * Para asistentes:
 replace aedu_ci = e8c - 1 if e8t == 2 & asiste_ci == 1 // Preparatoria (Sistema Antiguo)
@@ -1266,7 +1266,7 @@ replace aedu_ci = e8c + 8 - 1 if e8t == 6 & asiste_ci == 1 // Media Científico-
 replace aedu_ci = e8c + 6 - 1 if e8t == 7 & asiste_ci == 1 // Técnica, Comercial, Industrial o Normalista (Sistema Antiguo)
 replace aedu_ci = e8c + 8 - 1 if e8t == 8 & asiste_ci == 1 // Media Técnica Profesional
 replace aedu_ci = e8c + 12 - 1 if (e8t >= 9 & e8t <= 14) & asiste_ci == 1 // Superior
-replace aedu_ci = e8c + 17 - 1 if e8t == 15 & asiste_ci == 1 // Postgrado
+replace aedu_ci = e8c + 16 - 1 if e8t == 15 & asiste_ci == 1 // Postgrado
 label var aedu_ci "Anios de educacion aprobados" 
 
 **************

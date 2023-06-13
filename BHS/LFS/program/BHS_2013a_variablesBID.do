@@ -997,7 +997,7 @@ label var edupub_ci "Asiste a un centro de ensenanza público"
 ****************
 gen aguared_ch=.
 replace aguared_ch=1 if water_supply==1
-replace aguared_ch=0 if (water_supply>=2 & water_supply<=4)
+replace aguared_ch=0 if (water_supply>=2 & water_supply<=5)
 label var aguared_ch "Acceso a fuente de agua por red"
 	
 *****************

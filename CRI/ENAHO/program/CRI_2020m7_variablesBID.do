@@ -332,9 +332,11 @@ gen afroind_ano_c=.
 	*************
 	***dis_ci***
 	**************
-gen dis_ci=1 if a8a!=0
-replace dis_ci=0 if a8a==0
-replace dis_ci=. if a8a==. //En caso de que la variable tenga mv
+	* No considerar respuestas 6 y 7
+	
+gen dis_ci = 1 if (a8a >= 1 & a8a <= 5) | (a8b >= 1 & a8b <= 5)
+replace dis_ci = 0 if (a8a == 0 | a8a == 6 | a8a == 7)
+replace dis_ci = . if a8a ==. //En caso de que la variable tenga mv
 
 
 	*************

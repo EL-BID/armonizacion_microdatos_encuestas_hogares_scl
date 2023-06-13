@@ -404,13 +404,31 @@ gen afroind_ano_c=2012
 	*******************
 	***dis_ci***
 	*******************
-gen dis_ci=. 
+	
+	/* Respuestas binarias (1 = si; 2 = no)
+	 p401h1. Moverse o caminar, para usar brazos o piernas?  
+	 p401h2. Ver, aun usando anteojos?  
+	 p401h3. Hablar o comunicarse, aún usando el lenguaje de señas u otro?  
+	 p401h4. Oír, aún usando audífonos ?  
+	 p401h5. Entender o aprender (concentrarse y recordar)? 
+	 
+	 No considerar p401h6:
+	 p401h6. Relacionarse con los demás, por sus pensamientos, sentimientos, emociones o conductas? 
+	
+	*/
+	
+	
+gen dis_ci =.
+replace dis_ci = 1 if (p401h1 == 1 | p401h2 == 1 | p401h3 == 1 | p401h4 == 1 | p401h5 == 1) 
+replace dis_ci = 0 if (p401h1 == 2 & p401h2 == 2 & p401h3 == 2 & p401h4 == 2 & p401h5 == 2) 
+
 
 	*******************
 	***dis_ch***
 	*******************
-gen dis_ch=. 
-
+	
+egen dis_ch = sum(dis_ci), by(idh_ch) 
+replace dis_ch = 1 if (dis_ch > 0)
 
 
 ************************************
@@ -1630,19 +1648,18 @@ label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es const
 *************
 *aguamala_ch*  Altered
 *************
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if p110 <=4
-replace aguamala_ch= 1 if p110 ==8
-replace aguamala_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7 
-label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 0 if p110==8
-replace aguamejorada_ch= 1 if (p110 <= 4)
-replace aguamejorada_ch = 2 if p110 == 5 | p110 == 6 | p110 == 7
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 ***aguamide_ch***
@@ -1656,15 +1673,15 @@ gen aguamide_ch=.
 gen bano_ch=0
 replace bano_ch=1 if (p111==1|p111==2)
 replace bano_ch = 2 if p111==4
-replace bano_ch=3 if p111==3
-replace bano_ch=4 if (p111==6|p111==9)
-replace bano_ch = 6 if (p111 == 5 | p111 ==7)
+replace bano_ch=3 if p111==5
+replace bano_ch=4 if (p111==6)
+replace bano_ch = 6 if (p111 == 3 | p111 ==7)
 
 
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=.
+gen banoex_ch=9
 
 *****************
 *banomejorado_ch*  Altered

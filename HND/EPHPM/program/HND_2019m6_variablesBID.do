@@ -1422,13 +1422,13 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch = 1 if dv105==1 & dv106<=2
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if dv105==1 & dv106<=2
 replace aguafuente_ch = 2 if (dv105==1 & dv106>2) | dv105==4
 replace aguafuente_ch = 6 if dv105==6
 replace aguafuente_ch = 7 if dv105==7
 replace aguafuente_ch = 8 if dv105==5
-replace aguafuente_ch = 9 if dv105==8 
-replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3
+replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3 |dv105==8 
 
 *************
 *aguadist_ch*
@@ -1478,12 +1478,13 @@ replace bano_ch=1 if dh205==1
 replace bano_ch=2 if dh205==2
 replace bano_ch=3 if dh205==6 | dh205==7
 replace bano_ch=4 if (dh205==3 | dh205==4)
-replace bano_ch=6 if dh205==8 | dh205==5 
+replace bano_ch=6 if dh205>=8 | dh205==5 
 
 ***************
 ***banoex_ch***
 ***************
-generate banoex_ch=9
+generate banoex_ch=.
+replace banoex_ch = 9 if dh204 ==2
 replace banoex_ch = 1 if dh206==1
 replace banoex_ch = 0 if dh206==2
 la var banoex_ch "El servicio sanitario es exclusivo del hogar"
@@ -1500,7 +1501,8 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = 3
+gen sinbano_ch =.
+replace sinbano_ch = 3 if dh204==2
 replace sinbano_ch = 0 if dh204==1
 
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"

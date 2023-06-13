@@ -1124,6 +1124,7 @@ replace rama_ci = 9 if (pp04b_cod>=75 & pp04b_cod<=95) |(pp04b_cod>=7501 &  pp04
 		**********************************
 **#
 
+
 *************
 *aguadist_ch*
 *************
@@ -1180,20 +1181,18 @@ gen aguatrat_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-*Se asume mejorada cuando la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
-gen aguamala_ch= 2
-replace aguamala_ch= 0 if iv7==1
-replace aguamala_ch= 2 if iv7>1
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 *label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-*Se asume mejorada cuando  la fuente es red de distribucion y no mejorada cuando es perforacion con bomba a motor o manual
-gen aguamejorada_ch= 2
-replace aguamejorada_ch= 1 if iv7==1
-replace aguamejorada_ch= 2 if iv7>1
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 *bano_ch         *  Altered
@@ -1215,14 +1214,14 @@ gen banomejorado_ch= 2
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
-**#
+
 
 	************
 	*aguared_ch*
 	************
 
 	gen aguared_ch=(iv7==1)
-    replace aguared_ch=. if iv7==9
+	replace aguared_ch=. if iv7==9
 	
 	*************
 	*aguadist_ch*

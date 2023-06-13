@@ -1065,6 +1065,8 @@ replace aguafuente_ch= 10 if vsp5==4 | vsp5==6
 *aguadist_ch*
 *************
 gen aguadist_ch=0
+replace aguadist_ch =1 if  vsp5 ==1| vsp5 ==3
+replace aguadist_ch =3 if  vsp5 ==2
 
 
 **************

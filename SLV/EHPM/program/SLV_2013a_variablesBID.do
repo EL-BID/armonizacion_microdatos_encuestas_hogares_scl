@@ -975,23 +975,23 @@ replace aguafconsumo_ch= 3 if r315 ==3
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if r312==1 | r312==2| r312==3| r312==4
+gen aguafuente_ch = 1 if r312==1 |  r312==3|r312==2|r312==4 
 replace aguafuente_ch = 2 if r313==2
-replace aguafuente_ch= 4 if (r313==5 | r313==5.1)
+replace aguafuente_ch= 4 if (r313==5 | (r313>5 & r313<5.2))
 replace aguafuente_ch = 5 if r313==10
 replace aguafuente_ch= 6 if r313==3
-replace aguafuente_ch= 7 if r312==4.1 | r313==8 | r313==1 |r313==11
+replace aguafuente_ch= 7 if (r312>4 & r312<4.2) | r313==8 | r313==1 |r313==11
 replace aguafuente_ch = 8 if r313==7 | r313 ==9
-replace aguafuente_ch= 9 if  r313==6 |r313==6.1
-replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | r313==4.1   
+replace aguafuente_ch= 9 if  r313==6 |(r313>6 & r313 <6.2)
+replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | (r313>4 & r313<4.2)   
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  (r312==1 | r312==2) | r313==1 | r313==3 | r313==4| r313==5 | r313==6
-replace aguadist_ch= 2 if  (r312==3| r312==4|r312 == 4.1)
-replace aguadist_ch=3 if r313==2 | r313==4.1| r313==5.1 | r313==6.1 | r313==12 | r313==11 | r313==6.1
+replace aguadist_ch= 2 if  (r312==3| r312==4|(r312>4.0 &r312<4.2))
+replace aguadist_ch=3 if r313==2 |  (r313>4.0 &r313<4.2)| (r313>5.0 &r313<5.2)| (r313>6.0 &r313<6.2)| r313==12 | r313==11 
 
 
 **************
@@ -1004,9 +1004,7 @@ gen aguadisp1_ch =9
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch = 1 if r312h<=11 
-replace aguadisp2_ch = 2 if  r312h>=12
-replace aguadisp2_ch = 3 if r312h ==24
+gen aguadisp2_ch = 9
 
 
 
@@ -1041,8 +1039,9 @@ gen bano_ch=.
 replace bano_ch=1 if (r319==1 | r319==3)
 replace bano_ch=2 if (r319==2 | r319==4)
 replace bano_ch=3 if ( r319==7 | r319==8  | r319==9  | r319==10)
+replace bano_ch=4 if (r317a ==1 | r317a ==2) &  (r324a == 3 |r324a == 4) 
 replace bano_ch=6 if (r319==5 | r319==6 )
-replace bano_ch=0 if r317a==4 
+replace bano_ch=0 if r317a==4 |r317a==3 
 
 ***************
 ***banoex_ch***
@@ -1065,7 +1064,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 1 if r318==1
-replace sinbano_ch = 2 if r324a==4 & r318==2
+replace sinbano_ch = 2 if (r324a==4 & r324a==3) & r318==2
 replace sinbano_ch = 0 if r317a!=4
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
@@ -1282,11 +1281,13 @@ municipales. Ejemplos. A orilla de la línea férrea, a orilla de las quebradas,
 otra persona. Ejemplos: viviendas en fincas, zonas verdes de colonias etc.
 
 *Se debe revisar en años anteriores y posteriores.
+*Modificación David Cornejo - Febrero 2023
+* Agregando otros a las opciones de ocupado de la vivienda
 */
 gen viviprop_ch=0 		if r308==1
 replace viviprop_ch=1 	if r308==3 
 replace viviprop_ch=2 	if r308==2 
-replace viviprop_ch=3 	if r308==6 |r308==7 | r308==8 | r308==4 | r308==5
+replace viviprop_ch=3 	if r308==6 |r308==7 | r308==8 | r308==4 | r308==5| r308==9
 replace viviprop_ch=. 	if r308==.
 label var viviprop_ch "Propiedad de la vivienda"
 label def viviprop_ch 0"Alquilada" 1"Propia y totalmente pagada" 2"Propia y en proceso de pago"

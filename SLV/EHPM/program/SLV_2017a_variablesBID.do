@@ -1021,28 +1021,23 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 gen aguafconsumo_ch = 0
 
-*****************
-*aguafuente_ch*
-*****************
-
-gen aguafuente_ch = 1 if r312==1 | r312==2| r312==3| r312==4
+gen aguafuente_ch = 1 if r312==1 |  r312==3|r312==2|r312==4 
 replace aguafuente_ch = 2 if r313==2
-replace aguafuente_ch= 4 if (r313==5 | r313==5.1)
+replace aguafuente_ch= 4 if (r313==5 | (r313>5 & r313<5.2))
 replace aguafuente_ch = 5 if r313==10
 replace aguafuente_ch= 6 if r313==3
-replace aguafuente_ch= 7 if r312==4.1 | r313==8 | r313==1 |r313==11
+replace aguafuente_ch= 7 if (r312>4 & r312<4.2) | r313==8 | r313==1 |r313==11
 replace aguafuente_ch = 8 if r313==7 | r313 ==9
-replace aguafuente_ch= 9 if  r313==6 |r313==6.1
-replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | r313==4.1   
+replace aguafuente_ch= 9 if  r313==6 |(r313>6 & r313 <6.2)
+replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | (r313>4 & r313<4.2)   
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
 replace aguadist_ch= 1 if  (r312==1 | r312==2) | r313==1 | r313==3 | r313==4| r313==5 | r313==6
-replace aguadist_ch= 2 if  (r312==3| r312==4|r312 == 4.1)
-replace aguadist_ch=3 if r313==2 | r313==4.1| r313==5.1 | r313==6.1 | r313==12 | r313==11 | r313==6.1
-
+replace aguadist_ch= 2 if  (r312==3| r312==4|(r312>4.0 &r312<4.2))
+replace aguadist_ch=3 if r313==2 |  (r313>4.0 &r313<4.2)| (r313>5.0 &r313<5.2)| (r313>6.0 &r313<6.2)| r313==12 | r313==11 
 
 **************
 *aguadisp1_ch*
@@ -1091,8 +1086,9 @@ gen bano_ch=.
 replace bano_ch=1 if (r317==1 | r317==3)
 replace bano_ch=2 if (r317==2 | r317==4)
 replace bano_ch=3 if ( r317==7 | r317==8  | r317==9  | r317==10)
+replace bano_ch=4 if (r315 ==1 | r315 ==2) & (r319a==4 | r319a==3)
 replace bano_ch=6 if (r317==5 | r317==6 )
-replace bano_ch=0 if r315==4 
+replace bano_ch=0 if r315==4 |r315==3
 
 
 
@@ -1117,7 +1113,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 1 if r316==1
-replace sinbano_ch = 2 if r319a==4 & r316==2
+replace sinbano_ch = 2 if (r319a==4 | r319a==3) & r316==2
 replace sinbano_ch = 0 if r315a!=4
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 

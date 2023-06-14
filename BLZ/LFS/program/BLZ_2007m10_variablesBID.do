@@ -1080,7 +1080,7 @@ replace aguafuente_ch= 4 if h8==4 | h74==1
 replace aguafuente_ch= 7 if h8==3 | h73==1
 replace aguafuente_ch= 8 if h8==7 | h77==1
 replace aguafuente_ch= 9 if h8==5 | h75==1
-replace aaguafuente_ch= 10 if h8==8 | h78==1
+replace aguafuente_ch= 10 if h8==8 | h78==1
 
 *********************
 

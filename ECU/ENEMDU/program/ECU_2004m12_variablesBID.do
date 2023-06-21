@@ -87,6 +87,85 @@ gen region_c=int(ciudad/10000)
 	89 "Amazonia" 
    label value region_c region_c
 
+
+   	***************
+	***  ine01  ***
+	***************
+	gen ine01=.
+	replace ine01=int(ciudad/10000)
+	
+	label define ine01 ///
+	1 "Azuay" ///
+	2 "Bolívar" ///
+	3 "Cañar" ///
+	4 "Carchi" /// 
+	5 "Cotopaxi" ///
+	6 "Chimborazo" ///
+	7 "El Oro" ///
+	8 "Esmeraldas" ///
+	9 "Guayas" ///
+	10 "Imbabura" ///
+	11 "Loja" ///
+	12 "Los Ríos" ///
+	13 "Manabí" ///
+	14 "Morona Santiago" ///
+	15 "Napo" ///
+	16 "Pastaza" ///
+	17 "Pichincha" ///
+	18 "Tungurahua" ///
+	19 "Zamora Chinchipe" ///
+	20 "Galápagos" ///
+	21 "Sucumbíos" ///
+	22 "Orellana" ///
+	23 "Santo Domingo de los Tsáchilas" ///
+    24 "Santa Elena" 
+   label value ine01 ine01
+   label var ine01 "division politico-administrativa, provincia"
+
+
+   	***************
+	***  ine02  ***
+	***************
+	gen ine02=.
+	replace ine02=int(ciudad/100)
+	
+	label define ine02 101 "Cuenca" 102 "Girón" 103 "Gualaceo" 104 "Nabón" 105 "Paute" 106 "Pucará" 107 "San Fernando" /*
+	*/ 108 "Santa Isabel" 109 "Sigsig" 110 "Oña" 111 "Chordeleg" 112 "El Pan" 113 "Sevilla De Oro" 114 "Guachapala" /*
+	*/ 115 "Camilo Ponce Enríquez" 201 "Guaranda" 202 "Chillanes" 203 "Chimbo" 204 "Echeandia" 205 "San Miguel" /*
+	*/ 206 "Caluma" 207 "Las Naves" 301 "Azoques" 302 "Biblian" 303 "Cañar" 304 "La Troncal" 305 "El Tambo" 306 "Deleg"/*
+	*/ 307 "Suscal" 401 "Tulcán" 402 "Bolívar" 403 "Espejo" 404 "Mira" 405 "Montúfar" 406 "San Pedro De Huaca" 501 "Latacunga" /*
+	*/ 502 "La Maná" 503 "Pangua" 504 "Pujilí" 505 "Salcedo" 506 "Saquisilí" 507 "Sigchos" 601 "Riobamba" /*
+	*/ 602 "Alausí" 603 "Colta" 604 "Chambo" 605 "Chunchi" 606 "Guamote" 607 "Guano" 608 "Pallatanga" 609 "Penípe" /*
+	*/ 610 "Cumandá" 701 "Machala" 702 "Arenillas" 703 "Atahualpa" 704 "Balsas" 705 "Chilla" 706 "El Guabo" /*
+	*/ 707 "Huaquillas" 708 "Marcabelí" 709 "Pasaje" 710 "Piñas" 711 "Portovelo" 712 "Santa Rosa" 713 "Zaruma" /*
+	*/ 714 "Las Lajas" 801 "Esmeraldas" 802 "Eloy Alfaro" 803 "Muisne" 804 "Quininde" 805 "San Lorenzo" 806 "Atacames" /*
+	*/ 807 "Ríoverde" 901 "Guayaquil" 902 "Alfredo Baquerizo Moreno" 903 "Balao" 904 "Balzar" 905 "Colimes" /*
+	*/ 906 "Daule" 907 "Durán" 908 "Empalme" 909 "El Triunfo" 910 "Milagro" 911 "Naranjal"	912 "Naranjito" /*
+	*/ 913 "Palestina" 914 "Pedro Carbo" 916 "Samborondón" 918 "Santa Lucia" 919 "Salitre" 920 "San Jacinto De Yaguachi" /*
+	*/ 921 "Playas" 922 "Simón Bolívar" 923 "Crnel. Marcelino Maridueña" 924 "Lomas De Sargentillo" 925 "Nobol" /*
+	*/ 927 "Gnral. Antonio Elizalde" 928 "Isidro Ayora" 1001 "Ibarra" 1002 "Antonio Ante" 1003 "Cotacahi" 1004 "Otavalo" /*
+	*/ 1005 "Pimampiro" 1006 "San Miguel De Urcuqui" 1101 "Loja" 1102 "Calvas" 1103 "Catamayo" 1104 "Célica"/*
+	*/ 1105 "Chaguarpamba" 1106 "Espíndola" 1107 "Gonzanamá" 1108 "Macará" 1109 "Paltas" 1110 "Puyango" 1111 "Saraguro" /*
+	*/ 1112 "Sozoranga" 1113 "Zapotillo" 1114 "Pindal" 1115 "Quilanga" 1116 "Olemdo" 1201 "Babahoyo" 1202 "Baba" /*
+	*/ 1203 "Montalvo" 1204 "Puebloviejo" 1205 "Quevedo" 1206 "Urdaneta" 1207 "Ventanas" 1208 "Vinces" 1209 "Palenque" /*
+	*/ 1210 "Buena Fé" 1211 "Valencia" 1212 "Mocache" 1213 "Quinsaloma" 1301 "Portoviejo" 1302 "Bolívar" 1303 "Chone" /*
+	*/ 1304 "El Carmen" 1305 "Flavio Alfaro" 1306 "Jipijapa" 1307 "Junín" 1308 "Manta" 1309 "Montecristi" 1310 "Paján" /*
+	*/ 1311 "Pichincha" 1312 "Rocafuerte" 1313 "Santa Ana" 1314 "Sucre" 1315 "Tosagua" 1316 "24 De Mayo" 1317 "Pedernales" /*
+	*/ 1318 "Olmedo" 1319 "Puerto López" 1320 "Jama" 1321 "Jaramijó" 1322 "San Vicente" 1401 "Morona" 1402 "Gualaquiza" /*
+	*/ 1403 "Limón Indanza" 1404 "Palora" 1405 "Santiago" 1406 "Sucúa" 1407 "Huamboya" 1408 "San Juan Bosco" 1409 "Taisha" /*
+	*/ 1410 "Logroño" 1411 "Pablo Sexto" 1412 "Tiwintza" 1501 "Tena" 1503 "Archidona" 1504 "El Chaco" 1507 "Quijos" /*
+	*/ 1509 "Carlos Julio Arrosemena Tola" 1601 "Pastaza" 1602 "Mera" 1603 "Santa Clara" 1604 "Arajuno" 1701 "Quito" /*
+	*/ 1702 "Cayambe" 1703 "Mejía" 1704 "Pedro Moncayo" 1705 "Rumiñahui" 1707 "San Miguel De Los Bancos" 1708 "Pedro Vicente Maldonado" /*
+	*/ 1709 "Puerto Quito" 1801 "Ambato" 1802 "Baños De Agua Santa" 1803 "Cevallos" 1804 "Mocha" 1805 "Patate" 1806 "Quero" /*
+	*/ 1807 "San Pedro De Pelileo" 1808 "Santiago De Pillaro" 1809 "Tisaleo" 1901 "Zamora" 1902 "Chinchipe" 1903 "Nangaritza" /*
+	*/ 1904 "Yacuambi" 1905 "Yantzaza" 1906 "El Pangui" 1907 "Centinela Del Cóndor" 1908 "Palanda" 1909 "Paquisha" 2001 "San Cristobal" /*
+	*/ 2002 "Isabela" 2003 "Santa Cruz" 2101 "Lago Agrio" 2102 "Gonzalo Pizarro" 2103 "Putumayo" 2104 "Shushufindi" 2105 "Sucumbios" /*
+	*/ 2106 "Cascales" 2107 "Cuyabeno" 2201 "Orellana" 2202 "Aguarico" 2203 "La Joya De Los Sachas" 2204 "Loreto" 2301 "Santo Domingo" /*
+	*/ 2302 "La Condordía" 2401 "Santa Elena" 2402 "La Libertad" 2403 "Salinas"
+	label value ine02 ine02
+	label var ine02 "division politico-administrativa, cantones"
+
+	 
 	***************
 	***factor_ch***
 	***************
@@ -420,6 +499,7 @@ label var pension_ci "1=Recibe pension contributiva"
 *************
 gen ypen_ci=pe69b if pension_ci==1
 replace ypen_ci=. if pe69b==999999 
+replace ypen_ci=. if pe69b==0
 label var ypen_ci "Valor de la pension contributiva"
 
 ***************
@@ -434,6 +514,7 @@ label var pensionsub_ci "1=recibe pension subsidiada / no contributiva"
 *****************
 gen ypensub_ci=pe72b if pensionsub_ci==1
 replace ypensub_ci=. if ypensub_ci==999999
+replace ypensub_ci=. if ypensub_ci==0
 label var ypensub_ci "Valor de la pension subsidiada / no contributiva"
 
 *************
@@ -993,7 +1074,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label variable eduui_ci "Superior incompleto"
 	*/
 	*Modificación Mayra Sáenz - Agosto 2013
-	gen eduui_ci=(aedu_ci>12 & aedu_ci<17)
+	gen eduui_ci=(aedu_ci>12 & aedu_ci<16)
 	label variable eduui_ci "Superior incompleto"
 
 	***************
@@ -1006,7 +1087,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*/
 	*Modificación Mayra Sáenz - Agosto 2013
 	
-	gen byte eduuc_ci= (aedu_ci>=17)
+	gen byte eduuc_ci= (aedu_ci>=16)
 	label variable eduuc_ci "Superior completo"
 
 	***************
@@ -1119,67 +1200,40 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 	
 	*El año 2004 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
 	
-	****************
-	***aguared_ch***
-	****************
 	gen aguared_ch=.
-	label var aguared_ch "Acceso a fuente de agua por red"	
 	
+	gen aguafconsumo_ch = 0
 
-	*****************
-	***aguadist_ch***
-	*****************
-	gen aguadist_ch=.
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+	gen aguafuente_ch =.
 
-	*****************
-	***aguamala_ch***
-	*****************
+	gen aguadist_ch=0
 	
-	gen aguamala_ch=.
-	label var aguamala_ch "Agua unimproved según MDG" 
-	
-	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
+	gen aguadisp1_ch = 9
 
-	************
-	***luz_ch***
-	************
-	gen luz_ch=.
-	label var luz_ch "La principal fuente de iluminación es electricidad"	
-	
-		****************
-	***luzmide_ch***
-	****************
-	gen luzmide_ch=.
-	label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
+	gen aguadisp2_ch = 9
 
-	****************
-	***combust_ch***
-	****************
-	
-	gen combust_ch=.
-	label var combust_ch "Principal combustible gas o electricidad"	
-	
-	*************
-	***bano_ch***
-	*************
-	
+	gen aguamala_ch = .
+
+	gen aguamejorada_ch = .
+
+	gen aguamide_ch = .
+
 	gen bano_ch=.
-	label var bano_ch "El hogar tiene servicio sanitario"	
+
+	gen banoex_ch=9
+
+	gen banomejorado_ch=.
+
+	gen sinbano_ch =.
+
+	gen aguatrat_ch =9
 	
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+	gen luz_ch=.
+
+	gen luzmide_ch=.
+	gen combust_ch=.
+
+
 
 	*************
 	***des1_ch***
@@ -1232,16 +1286,7 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 	
 	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 	
-    *********************
-    ***aguamejorada_ch***
-    *********************
-	g       aguamejorada_ch = .
-		
-    *********************
-    ***banomejorado_ch***
-    *********************
-	g       banomejorado_ch = . 
-	 
+
 	*************
 	***dorm_ch***
 	*************
@@ -1376,7 +1421,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

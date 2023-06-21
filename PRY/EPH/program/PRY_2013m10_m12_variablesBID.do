@@ -1287,9 +1287,8 @@ replace aguafuente_ch = 1 if (v06==4 | v06==1 | v06==2 |v06==3) & v09<=2
 replace aguafuente_ch = 2 if (v06==4 | v06==1 | v06==2 |v06==3) & v09>2
 replace aguafuente_ch= 4 if (v06==5 | v06==6)
 replace aguafuente_ch = 5 if v06==10
-replace aguafuente_ch = 6 if v06==11
 replace aguafuente_ch = 8 if v06==9
-replace aguafuente_ch = 10 if (v06==12 | v06==8 |v06==7)
+replace aguafuente_ch = 10 if (v06==11 | v06==8 |v06==7|v06==99)
 
 *************
 *aguadist_ch*

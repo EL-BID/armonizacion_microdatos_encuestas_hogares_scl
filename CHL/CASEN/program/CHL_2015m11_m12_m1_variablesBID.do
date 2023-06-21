@@ -900,21 +900,25 @@ label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 *************
 ***aedu_ci*** 
 ************* 
-gen aedu_ci=.
-replace aedu_ci=.  if e6a==5 // Educación Especial
-replace e6a=. if e6a==99
-replace e6b=. if e6b==99
-replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
-replace aedu_ci=e6b            if e6a==6             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=e6b            if e6a==7             /*Básica (Sist. nuevo) */
-replace aedu_ci=e6b+6 		   if e6a==8             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=e6b+8 		   if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=e6b+6          if e6a==10            /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=e6b+8          if e6a==11            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=e6b+12         if e6a>=12 & e6a<=15  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
-replace aedu_ci=e6b+17         if e6a==16 | e6a==17  /*Posgrado*/
-label var aedu_ci "Anios de educacion aprobados" 
-*Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
+replace e6b = . if e6b == 99
+replace e6a = . if e6a == 99
+
+gen aedu_ci = .
+replace aedu_ci = 0              if e6a >= 1 & e6a <= 4   /*Nunca asistió, sala cuna. jardin infantil, prekinder/kinder */
+
+* Para aquellos que asisten actualmente
+replace aedu_ci = e6b      if inrange(e6a, 6, 7) & e3 == 1 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6b + 6 - 1  if inrange(e6a, 8, 10) & e3 == 1  /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6b + 8 - 1   if inrange(e6a, 9, 11) & e3 == 1 /*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6b + 12 - 1    if e6a >= 12 & e6a <= 15  & e3 == 1 /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6b + 17 - 1  if inrange(e6a, 16, 17) & e3 == 1   /*Posgrado*/
+
+* Para aquellos que no asisten actualmente
+replace aedu_ci = e6b      if inrange(e6a, 6, 7) & e3 == 2 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6b + 6  if inrange(e6a, 8, 10) & e3 == 2 /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6b + 8  if inrange(e6a, 9, 11) & e3 == 2/*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6b + 12 if e6a >= 12 & e6a <= 15 & e3 == 2  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6b + 17 if inrange(e6a, 16, 17) & e3 == 2   /*Posgrado*/
 
 **imputando anios perdidos
 
@@ -930,6 +934,10 @@ replace aedu_ci=12     if e6a==14 & aedu_ci==.
 replace aedu_ci=12    if e6a==15 & aedu_ci==.
 replace aedu_ci=17     if e6a==16 & aedu_ci==.
 replace aedu_ci=17     if e6a==17 & aedu_ci==.
+
+* VER IMPUTACION ACA! 17, 16 y 13 hacen referencia a niveles completos.
+
+label var aedu_ci "Anios de educacion aprobados" 
 
 **************
 ***eduno_ci***

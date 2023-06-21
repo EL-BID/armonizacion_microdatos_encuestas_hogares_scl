@@ -1057,40 +1057,83 @@ label values edupub_ci edupub
 *******************************
 *******************************
 
-**************************
-*  ACCEDE A AGUA POR RED *
-**************************
-gen aguared_ch=0
-replace aguared_ch=1 if h71==1 | h72==1 
-*replace aguared_ch=0 if (h73==1 | h74==1 | h75==1 | h76==1 | h77==1 | h78==1) & (h71!=1 | h72!=1) 
-label var aguared_ch "Tiene acceso a agua por red"
 
-***********************************
-*  UBICACION DE LA FUENTE DE AGUA *
-***********************************
-gen aguadist_ch=.
-*replace aguadist_ch=1 if water==1 | water==3 | water==7 /* Adentro de la casa */
-*replace aguadist_ch=2 if water==4 | water==2 /* Afuera de la casa pero adentro del terrno (o a menos de 1000mts de distancia) */
-*replace aguadist_ch=3 if water==5 | water==6 | water==8 /* Afuera de la casa y afuera del terreno (o a más de 1000mts de distancia) */
-*label var aguadist_ch "Ubicación de la fuente de agua"
-*label define aguadist 1"Adentro de la vivienda" 2"Fuera de la vivienda pero dentro del terreno" 3"Fuera de la vivienda y fuera del terreno"
-label values aguadist_ch aguadist
+*********************
+gen aguared_ch=.
+replace aguared_ch= 1 if h8==1 | h8==2 | h71==1 | h72==1
+replace aguared_ch= 0 if h8>2 | h73==1 | h74==1 | h75==1 | h76==1 | h77==1 | h78==1 
+*********************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch= 1 if h8==1 | h8==2
+replace aguafconsumo_ch= 3 if h8==6
+replace aguafconsumo_ch= 4 if h8==4
+replace aguafconsumo_ch= 7 if h8==3
+replace aguafconsumo_ch= 8 if h8==7
+replace aguafconsumo_ch= 9 if h8==5
+replace aguafconsumo_ch= 10 if h8==8
 
-********************************
-*  FUENTE DE AGUA "Unimproved" *
-********************************
-gen aguamala_ch=0
-* river/ stream / creek / pond / spring *
-replace aguamala_ch=1 if h73==1 | h77==1 | h78==1 
-*replace aguamala_ch=0 if h71==1 | h72==1 | h74==1 | h75==1 | h76==1
-label var aguamala_ch "Fuente de agua es Unimproved"
+*********************
+gen aguafuente_ch =.
+replace aguafuente_ch= 1 if h8==1 | h8==2 | h71==1 | h72==1
+replace aguafuente_ch= 3 if h8==6 | h76==1
+replace aguafuente_ch= 4 if h8==4 | h74==1
+replace aguafuente_ch= 7 if h8==3 | h73==1
+replace aguafuente_ch= 8 if h8==7 | h77==1
+replace aguafuente_ch= 9 if h8==5 | h75==1
+replace aguafuente_ch= 10 if h8==8 | h78==1
 
-************************
-*  USA MEDIDOR DE AGUA *
-************************
-gen aguamide_ch=.
-*replace aguamide_ch=1 if
-label var aguamide_ch "Usa medidor de agua para pagar por su consumo"
+*********************
+
+gen aguadist_ch=0
+
+*********************
+gen aguadisp1_ch = 9
+
+*********************
+gen aguadisp2_ch = 9
+
+*********************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+*********************
+
+
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*********************
+gen aguamide_ch = .
+*********************
+
+gen bano_ch=.
+replace bano_ch=0 if h3==8
+replace bano_ch=1 if h3==1
+replace bano_ch=2 if h3==2
+replace bano_ch=3 if h3==3 | h3==4 | h3==5
+replace bano_ch=5 if h3==6
+replace bano_ch=6 if h3==7
+
+*********************
+generate banoex_ch=9
+
+*********************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+*********************
+gen sinbano_ch =0 if h3!=8
+replace sinbano_ch =3 if h3==8
+
+*********************
+gen aguatrat_ch =9
+
+*********************
+
 
 *****************************
 *  ILUMINACION ES ELÉCTRICA *
@@ -1114,21 +1157,7 @@ gen combust_ch=0 if h5!=.
 replace combust_ch=1 if h5==1 | h5==4 
 label var combust_ch "Usa combustible como fuente de energía"
 
-****************
-*  TIENE BAÑO  *
-****************
-gen bano_ch=.
-replace bano_ch=1 if h3<=7 
-replace bano_ch=0 if h3==8 
-label var bano_ch "Tiene baño, inodoro, letrina o pozo ciego"
 
-*********************************
-*  TIENE BAÑO DE USO EXCLUSIVO  *
-*********************************
-gen banoex_ch=.
-*replace banoex_ch=1 if toilet>=1 & toilet<=6
-*replace banoex_ch=0 if toilet==7 | toilet==8
-label var banoex_ch "Tiene baño, inodoro, letrina o pozo ciego de uso exclusivo del hogar"
 
 *******************************************
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
@@ -1191,18 +1220,7 @@ label define resid 0"Recolección pública o privada" 1"Quemados o enterrados" 2
 label values resid_ch resid
 */
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch=.
-
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch=.
 
 
 *****************************************

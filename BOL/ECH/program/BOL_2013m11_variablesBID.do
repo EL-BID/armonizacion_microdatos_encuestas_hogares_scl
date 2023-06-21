@@ -1775,16 +1775,17 @@ gen aguadisp2_ch = 9
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
-replace aguamala_ch = 0 if s1_09 <= 7 | s1_09 ==9| s1_09 ==10  
-replace aguamala_ch = 1 if s1_09 ==8 
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if s1_09 ==8  
-replace aguamejorada_ch = 1 if s1_09 <= 7 | s1_09 ==9| s1_09 ==10 
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
 
 *****************
 ***aguamide_ch***
@@ -1823,7 +1824,6 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 0 if s1_11!=6
-replace sinbano_ch = 2 if s1_11==6
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 
 *************

@@ -1070,7 +1070,7 @@ replace aguafconsumo_ch = 3 if s5q13__7==1
 replace aguafconsumo_ch = 4 if s5q13__5==1 
 replace aguafconsumo_ch = 6 if s5q13__3==1
 replace aguafconsumo_ch = 8 if s5q13__6==1
-replace aguafconsumo_ch = 10 if s5q13__8==1  | s5q13__4==1
+replace aguafconsumo_ch = 10 if s5q13__8==1  | s5q13__4==1 
 *****************
 *aguafuente_ch*
 *****************
@@ -1087,6 +1087,7 @@ replace aguafuente_ch = 10 if s4q5__4 ==1
 *aguadist_ch*
 *************
 gen aguadist_ch=0
+replace aguadist_ch =1 if s4q5__3==1
 
 
 **************

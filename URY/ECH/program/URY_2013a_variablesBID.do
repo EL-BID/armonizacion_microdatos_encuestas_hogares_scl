@@ -1494,13 +1494,13 @@ replace aguared_ch =. if d11==.
 *****************
 
 gen aguafconsumo_ch =.
-replace aguafconsumo_ch = 1 if d11==1 & d12==1
-replace aguafconsumo_ch = 2 if d11==1 & d12>1
+replace aguafconsumo_ch = 1 if d11==1 & d12<=2
+replace aguafconsumo_ch = 2 if d11==1 & d12>2
 replace aguafconsumo_ch = 4 if d11==3
-replace aguafconsumo_ch = 6 if d11==4
 replace aguafconsumo_ch = 8 if d11==5
 replace aguafconsumo_ch = 9 if d11==2 
-replace aguafconsumo_ch = 10 if d11==6
+replace aguafconsumo_ch = 10 if d11==6 | d11==4
+
 
 
 
@@ -1508,13 +1508,12 @@ replace aguafconsumo_ch = 10 if d11==6
 *aguafuente_ch*
 *****************
 gen aguafuente_ch =.
-replace aguafuente_ch = 1 if d11==1 & d12==1
-replace aguafuente_ch = 2 if d11==1 & d12>1
+replace aguafuente_ch = 1 if d11==1 & d12<=2
+replace aguafuente_ch = 2 if d11==1 & d12>2
 replace aguafuente_ch = 4 if d11==3
-replace aguafuente_ch = 6 if d11==4
 replace aguafuente_ch = 8 if d11==5
 replace aguafuente_ch = 9 if d11==2 
-replace aguafuente_ch = 10 if d11==6
+replace aguafuente_ch = 10 if d11==6 | d11==4
 
 
 
@@ -1547,19 +1546,17 @@ gen aguadisp2_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-
-gen aguamala_ch= 0
-replace aguamala_ch= 1 if (d11==2 | d11==5)
-replace aguamala_ch= 2 if d11==6
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-
-gen aguamejorada_ch= 1 
-replace aguamejorada_ch= 0 if (d11==2 |d11==5)
-replace aguamejorada_ch= 2 if d11==6
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
 
 *****************
 *aguamide_ch*  Altered

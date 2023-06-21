@@ -1331,7 +1331,7 @@ gen aguafuente_ch = 0
 replace aguafuente_ch = 1 if (disp_agua==1 | disp_agua==2)
 replace aguafuente_ch = 2 if disp_agua==3
 replace aguafuente_ch = 5 if disp_agua==4
-replace aguafuente_ch = 9 if disp_agua==5
+replace aguafuente_ch = 7 if disp_agua==5
 replace aguafuente_ch = 6 if disp_agua==6
 replace aguafuente_ch = 10 if disp_agua==7 
 
@@ -1387,8 +1387,8 @@ destring drenaje, replace
 destring sanit_agua, replace
 gen bano_ch=.
 replace bano_ch=0 if excusado==2
-replace bano_ch=1 if drenaje==1 & excusado==1 & sanit_agua <3
-replace bano_ch=2 if drenaje==2 & excusado==1 & sanit_agua <3
+replace bano_ch=1 if drenaje==1 & excusado==1 
+replace bano_ch=2 if drenaje==2 & excusado==1 
 replace bano_ch=4 if (drenaje==4 | drenaje==3) & excusado==1
 replace bano_ch=6 if drenaje==5 & excusado==1 & sanit_agua== 3
 

@@ -1427,17 +1427,107 @@ replace edupub_ci=. if perseduc==0
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-gen aguared_ch=(abasagua==1 | abasagua==2)
+****************
+***aguared_ch***
+****************
 
-gen aguadist_ch=1 if abasagua==1
-replace aguadist_ch=2 if abasagua==2
-replace aguadist_ch=3 if abasagua>=3 & abasagua<=7
+gen aguared_ch=0
+replace aguared_ch= 1 if (abasagua==1 | abasagua==2)
+label var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguamala_ch=.
-/*NA*/
+*****************
+*aguafconsumo_ch*
+*****************
 
+gen aguafconsumo_ch = 0
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+label var aguadisp1 "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
-/*NA*/
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=0
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 0
+replace sinbano_ch =3 if p111 == 6
+
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+
+*****************
+***aguadist_ch***
+*****************
+gen aguadist_ch = 0
+replace aguadist_ch=1 if p110==1
+replace aguadist_ch=2 if p110==2
+replace aguadist_ch=3 if p110==3 
+
+
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
+label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
+label val aguadist_ch aguadist_ch
+
 
 gen luz_ch=alumbra1
 
@@ -1446,11 +1536,6 @@ gen luzmide_ch=.
 
 gen combust_ch=(combuco1==1 | combuco2==2)
 
-gen bano_ch=.
-/*NA*/
-
-gen banoex_ch=.
-/*NA*/
 
 gen des1_ch=0 if serhigie==5
 replace des1_ch=1 if serhigie>=1 & serhigie<=2
@@ -1475,20 +1560,6 @@ gen techo_ch=.
 
 gen resid_ch=.
 /*NA*/
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (abasagua >=1 & abasagua <=3) | abasagua ==5
-replace aguamejorada_ch = 0 if  abasagua ==4 | (abasagua >=6 & abasagua <=7)
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (serhigie >=1 & serhigie <=3)
-replace banomejorado_ch = 0 if (serhigie >=4 & serhigie <=5)
 
 gen dorm_ch=.
 /*NA*/

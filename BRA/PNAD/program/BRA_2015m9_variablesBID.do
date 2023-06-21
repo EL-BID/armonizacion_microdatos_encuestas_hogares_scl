@@ -1227,7 +1227,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *aguafconsumo_ch*
 *****************
 *La encuesta no hace este pregunta directamente
-gen aguafconsumo_ch =.
+gen aguafconsumo_ch =0
 
 *****************
 *aguafuente_ch*

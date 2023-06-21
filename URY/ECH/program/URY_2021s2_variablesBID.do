@@ -558,10 +558,14 @@ replace hpm=0 if e45_cv!=4
 
 gen bps=.
 replace bps=1 if e45_cv==5
-replace bps=0 if e45_cv==5
+replace bps=0 if e45_cv!=5
 
-gen afiliado_ci=(msp==1 | iamc==1 | spm==1 | hpm==1 | bps==1)
-replace afiliado_ci=. if msp==. & iamc==. & spm==. & hpm==. & bps==.
+gen poli=.
+replace poli=1 if e45_cv==6
+replace poli=0 if e45_cv!=6
+
+gen afiliado_ci=(msp==1 | iamc==1 | spm==1 | hpm==1 | bps==1 | poli==1)
+replace afiliado_ci=. if msp==. & iamc==. & spm==. & hpm==. & bps==. & poli==.
 label var afiliado_ci "Afiliado a la Seguridad Social"
 drop msp iamc spm hpm bps
 *Nota: seguridad social comprende solo los que en el futuro me ofrecen una pension.
@@ -1546,19 +1550,18 @@ gen aguadisp2_ch = 9
 *************
 *aguamala_ch*  Altered
 *************
-
-gen aguamala_ch= 0
-replace aguamala_ch= 1 if (d11==2 | d11==5)
-replace aguamala_ch= 2 if d11==6
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
 
-gen aguamejorada_ch= 1 
-replace aguamejorada_ch= 0 if (d11==2 |d11==5)
-replace aguamejorada_ch= 2 if d11==6
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 
 *96. El hogar usa un medidor para pagar por su consumo de agua
@@ -1783,6 +1786,7 @@ replace tipocobsalud_ci = 3 if (e45_cv == 3)
 replace tipocobsalud_ci = 4 if (e45_cv == 4)
 replace tipocobsalud_ci = 5 if (e45_cv == 5)
 replace tipocobsalud_ci = 6 if (e45_cv == 6)
+replace tipocobsalud_ci = 0 if (e45_cv == 7)
 recode tipocobsalud_ci (.=0)
 
 label var tipocobsalud_ci "Tipo cobertura de salud"

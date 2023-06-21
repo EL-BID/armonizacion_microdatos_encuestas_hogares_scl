@@ -86,6 +86,14 @@ label define region_c  ///
 label value region_c region_c
 label var region_c "División política, provincias"
 
+************
+* ine01 *
+************
+*Inclusión David Cornejo - Mayo 2023
+
+gen ine01=  .
+label var ine01 "División política"
+
 ***************
 ***factor_ci***
 ***************
@@ -865,23 +873,90 @@ gen ylmho_ci=ylm_ci/(horastot_ci*4.3)
 gen ylmho1_ci=ylm1_ci/(horastot_ci*4.3)
 
 *** HOUSING ***
-gen aguared_ch=.
 
+****************
+***aguared_ch***
+****************
+gen aguared_ch =.
+label var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = .
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
 
-gen aguamala_ch=.
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
 
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = .
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch =.
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch=.
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
 
 gen luz_ch=.
 
 gen luzmide_ch=.
 
 gen combust_ch=.
-
-gen bano_ch=.
-
-gen banoex_ch=.
 
 gen des1_ch=.
 
@@ -895,12 +970,6 @@ gen pared_ch=.
 gen techo_ch=.
 
 gen resid_ch=. 
-
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-gen aguamejorada_ch = .
-
-gen  banomejorado_ch = .
 
 gen dorm_ch=.
 
@@ -1144,19 +1213,10 @@ label var cesante_ci "Desocupado - definicion oficial del pais"
 *******************
 ***formal***
 *******************
-gen formal=1 if cotizando_ci==1
-
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="BOL"   /* si se usa afiliado, se restringiendo a ocupados solamente*/
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="CRI"
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="GTM" & anio_c>1998
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="PAN"
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="PRY" & anio_c<=2006
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="DOM"
-replace formal=1 if afiliado_ci==1 & (cotizando_ci!=1 | cotizando_ci!=0) & condocup_ci==1 & pais_c=="MEX" & anio_c>=2008
+*******************
+* David Cornejo Febrero 2023: no existe la variable cotizante ni afiliado
 
 gen byte formal_ci=.
-replace formal_ci=1 if formal==1 & (condocup_ci==1 | condocup_ci==2)
-replace formal_ci=0 if formal_ci==. & (condocup_ci==1 | condocup_ci==2) 
 label var formal_ci "1=afiliado o cotizante / PEA"
 
 *************
@@ -1234,7 +1294,112 @@ label var tecnica_ci "1=formacion terciaria tecnica"
 * Consumidor (2011=100), líneas de pobreza
 /*_____________________________________________________________________________________________________*/
 
+*******************
+*** SALUD  ***
+*******************
 
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci=.
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado/otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en último mes. 
+
+gen probsalud_ci=.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+
+
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 do "$gitFolder\armonizacion_microdatos_encuestas_hogares_scl\_DOCS\\Labels&ExternalVars_Harmonized_DataBank.do"
 
 /*_____________________________________________________________________________________________________*/

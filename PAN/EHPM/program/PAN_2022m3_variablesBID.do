@@ -1708,6 +1708,11 @@ clonevar codocupa=p26reco
 clonevar codindustria=p28reco
 compress
 
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr("`longlabel'",1,79)
+label var `i' "`shortlabel'"
+}
 
 saveold "`base_out'", replace v(12)
 

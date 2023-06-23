@@ -1312,12 +1312,12 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if (v10==4 | v10==1 | v10==2 |v10==3) & v11<=2
-replace aguafconsumo_ch = 2 if (v10==4 | v10==1 | v10==2 |v10==3) & v11>2
+replace aguafconsumo_ch = 2 if (v10==4 | v10==1 | v10==2 |v10==3) & v11==3
 replace aguafconsumo_ch = 3 if v10==11
 replace aguafconsumo_ch= 4 if (v10==5 | v10==6)
 replace aguafconsumo_ch = 5 if v10==10
 replace aguafconsumo_ch = 6 if v10==12
-replace aguafconsumo_ch = 7 if v10==8
+replace aguafconsumo_ch = 7 if v10==8| ((v10==1 | v10==2 |v10==3| v10==4 |v10==5|v10==6|v10=8|v10==10|v10==11|v10==12) & v11==4)
 replace aguafconsumo_ch = 8 if v10==13
 replace aguafconsumo_ch = 9 if v10==9 | v10==7
 replace aguafconsumo_ch = 10 if v10==14 | v10==99

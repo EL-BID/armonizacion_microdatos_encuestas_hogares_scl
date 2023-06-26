@@ -1113,7 +1113,7 @@ gen bano_ch=.
 replace bano_ch=0 if vsp8==5
 replace bano_ch=1 if vsp8==1
 replace bano_ch=2 if vsp8==2
-replace bano_ch=6 if vsp8==4|vsp8==3
+replace bano_ch=6 if vsp8==4|vsp8==3|(vsp8!=1 &vsp8!=2 &vsp8!=3 & vsp8!=4 &vsp8!=5 &jefe_ci!=.)
 
 ***************
 ***banoex_ch***

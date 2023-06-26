@@ -259,7 +259,8 @@ replace sinbano_ch = 0 if d16>0
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = 9
+gen aguatrat_ch = 0
+replace aguatrat_ch =1 if d13==1
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 *La principal fuente de iluminación es electricidad

@@ -1054,9 +1054,9 @@ replace aguafuente_ch= 10 if r313a1==8 | r313a1==3 |r313a1==5
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  (r31301==1 | r313a1==1 | r313a1==4 | r313a1==5)
+replace aguadist_ch= 1 if  (r31301==1 | r313a1==1 | r313a1==4)
 replace aguadist_ch= 2 if  r31301==2
-replace aguadist_ch=3 if r313a1==2 | r313a1==3 | r313a1==8
+replace aguadist_ch=3 if r313a1==2 | r313a1==3
 
 
 **************

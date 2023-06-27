@@ -136,6 +136,7 @@ gen aguafconsumo_ch =0
 gen aguafuente_ch =.
 replace aguafuente_ch = 1 if v0212 == 2 | v0213 == 1
 replace aguafuente_ch = 10 if (v0212 == 4 |v0212 == 6|v0212 == 9)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -190,6 +191,7 @@ replace bano_ch=2 if v0217==3
 replace bano_ch=6 if (v0217==4 | v0217==7)
 replace bano_ch=4 if (v0217==5|v0217==6)
 replace bano_ch=0 if v0215 == 3
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***

@@ -1160,13 +1160,14 @@ gen aguafconsumo_ch = 0
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 9
+gen aguafuente_ch = .
 replace aguafuente_ch = 1 if s01007==1 & s01010 != 3
 replace aguafuente_ch = 2 if s01007==1 & s01010==3
 replace aguafuente_ch = 4 if s01007==2         
 replace aguafuente_ch = 5 if s01007==5 
 replace aguafuente_ch = 9 if s01007==3 
 replace aguafuente_ch = 10 if (s01007==4 | s01007==6)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *****************
 ***aguadist_ch***
@@ -1224,6 +1225,7 @@ replace bano_ch = 2 if (s01011a>0 | s01011b>0) & s01012 == 2
 replace bano_ch = 4 if (s01011a>0 | s01011b>0)&  (s01012 == 3 | s01012== 4 )
 replace bano_ch = 6 if (s01011a>0 | s01011b>0)&  s01012==5
 replace bano_ch = 0 if (s01011a==0 | s01011b==0)
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 label var bano_ch "Tipo de instalación sanitaria del hogar"
 
 ***************

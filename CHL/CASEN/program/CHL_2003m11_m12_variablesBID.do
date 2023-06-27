@@ -156,10 +156,12 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch = 1 if v4<=3 & v5<=2
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if v4<=3 & v5<=2
 replace aguafuente_ch = 2 if v4<=3 & v5>2
 replace aguafuente_ch = 8 if v4==5
 replace aguafuente_ch = 10 if (v4==6 | v4==4)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -216,6 +218,7 @@ replace bano_ch=2 if v6==2
 replace bano_ch=3 if v6==3 | v6==4 
 replace bano_ch=4 if v6==5
 replace bano_ch=6 if v6==6
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***

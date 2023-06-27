@@ -1218,6 +1218,7 @@ replace aguafconsumo_ch = 5 if v11==7
 replace aguafconsumo_ch = 8 if v11==6
 replace aguafconsumo_ch = 10 if v11==5
 
+
 *****************
 *aguafuente_ch*
 *****************
@@ -1228,7 +1229,7 @@ replace aguafuente_ch = 2 if (v10==3) & v11<=4
 replace aguafuente_ch = 5 if v11==7
 replace aguafuente_ch = 8 if v11==6
 replace aguafuente_ch = 10 if v11==5
-
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *************
 *aguadist_ch*
@@ -1283,6 +1284,7 @@ replace bano_ch=0 if v12==5
 replace bano_ch=1 if v12==1
 replace bano_ch=2 if v12==2 
 replace bano_ch=6 if v12==3 | v12==4
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 ***************
 ***banoex_ch***
 ***************

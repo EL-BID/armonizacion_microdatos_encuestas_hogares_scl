@@ -1197,6 +1197,7 @@ replace aguafuente_ch = 2 if (v10==3) & abagua<=4
 replace aguafuente_ch = 5 if abagua==7
 replace aguafuente_ch = 8 if abagua==6
 replace aguafuente_ch = 10 if abagua==5 | abagua==9 
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1252,6 +1253,7 @@ replace bano_ch=0 if servsani==5
 replace bano_ch=1 if servsani==1
 replace bano_ch=2 if servsani==2 
 replace bano_ch=6 if servsani==3 | servsani==4|servsani==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 ***************
 ***banoex_ch***
 ***************

@@ -3594,7 +3594,7 @@ replace bano_ch=0 if EXCUS==2
 replace bano_ch=1 if DRENAJE==1 & EXCUS==1 
 replace bano_ch=2 if DRENAJE==2 & EXCUS==1 
 replace bano_ch=4 if (DRENAJE==4 | DRENAJE==3) & EXCUS==1
-replace bano_ch=6 if DRENAJE==5 & EXCUS==1 & ADM_AG== 3 (DRENAJE==. & jefe_ci ==1)
+replace bano_ch=6 if DRENAJE==5 & EXCUS==1 & ADM_AG== 3 | (DRENAJE==. & jefe_ci ==1)
 
 ***************
 ***banoex_ch***

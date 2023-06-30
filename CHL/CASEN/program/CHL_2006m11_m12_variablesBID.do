@@ -193,328 +193,6 @@ label def relacion_ci 1"Jefe" 2"Conyuge" 3"Hijo/a" 4"Otros parientes" 5"Otros no
 label val relacion_ci relacion_ci	
 
 
-******************************************
-* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
-******************************************
-
-****************
-***aguared_ch***
-****************
-generate aguared_ch =.
-replace aguared_ch = 1 if v4<=3 
-replace aguared_ch = 0 if v4>3
-la var aguared_ch "Acceso a fuente de agua por red"
-
-*****************
-*aguafconsumo_ch*
-*****************
-*se asume a partir de los datos y el cuestionario que agua potable solo es de red.
-gen aguafconsumo_ch = 0
-
-*****************
-*aguafuente_ch*
-*****************
-gen aguafuente_ch=.
-replace aguafuente_ch = 1 if v4<=3 & v5<=2
-replace aguafuente_ch = 2 if v4<=3 & v5>2
-replace aguafuente_ch = 8 if v4==5
-replace aguafuente_ch = 10 if (v4==6 | v4==9 | v4==4)
-replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
-
-
-*************
-*aguadist_ch*
-*************
-gen aguadist_ch=0
-replace aguadist_ch=1 if v5==1
-replace aguadist_ch=2 if v5==2
-replace aguadist_ch=3 if v5==3
-
-
-**************
-*aguadisp1_ch*
-**************
-gen aguadisp1_ch =9
-
-**************
-*aguadisp2_ch*
-**************
-gen aguadisp2_ch = 9
-*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
-
-
-*************
-*aguamala_ch*  Altered
-*************
-gen aguamala_ch = 2
-replace aguamala_ch = 0 if aguafuente_ch<=7
-replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
-*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
-
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-replace aguamejorada_ch = 1 if aguafuente_ch<=7
-*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
-
-*****************
-***aguamide_ch***
-*****************
-gen aguamide_ch = 1 if v4<=2
-replace aguamide_ch  = 0 if v4>2
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
-
-*****************
-*bano_ch         *  Altered
-*****************
-gen bano_ch=.
-replace bano_ch=0 if v6==7
-replace bano_ch=1 if v6==1
-replace bano_ch=2 if v6==2
-replace bano_ch=3 if v6==3 | v6==4 
-replace bano_ch=4 if v6==5
-replace bano_ch=6 if v6==6 | v6==9
-replace bano_ch=6 if bano_ch ==. & jefe_ci==1
-
-***************
-***banoex_ch***
-***************
-generate banoex_ch=9
-la var banoex_ch "El servicio sanitario es exclusivo del hogar"
-
-
-*****************
-*banomejorado_ch*  Altered
-*****************
-gen banomejorado_ch= 2
-replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
-replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
-
-
-************
-*sinbano_ch*
-************
-gen sinbano_ch = 3
-replace sinbano_ch = 0 if v6!=7
-
-*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
-
-*************
-*aguatrat_ch*
-*************
-gen aguatrat_ch = 9
-*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
-
-
-
-
-***************
-* luz_ch      *
-***************
-
-gen luz_ch=(v7a<=6)
-
-***************
-* luzmide_ch  *
-***************
-
-gen luzmide_ch=(v7a==1 | v7a==2)
-replace luzmide_ch=. if luz_ch==0
-
-***************
-* combust_ch  *
-***************
-
-gen combust_ch=.
-
-
-
-***************
-* des1_ch     *
-***************
-
-gen des1_ch=0 if bano_ch==0 | v6==7
-replace des1_ch=. if v6==9
-replace des1_ch=1 if v6==1 | v6==2
-replace des1_ch=2 if v6==3 | v6==4
-replace des1_ch=3 if v6==5 | v6==6
-
-***************
-* des2_ch     *
-***************
-
-gen des2_ch=des1_ch
-replace des2_ch=. if des1_ch==3
-
-***************
-* piso_ch     *
-***************
-
-gen piso_ch=0 if v9a==5
-replace piso_ch=1 if v9a<5
-
-***************
-* pared_ch    *
-***************
-
-gen pared_ch=0 if v8a>=4 & v8a<=7
-replace pared_ch=1 if v8a<4
-replace pared_ch=2 if v8a==8
-replace pared_ch=. if v8a==9
-
-***************
-* techo_ch    *
-***************
-
-gen techo_ch=0 if v10a>=4 & v10a<=6
-replace techo_ch=1 if v10a<4
-replace techo_ch=. if v10a==9
-
-***************
-* resid_ch    *
-***************
-
-gen resid_ch=.
-
-
-
-***************
-* dorm_ch     *
-***************
-
-gen dorm_ch=v3a 
-
-***************
-* cuartos_ch  *
-***************
-
-egen piezaviv=rsum(v3a v3b v3c v3d v3e v3f v3g), missing
-replace piezaviv=. if v3a==. & v3b==. & v3c==. & v3d==. & v3e==. & v3f==. & v3g==. 
-egen piezahog=rsum(v16a v16b v16c v16d v16e v16f v16g), missing
-replace piezahog=. if v16a==. & v16b==. & v16c==. & v16d==. & v16e==. & v16f==. & v16g==. 
-gen cuartos_ch=piezaviv 
-
-***************
-* cuartos_ch  *
-***************
-
-gen cocina_ch=(v3f!=0)
-
-sort idh_ch
-
-***************
-* telef_ch    *
-***************
-
-by idh_ch: egen telef_ch=sum(r10d==1)
-replace telef_ch=1 if telef_ch>=1
-
-***************
-* refrig_ch   *
-***************
-
-by idh_ch: egen refrig_ch=sum(r10b==1)
-replace refrig_ch=1 if refrig_ch>=1
-
-***************
-* freez_ch    *
-***************
-
-gen freez_ch=.
-
-***************
-* auto_ch     * 
-***************
-*Yanira Oviedo, Junio 2010: El programa no está cumpliendo con su finalidad. Se propone una instrucción nueva.
-*by idh_ch: egen auto_ch=sum(r9a>=1) /* for 2006  */
-*replace auto_ch=1 if auto_ch>=1
-
-gen auto_ch=0
-replace auto_ch=1 if r9a>=1 & r9a<9
-replace auto_ch=. if r9a==. | r9a==9
-
-***************
-* compu_ch    * 
-***************
-
-by idh_ch: egen compu_ch=sum(r11==1)
-replace compu_ch=1 if compu_ch>=1
-
-***************
-* compu_ch    * 
-***************
-
-by idh_ch: egen internet_ch=sum(r12a==1 | r12a==2 | r12a==3)
-replace internet_ch=1 if internet_ch>=1
-
-***************
-* compu_ch    * 
-***************
-
-by idh_ch: egen cel_ch=sum(r13==1 | r13==2)
-replace cel_ch=1 if cel_ch>=1
-
-***************
-* vivi1_ch    * 
-*************** 
-
-gen vivi1_ch=1 if v11==1 | v11==2
-replace vivi1_ch=2 if v11==3
-replace vivi1_ch=3 if v11>3
-
-***************
-* vivi2_ch    * 
-*************** 
-
-gen vivi2_ch=(vivi1_ch==1 | vivi1_ch==2)
-
-***************
-* viviprop_ch * 
-*************** 
-
-gen viviprop_ch=0 if v12==5 | v12==6
-replace viviprop_ch=1 if v12==1 | v12==3
-replace viviprop_ch=2 if v12==2 | v12==4
-replace viviprop_ch=3 if v12==10
-replace viviprop_ch=4 if v12>6 & v12<=9
-
-***************
-* vivitit_ch  * 
-***************
-
-gen vivitit_ch=.
-
-***************
-* vivialq_ch  * 
-***************
-
-gen vivialq_ch=. /* ??? */
-
-***************
-*vivialqimp_ch* 
-***************
-
-gen vivialqimp_ch=yaimhaj
-
-/* new variables */
-
-***************
-* howner      * 
-***************
-
-gen howner=(viviprop_ch==1 | viviprop==2)
-replace howner=. if viviprop_ch==.
-
-***************
-* floor       * 
-***************
-
-gen floor=(piso_ch==1)
-replace floor=. if piso_ch==.
-
-
 **************************
 * VARIABLES DEMOGRAFICAS *
 **************************
@@ -1230,6 +908,328 @@ replace firmapeq_ci=. if o13=="X" | emp_ci==0*/
 * Mod MLO: incorporacion variable 10/2015
 gen spublico_ci=(o19==3 | o19==4 | o19==9)
 replace spublico_ci=. if emp_ci!=1
+
+
+******************************************
+* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
+******************************************
+
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if v4<=3 
+replace aguared_ch = 0 if v4>3
+la var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+*se asume a partir de los datos y el cuestionario que agua potable solo es de red.
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if v4<=3 & v5<=2
+replace aguafuente_ch = 2 if v4<=3 & v5>2
+replace aguafuente_ch = 8 if v4==5
+replace aguafuente_ch = 10 if (v4==6 | v4==9 | v4==4)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if v5==1
+replace aguadist_ch=2 if v5==2
+replace aguadist_ch=3 if v5==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = 1 if v4<=2
+replace aguamide_ch  = 0 if v4>2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if v6==7
+replace bano_ch=1 if v6==1
+replace bano_ch=2 if v6==2
+replace bano_ch=3 if v6==3 | v6==4 
+replace bano_ch=4 if v6==5
+replace bano_ch=6 if v6==6 | v6==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if v6!=7
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+
+
+***************
+* luz_ch      *
+***************
+
+gen luz_ch=(v7a<=6)
+
+***************
+* luzmide_ch  *
+***************
+
+gen luzmide_ch=(v7a==1 | v7a==2)
+replace luzmide_ch=. if luz_ch==0
+
+***************
+* combust_ch  *
+***************
+
+gen combust_ch=.
+
+
+
+***************
+* des1_ch     *
+***************
+
+gen des1_ch=0 if bano_ch==0 | v6==7
+replace des1_ch=. if v6==9
+replace des1_ch=1 if v6==1 | v6==2
+replace des1_ch=2 if v6==3 | v6==4
+replace des1_ch=3 if v6==5 | v6==6
+
+***************
+* des2_ch     *
+***************
+
+gen des2_ch=des1_ch
+replace des2_ch=. if des1_ch==3
+
+***************
+* piso_ch     *
+***************
+
+gen piso_ch=0 if v9a==5
+replace piso_ch=1 if v9a<5
+
+***************
+* pared_ch    *
+***************
+
+gen pared_ch=0 if v8a>=4 & v8a<=7
+replace pared_ch=1 if v8a<4
+replace pared_ch=2 if v8a==8
+replace pared_ch=. if v8a==9
+
+***************
+* techo_ch    *
+***************
+
+gen techo_ch=0 if v10a>=4 & v10a<=6
+replace techo_ch=1 if v10a<4
+replace techo_ch=. if v10a==9
+
+***************
+* resid_ch    *
+***************
+
+gen resid_ch=.
+
+
+
+***************
+* dorm_ch     *
+***************
+
+gen dorm_ch=v3a 
+
+***************
+* cuartos_ch  *
+***************
+
+egen piezaviv=rsum(v3a v3b v3c v3d v3e v3f v3g), missing
+replace piezaviv=. if v3a==. & v3b==. & v3c==. & v3d==. & v3e==. & v3f==. & v3g==. 
+egen piezahog=rsum(v16a v16b v16c v16d v16e v16f v16g), missing
+replace piezahog=. if v16a==. & v16b==. & v16c==. & v16d==. & v16e==. & v16f==. & v16g==. 
+gen cuartos_ch=piezaviv 
+
+***************
+* cuartos_ch  *
+***************
+
+gen cocina_ch=(v3f!=0)
+
+sort idh_ch
+
+***************
+* telef_ch    *
+***************
+
+by idh_ch: egen telef_ch=sum(r10d==1)
+replace telef_ch=1 if telef_ch>=1
+
+***************
+* refrig_ch   *
+***************
+
+by idh_ch: egen refrig_ch=sum(r10b==1)
+replace refrig_ch=1 if refrig_ch>=1
+
+***************
+* freez_ch    *
+***************
+
+gen freez_ch=.
+
+***************
+* auto_ch     * 
+***************
+*Yanira Oviedo, Junio 2010: El programa no está cumpliendo con su finalidad. Se propone una instrucción nueva.
+*by idh_ch: egen auto_ch=sum(r9a>=1) /* for 2006  */
+*replace auto_ch=1 if auto_ch>=1
+
+gen auto_ch=0
+replace auto_ch=1 if r9a>=1 & r9a<9
+replace auto_ch=. if r9a==. | r9a==9
+
+***************
+* compu_ch    * 
+***************
+
+by idh_ch: egen compu_ch=sum(r11==1)
+replace compu_ch=1 if compu_ch>=1
+
+***************
+* compu_ch    * 
+***************
+
+by idh_ch: egen internet_ch=sum(r12a==1 | r12a==2 | r12a==3)
+replace internet_ch=1 if internet_ch>=1
+
+***************
+* compu_ch    * 
+***************
+
+by idh_ch: egen cel_ch=sum(r13==1 | r13==2)
+replace cel_ch=1 if cel_ch>=1
+
+***************
+* vivi1_ch    * 
+*************** 
+
+gen vivi1_ch=1 if v11==1 | v11==2
+replace vivi1_ch=2 if v11==3
+replace vivi1_ch=3 if v11>3
+
+***************
+* vivi2_ch    * 
+*************** 
+
+gen vivi2_ch=(vivi1_ch==1 | vivi1_ch==2)
+
+***************
+* viviprop_ch * 
+*************** 
+
+gen viviprop_ch=0 if v12==5 | v12==6
+replace viviprop_ch=1 if v12==1 | v12==3
+replace viviprop_ch=2 if v12==2 | v12==4
+replace viviprop_ch=3 if v12==10
+replace viviprop_ch=4 if v12>6 & v12<=9
+
+***************
+* vivitit_ch  * 
+***************
+
+gen vivitit_ch=.
+
+***************
+* vivialq_ch  * 
+***************
+
+gen vivialq_ch=. /* ??? */
+
+***************
+*vivialqimp_ch* 
+***************
+
+gen vivialqimp_ch=yaimhaj
+
+/* new variables */
+
+***************
+* howner      * 
+***************
+
+gen howner=(viviprop_ch==1 | viviprop==2)
+replace howner=. if viviprop_ch==.
+
+***************
+* floor       * 
+***************
+
+gen floor=(piso_ch==1)
+replace floor=. if piso_ch==.
 
 ************************
 * VARIABLES EDUCATIVAS *

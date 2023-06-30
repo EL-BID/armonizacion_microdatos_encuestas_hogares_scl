@@ -115,6 +115,94 @@ replace relacion_ci=6 if v0402==7
 label define relacion_ci 1 "Jefe" 2 "Conyuge" 3 "Hijo" 4 "Otros Parientes" 5 "Otros no Parientes" 6 "Servicio Domestico"
 label values relacion_ci relacion_ci
 
+
+
+/************************************************************************/
+/*				vARIABLES DEMOGRAFICAS			*/
+/************************************************************************/
+****************
+***miembros_ci***
+****************
+gen miembros_ci=(relacion_ci<5)
+label variable miembros_ci "Miembro del hogar"
+
+
+
+
+gen factor_ci=v4611 /*AUN CUANDO HAY UN FACTOR DE PERSONAS ES IDENTICO AL DE HOGARES, EXCEPTO PARA EL '93 EN DONDE SE REGISTRAN vALORES NEGATIvOS! PARA HOMOGENEIZAR,A TODOS LES PONEMOS EL FACTOR DE EXPANSION DEL HOGAR*/
+gen sexo_ci=1 if v0302==2
+replace sexo_ci=2 if v0302==4
+gen edad_ci=v8005
+replace edad_ci=. if edad_ci==999
+gen civil_ci=.
+capture replace civil_ci=1 if v1001==3 & v1003==3 /*EN ALGUNOS AÑOS NO ESTA EL MODULO DE NUPCIALIDAD!*/
+capture replace civil_ci=2 if v1001==1
+capture replace civil_ci=3 if v1004==2
+capture replace civil_ci=4 if v1004==4
+gen jefe_ci=(v0402==1)
+sort idh_ch
+by idh_ch: egen byte nconyuges_ch=sum(relacion_ci==2) 
+by idh_ch: egen byte nhijos_ch=sum(relacion_ci==3)
+by idh_ch: egen byte notropari_ch=sum(relacion_ci==4)
+by idh_ch: egen byte notronopari_ch=sum(relacion_ci==5)
+by idh_ch: egen byte nempdom_ch=sum(relacion_ci==6)
+gen byte clasehog_ch=0
+replace clasehog_ch=1 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch==0 /*Unipersonal*/
+replace clasehog_ch=2 if nhijos_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (child with or without spouse but without other relatives)*/
+replace clasehog_ch=2 if nhijos_ch==0 & nconyuges_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (spouse with or without children but without other relatives)*/
+replace clasehog_ch=3 if notropari_ch>0 & notronopari_ch==0 /*Ampliado*/
+replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))/*Compuesto (some relatives plus non relative)*/
+replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0 /*Corresidente*/
+sort idh_ch
+by idh_ch:egen byte nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5) if miembros_ci==1
+by idh_ch:egen byte nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21 & edad_ci<=98))
+by idh_ch:egen byte nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<21))
+by idh_ch:egen byte nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=65))
+by idh_ch:egen byte nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6))
+by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1))
+
+
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+												
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: COR OU RACA? (v0404) (BRANCA 2, PRETA 4, AMARELA 6, PARDA 8, INDIGENA 0, IGNORADA 9) 
+
+gen afroind_ci=. 
+replace afroind_ci=1  if v0404==0
+replace afroind_ci=2 if v0404 == 4 | v0404 == 8 
+replace afroind_ci=3 if v0404 == 2 | v0404 == 6 
+replace afroind_ci=. if v0404==9
+
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=1990
+
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 /************************************************************************/
 /*			vARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
 /************************************************************************/	
@@ -327,92 +415,6 @@ replace vivialq_ch=. if vivialq_ch>=999999999 | vivialq_ch<0
 gen vivialqimp_ch=.
 
 
-
-/************************************************************************/
-/*				vARIABLES DEMOGRAFICAS			*/
-/************************************************************************/
-****************
-***miembros_ci***
-****************
-gen miembros_ci=(relacion_ci<5)
-label variable miembros_ci "Miembro del hogar"
-
-
-
-
-gen factor_ci=v4611 /*AUN CUANDO HAY UN FACTOR DE PERSONAS ES IDENTICO AL DE HOGARES, EXCEPTO PARA EL '93 EN DONDE SE REGISTRAN vALORES NEGATIvOS! PARA HOMOGENEIZAR,A TODOS LES PONEMOS EL FACTOR DE EXPANSION DEL HOGAR*/
-gen sexo_ci=1 if v0302==2
-replace sexo_ci=2 if v0302==4
-gen edad_ci=v8005
-replace edad_ci=. if edad_ci==999
-gen civil_ci=.
-capture replace civil_ci=1 if v1001==3 & v1003==3 /*EN ALGUNOS AÑOS NO ESTA EL MODULO DE NUPCIALIDAD!*/
-capture replace civil_ci=2 if v1001==1
-capture replace civil_ci=3 if v1004==2
-capture replace civil_ci=4 if v1004==4
-gen jefe_ci=(v0402==1)
-sort idh_ch
-by idh_ch: egen byte nconyuges_ch=sum(relacion_ci==2) 
-by idh_ch: egen byte nhijos_ch=sum(relacion_ci==3)
-by idh_ch: egen byte notropari_ch=sum(relacion_ci==4)
-by idh_ch: egen byte notronopari_ch=sum(relacion_ci==5)
-by idh_ch: egen byte nempdom_ch=sum(relacion_ci==6)
-gen byte clasehog_ch=0
-replace clasehog_ch=1 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch==0 /*Unipersonal*/
-replace clasehog_ch=2 if nhijos_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (child with or without spouse but without other relatives)*/
-replace clasehog_ch=2 if nhijos_ch==0 & nconyuges_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (spouse with or without children but without other relatives)*/
-replace clasehog_ch=3 if notropari_ch>0 & notronopari_ch==0 /*Ampliado*/
-replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))/*Compuesto (some relatives plus non relative)*/
-replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0 /*Corresidente*/
-sort idh_ch
-by idh_ch:egen byte nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5) if miembros_ci==1
-by idh_ch:egen byte nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21 & edad_ci<=98))
-by idh_ch:egen byte nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<21))
-by idh_ch:egen byte nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=65))
-by idh_ch:egen byte nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6))
-by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1))
-
-
-*******************************************************
-***           VARIABLES DE DIVERSIDAD               ***
-*******************************************************				
-* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
-												
-	***************
-	***afroind_ci***
-	***************
-**Pregunta: COR OU RACA? (v0404) (BRANCA 2, PRETA 4, AMARELA 6, PARDA 8, INDIGENA 0, IGNORADA 9) 
-
-gen afroind_ci=. 
-replace afroind_ci=1  if v0404==0
-replace afroind_ci=2 if v0404 == 4 | v0404 == 8 
-replace afroind_ci=3 if v0404 == 2 | v0404 == 6 
-replace afroind_ci=. if v0404==9
-
-
-	***************
-	***afroind_ch***
-	***************
-gen afroind_jefe= afroind_ci if relacion_ci==1
-egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
-
-drop afroind_jefe 
-
-	*******************
-	***afroind_ano_c***
-	*******************
-gen afroind_ano_c=1990
-
-
-	*******************
-	***dis_ci***
-	*******************
-gen dis_ci=. 
-
-	*******************
-	***dis_ch***
-	*******************
-gen dis_ch=. 
 
 /******************************************************************************/
 /*				vARIABLES DE DEMANDA LABORAL		      */

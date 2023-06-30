@@ -1041,6 +1041,7 @@ replace aguafuente_ch= 3 if water==7
 replace aguafuente_ch= 4 if water==2
 replace aguafuente_ch= 8 if water==8
 replace aguafuente_ch= 10 if water==9 | water==6| water==10
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *********************
 
@@ -1078,6 +1079,7 @@ replace bano_ch=2 if toilet==2
 replace bano_ch=3 if toilet==3 | toilet==4 | toilet==5
 replace bano_ch=5 if toilet==6
 replace bano_ch=6 if toilet==7 |toilet==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 *********************
 generate banoex_ch=9

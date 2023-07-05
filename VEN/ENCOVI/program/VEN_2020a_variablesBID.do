@@ -1081,7 +1081,7 @@ replace aguafuente_ch= 2 if s4q5__2==1
 replace aguafuente_ch = 4 if s4q5__5==1 
 replace aguafuente_ch = 6 if s4q5__3==1
 replace aguafuente_ch = 8 if s4q5__6==1
-replace aguafuente_ch = 10 if s4q5__4 ==1
+replace aguafuente_ch = 10 if s4q5__4 ==1 |(s4q5__1!=1&s4q5__2!=1&s4q5__3!=1&s4q5__4!=1&s4q5__5!=1&s4q5__6!=1& jefe_ci !=.)
 
 *************
 *aguadist_ch*
@@ -1136,7 +1136,7 @@ gen bano_ch=.
 replace bano_ch=0 if s4q9==5
 replace bano_ch=1 if s4q9==1
 replace bano_ch=2 if s4q9==2
-replace bano_ch=6 if s4q9==3|s4q9==4
+replace bano_ch=6 if s4q9==3|s4q9==4|(s4q9!=1 &s4q9!=2 &s4q9!=3 & s4q9!=4 &s4q9!=5 &jefe_ci!=.)
 
 
 ***************

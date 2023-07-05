@@ -1236,6 +1236,7 @@ gen luzmide_ch=.
 * 1 si el combustible principal usado en el hogar es gas o electricidad y 0 dom
 gen combust_ch=.
 
+
 *************
 ***des1_ch***
 *************
@@ -1335,6 +1336,10 @@ PV11B	Recolección directa de basura
 PV11C	Container de basura
 */
 tab pv11b pv11c
+
+replace combust_ch=1 if ph14d==1
+replace combust_ch=0 if ph14d==2
+
 gen resid_ch=.
 replace resid_ch=3 if pv11c==1|pv11c==2
 replace resid_ch=0 if pv11b==1 //remplazo por 0 si es recolección directa aunque registre también container

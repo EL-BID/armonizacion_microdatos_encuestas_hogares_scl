@@ -238,13 +238,14 @@ replace aguafconsumo_ch = 10 if (P01D06==98 | P01D06==4) & P01D15!=5
 *****************
 *aguafuente_ch*
 *****************
-
-gen aguafuente_ch = 1 if (P01D06==1 | P01D06==2)
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if (P01D06==1 | P01D06==2)
 replace aguafuente_ch = 2 if P01D06==3
 replace aguafuente_ch = 5 if P01D06==7
 replace aguafuente_ch= 6 if P01D06==6
 replace aguafuente_ch = 8 if P01D06==5
 replace aguafuente_ch= 10 if P01D06==98 | P01D06==4
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *************
 *aguadist_ch*

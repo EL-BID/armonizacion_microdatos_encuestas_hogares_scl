@@ -1499,13 +1499,14 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-
-gen aguafuente_ch = 1 if (p02a05==1 | p02a05==2)
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if (p02a05==1 | p02a05==2)
 replace aguafuente_ch = 2 if p02a05==3
 replace aguafuente_ch = 5 if p02a05==8
 replace aguafuente_ch= 6 if p02a05==5
 replace aguafuente_ch = 8 if p02a05==6
 replace aguafuente_ch= 10 if p02a05==98 | p02a05==4 | p02a05==7
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *************
 *aguadist_ch*

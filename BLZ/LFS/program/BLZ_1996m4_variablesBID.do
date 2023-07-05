@@ -67,10 +67,33 @@ label var region_BID_c "Region BID"
 label define region_BID 1"Centroamérica" 2"Caribe" 3"Andinos" 4"Cono Sur"
 label values region_BID_c region_BID
 
+***********
+* Region_c *
+************
+gen region_c= q01
+label define region_c  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+		    
+label value region_c region_c
+label var region_c "División política, departamento"
+
 ***************
-* REGION PAIS *
+***ine01***
 ***************
-g region_c=.
+gen ine01= q01
+label define ine01  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+label value ine01 ine01
 
 ***************
 *    ZONA     *
@@ -314,7 +337,36 @@ egen nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad<1)),  by (idh_ch)
 label variable nmenor1_ch "Miembros menores a 1 año dentro del Hogar"
 
 
+********************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
 
+			
+	***************
+   *** afroind_ci ***
+	***************
+gen afroind_ci=. 
+
+	***************
+   *** afroind_ch ***
+	***************
+gen afroind_ch=. 
+
+	*******************
+   *** afroind_ano_c ***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	*** dis_ci ***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	*** dis_ch ***
+	*******************
+gen dis_ch=. 
 
 
 *******************************
@@ -977,6 +1029,13 @@ gen edus2c_ci=.
 *replace edus2c_ci=1 if 
 label var edus2c_ci "Ha completado el segundo ciclo de la secundaria"
 
+****************
+***asispre_ci***
+****************
+*Agregada por Iván Bornacelly - 01/23/2017
+g asispre_ci=. // no consideramos menores de 3 años (r201a)
+la var asispre_ci "Asiste a educacion prescolar"
+
 ****************************************
 *  HA COMPLETADO EDUCACION PREESCOLAR  *
 ****************************************
@@ -1052,6 +1111,41 @@ label var tecnica_ci "Tiene carrera técnica"
 *******************************
 *******************************
 *******************************
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = .
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+**************
+*aguamejorada_ch*
+**************
+gen aguamejorada_ch =2
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+
+************
+*aguatrat_ch*
+************
+gen aguatrat_ch = .
 
 
 **************************
@@ -1168,11 +1262,6 @@ label values resid_ch resid
 
 **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch=.
 
 *********************
 ***banomejorado_ch***
@@ -1288,6 +1377,67 @@ label var vivialq_ch "Monto pagado por el alquiler"
 ***********************************
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Monto ud cree le pagarían por su vivienda"
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+* Variables no generadas
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: bonos comunidades solidarias rurales/urbanas (r319a3 r319a4) 
+* PNC: 	pensión bósica universal r319a5
+* Se imputan montos porque se eliminaron del cuestionario para 2020
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Transferencias
+gen percibe_ptmc_ci  = .
+gen ptmc_ch=.  
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+gen pnc_ci = .
 
 
 * Variables no generadas

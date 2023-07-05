@@ -13,7 +13,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS CRI
 local ENCUESTA EHPM

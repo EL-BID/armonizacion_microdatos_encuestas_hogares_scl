@@ -1286,7 +1286,7 @@ replace aguafconsumo_ch = 2 if (v11==3|v11==0) & v12<=4
 replace aguafconsumo_ch = 5 if v12==7
 replace aguafconsumo_ch = 8 if v12==6
 replace aguafconsumo_ch = 10 if v12==5
-replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+replace aguafconsumo_ch = 10 if aguafconsumo_ch ==. & jefe_ci==1
 
 *****************
 *aguafuente_ch*

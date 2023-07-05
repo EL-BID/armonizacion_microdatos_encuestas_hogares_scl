@@ -1628,12 +1628,12 @@ replace aguafuente_ch= 10 if r313==9 | r313==5 |r313==7
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  (r313==1 | r313==3 | r313==6 | r313==7)
+replace aguadist_ch= 1 if  (r313==1 | r313==3 | r313==6)
 replace aguadist_ch= 2 if  r313==2
-replace aguadist_ch=3 if r313==4 | r313==5 | r313==9
+replace aguadist_ch=3 if r313==4 | r313==5
 
 
-**************
+***************
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch =9
@@ -1653,6 +1653,27 @@ gen aguadisp2_ch = 9
 gen aguamala_ch = 2
 replace aguamala_ch = 0 if aguafuente_ch<=7
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (r313==1 | r313==2)
+replace aguared_ch=0 if (r313==3 | r313==4)
+label var aguared_ch "Acceso a fuente de agua por red"
 
 
 gen luz_ch=(r312==1 | r312==2)

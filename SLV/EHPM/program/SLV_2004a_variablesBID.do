@@ -1533,9 +1533,9 @@ replace aguafuente_ch= 10 if r313==9 | r313==5 |r313==7
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  (r313==1 | r313==3 | r313==6 | r313==7)
+replace aguadist_ch= 1 if  (r313==1 | r313==3 | r313==6)
 replace aguadist_ch= 2 if  r313==2
-replace aguadist_ch=3 if r313==4 | r313==5 | r313==9
+replace aguadist_ch=3 if r313==4 | r313==5
 
 
 **************
@@ -1573,13 +1573,6 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 ***aguamide_ch***
 *****************
 gen aguamide_ch = .
-
-****************
-***aguared_ch***
-****************
-gen aguared_ch=1 if (r313==1 | r313==2)
-replace aguared_ch=0 if (r313==3 | r313==4)
-label var aguared_ch "Acceso a fuente de agua por red"
 
 
 *****************
@@ -1623,65 +1616,6 @@ gen aguatrat_ch=0
 replace aguatrat_ch=1 if r315 <4
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
-
-
-/*NA*/
-=======
-****************
-***aguadist_ch***
-****************
-gen aguadist_ch=1 if r313==1
-replace aguadist_ch=2 if r313==2
-replace aguadist_ch=3 if r313>2 & r313<=9
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
-label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
-label val aguadist_ch aguadist_ch
-
-****************
-***aguafconsumo_ch***
-****************
-gen aguafconsumo_ch = .
-
-******************
-***aguafuente_ch**
-******************
-gen aguafuente_ch = 1 if r313==1|r313==2
-replace aguafuente_ch = 2 if r313==4
-replace aguafuente_ch = 4 if r313==7
-replace aguafuente_ch = 6 if r313==6
-replace aguafuente_ch = 7 if r313==3
-replace aguafuente_ch = 8 if r313==8
-replace aguafuente_ch = 9 if r313==5|r313==9
-
-**************
-*aguadisp1_ch*
-**************
-gen aguadisp1_ch =9
-
-**************
-*aguadisp2_ch*
-**************
-gen aguadisp2_ch =9
-
-*************
-*aguamala_ch*  Altered
-*************
-gen aguamala_ch = 2
-replace aguamala_ch = 0 if aguafuente_ch<=7
-replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
-
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-
-*****************
-***aguamide_ch***
-*****************
-gen aguamide_ch = .
 
 
 gen luz_ch=(r312==1 | r312==2)

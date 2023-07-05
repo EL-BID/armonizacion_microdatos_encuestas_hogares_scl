@@ -1422,13 +1422,14 @@ Ubicación de la principal fuente de agua
     7 Lluvia
     8 Otro (98 en el 2021)
  */
-
-gen aguafuente_ch = 1 if (p02b03==1 | p02b03==2)
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if (p02b03==1 | p02b03==2)
 replace aguafuente_ch = 2 if p02b03==3
 replace aguafuente_ch = 5 if p02b03==7
 replace aguafuente_ch= 6 if p02b03==6
 replace aguafuente_ch = 8 if p02b03==5
 replace aguafuente_ch= 10 if p02b03==8 | p02b03==4
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *************
 *aguadist_ch*

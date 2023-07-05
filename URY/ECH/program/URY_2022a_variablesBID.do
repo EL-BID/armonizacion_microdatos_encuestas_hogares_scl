@@ -905,8 +905,9 @@ gen g146_ = g146/12
 gen g147_ = g147/12
 
 destring g126_7, replace
+destring g142, replace
 
-egen ylmpri_ci = rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7 g143_ g145_ g146_ g147_ g133_2) if emp_ci == 1, missing
+egen ylmpri_ci = rsum(g126_1 g126_2  g126_3  g126_4  g126_5  g126_6  g126_7 g142 g143_ g145_ g146_ g147_ g133_2) if emp_ci == 1, missing
 
 replace ylmpri_ci=. if (g126_1==. & g126_2==. & g126_3==. &  g126_4==. &  g126_5==. &  g126_6==. &  g126_7==. &  g143_==. & g145_==. & g146_==. & g147_==.)
 

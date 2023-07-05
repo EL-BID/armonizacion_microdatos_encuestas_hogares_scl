@@ -182,7 +182,7 @@ replace aguafuente_ch = 2 if (d11==1 & d14_1>2) | d11==2
 replace aguafuente_ch = 4 if d11==4
 replace aguafuente_ch = 8 if d11==6
 replace aguafuente_ch = 9 if d11==3 
-replace aguafuente_ch = 10 if d11==7 | d11==5
+replace aguafuente_ch = 10 if d11==7 | d11==5|d11==0|d11==8
 
 
 
@@ -269,7 +269,8 @@ replace sinbano_ch = 0 if d16>0
 *************
 *aguatrat_ch*
 *************
-gen aguatrat_ch = 9
+gen aguatrat_ch = 0
+replace aguatrat_ch =1 if d13==1
 *label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 gen luz_ch=.
 

@@ -1081,6 +1081,7 @@ replace aguafuente_ch= 7 if h8==3 | h73==1
 replace aguafuente_ch= 8 if h8==7 | h77==1
 replace aguafuente_ch= 9 if h8==5 | h75==1
 replace aguafuente_ch= 10 if h8==8 | h78==1
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *********************
 
@@ -1116,6 +1117,7 @@ replace bano_ch=2 if h3==2
 replace bano_ch=3 if h3==3 | h3==4 | h3==5
 replace bano_ch=5 if h3==6
 replace bano_ch=6 if h3==7
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 *********************
 generate banoex_ch=9

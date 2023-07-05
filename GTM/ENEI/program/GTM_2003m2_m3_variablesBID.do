@@ -1391,8 +1391,10 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 *aguafuente_ch*
 *****************
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if p02a03a==1
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
-gen aguafuente_ch = 1 if p02a03a==1
 
 
 

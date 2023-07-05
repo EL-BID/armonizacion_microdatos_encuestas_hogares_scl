@@ -1337,7 +1337,7 @@ replace aguafuente_ch = 2 if (v06<=2 & v09>2) | v06==8
 replace aguafuente_ch = 6 if v06==6
 replace aguafuente_ch = 7 if v06==7
 replace aguafuente_ch = 8 if v06==5
-replace aguafuente_ch = 10 if  v06==9 |v06==3 | v06==4
+replace aguafuente_ch = 10 if  v06==9 |v06==3 | v06==4|(v06==. & jefe_ci!=.)
 
 *************
 *aguadist_ch*

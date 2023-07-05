@@ -1169,7 +1169,8 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
+ rename v11 abagua
+ rename v12 servsani
 ****************
 ***aguared_ch***
 ****************
@@ -1298,9 +1299,9 @@ replace combust_ch=0 if  v15==3 | v15==4
 /*NA*/
 
 gen des1_ch=.
-replace des1_ch=0 if v12==5
-replace des1_ch=1 if v12==1 |v12==2
-replace des1_ch=2 if v12==3
+replace des1_ch=0 if servsani==5
+replace des1_ch=1 if servsani==1 |servsani==2
+replace des1_ch=2 if servsani==3
 */replace des1_ch=NUNCA ES 3*/
 *v12=4 SIGNIFICA OTRO, pero no existe esta categoria*
 
@@ -1451,8 +1452,6 @@ RELACION DE PARENTESCO	(b03)
  rename c31 tamestsec
  rename c26 ocupsec
  rename c08 condinac
- rename v11 abagua
- rename v12 servsani
  rename v15 solidfuels
  rename v01 tipoviv
  rename v02 tenviv
@@ -1462,7 +1461,7 @@ RELACION DE PARENTESCO	(b03)
  rename v16a celular
  rename v16b telefono
  rename v16i computa
-
+ 
 ** AREA
 
  tab area [w=factor]

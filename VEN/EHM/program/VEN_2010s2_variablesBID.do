@@ -1193,7 +1193,7 @@ gen aguafuente_ch=.
 replace aguafuente_ch=1 if pv7==1
 replace aguafuente_ch=2 if pv7==2
 replace aguafuente_ch=6 if pv7==3
-replace aguafuente_ch= 10 if pv7==4
+replace aguafuente_ch= 10 if pv7==4|pv7==6|pv7==7
 
 *************
 *aguadist_ch*

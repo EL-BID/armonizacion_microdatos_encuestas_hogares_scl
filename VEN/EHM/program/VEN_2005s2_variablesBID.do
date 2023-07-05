@@ -1775,9 +1775,6 @@ gen luzmide_ch=.
 gen combust_ch=.
 replace combust_ch=1 if ph14d==1
 replace combust_ch=0 if ph14d==2
-gen banoex_ch=.
-replace banoex=1 if ph13a==1
-replace banoex=0 if ph13a==2
 gen resid_ch=.
 
 
@@ -1818,10 +1815,6 @@ replace vivialq_ch= ph16b if ph16b>=0
 
 gen vivialqimp_ch=.
 
-gen bano_ch=1 if pv8>=1 & pv8<=3
-replace bano_ch=0 if pv8==4
-
-label var bano_ch "El hogar tiene algún tipo de servicio higíenico (Inodoro o letrina)"
 
 
 /*_____________________________________________________________________________________________________*/

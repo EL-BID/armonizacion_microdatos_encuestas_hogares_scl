@@ -1141,6 +1141,7 @@ replace aguafuente_ch = 7 if p5050==2
 replace aguafuente_ch = 8 if p5050==6  
 replace aguafuente_ch = 9 if (p5050==4 | p5050==9)
 replace aguafuente_ch = 10 if (p5050==3 | p5050==2)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1198,6 +1199,7 @@ replace bano_ch=1 if p5020==1
 replace bano_ch=2 if p5020==2
 replace bano_ch=4 if p5020==5
 replace bano_ch=6 if p5020==3 | p5020 ==4
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***

@@ -3898,7 +3898,7 @@ replace aguafuente_ch = 2 if dis_agua==3
 replace aguafuente_ch = 5 if dis_agua==4
 replace aguafuente_ch = 7 if dis_agua==5
 replace aguafuente_ch = 6 if dis_agua==6
-replace aguafuente_ch = 10 if dis_agua==7 
+replace aguafuente_ch = 10 if dis_agua==7 | (dis_agua ==. & jefe_ci==1)
 
 *************
 *aguadist_ch*
@@ -3955,7 +3955,7 @@ replace bano_ch=0 if excus==2
 replace bano_ch=1 if drenaje==1 & excus==1 
 replace bano_ch=2 if drenaje==2 & excus==1 
 replace bano_ch=4 if (drenaje==4 | drenaje==3) & excus==1
-replace bano_ch=6 if drenaje==5 & excus==1 & adm_ag== 3
+replace bano_ch=6 if drenaje==5 & excus==1 & adm_ag== 3|(drenaje==. & jefe_ci ==1)
 
 ***************
 ***banoex_ch***

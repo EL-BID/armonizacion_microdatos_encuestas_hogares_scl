@@ -329,7 +329,7 @@ gen pea_ci=(emp_ci==1 | desemp_ci==1)
 ****************
 * horaspri_ci  * 
 ****************
-gen horaspri_ci= y2_hrs
+gen horaspri_ci= y2_hrs/4
 replace horaspri_ci=. if emp_ci!=1
 label var horaspri_ci "Horas totales trabajadas en la actividad principal"
 
@@ -823,24 +823,29 @@ gen asiste_ci=(e2==1)
 replace asiste_ci=. if e2==.
 label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 
+
 *************
 ***aedu_ci*** 
 ************* 
-gen aedu_ci=.
-replace aedu_ci=.  if e6a==5 // Educación Especial
-replace e6a=. if e6a==99
-replace e6b=. if e6b==99
-replace aedu_ci=0              if e6a>=1 & e6a<=4    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
-replace aedu_ci=e6b            if e6a==6             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=e6b            if e6a==7             /*Básica (Sist. nuevo) */
-replace aedu_ci=e6b+6 		   if e6a==8             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=e6b+8 		   if e6a==9             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=e6b+6          if e6a==10            /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=e6b+8          if e6a==11            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=e6b+12         if e6a>=12 & e6a<=15  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
-replace aedu_ci=e6b+17         if e6a==16 | e6a==17  /*Posgrado*/
-label var aedu_ci "Anios de educacion aprobados" 
-label var aedu_ci "Anios de educacion aprobados" 
+replace e6b = . if e6b == 99
+replace e6a = . if e6a == 99
+
+gen aedu_ci = .
+replace aedu_ci = 0              if e6a >= 1 & e6a <= 4    /*Nunca asistió, sala cuna. jardin infantil, prekinder/kinder */
+
+* Para aquellos que asisten actualmente
+replace aedu_ci = e6b      if inrange(e6a, 6, 7) & e2 == 1 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6b + 6 - 1  if inrange(e6a, 8, 10) & e2 == 1  /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6b + 8 - 1   if inrange(e6a, 9, 11) & e2 == 1 /*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6b + 12 - 1    if e6a >= 12 & e6a <= 15  & e2 == 1 /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6b + 16 - 1  if inrange(e6a, 16, 17) & e2 == 1   /*Posgrado*/
+
+* Para aquellos que no asisten actualmente
+replace aedu_ci = e6b      if inrange(e6a, 6, 7) & e2 == 2 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6b + 6  if inrange(e6a, 8, 10) & e2 == 2 /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6b + 8  if inrange(e6a, 9, 11) & e2 == 2/*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6b + 12 if e6a >= 12 & e6a <= 15 & e2 == 2  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6b + 16 if inrange(e6a, 16, 17) & e2 == 2   /*Posgrado*/
 
 **imputando anios perdidos
 
@@ -851,11 +856,14 @@ replace aedu_ci=8     if e6a==9 & aedu_ci==.
 replace aedu_ci=6     if e6a==10 & aedu_ci==.
 replace aedu_ci=8     if e6a==11 & aedu_ci==.
 replace aedu_ci=12     if e6a==12 & aedu_ci==.
-replace aedu_ci=12     if e6a==13 & aedu_ci==.
+replace aedu_ci=14     if e6a==13 & aedu_ci==.
 replace aedu_ci=12     if e6a==14 & aedu_ci==.
-replace aedu_ci=12    if e6a==15 & aedu_ci==.
-replace aedu_ci=17     if e6a==16 & aedu_ci==.
-replace aedu_ci=17     if e6a==17 & aedu_ci==.
+replace aedu_ci=16    if e6a==15 & aedu_ci==.
+replace aedu_ci=16     if e6a==16 & aedu_ci==.
+replace aedu_ci=18     if e6a==17 & aedu_ci==.
+
+label var aedu_ci "Anios de educacion aprobados" 
+
 
 **************
 ***eduno_ci***
@@ -1013,11 +1021,13 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch = 1 if v20==1 & v22<=2
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if v20==1 & v22<=2
 replace aguafuente_ch = 2 if v20==1 & v22>2
 replace aguafuente_ch = 6 if v20==6
 replace aguafuente_ch = 8 if v20==5
 replace aguafuente_ch = 10 if (v20==7 | v20==4)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1076,6 +1086,7 @@ replace bano_ch=3 if v23_sistema==3|v23_cajon==4
 replace bano_ch=4 if v23_cajon==5
 replace bano_ch=5 if v23_sistema==7 
 replace bano_ch=6 if v23_cajon==6
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***

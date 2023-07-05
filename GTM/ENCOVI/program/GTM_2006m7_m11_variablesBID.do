@@ -214,23 +214,128 @@ egen hh=sum(jefe_ci), by (idh_ch)
 capture assert hh==1
 
 *** HOUSING ***
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if P01A05A==1
+replace aguared_ch = 0 if P01A05A==2
+la var aguared_ch "Acceso a fuente de agua por red"
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if (P01D06==1 | P01D06==2) & P01D15!=5
+replace aguafconsumo_ch = 2 if P01D06==3 & P01D15!=5
+replace aguafconsumo_ch = 3 if P01D15==5 
+replace aguafconsumo_ch = 5 if P01D06==7 & P01D15!=5
+replace aguafconsumo_ch = 6 if P01D06==6 & P01D15!=5
+replace aguafconsumo_ch = 8 if P01D06==5 & P01D15!=5
+replace aguafconsumo_ch = 10 if (P01D06==98 | P01D06==4) & P01D15!=5
 
-gen aguared_ch=.
-replace aguared_ch=1 if P01A05A==1
-replace aguared_ch=0 if P01A05A==2
 
-gen aguadist_ch=.
-replace aguadist_ch=1 if  P01D12A==0
-replace aguadist_ch=2 if  P01D12A>0 & P01D12A<=1000
-replace aguadist_ch=3 if  P01D12A>1000
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if (P01D06==1 | P01D06==2)
+replace aguafuente_ch = 2 if P01D06==3
+replace aguafuente_ch = 5 if P01D06==7
+replace aguafuente_ch= 6 if P01D06==6
+replace aguafuente_ch = 8 if P01D06==5
+replace aguafuente_ch= 10 if P01D06==98 | P01D06==4
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
-gen aguamala_ch=.
-replace aguamala_ch=1 if P01D06==5 | P01D06==6 | P01D06==7 | P01D06==8
-replace aguamala_ch=0 if P01D06==1 | P01D06==2 | P01D06==3 | P01D06==4
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch= 1 if  P01D06 ==1
+replace aguadist_ch= 2 if  P01D06 ==2
+replace aguadist_ch= 3 if  P01D06==3
+replace aguadist_ch= 0 if  P01D06>=4 & P01D06 <=98
 
-gen aguamide_ch=.
-replace aguamide_ch=1 if P01A05E==1
-replace aguamide_ch=0 if P01A05E==2
+**************
+*aguadisp1_ch*
+**************
+
+gen aguadisp1_ch =9
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = 1 if  P01A05E==1
+replace aguamide_ch =  0 if P01A05E==2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if P01D16==5
+replace bano_ch=1 if P01D16==1
+replace bano_ch=2 if P01D16==2
+replace bano_ch=6 if P01D16==3|P01D16==4
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if P01D16!=5
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+replace aguatrat_ch = 1 if P01D15!=1
+replace aguatrat_ch = 0 if P01D15==1|P01D15==5 
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
 
 gen luz_ch=.
 replace luz_ch=1 if P01A05C==1
@@ -245,13 +350,6 @@ replace combust_ch=1 if
 replace combust_ch=0 if 
 */
 
-gen bano_ch=.
-replace bano_ch=1 if P01D16==1 | P01D16==2 | P01D16==3 | P01D16==4
-replace bano_ch=0 if P01D16==5
-
-gen banoex_ch=.
-replace banoex=1 if P01D17==1
-replace banoex=0 if P01D17==2
 
 
 * Modificaciones Marcela Rubio Septiembre 2014: variable habia sido generada como missing
@@ -289,19 +387,6 @@ replace resid_ch=1 if P01D20==3 | P01D20==4
 replace resid_ch=2 if P01D20==5
 replace resid_ch=3 if P01D20==6 | P01D20==98
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (P01D06 >=1 & P01D06  <=4) | P01D06  ==7
-replace aguamejorada_ch = 0 if (P01D06  >=5 & P01D06  <=6) | P01D06  ==98
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (P01D16 >=1 & P01D16 <=4) & P01D17 == 1
-replace banomejorado_ch = 0 if ((P01D16 >=1 & P01D16 <=4) & P01D17 == 2) & P01D16 ==5 
 
 gen dorm_ch=.
 replace dorm_ch=P01D02 if P01D02>=0
@@ -1331,7 +1416,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

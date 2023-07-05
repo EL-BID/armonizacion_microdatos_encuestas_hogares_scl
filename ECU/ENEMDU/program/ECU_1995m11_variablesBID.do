@@ -1196,30 +1196,36 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	*El año 1998 la ENEMDU no levanta informacion de vivienda (no existe este modulo)
 	
 	****************
-***aguared_ch***
-****************
+
+	***aguared_ch***
+	****************
+	
 gen aguared_ch =.
 label var aguared_ch "Acceso a fuente de agua por red"
+
 
 *****************
 *aguafconsumo_ch*
 *****************
-gen aguafconsumo_ch = .
+gen aguafconsumo_ch = 0
 
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch =.
+gen aguafuente_ch = 0
+
+
 
 *************
 *aguadist_ch*
 *************
-gen aguadist_ch=.
+gen aguadist_ch=0
 
 **************
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch = 9 
+
 
 
 **************
@@ -1228,15 +1234,16 @@ gen aguadisp1_ch = 9
 gen aguadisp2_ch = 9
 
 
+
 *************
 *aguamala_ch*  Altered
 *************
-gen aguamala_ch = .
+gen aguamala_ch = 2
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
-gen aguamejorada_ch =.
+gen aguamejorada_ch = 2
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
@@ -1244,6 +1251,7 @@ gen aguamejorada_ch =.
 *****************
 gen aguamide_ch=.
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+	
 
 *****************
 *bano_ch         *  Altered
@@ -1253,25 +1261,22 @@ gen bano_ch=.
 ***************
 ***banoex_ch***
 ***************
-gen banoex_ch=9
+gen banoex_ch=.
+
 label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 *****************
 *banomejorado_ch*  Altered
 *****************
-gen banomejorado_ch=.
+gen banomejorado_ch= 2
+
 
 
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = .
+gen sinbano_ch = 3
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
-
-*************
-*aguatrat_ch*
-*************
-gen aguatrat_ch =9
 
 
 	************
@@ -1292,7 +1297,7 @@ gen aguatrat_ch =9
 	
 	gen combust_ch=.
 	label var combust_ch "Principal combustible gas o electricidad"	
-	
+
 	*************
 	***des1_ch***
 	*************

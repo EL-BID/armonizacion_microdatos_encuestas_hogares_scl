@@ -1036,8 +1036,10 @@ gen aguafconsumo_ch = 0
 *****************
 *aguafuente_ch*
 *****************
-gen aguafuente_ch = 1 if water_supply==1
-replace aguafuente_ch= 10 if (water_supply==2 |water_supply==3 | water_supply==4 | water_supply==5)
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if water_supply==1
+replace aguafuente_ch= 10 if (water_supply==2 |water_supply==3 | water_supply==4 | water_supply==5| water_supply==6)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *************
 *aguadist_ch*

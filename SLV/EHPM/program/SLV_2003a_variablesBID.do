@@ -1594,51 +1594,58 @@ Son todos los centros educativos que pertenecen a una Congregación Religiosa.
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
-
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=1 if (r313==1 | r313==2)
-replace aguared_ch=0 if (r313==3 | r313==4)
-label var aguared_ch "Acceso a fuente de agua por red"
+generate aguared_ch =.
+replace aguared_ch = 1 if r313==1 | r313==2
+replace aguared_ch = 0 if r313> 2
+la var aguared_ch "Acceso a fuente de agua por red"
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if (r313==1 |  r313==2) & r314==1
+replace aguafconsumo_ch = 2 if (r313==4) & r314==1
+replace aguafconsumo_ch = 3 if r315 ==5
+replace aguafconsumo_ch= 6 if (r313==6) & r314==1
+replace aguafconsumo_ch= 7 if (r313==3) & r314==1
+replace aguafconsumo_ch = 8 if (r313==8) & r314==1
+replace aguafconsumo_ch= 10 if (r313==9 | r313==5 |r313==7) & r314==1
+*****************
+*aguafuente_ch*
+*****************
 
-****************
-***aguadist_ch***
-****************
-gen aguadist_ch=.
-replace aguadist_ch = 1 if r313 ==1 | r313 ==6
-replace aguadist_ch = 2 if r313 == 2
-replace aguadist_ch = 3 if r313 == 3|r313==4|r313 == 5 | r313 == 8
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
-label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
-label val aguadist_ch aguadist_ch
-
-****************
-***aguafconsumo_ch***
-****************
-gen aguafconsumo_ch = .
-
-******************
-***aguafuente_ch**
-******************
-gen aguafuente_ch = 1 if r313==1|r313==2
+gen aguafuente_ch = 1 if r313==1 |  r313==2
 replace aguafuente_ch = 2 if r313==4
-replace aguafuente_ch = 4 if r313==7
-replace aguafuente_ch = 6 if r313==6
-replace aguafuente_ch = 7 if r313==3
+replace aguafuente_ch= 6 if r313==6
+replace aguafuente_ch= 7 if r313==3
 replace aguafuente_ch = 8 if r313==8
-replace aguafuente_ch = 9 if r313==5|r313==9
+replace aguafuente_ch= 10 if r313==9 | r313==5 |r313==7
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch= 1 if  (r313==1 | r313==3 | r313==6 | r313==7)
+replace aguadist_ch= 2 if  r313==2
+replace aguadist_ch=3 if r313==4 | r313==5 | r313==9
+
 
 **************
 *aguadisp1_ch*
 **************
 gen aguadisp1_ch =9
 
+
+
 **************
 *aguadisp2_ch*
 **************
-gen aguadisp2_ch =9
+gen aguadisp2_ch = 9
+
+
 
 *************
 *aguamala_ch*  Altered
@@ -1647,17 +1654,6 @@ gen aguamala_ch = 2
 replace aguamala_ch = 0 if aguafuente_ch<=7
 replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
-*****************
-*aguamejorada_ch*  Altered
-*****************
-gen aguamejorada_ch = 2
-replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
-replace aguamejorada_ch = 1 if aguafuente_ch<=7 
-
-*****************
-***aguamide_ch***
-*****************
-gen aguamide_ch = .
 
 gen luz_ch=(r312==1 | r312==2)
 replace luz_ch=. if r312==9
@@ -1667,6 +1663,7 @@ gen luzmide_ch=.
 
 gen combust_ch=(r312>=1 & r312<=3)
 replace combust_ch=. if r312==9
+
 
 *****************
 *bano_ch         *  Altered
@@ -1702,6 +1699,7 @@ replace sinbano_ch = 0 if r317!=7
 gen aguatrat_ch=.
 replace aguatrat_ch = 1 if r315==1|r315==2|r315==3|r315==5|r315==6|r315==7
 replace aguatrat_ch = 2 if r315==4
+
 
 * MGR Jul, 2015: variable generada como missing ya que no tenemos opción 3, pero genero de la misma manera que los años anteriores
 gen des1_ch=.
@@ -2116,7 +2114,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

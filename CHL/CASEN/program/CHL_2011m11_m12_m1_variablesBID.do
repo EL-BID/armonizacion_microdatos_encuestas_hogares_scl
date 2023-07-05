@@ -795,35 +795,55 @@ label var asiste_ci "Personas que actualmente asisten a centros de enseñanza"
 *************
 ***aedu_ci*** 
 ************* 
-replace e6c=. if e6c==99
-replace e6a=. if e6a==99
+replace e6c = . if e6c == 99
+replace e6a = . if e6a == 99
 
-gen aedu_ci=.
-replace aedu_ci=.  if e6a==4 // Educación Especial
-replace e6a=. if e6a==99
-replace e6c=. if e6c==99
-replace aedu_ci=0              if e6a>=1 & e6a<=3    /*Pre-escolar, o ninguna MGD: se incluye a jardin??*/
-replace aedu_ci=e6c            if e6a==5             /*Preparatoria  (Sist. antiguo)*/
-replace aedu_ci=e6c            if e6a==6             /*Básica (Sist. nuevo) */
-replace aedu_ci=e6c+6 		   if e6a==7             /*Humanidades (Sist. antiguo)*/
-replace aedu_ci=e6c+8 		   if e6a==8             /*Educación Media Científico Humanística (Sist. nuevo)*/
-replace aedu_ci=e6c+6          if e6a==9             /*Técnica, Comercial, Industrial o Normalista (Sist. antiguo)*/
-replace aedu_ci=e6c+8          if e6a==10            /*Educación Media Técnica Profesional (Sist. nuevo)*/  
-replace aedu_ci=e6c+12         if e6a>=11 & e6a<=12  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
-replace aedu_ci=e6c+17         if e6a==13            /*Posgrado*/
+gen aedu_ci = .
+replace aedu_ci=0              if e6a>=1 & e6a<=3    /*Nunca asistió, sala cuna. jardin infantil, prekinder/kinder */
+
+* Para aquellos que asisten actualmente 
+replace aedu_ci = e6c - 1      if inrange(e6a, 5, 6) & e3 == 1 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6c + 6 - 1  if inrange(e6a, 7, 9) & e3 == 1 /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6c + 8 - 1  if inrange(e6a, 8, 10) & e3 == 1 /*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6c + 12 - 1 if e6a >= 11 & e6a <= 12 & e3 == 1  /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6c + 16 - 1 if e6a == 13 & e3 == 1   /*Posgrado*/
+
+
+* Para aquellos que no asisten actualmente
+replace aedu_ci = e6c      if inrange(e6a, 5, 6) & e3 == 2 /*Preparatoria  (Sist. antiguo) y Básica (Sist. nuevo) */
+replace aedu_ci = e6c + 6  if inrange(e6a, 7, 9) & e3 == 2  /*Humanidades (Sist. antiguo) Técnica, Comercial, Industrial o Normalista (Sist. antiguo) */
+replace aedu_ci = e6c + 8    if inrange(e6a, 8, 10) & e3 == 2 /*Educación Media Científico Humanística (Sist. nuevo) Educación Media Técnica Profesional (Sist. nuevo)*/           
+replace aedu_ci = e6c + 12   if e6a >= 11 & e6a <= 12  & e3 == 2 /*Tecnico nivel superior completo o incompleto, profesional completo o incompleto*/
+replace aedu_ci = e6c + 16   if e6a == 13 & e3 == 2   /*Posgrado*/
+
+
+* Imputando anios perdidos *
+
+* para aquellos que no finalizaron *
+
+replace aedu_ci = 0     if e6a==5 & aedu_ci==. & e6b != 1 //prebasica
+replace aedu_ci = 0     if e6a==6 & aedu_ci==. & e6b != 1  //preparatoria
+replace aedu_ci = 6     if e6a==7 & aedu_ci==. & e6b != 1 // humanidades
+replace aedu_ci = 8     if e6a==8 & aedu_ci==. & e6b != 1 //media cientifico
+replace aedu_ci = 6     if e6a==9 & aedu_ci==. & e6b != 1 // tp antigua
+replace aedu_ci = 8     if e6a==10 & aedu_ci==.  & e6b != 1 //media tp
+replace aedu_ci = 12    if (e6a==11 | e6a==12) & aedu_ci==. & e6b != 1 //profesional o tecnico nivel superior 
+replace aedu_ci = 16    if e6a==13 & aedu_ci==.  & e6b != 1 // postgrado
+
+* para aquellos que finalizaron *
+
+replace aedu_ci = 0     if e6a==5 & aedu_ci==. & e6b == 1 //prebasica
+replace aedu_ci = 6     if e6a==6 & aedu_ci==. & e6b == 1  //preparatoria
+replace aedu_ci = 8     if e6a==7 & aedu_ci==. & e6b == 1 // humanidades
+replace aedu_ci = 12     if e6a==8 & aedu_ci==. & e6b == 1 //media cientifico
+replace aedu_ci = 8     if e6a==9 & aedu_ci==. & e6b == 1 // tp antigua
+replace aedu_ci = 12     if e6a==10 & aedu_ci==.  & e6b == 1 //media tp
+replace aedu_ci = 14    if e6a==11 & aedu_ci==. & e6b == 1 // tecnico nivel superior
+replace aedu_ci = 16    if e6a==12 & aedu_ci==. & e6b == 1 //profesional 
+replace aedu_ci = 18    if e6a==13 & aedu_ci==.  & e6b == 1 // postgrado
+
 label var aedu_ci "Anios de educacion aprobados" 
-*Nota: a diferencia del 2009 aqui no se debe restar un anio ya que pregunta directamente los anios aprobados
 
-**imputando anios perdidos
-
-replace aedu_ci=0     if e6a==5 & aedu_ci==. //prebasica
-replace aedu_ci=0     if e6a==6 & aedu_ci==. //preparatoria
-replace aedu_ci=6     if e6a==7 & aedu_ci==. // humanidades
-replace aedu_ci=8     if e6a==8 & aedu_ci==. //media cientifico
-replace aedu_ci=6     if e6a==9 & aedu_ci==. // tp antigua
-replace aedu_ci=8     if e6a==10 & aedu_ci==. //media tp
-replace aedu_ci=12    if (e6a==11 | e6a==12) & aedu_ci==. //profesional o tecnico nivel superior 
-replace aedu_ci=17    if e6a==13 & aedu_ci==. // postgrado
 
 **************
 ***eduno_ci***
@@ -1002,37 +1022,121 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
 		******************************************
 
-***************
-* aguared_ch  *
-***************
-gen aguared_ch=(v18>=1 & v18<=3)
-replace aguared_ch=. if v8==.
-label var aguared_ch "Acceso a fuente de agua por red"
+		
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+replace aguared_ch = 1 if v18<=3 
+replace aguared_ch = 0 if v18>3
+la var aguared_ch "Acceso a fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+*se asume a partir de los datos y el cuestionario que agua potable solo es de red.
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if v18<=3 & v20<=2
+replace aguafuente_ch = 2 if v18<=3 & v20>2
+replace aguafuente_ch = 6 if v18==6
+replace aguafuente_ch = 8 if v18==5
+replace aguafuente_ch = 10 if (v18==7 |v18==4)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+replace aguadist_ch=1 if v20==1
+replace aguadist_ch=2 if v20==2
+replace aguadist_ch=3 if v20==3
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = 1 if v18<=2
+replace aguamide_ch  = 0 if v18>2
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if v21==8
+replace bano_ch=1 if v21==1
+replace bano_ch=2 if v21==2
+replace bano_ch=3 if v21==3 | v21==4 
+replace bano_ch=4 if v21==5
+replace bano_ch=5 if v21==7 
+replace bano_ch=6 if v21==6
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
-* aguadist_ch *
+***banoex_ch***
 ***************
-*Es la mejor aproximación
-gen aguadist_ch=v20
-replace aguadist_ch=. if v20==9
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la vivienda" 2"Afuera de la vivienda" 3"La acarrean"
-label val aguadist_ch aguadist_ch
+generate banoex_ch=9
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
-***************
-* aguamala_ch *
-***************
-gen aguamala_ch=(v18>=5 & v18<=6)
-replace aguamala_ch=. if aguared_ch==.
-label var aguamala_ch "La principal fuente de agua es unimproved según MDG"
 
-***************
-* aguamide_ch *
-***************
-gen aguamide_ch=(v18==1 | v18==2)
-replace aguamide_ch=. if aguared_ch==.
-label var aguamide_ch "El hogar usa un medidor para pagar por su consumo de agua"
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if v21!=8
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+
+
+		
 ***************
 * luz_ch      *
 ***************
@@ -1053,18 +1157,7 @@ label var luzmide_ch "El hogar usa un medidor para pagar el consumo de electrici
 gen combust_ch=.
 label var combust_ch "El combustible pricipal usado en el hogar es gas o electricidad"
 
-***************
-* bano_ch     *
-***************
-gen bano_ch=(v21<=7)
-replace bano_ch=. if v21==.
-label var bano_ch "El hogar tiene algún tipo de servicio higiénico"
 
-***************
-* banoex_ch   *
-***************
-gen banoex_ch=.
-label var banoex_ch "El servicio higiénico es de uso exclusivo del hogar"
 
 ***************
 * des1_ch     *
@@ -1126,19 +1219,7 @@ label val techo_ch techo_ch
 gen resid_ch=.
 label var resid_ch "Método de eliminación de residuos"
 
- **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (v18 >=1 & v18 <=4)
-replace aguamejorada_ch = 0 if (v18 >=5 & v18 <=7) | v20 ==3
 
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if  (v21 >=1 & v21 <=4) 
-replace banomejorado_ch = 0 if  (v21 >=5 & v21 <=8)
 	
 
 ***************
@@ -1650,7 +1731,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci	repite_ci repiteult_ci edupub_ci  ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

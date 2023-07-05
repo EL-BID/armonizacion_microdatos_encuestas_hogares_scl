@@ -1090,6 +1090,7 @@ gen bano_ch=.
 replace bano_ch=1 if (r317==1 | r317==3)
 replace bano_ch=2 if (r317==2 | r317==4)
 replace bano_ch=3 if ( r317==7 | r317==8  | r317==9  | r317==10)
+replace bano_ch=4 if (r315 ==1 | r315 ==2) & (r319a==2 | r319a==3)
 replace bano_ch=6 if (r317==5 | r317==6 )
 replace bano_ch=0 if r315==4 |r315==3
 
@@ -1116,7 +1117,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 1 if r316==1
-replace sinbano_ch = 2 if r319a==4 & r316==2
+replace sinbano_ch = 2 if (r319a==2|r319a==3) & r316==2
 replace sinbano_ch = 0 if r315a!=4
 *label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
 

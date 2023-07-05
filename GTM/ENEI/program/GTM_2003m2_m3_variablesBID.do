@@ -1364,37 +1364,57 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
+gen aguafconsumo_ch = 0
+
+gen aguadist_ch=0
+gen aguadisp1_ch = 9
+gen aguadisp2_ch = 9
+
+gen aguamide_ch = .
+gen bano_ch=.
+generate banoex_ch=9
+gen banomejorado_ch=.
+gen sinbano_ch =.
+gen aguatrat_ch =9
 
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=.
-replace aguared_ch=(p02a03a==1)
-label var aguared_ch "Acceso a fuente de agua por red"
+generate aguared_ch =.
+replace aguared_ch = 1 if p02a03a==1
+replace aguared_ch = 0 if p02a03a==2
+la var aguared_ch "Acceso a fuente de agua por red"
+	
 
-
-*****************
-***aguadist_ch***
-*****************
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_ch
 
 
 *****************
-***aguamala_ch***
+*aguafuente_ch*
 *****************
-gen aguamala_ch=.
-label var aguamala_ch "Agua unimproved según MDG" 
+gen aguafuente_ch=.
+replace aguafuente_ch = 1 if p02a03a==1
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+
+
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
 
 
 *****************
-***aguamide_ch***
+*aguamejorada_ch*  Altered
 *****************
-gen aguamide_ch=.
-label var aguamide_ch "Usan medidor para pagar consumo de agua"
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
 
 
 ************
@@ -1419,19 +1439,7 @@ gen combust_ch=.
 label var combust_ch "Principal combustible gas o electricidad" 
 
 
-*************
-***bano_ch***
-*************
-gen bano_ch=(p02a03c ==1)
-label var bano_ch "El hogar tiene servicio sanitario"
 
-
-***************
-***banoex_ch***
-***************
-
-gen banoex_ch=.
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -1498,19 +1506,7 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if p02a03a ==1 // Esta pregunta no es comparable con el resto de anios porque no desagrega las categorias de respuesta
-replace aguamejorada_ch = 0 if p02a03a ==2
-		
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if p02a03c == 1 // Esta pregunta no es comparable con el resto de anio porque no desagrega las categorias de respuesta
-replace banomejorado_ch = 0 if p02a03c == 2
+
  
 *************
 ***dorm_ch***
@@ -1689,7 +1685,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

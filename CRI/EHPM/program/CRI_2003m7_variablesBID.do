@@ -13,7 +13,7 @@ set more off
  
 
 
-*global ruta = "${surveysFolder}"
+global ruta = "${surveysFolder}"
 
 local PAIS CRI
 local ENCUESTA EHPM
@@ -1168,25 +1168,116 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
 
-gen aguared_ch=.
-*acceso a una fuente de agua por red*
-replace aguared_ch=1 if v10>=1 & v10<=3
-replace aguared_ch=0 if v10==4
-*acordado en meeting sept/7/05*
+****************
+***aguared_ch***
+****************
+gen aguared_ch=0
+replace aguared_ch=1 if (v11 <= 4 & (v10==1 | v10==2) )
+label var aguared_ch "Acceso a una fuente de agua por red"
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if (v10==1 | v10==2) & v11<=4
+replace aguafconsumo_ch = 2 if (v10==3) & v11<=4
+replace aguafconsumo_ch = 5 if v11==7
+replace aguafconsumo_ch = 8 if v11==6
+replace aguafconsumo_ch = 10 if v11==5|v11==5
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = .
+replace aguafuente_ch = 1 if (v10==1 | v10==2) & v11<=4
+replace aguafuente_ch = 2 if (v10==3) & v11<=4
+replace aguafuente_ch = 5 if v11==7
+replace aguafuente_ch = 8 if v11==6
+replace aguafuente_ch = 10 if v11==5|v11==5
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
 replace aguadist_ch=1 if v10==1
 replace aguadist_ch=2 if v10==2
-replace aguadist_ch=3 if v10==3
+replace aguadist_ch=3 if v10==3  
+replace aguadist_ch=0 if v10==4 | v10==9 
+label define aguadist_ch 1 "tubería dentro de la vivienda" 2 " tubería fuera de la vivienda pero dentro del lote o edificio" 3 "tubería fuera del lote o edificio"
+label var aguadist_ch "Ubicación de la principal fuente de agua"
 
 
-gen aguamala_ch=.
-replace aguamala_ch=0 if v11==1| v11==2 | v11==3
-replace aguamala_ch=1 if  v11==4 | v11==5
-*segun lo acordado en reunion sept/7/05 pozo es agua BUENA*
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
 
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
 gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if v12==5 
+replace bano_ch=1 if v12==1
+replace bano_ch=2 if v12==2 
+replace bano_ch=6 if v12==3 | v12==4|v12==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+
+label var banoex_ch "Servicio higiénico de uso exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 0
+replace sinbano_ch = 3 if v12==5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
 
 gen luz_ch=.
 replace luz_ch=1 if v14==1 | v14==2
@@ -1200,11 +1291,6 @@ replace combust_ch=1 if  v15==1 | v15==2
 replace combust_ch=0 if  v15==3 | v15==4
 *v15=5 no cocina o ignorado se queda como missing*
 
-gen bano_ch=.
-replace bano_ch=1 if v13==1
-replace bano_ch=0 if v13==2
-
-gen banoex_ch=.
 
 gen des1_ch=.
 replace des1_ch=0 if v12==5
@@ -1234,19 +1320,7 @@ replace techo_ch=2 if v04==3
 gen resid_ch=.
 /*NA*/
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (v11 >=1 & v11 <=3)
-replace aguamejorada_ch = 0 if (v11 >=4 & v11 <=5)
-			
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if  (v12 >=1 & v12 <=3)
-replace banomejorado_ch = 0 if  (v12 >=4 & v12 <=5) |  v13 == 2
+
 
 gen dorm_ch=.
 replace dorm_ch=v08 if v08>=0 & v08<=25
@@ -1409,7 +1483,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

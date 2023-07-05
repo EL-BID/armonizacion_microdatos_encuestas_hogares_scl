@@ -1069,34 +1069,22 @@ label var tecnica_ci "Tiene carrera técnica"
 *******************************
 
 
-**************************
-*  ACCEDE A AGUA POR RED *
-**************************
 gen aguared_ch=.
-*replace aguared_ch=1 if
-label var tecnica_ci "Tiene acceso a agua por red"
+gen aguafconsumo_ch = 0
+gen aguafuente_ch =.
+gen aguadist_ch=0
+gen aguadisp1_ch = 9
+gen aguadisp2_ch = 9
+gen aguamala_ch = .
+gen aguamejorada_ch = .
+gen aguamide_ch = .
+gen bano_ch=.
+generate banoex_ch=9
+gen banomejorado_ch=.
+gen sinbano_ch =.
+gen aguatrat_ch =9
 
-***********************************
-*  UBICACION DE LA FUENTE DE AGUA *
-***********************************
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la fuente de agua"
-label define aguadist 1"Adentro de la vivienda" 2"Fuera de la vivienda pero dentro del terreno" 3"Fuera de la vivienda y fuera del terreno"
-label values aguadist_ch aguadist
 
-********************************
-*  FUENTE DE AGUA "Unimproved" *
-********************************
-gen aguamala_ch=.
-*replace aguamala_ch=1 if
-label var aguamala_ch "Fuente de agua es Unimproved"
-
-************************
-*  USA MEDIDOR DE AGUA *
-************************
-gen aguamide_ch=.
-*replace aguamide_ch=1 if
-label var aguamide_ch "Usa medidor de agua para pagar por su consumo"
 
 *****************************
 *  ILUMINACION ES ELÉCTRICA *
@@ -1119,19 +1107,7 @@ gen combust_ch=.
 *replace combust_ch=1 if
 label var combust_ch "Usa combustible como fuente de energía"
 
-****************
-*  TIENE BAÑO  *
-****************
-gen bano_ch=.
-*replace bano_ch=1 if
-label var bano_ch "Tiene baño, inodoro, letrina o pozo ciego"
 
-*********************************
-*  TIENE BAÑO DE USO EXCLUSIVO  *
-*********************************
-gen banoex_ch=.
-*replace banoex_ch=1 if
-label var banoex_ch "Tiene baño, inodoro, letrina o pozo ciego de uso exclusivo del hogar"
 
 *******************************************
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
@@ -1181,18 +1157,7 @@ label var resid_ch "Material predominante del techo"
 label define resid 0"Recolección pública o privada" 1"Quemados o enterrados" 2"Tirados en un espacio abierto"
 label values resid_ch resid
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch=.
-
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch=.
 
 *****************************************
 *  CANTIDAD DE DORMITORIOS EN EL HOGAR  *
@@ -1397,7 +1362,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

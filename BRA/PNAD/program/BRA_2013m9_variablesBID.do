@@ -1216,7 +1216,7 @@ label var aguared_ch "Acceso a fuente de agua por red"
 *aguafconsumo_ch*
 *****************
 *La encuesta no hace este pregunta directamente
-gen aguafconsumo_ch =.
+gen aguafconsumo_ch =0
 
 *****************
 *aguafuente_ch*
@@ -1235,6 +1235,7 @@ gen aguafuente_ch =.
 replace aguafuente_ch = 1 if v4624==1 |  (v4624==4 & v0213 == 1)
 replace aguafuente_ch = 2 if v4624==4 & v0213 == 3 
 replace aguafuente_ch = 10 if(v4624==2|v4624==3|v4624==5|v4624==6)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1244,7 +1245,7 @@ gen aguadist_ch=.
 *si el agua llega a una habitacion esta dentro de la casa
 replace aguadist_ch= 1 if v0211==1
 *si el agua llega al inmueble pero no llega dentro de la casa llega al terreno, o si la fuente de agua esta en el terreno
-replace aguadist_ch= 2 if (v0213==1|v0214==1)
+replace aguadist_ch= 2 if (v0213==1|v0214==2)
 replace aguadist_ch = 3 if (v0213 ==3 & v0214 ==4)
 *la encuesta no pregunta por fuentes externas al terreno
 
@@ -1295,6 +1296,7 @@ replace bano_ch=2 if v0217==3
 replace bano_ch=6 if (v0217==4 | v0217==7)
 replace bano_ch=4 if (v0217==5|v0217==6)
 replace bano_ch=0 if v0215 == 3
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 label var bano_ch "Tipo de instalación sanitaria del hogar"
 
 

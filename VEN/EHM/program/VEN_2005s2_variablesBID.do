@@ -1230,12 +1230,6 @@ gen luz_ch=.
 * hogar usa medidor para pagar consumo de electricidad 
 gen luzmide_ch=.
 
-****************
-***combust_ch***
-****************
-* 1 si el combustible principal usado en el hogar es gas o electricidad y 0 dom
-gen combust_ch=.
-
 
 *************
 ***des1_ch***
@@ -1339,21 +1333,6 @@ PV11C	Container de basura
 tab pv11b pv11c
 
 
-g       pqnoasis1_ci = 1 if pp28 ==4
-replace pqnoasis1_ci = 2 if pp28 ==5
-replace pqnoasis1_ci = 3 if pp28 ==8  | pp28 ==9
-replace pqnoasis1_ci = 4 if pp28 ==7
-replace pqnoasis1_ci = 5 if pp28 ==12 | pp28 ==14
-replace pqnoasis1_ci = 6 if pp28 ==1
-replace pqnoasis1_ci = 7 if pp28 ==11 | pp28 ==13
-replace pqnoasis1_ci = 8 if pp28 ==2  | pp28 ==3 
-replace pqnoasis1_ci = 9 if pp28 ==6  | pp28 ==10 | pp28 ==15
-
-label define pqnoasis1_ci 1 "Problemas económicos" 2 "Por trabajo" 3 "Problemas familiares o de salud" 4 "Falta de interés" 5	"Quehaceres domésticos/embarazo/cuidado de niños/as" 6 "Terminó sus estudios" 7	"Edad" 8 "Problemas de acceso"  9 "Otros"
-label value  pqnoasis1_ci pqnoasis1_ci
-
-
-gen luzmide_ch=.
 gen combust_ch=.
 
 replace combust_ch=1 if ph14d==1

@@ -113,6 +113,12 @@ label variable idh_ch "ID del hogar"
 ****idp_ci****
 **************
 gen idp_ci=v0301
+***ELIMINAR 266 HOGARES POR DUPLICADOS***
+duplicates tag idh_ch idp_ci, gen(d)
+bys idh_ch: egen d1=max(d)
+drop if d1==1
+drop d d1
+
 label variable idp_ci "ID de la persona en el hogar"
 
 **********

@@ -103,6 +103,7 @@ label var idh_ch "ID del hogar"
 * idp_ci    *
 *************
 gen idp_ci=member
+duplicates drop idh_ch idp_ci, force
 label variable idp_ci "ID de la persona en el hogar"
 
 *************

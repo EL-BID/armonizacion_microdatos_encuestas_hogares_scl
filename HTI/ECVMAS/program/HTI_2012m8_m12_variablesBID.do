@@ -1133,13 +1133,12 @@ la var aguared_ch "Acceso a fuente de agua por red"
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if hh_c10a==1 
 replace aguafconsumo_ch = 2 if hh_c10a==2 
-replace aguafconsumo_ch = 4 if hh_c10a==3
+replace aguafconsumo_ch = 4 if hh_c10a==3 |hh_c10a== 4
 replace aguafconsumo_ch = 5 if hh_c10a==6
-replace aguafconsumo_ch = 6 if hh_c10a==8 
-replace aguafconsumo_ch = 7 if hh_c10a==4 | hh_c10a==5 | hh_c10a==7
+replace aguafconsumo_ch = 7 if hh_c10a==5 | hh_c10a==7 |hh_c10a==8
 replace aguafconsumo_ch = 8 if hh_c10a==12
-replace aguafconsumo_ch = 9 if hh_c10a==10 | hh_c10a==11
-replace aguafconsumo_ch = 10 if hh_c10a==9
+replace aguafconsumo_ch = 9 if hh_c10a==10 | hh_c10a==11 | hh_c10a==9
+replace aguafconsumo_ch = 10 if hh_c10a == -8 |hh_c10a == -9 
 
 *****************
 *aguafuente_ch*
@@ -1147,14 +1146,12 @@ replace aguafconsumo_ch = 10 if hh_c10a==9
 gen aguafuente_ch =.
 replace aguafuente_ch = 1 if hh_c10b==1 
 replace aguafuente_ch = 2 if hh_c10b==2 
-replace aguafuente_ch = 4 if hh_c10b==3
+replace aguafuente_ch = 4 if hh_c10b==3|hh_c10b== 4
 replace aguafuente_ch = 5 if hh_c10b==6 
-replace aguafuente_ch = 6 if hh_c10b==8 
-replace aguafuente_ch = 7 if hh_c10b==4 | hh_c10b==5 | hh_c10b==7
+replace aguafuente_ch = 7 if hh_c10b==5 | hh_c10b==7 | hh_c10b==8 
 replace aguafuente_ch = 8 if hh_c10b==12
-replace aguafuente_ch = 9 if hh_c10b==10 | hh_c10b==11
-replace aguafuente_ch = 10 if hh_c10b==9
-replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+replace aguafuente_ch = 9 if hh_c10b==10 | hh_c10b==11 |hh_c10b==9
+replace aguafuente_ch = 10 if  hh_c10b == -8 |hh_c10b == -9 
 
 
 *************
@@ -1208,18 +1205,19 @@ gen bano_ch=.
 replace bano_ch=0 if hh_d02==7 
 replace bano_ch=1 if hh_d02==1 & hh_c11==1
 replace bano_ch=2 if hh_d02==1 & hh_c11==2
-replace bano_ch=3 if hh_d02==2 | hh_d02==3
-replace bano_ch=4 if (hh_d02==4 | hh_d02==5) & (hh_c11==3 | hh_c11==4)
-replace bano_ch=5 if hh_d02==6 
+replace bano_ch=3 if (hh_d02==2 | hh_d02==3) & (hh_c11!=3 | hh_c11!=4 |hh_c11!=5|hh_c11!=6)
+replace bano_ch=4 if hh_c11==3 | hh_c11==4|hh_c11==5|hh_c11==6
+replace bano_ch=5 if (hh_d02==4 | hh_d02==5 | hh_d02 ==6) & (hh_c11!=3 | hh_c11!=4 |hh_c11!=5|hh_c11!=6)
 replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***
 ***************
 generate banoex_ch=.
-replace banoex_ch = 1 if hh_d02==1 | hh_d02==2 | hh_d02==4
-replace banoex_ch = 0 if hh_d02==3 | hh_d02==5 | hh_d02==6
-
+replace banoex_ch = 1 if hh_d02==2 | hh_d02==4
+replace banoex_ch = 0 if hh_d02==3 | hh_d02==5 | hh_d02==7
+replace banoex_ch = 9 if hh_d02==1 | hh_d02==6
+* does not ask about exclusivity for those with wcs or holes *
 
 
 *****************
@@ -1234,8 +1232,7 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 gen sinbano_ch = 3
 replace sinbano_ch = 0 if hh_d02<7
-replace sinbano_ch = 1 if hh_d02==3 | hh_d02==5
-replace sinbano_ch = 2 if hh_d02!=7 & sinbano_ch!=2 & (hh_c11==4 | hh_c11==6)
+
 
 
 

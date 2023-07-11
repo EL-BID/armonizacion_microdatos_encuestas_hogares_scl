@@ -126,6 +126,18 @@ label var idh_ch "Identificador Unico del Hogar"
 * IDENTIFICADOR DEL INDIVIDUO *
 *******************************
 gen idp_ci=person2
+replace idp_ci=person1 if idp_ci==.
+
+**Solucionar las personas duplicadas debido al ID*
+sort idh_ch idp_ci
+duplicates tag idh_ch idp_ci, gen(d)
+bys idh_ch : gen n=_n
+bys idh_ch: egen d1=max(d)
+duplicates tag idh_ch idp_ci age, gen(d2)
+replace idp_ci =n if d1==1 & d2==0
+duplicates drop idh_ch idp_ci age, force
+drop d n d1 d2
+**********
 label var idp_ci "Identificador Individual dentro del Hogar"
 
 ************************************

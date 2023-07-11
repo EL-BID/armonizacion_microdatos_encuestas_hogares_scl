@@ -110,6 +110,10 @@ label variable idh_ch "ID del hogar"
 **************
 
 gen idp_ci=ORDEN
+**SOLUCIONAR LOS DUPLICADOS DEL ID****
+drop if DIRECTORIO==. & SECUENCIA_P==. & ORDEN==. & HOGAR==. & REGIS=="" & SEGMENTO==. & MPIO=="" & P6020==. & P6040==.
+duplicates drop DIRECTORIO SECUENCIA_P ORDEN HOGAR REGIS SEGMENTO MPIO P6020 P6040, force
+
 label variable idp_ci "ID de la persona en el hogar"
 
 **********

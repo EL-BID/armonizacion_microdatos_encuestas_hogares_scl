@@ -1202,13 +1202,13 @@ generate aguamide_ch = .
 *bano_ch         *  
 *****************
 gen bano_ch=.
-replace bano_ch=0 if hh_d02==7 
 replace bano_ch=1 if hh_d02==1 & hh_c11==1
 replace bano_ch=2 if hh_d02==1 & hh_c11==2
 replace bano_ch=3 if (hh_d02==2 | hh_d02==3) & (hh_c11!=3 | hh_c11!=4 |hh_c11!=5|hh_c11!=6)
 replace bano_ch=4 if hh_c11==3 | hh_c11==4|hh_c11==5|hh_c11==6
 replace bano_ch=5 if (hh_d02==4 | hh_d02==5 | hh_d02 ==6) & (hh_c11!=3 | hh_c11!=4 |hh_c11!=5|hh_c11!=6)
 replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+replace bano_ch=0 if hh_d02==7 
 
 ***************
 ***banoex_ch***
@@ -1230,11 +1230,8 @@ replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
 ************
 *sinbano_ch*
 ************
-gen sinbano_ch = 3
-replace sinbano_ch = 0 if hh_d02<7
-
-
-
+gen sinbano_ch = 0
+replace sinbano_ch = 3 if hh_d02==7
 
 
 *************

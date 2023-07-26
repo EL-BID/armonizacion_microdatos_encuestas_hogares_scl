@@ -1428,7 +1428,7 @@ replace aguafuente_ch = 2 if (dv105==1 & dv106>2) | dv105==4
 replace aguafuente_ch = 6 if dv105==6
 replace aguafuente_ch = 7 if dv105==7
 replace aguafuente_ch = 8 if dv105==5
-replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3 |dv105==8 | dv105 == 97
+replace aguafuente_ch = 10 if dv105==9 | dv105==2 | dv105==3 |dv105==8 | dv105 == 97 | (dv105==. & jefe_ci!=.)
 
 *************
 *aguadist_ch*

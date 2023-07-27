@@ -909,7 +909,7 @@ replace aguafuente_ch= 6 if r313==3
 replace aguafuente_ch= 7 if r313==8 | r313==1
 replace aguafuente_ch = 8 if r313==7 | r313 ==9
 replace aguafuente_ch= 9 if  r313==6 
-replace aguafuente_ch= 10 if r313==13 | r313==12 |r313==4 | (r312==. & jefe_ci!=.)   
+replace aguafuente_ch= 10 if r313==14 |r313==13 | r313==12 |r313==4 | (r312==. & jefe_ci!=.)   
 
 *************
 *aguadist_ch*

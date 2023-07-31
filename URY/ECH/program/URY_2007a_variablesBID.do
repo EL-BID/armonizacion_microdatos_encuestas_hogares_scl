@@ -169,7 +169,7 @@ replace aguafconsumo_ch = 2 if (d11==1 & d14_1>2) | d11==2
 replace aguafconsumo_ch = 4 if d11==4
 replace aguafconsumo_ch = 8 if d11==6
 replace aguafconsumo_ch = 9 if d11==3 
-replace aguafconsumo_ch = 10 if d11==7 | d11==5
+replace aguafconsumo_ch = 10 if d11==7 | d11==5 | d11==0 | d11==8
 
 
 

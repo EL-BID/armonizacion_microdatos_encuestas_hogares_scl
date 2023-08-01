@@ -1286,7 +1286,7 @@ replace aguafuente_ch = 5 if v06==10
 replace aguafuente_ch = 6 if v06==11
 replace aguafuente_ch = 7 if (v06==1 | v06==2 |v06==3 |v06==4 |v06==5|v06==10|v06==11) & v07a ==5
 replace aguafuente_ch = 8 if v06==9
-replace aguafuente_ch = 10 if (v06==12 | v06==8 |v06==7|(v06==.& jefe_ci!=.))
+replace aguafuente_ch = 10 if (v06==99 |v06==12 | v06==8 |v06==7|(v06==.& jefe_ci!=.))
 
 *************
 *aguadist_ch*
@@ -1345,7 +1345,7 @@ replace bano_ch=2 if v13==2
 replace bano_ch=3 if (v13==5 | v13==6)
 replace bano_ch=4 if v13==4
 replace bano_ch=5 if v13==7
-replace bano_ch=6 if (v13==8 | v13==3) |(v13==. & jefe_ci!=.)
+replace bano_ch=6 if (v13==9 |v13==8 | v13==3) |(v13==. & jefe_ci!=.)
 
 ***************
 ***banoex_ch***

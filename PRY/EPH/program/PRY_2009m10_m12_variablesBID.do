@@ -1402,7 +1402,7 @@ replace bano_ch=2 if v15==2
 replace bano_ch=3 if (v15==5 | v15==6)
 replace bano_ch=4 if v15==4
 replace bano_ch=5 if v15==7
-replace bano_ch=6 if (v15==8 | v15==3 |v15 ==8) | (v15==.& jefe_ci!=.)
+replace bano_ch=6 if (v15==8 | v15==3 |v15 ==9) | (v15==.& jefe_ci!=.)
 
 ***************
 ***banoex_ch***

@@ -1323,15 +1323,15 @@ la var aguared_ch "Acceso a fuente de agua por red"
 *****************
 gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if (v09==4 | v09==1 | v09==2 |v09==3) & v10<=2
-replace aguafconsumo_ch = 2 if (v09==4 | v09==1 | v09==2 |v09==3) & v10>2
+replace aguafconsumo_ch = 2 if (v09==4 | v09==1 | v09==2 |v09==3) & v10==3
 replace aguafconsumo_ch = 3 if v09==11
-replace aguafconsumo_ch= 4 if (v09==5 | v09==6)
+replace aguafconsumo_ch= 4 if (v09==5 | v08==6)
 replace aguafconsumo_ch = 5 if v09==10
 replace aguafconsumo_ch = 6 if v09==12
-replace aguafconsumo_ch = 7 if v09==8
+replace aguafconsumo_ch = 7 if v09==8 | ((v09==1 | v09==2 |v09==3| v09==4 |v09==5|v09==6|v09==8|v09==10|v09==11|v09==12) & v10==4)
 replace aguafconsumo_ch = 8 if v09==13
 replace aguafconsumo_ch = 9 if v09==9 | v09==7
-replace aguafconsumo_ch = 10 if v09==14  | v09==99
+replace aguafconsumo_ch = 10 if v09==14 | v09 ==99
 
 
 *****************
@@ -1343,7 +1343,7 @@ replace aguafuente_ch = 2 if (v06==4 | v06==1 | v06==2 |v06==3) & v10>2
 replace aguafuente_ch= 4 if (v06==5 | v06==6)
 replace aguafuente_ch = 5 if v06==10
 replace aguafuente_ch = 8 if v06==9
-replace aguafuente_ch = 10 if (v06==11 | v06==8 |v06==7| v06==99)
+replace aguafuente_ch = 10 if (v06==11 | v06==8 |v06==7| v06==99)| (v06==.& jefe_ci!=.)
 
 *************
 *aguadist_ch*
@@ -1402,7 +1402,7 @@ replace bano_ch=2 if v15==2
 replace bano_ch=3 if (v15==5 | v15==6)
 replace bano_ch=4 if v15==4
 replace bano_ch=5 if v15==7
-replace bano_ch=6 if (v15==8 | v15==3) 
+replace bano_ch=6 if (v15==8 | v15==3 |v15 ==9) | (v15==.& jefe_ci!=.)
 
 ***************
 ***banoex_ch***

@@ -110,6 +110,10 @@ label variable idh_ch "ID del hogar"
 **************
 
 gen idp_ci=ORDEN
+**SOLUCIONAR LOS DUPLICADOS DEL ID****
+drop if DIRECTORIO==. & SECUENCIA_P==. & ORDEN==. & HOGAR==. & REGIS=="" & SEGMENTO==. & MPIO=="" & P6020==. & P6040==.
+duplicates drop DIRECTORIO SECUENCIA_P ORDEN HOGAR REGIS SEGMENTO MPIO P6020 P6040, force
+
 label variable idp_ci "ID de la persona en el hogar"
 
 **********
@@ -1208,6 +1212,7 @@ replace aguafuente_ch = 7 if P5050==2
 replace aguafuente_ch = 8 if P5050==6  
 replace aguafuente_ch = 9 if (P5050==4 | P5050==9)
 replace aguafuente_ch = 10 if (P5050==3 | P5050==2)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1265,6 +1270,7 @@ replace bano_ch=1 if P5020==1
 replace bano_ch=2 if P5020==2
 replace bano_ch=4 if P5020==5
 replace bano_ch=6 if P5020==3 | P5020 ==4
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 ***************
 ***banoex_ch***

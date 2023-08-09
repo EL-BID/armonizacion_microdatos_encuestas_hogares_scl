@@ -1257,7 +1257,7 @@ replace bano_ch = 1 if (s01011a>0 | s01011b>0) & (s01012a == 1 | s01012a == 2 )
 replace bano_ch = 2 if (s01011a>0 | s01011b>0) & s01012a == 3
 replace bano_ch = 4 if (s01011a>0 | s01011b>0)&  (s01012a == 5 | s01012a == 6 )
 replace bano_ch = 6 if (s01011a>0 | s01011b>0) & s01012a == 4
-replace bano_ch = 0 if (s01011a==0 | s01011b==0)
+replace bano_ch = 0 if (s01011a==0 | s01011b==0) | s01012a ==7
 label var bano_ch "Tipo de instalación sanitaria del hogar"
 
 

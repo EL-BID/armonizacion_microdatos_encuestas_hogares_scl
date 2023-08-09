@@ -1151,8 +1151,8 @@ replace aguamejorada_ch = 1 if aguafuente_ch<=7
 ***aguamide_ch***
 *****************
 gen aguamide_ch=.
-replace aguamide_ch = 1 if vi16a==1
-replace aguamide_ch = 0 if vi16a==2
+replace aguamide_ch = 1 if vi16a==1| vi16 ==1
+replace aguamide_ch = 0 if vi16a==2 | (vi16 !=1 &  vi16a!=1)
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 *****************

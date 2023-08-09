@@ -1323,12 +1323,12 @@ gen aguafconsumo_ch = 0
 *****************
 gen aguafuente_ch =.
 replace aguafuente_ch = 1 if ((v06==1 | v06==5) & v08<=3)
-replace aguafuente_ch = 2 if ((v06==1 | v06==5) & (v08==4 & v08 == 7))
+replace aguafuente_ch = 2 if ((v06==1 | v06==5) & v08==4)
 replace aguafuente_ch= 4 if (v06==2 | v06==4)
 replace aguafuente_ch = 6 if v08 == 6 & (v06==1 | v06==2 | v06==4 | v06==5)
 replace aguafuente_ch = 7 if ((v06==1 | v06==2 | v06==4 | v06==5) & v08==5)
 replace aguafuente_ch = 8 if v06==6
-replace aguafuente_ch = 10 if (v06==3 |v06==7 |v06==8)
+replace aguafuente_ch = 10 if (v06==3 |v06==7 |v06==8 |v06==9)|(v06==.& jefe_ci!=.)
 
 *************
 *aguadist_ch*

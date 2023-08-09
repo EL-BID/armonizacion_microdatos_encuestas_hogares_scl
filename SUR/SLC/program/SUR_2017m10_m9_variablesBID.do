@@ -1155,7 +1155,8 @@ replace aguafuente_ch = 2 if q13_15==3
 replace aguafuente_ch = 5 if q13_15==4
 replace aguafuente_ch= 6 if q13_15==7
 replace aguafuente_ch = 8 if q13_15==6
-replace aguafuente_ch= 10 if q13_15==5 | q13_15==8
+replace aguafuente_ch= 10 if q13_15==5 | q13_15==8|(q13_15==. & jefe_ci !=.)
+
 
 *************
 *aguadist_ch*

@@ -71,11 +71,34 @@ label var region_BID_c "Region BID"
 label define region_BID 1"Centroamérica" 2"Caribe" 3"Andinos" 4"Cono Sur"
 label values region_BID_c region_BID
 
+***********
+* Region_c *
+************
+gen region_c= district
+label define region_c  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+		    
+label value region_c region_c
+label var region_c "División política, departamento"
+
 ***************
-* REGION PAIS *
+***ine01***
 ***************
-g region_c=.
 gen ine01= district
+label define ine01  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+label value ine01 ine01
+
 
 ***************
 *    ZONA     *
@@ -1041,6 +1064,7 @@ replace aguafuente_ch= 3 if water==7
 replace aguafuente_ch= 4 if water==2
 replace aguafuente_ch= 8 if water==8
 replace aguafuente_ch= 10 if water==9 | water==6| water==10
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 *********************
 
@@ -1078,6 +1102,7 @@ replace bano_ch=2 if toilet==2
 replace bano_ch=3 if toilet==3 | toilet==4 | toilet==5
 replace bano_ch=5 if toilet==6
 replace bano_ch=6 if toilet==7 |toilet==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 
 *********************
 generate banoex_ch=9
@@ -1296,16 +1321,77 @@ label var vivialq_ch "Monto pagado por el alquiler"
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Monto ud cree le pagarían por su vivienda"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: bonos comunidades solidarias rurales/urbanas (r319a3 r319a4) 
+* PNC: 	pensión bósica universal r319a5
+* Se imputan montos porque se eliminaron del cuestionario para 2020
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Transferencias
+gen percibe_ptmc_ci  = .
+gen ptmc_ch=.  
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+gen pnc_ci = .
 
 
 * Variables no generadas
-g tipopen_ci=.
+g tipopen_ci = .
 g tcylmpri_ci=.
 g tcylmpri_ch=.
 g instcot_ci=.
 g edus1i_ci=.
 g edus1c_ci=.
 g mes_c=.
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 

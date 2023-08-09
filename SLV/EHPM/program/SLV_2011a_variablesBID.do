@@ -1027,25 +1027,23 @@ replace aguafconsumo_ch= 3 if r315 ==3
 *aguafuente_ch*
 *****************
 
-gen aguafuente_ch = 1 if r312==1 |  r312==3|r312==2|r312==4 
+gen aguafuente_ch = 1 if  r312<=4 
 replace aguafuente_ch = 2 if r313==2
-replace aguafuente_ch= 4 if (r313==5 | (r313>5 & r313<5.2))
+replace aguafuente_ch= 4 if r313==5
 replace aguafuente_ch = 5 if r313==10
 replace aguafuente_ch= 6 if r313==3
-replace aguafuente_ch= 7 if (r312>4 & r312<4.2) | r313==8 | r313==1 | r313==12
+replace aguafuente_ch= 7 if (r312>4.0&r312<4.5) | r313==8 | r313==1 
 replace aguafuente_ch = 8 if r313==7 | r313 ==9
-replace aguafuente_ch= 9 if  r313==6 |(r313>6 & r313 <6.2)
-replace aguafuente_ch= 10 if r313==13 | r313==11 |r313==4 | (r313>4 & r313<4.2)   
+replace aguafuente_ch= 9 if  r313==6
+replace aguafuente_ch= 10 if r313==11 |r313==12 |r313==4 |r313==13 | (r312==. & jefe_ci!=.)
 
 *************
 *aguadist_ch*
 *************
 gen aguadist_ch=0
-replace aguadist_ch= 1 if  (r312==1 | r312==2) | r313==1 | r313==3 | r313==4| r313==5 | r313==6
-replace aguadist_ch= 2 if  (r312==3| r312==4|(r312>4.0 &r312<4.2))
-replace aguadist_ch=3 if r313==2 |  (r313>4.0 &r313<4.2)| (r313>5.0 &r313<5.2)| (r313>6.0 &r313<6.2)| r313==11 | r313==12
-
-
+replace aguadist_ch= 1 if  (r312==1 |r312==2 | r313==1 | r313==3)
+replace aguadist_ch= 2 if  r312==3|r312==4
+replace aguadist_ch=3 if r313==2 |r313==11 | r313==12 
 **************
 *aguadisp1_ch*
 **************

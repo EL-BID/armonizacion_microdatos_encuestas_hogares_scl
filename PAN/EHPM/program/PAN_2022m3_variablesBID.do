@@ -377,8 +377,8 @@ drop factorjefe
 
 encode area, gen(area_)
 
-gen zona_c=0 if area_==1
-replace zona_c=1 if area_==2
+gen zona_c=0 if area_==2
+replace zona_c=1 if area_==1
 label var zona_c "Zona del pais"
 label define zona_c 1 "Urban" 0 "Rural"
 label value zona_c zona_c
@@ -1000,7 +1000,7 @@ replace aguafuente_ch = 3 if v1i_agua_b==10
 replace aguafuente_ch = 4 if v1i_agua_b==4
 replace aguafuente_ch = 5 if v1i_agua_b==6
 replace aguafuente_ch = 6 if v1i_agua_b==9
-replace aguafconsumo_ch = 7 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==3)
+replace aguafuente_ch = 7 if (v1i_agua_b==1 | v1i_agua_b==2|v1i_agua_b==3) & (v1j_ubicac==3)
 replace aguafuente_ch = 8 if ( v1i_agua_b==8)
 replace aguafuente_ch = 9 if (v1i_agua_b==7  |v1i_agua_b==5)
 replace aguafuente_ch=10 if v1i_agua_b==11
@@ -1708,6 +1708,11 @@ clonevar codocupa=p26reco
 clonevar codindustria=p28reco
 compress
 
+foreach i of varlist _all {
+local longlabel: var label `i'
+local shortlabel = substr("`longlabel'",1,79)
+label var `i' "`shortlabel'"
+}
 
 saveold "`base_out'", replace v(12)
 

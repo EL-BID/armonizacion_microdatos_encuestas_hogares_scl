@@ -1190,7 +1190,7 @@ gen bano_ch=.
 replace bano_ch=0 if pv8==4
 replace bano_ch=1 if pv8==1
 replace bano_ch=2 if pv8==2
-replace bano_ch=6 if pv8==3
+replace bano_ch=6 if pv8==3 | pv8 == -3
 
 
 ***************

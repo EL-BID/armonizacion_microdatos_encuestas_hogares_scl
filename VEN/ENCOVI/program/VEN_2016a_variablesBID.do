@@ -1040,7 +1040,7 @@ gen aguafuente_ch = 1 if vp5==1
 replace aguafuente_ch = 2 if vp5==2
 replace aguafuente_ch= 4 if  vp5==5
 replace aguafuente_ch= 6 if vp5==3
-replace aguafuente_ch= 10 if vp5==4 | vp5==6
+replace aguafuente_ch= 10 if vp5==4 | vp5==6|(vp5!=1 &vp5!=2 &vp5!=3 & vp5!=4 &vp5!=5 & vp5!=6 &jefe_ci!=.)
 
 *************
 *aguadist_ch*
@@ -1095,7 +1095,7 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 gen bano_ch=.
 replace bano_ch=0 if vp8==4
 replace bano_ch=3 if vp8==2|vp8==1
-replace bano_ch=6 if vp8==3
+replace bano_ch=6 if vp8==3|(vp8!=1 &vp8!=2 &vp8!=3 & vp8!=4 &jefe_ci!=.)
 
 ***************
 ***banoex_ch***

@@ -1099,7 +1099,8 @@ gen aguamide_ch = .
 gen bano_ch=.
 replace bano_ch=0 if toilet==5
 replace bano_ch=1 if toilet==2
-replace bano_ch=6 if toilet==1|toilet==3|toilet==4|toilet==9 
+replace bano_ch=6 if toilet==1|toilet==3|toilet==4|toilet==9 |toilet==8 |(jefe_ci!=. & toilet ==.)
+
 
 ***************
 ***banoex_ch***

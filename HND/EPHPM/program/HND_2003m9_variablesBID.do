@@ -1332,7 +1332,7 @@ replace aguafuente_ch = 2 if (v05b<=2 & v05c>2)
 replace aguafuente_ch = 6 if v05b==6
 replace aguafuente_ch = 7 if v05b==7
 replace aguafuente_ch = 8 if v05b==5
-replace aguafuente_ch = 10 if  v05b==8 |v05b==3 | v05b==4
+replace aguafuente_ch = 10 if  v05b==8 |v05b==3 | v05b==4|(v05b==. & jefe_ci!=.)
 
 *************
 *aguadist_ch*
@@ -1382,12 +1382,12 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
 *bano_ch         *  Altered
 *****************
 gen bano_ch=.
-replace bano_ch=0 if v06a==2
 replace bano_ch=1 if v06b==1
 replace bano_ch=2 if v06b==2
 replace bano_ch=3 if ( v06b==6 | v06b==7)
 replace bano_ch=4 if (v06b==3 | v06b==4)
-replace bano_ch=6 if v06b==8 | v06b==5 
+replace bano_ch=6 if v06b==8 | v06b==5 |(v06b==. & jefe_ci!=.)
+replace bano_ch=0 if v06a==2
 
 ***************
 ***banoex_ch***

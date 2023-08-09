@@ -113,6 +113,12 @@ label variable idh_ch "ID del hogar"
 ****idp_ci****
 **************
 gen idp_ci=v0301
+***ELIMINAR 266 HOGARES POR DUPLICADOS***
+duplicates tag idh_ch idp_ci, gen(d)
+bys idh_ch: egen d1=max(d)
+drop if d1==1
+drop d d1
+
 label variable idp_ci "ID de la persona en el hogar"
 
 **********
@@ -1234,6 +1240,7 @@ gen aguafuente_ch =.
 replace aguafuente_ch = 1 if v4624==1 |  (v4624==4 & v0213 == 1)
 replace aguafuente_ch = 10 if(v4624==2|v4624==3|v4624==5|v4624==6)
 replace aguafuente_ch = 2 if v4624==4 & v0213 == 3 
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
 
 *************
@@ -1290,6 +1297,7 @@ replace bano_ch=2 if v0217==3
 replace bano_ch=6 if (v0217==4 | v0217==7)
 replace bano_ch=4 if (v0217==5|v0217==6)
 replace bano_ch=0 if v0215 == 3
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
 label var bano_ch "Tipo de instalación sanitaria del hogar"
 
 

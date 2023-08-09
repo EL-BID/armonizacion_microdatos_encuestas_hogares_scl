@@ -1319,17 +1319,24 @@ gen aguadisp2_ch = 9
 *label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
 
 
+
 *************
 *aguamala_ch*  Altered
 *************
 gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
 *label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
 *aguamejorada_ch*  Altered
 *****************
 gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
 *label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
 
 *****************
 ***aguamide_ch***

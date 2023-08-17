@@ -210,11 +210,13 @@ label values civil_ci civil
 *******************
 *  JEFE DE HOGAR  *
 *******************
-gen jefe_ci=0
+gen jefe_ci=.
+/*
 replace jefe_ci=1 if relacion_ci==1
 label var jefe_ci "Jefe de hogar"
 label define jefe 1"Jefe de Hogar" 2"Otro" 
 label values jefe_ci jefe
+*/
 
 ************************************
 *  NUMERO DE CONYUGES EN EL HOGAR  *
@@ -281,7 +283,7 @@ label values miembros_ch miembros
 ********************************************
 *  MIEMBROS EN EL HOGAR MAYORES DE 21 AÑOS *
 ********************************************
-egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21)), by (idh_ch)
+egen nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21)), by (idh_ch)												
 label variable nmayor21_ch "Numero de personas de 21 años o mas dentro del Hogar"
 
 ********************************************
@@ -331,18 +333,16 @@ label variable nmenor1_ch "Miembros menores a 1 año dentro del Hogar"
 **************************
 *Ocupado*
 gen condocup_ci=.
-replace condocup_ci=1 if cq112==1 | cq113==1 | (cq114==1 & cq115<=2 & cq115!=. & cq115a==1) | (cq114==1 & cq115>=3 & cq115<=8)
+replace condocup_ci=1 if Status==2
 *Desocupado*
-*Desocupado*
-replace condocup_ci=2 if condocup_ci!=1 & ((cq16==1 | (cq110b<=8 & cq110b!=.) | cq1171==1 | cq1172==1 | cq1173==1 | cq1174==1 | cq1175==1 | cq1176==1) & cq119==1)
+replace condocup_ci=2 if Status==3
 *Inactivo*
-replace condocup_ci=3 if (condocup_ci~=1 & condocup_ci~=2) & edad_ci>=14
+replace condocup_ci=3 if Status==4
 *menores que PET
 recode condocup_ci (.=4) if edad<14
-label define condocup 1"Ocupado" 2"Desocupado" 3"Inactivo" 4"Menores de 14 años"
+label define condocup 1"Ocupado" 2"Desocupado" 3"Inactivo" 4 "Menores de 14 años"
 label values condocup_ci condocup
 label var condocup_ci "Condición de ocupación"
-
 
 
 **************************
@@ -352,14 +352,14 @@ label var condocup_ci "Condición de ocupación"
 gen categoinac_ci=.
 label var  categoinac_ci "Condición de Inactividad" 
 *Jubilados, pensionados
-replace categoinac_ci=1 if (cq120==3 | cq118==4) & condocup_ci==3
+replace categoinac_ci=1 if (EA8==5) & condocup_ci==3
 *Estudiantes
-replace categoinac_ci=2 if (cq120==2 | cq111==2 | cq118==3) & condocup_ci==3
+replace categoinac_ci=2 if (EA8==4) & condocup_ci==3
 *Quehaceres del Hogar
-replace categoinac_ci=3 if (cq120==1 | cq111==1)& condocup_ci==3
+replace categoinac_ci=3 if (EA8==3)& condocup_ci==3
 *Otra razon
-recode categoinac_ci (.=4) if categoinac_ci!=1 & categoinac_ci!=2 & categoinac_ci!=3 & condocup_ci==3 & cq120!=.
-label define inactivo 1"Jubilados o Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
+recode categoinac_ci (.=4) if categoinac_ci!=1 & categoinac_ci!=2 & categoinac_ci!=3 & condocup_ci==3 & EA8!=.
+label define inactivo 1 "Jubilados o Pensionado" 2 "Estudiante" 3 "Hogar" 4 "Otros", replace
 label values categoinac_ci inactivo
 
 
@@ -367,8 +367,8 @@ label values categoinac_ci inactivo
 *  NÚMERO DE EMPLEOS *
 **********************
 gen nempleos_ci=.
-replace nempleos_ci=1 if cq127==2 
-replace nempleos_ci=2 if cq127==1
+replace nempleos_ci=1 if condocup_ci==1
+replace nempleos_ci=2 if EA17new==1 & condocup_ci==1
 label var nempleos_ci "Numero de empleos"
 label define nempleos_ci 1 "un trabajo" 2 "dos o mas trabajos"
 label values nempleos_ci nempleos_ci
@@ -385,15 +385,24 @@ label values emp_ci ocupado
 *****************************************
 * ANTIGUEDAD EN LA ACTIVIDAD PRINCIPAL  *
 *****************************************
-gen antiguedad_ci=cq141 if cq141<99 & emp_ci==1
+gen antiguedad_ci=.
+*gen antiguedad_ci=cq141 if cq141<99 & emp_ci==1
 label var antiguedad_ci "Años de trabajo en la actividad principal"
+***La variable  esta dividida como intervalos.
+/*
+gen antiguedad_ci_grupo=jobyears if jobyears<6 & emp_ci==1
+label var antiguedad_ci_grupo "Años de trabajo en la actividad principal (intervalos)"
+label define antiguedad 1"Entre 0 y 5 años" 2 "Entre 6 y 10 años" 3 "Entre 11 y 15 años"  4 "Entre 16 y 20 años" 5"Entre 21 y 25 años" 6"Más de 26 años", replace
+label values antiguedad_ci_grupo antiguedad
+*/
+
 
 ***************
 * DESOCUPADO  *
 ***************
 gen desemp_ci=0 
 replace desemp_ci=1 if condocup_ci==2
-label var emp_ci "Desocupado"
+label var desemp_ci "Desocupado"
 label define desocupado 1"Desocupado" 0"No desocupado"  
 label values desemp_ci desocupado
 
@@ -401,7 +410,7 @@ label values desemp_ci desocupado
 * CESANTE *
 ***********
 gen cesante_ci=0 if condocup_ci==2
-replace cesante_ci=1 if cq125==1 & condocup_ci==2
+replace cesante_ci=1 if EA15new==1 & condocup_ci==2
 label var cesante_ci "Cesante"
 
 ***********************************
@@ -409,12 +418,23 @@ label var cesante_ci "Cesante"
 ***********************************
 *La variable esta definida por intervalos de tiempo. Se uso el punto medio del intervalo
 gen durades_ci=.
+/*
 replace durades_ci=0.5 if condocup_ci==2 & cq124==1
 replace durades_ci=2 if condocup_ci==2 & cq124==2
 replace durades_ci=5 if condocup_ci==2 & cq124==3
 replace durades_ci=10 if condocup_ci==2 & cq124==4
 replace durades_ci=12 if condocup_ci==2 & cq124==5
-label var durades_ci "Duración de desempleo o búsqueda de empleo"
+*/
+/*
+gen durades_ci_inter=.
+replace durades_ci_inter=1 if condocup_ci==2 & periodunempl==1
+replace durades_ci_inter=2 if condocup_ci==2 & periodunempl==2
+replace durades_ci_inter=3 if condocup_ci==2 & periodunempl==3
+
+label var durades_ci "Duración de desempleo o búsqueda de empleo - Intervalos"
+label define desocupado_int 1"Menos de un año" 2 "Entre 1 y 5 años"  3 "Entre 5 y 10 años"  
+label values durades_ci_inter desocupado_int
+*/
 
 ***********************************
 * POBLACION ECONOMICAMENTE ACTIVA *
@@ -427,7 +447,7 @@ label var pea_ci "Población económicamente activa"
 * DESALENTADOS *
 ****************
 gen desalent_ci=0 if condocup_ci==3
-replace desalent_ci=1 if (cq118>=10 & cq118<=14) & condocup_ci==3
+replace desalent_ci=1 if (EA8>=14 & EA8<=17) & condocup_ci==3
 label var desalent_ci "Trabajadores desalentados, personas que creen que por alguna razon no conseguiran trabajo" 
 
 *****************************
@@ -435,7 +455,7 @@ label var desalent_ci "Trabajadores desalentados, personas que creen que por alg
 *****************************
 * MGD 08/29/2014: no hay la pregunta de si desea trabajar mas horas, pero se utiliza disponibilidad para otro trabajo.
 gen subemp_ci=0 
-replace subemp_ci=1 if cq132m<=30 & cq138==1 & condocup_ci==1
+replace subemp_ci=1 if EA22_3new<=30 & EA28new==1 & condocup_ci==1
 label var subemp_ci "Trabaja menos de 30 horas"
 
 
@@ -445,63 +465,66 @@ label var subemp_ci "Trabaja menos de 30 horas"
 ****************************************************
 * MGD 08/29/2014: no hay la pregunta de si desea trabajar mas horas, pero se utiliza disponibilidad para otro trabajo.
 gen tiempoparc_ci=0 
-replace tiempoparc_ci=1 if cq132m<=30 & cq138==2 & condocup_ci==1
+replace tiempoparc_ci=1 if EA22_3new<=30 & EA28new==2 & condocup_ci==1
 label var tiempoparc_ci "Trabaja menos de 30 horas"
 
+**# Bookmark #2
 
 *********************************
 * CATEGORIA OCUPACION PRINCIPAL *
 *********************************
 gen categopri_ci=.
-replace categopri_ci=1 if cq128m==1 & condocup_ci==1
-replace categopri_ci=2 if cq128m==2 & condocup_ci==1
-replace categopri_ci=3 if (cq128m==3 | cq128m==4 | cq128m==5) & condocup_ci==1
-replace categopri_ci=4 if cq128m==6 & condocup_ci==1
+
+replace categopri_ci=0 if catmain==1 & condocup_ci==1
+replace categopri_ci=3 if (catmain==2 | catmain==3) & condocup_ci==1
+replace categopri_ci=4 if catmain==4 & condocup_ci==1
 label var categopri_ci "Categoría ocupación principal"
-label define categopri 1"Patrón o empleador" 2"Cuenta propia o independiente" 3"Empleado o asalariado" 4"Trabajador no remunerado"  
+label define categopri 0 "Otros" 1 "Patrón o empleador" 2 "Cuenta propia o independiente" 3 "Empleado o asalariado" 4 "Trabajador no remunerado"
 label values categopri_ci categopri
+
 
 *********************************
 * CATEGORIA OCUPACION SECUNDARIA*
 *********************************
 gen categosec_ci=.
-replace categosec_ci=1 if cq128o==1 & condocup_ci==1
-replace categosec_ci=2 if cq128o==2 & condocup_ci==1
-replace categosec_ci=3 if (cq128o==3 | cq128o==4 | cq128o==5) & condocup_ci==1
-replace categosec_ci=4 if cq128o==6 & condocup_ci==1
+
+replace categosec_ci=0 if catother==1 & condocup_ci==1
+replace categosec_ci=3 if (catother==2 | catother==3 ) & condocup_ci==1
+replace categosec_ci=4 if catother==4 & condocup_ci==1
 label var categosec_ci "Categoría ocupación secundaria"
-label define categosec 1"Patrón o empleador" 2"Cuenta propia o independiente" 3"Empleado o asalariado" 4"Trabajador no remunerado"  
+label define categosec  0 "Otros" 1"Patrón o empleador" 2"Cuenta propia o independiente" 3"Empleado o asalariado" 4"Trabajador no remunerado"  
 label values categosec_ci categosec
+
 
 *********************************
 *  RAMA DE ACTIVIDAD PRINCIPAL  *
 *********************************
 *** MGD 08/29/2014: CIIU REV. 3
 gen rama_ci=.
-replace rama_ci=1 if (cq131misi>=0 & cq131misi<=502) & emp_ci==1 /* indmisic for 2004 */
-replace rama_ci=2 if (cq131misi>=1000 & cq131misi<=1421) & emp_ci==1
-replace rama_ci=3 if (cq131misi>=1500 & cq131misi<=3799) & emp_ci==1
-replace rama_ci=4 if (cq131misi>=4010 & cq131misi<=4100) & emp_ci==1
-replace rama_ci=5 if (cq131misi>=4500 & cq131misi<=4599) & emp_ci==1
-replace rama_ci=6 if (cq131misi>=5000 & cq131misi<=5599) & emp_ci==1
-replace rama_ci=7 if (cq131misi>=6000 & cq131misi<=6420) & emp_ci==1
-replace rama_ci=8 if (cq131misi>=6500 & cq131misi<=7499) & emp_ci==1
-replace rama_ci=9 if (cq131misi>=7500 & cq131misi<=9900) & emp_ci==1
+replace rama_ci=1 if (EA21_3new<=3) & emp_ci==1 /* indmisic for 2004 */
+replace rama_ci=2 if (EA21_3new==4) & emp_ci==1
+replace rama_ci=3 if (EA21_3new==5) & emp_ci==1
+replace rama_ci=4 if (EA21_3new==6) & emp_ci==1
+replace rama_ci=5 if (EA21_3new==7) & emp_ci==1
+replace rama_ci=6 if (EA21_3new==8 | EA21_3new==9) & emp_ci==1
+replace rama_ci=7 if (EA21_3new==10 ) & emp_ci==1
+replace rama_ci=8 if (EA21_3new==11 | EA21_3new==12) & emp_ci==1
+replace rama_ci=9 if (EA21_3new==13 | EA21_3new==14) & emp_ci==1
 label define rama_ci 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
 label values rama_ci rama_ci
 
 
 * rama secundaria
 gen ramasec_ci=.
-replace ramasec_ci=1 if (cq131oisi>=0 & cq131oisi<=502) & emp_ci==1 /* indmisic for 2004 */
-replace ramasec_ci=2 if (cq131oisi>=1000 & cq131oisi<=1421) & emp_ci==1
-replace ramasec_ci=3 if (cq131oisi>=1500 & cq131oisi<=3799) & emp_ci==1
-replace ramasec_ci=4 if (cq131oisi>=4010 & cq131oisi<=4100) & emp_ci==1
-replace ramasec_ci=5 if (cq131oisi>=4500 & cq131oisi<=4599) & emp_ci==1
-replace ramasec_ci=6 if (cq131oisi>=5000 & cq131oisi<=5599) & emp_ci==1
-replace ramasec_ci=7 if (cq131oisi>=6000 & cq131oisi<=6420) & emp_ci==1
-replace ramasec_ci=8 if (cq131oisi>=6500 & cq131oisi<=7499) & emp_ci==1
-replace ramasec_ci=9 if (cq131oisi>=7500 & cq131oisi<=9900) & emp_ci==1
+replace ramasec_ci=1 if (EA21_6new<=3) & emp_ci==1 /* indmisic for 2004 */
+replace ramasec_ci=2 if (EA21_6new==4) & emp_ci==1
+replace ramasec_ci=3 if (EA21_6new==5) & emp_ci==1
+replace ramasec_ci=4 if (EA21_6new==6) & emp_ci==1
+replace ramasec_ci=5 if (EA21_6new==7) & emp_ci==1
+replace ramasec_ci=6 if (EA21_6new==8 | EA21_6new==9) & emp_ci==1
+replace ramasec_ci=7 if (EA21_6new==10 ) & emp_ci==1
+replace ramasec_ci=8 if (EA21_6new==11 | EA21_6new==12) & emp_ci==1
+replace ramasec_ci=9 if (EA21_6new==13 | EA21_6new==14) & emp_ci==1
 label define ramasec_ci 1"Agricultura, caza, silvicultura o pesca" 2"Minas y Canteras" 3"Manufactura" 4"Electricidad, gas o agua" 5"Construcción" 6"Comercio al por mayor, restaurantes o hoteles" 7"Transporte o almacenamiento" 8"Establecimientos financieros, seguros o bienes inmuebles" 9"Servicios sociales, comunales o personales" 
 label values ramasec_ci ramasec_ci
 
@@ -510,13 +533,13 @@ label values ramasec_ci ramasec_ci
 *  TRABAJA EN EL SECTOR PUBLICO *
 *********************************
 gen spublico_ci=0 
-replace spublico_ci=1 if (cq128m==3 | cq128m==4) & condocup_ci==1
+replace spublico_ci=1 if (catmain==2) & condocup_ci==1
 label var spublico_ci "Personas que trabajan en el sector publico"
- 
+
 ********************
 * TAMAÑO DE EMPRESA*
 ********************
-* MGD 08/29/2014: esta variable tiene demasiados valores missing reportados; por lo que no es confiable el indicador.
+* MYN 08/16/2023: esta variable no esta incluida en la base (pero si esta en el cuestionario - )
 g tamemp_ci=.
 /*
 gen tamemp_ci=1 if cq129y==1
@@ -584,6 +607,7 @@ label values tipocontrato_ci tipocontrato
 * TIPO DE OCUPACION LABORAL *
 *****************************
 * MGD 09/02/2014: CIUO-88
+/*
 gen ocupa_ci=.
 replace ocupa_ci=1 if (cq130m>=2000 & cq130m<=3999) & emp_ci==1
 replace ocupa_ci=2 if (cq130m>=1000 & cq130m<=1999) & emp_ci==1
@@ -597,19 +621,35 @@ replace ocupa_ci=9 if (cq130m==9119 | cq130m==9999) & emp_ci==1
 label var ocupa_ci "Tipo de ocupacion laboral"
 label define ocupa 1"Profesional o técnico" 2"Director o funcionario superior" 3"Personal administrativo o nivel intermedio" 4"Comerciante o vendedor" 5"Trabajador en servicios" 6"Trabajador agrícola o afines" 7"Obrero no agrícola, conductores de máquinas y vehículos de transporte y similares" 8"Fuerzas armadas" 9"Otras ocupaciones no clasificadas"
 label values ocupa_ci ocupa
+*/
+gen  ocupa_ci=.
+replace ocupa_ci=1 if (EA20_3new==2 | EA20_3new==3) & emp_ci==1
+replace ocupa_ci=2 if (EA20_3new==1) & emp_ci==1
+replace ocupa_ci=3 if (EA20_3new==4) & emp_ci==1
+*replace ocupa_ci=4 if ((cq130m>=5200 & cq130m<=5999) | (cq130m>=9111 & cq130m<=9113)) & emp_ci==1
+*replace ocupa_ci=5 if ((cq130m>=5000 & cq130m<=5199) | (cq130m>=9120 & cq130m<=9162)) & emp_ci==1
+replace ocupa_ci=6 if (EA20_3new==6) & emp_ci==1
+replace ocupa_ci=7 if (EA20_3new==7 | EA20_3new==8) & emp_ci==1
+replace ocupa_ci=8 if (EA20_3new==0) & emp_ci==1
+replace ocupa_ci=9 if (EA20_3new==9) & emp_ci==1
+label var ocupa_ci "Tipo de ocupacion laboral"
+label define ocupa 1"Profesional o técnico" 2"Director o funcionario superior" 3"Personal administrativo o nivel intermedio" 4"Comerciante o vendedor" 5"Trabajador en servicios" 6"Trabajador agrícola o afines" 7"Obrero no agrícola, conductores de máquinas y vehículos de transporte y similares" 8"Fuerzas armadas" 9"Otras ocupaciones no clasificadas"
+label values ocupa_ci ocupa
 
 **********************************************
 * HORAS TRABAJADAS EN LA ACTIVIDAD PRINCIPAL *
 **********************************************
 gen horaspri_ci=.
+/*
 replace horaspri_ci=cq132m if cq132m!=99
+*/
 label var horaspri_ci "Horas trabajadas en la actividad principal"
 
 **************************
 * TOTAL HORAS TRABAJADAS *
 **************************
-gen horastot_ci=cq132m+cq132o
-replace horastot_ci=. if cq132m==. & cq132o==.
+gen horastot_ci=EA22_3new
+replace horastot_ci=. if EA22_3new==999
 label var horastot_ci "Total horas trabajadas"
 
 ***********************************************
@@ -646,7 +686,7 @@ label var instpen_ci "Institución que otorga la pensión o jubilación"
 *************************************
 *** Dummy Individual si no reporta el ingreso laboral monetario de la actividad principal
 gen byte nrylmpri_ci=0
-*replace nrylmpri_ci=1 if cq51==9 | (cq51==7 & cq128m>0)
+replace nrylmpri_ci=1 if emp_ci==1 & income_month==.
 label var nrylmpri_ci "Identificador de No Respuesta del Ingreso Monetario de la Actividad Principal"
 
 *** Dummy para el Hogar
@@ -661,15 +701,9 @@ label var nrylmpri_ch "Identificador de Hogares en donde alguno de los miembros 
 * INGRESO MONETARIO MENSUAL LABORAL *
 *************************************
 gen ylmpri_ci=.
-replace ylmpri_ci=incoave*30 if cq143==1
-replace ylmpri_ci= incoave*4.3 if cq143==2
-replace ylmpri_ci= incoave*2 if cq143==3
-replace ylmpri_ci= incoave if cq143==4 | cq143==8
-replace ylmpri_ci= incoave/12 if cq143==5
-replace ylmpri_ci= 0 if cq143==6
-*replace ylmpri_ci= cq142 if incoave==. & emp_ci==1 
-
+replace ylmpri_ci= income_month if emp_ci==1 
 label var ylmpri_ci "Monto mensual de ingreso laboral de la actividad principal"
+
 /*
 gen income=.
 replace income= (119/2) if cq142==1
@@ -847,8 +881,8 @@ label var ypensub_ci "Ingreso por pensionc NO contributiva"
 ********************************
 * SALARIO MINIMO MENSUAL LEGAL *
 ********************************
-* MGD 09/02/2014: Fuente: Doing Bussiness
-gen salmm_ci =585
+* MYN Fuente: https://datosmacro.expansion.com/smi/belice
+gen salmm_ci =643.5
 label var salmm_ci "salario mínimo mensual legal"
 
 
@@ -873,13 +907,6 @@ label var lpe_ci "Línea de pobreza extrema oficial en moneda local"
 *******************************
 *******************************
 
-
-// dk/ns va a missing
-replace cq13 = . if cq13 == 99
-replace q51b = . if q51b == 99
-replace cq16a = . if cq16a == 17
-replace cq16b = . if cq16b == 99
-
 *************
 ** aedu_ci **
 *************
@@ -895,24 +922,19 @@ Se toma como referencia:
 
 La ultima categoria es mas de dos años de universidad y se asumen 16 completos.
 
-Debido a inconsistencia en la encuesta entre las preguntas q51a q51b y cq16a cq16b se condiciona su uso por edad 
-siguiendo la clasificacion del cuestionario q51x es para menores de 14 anios y las cq16x de 14 anios en adelante. 
+Segun la clasificacion de la UNESCO 6 anos en belice corresponden a primaria, aunque en belice primaria sean 8
 	
 */
 
 
 gen aedu_ci = .
-// Menores de 14 anios 
-replace aedu_ci = q51a if cq13 < 14 // Asistentes
-replace aedu_ci = q51b if cq13 < 14 // No asistentes
 
-// Mayores de 14 anios
-replace aedu_ci = cq16a if (cq16a < 16 & cq13 >= 14) // Asistentes 
-replace aedu_ci = cq16b if (cq16b < 17 & cq13 >= 14) // No asistentes
+replace aedu_ci = ED5New 	if ED5New<=12
+replace aedu_ci = 14		if ED5New==13
+replace aedu_ci = 17		if ED5New==14 //3 years of bachelor (Tha programs last between 2/4 years)
+replace aedu_ci = 19		if ED5New==15 //2 years of Masters 
+replace aedu_ci = 0 		if ED5New==17 | ED5New==18
 
-// Universitarios de mas de 2 anios - se imputa universitario completo
-replace aedu_ci = 16 if cq16a == 16 & cq13 >= 14 
-replace aedu_ci = 16 if cq16b == 17 & cq13 >= 14 
 label var aedu_ci "número de años de educación culminados"
 
 **************
@@ -925,13 +947,14 @@ label var eduno_ci "No tiene ningún nivel de instrucción"
 **************
 ** edupi_ci **
 **************
-gen edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
+gen edupi_ci = (aedu_ci > 0 & aedu_ci < 8)
 replace edupi_ci = . if aedu_ci == .
 label var edupi_ci "No ha completado la educación primaria"
 
 ***************
 ** edupc_ci  **
 ***************
+//Revisar este tema: https://www.moecst.gov.bz/education-sectors/primary-education/ 
 gen edupc_ci = (aedu_ci == 6)
 replace edupc_ci = . if aedu_ci == .
 label var edupc_ci "Ha completado la educación primaria"
@@ -996,7 +1019,7 @@ label var edus2c_ci "Ha completado el segundo ciclo de la secundaria"
 ***************
 ** edupre_ci **
 ***************
-gen edupre_ci = . 
+gen edupre_ci = .
 label var edupre_ci "Ha completado educación preescolar"
 
 ***************
@@ -1016,18 +1039,22 @@ label var eduac_ci "Ha completado educación terciaria académica"
 ** asiste_ci **
 ***************
 gen asiste_ci=.
+/*
 replace asiste_ci = 1 if ((cq16 == 1 | cq16 == 2) & cq13 > 14) | ((q51 == 1 | q51 == 2) & cq13 <= 14)
 replace asiste_ci = 0 if (cq16 == 3  & cq13 > 14) |  (q51 == 3  & cq13 <= 14)
 label var asiste_ci "Asiste a algún centro de enseñanza"
+*/
 
 
 *****************
 ** pqnoasis_ci **
 *****************
 gen pqnoasis_ci=.
+/*
 label var pqnoasis_ci "Porque no asiste a algún centro de enseñanza"
 label define pqnoasis 1"Muy joven" 2"Razones financieras" 3"Trabaja en casa o negocio familiar" 4"Distancia a la escuela/transporte" 5"Enfermedad/inhabilidad" 6"falta de especio en la escuela" 7"Otra" 9"NS/NR"  
 label values pqnoasis_ci pqnoasis
+*/
 
 
 ******************
@@ -1052,9 +1079,11 @@ label var repiteult_ci "Ha repetido el último grado"
 ** edupub_ci **
 ***************
 gen edupub_ci=.
+/*
 label var edupub_ci "Asiste a centro de enseñanza pública"
 label define edupub 1"Pública" 0"Privada"  
 label values edupub_ci edupub
+*/
 
 
 
@@ -1069,10 +1098,13 @@ label values edupub_ci edupub
 
 *********************
 gen aguared_ch=.
+/*
 replace aguared_ch= 1 if h8==1 | h8==2 | h71==1 | h72==1
 replace aguared_ch= 0 if h8>2 | h73==1 | h74==1 | h75==1 | h76==1 | h77==1 | h78==1 
+*/
 *********************
 gen aguafconsumo_ch = 0
+/*
 replace aguafconsumo_ch= 1 if h8==1 | h8==2
 replace aguafconsumo_ch= 3 if h8==6
 replace aguafconsumo_ch= 4 if h8==4
@@ -1080,9 +1112,11 @@ replace aguafconsumo_ch= 7 if h8==3
 replace aguafconsumo_ch= 8 if h8==7
 replace aguafconsumo_ch= 9 if h8==5
 replace aguafconsumo_ch= 10 if h8==8
+*/
 
 *********************
 gen aguafuente_ch =.
+/*
 replace aguafuente_ch= 1 if h8==1 | h8==2 | h71==1 | h72==1
 replace aguafuente_ch= 3 if h8==6 | h76==1
 replace aguafuente_ch= 4 if h8==4 | h74==1
@@ -1091,6 +1125,7 @@ replace aguafuente_ch= 8 if h8==7 | h77==1
 replace aguafuente_ch= 9 if h8==5 | h75==1
 replace aguafuente_ch= 10 if h8==8 | h78==1
 replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+*/
 
 *********************
 
@@ -1120,6 +1155,7 @@ gen aguamide_ch = .
 *********************
 
 gen bano_ch=.
+/*
 replace bano_ch=0 if h3==8
 replace bano_ch=1 if h3==1
 replace bano_ch=2 if h3==2
@@ -1127,18 +1163,21 @@ replace bano_ch=3 if h3==3 | h3==4 | h3==5
 replace bano_ch=5 if h3==6
 replace bano_ch=6 if h3==7
 replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+*/
 
 *********************
 generate banoex_ch=9
 
 *********************
 gen banomejorado_ch= 2
+/*
 replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
 replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+*/
 
 *********************
-gen sinbano_ch =0 if h3!=8
-replace sinbano_ch =3 if h3==8
+gen sinbano_ch =. 
+*replace sinbano_ch =3 if h3==8
 
 *********************
 gen aguatrat_ch =9
@@ -1150,8 +1189,10 @@ gen aguatrat_ch =9
 *  ILUMINACION ES ELÉCTRICA *
 *****************************
 gen luz_ch=.
+/*
 replace luz_ch=1 if h4<=3
 replace luz_ch=0 if h4>3 & h4!=9
+*/
 label var luz_ch "La iluminación del hogar es eléctrica"
 
 ************************
@@ -1164,8 +1205,8 @@ label var luzmide_ch "Usa medidor de luz para pagar por su consumo"
 ********************************************
 *  USA COMBUSTIBLE COMO FUENTE DE ENERGIA  *
 ********************************************
-gen combust_ch=0 if h5!=.
-replace combust_ch=1 if h5==1 | h5==4 
+gen combust_ch=.
+*replace combust_ch=1 if h5==1 | h5==4 
 label var combust_ch "Usa combustible como fuente de energía"
 
 
@@ -1174,10 +1215,12 @@ label var combust_ch "Usa combustible como fuente de energía"
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
 *******************************************
 gen des1_ch=.
+/*
 replace des1_ch=0 if h3==8
 replace des1_ch=1 if h3==1
 replace des1_ch=2 if h3==2
 replace des1_ch=3 if h3>=3 & h3<=6
+*/
 label var des1_ch "Tipo de desague incluyendo Unimproved"
 label define des1 0"El hogar no tiene servicio higienico" 1"Desagüe conectado a la red general" 2"Desagüe conectado a un pozo o letrina" 3"El desagüe se comunica con la superficie"
 label values des1_ch des1
@@ -1186,9 +1229,11 @@ label values des1_ch des1
 * TIPO DE DESAGÜE sin incluir Unimproved  *
 *******************************************
 gen des2_ch=.
+/*
 replace des1_ch=0 if h3==8
 replace des1_ch=1 if h3==1
 replace des1_ch=2 if h3>=2 & h3<=7
+*/
 label var des2_ch "Tipo de desague sin incluir Unimproved"
 label define des2 0"El hogar no tiene servicio higienico" 1"Desagüe conectado a la red general" 2"Resto de alternativas"
 label values des2_ch des2
@@ -1260,8 +1305,8 @@ label var cocina_ch "Cuarto exclusivo a la cocina"
 *************************
 *  TIENE TELEFONO FIJO  *
 *************************
-gen telef_ch=0 if h61!=.
-replace telef_ch=1 if h61==1
+gen telef_ch=.
+*replace telef_ch=1 if h61==1
 label var telef_ch "Tiene teléfono fijo"
 
 ***********************************
@@ -1289,8 +1334,10 @@ label var auto_ch "Tiene automovil"
 *  TIENE COMPUTADOR  *
 *********************
 gen compu_ch=.
+/*
 replace compu_ch=1 if h62==1
 replace compu_ch=0 if h62==2
+*/
 label var compu_ch "Tiene computador"
 
 *******************************
@@ -1333,9 +1380,11 @@ label var vivi2_ch "Casa o departamento"
 *  VIVIENDA PROPIA *
 ********************
 gen viviprop_ch=.
+/*
 replace viviprop_ch=0 if h1==3 | h1==4 | h1==5 | h1==2
 replace viviprop_ch=1 if h1==1
 replace viviprop_ch=3 if h1==6 | h1==7
+*/
 label var viviprop_ch "Vivienda propia"
 label define viviprop 0"Arrendada" 1"Propia y totalmente pagada" 3 "Ocupada(propia de facto)"
 label values viviprop_ch viviprop
@@ -1428,8 +1477,8 @@ aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 
-rename cq131misi codindustria
-rename cq130m codocupa
+gen codindustria=.
+gen codocupa=.
 
 compress
 

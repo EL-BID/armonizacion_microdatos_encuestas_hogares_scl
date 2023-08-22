@@ -1631,16 +1631,15 @@ replace eduac_ci=0 if (s5_02a>=34 & s5_02a<=36 ) //tecnicaturas
 replace eduac_ci=0 if (s5_02a==28 ) // normal
 
 label variable eduac_ci "Superior universitario vs superior no universitario"
+
 ***************
 ***asiste_ci***
 ***************
+* Se utiliza matriculación como proxy de asistencia. 
 
-*(introducido por YL): Se cambia la forma de cálculo porque se deben considerar los rangos de edad 
-*Modificación Mayra Sáenz Enero-2017: Se genera la dummy de acuerdo al documento metodológico.
-gen asiste_ci= s5_04==1
-/* 
-gen asiste_ci= 1 if s5_04==1
-replace asiste_ci = 0 if s5_04==2*/
+gen asiste_ci = .
+replace asiste_ci = 1 if s5_04 == 1
+replace asiste_ci = 0 if s5_04 == 2
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************

@@ -252,6 +252,7 @@ label var nempdom_ch "Número de empleados en el hogar"
 *  CLASE DE HOGAR   *
 *********************
 gen clasehog_ch=.
+/*
 replace clasehog_ch=1 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch==0 /* unipersonal*/
 replace clasehog_ch=2 if nhijos_ch>0 & nhijos_ch!=. & notropari_ch==0 & notronopari_ch==0 /* nuclear (child with or without spouse but without other relatives)*/
 replace clasehog_ch=2 if nconyuges_ch>0 & nconyuges_ch!=. & notropari_ch==0 & notronopari_ch==0 /* nuclear (spouse with or without children but without other relatives)*/
@@ -261,6 +262,7 @@ replace clasehog_ch=4 if nconyuges_ch>0 & nconyuges_ch!=. & notropari_ch==0 & no
 replace clasehog_ch=4 if notropari_ch>0 & notropari_ch!=. & notronopari_ch>0 & notronopari_ch!=. /* ampliado*/
 *replace clasehog_ch=4 if nconyuges_ch>0 | nhijos_ch>0 | (notropari_ch>0 & notropari_ch<.)) & (notronopari_ch>0 & notronopari_ch<.) /* compuesto  (some relatives plus non relative)*/
 replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0 & notronopari_ch!=./** corresidente*/
+*/
 label var clasehog_ch "Clase de hogar"
 label define clasehog 1"Unipersonal" 2"Nuclear" 3"Ampliado" 4"Compuesto" 5"Corresidente" 
 label values clasehog_ch clasehog
@@ -454,10 +456,9 @@ label var desalent_ci "Trabajadores desalentados, personas que creen que por alg
 * TRABAJA MENOS DE 30 HORAS *
 *****************************
 * MGD 08/29/2014: no hay la pregunta de si desea trabajar mas horas, pero se utiliza disponibilidad para otro trabajo.
-gen subemp_ci=0 
+gen subemp_ci=0
 replace subemp_ci=1 if EA22_3new<=30 & EA28new==1 & condocup_ci==1
 label var subemp_ci "Trabaja menos de 30 horas"
-
 
 
 ****************************************************
@@ -626,14 +627,13 @@ gen  ocupa_ci=.
 replace ocupa_ci=1 if (EA20_3new==2 | EA20_3new==3) & emp_ci==1
 replace ocupa_ci=2 if (EA20_3new==1) & emp_ci==1
 replace ocupa_ci=3 if (EA20_3new==4) & emp_ci==1
-*replace ocupa_ci=4 if ((cq130m>=5200 & cq130m<=5999) | (cq130m>=9111 & cq130m<=9113)) & emp_ci==1
-*replace ocupa_ci=5 if ((cq130m>=5000 & cq130m<=5199) | (cq130m>=9120 & cq130m<=9162)) & emp_ci==1
+replace ocupa_ci=9 if (EA20_3new==5) & emp_ci==1
 replace ocupa_ci=6 if (EA20_3new==6) & emp_ci==1
 replace ocupa_ci=7 if (EA20_3new==7 | EA20_3new==8) & emp_ci==1
 replace ocupa_ci=8 if (EA20_3new==0) & emp_ci==1
 replace ocupa_ci=9 if (EA20_3new==9) & emp_ci==1
 label var ocupa_ci "Tipo de ocupacion laboral"
-label define ocupa 1"Profesional o técnico" 2"Director o funcionario superior" 3"Personal administrativo o nivel intermedio" 4"Comerciante o vendedor" 5"Trabajador en servicios" 6"Trabajador agrícola o afines" 7"Obrero no agrícola, conductores de máquinas y vehículos de transporte y similares" 8"Fuerzas armadas" 9"Otras ocupaciones no clasificadas"
+label define ocupa 0 "Otros" 1"Profesional o técnico" 2"Director o funcionario superior" 3"Personal administrativo o nivel intermedio" 4"Comerciante o vendedor" 5"Trabajador en servicios" 6"Trabajador agrícola o afines" 7"Obrero no agrícola, conductores de máquinas y vehículos de transporte y similares" 8"Fuerzas armadas" 9"Otras ocupaciones no clasificadas"
 label values ocupa_ci ocupa
 
 **********************************************
@@ -947,7 +947,7 @@ label var eduno_ci "No tiene ningún nivel de instrucción"
 **************
 ** edupi_ci **
 **************
-gen edupi_ci = (aedu_ci > 0 & aedu_ci < 8)
+gen edupi_ci = (aedu_ci > 0 & aedu_ci < 6)
 replace edupi_ci = . if aedu_ci == .
 label var edupi_ci "No ha completado la educación primaria"
 

@@ -345,10 +345,11 @@ label variable miembros_ci "Miembro del hogar"
 **Pregunta: ¿Cree tener ascendencia...? ¿Cuál considera principal de las declaradas?:(e29_6) (1 - Afro o Negra; 2 - Asiatica o Amarilla; 3 - Blanca; 4 - Indigena; 5 - Otra) 
 **En Uruguay puedes reportar más de una identidad pero la pregunta e29_6 pregunta cuál es la identidad principal. 
 
-gen afroind_ci =. 
-replace afroind_ci = 1 if (e29_4 == 1)
-replace afroind_ci = 2 if (e29_1 == 1)
-replace afroind_ci = 3 if (e29_2 == 1 | e29_2 == 1 | e29_5 == 1)
+gen afroind_ci=. 
+replace afroind_ci=1 if e29_6 == 4 | (e29_4 == 1 & e29_6 == 0)
+replace afroind_ci=2 if e29_6 == 1 | (e29_1 == 1 & e29_6 == 0)
+replace afroind_ci=3 if inlist(e29_6, 2, 3, 5 )| (e29_6 == 0 & (e29_2==1 | e29_3==1 | e29_2==5))
+replace afroind_ci=. if e29_6 ==. 
 
 label variable afroind_ci "Identificación étnica o racial"
 label define afroind_ci 1"Indígena" 2"Afrodesendiente" 3"Otros"

@@ -529,14 +529,15 @@ gen afroind_ano_c=2022
 	*** dis_ci ***
 	*******************
 destring p4q_discap, replace
-gen dis_ci= 0 if p4q_discap==1
-replace dis_ci= 1 if p4q_discap==2
+gen dis_ci= 0 if p4q_discap==2
+replace dis_ci= 1 if p4q_discap==1
 
 
 	*******************
 	*** dis_ch ***
 	*******************
-gen dis_ch=. 
+egen dis_ch  = sum(dis_ci), by(idh_ch) 
+replace dis_ch=1 if dis_ch>=1 & dis_ch!=. 
 
 
 ******************************************************************************

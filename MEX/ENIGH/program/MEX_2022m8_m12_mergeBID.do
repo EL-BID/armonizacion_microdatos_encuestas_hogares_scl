@@ -38,8 +38,8 @@ Fecha última modificación: Setiembre 2023
 							SCL/LMK - IADB
 ****************************************************************************/
 
-* global ruta "G:\3_ENIGH\2020"
-*Mayra Sáenz - Agosto 2015: Se realiza el merge con base en la sintaxis de CONEVAL, 
+global ruta "Z:\survey\MEX\ENIGH\2022\m8_m12\data_orig"
+*Olga Dulce- Septiembre 2023: Se realiza el merge con base en la sintaxis de CONEVAL, 
 *pero con algunas modificaciones, y generando nuevas variables.
 
 
@@ -128,71 +128,71 @@ drop if (clave=="P016" & aguinaldo2!=1)
 
 
 /*Una vez realizado lo anterior, se procede a deflactar el ingreso recibido
-por los hogares a precios de agosto de 2020. Para ello, se utilizan las 
+por los hogares a precios de agosto de 2022. Para ello, se utilizan las 
 variables meses, las cuales toman los valores 2 a 10 e indican el mes en
 que se recibió el ingreso respectivo*/
 
 sort folioviv foliohog numren
 
-*Definición de los deflactores 2020
-* Se retoman del programa realizado por Coneval, 2020
+*Definición de los deflactores 2022
+* Fuente: https://www.coneval.org.mx/Medicion/MP/Paginas/Programas_BD_2022.aspx 
 
-scalar	dic19	=	0.9820797834	
-scalar	ene20	=	0.9868356402	
-scalar	feb20	=	0.9909332789	
-scalar	mar20	=	0.9904604745	
-scalar	abr20	=	0.9804203324	
-scalar	may20	=	0.9841934975	
-scalar	jun20	=	0.9895797603	
-scalar	jul20	=	0.9960785041	
-scalar	ago20	=	1.0000000000	
-scalar	sep20	=	1.0022898570	
-scalar	oct20	=	1.0084085031	
-scalar	nov20	=	1.0091686985	
-scalar	dic20	=	1.0130160290			
+scalar	dic21 = 0.9475376203
+scalar	ene22 = 0.9531433002
+scalar	feb22 = 0.9610510246
+scalar	mar22 = 0.9705661414
+scalar	abr22 = 0.9758164180
+scalar	may22 = 0.9775368933
+scalar	jun22 = 0.9857919437
+scalar	jul22 = 0.9930938669
+scalar	ago22 = 1.0000000000
+scalar	sep22 = 1.0062034038
+scalar	oct22 = 1.0118979346
+scalar	nov22 = 1.0177217030
+scalar	dic22 = 1.0216069077	
 
 
 destring mes_*, replace
-replace ing_6=ing_6/feb20 if mes_6==2
-replace ing_6=ing_6/mar20 if mes_6==3
-replace ing_6=ing_6/abr20 if mes_6==4
-replace ing_6=ing_6/may20 if mes_6==5
+replace ing_6=ing_6/feb22 if mes_6==2
+replace ing_6=ing_6/mar22 if mes_6==3
+replace ing_6=ing_6/abr22 if mes_6==4
+replace ing_6=ing_6/may22 if mes_6==5
 
 
-replace ing_5=ing_5/mar20 if mes_5==3
-replace ing_5=ing_5/abr20 if mes_5==4
-replace ing_5=ing_5/may20 if mes_5==5
-replace ing_5=ing_5/jun20 if mes_5==6
+replace ing_5=ing_5/mar22 if mes_5==3
+replace ing_5=ing_5/abr22 if mes_5==4
+replace ing_5=ing_5/may22 if mes_5==5
+replace ing_5=ing_5/jun22 if mes_5==6
 
-replace ing_4=ing_4/abr20 if mes_4==4
-replace ing_4=ing_4/may20 if mes_4==5
-replace ing_4=ing_4/jun20 if mes_4==6
-replace ing_4=ing_4/jul20 if mes_4==7
+replace ing_4=ing_4/abr22 if mes_4==4
+replace ing_4=ing_4/may22 if mes_4==5
+replace ing_4=ing_4/jun22 if mes_4==6
+replace ing_4=ing_4/jul22 if mes_4==7
 
-replace ing_3=ing_3/may20 if mes_3==5
-replace ing_3=ing_3/jun20 if mes_3==6
-replace ing_3=ing_3/jul20 if mes_3==7
-replace ing_3=ing_3/ago20 if mes_3==8
+replace ing_3=ing_3/may22 if mes_3==5
+replace ing_3=ing_3/jun22 if mes_3==6
+replace ing_3=ing_3/jul22 if mes_3==7
+replace ing_3=ing_3/ago22 if mes_3==8
 
-replace ing_2=ing_2/jun20 if mes_2==6
-replace ing_2=ing_2/jul20 if mes_2==7
-replace ing_2=ing_2/ago20 if mes_2==8
-replace ing_2=ing_2/sep20 if mes_2==9
+replace ing_2=ing_2/jun22 if mes_2==6
+replace ing_2=ing_2/jul22 if mes_2==7
+replace ing_2=ing_2/ago22 if mes_2==8
+replace ing_2=ing_2/sep22 if mes_2==9
 
-replace ing_1=ing_1/jul20 if mes_1==7
-replace ing_1=ing_1/ago20 if mes_1==8
-replace ing_1=ing_1/sep20 if mes_1==9
-replace ing_1=ing_1/oct20 if mes_1==10
+replace ing_1=ing_1/jul22 if mes_1==7
+replace ing_1=ing_1/ago22 if mes_1==8
+replace ing_1=ing_1/sep22 if mes_1==9
+replace ing_1=ing_1/oct22 if mes_1==10
 
 
 /*Se deflactan las claves P008 y P015 (Reparto de utilidades) 
 y P009 y P016 (aguinaldo)
-con los deflactores de mayo a agosto 2020
-y de diciembre de 2019 a agosto 2020, 
+con los deflactores de mayo a agosto 2022
+y de diciembre de 2021 a agosto 2022, 
 respectivamente, y se obtiene el promedio mensual.*/
 
-replace ing_1=(ing_1/may20)/12 if clave=="P008" | clave=="P015"
-replace ing_1=(ing_1/dic20)/12 if clave=="P009" | clave=="P016"
+replace ing_1=(ing_1/may22)/12 if clave=="P008" | clave=="P015"
+replace ing_1=(ing_1/dic22)/12 if clave=="P009" | clave=="P016"
 
 recode ing_2 ing_3 ing_4 ing_5 ing_6 (0=.) if clave=="P008" | clave=="P009" | clave=="P015" | clave=="P016"
 
@@ -286,14 +286,14 @@ label var otros     "Otros"
 sort folio numren, stable
 
 
-saveold "$ruta\ingreso_deflactado20_per.dta", replace
+saveold "$ruta\ingreso_deflactado22_per.dta", replace
 
 
 
 *********************************************************
 
 /*Creación del ingreso no monetario deflactado a pesos de 
-agosto del 2020.*/
+agosto del 2022.*/
 
 *********************************************************
 
@@ -319,102 +319,106 @@ gen decena=real(substr(folioviv,8,1))
 *Definición de los deflactores;		
 		
 *Rubro 1.1 semanal, Alimentos;		
-scalar d11w07=	0.9939758499	
-scalar d11w08=	1.0000000000	
-scalar d11w09=	1.0028338457	
-scalar d11w10=	1.0098560798	
-scalar d11w11=	1.0094105066	
+scalar d11w07 =	0.9869825057 
+scalar d11w08 =	1.0000000000 
+scalar d11w09 =	1.0130754464 
+scalar d11w10 =	1.0178275200 
+scalar d11w11 =	1.0207468579 
+	
 		
 *Rubro 1.2 semanal, Bebidas alcohólicas y tabaco;		
-scalar d12w07=	1.0044889115	
-scalar d12w08=	1.0000000000	
-scalar d12w09=	0.9980317849	
-scalar d12w10=	1.0006215416	
-scalar d12w11=	0.9988864046	
+scalar d12w07 =	0.9923340135 
+scalar d12w08 =	1.0000000000 
+scalar d12w09 =	1.0035071112 
+scalar d12w10 =	1.0111808568 
+scalar d12w11 =	1.0131982216 
+	
 		
 *Rubro 2 trimestral, Vestido, calzado y accesorios;		
-scalar d2t05=	0.9844476202	
-scalar d2t06=	0.9923010570	
-scalar d2t07=	1.0003186435	
-scalar d2t08=	1.0061700977	
+scalar d2t05 = 0.9899050815 
+scalar d2t06 = 0.9941003723 
+scalar d2t07 = 0.9997465345 
+scalar d2t08 = 1.0083352270 	
 		
 *Rubro 3 mensual, Viviendas;	
-scalar d3m07=	0.9963402865	
-scalar d3m08=	1.0000000000	
-scalar d3m09=	1.0008217634	
-scalar d3m10=	1.0170085903	
-scalar d3m11=	1.0374475648	
+scalar d3m07 = 0.9998142481 
+scalar d3m08 = 1.0000000000 
+scalar d3m09 = 0.9978682753 
+scalar d3m10 = 1.0031577830 
+scalar d3m11 = 1.0197073965 	
 		
 *Rubro 4.2 mensual, Accesorios y artículos de limpieza para el hogar;		
-scalar d42m07=	0.9967972340	
-scalar d42m08=	1.0000000000	
-scalar d42m09=	1.0024748647	
-scalar d42m10=	1.0026659388	
-scalar d42m11=	1.0008279878	
+scalar d42m07=	0.9894769136
+scalar d42m08=	1.0000000000
+scalar d42m09=	1.0086286240
+scalar d42m10=	1.0182083142
+scalar d42m11=	1.0237613131	
 		
 *Rubro 4.2 trimestral, Accesorios y artículos de limpieza para el hogar;		
-scalar d42t05=	0.9887690885	
-scalar d42t06=	0.9957963696	
-scalar d42t07=	0.9997573662	
-scalar d42t08=	1.0017136011	
+scalar d42t05=	0.9787953163
+scalar d42t06=	0.9897197934
+scalar d42t07=	0.9993685126
+scalar d42t08=	1.0089456461
+	
 		
 *Rubro 4.1 semestral, Muebles y aparatos domésticos;		
-scalar d41s02=	0.9716430784	
-scalar d41s03=	0.9778718235	
-scalar d41s04=	0.9849581733	
-scalar d41s05=	0.9927539810	
+scalar d41s02=	1.0003069312
+scalar d41s03=	0.9993861376
+scalar d41s04=	0.9992122603
+scalar d41s05=	0.9991442214	
 		
 *Rubro 5.1 trimestral, Salud;		
-scalar d51t05=	0.9948883582	
-scalar d51t06=	0.9973496320	
-scalar d51t07=	1.0009424208	
-scalar d51t08=	1.0032664489	
+scalar d51t05=	0.9909917367
+scalar d51t06=	0.9954834527
+scalar d51t07=	0.9994564693
+scalar d51t08=	1.0030487384	
 		
 *Rubro 6.1.1 semanal, Transporte público urbano;		
-scalar d611w07=	0.9981969820	
-scalar d611w08=	1.0000000000	
-scalar d611w09=	1.0030142762	
-scalar d611w10=	1.0031714624	
-scalar d611w11=	1.0035043272	
+scalar d611w07=	0.9963207274
+scalar d611w08=	1.0000000000
+scalar d611w09=	1.0034865488
+scalar d611w10=	1.0052385833
+scalar d611w11=	1.0064912880	
 		
 *Rubro 6 mensual, Transporte;		
-scalar d6m07=	0.9987343957	
-scalar d6m08=	1.0000000000	
-scalar d6m09=	1.0009587912	
-scalar d6m10=	1.0003931044	
-scalar d6m11=	0.9833266218	
+scalar d6m07=	0.9987845893
+scalar d6m08=	1.0000000000
+scalar d6m09=	1.0001664946
+scalar d6m10=	1.0057274150
+scalar d6m11=	1.0076837268	
 		
 *Rubro 6 semestral, Transporte;		
-scalar d6s02=	0.9704468606	
-scalar d6s03=	0.9685484541	
-scalar d6s04=	0.9718275199	
-scalar d6s05=	0.9864091354	
+scalar d6s02=	0.9808628306
+scalar d6s03=	0.9879901879
+scalar d6s04=	0.9927380596
+scalar d6s05=	0.9969378864
 		
 *Rubro 7 mensual, Educación y esparcimiento;		
-scalar d7m07=	0.9984004543	
-scalar d7m08=	1.0000000000	
-scalar d7m09=	1.0061994226	
-scalar d7m10=	1.0076002082	
-scalar d7m11=	1.0062940703	
+scalar d7m07=	0.9961413091
+scalar d7m08=	1.0000000000
+scalar d7m09=	1.0095233900
+scalar d7m10=	1.0144128271
+scalar d7m11=	1.0174522069	
 		
 *Rubro 2.3 mensual, Accesorios y cuidados del vestido;		
-scalar d23m07=	0.9944542071	
-scalar d23m08=	1.0000000000	
-scalar d23m09=	1.0056497175	
-scalar d23m10=	1.0048844548	
-scalar d23m11=	0.9969956352	
+scalar d23m07=	0.9952443607
+scalar d23m08=	1.0000000000
+scalar d23m09=	1.0081869233
+scalar d23m10=	1.0108184343
+scalar d23m11=	1.0072323555	
 		
 *Rubro 2.3 trimestral,  Accesorios y cuidados del vestido;		
-scalar d23t05=	0.9806290901	
-scalar d23t06=	0.9895823492	
-scalar d23t07=	1.0000346415	
-scalar d23t08=	1.0035113908	
+scalar d23t05=	0.9914948875
+scalar d23t06=	0.9956428139
+scalar d23t07=	1.0011437613
+scalar d23t08=	1.0063351192	
 		
 *INPC semestral;		
-scalar dINPCs02=	0.9886109746	
-scalar dINPCs03=	0.9901220948	
-scalar dINPCs04=	0.9920936585	
-scalar dINPCs05=	0.9967583537	
+scalar	dINPCs02 =	0.9773093813
+scalar	dINPCs03 =	0.9838008772
+scalar	dINPCs04 =	0.9897404209
+scalar	dINPCs05 =	0.9957540070
+	
 
 *Una vez definidos los deflactores, se seleccionan los rubros
 /*
@@ -717,9 +721,9 @@ replace reda_nm=reda_nm/dINPCs05 if decena==9
 replace reda_nm=reda_nm/dINPCs05 if decena==0
 
 
-save "$ruta\ingresonomonetario_def20.dta", replace
+save "$ruta\ingresonomonetario_def22.dta", replace
 
-use "$ruta\ingresonomonetario_def20.dta", clear
+use "$ruta\ingresonomonetario_def22.dta", clear
 
 *Construcción de la base de pagos en especie a partir de la base 
 *de gasto no monetario
@@ -751,12 +755,12 @@ rename  reda_nm reda_nme
 
 *sort proyecto folioviv foliohog
 sort folioviv foliohog
-save "$ruta\esp_def20.dta", replace
+save "$ruta\esp_def22.dta", replace
 
 
 *Construcción de base de regalos a partir de la base no monetaria
 
-use "$ruta\ingresonomonetario_def20.dta", clear
+use "$ruta\ingresonomonetario_def22.dta", clear
 
 keep if reg==1
 
@@ -785,19 +789,19 @@ rename  reda_nm reda_nmr
 *sort proyecto folioviv foliohog
 sort folioviv foliohog
 
-save "$ruta\reg_def20.dta", replace
+save "$ruta\reg_def22.dta", replace
 
 
 *Modificación Mayra Saenz, Abril 2017
 
 *Construcción de base de gasto monetario en educación
 
-use "$ruta\ingresonomonetario_def20.dta", clear
+use "$ruta\ingresonomonetario_def22.dta", clear
 
 *********************************************************
 
 /*Creación del gasto monetario deflactado a pesos de 
-agosto del 2020.*/
+agosto del 2022.*/
 
 *********************************************************
 *Modificado Mayra Saenz- Abril 2017
@@ -814,11 +818,12 @@ identifique la decena de levantamiento*/
 gen decena=real(substr(folioviv,8,1))
 
 *Rubro 7 mensual, Educación y esparcimiento		
-scalar d7m07=0.9983986795	
-scalar d7m08=1.0000000000	
-scalar d7m09=1.0080940547	
-scalar d7m10=1.0114274878	
-scalar d7m11=1.0122658363	
+scalar d7m07=	0.9961413091
+scalar d7m08=	1.0000000000
+scalar d7m09=	1.0095233900
+scalar d7m10=	1.0144128271
+scalar d7m11=	1.0174522069
+	
 
 *Una vez definidos los deflactores, se seleccionan los rubros
 /*
@@ -881,11 +886,11 @@ gen decena=real(substr(folioviv,8,1))
 *Definición de los deflactores
 
 *Rubro 7 mensual, Educación y esparcimiento		
-scalar d7m07=0.9983986795	
-scalar d7m08=1.0000000000	
-scalar d7m09=1.0080940547	
-scalar d7m10=1.0114274878	
-scalar d7m11=1.0122658363
+scalar d7m07=	0.9961413091
+scalar d7m08=	1.0000000000
+scalar d7m09=	1.0095233900
+scalar d7m10=	1.0144128271
+scalar d7m11=	1.0174522069
 
 
 *Una vez definidos los deflactores, se seleccionan los rubros
@@ -969,7 +974,7 @@ tab _merge
 drop _merge
 
 
-merge 1:1 folioviv foliohog using "$ruta\esp_def20.dta"
+merge 1:1 folioviv foliohog using "$ruta\esp_def22.dta"
 tab _merge
 drop _merge
 
@@ -977,7 +982,7 @@ drop _merge
 
 sort folioviv foliohog
 
-merge 1:1 folioviv foliohog using "$ruta\reg_def20.dta"
+merge 1:1 folioviv foliohog using "$ruta\reg_def22.dta"
 tab _merge
 drop _merge
 
@@ -1003,9 +1008,9 @@ label var gtos_edu "Gastos en Educación - ya están incluidos en pago_esp y reg
 
 sort  folioviv foliohog
 
-save "$ruta\ingresotot20.dta", replace
+save "$ruta\ingresotot22.dta", replace
 
-saveold "$ruta\gtos_autoc20.dta", replace
+saveold "$ruta\gtos_autoc22.dta", replace
 
 *--------------------------------------------*
 *Base de Trabajos
@@ -1049,14 +1054,14 @@ sort folio numren, stable
 merge 1:1 folioviv foliohog numren using "$ruta\trabajos_reshape.dta", keep (match master)
 drop _merge
 
-merge 1:1 folio numren using "$ruta\ingreso_deflactado20_per.dta", keep (match master)
+merge 1:1 folio numren using "$ruta\ingreso_deflactado22_per.dta", keep (match master)
 rename _merge _merge_inge
 sort folio numren, stable
 
 merge m:1 folioviv foliohog numren using "$ruta\edu_gtosmp.dta", keep (match master)
 drop _merge
 
-merge m:1 folioviv foliohog using "$ruta\gtos_autoc20.dta", keep (match master)
+merge m:1 folioviv foliohog using "$ruta\gtos_autoc22.dta", keep (match master)
 drop _merge
 
 merge m:1 folioviv foliohog using "$ruta\edu_gtosmh.dta", keep (match master)
@@ -1070,11 +1075,11 @@ egen double ict=rsum(ing_monh nomon)  if parentesco=="101" | parentesco=="102" /
 label var  ict "Ingreso corriente total"
 
 
-global ruta = "${surveysFolder}\\survey\MEX\ENIGH\2020\m8_m12\data_orig"
+global ruta = "${surveysFolder}\\survey\MEX\ENIGH\2022\m8_m12\data_orig"
 
 local PAIS MEX
 local ENCUESTA ENIGH
-local ANO "2020"
+local ANO "2022"
 local ronda m8_m12
 
 local log_file = "${surveysFolder}\harmonized\\`PAIS'\\`ENCUESTA'\\log\\`PAIS'_`ANO'`ronda'_mergeBID.log"

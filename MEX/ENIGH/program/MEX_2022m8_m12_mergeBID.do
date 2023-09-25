@@ -38,7 +38,7 @@ Fecha última modificación: Setiembre 2023
 							SCL/LMK - IADB
 ****************************************************************************/
 
-global ruta "Z:\survey\MEX\ENIGH\2022\m8_m12\data_orig"
+*global ruta "Z:\survey\MEX\ENIGH\2022\m8_m12\data_orig"
 *Olga Dulce- Septiembre 2023: Se realiza el merge con base en la sintaxis de CONEVAL, 
 *pero con algunas modificaciones, y generando nuevas variables.
 

@@ -975,14 +975,14 @@ replace aedu_ci = 0 if inlist(nivel_asiste, 6, 7, 8)
 
 * Esino fundamental 1 y 2 
 replace aedu_ci = grado_asiste - 1 if inlist(nivel_asiste, 1, 3) // Ensino fundamental ou 1º grau
-replace aedu_ci = grado_asiste + 8 - 1  if inlist(nivel_asiste, 2, 4) // Ensino fundamental ou 2º grau
+replace aedu_ci = grado_asiste + 9 - 1  if inlist(nivel_asiste, 2, 4) // Ensino fundamental ou 2º grau
 
 * Superior
 replace aedu_ci = grado_asiste + 12 - 1 if nivel_asiste == 5 // Universitario
 
 * Imputación para los que declaran nivel pero no grado (incluye no seriados)
 replace aedu_ci = 0 if (inlist(nivel_asiste, 1, 3) & grado_asiste == .) // Ensino fundamental ou 1º grau
-replace aedu_ci = 8 if (inlist(nivel_asiste, 2, 4) & grado_asiste == .) // Ensino fundamental ou 2º grau
+replace aedu_ci = 9 if (inlist(nivel_asiste, 2, 4) & grado_asiste == .) // Ensino fundamental ou 2º grau
 replace aedu_ci = 12 if nivel_asiste == 9 // Pre-Vestibular 
 replace aedu_ci = 12 if (nivel_asiste == 5 & grado_asiste == .) // Universitario
 replace aedu_ci = 12 + 4 if nivel_asiste == 10 // Maestría o Doctorado
@@ -1003,7 +1003,7 @@ replace aedu_ci = grado_no_asiste + 8 if nivel_no_asiste == 3 // Medio 2do ciclo
 
 * Sistema actual
 replace aedu_ci = grado_no_asiste if nivel_no_asiste == 4 // Ensino fundamental ou 1º grau
-replace aedu_ci = grado_no_asiste + 8 if nivel_no_asiste == 5 // Ensino fundamental ou 2º grau
+replace aedu_ci = grado_no_asiste + 9 if nivel_no_asiste == 5 // Ensino fundamental ou 2º grau
 
 * Superior
 replace aedu_ci = grado_no_asiste + 12 if nivel_no_asiste == 6 // Universitario
@@ -1014,14 +1014,14 @@ replace aedu_ci = grado_no_asiste + 12 if nivel_no_asiste == 6 // Universitario
 replace aedu_ci = 0 if (inlist(nivel_no_asiste, 1, 4)  & grado_no_asiste == . & inlist(finalizo, 3, .)) // Elementar, Esino fundamental ou 1º grau
 replace aedu_ci = 4 if (nivel_no_asiste == 2 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Medio 1 
 replace aedu_ci = 8 if (nivel_no_asiste == 3 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Medio 2 
-replace aedu_ci = 8 if (nivel_no_asiste == 5 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Ensino fundamental ou 2º grau
+replace aedu_ci = 9 if (nivel_no_asiste == 5 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Ensino fundamental ou 2º grau
 replace aedu_ci = 12 if (nivel_no_asiste == 6 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Universitario
 replace aedu_ci = 12 + 4 if (nivel_no_asiste == 7 & grado_no_asiste == . & inlist(finalizo, 3, .)) // Maestría o Doctorado
 
 * Finalizado 
 replace aedu_ci = 4 if (nivel_no_asiste == 1  & grado_no_asiste == . & finalizo == 1) // Elementar
 replace aedu_ci = 8 if (nivel_no_asiste == 2 & grado_no_asiste == . & finalizo == 1) // Medio 1 
-replace aedu_ci = 8 if (nivel_no_asiste == 4 & grado_no_asiste == . & finalizo == 1) // Esino fundamental ou 1º grau
+replace aedu_ci = 9 if (nivel_no_asiste == 4 & grado_no_asiste == . & finalizo == 1) // Esino fundamental ou 1º grau
 replace aedu_ci = 12 if (nivel_no_asiste == 3 & grado_no_asiste == . & finalizo == 1) // Medio 2 
 replace aedu_ci = 12 if (nivel_no_asiste == 5 & grado_no_asiste == . & finalizo == 1) // Ensino fundamental ou 2º grau
 replace aedu_ci = 12 + 4 if (nivel_no_asiste == 6 & grado_no_asiste == . & finalizo == 1) // Universitario

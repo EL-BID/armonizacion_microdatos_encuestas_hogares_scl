@@ -1,4 +1,5 @@
 * (Versión Stata 17)
+* (Versión Stata 17)
 clear
 set more off
 *________________________________________________________________________________________________________________*
@@ -1124,9 +1125,9 @@ label var ylmho_ci "Salario monetario de todas las actividades"
 ******************************
 *	asiste_ci: Definida aqui como inscritos en plantel educativo en el presente anio escolar  OK
 ******************************
-* P03A02 2021 y p04a02 2022: Inscripción escolar
-g asiste_ci=(p04a02==1)
-replace asiste_ci=. if p03a02==.
+* P03A02 2021 es p04a02 en 2022: Inscripción escolar
+g asiste_ci = (p04a02 == 1)
+replace asiste_ci = . if p04a02 == .
 notes: asiste is defined as enrolled in the current school year
 
 *******************************************
@@ -1259,19 +1260,16 @@ la var edupc_ci "Primaria Completa"
 ******************************
 *	edusi_ci 
 ******************************
-g byte edusi_ci=(aedu_ci>6 & aedu_ci<11) 
-replace edusi_ci=1 if aedu_ci==11 & p04a06<100 // sin diploma de bachiller
+g byte edusi_ci=(aedu_ci>6 & aedu_ci<11)
 replace edusi_ci=. if aedu_ci==.
 la var edusi_ci "Secundaria Incompleta" 
 
 ******************************
 *	edusc_ci 
 ******************************
-
-g byte edusc_ci=(aedu_ci==11) // 
-replace edusc_ci=1 if aedu_ci==11 & p04a06>=100 & p04a06<=999 // con diploma de bachiller
+g byte edusc_ci=(aedu_ci==11) 
 replace edusc_ci=. if aedu_ci==.
-la var edusc_ci "Secundaria Completa" // Nota: hasta 5to diversificado sería completa
+la var edusc_ci "Secundaria Completa" 
 
 ******************************
 *	edus1i_ci 
@@ -1285,36 +1283,35 @@ la var edus1i_ci "1er ciclo de Educacion Secundaria Incompleto"
 ******************************
 g byte edus1c_ci=(aedu_ci==9)
 replace edus1c_ci=. if aedu_ci==.
-la var edus1c_ci "1er ciclo de Educacion Secundaria Completo" //nota: hasta 3ro básico
+la var edus1c_ci "1er ciclo de Educacion Secundaria Completo"
 
 ******************************
 *	edus2i_ci 
 ******************************
-g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11) 
-replace edus2i_ci=1 if aedu_ci==11 & p04a06<100 
+g byte edus2i_ci=(aedu_ci>9 & aedu_ci<11)
 replace edus2i_ci=. if aedu_ci==.
-la var edus2i_ci "2do ciclo de Educacion Secundaria Incompleto"
+la var edus2i_ci "1er ciclo de Educacion Secundaria Incompleto"
 
 ******************************
 *	edus2c_ci 
 ******************************
 g byte edus2c_ci=(aedu_ci==11)
-replace edus2c_ci=1 if aedu_ci==11 & p03a06>=100 & p03a06<=999 
 replace edus2c_ci=. if aedu_ci==.
-la var edus2c_ci "2do ciclo de Educacion Secundaria Completo"
+la var edus2c_ci "2do ciclo de Educacion Secundaria Incompleto"
 
 ******************************
 *	eduui_ci 
 ******************************
-g byte eduui_ci=(aedu_ci>11 &  p03a06>=100 & p03a06<999) | (aedu_ci>11 &  p03a06>=100 & p03a06==.) 
-la var eduui_ci "Universitaria o Terciaria Incompleta" // mas de 11 anios pero grado de bachiller 
+g byte eduui_ci=(aedu_ci>11 & aedu_ci<15) 
+replace eduui_ci=. if aedu_ci==.
+la var eduui_ci "Universitaria o Terciaria Incompleta"
 
 ******************************
 *	eduuc_ci 
 ******************************
-g byte eduuc_ci=(aedu_ci>11 &  p03a06>=1000 & p03a06<9999)
+g byte eduuc_ci=aedu_ci>14
 replace eduuc_ci=. if aedu_ci==.
-la var eduuc_ci "Universitaria o Terciaria Completa" // mas de 11 anios y grado terciario
+la var eduuc_ci "Universitaria o Terciaria Completa"
 
 ******************************
 *	edupre_ci 

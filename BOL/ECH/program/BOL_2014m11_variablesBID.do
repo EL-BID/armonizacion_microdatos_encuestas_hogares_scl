@@ -1642,14 +1642,15 @@ replace eduac_ci=1 if (s5a_02>=72 & s5a_02<=75)
 replace eduac_ci=0 if s5a_02==71 //educacion normal
 replace eduac_ci=0 if (s5a_02>=76 & s5a_02<=79)
 label variable eduac_ci "Superior universitario vs superior no universitario"
+
 ***************
 ***asiste_ci***
 ***************
+* Se utiliza matriculación como proxy de asistencia. 
 
-gen asiste_ci= (s5a_04==1  | s4d_25 ==1)
-replace asiste_ci = 0 if s5a_04==2 & s4d_25 ==2
-replace asiste_ci=. if (s5a_04==.  | s5a_04==9)  & (s4d_25 ==. | s4d_25 ==9)
-
+gen asiste_ci = . 
+replace asiste_ci = 1 if s5a_04 == 1  
+replace asiste_ci = 0 if s5a_04 == 2
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************

@@ -1664,18 +1664,11 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
-/*
-gen asiste_ci= 1 if s4_13==1
-replace asiste_ci = 0 if s4_13==2
-*/
+* Se utiliza matriculación como proxy de asistencia. 
 
-* LCM (introducido por YL): Considerar que se esta tomando la variable de matricula en lugar de la de asistencia lo cual genera una diferencia de % lcm dic2013
-
-*Modificación Mayra Sáenz Enero-2017: Se genera la dummy de acuerdo al documento metodológico.
-gen asiste_ci= s4_05==1
-/*
-gen asiste_ci= 1 if s4_05==1
-replace asiste_ci = 0 if s4_05==2*/
+gen asiste_ci = .
+replace asiste_ci = 1 if s4_05 == 1
+replace asiste_ci = 0 if s4_05 == 2
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************

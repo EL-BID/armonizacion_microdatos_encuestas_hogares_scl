@@ -1707,22 +1707,11 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
+* Se usa matriculación como proxy de asistencia. 
 
-*(introducido por YL): Se cambia la forma de cálculo porque se deben considerar los rangos de edad 
-*gen asiste_ci= 1 if s5b_10==1
-*replace asiste_ci = 0 if s5b_10==2
-*Modificación Mayra Sáenz Enero-2017: Se genera la dummy de acuerdo al documento metodológico.
-*Modificación Victor Saldarriaga Enero-2017: Muchos de estos niños se encuentran en periodo de vacaciones o ya han culminado el año escolar y por ello no asisten a la escuela
-*											 en ese caso se considera que asisten si es que se encuentran matriculados (s5a_4 == 1) y si es que se encuentran en vacaciones/culminó estudios. 
-*gen asiste_ci= (s5b_10==1) | (s5a_4==1 & s5b_10==2 & s5b_11==1) | (s5a_4==1 & s5b_10==2 & s5b_11==2)
-*Modificación Mayra Sáenz Enero 25-2017: Se incluye la asistencia de los menores de 5
-*gen asiste_ci=1 if (s05b_10==1) | (s05a_05==1 & s05b_10==2 &s05b_11==1) | (s05a_05==1 & s05b_10==2 &s05b_11==2) |s04c_22 ==1 | (s05a_06a>=13 & s05a_06a<=80)
-*Modificación Daniela Zuluaga Nov-2018: Se pone la condición de escolaridad con & y se elimina la opción de "culminó estudios"
-*replace asiste_ci=0 if (s05b_10==2 | s05a_05==2  |s04c_22 ==2) & asiste_ci==.
-gen asiste_ci=.
-replace asiste_ci=0 if (s05b_10==2 | s05a_05==2  |s04c_22 ==2)
-replace asiste_ci=1 if (((s05b_10==1) | (s05a_05==1 & s05b_10==2 &s05b_11==1) |s04c_22 ==1) & (s05a_06a>=13 & s05a_06a<=80))
-replace asiste_ci=0 if asiste_ci ==.
+gen asiste_ci = .
+replace asiste_ci = 0 if s05a_04 == 2  
+replace asiste_ci = 1 if s05a_04 == 1 
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************

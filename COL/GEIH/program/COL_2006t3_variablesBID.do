@@ -50,6 +50,7 @@ principales ciudades y áreas metropolitanas, al resto de cabeceras y al resto r
 actualidad mantiene la GEIH. */
 
 
+
 use `base_in', clear
 
 *YL: generacion "region_c" para los años 2009 y +. Para proyecto maps America.	
@@ -1282,34 +1283,128 @@ label var edupub_ci "Asiste a un centro de enseñanza público"
 ****************
 ***aguared_ch***
 ****************
-gen aguared_ch=(P4030S5==1)
-replace aguared_ch=. if P4030S5 ==.
-label var aguared_ch "Acceso a fuente de agua por red"
+generate aguared_ch =.
+replace aguared_ch = 1 if P4030S5==1 
+replace aguared_ch = 0 if P4030S5==2
+la var aguared_ch "Acceso a fuente de agua por red"
 
 *****************
-***aguadist_ch***
+*aguafconsumo_ch*
 *****************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch = 1 if P5050==1 
+replace aguafconsumo_ch = 2 if P5050==7 
+replace aguafconsumo_ch = 3 if P5050==10 
+replace aguafconsumo_ch = 5 if P5050==5 
+replace aguafconsumo_ch = 6 if P5050==8 
+replace aguafconsumo_ch = 7 if P5050==2
+replace aguafconsumo_ch = 8 if P5050==6  
+replace aguafconsumo_ch = 9 if (P5050==4 | P5050==9)
+replace aguafconsumo_ch = 10 if (P5050==3| P5050==2)
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if P5050==1 
+replace aguafuente_ch = 2 if P5050==7 
+replace aguafuente_ch = 3 if P5050==10 
+replace aguafuente_ch = 5 if P5050==5 
+replace aguafuente_ch = 6 if P5050==8 
+replace aguafuente_ch = 7 if P5050==2
+replace aguafuente_ch = 8 if P5050==6  
+replace aguafuente_ch = 9 if (P5050==4 | P5050==9)
+replace aguafuente_ch = 10 if (P5050==3 | P5050==2)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+
+*************
+*aguadist_ch*
+*************
 gen aguadist_ch=.
-replace aguadist_ch=P5060
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-label val aguadist_ch aguadist_ch
+replace aguadist_ch=1 if (P5050==1 | P5050==2)
+replace aguadist_ch=0 if P5050>2
 
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =.
+replace aguadisp1_ch = 1 if P4040==1
+replace aguadisp1_ch = 0 if P4040==2
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+*label var aguadisp2_ch "= 9 la encuesta no pregunta si el servicio de agua es constante"
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
 
 *****************
-***aguamala_ch***
+*aguamejorada_ch*  Altered
 *****************
-gen aguamala_ch=(P5050==5 | P5050==6)
-replace aguamala_ch=. if P5050==.
-label var aguamala_ch "Agua unimproved según MDG" 
-
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
 
 *****************
 ***aguamide_ch***
 *****************
-gen aguamide_ch=.
+generate aguamide_ch = .
 label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+replace bano_ch=0 if P5020==6
+replace bano_ch=1 if P5020==1
+replace bano_ch=2 if P5020==2
+replace bano_ch=4 if P5020==5
+replace bano_ch=6 if P5020==3 | P5020 ==4
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch=.
+replace banoex_ch = 1 if P5030==1
+replace banoex_ch = 0 if P5030==2
+la var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if P5020<6
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
+		
 
 
 ************
@@ -1334,20 +1429,6 @@ gen combust_ch=0
 replace combust_ch=1 if  P5080==1 | P5080==3 | P5080==4
 label var combust_ch "Principal combustible gas o electricidad" 
 
-
-*************
-***bano_ch***
-*************
-g bano_ch = P5020 != 6
-replace bano_ch = . if P5020 == .
-label var bano_ch "El hogar tiene servicio sanitario"
-
-***************
-***banoex_ch***
-***************
-gen banoex_ch=0
-replace banoex_ch=1 if P5030==1
-label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 
 *************
@@ -1416,20 +1497,8 @@ label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 label val resid_ch resid_ch
 
- **Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch = 1 if (P5050 >=1 & P5050 <=5) | P5050 ==7
-replace aguamejorada_ch = 0 if  P5050==6 | (P5050 >=8 & P5050 <=10)
-
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch = 1 if ( P5020 >=1 &  P5020 <=4) & P5030 ==1
-replace banomejorado_ch = 0 if (( P5020 >=1 &  P5020 <=4) & P5030 ==2) | ( P5020 >=5 &  P5020 <=6)
-
+ 
+ 
 *************
 ***dorm_ch***
 *************
@@ -1643,17 +1712,15 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
-
 
 foreach i of varlist _all {
 local longlabel: var label `i'
 local shortlabel = substr(`"`longlabel'"',1,79)
 label var `i' `"`shortlabel'"'
 }
-
 
 compress
 

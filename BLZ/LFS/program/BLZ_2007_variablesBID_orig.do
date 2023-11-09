@@ -894,6 +894,7 @@ label var tecnica_ci "Tiene carrera técnica"
 
 
 
+Argentina, Brasil, Colombia, Costa Rica, El Salvador, Guatemala, México, Panamá, Uruguay
 
 
 *******************************
@@ -905,41 +906,85 @@ label var tecnica_ci "Tiene carrera técnica"
 *******************************
 
 
-**************************
-*  ACCEDE A AGUA POR RED *
-**************************
+*********************
 gen aguared_ch=.
-replace aguared_ch=1 if h71==1 | h72==1 
-replace aguared_ch=0 if (h73==1 | h74==1 | h75==1 | h76==1 | h77==1 | h78==1) & (h71!=1 | h72!=1) 
-label var tecnica_ci "Tiene acceso a agua por red"
+replace aguared_ch= 1 if h71==1 
+replace aguared_ch= 0 if h71==0
+*********************
+gen aguafconsumo_ch = 0
+replace aguafconsumo_ch= 1 if h8==1 
+replace aguafconsumo_ch= 2 if h8==2
+replace aguafconsumo_ch= 3 if h8==6
+replace aguafconsumo_ch= 4 if h8==4
+replace aguafconsumo_ch= 7 if h8==3
+replace aguafconsumo_ch= 8 if h8==7
+replace aguafconsumo_ch= 9 if h8==5
+replace aguafconsumo_ch= 10 if h8==8
 
-***********************************
-*  UBICACION DE LA FUENTE DE AGUA *
-***********************************
+*********************
+gen aguafuente_ch =.
+replace aguafuente_ch= 1 if h8==1 
+replace aguafuente_ch= 2 if h8==2
+replace aguafuente_ch= 3 if h8==6
+replace aguafuente_ch= 4 if h8==4
+replace aguafuente_ch= 7 if h8==3 
+replace aguafuente_ch= 8 if h8==7 
+replace aguafuente_ch= 9 if h8==5 
+replace aaguafuente_ch= 10 if h8==8 
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
 
-gen aguadist_ch=.
-*replace aguadist_ch=1 if water==1 | water==3 | water==7 /* Adentro de la casa */
-*replace aguadist_ch=2 if water==4 | water==2 /* Afuera de la casa pero adentro del terrno (o a menos de 1000mts de distancia) */
-*replace aguadist_ch=3 if water==5 | water==6 | water==8 /* Afuera de la casa y afuera del terreno (o a más de 1000mts de distancia) */
-*label var aguadist_ch "Ubicación de la fuente de agua"
-*label define aguadist 1"Adentro de la vivienda" 2"Fuera de la vivienda pero dentro del terreno" 3"Fuera de la vivienda y fuera del terreno"
-label values aguadist_ch aguadist
+*********************
 
-********************************
-*  FUENTE DE AGUA "Unimproved" *
-********************************
-gen aguamala_ch=.
-* river/ stream / creek / pond / spring *
-replace aguamala_ch=1 if h73==1 | h77==1 
-replace aguamala_ch=0 if h71==1 | h72==1 | h74==1 | h75==1 | h76==1
-label var aguamala_ch "Fuente de agua es Unimproved"
+gen aguadist_ch=0
 
-************************
-*  USA MEDIDOR DE AGUA *
-************************
-gen aguamide_ch=.
-*replace aguamide_ch=1 if
-label var aguamide_ch "Usa medidor de agua para pagar por su consumo"
+*********************
+gen aguadisp1_ch = 9
+
+*********************
+gen aguadisp2_ch = 9
+
+*********************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+*label var aguamala_ch "= 1 si la fuente de agua no es mejorada"
+*********************
+
+
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*********************
+gen aguamide_ch = .
+*********************
+
+gen bano_ch=.
+replace bano_ch=0 if h3==8
+replace bano_ch=1 if h3==1
+replace bano_ch=2 if h3==2
+replace bano_ch=3 if h3==3 | h3==4 | h3==5
+replace bano_ch=5 if h3==6
+replace bano_ch=6 if h3==7 | h3==9
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+
+*********************
+generate banoex_ch=9
+
+*********************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+*********************
+gen sinbano_ch =0 if h3!=8
+replace sinbano_ch =3 if h3==8
+
+*********************
+gen aguatrat_ch =9
+
+*********************
 
 *****************************
 *  ILUMINACION ES ELÉCTRICA *
@@ -963,21 +1008,6 @@ gen combust_ch=.
 replace combust_ch=1 if h4==4 & h4==5 
 label var combust_ch "Usa combustible como fuente de energía"
 
-****************
-*  TIENE BAÑO  *
-****************
-gen bano_ch=.
-replace bano_ch=1 if h3<=7 
-replace bano_ch=0 if h3==8 
-label var bano_ch "Tiene baño, inodoro, letrina o pozo ciego"
-
-*********************************
-*  TIENE BAÑO DE USO EXCLUSIVO  *
-*********************************
-gen banoex_ch=.
-*replace banoex_ch=1 if toilet>=1 & toilet<=6
-*replace banoex_ch=0 if toilet==7 | toilet==8
-label var banoex_ch "Tiene baño, inodoro, letrina o pozo ciego de uso exclusivo del hogar"
 
 *******************************************
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
@@ -1153,6 +1183,40 @@ label var vivialq_ch "Monto pagado por el alquiler"
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Monto ud cree le pagarían por su vivienda"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+
 
 save BLZ2007EA_BID, replace
 
@@ -1161,4 +1225,4 @@ save BLZ2007EA_BID, replace
 sum pais_c anio_c mes_c zona_c factor_ch idh_ch  idp_ci factor_ci sexo_ci edad_ci raza_ci relacion_ci civil_ci jefe_ci nconyuges_ch nhijos_ch notropari_ch notronopari_ch nempdom_ch clasehog_ch nmiembros_ch miembros_ci nmayor21_ch nmenor21_ch nmayor65_ch nmenor6_ch nmenor1_ch condocup_ci categoinac_ci nempleos_ci emp_ci antiguedad_ci desemp_ci
 sum cesante_ci durades_ci pea_ci desalent_ci subemp_ci tiempoparc_ci categopri_ci categosec_ci rama_ci spublico_ci tamemp_ci cotizando_ci inscot_ci afiliado_ci formal_ci tipocontrato_ci ocupa_ci horaspri_ci horastot_ci pensionsub_ci pension_ci instpen_ci ylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci ylmotros_ci ylnmotros_ci ylm_ci ylnm_ci ynlm_ci
 sum ynlnm_ci ylm_ch ylnm_ch ylmnr_ch ynlm_ch ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch remesas_ci remesas_ch ypen_ci ypensub_ci salmm_ci lp25_ci lp4_ci lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci edusi_ci edusc_ci eduui_ci eduuc_ci edus1i_ci edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci repite_ci
-sum repiteult_ci edupub_ci tecnica_ci aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch bano_ch banoex_ch des1_ch des2_ch piso_ch pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch vivialqimp_ch 
+sum repiteult_ci edupub_ci tecnica_ci aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch bano_ch banoex_ch des1_ch des2_ch piso_ch pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch vivialqimp_ch aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///

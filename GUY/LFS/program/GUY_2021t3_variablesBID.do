@@ -103,6 +103,7 @@ label var idh_ch "ID del hogar"
 * idp_ci    *
 *************
 gen idp_ci=member
+duplicates drop idh_ch idp_ci, force
 label variable idp_ci "ID de la persona en el hogar"
 
 *************
@@ -912,31 +913,93 @@ label var edupub_ci "Personas que asisten a centros de enseñanza públicos"
 		* VARIABLES DE INFRAESTRUCTURA DEL HOGAR *
 		******************************************
 
-***************
-* aguared_ch  *
-***************
-gen aguared_ch=.
-label var aguared_ch "Acceso a fuente de agua por red"
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
+	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+
+gen aguafuente_ch = .
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = .
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = .
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
 
 ***************
-* aguadist_ch *
+***banoex_ch***
 ***************
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la principal fuente de agua"
-label def aguadist_ch 1"Adentro de la vivienda" 2"Afuera de la vivienda" 3"La acarrean"
-label val aguadist_ch aguadist_ch
+generate banoex_ch=9
 
-***************
-* aguamala_ch *
-***************
-gen aguamala_ch=.
-label var aguamala_ch "La principal fuente de agua es unimproved según MDG"
 
-***************
-* aguamide_ch *
-***************
-gen aguamide_ch=.
-label var aguamide_ch "El hogar usa un medidor para pagar por su consumo de agua"
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= .
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
+
+
 
 ***************
 * luz_ch      *
@@ -956,17 +1019,6 @@ label var luzmide_ch "El hogar usa un medidor para pagar el consumo de electrici
 gen combust_ch=.
 label var combust_ch "El combustible pricipal usado en el hogar es gas o electricidad"
 
-***************
-* bano_ch     *
-***************
-gen bano_ch=.
-label var bano_ch "El hogar tiene algún tipo de servicio higiénico"
-
-***************
-* banoex_ch   *
-***************
-gen banoex_ch=.
-label var banoex_ch "El servicio higiénico es de uso exclusivo del hogar"
 
 ***************
 * des1_ch     *
@@ -1016,16 +1068,6 @@ label val techo_ch techo_ch
 gen resid_ch=.
 label var resid_ch "Método de eliminación de residuos"
 	
- *********************
- ***aguamejorada_ch***
- *********************
-g       aguamejorada_ch =.
-
- *********************
- ***banomejorado_ch***
- *********************
-g       banomejorado_ch =.
-
 ***************
 * dorm_ch     *
 ***************

@@ -1112,13 +1112,103 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	**********************************
 	**** VARIABLES DE LA VIVIENDA ****
 	**********************************
-	
-	****************
-	***aguared_ch***
-	****************
-	generat aguared_ch=(vi10==1 |vi10==2 |vi10==3)
-	replace aguared_ch=. if vi10==.
-	label var aguared_ch "Acceso a fuente de agua por red"
+
+****************
+***aguared_ch***
+****************
+gen aguared_ch =0
+replace aguared_ch=1 if vi10==1
+replace aguared_ch=. if vi10==.
+label var aguared_ch "Acceso a fuente de agua por red"
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch = 0
+replace aguafuente_ch = 1 if vi10==1
+replace aguafuente_ch = 2 if vi10==2
+replace aguafuente_ch = 6 if vi10==4
+replace aguafuente_ch = 8 if vi10==6
+replace aguafuente_ch = 10 if (vi10==3|vi10==5| vi10==7)
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9 
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7 
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+*label var aguamejorada_ch "= 1 si la fuente de agua es mejorada"
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+label var aguamide_ch "Usan medidor para pagar consumo de agua"
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=6
+replace bano_ch=0 if vi09==5
+replace bano_ch=1 if vi09==1
+replace bano_ch=2 if vi09==2
+replace bano_ch=3 if vi09==3 
+replace bano_ch=6 if vi09==4
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=9
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if vi09!=5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+
 
 	*****************
 	***aguadist_ch***
@@ -1134,18 +1224,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label val aguadist_ch aguadist_ch
 
 
-	*****************
-	***aguamala_ch***
-	*****************
-	gen aguamala_ch=(vi10==6)
-	replace aguamala_ch=. if vi10==.
-	label var aguamala_ch "Agua unimproved según MDG" 
-	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
 
 	************
 	***luz_ch***
@@ -1166,19 +1244,6 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	replace combust_ch=1 if  vi08==1 | vi08==3 
 	label var combust_ch "Principal combustible gas o electricidad" 
 	
-	*************
-	***bano_ch***
-	*************
-	gen bano_ch=1
-	replace bano_ch=0 if vi09==5 
-	replace bano_ch=. if vi09==.
-	label var bano_ch "El hogar tiene servicio sanitario"
-	
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 	*************
 	***des1_ch***
@@ -1250,18 +1315,7 @@ label var tcylmpri_ci "Identificador de top-code del ingreso de la actividad pri
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
-	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-    *********************
-    ***aguamejorada_ch***
-    *********************
-	g       aguamejorada_ch = 1 if (vi10 >=1 & vi10 <=3) | vi10 ==5  | vi10 ==7
-	replace aguamejorada_ch = 0 if  vi10 ==4  | vi10 ==6
-    *********************
-    ***banomejorado_ch***
-    *********************
-	g       banomejorado_ch = 1 if (vi09 >=1 & vi09 <=4)
-	replace banomejorado_ch = 0 if  vi09 ==5 
+ 
 	
 	*************
 	***dorm_ch***
@@ -1552,7 +1606,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci  ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 

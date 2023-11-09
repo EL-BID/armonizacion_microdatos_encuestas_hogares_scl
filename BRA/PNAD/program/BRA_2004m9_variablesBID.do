@@ -157,9 +157,98 @@ gen estrato_ci=v4602
 /*    vARIABLES DEL HOGAR	*/
 /********************************/
 
+
+
+/************************************************************************/
+/*				vARIABLES DEMOGRAFICAS			*/
+/************************************************************************/
+****************
+***miembros_ci***
+****************
+gen miembros_ci=(relacion_ci<5)
+label variable miembros_ci "Miembro del hogar"
+
+
+
+
+gen factor_ci=v4611 /*AUN CUANDO HAY UN FACTOR DE PERSONAS ES IDENTICO AL DE HOGARES, EXCEPTO PARA EL '93 EN DONDE SE REGISTRAN vALORES NEGATIvOS! PARA HOMOGENEIZAR,A TODOS LES PONEMOS EL FACTOR DE EXPANSION DEL HOGAR*/
+gen sexo_ci=1 if v0302==2
+replace sexo_ci=2 if v0302==4
+gen edad_ci=v8005
+replace edad_ci=. if edad_ci==999
+gen civil_ci=.
+capture replace civil_ci=1 if v1001==3 & v1003==3 /*EN ALGUNOS AÑOS NO ESTA EL MODULO DE NUPCIALIDAD!*/
+capture replace civil_ci=2 if v1001==1
+capture replace civil_ci=3 if v1004==2
+capture replace civil_ci=4 if v1004==4
+gen jefe_ci=(v0402==1)
+sort idh_ch
+by idh_ch: egen byte nconyuges_ch=sum(relacion_ci==2) 
+by idh_ch: egen byte nhijos_ch=sum(relacion_ci==3)
+by idh_ch: egen byte notropari_ch=sum(relacion_ci==4)
+by idh_ch: egen byte notronopari_ch=sum(relacion_ci==5)
+by idh_ch: egen byte nempdom_ch=sum(relacion_ci==6)
+gen byte clasehog_ch=0
+replace clasehog_ch=1 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch==0 /*Unipersonal*/
+replace clasehog_ch=2 if nhijos_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (child with or without spouse but without other relatives)*/
+replace clasehog_ch=2 if nhijos_ch==0 & nconyuges_ch>0 & notropari_ch==0 & notronopari_ch==0 /*Nuclear (spouse with or without children but without other relatives)*/
+replace clasehog_ch=3 if notropari_ch>0 & notronopari_ch==0 /*Ampliado*/
+replace clasehog_ch=4 if ((nconyuges_ch>0 | nhijos_ch>0 | notropari_ch>0) & (notronopari_ch>0))/*Compuesto (some relatives plus non relative)*/
+replace clasehog_ch=5 if nhijos_ch==0 & nconyuges_ch==0 & notropari_ch==0 & notronopari_ch>0 /*Corresidente*/
+sort idh_ch
+by idh_ch:egen byte nmiembros_ch=sum(relacion_ci>0 & relacion_ci<5) if miembros_ci==1
+by idh_ch:egen byte nmayor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=21 & edad_ci<=98))
+by idh_ch:egen byte nmenor21_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<21))
+by idh_ch:egen byte nmayor65_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci>=65))
+by idh_ch:egen byte nmenor6_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<6))
+by idh_ch:egen byte nmenor1_ch=sum((relacion_ci>0 & relacion_ci<5) & (edad_ci<1))
+
+
+*******************************************************
+***           VARIABLES DE DIVERSIDAD               ***
+*******************************************************				
+* Maria Antonella Pereira & Nathalia Maya - Marzo 2021	
+												
+	***************
+	***afroind_ci***
+	***************
+**Pregunta: COR OU RACA? (v0404) (BRANCA 2, PRETA 4, AMARELA 6, PARDA 8, INDIGENA 0, IGNORADA 9) 
+
+gen afroind_ci=. 
+replace afroind_ci=1  if v0404==0
+replace afroind_ci=2 if v0404 == 4 | v0404 == 8 
+replace afroind_ci=3 if v0404 == 2 | v0404 == 6 
+replace afroind_ci=. if v0404==9
+
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_jefe= afroind_ci if relacion_ci==1
+egen afroind_ch  = min(afroind_jefe), by(idh_ch) 
+
+drop afroind_jefe 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=1990
+
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 /************************************************************************/
 /*			vARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
 /************************************************************************/	
+
 
  *****************
  ***aguared_ch****
@@ -194,6 +283,113 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
  ************
  ***luz_ch***
  ************ 
+
+****************
+***aguared_ch***
+****************
+gen aguared_ch=(v0212==2 | v0213==1)
+label var aguared_ch "Acceso a fuente de agua por red"
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch =9
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if v0212 == 2 | v0213 == 1
+replace aguafuente_ch = 10 if (v0212 == 4 |v0212 == 6|v0212 == 9)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if v0211==1
+replace aguadist_ch= 2 if (v0213==1|v0214==2)
+replace aguadist_ch = 3 if (v0213 ==3 & v0214 ==4)
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+replace bano_ch=1 if (v0217==1|v0217==2)
+replace bano_ch=2 if v0217==3
+replace bano_ch=6 if (v0217==4 | v0217==7)
+replace bano_ch=4 if (v0217==5|v0217==6)
+replace bano_ch=0 if v0215 == 3
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=(v0216==2)
+replace banoex_ch=. if bano_ch==0 | bano_ch==.
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  0 if v0215==1
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+replace aguatrat_ch = 1 if v0224==2
+replace aguatrat_ch = 0 if v0224==4
+
+		
+
 gen luz_ch=(v0219==1)
 replace luz_ch=. if v0219==9
 label var luz_ch  "La principal fuente de iluminación es electricidad"
@@ -209,6 +405,7 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
  ****************
 gen combust_ch=(v0223==1|v0223==2|v0223==5)
 replace combust_ch=. if v0223==9
+
 label var combust_ch "Principal combustible gas o electricidad" 
 
  *************
@@ -228,6 +425,7 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
  *************
  ***des1_ch***
  *************
+
 gen des1_ch=1 if v0217>=1 & v0217<=3
 replace des1_ch=2 if v0217==4
 replace des1_ch=3 if v0217>=5
@@ -318,6 +516,7 @@ replace resid_ch=1 if v0218==3
 replace resid_ch=2 if v0218==4 | v0218==5
 replace resid_ch=3 if v0218==6
 replace resid_ch=. if v0218==9
+
 label var resid_ch "Método de eliminación de residuos"
 label def resid_ch 0"Recolección pública o privada" 1"Quemados o enterrados"
 label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
@@ -326,6 +525,7 @@ label val resid_ch resid_ch
  **************
  ***dorm_ch***
  **************
+
 gen dorm_ch=v0206
 replace dorm_ch=. if v0206==99 |v0206==-1
 label var dorm_ch "Habitaciones para dormir"
@@ -440,6 +640,7 @@ label var vivialq_ch "Alquiler mensual"
  *****************
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Alquiler mensual imputado"
+
 
 
 /************************************************************************/
@@ -631,6 +832,7 @@ gen dis_ci=.
 	***dis_ch***
 	************
 gen dis_ch=. 
+
 
 /******************************************************************************/
 /*				VARIABLES DEl MERCADO LABORAL		      */
@@ -2075,6 +2277,51 @@ clonevar	totpers=v0105
 
  gen GFAS=(anoest/(edad-7)) if (edad>=11 & edad<=17) & (anoest>=0 & anoest<99)
 
+
+
+*******************
+***tamemp_ci*******
+*******************
+gen tamemp_ci=1 if v9019==1 | v9019==3 | v9019==5 |v9017==1 | v9017==3 | v9017==5 | v9040==2 | v9040==4 | v9048==2 | v9048==4 | v9048==6 
+replace tamemp_ci=2 if v9019==7 | v9017==7 | v9040==6 | v9048==8
+replace tamemp_ci=3 if v9019==8 | v9017==8 | v9040==8 | v9048==0
+
+* rev MLO, 2015, 03
+* se incorporan cuenta propia y trabajadores agricolas
+recode tamemp_ci . =1 if v9049==3
+replace tamemp_ci=1 if v9014==2 |  v9014==4 |  v9014==6
+replace tamemp_ci=1 if v9049==3 | v9050==6 | v9050==4 | v9050==2 | v9052==2 | v9052==4 | v9052==6
+replace tamemp_ci=2 if v9014==8 | v9052==8
+replace tamemp_ci=3 if v9014==0 | v9050==8 | v9052==0 
+
+label var  tamemp_ci "Tamaño de Empresa" 
+label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaño
+
+******************
+***categoinac_ci**
+******************
+gen categoinac_ci=1 if (v9122==2 | v9123==1) & condocup_ci==3
+replace categoinac_ci=2 if v0602==2 & condocup_ci==3
+replace categoinac_ci=3 if v9121==1 & condocup_ci==3
+recode categoinac_ci .=4 if condocup_ci==3
+label var  categoinac_ci "Condición de Inactividad" 
+label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
+label values categoinac_ci inactivo
+
+
+*variables que faltan generar
+gen tcylmpri_ci=.
+gen tcylmpri_ch=.
+
+
+gen vivi1_ch =.
+gen vivi2_ch =.
+gen tipopen_ci=.
+gen ylmho_ci=. 
+gen vivitit_ch=.
+
+
 ren ocup ocup_old
 
 /*_____________________________________________________________________________________________________*/
@@ -2099,7 +2346,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci migrantiguo5_ci miglac_ci , first
 

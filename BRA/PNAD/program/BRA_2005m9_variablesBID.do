@@ -159,6 +159,7 @@ gen estrato_ci=v4602
 /*			vARIABLES DE INFRAESTRUCTURA DEL HOGAR		*/
 /************************************************************************/	
 
+
  *****************
  ***aguared_ch****
  *****************  
@@ -192,6 +193,112 @@ label var aguamide_ch "Usan medidor para pagar consumo de agua"
  ************
  ***luz_ch***
  ************ 
+
+****************
+***aguared_ch***
+****************
+gen aguared_ch=(v0212==2 | v0213==1)
+label var aguared_ch "Acceso a fuente de agua por red"
+
+
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch =0
+
+
+*****************
+*aguafuente_ch*
+*****************
+gen aguafuente_ch =.
+replace aguafuente_ch = 1 if v0212 == 2 | v0213 == 1
+replace aguafuente_ch = 10 if (v0212 == 4 |v0212 == 6|v0212 == 9)
+replace aguafuente_ch = 10 if aguafuente_ch ==. & jefe_ci==1
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=.
+replace aguadist_ch= 1 if v0211==1
+replace aguadist_ch= 2 if (v0213==1|v0214==1)
+replace aguadist_ch = 3 if (v0213 ==3 & v0214 ==4)
+
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch=.
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+replace bano_ch=1 if (v0217==1|v0217==2)
+replace bano_ch=2 if v0217==3
+replace bano_ch=6 if (v0217==4 | v0217==7)
+replace bano_ch=4 if (v0217==5|v0217==6)
+replace bano_ch=0 if v0215 == 3
+replace bano_ch=6 if bano_ch ==. & jefe_ci==1
+
+***************
+***banoex_ch***
+***************
+gen banoex_ch=(v0216==2)
+replace banoex_ch=. if bano_ch==0 | bano_ch==.
+label var banoex_ch "El servicio sanitario es exclusivo del hogar"
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch =  0 if v0215==1
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch =9
+replace aguatrat_ch = 1 if v0224==2
+replace aguatrat_ch = 0 if v0224==4
+
+		
+
 gen luz_ch=(v0219==1)
 replace luz_ch=. if v0219==9
 label var luz_ch  "La principal fuente de iluminación es electricidad"
@@ -207,6 +314,7 @@ label var luzmide_ch "Usan medidor para pagar consumo de electricidad"
  ****************
 gen combust_ch=(v0223==1|v0223==2|v0223==5)
 replace combust_ch=. if v0223==9
+
 label var combust_ch "Principal combustible gas o electricidad" 
 
  *************
@@ -226,6 +334,7 @@ label var banoex_ch "El servicio sanitario es exclusivo del hogar"
  *************
  ***des1_ch***
  *************
+
 gen des1_ch=1 if v0217>=1 & v0217<=3
 replace des1_ch=2 if v0217==4
 replace des1_ch=3 if v0217>=5
@@ -328,6 +437,7 @@ label val resid_ch resid_ch
  ***dorm_ch***
  **************
 gen dorm_ch=v0206
+
 replace dorm_ch=. if v0206==99 |v0206==-1
 label var dorm_ch "Habitaciones para dormir"
 
@@ -2078,6 +2188,55 @@ compress
  gen GFAS=(anoest/(edad-7)) if (edad>=11 & edad<=17) & (anoest>=0 & anoest<99)
 
 
+*******************
+***tamemp_ci*******
+*******************
+gen tamemp_ci=1 if v9019==1 | v9019==3 | v9019==5 |v9017==1 | v9017==3 | v9017==5 | v9040==2 | v9040==4 | v9048==2 | v9048==4 | v9048==6 
+replace tamemp_ci=2 if v9019==7 | v9017==7 | v9040==6 | v9048==8
+replace tamemp_ci=3 if v9019==8 | v9017==8 | v9040==8 | v9048==0
+
+* rev MLO, 2015, 03
+* se incorporan cuenta propia y trabajadores agricolas
+recode tamemp_ci . =1 if v9049==3
+replace tamemp_ci=1 if v9014==2 |  v9014==4 |  v9014==6
+replace tamemp_ci=1 if v9049==3 | v9050==6 | v9050==4 | v9050==2 | v9052==2 | v9052==4 | v9052==6
+replace tamemp_ci=2 if v9014==8 | v9052==8
+replace tamemp_ci=3 if v9014==0 | v9050==8 | v9052==0 
+
+label var  tamemp_ci "Tamaño de Empresa" 
+label define tamaño 1"Pequeña" 2"Mediana" 3"Grande"
+label values tamemp_ci tamaño
+
+******************
+***categoinac_ci**
+******************
+gen categoinac_ci=1 if (v9122==2 | v9123==1) & condocup_ci==3
+replace categoinac_ci=2 if v0602==2 & condocup_ci==3
+replace categoinac_ci=3 if v9121==1 & condocup_ci==3
+recode categoinac_ci .=4 if condocup_ci==3
+label var  categoinac_ci "Condición de Inactividad" 
+label define inactivo 1"Pensionado" 2"Estudiante" 3"Hogar" 4"Otros"
+label values categoinac_ci inactivo
+
+
+*variables que faltan generar
+gen tcylmpri_ci=.
+gen tcylmpri_ch=.
+
+
+gen vivi1_ch =.
+gen vivi2_ch =.
+gen tipopen_ci=.
+gen ylmho_ci=. 
+gen vivitit_ch=.
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -2101,7 +2260,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci migrantiguo5_ci miglac_ci , first
 

@@ -84,6 +84,26 @@ label value region_c region_c
 label var region_c "División política"
 
 ***************
+***ine01***
+***************
+gen ine01= r003_dep
+label define ine01 1 "Ahuachapán" ///
+2 "Santa Ana" ///
+3 "Sonsonate" ///
+4 "Chalatenango" ///
+5 "La Libertad" ///
+6 "San Salvador" ///
+7 "Cuscatlán" ///
+8 "La Paz" ///
+9 "Cabañas" ///
+10 "San Vicente" ///
+11 "Usulután" ///
+12 "San Miguel" ///
+13 "Morazán" ///
+14 "La Unión" 
+label value ine01 ine01
+
+***************
 ***factor_ch***
 ***************
 
@@ -115,6 +135,21 @@ replace zona_c=1 if area==1
 label variable zona_c "Zona del pais"
 label define zona_c 1 "Urbana" 0 "Rural"
 label value zona_c zona_c
+
+***************
+***upm_ci***
+***************
+
+gen upm_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
+***************
+***estrato_ci***
+***************
+
+gen estrato_ci=.
+label variable upm_ci "Unidad Primaria de Muestreo"
+
 
 ************
 ****pais****
@@ -317,6 +352,36 @@ label variable nmenor1_ch "Numero de familiares menores a 1 anio"
 
 gen miembros_ci = (relacion_ci>=1 & relacion_ci<=4)
 label variable miembros_ci "Miembro del hogar"
+
+******************************************************************************
+*	VARIABLES DE DIVERSIDAD
+******************************************************************************
+**María Antonella Pereira & Nathalia Maya - Marzo 2021 
+	***************
+	***afroind_ci***
+	***************
+gen afroind_ci=. 
+
+	***************
+	***afroind_ch***
+	***************
+gen afroind_ch=. 
+
+	*******************
+	***afroind_ano_c***
+	*******************
+gen afroind_ano_c=.		
+
+	*******************
+	***dis_ci***
+	*******************
+gen dis_ci=. 
+
+	*******************
+	***dis_ch***
+	*******************
+gen dis_ch=. 
+
 
 *************************
 *** VARIABLES DE RAZA ***
@@ -634,6 +699,112 @@ gen byte formal_ci=1 if cotizando_ci==1 & (condocup_ci==1 | condocup_ci==2)
 recode formal_ci .=0 if (condocup_ci==1 | condocup_ci==2)
 label var formal_ci "1=afiliado o cotizante / PEA"
 
+*******************
+*** SALUD  ***
+*******************
+
+*******************
+*** cobsalud_ci ***
+*******************
+
+gen cobsalud_ci= .
+
+label var cobsalud_ci "Tiene cobertura de salud"
+label define cobsalud_ci 0 "No" 1 "Si" 
+label value cobsalud_ci cobsalud_ci
+
+************************
+*** tipocobsalud_ci  ***
+************************
+
+gen tipocobsalud_ci=.
+
+label var tipocobsalud_ci "Tipo cobertura de salud"
+lab def tipocobsalud_ci 0"Sin cobertura" 1 "Publico" 2"Privado/otros" 
+lab val tipocobsalud_ci tipocobsalud_ci
+
+
+*********************
+*** probsalud_ci  ***
+*********************
+* Nota: se pregunta si tuvieron problemas de salud en último mes. 
+
+gen probsalud_ci=.
+
+label var probsalud_ci "Tuvo algún problema de salud en los ultimos días"
+lab def probsalud_ci 0 "No" 1 "Si"
+lab val probsalud_ci probsalud_ci
+
+
+*********************
+*** distancia_ci  ***
+*********************
+gen distancia_ci=.
+
+label var distancia_ci "Dificultad de acceso a salud por distancia"
+lab def distancia_ci 0 "No" 1 "Si"
+lab val distancia_ci distancia_ci
+
+*****************
+*** costo_ci  ***
+*****************
+gen costo_ci=.
+
+label var costo_ci "Dificultad de acceso a salud por costo"
+lab def costo_ci 0 "No" 1 "Si"
+lab val costo_ci costo_ci
+
+********************
+*** atencion_ci  ***
+********************
+gen atencion_ci=.
+
+label var atencion_ci "Dificultad de acceso a salud por problemas de atencion"
+lab def atencion_ci 0 "No" 1 "Si"
+lab val atencion_ci atencion_ci
+
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+
+
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
 
 
 
@@ -856,16 +1027,19 @@ replace ynlm_ci= ynlm_ci/8.76
 
 gen ynlnm_ci=.
 
+*Modificación Mayra Sáenz - Septiembre 2014
+*Conversión de colones a dólares
 * Para capturar el ingreso de los desocupados 
-egen ylmotros_ci = rsum(comisiones dietass viaticoss bonif aguinals bonificaciones), missing
-replace ylmotros_ci =. if emp_ci ==1
-*Conversión colones a dólares
-replace ylmotros_ci= ylmotros_ci/8.76 
 
-egen ylnmotros_ci=rsum(especiess combuss), missing
-replace ylnmotros_ci=. if emp_ci==1
+*Modificación David Cornejo - Febrero 2023
+* Está sumando doblemente comisiones, dietas, viaticos, bonificaciones, aguinaldo y bonificaciones 2, cuando ya están en ylm_ch
+gen ylmotros_ci = .
+
 *Conversión colones a dólares
-replace ylnmotros_ci= ylnmotros_ci/8.76 
+
+gen ylnmotros_ci= .
+
+*Conversión colones a dólares
 
 
 **********************
@@ -1271,17 +1445,74 @@ label var tecnica_ci "=1 formacion terciaria tecnica"
 **********************************
 **** VARIABLES DE LA VIVIENDA ****
 **********************************
+****************
+***aguared_ch***
+****************
+gen aguared_ch=1 if (r305b_ti==1 | r305b_ti==2)
+replace aguared_ch=0 if (r305b_ti==3 | r305b_ti==4)
+label var aguared_ch "Acceso a fuente de agua por red"
 
-gen aguared_ch=(r305b_ti==1 | r305b_ti==2)
+****************
+***aguadist_ch***
+****************
+gen aguadist_ch=.
 
-gen aguadist_ch=1 if r305b_ti==1
-replace aguadist_ch=2 if r305b_ti==2
-replace aguadist_ch=3 if r305c_ag>=1 & r305c_ag<=8
+replace aguadist_ch = 1 if r305b_ti ==1 | r305c_ag ==3 | r305c_ag == 8
 
-gen aguamala_ch=.
-/*NA*/
+replace aguadist_ch = 2 if r305b_ti == 2
 
-gen aguamide_ch=.
+replace aguadist_ch = 3 if (r305b_ti == 3|r305b_ti==4) & (r305c_ag == 2 | r305c_ag == 1)
+label var aguadist_ch "Ubicación de la principal fuente de agua"
+label def aguadist_ch 1"Adentro de la casa" 2"Afuera de la casa pero dentro del terreno" 
+label def aguadist_ch 3"Afuera de la casa y afuera del terreno", add
+label val aguadist_ch aguadist_ch
+
+****************
+***aguafconsumo_ch***
+****************
+gen aguafconsumo_ch = .
+
+******************
+***aguafuente_ch**
+******************
+gen aguafuente_ch = 1 if r305b_ti==1|r305b_ti==2
+replace aguafuente_ch = 2 if r305c_ag==1
+replace aguafuente_ch = 4 if r305c_ag==4|r305c_ag==5
+replace aguafuente_ch = 5 if r305c_ag==8
+replace aguafuente_ch = 6 if r305c_ag==3
+replace aguafuente_ch = 7 if r305c_ag==2
+replace aguafuente_ch = 8 if r305c_ag==5|r305c_ag==6
+replace aguafuente_ch = 9 if r305c_ag==7
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch =9
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch =9
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = 2
+replace aguamala_ch = 0 if aguafuente_ch<=7
+replace aguamala_ch = 1 if aguafuente_ch>7 & aguafuente_ch!=10
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = 2
+replace aguamejorada_ch = 0 if aguafuente_ch>7 & aguafuente_ch!=10
+replace aguamejorada_ch = 1 if aguafuente_ch<=7 
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
 /*NA*/
 
 gen luz_ch=(r305a_al==1 | r305a_al==2)
@@ -1291,9 +1522,40 @@ gen luzmide_ch=.
 
 gen combust_ch=(r305a_al>=1 & r305a_al<=4)
 
-gen bano_ch = (r305f_sa>=1 & r305f_sa<=4) | (r305g_no==1 | r305g_no==3)
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch = .
+replace bano_ch = 1 if (r305f_sa==1|r305g_no==1)
+replace bano_ch = 2 if (r305f_sa==2|r305g_no==2)
+replace bano_ch = 3 if (r305f_sa==4)
+replace bano_ch = 6 if (r305f_sa==3|r305g_no==3)
+replace bano_ch = 0 if (r305f_sa==5)
 
-gen banoex_ch=(r305g_no>=1 & r305g_no<=3)
+*****************
+*banoex_ch         *  Altered
+*****************
+gen banoex_ch=(r305f_sa>=1 & r305f_sa<=4)
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= 2
+replace banomejorado_ch =1 if bano_ch<=3 & bano_ch!=0
+replace banomejorado_ch =0 if (bano_ch ==0 | bano_ch>=4) & bano_ch!=6
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = 3
+replace sinbano_ch = 0 if r305f_sa!=5
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch=9
+*label var aguatrat_ch "= 9 la encuesta no pregunta de si se trata el agua antes de consumirla"
 
 gen des1_ch=.
 replace des1_ch = 0 if r305f_sa==5
@@ -1320,19 +1582,6 @@ replace resid_ch=1 if r305k_ba==4 | r305k_ba==5
 replace resid_ch=2 if r305k_ba==6
 replace resid_ch=3 if r305k_ba==3 | r305k_ba==7
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-*********************
-***aguamejorada_ch***
-*********************
-g       aguamejorada_ch = 1 if (r305b_ti >=1 & r305b_ti <=2) | r305c_ag == 1 | r305c_ag == 4 | r305c_ag == 8
-replace aguamejorada_ch = 0 if (r305b_ti >=3 & r305b_ti <=4) | r305c_ag == 2 | r305c_ag == 3 | (r305c_ag >=5 & r305c_ag <=7) | r305c_ag == 9
-
-*********************
-***banomejorado_ch***
-*********************
-g       banomejorado_ch = 1 if (r305f_sa>=1 & r305f_sa <=4)
-replace banomejorado_ch = 0 if  r305d_ba ==3 | r305f_sa ==5
 
 gen dorm_ch=r3032_do
 
@@ -1422,7 +1671,7 @@ salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci e
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
 aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch  ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
-vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
+vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch migrante_ci migantiguo5_ci migrantelac_ci, first
 
 
 

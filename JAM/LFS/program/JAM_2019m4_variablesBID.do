@@ -1125,35 +1125,90 @@ gen edupub_ci=.
 	
 	*Esta base de datos no tiene módulo de vivienda.
 	
-	****************
-	***aguared_ch***
-	****************
-	gen aguared_ch=.
-	label var aguared_ch "Acceso a fuente de agua por red"	
+****************
+***aguared_ch***
+****************
+generate aguared_ch =.
 	
+*****************
+*aguafconsumo_ch*
+*****************
+gen aguafconsumo_ch = 0
 
-	*****************
-	***aguadist_ch***
-	*****************
-	gen aguadist_ch=.
-	label var aguadist_ch "Ubicación de la principal fuente de agua"
-	label def aguadist_ch 1"Dentro de la vivienda" 2"Fuera de la vivienda pero en el terreno"
-	label def aguadist_ch 3"Fuera de la vivienda y del terreno", add
-	label val aguadist_ch aguadist_ch
+*****************
+*aguafuente_ch*
+*****************
 
-	*****************
-	***aguamala_ch***
-	*****************
-	
-	gen aguamala_ch=.
-	label var aguamala_ch "Agua unimproved según MDG" 
-	
-	
-	*****************
-	***aguamide_ch***
-	*****************
-	gen aguamide_ch=.
-	label var aguamide_ch "Usan medidor para pagar consumo de agua"
+gen aguafuente_ch = .
+
+*************
+*aguadist_ch*
+*************
+gen aguadist_ch=0
+
+**************
+*aguadisp1_ch*
+**************
+gen aguadisp1_ch = 9
+
+
+
+**************
+*aguadisp2_ch*
+**************
+gen aguadisp2_ch = 9
+
+
+
+*************
+*aguamala_ch*  Altered
+*************
+gen aguamala_ch = .
+
+
+*****************
+*aguamejorada_ch*  Altered
+*****************
+gen aguamejorada_ch = .
+
+
+
+*****************
+***aguamide_ch***
+*****************
+gen aguamide_ch = .
+
+
+
+*****************
+*bano_ch         *  Altered
+*****************
+gen bano_ch=.
+
+
+***************
+***banoex_ch***
+***************
+generate banoex_ch= 9
+
+
+*****************
+*banomejorado_ch*  Altered
+*****************
+gen banomejorado_ch= .
+
+
+************
+*sinbano_ch*
+************
+gen sinbano_ch = .
+
+*label var sinbano_ch "= 0 si tiene baño en la vivienda o dentro del terreno"
+
+*************
+*aguatrat_ch*
+*************
+gen aguatrat_ch = 9
 
 	************
 	***luz_ch***
@@ -1161,7 +1216,7 @@ gen edupub_ci=.
 	gen luz_ch=.
 	label var luz_ch "La principal fuente de iluminación es electricidad"	
 	
-		****************
+	****************
 	***luzmide_ch***
 	****************
 	gen luzmide_ch=.
@@ -1174,18 +1229,6 @@ gen edupub_ci=.
 	gen combust_ch=.
 	label var combust_ch "Principal combustible gas o electricidad"	
 	
-	*************
-	***bano_ch***
-	*************
-	
-	gen bano_ch=.
-	label var bano_ch "El hogar tiene servicio sanitario"	
-	
-	***************
-	***banoex_ch***
-	***************
-	gen banoex_ch=.
-	label var banoex_ch "El servicio sanitario es exclusivo del hogar"
 
 	*************
 	***des1_ch***
@@ -1236,18 +1279,7 @@ gen edupub_ci=.
 	label def resid_ch 2"Tirados a un espacio abierto" 3"Otros", add
 	label val resid_ch resid_ch
 	
-	**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
-	
-     *********************
-     ***aguamejorada_ch***
-     *********************
-     g       aguamejorada_ch = .
-		
-     *********************
-     ***banomejorado_ch***
-     *********************
-     g       banomejorado_ch = .
-	 
+
 	*************
 	***dorm_ch***
 	*************

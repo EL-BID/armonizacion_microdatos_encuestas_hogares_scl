@@ -72,11 +72,34 @@ label var region_BID_c "Region BID"
 label define region_BID 1"Centroamérica" 2"Caribe" 3"Andinos" 4"Cono Sur"
 label values region_BID_c region_BID
 
+***********
+* Region_c *
+************
+gen region_c= district
+label define region_c  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+		    
+label value region_c region_c
+label var region_c "División política, departamento"
+
 ***************
-* REGION PAIS *
+***ine01***
 ***************
-g region_c=.
 gen ine01= district
+label define ine01  ///
+          1 "Corozal" ///
+           2 "Orange-Walk" ///
+           3 "Belize" ///
+           4 "Cayo" ///
+           5 "Stann-Creek" ///
+           6 "Toledo"
+label value ine01 ine01
+
 
 ***************
 *    ZONA     *
@@ -103,17 +126,30 @@ label var idh_ch "Identificador Unico del Hogar"
 * IDENTIFICADOR DEL INDIVIDUO *
 *******************************
 gen idp_ci=person2
+replace idp_ci=person1 if idp_ci==.
+
+**Solucionar las personas duplicadas debido al ID*
+sort idh_ch idp_ci
+duplicates tag idh_ch idp_ci, gen(d)
+bys idh_ch : gen n=_n
+bys idh_ch: egen d1=max(d)
+duplicates tag idh_ch idp_ci age, gen(d2)
+replace idp_ci =n if d1==1 & d2==0
+duplicates drop idh_ch idp_ci age, force
+drop d n d1 d2
+**********
 label var idp_ci "Identificador Individual dentro del Hogar"
 
 ************************************
 *  RELACION CON EL JEFE DE HOGAR   *
 ************************************
-gen relacion_ci=1 if relate2==1 | relate1==1
-replace relacion_ci=2 if relate2==2 | relate1==2
-replace relacion_ci=3 if relate2==3 | relate1==3
-replace relacion_ci=4 if relate2==4 | relate2==5 | relate2==6 | relate2==7 | relate1==4 | relate1==5 | relate1==6 | relate1==7
-replace relacion_ci=5 if relate2==8 | relate1==8
-replace relacion_ci=. if relate2==9 | relate1==9 /* No sabe */
+* David Cornejo: 25 de mayo, modificando de acuerdo a que tiene jefe de hgoar como opción
+gen relacion_ci=1 if relate2==1
+replace relacion_ci=2 if relate2==2
+replace relacion_ci=3 if relate2==3
+replace relacion_ci=4 if relate2==4 | relate2==5 | relate2==6 | relate2==7
+replace relacion_ci=5 if relate2==8
+replace relacion_ci=. if relate2==9 /* No sabe */
 label var relacion_ci "relación con el jefe de hogar"
 label define relacion 1"Jefe" 2"Cónguye, Esposo/a, Compañero/a" 3"Hijo/a" 4"Otros parientes" 5"Otros no parientes" 6"Servicio doméstico" 
 label values relacion_ci relacion
@@ -1045,34 +1081,22 @@ label var tecnica_ci "Tiene carrera técnica"
 *******************************
 
 
-**************************
-*  ACCEDE A AGUA POR RED *
-**************************
 gen aguared_ch=.
-*replace aguared_ch=1 if
-label var tecnica_ci "Tiene acceso a agua por red"
+gen aguafconsumo_ch = 0
+gen aguafuente_ch =.
+gen aguadist_ch=0
+gen aguadisp1_ch = 9
+gen aguadisp2_ch = 9
+gen aguamala_ch = .
+gen aguamejorada_ch = .
+gen aguamide_ch = .
+gen bano_ch=.
+generate banoex_ch=9
+gen banomejorado_ch=.
+gen sinbano_ch =.
+gen aguatrat_ch =9
 
-***********************************
-*  UBICACION DE LA FUENTE DE AGUA *
-***********************************
-gen aguadist_ch=.
-label var aguadist_ch "Ubicación de la fuente de agua"
-label define aguadist 1"Adentro de la vivienda" 2"Fuera de la vivienda pero dentro del terreno" 3"Fuera de la vivienda y fuera del terreno"
-label values aguadist_ch aguadist
 
-********************************
-*  FUENTE DE AGUA "Unimproved" *
-********************************
-gen aguamala_ch=.
-*replace aguamala_ch=1 if
-label var aguamala_ch "Fuente de agua es Unimproved"
-
-************************
-*  USA MEDIDOR DE AGUA *
-************************
-gen aguamide_ch=.
-*replace aguamide_ch=1 if
-label var aguamide_ch "Usa medidor de agua para pagar por su consumo"
 
 *****************************
 *  ILUMINACION ES ELÉCTRICA *
@@ -1095,19 +1119,7 @@ gen combust_ch=.
 *replace combust_ch=1 if
 label var combust_ch "Usa combustible como fuente de energía"
 
-****************
-*  TIENE BAÑO  *
-****************
-gen bano_ch=.
-*replace bano_ch=1 if
-label var bano_ch "Tiene baño, inodoro, letrina o pozo ciego"
 
-*********************************
-*  TIENE BAÑO DE USO EXCLUSIVO  *
-*********************************
-gen banoex_ch=.
-*replace banoex_ch=1 if
-label var banoex_ch "Tiene baño, inodoro, letrina o pozo ciego de uso exclusivo del hogar"
 
 *******************************************
 *  TIPO DE DESAGÜE incluyendo Unimproved  *
@@ -1157,18 +1169,7 @@ label var resid_ch "Material predominante del techo"
 label define resid 0"Recolección pública o privada" 1"Quemados o enterrados" 2"Tirados en un espacio abierto"
 label values resid_ch resid
 
-**Daniela Zuluaga- Enero 2018: Se agregan las variables aguamejorada_ch y banomejorado_ch cuya sintaxis fue elaborada por Mayra Saenz**
 
-*********************
-***aguamejorada_ch***
-*********************
-
-gen aguamejorada_ch=.
-
-*********************
-***banomejorado_ch***
-*********************
-gen banomejorado_ch=.
 
 *****************************************
 *  CANTIDAD DE DORMITORIOS EN EL HOGAR  *
@@ -1279,9 +1280,70 @@ label var vivialq_ch "Monto pagado por el alquiler"
 gen vivialqimp_ch=.
 label var vivialqimp_ch "Monto ud cree le pagarían por su vivienda"
 
+******************************
+*** VARIABLES DE MIGRACION ***
+******************************
+
+* Variables incluidas por SCL/MIG Fernando Morales
+
+	*******************
+	*** migrante_ci ***
+	*******************
+	
+	gen migrante_ci=.
+	label var migrante_ci "=1 si es migrante"
+	
+	**********************
+	*** migantiguo5_ci ***
+	**********************
+	
+	gen migantiguo5_ci=.
+	label var migantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** migrantelac_ci ***
+	**********************
+	
+	gen migrantelac_ci=.
+	label var migrantelac_ci "=1 si es migrante proveniente de un pais LAC"
+	
+	**********************
+	*** migrantiguo5_ci **
+	**********************
+	
+	gen migrantiguo5_ci=.
+	label var migrantiguo5_ci "=1 si es migrante antiguo (5 anos o mas)"
+		
+	**********************
+	*** miglac_ci ***
+	**********************
+	
+	gen miglac_ci=.
+	label var miglac_ci "=1 si es migrante proveniente de un pais LAC"
+* Variables no generadas
+******************************
+* Variables SPH - PMTC y PNC *
+******************************
+
+* PTMC: bonos comunidades solidarias rurales/urbanas (r319a3 r319a4) 
+* PNC: 	pensión bósica universal r319a5
+* Se imputan montos porque se eliminaron del cuestionario para 2020
+
+* Ingreso del hogar
+egen ingreso_total = rowtotal(ylm_ci ylnm_ci ynlm_ci ynlnm_ci), missing
+bys idh_ch: egen y_hog = sum(ingreso_total)
+
+* Transferencias
+gen percibe_ptmc_ci  = .
+gen ptmc_ch=.  
+
+* Adultos mayores 
+gen mayor64_ci=(edad>64 & edad!=.)
+gen pnc_ci = .
+
 
 * Variables no generadas
-g tipopen_ci=.
+g tipopen_ci = .
 g tcylmpri_ci=.
 g tcylmpri_ch=.
 g instcot_ci=.
@@ -1289,7 +1351,6 @@ g edus1i_ci=.
 g edus1c_ci=.
 g mes_c=.
 
-rename sector1 sector_1
 
 /*_____________________________________________________________________________________________________*/
 * Asignación de etiquetas e inserción de variables externas: tipo de cambio, Indice de Precios al 
@@ -1313,7 +1374,7 @@ tcylmpri_ci ylnmpri_ci ylmsec_ci ylnmsec_ci	ylmotros_ci	ylnmotros_ci ylm_ci	ylnm
 ynlm_ch	ynlnm_ch ylmhopri_ci ylmho_ci rentaimp_ch autocons_ci autocons_ch nrylmpri_ch tcylmpri_ch remesas_ci remesas_ch	ypen_ci	ypensub_ci ///
 salmm_ci tc_c ipc_c lp19_c lp31_c lp5_c lp_ci lpe_ci aedu_ci eduno_ci edupi_ci edupc_ci	edusi_ci edusc_ci eduui_ci eduuc_ci	edus1i_ci ///
 edus1c_ci edus2i_ci edus2c_ci edupre_ci eduac_ci asiste_ci pqnoasis_ci pqnoasis1_ci	repite_ci repiteult_ci edupub_ci tecnica_ci ///
-aguared_ch aguadist_ch aguamala_ch aguamide_ch luz_ch luzmide_ch combust_ch	bano_ch banoex_ch des1_ch des2_ch piso_ch aguamejorada_ch banomejorado_ch ///
+aguared_ch aguafconsumo_ch aguafuente_ch aguadist_ch aguadisp1_ch aguadisp2_ch aguamala_ch aguamejorada_ch aguamide_ch bano_ch banoex_ch banomejorado_ch sinbano_ch aguatrat_ch luz_ch luzmide_ch combust_ch des1_ch des2_ch piso_ch ///
 pared_ch techo_ch resid_ch dorm_ch cuartos_ch cocina_ch telef_ch refrig_ch freez_ch auto_ch compu_ch internet_ch cel_ch ///
 vivi1_ch vivi2_ch viviprop_ch vivitit_ch vivialq_ch	vivialqimp_ch , first
 

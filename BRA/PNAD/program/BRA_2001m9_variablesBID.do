@@ -400,20 +400,20 @@ label var cel_ch "El hogar tiene servicio telefonico celular"
  **************
  ***vivi1_ch***
  **************
-gen viv1_ch=1 if v0202==2
-replace viv1_ch=2 if v0202==4
-replace viv1_ch=3 if v0202==6
-replace viv1_ch = . if v0202 == 9 
-label var viv1_ch "Tipo de vivienda en la que reside el hogar"
-label def viv1_ch 1"Casa" 2"Departamento" 3"Otros"
-label val viv1_ch viv1_ch
+gen vivi1_ch=1 if v0202==2
+replace vivi1_ch=2 if v0202==4
+replace vivi1_ch=3 if v0202==6
+replace vivi1_ch = . if v0202 == 9 
+label var vivi1_ch "Tipo de vivienda en la que reside el hogar"
+label def vivi1_ch 1"Casa" 2"Departamento" 3"Otros"
+label val vivi1_ch vivi1_ch
 
  **************
  ***vivi2_ch***
  **************
-gen viv2_ch=(viv1_ch==1 | viv1_ch==2)
-replace viv2_ch=. if viv1_ch==.
-label var viv2_ch "La vivienda es casa o departamento"
+gen vivi2_ch=(vivi1_ch==1 | vivi1_ch==2)
+replace vivi2_ch=. if vivi1_ch==.
+label var vivi2_ch "La vivienda es casa o departamento"
 
  *****************
  ***viviprop_ch***

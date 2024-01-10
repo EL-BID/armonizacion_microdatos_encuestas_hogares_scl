@@ -1685,11 +1685,12 @@ lab val atencion_ci atencion_ci
 ***************************************************************
 *** VARIABLES NO INCLUIDAS EN LA ENCUESTA TOMADAS COMO M.V. ***
 ***************************************************************
-gen dis_ci  = . 
+	gen dis_ci  = . 
 	replace dis_ci = 1 if inrange(h7a,2,4) | inrange(h7b,2,4) | inrange(h7c,2,4) | inrange(h7d,2,4) | inrange(h7e,2,4) | inrange(h7f,2,4)
 	replace dis_ci = 0 if h7a==1 & h7b==1 & h7c==1 & h7d==1 & h7e==1 & h7f==1
 
-bysort idh_ch : gen dis_ch = max(dis_ci) 
+	egen dis_ch = sum(dis_ci), by(idh_ch) 
+	replace dis_ch = 1 if (dis_ch > 0)
 
 gen antiguedad_ci=. // No está la pregunta en la encuesta 2020
 gen durades_ci=. // No está la pregunta en la encuesta 2020

@@ -1725,15 +1725,11 @@ label variable eduac_ci "Superior universitario vs superior no universitario"
 ***************
 ***asiste_ci***
 ***************
+* Se utiliza matriculación como proxy de asistencia.
 
-*gen asiste_ci=(s4_10==1)
-
-*LCM (introducido por YL): Se cambia la forma de cálculo porque se deben considerar los rangos de edad lcm dic2013
-*Modificación Mayra Sáenz Enero-2017: Se genera la dummy de acuerdo al documento metodológico.
-gen asiste_ci= s4_06==1
-/*
-gen asiste_ci= 1 if s4_06==1
-replace asiste_ci = 0 if s4_06==2*/
+gen asiste_ci = .
+replace asiste_ci = 1 if s4_06 == 1
+replace asiste_ci = 0 if s4_06 == 2
 label variable asiste_ci "Asiste actualmente a la escuela"
 
 **************

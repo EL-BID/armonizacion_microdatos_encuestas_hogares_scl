@@ -1325,10 +1325,10 @@ gen aguafconsumo_ch = 0
 replace aguafconsumo_ch = 1 if (v09==4 | v09==1 | v09==2 |v09==3) & v10<=2
 replace aguafconsumo_ch = 2 if (v09==4 | v09==1 | v09==2 |v09==3) & v10==3
 replace aguafconsumo_ch = 3 if v09==11
-replace aguafconsumo_ch= 4 if (v09==5 | v08==6)
+replace aguafconsumo_ch= 4 if (v09==5 | v09==6)
 replace aguafconsumo_ch = 5 if v09==10
 replace aguafconsumo_ch = 6 if v09==12
-replace aguafconsumo_ch = 7 if v09==8 | ((v09==1 | v09==2 |v09==3| v09==4 |v09==5|v09==6|v09==8|v09==10|v09==11|v09==12) & v10==4)
+replace aguafconsumo_ch = 7 if v09==8 | ((v09==1 | v09==2 |v09==3| v09==4 |v09==5|v09==6|v09==8|v09==10|v09==11|v09==12) & (v10==4))| ((v09==1 | v09==2 |v09==3| v09==4) & v10==7)
 replace aguafconsumo_ch = 8 if v09==13
 replace aguafconsumo_ch = 9 if v09==9 | v09==7
 replace aguafconsumo_ch = 10 if v09==14 | v09 ==99
